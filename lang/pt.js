@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 a VM do Unraid %2","tooltip":"Arranca ou pára uma máquina virtual, pelo nome. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada arranca nem pára a sério."},
 "rb_unraid_parity":{"message0":"verificar a paridade do Unraid","tooltip":"Verifica os discos de paridade ao lê-los, sem escrever correções. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada verifica a sério."},
 "rb_nzbgeek_search":{"message0":"procurar no NZBGeek %1","tooltip":"Uma lista de registos, um por cada release que o indexador tem para estas palavras: title, id, size_mb, grabs, posted (quando foi publicada) e group. Só lê: nunca se descarrega nada. Precisa de NZBGEEK_API_KEY em second-thought.ini. Nesta página usa uma procura de exemplo."},
-"rb_nzbgeek_fetch":{"message0":"obter o NZB de %1","tooltip":"Obtém o ficheiro NZB de uma release e guarda-o como <id>.nzb. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Não entrega nada a um gestor de descarregas: o ficheiro é guardado, só isso. Nesta página nada obtém a sério."}
+"rb_nzbgeek_fetch":{"message0":"obter o NZB de %1","tooltip":"Obtém o ficheiro NZB de uma release e guarda-o como <id>.nzb. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Não entrega nada a um gestor de descarregas: o ficheiro é guardado, só isso. Nesta página nada obtém a sério."},
+"rb_pihole_summary":{"message0":"resumo do Pi-hole","tooltip":"Um registo para hoje: queries (quantas consultas DNS), blocked (quantas bloqueadas), blocked_pct (a proporção bloqueada), gravity (quantos domínios têm as listas), clients (quantos aparelhos perguntaram) e blocking (se o bloqueio está ligado). Precisa de PIHOLE_URL e PIHOLE_PASSWORD em second-thought.ini. Nesta página usa um Pi-hole de exemplo."},
+"rb_pihole_top_domains":{"message0":"top %1 domínios bloqueados","tooltip":"Uma lista de registos, um por cada um dos domínios mais bloqueados: domain e count (quantas vezes bloqueado). Só lê."},
+"rb_pihole_top_clients":{"message0":"top %1 clientes","tooltip":"Uma lista de registos, um por cada um dos aparelhos que mais perguntaram: name, ip e count (quantas consultas). Só lê."},
+"rb_pihole_blocking":{"message0":"desligar o bloqueio do Pi-hole durante %1 segundos","tooltip":"Desliga o bloqueio durante esses segundos, e depois o Pi-hole volta a ligá-lo sozinho. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
+"rb_pihole_enable":{"message0":"ligar o bloqueio do Pi-hole","tooltip":"Volta a ligar o bloqueio. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
+"rb_pihole_allow":{"message0":"%1 %2 na lista allow do Pi-hole","tooltip":"Põe um domínio na lista allow, ou retira-o. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
+"rb_pihole_deny":{"message0":"%1 %2 na lista deny do Pi-hole","tooltip":"Põe um domínio na lista deny, ou retira-o. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr e Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"obter um ficheiro NZB do NZBGeek e guardá-lo (perguntando-to cada vez)",
 "{n} found":"{n} encontrados",
 "NZBGeek search":"procura no NZBGeek",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"ler o teu Pi-hole: as consultas de hoje e a proporção bloqueada, os domínios e clientes mais bloqueados, e se o bloqueio está ligado",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"desligar e ligar o bloqueio do teu Pi-hole, e mudar as suas listas allow e deny (perguntando-to cada vez)",
+"{n} domains":"{n} domínios",
+"Pi-hole summary":"resumo do Pi-hole",
+"Pi-hole top blocked domains":"domínios mais bloqueados do Pi-hole",
+"Pi-hole top clients":"principais clientes do Pi-hole",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Uma execução anterior parou a meio, mas o programa mudou entretanto, por isso começa do zero.)",
@@ -2232,6 +2249,23 @@
 "fetch the NZB for {id} from NZBGeek":"obter o NZB de {id} do NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} dias de retenção",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"O {who} precisa de {url_setting} e {key_setting} {where_keys}: o seu endereço (como http://pi.hole) e a palavra-passe da sua interface web.",
+"The {who} refused its password.":"O {who} recusou a sua palavra-passe.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"resumo do Pi-hole",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} consultas, {blocked} bloqueadas ({blocked_pct} %)",
+"blocking on":"bloqueio ligado",
+"blocking off":"bloqueio desligado",
+"Pi-hole top blocked domains":"domínios mais bloqueados do Pi-hole",
+"{n} domains":"{n} domínios",
+"Pi-hole top clients":"principais clientes do Pi-hole",
+"For how long? Give the seconds blocking should be off, like 60.":"Durante quanto tempo? Dá os segundos durante os quais o bloqueio deve ficar desligado, como 60.",
+"disable Pi-hole's blocking for {n} seconds":"desligar o bloqueio do Pi-hole durante {n} segundos",
+"enable Pi-hole's blocking":"ligar o bloqueio do Pi-hole",
+"Which list (allow or deny), add or remove, and which domain?":"Qual lista (allow ou deny), adicionar ou remover, e qual domínio?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} na lista {which} do Pi-hole",
+"added by Second Thought":"adicionado pelo Second Thought",
+"{n} queries, {blocked} blocked":"{n} consultas, {blocked} bloqueadas"
 }
 };

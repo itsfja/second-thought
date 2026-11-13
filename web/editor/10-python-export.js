@@ -79,6 +79,7 @@
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
+             pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -158,6 +159,12 @@
       "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
       "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
       "NZBGEEK_API_KEY = ", "; NZBGEEK_URL = ", "; NZBGEEK_CERT_SHA256 = ");
+    if (need.pihole) out.push("", "[pihole]",
+      "; Your Pi-hole (v6 or later), through its REST API: its address and its web interface's password. The blocks",
+      "; read the stats and the top lists; blocking and the allow and deny lists ask first, and nothing else is",
+      "; ever sent. Run --doctor once: it shows the certificate fingerprint for PIHOLE_CERT_SHA256, if Pi-hole is",
+      "; behind HTTPS this computer doesn't trust.",
+      "PIHOLE_URL = ", "PIHOLE_PASSWORD = ", "; PIHOLE_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -507,6 +514,9 @@
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
         case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
+        case "rb_pihole_summary": return "(await R.pihole_summary())";
+        case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
+        case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -668,6 +678,10 @@
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
+        case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
+        case "rb_pihole_enable": E("await R.pihole_enable()"); break;
+        case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
+        case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;

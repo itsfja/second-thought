@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid mashina %2","tooltip":"Nachnetъ ili vospatitъ edinou vidьnou mashinou, po imene. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne nachnetъ se ni vospatitъ."},
 "rb_unraid_parity":{"message0":"ispytati ravьstvo Unraid","tooltip":"Ispytayetъ ravьstvenъi diskъi chtъi ihъ, ne pisatъ ispravlenьe. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьto zhe istino ne ispytaetъ se."},
 "rb_nzbgeek_search":{"message0":"iskati vъ NZBGeek %1","tooltip":"Spisъkъ zapisii, po edinъ za vseakо izdanie, ezhe iskatelnikъ imatъ za si slova: title, id, size_mb, grabs, posted (kogda poustъ) i group. Toliko chtetъ: nichьto zhe nikogda ne skachayetъ se. Trebuetъ NZBGEEK_API_KEY vъ second-thought.ini. Na sei stranici obrazъnъnъ iskanie."},
-"rb_nzbgeek_fetch":{"message0":"vzyti NZB %1","tooltip":"Vozmetъ NZB pisanie edina izdaniya i sъhranitъ ego jako <id>.nzb. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Ne dastъ nichьto zhe skachalnou: pisanie sъhranyaetъ se, toliko. Na sei stranici nichьto zhe istino ne vospriimletъ."}
+"rb_nzbgeek_fetch":{"message0":"vzyti NZB %1","tooltip":"Vozmetъ NZB pisanie edina izdaniya i sъhranitъ ego jako <id>.nzb. Te voprahaetъ vsegda prьveye, asche i nichьto zhe ino ne voprahaetъ, i ne sъshтou chlovekou rekshou da, ne byvaetъ. Ne dastъ nichьto zhe skachalnou: pisanie sъhranyaetъ se, toliko. Na sei stranici nichьto zhe istino ne vospriimletъ."},
+"rb_pihole_summary":{"message0":"Pi-hole svodъ","tooltip":"Edina zapisъ za dnesъ: queries (koli vъprosovъ DNS), blocked (koli zagrajdeno), blocked_pct (zagrajdenyia chastъ), gravity (koli domenovъ listy imoutъ), clients (koli ustroistvъ vъproshachu) i blocking (deistvuetъ li zagrajdenie). Trebuetъ PIHOLE_URL i PIHOLE_PASSWORD vъ second-thought.ini. Na sei stranici obrazъnyi Pi-hole."},
+"rb_pihole_top_domains":{"message0":"naibolee zagrajdenyja domeny %1","tooltip":"Spisakъ zapisii, po edinъ za vseaky naibolee zagrajdenyii domenъ: domain i count (koli razъ zagrajdenъ). Toliko chtetъ."},
+"rb_pihole_top_clients":{"message0":"glavnyja klienty %1","tooltip":"Spisakъ zapisii, po edinъ za vseako ustroistvo, ezhe vъproshaetъ naibolee: name, ip i count (koli vъprosovъ). Toliko chtetъ."},
+"rb_pihole_blocking":{"message0":"iskliuchiti zagrajdenie Pi-hole na %1 sekundъ","tooltip":"Iskliuchaetъ zagrajdenie na tolmi sekundъ, posliezhe Pi-hole samo vъkljuchaetъ ego. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."},
+"rb_pihole_enable":{"message0":"vъkljuchiti zagrajdenie Pi-hole","tooltip":"Vъkljuchaetъ zagrajdenie vъspiatъ. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."},
+"rb_pihole_allow":{"message0":"%1 %2 na allow listie Pi-hole","tooltip":"Polagaetъ domenъ na allow listu, ili emlъetъ. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."},
+"rb_pihole_deny":{"message0":"%1 %2 na deny listie Pi-hole","tooltip":"Polagaetъ domenъ na deny listu, ili emlъetъ. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -254,7 +261,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr и Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",
@@ -1074,7 +1082,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"чести MikroTik твой: врата, части, здравїе и лѣтопись",
 "UniFi":"UniFi",
 "UniFi clients":"Гостїе UniFi",
-"{n} clients":"{n} гостей",
+"{n} clients":"{n} klienty",
 "UniFi network":"мрежа UniFi",
 "read your UniFi network: who's connected, and how your UniFi devices are":"чести мрежꙋ твою UniFi: кто совокꙋпленъ, и како имꙋтъ орꙋдїѧ твоѧ UniFi",
 "A Proxmox guest can be started, shut down or rebooted.":"Гость Proxmox можетъ начатисѧ, ѹгаснѹти или паки начатисѧ.",
@@ -1142,7 +1150,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"vzyti NZB pisanie otъ NZBGeek i sъhraniti ego (voprasha te vseaky pytъ)",
 "{n} found":"{n} obreteno",
 "NZBGeek search":"iskanie vъ NZBGeek",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"chitati tvoi Pi-hole: dnesъshnyia vъprosy i zagrajdenyia chastъ, naibolee zagrajdenyia domeny i klienty, i deistvuetъ li zagrajdenie",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"iskliuchati i vъkljuchati zagrajdenie tvoego Pi-hole, i mieniti ego allow i deny listy (voprasha te vseaky pytъ)",
+"{n} domains":"{n} domeny",
+"Pi-hole summary":"Pi-hole svodъ",
+"Pi-hole top blocked domains":"naibolee zagrajdenyja domeny Pi-hole",
+"Pi-hole top clients":"glavnyja klienty Pi-hole",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -1353,7 +1368,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(Прежнее теченїе ѡстависѧ на полупути, но чинъ ѿтолѣ премѣнисѧ, сегѡ ради начинаетъ изнова.)",
@@ -2118,7 +2135,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought точїю чтетъ ѿ UniFi, тѣмже не посылаетъ {what}.",
 "UniFi clients":"Гостїе UniFi",
-"{n} clients":"{n} гостей",
+"{n} clients":"{n} klienty",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi требꙋетъ UNIFI_URL и UNIFI_API_KEY {where_keys}: мѣсто ꙋправителѧ (ꙗкоже https://192.168.1.1) и ключь API ѿ Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"Ꙋправитель UniFi ѿвержѐ UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} орꙋдїй",
@@ -2231,7 +2248,24 @@
 "fetch the NZB for {id} from NZBGeek":"vzyti NZB {id} otъ NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} dьni hrana",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} trebuetъ {url_setting} i {key_setting} {where_keys}: adresъ jego (ako http://pi.hole) i slovo jego webьskago lica.",
+"The {who} refused its password.":"{who} otъverzhe slovo svoe.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole svodъ",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} vъprosy, {blocked} zagrajdeny ({blocked_pct} %)",
+"blocking on":"zagrajdenie deistvuet",
+"blocking off":"zagrajdenie ne deistvuet",
+"Pi-hole top blocked domains":"naibolee zagrajdenyja domeny Pi-hole",
+"{n} domains":"{n} domeny",
+"Pi-hole top clients":"glavnyja klienty Pi-hole",
+"For how long? Give the seconds blocking should be off, like 60.":"Kako dolgo? Dajь sekundy, vъ nichъ zhe zagrajdenie dolzhitъ byti izkliucheno, ako 60.",
+"disable Pi-hole's blocking for {n} seconds":"iskliuchiti zagrajdenie Pi-hole na {n} sekundъ",
+"enable Pi-hole's blocking":"vъkljuchiti zagrajdenie Pi-hole",
+"Which list (allow or deny), add or remove, and which domain?":"Kakaia lista (allow ili deny), prilojiti ili otъlojiti, i koiyi domenъ?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} na {which} listie Pi-hole",
+"added by Second Thought":"prilozheno otъ Second Thought",
+"{n} queries, {blocked} blocked":"{n} vъprosy, {blocked} zagrajdeny"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

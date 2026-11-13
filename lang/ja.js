@@ -190,7 +190,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid VM %2","tooltip":"仮想マシンを 1 つ、名前で開始または停止します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には開始・停止しません。"},
 "rb_unraid_parity":{"message0":"Unraid のパリティを検査","tooltip":"パリティディスクを読んで検査し、修正は書き込みません。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には検査しません。"},
 "rb_nzbgeek_search":{"message0":"NZBGeek で %1 を検索","tooltip":"この言葉に対してインデクサーが持つ各 release の記録のリスト：title, id, size_mb, grabs, posted（投稿された時刻）、group。読み取り専用です：何もダウンロードされません。second-thought.ini に NZBGEEK_API_KEY が必要です。このページではサンプル検索を使います。"},
-"rb_nzbgeek_fetch":{"message0":"%1 の NZB を取得","tooltip":"1 つの release の NZB ファイルを取得し、<id>.nzb として保存します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。ダウンローダーには何も渡しません：ファイルを保存するだけです。このページでは何も実際には取得しません。"}
+"rb_nzbgeek_fetch":{"message0":"%1 の NZB を取得","tooltip":"1 つの release の NZB ファイルを取得し、<id>.nzb として保存します。他に何も尋ねなくても、常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。ダウンローダーには何も渡しません：ファイルを保存するだけです。このページでは何も実際には取得しません。"},
+"rb_pihole_summary":{"message0":"Pi-hole の概要","tooltip":"今日の 1 つの記録：queries（DNS クエリ数）、blocked（ブロック数）、blocked_pct（ブロック率）、gravity（リストのドメイン数）、clients（問い合わせた端末数）、blocking（ブロックが有効か）。second-thought.ini に PIHOLE_URL と PIHOLE_PASSWORD が必要。このページではサンプルの Pi-hole を使います。"},
+"rb_pihole_top_domains":{"message0":"ブロック最多的ドメイン %1","tooltip":"最も多くブロックされた各ドメインの記録のリスト：domain と count（ブロックされた回数）。読み取り専用です。"},
+"rb_pihole_top_clients":{"message0":"上位クライアント %1","tooltip":"最も多く問い合わせた各端末の記録のリスト：name、ip、count（クエリ数）。読み取り専用です。"},
+"rb_pihole_blocking":{"message0":"Pi-hole のブロックを %1 秒間無効にする","tooltip":"その秒数だけブロックを切り、その後 Pi-hole が自分で戻します。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
+"rb_pihole_enable":{"message0":"Pi-hole のブロックを有効にする","tooltip":"ブロックを再度有効にします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
+"rb_pihole_allow":{"message0":"Pi-hole の allow リストに %1 %2","tooltip":"ドメインを allow リストに載せたり外したりします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
+"rb_pihole_deny":{"message0":"Pi-hole の deny リストに %1 %2","tooltip":"ドメインを deny リストに載せたり外したりします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr と Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"エージェントの道具：エージェントブロックの中に入れます",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"NZBGeek から NZB ファイルを取得して保存する（毎回あなたに尋ねる）",
 "{n} found":"{n} 件見つかりました",
 "NZBGeek search":"NZBGeek 検索",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"あなたの Pi-hole を読む：今日のクエリ数とブロック率、ブロック最多的ドメインとクライアント、ブロックが有効かどうか",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"あなたの Pi-hole のブロックを切り・入れし、allow と deny のリストを変える（毎回あなたに尋ねる）",
+"{n} domains":"{n} ドメイン",
+"Pi-hole summary":"Pi-hole の概要",
+"Pi-hole top blocked domains":"Pi-hole のブロック最多的ドメイン",
+"Pi-hole top clients":"Pi-hole の上位クライアント",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n（前回の実行は途中で止まりましたが、その後プログラムが変わったので、最初からやり直します。）",
@@ -2232,6 +2249,23 @@
 "fetch the NZB for {id} from NZBGeek":"NZBGeek から {id} の NZB を取得",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} 日保持",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who}には{url_setting}と{key_setting}が必要です{where_keys}：そのアドレス（http://pi.hole など）と、ウェブインターフェースのパスワード。",
+"The {who} refused its password.":"この{who}はパスワードを拒否しました。",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole の概要",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} 件のクエリ、{blocked} 件ブロック（{blocked_pct} %）",
+"blocking on":"ブロック有効",
+"blocking off":"ブロック無効",
+"Pi-hole top blocked domains":"Pi-hole のブロック最多的ドメイン",
+"{n} domains":"{n} ドメイン",
+"Pi-hole top clients":"Pi-hole の上位クライアント",
+"For how long? Give the seconds blocking should be off, like 60.":"どれくらい？ブロックを切っておく秒数を指定してください（60 など）。",
+"disable Pi-hole's blocking for {n} seconds":"Pi-hole のブロックを {n} 秒間無効にする",
+"enable Pi-hole's blocking":"Pi-hole のブロックを有効にする",
+"Which list (allow or deny), add or remove, and which domain?":"どのリスト（allow か deny）で、追加か削除か、どのドメイン？",
+"{action} {domain} on Pi-hole's {which} list":"Pi-hole の {which} リストに {action} {domain}",
+"added by Second Thought":"Second Thought によって追加",
+"{n} queries, {blocked} blocked":"{n} 件のクエリ、{blocked} 件ブロック"
 }
 };

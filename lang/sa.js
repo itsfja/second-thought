@@ -191,7 +191,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid yantram %2","tooltip":"abhasayantramekam, namna, arabhati sthapayati va. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na arabhyate na sthapyate."},
 "rb_unraid_parity":{"message0":"Unraid ityasya samyam parikset","tooltip":"samyampatlan pathitva pariksate, sudhih na likhati. anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. asmin prsthe kimapi vastutah na pariksyate."},
 "rb_nzbgeek_search":{"message0":"NZBGeek %1 anvesayatu","tooltip":"Smrtinam sucih, pratyeksya pratibimbasyaika yam anvesakah etesu padesu asti: title, id, size_mb, grabs, posted (kada pritah) ca group ca. Kevalam pathati: na kadapi kimapi avataryate. NZBGEEK_API_KEY second-thought.ini ityasyam. Asmin prsthe nidarsakam anvesanam upayabhate."},
-"rb_nzbgeek_fetch":{"message0":"%1 NZB grhnatu","tooltip":"Pratibimbasya NZB patram grhnati cha tat <id>.nzb iti rakshati. Anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Na kasyapi avatarakaya datti: patram rakshyate, iti eva. Asmin prsthe kimapi vastutah na grhnati."}
+"rb_nzbgeek_fetch":{"message0":"%1 NZB grhnatu","tooltip":"Pratibimbasya NZB patram grhnati cha tat <id>.nzb iti rakshati. Anyat kimapi na prcchati sati api tvam sarvada prathamam prcchati, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Na kasyapi avatarakaya datti: patram rakshyate, iti eva. Asmin prsthe kimapi vastutah na grhnati."},
+"rb_pihole_summary":{"message0":"Pi-hole samkshepah","tooltip":"Aika smritih adyaha: queries (kati prashnah), blocked (kati nirodhita), blocked_pct (nirodhita bhagah), gravity (kati domainah listah santi), clients (kati yantrani apipracchan) cha blocking (nirodhah pravartate va no). PIHOLE_URL PIHOLE_PASSWORD second-thought.ini. Asmin prsthe nidarsakam Pi-hole upayabhate."},
+"rb_pihole_top_domains":{"message0":"atyadhikam nirodhita domainah %1","tooltip":"Smrtinam sucih, pratyeksya atyadhikam nirodhita domain: domain ca count (kati nirodhita). Kevalam pathati."},
+"rb_pihole_top_clients":{"message0":"pratham clientah %1","tooltip":"Smrtinam sucih, pratyeksya yantra yad atyadhikam apipracchat: name, ip ca count (kati prashnah). Kevalam pathati."},
+"rb_pihole_blocking":{"message0":"Pi-hole nirodham %1 sekundan apagantum","tooltip":"Nirodham etanih sekundani apagacchati, tadanantaram Pi-hole swayam pravartayati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."},
+"rb_pihole_enable":{"message0":"Pi-hole nirodham pravartayitum","tooltip":"Nirodham punah pravartayati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."},
+"rb_pihole_allow":{"message0":"%1 %2 Pi-hole allow liste","tooltip":"Domainam allow liste sthapayati, va apasarayati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."},
+"rb_pihole_deny":{"message0":"%1 %2 Pi-hole deny liste","tooltip":"Domainam deny liste sthapayati, va apasarayati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -256,7 +263,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr-Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",
@@ -1076,7 +1084,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"तव MikroTik-मार्गदर्शकं परिवर्तकं वा पठितुम्: द्वाराणि, अंशाः, स्वास्थ्यं, वृत्तान्तः च",
 "UniFi":"UniFi",
 "UniFi clients":"UniFi-ग्राहकाः",
-"{n} clients":"{n} ग्राहकाः",
+"{n} clients":"{n} clientah",
 "UniFi network":"UniFi-जालम्",
 "read your UniFi network: who's connected, and how your UniFi devices are":"तव UniFi-जालं पठितुम्: के संयुक्ताः, तव UniFi-यन्त्राणि कथम् इति च",
 "A Proxmox guest can be started, shut down or rebooted.":"Proxmox-अतिथिः आरब्धुं, निर्वापयितुं, पुनः आरब्धुं वा शक्यते।",
@@ -1144,7 +1152,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"NZBGeek at NZB patram grhnatu cha tat rakshatu (prativaram tvam prcchati)",
 "{n} found":"{n} labdhani",
 "NZBGeek search":"NZBGeek anvesanam",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"pathatu yad tasya asti: adya prashnah nirodhita bhagam, atyadhikam nirodhita domainah clientah cha, nirodhah pravartate va no",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"Pi-hole nirodham apagantum pravartayitum cha, allow deny liste cha parivartayitum (prativaram tvam prcchati)",
+"{n} domains":"{n} domainah",
+"Pi-hole summary":"Pi-hole samkshepah",
+"Pi-hole top blocked domains":"Pi-hole atyadhikam nirodhita domainah",
+"Pi-hole top clients":"Pi-hole pratham clientah",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -1355,7 +1370,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(पूर्वं चालनं मध्ये स्थगितम्, किन्तु ततः परं कार्यक्रमः परिवृत्तः, अतः नूतनतया आरभते।)",
@@ -2120,7 +2137,7 @@
 "UniFi: {why}.":"UniFi: {why}।",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought UniFi इत्यस्मात् केवलं पठति, अतः {what} न प्रेषयति।",
 "UniFi clients":"UniFi-ग्राहकाः",
-"{n} clients":"{n} ग्राहकाः",
+"{n} clients":"{n} clientah",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL UNIFI_API_KEY च अपेक्षते {where_keys}: नियन्त्रकस्य स्थानम् (यथा https://192.168.1.1), Network-अनुप्रयोगात् API-कुञ्चिका च (Settings, Control Plane, Integrations)।",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi-नियन्त्रकः UNIFI_API_KEY प्रत्याख्यातवान्।",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} यन्त्राणि",
@@ -2233,7 +2250,24 @@
 "fetch the NZB for {id} from NZBGeek":"NZBGeek at {id} NZB grhnatu",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} dinani parirakshana",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} kamayate {url_setting} ca {key_setting} ca {where_keys}: tasya adesham (yatha http://pi.hole) ca tasya web anshasya kuncikam.",
+"The {who} refused its password.":"Tena {who} tena kuncikam apaharitam.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole samkshepah",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} prashnah, {blocked} nirodhah ({blocked_pct} %)",
+"blocking on":"nirodhah on",
+"blocking off":"nirodhah off",
+"Pi-hole top blocked domains":"Pi-hole atyadhikam nirodhita domainah",
+"{n} domains":"{n} domainah",
+"Pi-hole top clients":"Pi-hole pratham clientah",
+"For how long? Give the seconds blocking should be off, like 60.":"Kati kalam? Dva nirodhasya apagatasya sekundani, yatha 60.",
+"disable Pi-hole's blocking for {n} seconds":"Pi-hole nirodham {n} sekundan apagantum",
+"enable Pi-hole's blocking":"Pi-hole nirodham pravartayitum",
+"Which list (allow or deny), add or remove, and which domain?":"Ka lista (allow va deny), prasthitum va apasarayitum, ka cha domain?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} Pi-hole {which} liste",
+"added by Second Thought":"Second Thought dvara prasthitam",
+"{n} queries, {blocked} blocked":"{n} prashnah, {blocked} nirodhah"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

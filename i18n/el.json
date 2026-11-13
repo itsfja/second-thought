@@ -736,6 +736,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "λήψη του NZB του %1",
    "tooltip": "Παίρνει το αρχείο NZB μιας κυκλοφορίας και το αποθηκεύει ως <id>.nzb. Σε ρωτά πάντα πρώτα, ακόμη κι όταν τίποτα άλλο δεν ρωτά, και χωρίς κανέναν να πει ναι, δεν γίνεται. Δεν δίνει τίποτα σε πρόγραμμα λήψης: το αρχείο αποθηκεύεται, αυτό μόνο. Σε αυτή τη σελίδα τίποτα δεν παίρνει πραγματικά."
+  },
+  "rb_pihole_summary": {
+   "message0": "σύνοψη Pi-hole",
+   "tooltip": "Μια εγγραφή για σήμερα: queries (πόσα ερωτήματα DNS), blocked (πόσα μπλοκαρίστηκαν), blocked_pct (το ποσοστό μπλοκαρίσματος), gravity (πόσους τομείς έχουν οι λίστες), clients (πόσες συσκευές ρώτησαν) και blocking (αν το μπλοκάρισμα είναι ενεργό). Χρειάζεται PIHOLE_URL και PIHOLE_PASSWORD στο second-thought.ini. Σε αυτή τη σελίδα χρησιμοποιεί ένα δείγμα Pi-hole."
+  },
+  "rb_pihole_top_domains": {
+   "message0": "top %1 μπλοκαρισμένοι τομείς",
+   "tooltip": "Μια λίστα εγγραφών, μία για καθέναν από τους πιο μπλοκαρισμένους τομείς: domain και count (πόσες φορές μπλοκαρίστηκε). Μόνο διαβάζει."
+  },
+  "rb_pihole_top_clients": {
+   "message0": "top %1 πελάτες",
+   "tooltip": "Μια λίστα εγγραφών, μία για κάθε συσκευή που ρώτησε τις περισσότερες φορές: name, ip και count (πόσα ερωτήματα). Μόνο διαβάζει."
+  },
+  "rb_pihole_blocking": {
+   "message0": "κλείσιμο του μπλοκαρίσματος του Pi-hole για %1 δευτερόλεπτα",
+   "tooltip": "Κλείνει το μπλοκάρισμα για τόσα δευτερόλεπτα, μετά το Pi-hole το ξανανοίγει μόνο του. Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
+  },
+  "rb_pihole_enable": {
+   "message0": "άνοιγμα του μπλοκαρίσματος του Pi-hole",
+   "tooltip": "Ξανανοίγει το μπλοκάρισμα. Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 στη λίστα allow του Pi-hole",
+   "tooltip": "Βάζει έναν τομέα στη λίστα allow, ή τον βγάζει. Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 στη λίστα deny του Pi-hole",
+   "tooltip": "Βάζει έναν τομέα στη λίστα deny, ή τον βγάζει. Σε ρωτάει πάντα πρώτα, ακόμα κι όταν τίποτα άλλο δεν ρωτάει, και χωρίς κανέναν να πει ναι, δεν γίνεται. Σε αυτή τη σελίδα τίποτα δεν αλλάζει πραγματικά."
   }
  },
  "options": {
@@ -927,7 +955,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr και Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",
@@ -1815,7 +1844,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "να παίρνεις ένα αρχείο NZB από το NZBGeek και να το αποθηκεύεις (ρωτώντας σε κάθε φορά)",
   "{n} found": "βρέθηκαν {n}",
   "NZBGeek search": "αναζήτηση στο NZBGeek",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "να διαβάζεις το Pi-hole σου: τα ερωτήματα και το ποσοστό μπλοκαρίσματος του σήμερα, τους πιο μπλοκαρισμένους τομείς και πελάτες, και αν το μπλοκάρισμα είναι ενεργό",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "να κλείνεις και να ανοίγεις το μπλοκάρισμα του Pi-hole σου, και να αλλάζεις τις λίστες allow και deny του (ρωτώντας σε κάθε φορά)",
+  "{n} domains": "{n} τομείς",
+  "Pi-hole summary": "σύνοψη Pi-hole",
+  "Pi-hole top blocked domains": "Οι πιο μπλοκαρισμένοι τομείς του Pi-hole",
+  "Pi-hole top clients": "Κύριοι πελάτες του Pi-hole",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2658,7 +2694,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(Μια προηγούμενη εκτέλεση σταμάτησε στη μέση, αλλά το πρόγραμμα έχει αλλάξει από τότε, οπότε ξεκινά από την αρχή.)",
@@ -3536,6 +3574,23 @@
   "fetch the NZB for {id} from NZBGeek": "λήψη του NZB του {id} από το NZBGeek",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} ημέρες διατήρησης",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "Το {who} χρειάζεται {url_setting} και {key_setting} {where_keys}: τη διεύθυνσή του (όπως http://pi.hole) και τον κωδικό της ιστοσελίδας του.",
+  "The {who} refused its password.": "Το {who} απέρριψε τον κωδικό του.",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "σύνοψη Pi-hole",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} ερωτήματα, {blocked} μπλοκαρισμένα ({blocked_pct} %)",
+  "blocking on": "μπλοκάρισμα ενεργό",
+  "blocking off": "μπλοκάρισμα ανενεργό",
+  "Pi-hole top blocked domains": "Οι πιο μπλοκαρισμένοι τομείς του Pi-hole",
+  "{n} domains": "{n} τομείς",
+  "Pi-hole top clients": "Κύριοι πελάτες του Pi-hole",
+  "For how long? Give the seconds blocking should be off, like 60.": "Για πόσο; Δώσε τα δευτερόλεπτα που το μπλοκάρισμα πρέπει να είναι κλειστό, όπως 60.",
+  "disable Pi-hole's blocking for {n} seconds": "κλείσιμο του μπλοκαρίσματος του Pi-hole για {n} δευτερόλεπτα",
+  "enable Pi-hole's blocking": "άνοιγμα του μπλοκαρίσματος του Pi-hole",
+  "Which list (allow or deny), add or remove, and which domain?": "Ποια λίστα (allow ή deny), προσθήκη ή αφαίρεση, και ποιος τομέας;",
+  "{action} {domain} on Pi-hole's {which} list": "{action} {domain} στη λίστα {which} του Pi-hole",
+  "added by Second Thought": "προστέθηκε από το Second Thought",
+  "{n} queries, {blocked} blocked": "{n} ερωτήματα, {blocked} μπλοκαρισμένα"
  }
 }

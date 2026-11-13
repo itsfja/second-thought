@@ -736,6 +736,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "获取 %1 的 NZB",
    "tooltip": "获取一个 release 的 NZB 文件并保存为 <id>.nzb。即使别的都不问，它也总是先问你，没人在场说“是”就不会运行。它不会把任何东西交给下载器：只是保存文件而已。此页面上什么都不会真的获取。"
+  },
+  "rb_pihole_summary": {
+   "message0": "Pi-hole 概览",
+   "tooltip": "今天的一条记录：queries（多少次 DNS 查询）、blocked（多少次被拦截）、blocked_pct（拦截占比）、gravity（列表里有多少域名）、clients（多少台设备询问）和 blocking（拦截是否开启）。需要在 second-thought.ini 中设置 PIHOLE_URL 和 PIHOLE_PASSWORD。此页面使用示例 Pi-hole。"
+  },
+  "rb_pihole_top_domains": {
+   "message0": "拦截最多的 %1 个域名",
+   "tooltip": "记录列表，每个拦截最多的域名一条：domain 和 count（被拦截多少次）。它只读取。"
+  },
+  "rb_pihole_top_clients": {
+   "message0": "前 %1 个客户端",
+   "tooltip": "记录列表，每个询问最多的设备一条：name、ip 和 count（多少次查询）。它只读取。"
+  },
+  "rb_pihole_blocking": {
+   "message0": "将 Pi-hole 拦截关闭 %1 秒",
+   "tooltip": "把拦截关闭这些秒，之后 Pi-hole 会自己重新开启。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
+  },
+  "rb_pihole_enable": {
+   "message0": "开启 Pi-hole 拦截",
+   "tooltip": "重新开启拦截。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 到 Pi-hole 的 allow 列表",
+   "tooltip": "把一个域名放到 allow 列表上，或把它取下。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 到 Pi-hole 的 deny 列表",
+   "tooltip": "把一个域名放到 deny 列表上，或把它取下。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
   }
  },
  "options": {
@@ -927,7 +955,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr 和 Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Tools for the agent: drop them inside an agent block": "给智能体的工具：把它们放进智能体积木里",
@@ -1815,7 +1844,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "从 NZBGeek 获取 NZB 文件并保存（每次都先问你）",
   "{n} found": "找到 {n} 个",
   "NZBGeek search": "NZBGeek 搜索",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "读取你的 Pi-hole：今天的查询和拦截占比、拦截最多的域名和客户端、以及拦截是否开启",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "关闭和开启你的 Pi-hole 的拦截，并修改它的 allow 和 deny 列表（每次都先问你）",
+  "{n} domains": "{n} 个域名",
+  "Pi-hole summary": "Pi-hole 概览",
+  "Pi-hole top blocked domains": "Pi-hole 拦截最多的域名",
+  "Pi-hole top clients": "Pi-hole 主要客户端",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2658,7 +2694,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n（上一次运行中途停止了，但程序之后有改动，所以从头开始。）",
@@ -3536,6 +3574,23 @@
   "fetch the NZB for {id} from NZBGeek": "从 NZBGeek 获取 {id} 的 NZB",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} 天保存期",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "{who}需要 {url_setting} 和 {key_setting} {where_keys}：它的地址（如 http://pi.hole）和它的网页界面密码。",
+  "The {who} refused its password.": "这个{who}拒绝了它的密码。",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "Pi-hole 概览",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} 次查询，{blocked} 次拦截（{blocked_pct} %）",
+  "blocking on": "拦截开启",
+  "blocking off": "拦截关闭",
+  "Pi-hole top blocked domains": "Pi-hole 拦截最多的域名",
+  "{n} domains": "{n} 个域名",
+  "Pi-hole top clients": "Pi-hole 主要客户端",
+  "For how long? Give the seconds blocking should be off, like 60.": "多久？给出拦截应关闭的秒数，比如 60。",
+  "disable Pi-hole's blocking for {n} seconds": "将 Pi-hole 的拦截关闭 {n} 秒",
+  "enable Pi-hole's blocking": "开启 Pi-hole 的拦截",
+  "Which list (allow or deny), add or remove, and which domain?": "哪个列表（allow 还是 deny），添加还是移除，哪个域名？",
+  "{action} {domain} on Pi-hole's {which} list": "在 Pi-hole 的 {which} 列表上{action} {domain}",
+  "added by Second Thought": "由 Second Thought 添加",
+  "{n} queries, {blocked} blocked": "{n} 次查询，{blocked} 次拦截"
  }
 }

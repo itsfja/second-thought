@@ -192,7 +192,14 @@
 "rb_unraid_vm_power":{"message0":"%1 lawnyta d Unraid %2","tooltip":"mkyl aw mkyf awnyta da, bshmh. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la mkyl aw mkyf bshryra."},
 "rb_unraid_parity":{"message0":"bdykuta d mwshtha d Unraid","tooltip":"bdyk asqle dmwshtha bqrynhn, la ktb twbrna. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la bdyk bshryra."},
 "rb_nzbgeek_search":{"message0":"nwd b NZBGeek %1","tooltip":"rhta dktb, lda lkl pkde d mkyn ldayt lhwn: name, id, size_mb, grabs, posted (aymt shlaq) w group. bqra fqt: la sh lamy abd. hty' NZBGEEK_API_KEY b second-thought.ini. bhn dawkta nwdta d hwyt mtlmy."},
-"rb_nzbgeek_fetch":{"message0":"lmbt NZB d %1","tooltip":"lmb sfa NZB dpkde w htyantha k <id>.nzb. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. la mnth lsh dmy: sfa htyan, hdt. bhn dawkta la lmb bshryra."}
+"rb_nzbgeek_fetch":{"message0":"lmbt NZB d %1","tooltip":"lmb sfa NZB dpkde w htyantha k <id>.nzb. shl lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. la mnth lsh dmy: sfa htyan, hdt. bhn dawkta la lmb bshryra."},
+"rb_pihole_summary":{"message0":"Pi-hole sjl","tooltip":"Sjl l lywm: queries (ad stsal DNS), blocked (ad msdod), blocked_pct (nsba d hms), gravity (ad domyn rsha mrha), clients (ad ajhz sl) w blocking (hms on wla of). hty' PIHOLE_URL w PIHOLE_PASSWORD b second-thought.ini. bhn dawkta Pi-hole d hwyt mtlmy."},
+"rb_pihole_top_domains":{"message0":"top %1 msdod domyn","tooltip":"rhta dktba, lda lkl domyn msdod aktr: domain w count (ad mr msdod). bqra fqt."},
+"rb_pihole_top_clients":{"message0":"top %1 kliont","tooltip":"rhta dktba, lda lkl ajhz d sl aktr: name, ip w count (ad stsal). bqra fqt."},
+"rb_pihole_blocking":{"message0":"tf' hms Pi-hole l %1 sbn","tooltip":"tf' hms had sbn, bdn Pi-hole byshglh b nafsh. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
+"rb_pihole_enable":{"message0":"shgl hms Pi-hole","tooltip":"yshgl hms. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
+"rb_pihole_allow":{"message0":"%1 %2 b rshma allow d Pi-hole","tooltip":"hty domyn b rshma allow, wla htyh. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
+"rb_pihole_deny":{"message0":"%1 %2 b rshma deny d Pi-hole","tooltip":"hty domyn b rshma deny, wla htyh. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ܟܘܠ ܝܘܡ","weekdays":"ܒܝܘܡܬܐ ܕܥܒܕܐ","weekends":"ܒܫܒܬܐ"},
@@ -256,7 +263,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr w-Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",
@@ -1076,7 +1084,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"ܩܪܝ ܡܫܚܠܦܢܟ ܕ-MikroTik: ܬܪܥܘ, ܡܢܘܬܗ, ܫܠܡܗ ܘܟܛܒܗ",
 "UniFi":"UniFi",
 "UniFi clients":"ܐܟܣܢܝܐ ܕ-UniFi",
-"{n} clients":"{n} ܐܟܣܢܝܐ",
+"{n} clients":"{n} kliont",
 "UniFi network":"ܡܨܝܕܬܐ ܕ-UniFi",
 "read your UniFi network: who's connected, and how your UniFi devices are":"ܩܪܝ ܡܨܝܕܬܟ ܕ-UniFi: ܡܢ ܐܣܝܪ, ܘܐܝܟܢܐ ܡܢܝܟ ܕ-UniFi",
 "A Proxmox guest can be started, shut down or rebooted.":"ܐܟܣܢܝܐ ܕ-Proxmox ܡܫܬܪܐ, ܡܬܕܥܟ ܐܘ ܬܘܒ ܡܫܬܪܐ.",
@@ -1144,7 +1152,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"lmbt sfa NZB mn NZBGeek w htyantha (shl lk kl zbn)",
 "{n} found":"{n} ltwy",
 "NZBGeek search":"nwdta b NZBGeek",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"qra Pi-hole dyrk: stsal lywm w nsba d hms, aktr msdod domyn w kliont, w hms on wla of",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"tf' w shgl hms d Pi-hole dyrk, w ghyr rshma allow w deny dylh (shal lk kl zbn)",
+"{n} domains":"{n} domyn",
+"Pi-hole summary":"Pi-hole sjl",
+"Pi-hole top blocked domains":"aktr msdod domyn b Pi-hole",
+"Pi-hole top clients":"rwas kliont b Pi-hole",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -1355,7 +1370,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(rahṭā qadmāyā psaq bpalgeh, ꜣellā ṭuksā ꜣeštaḥlap men hāydēn, wmettul hānā šārē men dreš.)",
@@ -2120,7 +2137,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought balḥod qāre men UniFi, wlā mšaddar {what}.",
 "UniFi clients":"ꜣaksnāyē d-UniFi",
-"{n} clients":"{n} ꜣaksnāyē",
+"{n} clients":"{n} kliont",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi sānē UNIFI_URL w-UNIFI_API_KEY {where_keys}: dukktā (ꜣak https://192.168.1.1) wqlīdā d-API men Network (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi lꜥez l-UNIFI_API_KEY.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, {n} mānē",
@@ -2233,7 +2250,24 @@
 "fetch the NZB for {id} from NZBGeek":"lmbt NZB d {id} mn NZBGeek",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} ywm shwra",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} bea {url_setting} w {key_setting} {where_keys}: adres dylh (kl http://pi.hole) w sfa d web dylh.",
+"The {who} refused its password.":"{who} rdd sfh.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole sjl",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} stsal, {blocked} msdod ({blocked_pct} %)",
+"blocking on":"hms on",
+"blocking off":"hms of",
+"Pi-hole top blocked domains":"aktr msdod domyn b Pi-hole",
+"{n} domains":"{n} domyn",
+"Pi-hole top clients":"rwas kliont b Pi-hole",
+"For how long? Give the seconds blocking should be off, like 60.":"Ad shw? hb sbab d hms bykon of, kl 60.",
+"disable Pi-hole's blocking for {n} seconds":"tf' hms d Pi-hole l {n} sbn",
+"enable Pi-hole's blocking":"shgl hms d Pi-hole",
+"Which list (allow or deny), add or remove, and which domain?":"Ayna rshma (allow wla deny), zwd wla hty, w ayna domyn?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} b rshma {which} d Pi-hole",
+"added by Second Thought":"zwd mnh Second Thought",
+"{n} queries, {blocked} blocked":"{n} stsal, {blocked} msdod"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

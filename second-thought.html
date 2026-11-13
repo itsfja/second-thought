@@ -505,7 +505,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -569,7 +569,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD")
 
 
 def _load_keychain():
@@ -1568,6 +1568,14 @@ SAFETY = {
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
     "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
     "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
+    # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
+    # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
+    # settings.
+    "pihole_free": [["GET", r"^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"],
+                    ["POST", r"^/api/auth$"]],
+    "pihole_asks": [["POST", r"^/api/dns/blocking$"],
+                    ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
+                    ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
@@ -1743,6 +1751,17 @@ def arr_call(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
+
+
+def pihole_call(method, path):
+    """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
+    signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
+    deny list), and None for anything else, which is never sent (#401)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
             return kind
     return None
 
@@ -2208,6 +2227,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
+    ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -2220,6 +2240,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
+    ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("web", "read public web pages and search the web", False),
@@ -4929,6 +4950,136 @@ class Connections:
         raw = await self._nzbgeek({"t": "get", "id": n}, approved=True)
         await self.save_file(raw, n, "nzb")
         self.log(tr("NZBGeek"), what, tr("done"))
+        return True
+
+    # Pi-hole (#401)
+    # Pi-hole's REST API (v6 and later): PIHOLE_URL (like http://pi.hole) and PIHOLE_PASSWORD (the web interface's
+    # password). Each run signs in once (POST /api/auth) and carries the session id; the stats and the blocking
+    # status are reads (pihole_free); disabling or enabling blocking, and adding or removing a domain on the allow
+    # or deny list (pihole_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: no
+    # upstream DNS, no DHCP, no web password, no network settings. PIHOLE_CERT_SHA256 pins a certificate this
+    # computer doesn't trust.
+    async def _pihole_auth(self):
+        """Signs in once and keeps the session id for the run."""
+        if getattr(self, "_pihole_sid", None):
+            return self._pihole_sid
+        url = os.environ.get("PIHOLE_URL", "").strip()
+        password = os.environ.get("PIHOLE_PASSWORD", "").strip()
+        if not url or not password:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.",
+                              who="Pi-hole", url_setting="PIHOLE_URL", key_setting="PIHOLE_PASSWORD", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Pi-hole", url, "PIHOLE_CERT_SHA256", "POST", "/api/auth",
+                                         {"Content-Type": "application/json"}, {"password": password})
+        answer = json.loads(raw) if raw.strip() else {}
+        session = (answer.get("session") or {}) if isinstance(answer, dict) else {}
+        if status >= 400 or not session.get("sid"):
+            raise RunError(tr("The {who} refused its password.", who="Pi-hole"))
+        self._pihole_sid = session["sid"]
+        return self._pihole_sid
+
+    async def _pihole(self, method, path, body=None, approved=False, reauth=True, query=None):
+        """One request to Pi-hole's API, signed in and gated by pihole_call: the stats and the blocking status go
+        without asking, the few changes only after a live yes, and anything else is never sent. The query string is
+        kept out of the gate: it only ever narrows a read."""
+        kind = pihole_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who="Pi-hole"))
+        sid = await self._pihole_auth()
+        whole = path + (("?" + urllib.parse.urlencode(query)) if query else "")
+        status, raw = await self._pinned("Pi-hole", os.environ.get("PIHOLE_URL", "").strip(), "PIHOLE_CERT_SHA256",
+                                        method, whole, {"X-FTL-SID": sid}, body)
+        if status == 401 and reauth:  # the session ran out: sign in again and try once more
+            self._pihole_sid = None
+            return await self._pihole(method, path, body, approved, reauth=False, query=query)
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Pi-hole", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        if isinstance(answer, dict) and answer.get("error"):
+            raise RunError(tr("{who}: {why}.", who="Pi-hole", why=_short(to_str((answer["error"] or {}).get("message") or ""), 120)))
+        return answer
+
+    async def pihole_summary(self):
+        """One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the
+        blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking
+        (whether blocking is on)."""
+        s = await self._pihole("GET", "/api/stats/summary")
+        blocking = await self._pihole("GET", "/api/dns/blocking")
+        q = (s.get("queries") or {})
+        out = {"queries": num(q.get("total")), "blocked": num(q.get("blocked")),
+               "blocked_pct": num(q.get("percent")),
+               "gravity": num((s.get("gravity") or {}).get("domains")),
+               "clients": num((s.get("clients") or {}).get("total")),
+               "blocking": bool((blocking or {}).get("blocking"))}
+        on = out["blocking"]
+        self.log(tr("Pi-hole summary"),
+                 tr("{queries} queries, {blocked} blocked ({blocked_pct} %)", **out) + ", "
+                 + (tr("blocking on") if on else tr("blocking off")))
+        return out
+
+    async def pihole_top_domains(self, count=5):
+        """The most-blocked domains: a list of records — domain and count (how many times it was blocked)."""
+        d = await self._pihole("GET", "/api/stats/top_domains", query={"blocked": "true", "count": str(num(count) or 5)})
+        rows = d.get("domains") or []
+        out = [{"domain": to_str(r.get("domain")), "count": num(r.get("count"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['domain']}: {r['count']}" for r in out)
+        self.log(tr("Pi-hole top blocked domains"), lines or tr("(nothing)"), tr("{n} domains", n=len(out)))
+        return out
+
+    async def pihole_top_clients(self, count=5):
+        """The devices that asked the most: a list of records — name, ip and count (how many queries)."""
+        c = await self._pihole("GET", "/api/stats/top_clients", query={"count": str(num(count) or 5)})
+        rows = c.get("clients") or []
+        out = [{"name": to_str(r.get("name") or r.get("ip")), "ip": to_str(r.get("ip")), "count": num(r.get("count"))}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['count']}" for r in out)
+        self.log(tr("Pi-hole top clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
+        return out
+
+    async def pihole_blocking(self, seconds):
+        """Disables blocking for that many seconds, after asking you, every time. Gives back True if it was done."""
+        n = num(seconds)
+        if not n or n <= 0:
+            raise RunError(tr("For how long? Give the seconds blocking should be off, like 60."))
+        what = tr("disable Pi-hole's blocking for {n} seconds", n=n)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._pihole("POST", "/api/dns/blocking", {"blocking": False, "timer": n}, approved=True)
+        self.log(tr("Pi-hole"), what, tr("done"))
+        return True
+
+    async def pihole_enable(self):
+        """Turns blocking back on, after asking you, every time. Gives back True if it was done."""
+        what = tr("enable Pi-hole's blocking")
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._pihole("POST", "/api/dns/blocking", {"blocking": True}, approved=True)
+        self.log(tr("Pi-hole"), what, tr("done"))
+        return True
+
+    async def pihole_list(self, which, action, domain):
+        """Puts a domain on Pi-hole's allow or deny list, or takes it off, after asking you, every time. Gives back
+        True if it was done."""
+        w, a, d = to_str(which).strip().lower(), to_str(action).strip().lower(), to_str(domain).strip().lower()
+        if w not in ("allow", "deny") or a not in ("add", "remove") or not d:
+            raise RunError(tr("Which list (allow or deny), add or remove, and which domain?"))
+        what = tr("{action} {domain} on Pi-hole's {which} list", action=a, domain=d, which=w)
+        if getattr(self, "testing", False):
+            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return False
+        if not await self.confirm_live(what):
+            return False
+        path = f"/api/domains/{w}list/exact"
+        if a == "add":
+            await self._pihole("POST", path, {"domain": d, "comment": tr("added by Second Thought")}, approved=True)
+        else:
+            await self._pihole("DELETE", path, {"domain": [d]}, approved=True)
+        self.log(tr("Pi-hole"), what, tr("done"))
         return True
 
     # Proxmox (#357)
@@ -7800,6 +7951,12 @@ class Doctor:
                 return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
                     + ", " + tr("{n} days of retention", n=days or "?")
             out.append(("NZBGeek", nzbgeek))
+        if has("pihole_read", "pihole_control"):
+            async def pihole():
+                s = await self._pihole("GET", "/api/stats/summary")
+                q = (s.get("queries") or {})
+                return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
+            out.append(("Pi-hole", pihole))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -8115,7 +8272,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -10369,6 +10526,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 {"key":"g_consultation_diff","file":"consultation-diff.json","category":"news","title":"Consultation changes","description":"Choose two versions of a consultation or policy document. Claude lists what changed between them, in plain English, most important first, quoting both versions for each change.","tip":"Choose the older version first. Works with PDFs, Word files and text files.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_before","name":"before"},{"id":"g_after","name":"after"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_say","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Choose the older version first."}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_before"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_after"}},"inputs":{"VALUE":{"block":{"type":"rb_file_choose"}}},"next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"List what changed between these two versions of a document: what was added, removed or reworded in a way that changes its meaning. Most important first. For each, quote the old and the new wording, then one plain sentence on what the change means. Leave out changes to layout, spelling and numbering.\n\nOLDER VERSION:\n"}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_before"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nNEWER VERSION:\n"}}},"ADD3":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_after"}}}}},"extraState":{"itemCount":4}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"every change quotes both versions word for word; nothing listed that didn't change; changes of meaning only; the most important first; plain English"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_local_council_watch","file":"local-council-watch.json","category":"news","title":"Council agenda watch","description":"Watches your council's agenda page and emails you when an item matches your topics, with the meeting and its date.","tip":"Change the page to your council's agendas and the topics in the first block. Agendas only in PDFs can't be watched.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_topics","name":"topics"},{"id":"g_hits","name":"hits"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_ask_me","inputs":{"TEXT":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Paste an agenda item to test with"}}}},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"agenda"}}},"VALUE":{"block":{"type":"rb_answer"}}}}}}},"x":30,"y":30},{"type":"rb_page_when","fields":{"URL":"https://example.com/council/agendas","WORDS":"Agenda","N":720},"next":{"block":{"type":"rb_broadcast_with_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"agenda"}}},"VALUE":{"block":{"type":"rb_event","fields":{"KEY":"text"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"agenda"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_topics"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"planning applications, bin collections, parking, cycle lanes"}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_hits"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"This is what changed on a council's agenda page. List any items about these topics: "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_topics"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":". One line each: the item, the committee, and the meeting date. If none match, reply exactly: nothing\n\n"}}},"ADD3":{"block":{"type":"rb_msg_value"}}},"extraState":{"itemCount":4}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"rb_contains","inputs":{"A":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_hits"}}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"nothing"}}}}}},"DO0":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"Nothing on the agenda for your topics."}}}}}},"ELSE":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"On the council agenda"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_hits"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_hits"}}}}}}}}}},"extraState":{"hasElse":true}}}}}}},"x":30,"y":290}]}}},
 {"key":"g_dep_watcher","file":"dep-watcher.json","category":"coding","title":"Dependency watcher","description":"Each Monday, reads the releases feeds of your dependencies, summarises breaking changes, and checks your project's dependency file to say whether each one touches you.","tip":"Put each dependency's releases feed in feeds = …, like https://github.com/d3/d3/releases.atom, and your project in the first block.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_project","name":"project"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"deps"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":9,"MINUTE":15,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Monday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"deps"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"deps"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_project"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"sample-baker/sourdough-chart"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Recall the note 'releases seen'. Read my feeds (read_feed with no url): they're the releases of my dependencies. For each release newer than the ones I've seen, say in a line whether it has breaking changes, and what. Then read the dependency file in "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_project"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" (package.json, requirements.txt or pyproject.toml) and say whether each breaking change affects a version I use. Finally remember the newest release of each dependency as 'releases seen'."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":12}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"feeds"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"memory"}}}}}}}},"next":{"block":{"type":"rb_email_send","inputs":{"TO":{"shadow":{"type":"text","fields":{"TEXT":"you@example.com"}}},"SUBJECT":{"shadow":{"type":"text","fields":{"TEXT":"Dependency releases this week"}}},"TEXT":{"block":{"type":"rb_draft"}}},"next":{"block":{"type":"rb_result"}}}}}}}},"x":30,"y":290}]}}},
+{"key":"g_dns_check","file":"dns-check.json","category":"home","title":"DNS check","description":"Each morning, reads your Pi-hole: today's queries and blocked share, the most-blocked domain, and whether blocking is on, and sends you a Telegram message, with a warning if blocking is off. It only reads: nothing is disabled or enabled.","tip":"Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. Change 1 to report more blocked domains.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_summary","name":"summary"},{"id":"g_top","name":"top"},{"id":"g_one","name":"one"},{"id":"g_report","name":"report"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":8,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"check"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"check"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_summary"}},"inputs":{"VALUE":{"block":{"type":"rb_pihole_summary"}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_top"}},"inputs":{"VALUE":{"block":{"type":"rb_pihole_top_domains","inputs":{"N":{"shadow":{"type":"math_number","fields":{"NUM":1}}}}}}},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Pi-hole overnight: "}}},"ADD1":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"queries"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" queries, "}}},"ADD3":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"blocked"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" blocked ("}}},"ADD5":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"blocked_pct"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}},"ADD6":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" %)"}}}},"extraState":{"itemCount":7}}}},"next":{"block":{"type":"controls_forEach","fields":{"VAR":{"id":"g_one"}},"inputs":{"LIST":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_top"}}}},"DO":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nMost blocked: "}}},"ADD2":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"domain"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD3":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" ("}}},"ADD4":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"count"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_one"}}}}}}},"ADD5":{"shadow":{"type":"rb_longtext","fields":{"TEXT":" times)"}}}},"extraState":{"itemCount":6}}}}}}},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_negate","inputs":{"BOOL":{"block":{"type":"rb_rec_get","inputs":{"KEY":{"shadow":{"type":"text","fields":{"TEXT":"blocking"}}},"REC":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_summary"}}}}}}}}}},"DO0":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_report"}},"inputs":{"VALUE":{"block":{"type":"text_join","inputs":{"ADD0":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}},"ADD1":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\nWarning: Pi-hole's blocking is off!"}}}},"extraState":{"itemCount":2}}}}}}},"next":{"block":{"type":"rb_tg_send","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_report"}}}}}}}}}}}}}}}}}}},"x":30,"y":190}]}}},
 {"key":"g_docs_drift_detector","file":"docs-drift-detector.json","category":"coding","title":"Docs drift detector","description":"Each Monday, compares a project's README with its code: flags, commands and files the README mentions that don't exist, and ones the code has that it doesn't mention. Opens an issue, or updates the open one.","tip":"Change the project in the first block. On the page, the sample project's README really has drifted.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_project","name":"project"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"drift"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":9,"MINUTE":30,"DAYS":"weekdays"},"next":{"block":{"type":"controls_if","inputs":{"IF0":{"block":{"type":"logic_compare","fields":{"OP":"EQ"},"inputs":{"A":{"block":{"type":"rb_now","fields":{"PART":"weekday"}}},"B":{"shadow":{"type":"text","fields":{"TEXT":"Monday"}}}}}},"DO0":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"drift"}}}}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"drift"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_project"}},"inputs":{"VALUE":{"block":{"type":"text","fields":{"TEXT":"sample-baker/sourdough-chart"}}}},"next":{"block":{"type":"rb_agent","fields":{"PLAN":false},"inputs":{"GOAL":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"In the GitHub project "}}},"ADD1":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_project"}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":", read README.md, the top folder, and the code for its command line (look in src/ or the main package). List every flag, command and file the README mentions that the code doesn't have, and every flag the code has that the README doesn't mention. Check your list with review_text against: each difference names where it comes from; nothing invented. If there are differences, search_github for an open issue titled 'README drift' in the project: comment on it if there is one, otherwise open one. If there are none, change nothing and say so."}}}},"extraState":{"itemCount":3}}},"STEPS":{"shadow":{"type":"math_number","fields":{"NUM":14}}},"TOOLS":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"github_act"},"next":{"block":{"type":"rb_agent_builtin","fields":{"KIND":"review"}}}}}}}},"next":{"block":{"type":"rb_result"}}}}}},"x":30,"y":290}]}}},
 {"key":"g_easy_read","file":"easy-read.json","category":"odds","title":"Easy read","description":"Choose a document. Claude makes an easy-read version: one idea per sentence, everyday words, a heading every few points and a suggested picture for each, checked against easy-read guidance. Saved to print.","tip":"Easy read is for people with learning disabilities. Ask someone who uses it to check the result.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_task","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Make an easy-read version of this document. Keep what the reader needs to know or do; leave out the rest. For each point, suggest a picture in [square brackets] before it.\n\n"}}},"ADD1":{"block":{"type":"rb_file_choose"}}},"extraState":{"itemCount":2}}}},"next":{"block":{"type":"rb_generate","next":{"block":{"type":"rb_reflect","inputs":{"CRITERIA":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"one idea per sentence; sentences of 15 words or fewer; everyday words, with any hard word explained; a heading every three to five points; a suggested picture for each point; numbers written as digits; nothing the reader needs is left out"}}},"ROUNDS":{"shadow":{"type":"math_number","fields":{"NUM":3}}},"FIX":{"block":{"type":"rb_revise"}}},"next":{"block":{"type":"rb_ask_first","fields":{"WHAT":"files"},"next":{"block":{"type":"rb_file_save","fields":{"EXT":"md"},"inputs":{"VALUE":{"block":{"type":"rb_draft"}},"NAME":{"shadow":{"type":"text","fields":{"TEXT":"easy-read"}}}},"next":{"block":{"type":"rb_result"}}}}}}}}}}}},"x":30,"y":30}]}}},
 {"key":"g_energy_autopsy","file":"energy-autopsy.json","category":"home","title":"Energy autopsy","description":"Each night, reads the day's power use from Home Assistant and explains the spikes in plain English, like \"the 2 to 4pm spike was the tumble dryer\".","tip":"Add your own big appliances' power sensors to the question, in place of the washing machine and garage heater.","author":"itsfja","runtime":"3.0.0","version":1,"program":{"variables":[{"id":"g_explained","name":"explained"}],"blocks":{"languageVersion":0,"blocks":[{"type":"rb_start","next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"autopsy"}}}}}},"x":30,"y":30},{"type":"rb_when_time","fields":{"HOUR":22,"MINUTE":0,"DAYS":"every"},"next":{"block":{"type":"rb_broadcast_wait","inputs":{"MSG":{"shadow":{"type":"text","fields":{"TEXT":"autopsy"}}}}}},"x":550,"y":30},{"type":"rb_receive","fields":{"MSG":"autopsy"},"next":{"block":{"type":"variables_set","fields":{"VAR":{"id":"g_explained"}},"inputs":{"VALUE":{"block":{"type":"rb_ask","inputs":{"TEXT":{"block":{"type":"text_join","inputs":{"ADD0":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"Here is today's whole-house power, and the power of some devices. Find the two or three biggest spikes (when, and roughly how many watts) and say which device most likely caused each, like 'the 2 to 4pm spike was the tumble dryer'. Plain English, at most five lines, then one thing worth changing.\n\nHouse power, last 24 hours:\n"}}},"ADD1":{"block":{"type":"rb_ha_history","inputs":{"ENTITY":{"shadow":{"type":"text","fields":{"TEXT":"sensor.house_power"}}},"HOURS":{"shadow":{"type":"math_number","fields":{"NUM":24}}}}}},"ADD2":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nWashing machine, last 24 hours:\n"}}},"ADD3":{"block":{"type":"rb_ha_history","inputs":{"ENTITY":{"shadow":{"type":"text","fields":{"TEXT":"sensor.washing_machine_power"}}},"HOURS":{"shadow":{"type":"math_number","fields":{"NUM":24}}}}}},"ADD4":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nGarage heater, last 24 hours:\n"}}},"ADD5":{"block":{"type":"rb_ha_history","inputs":{"ENTITY":{"shadow":{"type":"text","fields":{"TEXT":"sensor.garage_heater_power"}}},"HOURS":{"shadow":{"type":"math_number","fields":{"NUM":24}}}}}},"ADD6":{"shadow":{"type":"rb_longtext","fields":{"TEXT":"\n\nEverything reporting power now:\n"}}},"ADD7":{"block":{"type":"rb_ha_summary","inputs":{"TEXT":{"shadow":{"type":"text","fields":{"TEXT":"power"}}}}}}},"extraState":{"itemCount":8}}}}}}},"next":{"block":{"type":"rb_ha_notify","inputs":{"TARGET":{"shadow":{"type":"text","fields":{"TEXT":"persistent_notification"}}},"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_explained"}}}}},"next":{"block":{"type":"rb_finish_with","inputs":{"TEXT":{"block":{"type":"variables_get","fields":{"VAR":{"id":"g_explained"}}}}}}}}}}},"x":30,"y":290}]}}},
@@ -10457,6 +10615,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
+["pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
@@ -10469,6 +10628,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", false],
+["pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["web", "read public web pages and search the web", false],
@@ -10607,6 +10767,30 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "GET",
    "^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"
+  ]
+ ],
+ "pihole_free": [
+  [
+   "GET",
+   "^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"
+  ],
+  [
+   "POST",
+   "^/api/auth$"
+  ]
+ ],
+ "pihole_asks": [
+  [
+   "POST",
+   "^/api/dns/blocking$"
+  ],
+  [
+   "POST",
+   "^/api/domains/(allowlist|denylist)/exact$"
+  ],
+  [
+   "DELETE",
+   "^/api/domains/(allowlist|denylist)/exact$"
   ]
  ],
  "unifi_free": [
@@ -15082,6 +15266,54 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     ]
    }
   ]
+ },
+ "pihole": {
+  "note": "A sample Pi-hole (v6) for the page and the tests (#401), shaped the way its REST API answers: 85000 queries today, 14.1 % blocked, blocking on, with the living-room TV the noisiest client.",
+  "summary": {
+   "queries": {
+    "total": 85000,
+    "blocked": 12000,
+    "percent": 14.1
+   },
+   "gravity": {
+    "domains": 1200000
+   },
+   "clients": {
+    "total": 12
+   }
+  },
+  "blocking": true,
+  "top_domains": [
+   {
+    "domain": "ads.example.com",
+    "count": 3210
+   },
+   {
+    "domain": "tracker.example.net",
+    "count": 1842
+   },
+   {
+    "domain": "telemetry.example.org",
+    "count": 907
+   }
+  ],
+  "top_clients": [
+   {
+    "name": "livingroom-tv",
+    "ip": "192.168.1.42",
+    "count": 5400
+   },
+   {
+    "name": "fridge",
+    "ip": "192.168.1.51",
+    "count": 2210
+   },
+   {
+    "name": "laptop",
+    "ip": "192.168.1.10",
+    "count": 1877
+   }
+  ]
  }
 }
 </script>
@@ -15345,7 +15577,7 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A", pihole:"#9E2B25"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -15357,7 +15589,7 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), pihole:style(HUES.pihole),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -15543,7 +15775,9 @@ HOW TO MAP CODE
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
-    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
+    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch", rb_pihole_summary:"pihole_read",
+    rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
+    rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control", rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -15944,6 +16178,21 @@ HOW TO MAP CODE
       tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),
     S("rb_nzbgeek_fetch", "fetch the NZB for %1", [val("ID")],
       { style:"nzbgeek", inputsInline:true, tooltip:"Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches." }),
+    /* Pi-hole (#401): reads, and changes that always ask */
+    V("rb_pihole_summary", "Pi-hole summary", [], null, { style:"pihole",
+      tooltip:"One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking (whether blocking is on). Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. On this page it uses a sample Pi-hole." }),
+    V("rb_pihole_top_domains", "top %1 blocked domains", [val("N")], "Array", { style:"pihole", inputsInline:true,
+      tooltip:"A list of records, one for each of the most-blocked domains: domain and count (how many times it was blocked). It only reads." }),
+    V("rb_pihole_top_clients", "top %1 clients", [val("N")], "Array", { style:"pihole", inputsInline:true,
+      tooltip:"A list of records, one for each of the devices that asked the most: name, ip and count (how many queries). It only reads." }),
+    S("rb_pihole_blocking", "disable Pi-hole blocking for %1 seconds", [val("N")],
+      { style:"pihole", inputsInline:true, tooltip:"Turns blocking off for that many seconds, then Pi-hole turns it back on itself. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_pihole_enable", "enable Pi-hole blocking", [],
+      { style:"pihole", tooltip:"Turns blocking back on. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_pihole_allow", "%1 %2 on Pi-hole's allow list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
+      { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the allow list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_pihole_deny", "%1 %2 on Pi-hole's deny list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
+      { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the deny list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     /* Proxmox (#357): reads, and power that always asks */
     V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
       tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
@@ -16162,6 +16411,11 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", contents:[
       B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
+    ]},
+    { kind:"category", name:"Pi-hole", categorystyle:"pihole", contents:[
+      B("rb_pihole_summary"), B("rb_pihole_top_domains", { N:N(5) }), B("rb_pihole_top_clients", { N:N(5) }),
+      B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
+      B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
     ]},
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
@@ -18751,6 +19005,7 @@ HOW TO MAP CODE
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
+             pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
@@ -18830,6 +19085,12 @@ HOW TO MAP CODE
       "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
       "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
       "NZBGEEK_API_KEY = ", "; NZBGEEK_URL = ", "; NZBGEEK_CERT_SHA256 = ");
+    if (need.pihole) out.push("", "[pihole]",
+      "; Your Pi-hole (v6 or later), through its REST API: its address and its web interface's password. The blocks",
+      "; read the stats and the top lists; blocking and the allow and deny lists ask first, and nothing else is",
+      "; ever sent. Run --doctor once: it shows the certificate fingerprint for PIHOLE_CERT_SHA256, if Pi-hole is",
+      "; behind HTTPS this computer doesn't trust.",
+      "PIHOLE_URL = ", "PIHOLE_PASSWORD = ", "; PIHOLE_CERT_SHA256 = ");
     if (need.proxmox) out.push("", "[proxmox]",
       "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
       "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
@@ -19179,6 +19440,9 @@ HOW TO MAP CODE
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
         case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
+        case "rb_pihole_summary": return "(await R.pihole_summary())";
+        case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
+        case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
         case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
@@ -19340,6 +19604,10 @@ HOW TO MAP CODE
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
+        case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
+        case "rb_pihole_enable": E("await R.pihole_enable()"); break;
+        case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
+        case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -21754,6 +22022,37 @@ HOW TO MAP CODE
     addStep("NZBGeek", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  /* Pi-hole on the page (#401): a sample network. Exported Python talks to its REST API: reads, and changes
+     that always ask. */
+  const piholeSample = () => { connNote("Pi-hole"); return CONN.pihole || {}; };
+  function piholeSummary(){
+    const s = piholeSample(), q = s.summary.queries || {}, out = { queries:Math.trunc(num(q.total)), blocked:Math.trunc(num(q.blocked)),
+      blocked_pct:num(q.percent), gravity:Math.trunc(num((s.summary.gravity || {}).domains)),
+      clients:Math.trunc(num((s.summary.clients || {}).total)), blocking:!!s.blocking };
+    addStep("Pi-hole summary", { mono:true, text:out.queries + " queries, " + out.blocked + " blocked (" + out.blocked_pct + " %), "
+      + (out.blocking ? "blocking on" : "blocking off") })
+      .done(tr("done"), "ok");
+    return out;
+  }
+  function piholeTopDomains(n){
+    const out = (piholeSample().top_domains || []).slice(0, Math.max(1, Math.trunc(num(n)) || 5))
+      .map(r => ({ domain:str(r.domain), count:Math.trunc(num(r.count)) }));
+    addStep("Pi-hole top blocked domains", { mono:true, text:out.map(r => r.domain + ": " + r.count).join("\n") || tr("(nothing)") })
+      .done(tr("{n} domains", { n:out.length }), "ok");
+    return out;
+  }
+  function piholeTopClients(n){
+    const out = (piholeSample().top_clients || []).slice(0, Math.max(1, Math.trunc(num(n)) || 5))
+      .map(r => ({ name:str(r.name || r.ip), ip:str(r.ip), count:Math.trunc(num(r.count)) }));
+    addStep("Pi-hole top clients", { mono:true, text:out.map(r => r.name + ": " + r.count).join("\n") || tr("(nothing)") })
+      .done(tr("{n} clients", { n:out.length }), "ok");
+    return out;
+  }
+  async function piholeAsking(what){
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Pi-hole", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
      shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
   const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
@@ -22678,6 +22977,9 @@ HOW TO MAP CODE
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
       case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
+      case "rb_pihole_summary": return piholeSummary();
+      case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
+      case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
@@ -23280,6 +23582,10 @@ HOW TO MAP CODE
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
+      case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
+      case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;
+      case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
+      case "rb_pihole_deny": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's deny list"); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

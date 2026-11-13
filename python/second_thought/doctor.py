@@ -352,6 +352,12 @@ class Doctor:
                 return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
                     + ", " + tr("{n} days of retention", n=days or "?")
             out.append(("NZBGeek", nzbgeek))
+        if has("pihole_read", "pihole_control"):
+            async def pihole():
+                s = await self._pihole("GET", "/api/stats/summary")
+                q = (s.get("queries") or {})
+                return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
+            out.append(("Pi-hole", pihole))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -667,5 +673,5 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

@@ -737,6 +737,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "%1 NZB gahetva",
    "tooltip": "Paccayassa NZB pannam gahetva tam <id>.nzb ti rakkhati. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Na kimpi orohakassa deti: pannam rakkhati, etam yeva. Imasmi pannapattiye kimpi na saccato gahetva."
+  },
+  "rb_pihole_summary": {
+   "message0": "Pi-hole samkhittam",
+   "tooltip": "Ekam mulhanam adyaha: queries (kivati pucchha DNS), blocked (kivati rukkha), blocked_pct (rukkha bhagam), gravity (kivati domainani pannapatti atthi), clients (kivati yantrani pucchhi) ca blocking (rukkhana on va no). PIHOLE_URL PIHOLE_PASSWORD second-thought.ini. Imasmi pannapattiye dakkhineyyaka Pi-hole."
+  },
+  "rb_pihole_top_domains": {
+   "message0": "atirukkha domainani %1",
+   "tooltip": "Mulhanam santanam, ekam ekam atirukkha domainassa: domain ca count (kivati rukkha). Patham yeva."
+  },
+  "rb_pihole_top_clients": {
+   "message0": "pattha clientani %1",
+   "tooltip": "Mulhanam santanam, ekam ekam yantrassa yam atirukkha pucchhi: name, ip ca count (kivati pucchha). Patham yeva."
+  },
+  "rb_pihole_blocking": {
+   "message0": "Pi-hole rukkhanam %1 sekunde off katuva",
+   "tooltip": "Rukkhanam etani sekunde off karoti, paccha Pi-hole sayam on karoti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
+  },
+  "rb_pihole_enable": {
+   "message0": "Pi-hole rukkhanam on katuva",
+   "tooltip": "Rukkhanam puno on karoti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 Pi-hole allow pannapatti",
+   "tooltip": "Domainam allow pannapatti joteti, va nivatteti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 Pi-hole deny pannapatti",
+   "tooltip": "Domainam deny pannapatti joteti, va nivatteti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
   }
  },
  "options": {
@@ -918,7 +946,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr-Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",
@@ -1738,7 +1767,7 @@
   "read your MikroTik router or switch: its ports, modules, health and log": "तव MikroTik-मग्गदेसकं परिवत्तकं वा पठितुं: द्वारानि, अंसा, आरोग्यं, वत्तन्तं च",
   "UniFi": "UniFi",
   "UniFi clients": "UniFi-गाहका",
-  "{n} clients": "{n} गाहका",
+  "{n} clients": "{n} clientani",
   "UniFi network": "UniFi-जालं",
   "read your UniFi network: who's connected, and how your UniFi devices are": "तव UniFi-जालं पठितुं: के संयुत्ता, तव UniFi-यन्तानि कथं इति च",
   "A Proxmox guest can be started, shut down or rebooted.": "Proxmox-अतिथि आरभितुं, निब्बापेतुं, पुन आरभितुं वा सक्का।",
@@ -1806,7 +1835,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "NZBGeek to NZB pannam gahetva ca tam rakkhitva (sabada tam pucchito)",
   "{n} found": "{n} laddha",
   "NZBGeek search": "NZBGeek esana",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "pathatu yam tassa atthi: adya pucchha rukkha bhagam, atirukkha domainani ca clientani, rukkhana on va no",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "Pi-hole rukkhanam off on katuva, allow deny pannapatti ca parivattetu (sabada tam pucchito)",
+  "{n} domains": "{n} domainani",
+  "Pi-hole summary": "Pi-hole samkhittam",
+  "Pi-hole top blocked domains": "Pi-hole atirukkha domainani",
+  "Pi-hole top clients": "Pi-hole pattha clientani",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2649,7 +2685,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(पुब्बचालनं मज्झे अट्ठासि, किच्चक्कमो पन ततो परिवत्ति, तस्मा नवं आरभति।)",
@@ -3414,7 +3452,7 @@
   "UniFi: {why}.": "UniFi: {why}।",
   "Second Thought only reads from UniFi, so it doesn't send {what}.": "Second Thought UniFi तो केवलं पठति, तस्मा {what} न पेसेति।",
   "UniFi clients": "UniFi-गाहका",
-  "{n} clients": "{n} गाहका",
+  "{n} clients": "{n} clientani",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi UNIFI_URL UNIFI_API_KEY च इच्छति {where_keys}: नियामकस्स ठानं (यथा https://192.168.1.1), Network-अनुप्पयोगतो API-कुञ्चिका च (Settings, Control Plane, Integrations)।",
   "The UniFi console refused UNIFI_API_KEY.": "UniFi-नियामको UNIFI_API_KEY पटिक्खिपि।",
   "UniFi Network {version}, {n} devices": "UniFi Network {version}, {n} यन्तानि",
@@ -3527,7 +3565,24 @@
   "fetch the NZB for {id} from NZBGeek": "NZBGeek to {id} NZB gahetva",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} divasa rakkhana",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "{who} icchati {url_setting} ca {key_setting} ca {where_keys}: tassa thanam (yadi http://pi.hole) ca tassa web pannassa kammattanam.",
+  "The {who} refused its password.": "{who} tena kammattanam apaharasi.",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "Pi-hole samkhittam",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} pucchha, {blocked} rukkha ({blocked_pct} %)",
+  "blocking on": "rukkhana on",
+  "blocking off": "rukkhana off",
+  "Pi-hole top blocked domains": "Pi-hole atirukkha domainani",
+  "{n} domains": "{n} domainani",
+  "Pi-hole top clients": "Pi-hole pattha clientani",
+  "For how long? Give the seconds blocking should be off, like 60.": "Kivati kalam? Dehi sekunde rukkhanassa off bhavitu, yadi 60.",
+  "disable Pi-hole's blocking for {n} seconds": "Pi-hole rukkhanam {n} sekunde off katuva",
+  "enable Pi-hole's blocking": "Pi-hole rukkhanam on katuva",
+  "Which list (allow or deny), add or remove, and which domain?": "Ka pannam (allow va deny), joti va nivatti, ka ca domainam?",
+  "{action} {domain} on Pi-hole's {which} list": "{action} {domain} Pi-hole {which} pannapatti",
+  "added by Second Thought": "Second Thought dvare jotita",
+  "{n} queries, {blocked} blocked": "{n} pucchha, {blocked} rukkha"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

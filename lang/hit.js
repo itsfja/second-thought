@@ -191,7 +191,14 @@
 "rb_unraid_vm_power":{"message0":"%1 Unraid unutti %2","tooltip":"Unutti sarnikzi u eszi, sarriessar. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL sarnikzi u UL eszi."},
 "rb_unraid_parity":{"message0":"Unraid para handaizzi","tooltip":"Para sarnikzi mema tarna, tus UL kisari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL handaizzi."},
 "rb_nzbgeek_search":{"message0":"NZBGeek tarna %1","tooltip":"Mema tarnas, kuiš tarnas tarna kuit ID: title, id, size_mb, grabs, posted (kuwapi dais) u group. Tarna only: UL dais. NZBGEEK_API_KEY second-thought.ini. Kuwapi Unraid tarna parkuwas."},
-"rb_nzbgeek_fetch":{"message0":"NZB %1 dai","tooltip":"NZB lim tarnas dais u parkuwa <id>.nzb. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. UL dai parkuwa: lim parkuwa, id. Kuwapi UL dai suneu."}
+"rb_nzbgeek_fetch":{"message0":"NZB %1 dai","tooltip":"NZB lim tarnas dais u parkuwa <id>.nzb. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. UL dai parkuwa: lim parkuwa, id. Kuwapi UL dai suneu."},
+"rb_pihole_summary":{"message0":"Pi-hole mema","tooltip":"Mema memas tarnas: queries (kuit tarnas DNS), blocked (kuit beloceni), blocked_pct (beloceni igi), gravity (kuit domainas rimma is), clients (kuit tolko tarnas) u blocking (belocu estari din natta). PIHOLE_URL u PIHOLE_PASSWORD second-thought.ini. Kuwapi Unraid tarna parkuwas."},
+"rb_pihole_top_domains":{"message0":"beloceni domainas %1","tooltip":"Mema tarnas, kuis tarnas beloceni domain: domain u count (kuit beloceni). Tarna only."},
+"rb_pihole_top_clients":{"message0":"klientas %1","tooltip":"Mema tarnas, kuis tarnas klient nwd: name, ip u count (kuit tarnas). Tarna only."},
+"rb_pihole_blocking":{"message0":"Pi-hole belocu %1 secundas of","tooltip":"Belocu of ana secundas, Pi-hole estari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
+"rb_pihole_enable":{"message0":"Pi-hole belocu estari","tooltip":"Belocu estari. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
+"rb_pihole_allow":{"message0":"%1 %2 Pi-hole allow rimma","tooltip":"Domain allow rimma dais, removian. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
+"rb_pihole_deny":{"message0":"%1 %2 Pi-hole deny rimma","tooltip":"Domain deny rimma dais, removian. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -255,7 +262,8 @@
 "SABnzbd":"SABnzbd",
 "Radarr and Sonarr":"Radarr ù Sonarr",
 "Unraid":"Unraid",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"Pi-hole":"Pi-hole"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",
@@ -1075,7 +1083,7 @@
 "read your MikroTik router or switch: its ports, modules, health and log":"𒉿𒄴𒉡𒈥 MikroTik-𒅗 𒊭𒀝𒍣: 𒆍𒎌, 𒋗𒎌, 𒀸𒋗𒌌 𒅇 𒁾",
 "UniFi":"UniFi",
 "UniFi clients":"𒀭𒌅𒄴𒅆𒌍 UniFi",
-"{n} clients":"𒀭𒌅𒄴𒅆𒌍 {n}",
+"{n} clients":"{n} klientas",
 "UniFi network":"𒊭𒊓 UniFi",
 "read your UniFi network: who's connected, and how your UniFi devices are":"𒊭𒊓 UniFi-𒅗 𒊭𒀝𒍣: 𒆪𒅖 𒄩𒈪𒅔𒃷, 𒅇 𒌑𒉡𒌓 UniFi-𒅗 𒈠𒄴𒄩𒀭",
 "A Proxmox guest can be started, shut down or rebooted.":"𒇽𒍝𒈝 Proxmox 𒅈𒄩 𒋾𒉿𒍣, 𒋼𒀀𒀊𒍣 𒈾𒀸𒈠 𒂕𒉺 𒋾𒉿𒍣.",
@@ -1143,7 +1151,14 @@
 "fetch an NZB file from NZBGeek and save it (asking you each time)":"NZB lim NZBGeek dais u parkuwa (tuwaz kuwapit arha ehu)",
 "{n} found":"{n} tarna",
 "NZBGeek search":"NZBGeek tarna",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on":"Pi-hole tarnas: tarnas u beloceni, beloceni domainas u klientas, belocu estari din natta",
+"disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)":"Pi-hole belocu of u estari, allow u deny rimma wemiya (tuwaz kuwapit arha ehu)",
+"{n} domains":"{n} domainas",
+"Pi-hole summary":"Pi-hole mema",
+"Pi-hole top blocked domains":"Pi-hole beloceni domainas",
+"Pi-hole top clients":"Pi-hole klientas",
+"Pi-hole":"Pi-hole"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -1354,7 +1369,9 @@
 "plex":"plex",
 "windows":"windows",
 "Everything Everywhere All at Once":"Everything Everywhere All at Once",
-"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c"
+"e9c515e02346086e3a477a5436d7bc8c":"e9c515e02346086e3a477a5436d7bc8c",
+"ads.example.com":"ads.example.com",
+"bad.example.com":"bad.example.com"
 },
 "python":{
 "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)":"\n(i-ya-u-wa-ar ḫa-an-te-ez-zi ŠÀ-pát kar-aš-ta, GIŠ.ḪUR-ma wa-aḫ-nu-ut, ne-e-wa ti-ya-zi.)",
@@ -2119,7 +2136,7 @@
 "UniFi: {why}.":"UniFi: {why}.",
 "Second Thought only reads from UniFi, so it doesn't send {what}.":"Second Thought UniFi-za ḫa-at-ra-a-iz-zi-pát, {what} UL pé-e-da-i.",
 "UniFi clients":"an-tu-uḫ-ši-eš UniFi",
-"{n} clients":"an-tu-uḫ-ši-eš {n}",
+"{n} clients":"{n} klientas",
 "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).":"UniFi UNIFI_URL Ù UNIFI_API_KEY {where_keys} ú-e-ek-zi: pé-e-da-an (https://192.168.1.1 ma-ši-wa-an) Ù GIŠ.SAG.KUL API Network-za (Settings, Control Plane, Integrations).",
 "The UniFi console refused UNIFI_API_KEY.":"UniFi UNIFI_API_KEY UL ma-la-a-it.",
 "UniFi Network {version}, {n} devices":"UniFi Network {version}, ú-nu-ut {n}",
@@ -2232,7 +2249,24 @@
 "fetch the NZB for {id} from NZBGeek":"NZB {id} NZBGeek dai",
 "NZBGeek {version}":"NZBGeek {version}",
 "{n} days of retention":"{n} memal harten",
-"NZBGeek":"NZBGeek"
+"NZBGeek":"NZBGeek",
+"{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.":"{who} {url_setting} u {key_setting} {where_keys}: kuit ID-s (sux http://pi.hole) u hartin web lizzi.",
+"The {who} refused its password.":"{who} hartin-wa apeni.",
+"Pi-hole":"Pi-hole",
+"Pi-hole summary":"Pi-hole mema",
+"{queries} queries, {blocked} blocked ({blocked_pct} %)":"{queries} tarnas, {blocked} beloceni ({blocked_pct} %)",
+"blocking on":"belocu estari",
+"blocking off":"belocu natta",
+"Pi-hole top blocked domains":"Pi-hole beloceni domainas",
+"{n} domains":"{n} domainas",
+"Pi-hole top clients":"Pi-hole klientas",
+"For how long? Give the seconds blocking should be off, like 60.":"Kuwat-ma? Tarnas secundas belocu of, suwa 60.",
+"disable Pi-hole's blocking for {n} seconds":"Pi-hole belocu {n} secundas of",
+"enable Pi-hole's blocking":"Pi-hole belocu estari",
+"Which list (allow or deny), add or remove, and which domain?":"Kuis rim (allow allai deny), addian allai removian, kuis domain?",
+"{action} {domain} on Pi-hole's {which} list":"{action} {domain} Pi-hole {which} rimma",
+"added by Second Thought":"added fram Second Thought",
+"{n} queries, {blocked} blocked":"{n} tarnas, {blocked} beloceni"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

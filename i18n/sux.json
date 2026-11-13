@@ -737,6 +737,34 @@
   "rb_nzbgeek_fetch": {
    "message0": "NZB %1 su3",
    "tooltip": "NZB pisan ki-ag2-ki-bi su3 aq hms-bi <id>.nzb-gu. mueash nugigi4, igal igal nugigi4, lu igal nuduga, nugal. nu-ub-su3-e: pisan hms, igi. kigiga-bi ki-a nu-ub-su3."
+  },
+  "rb_pihole_summary": {
+   "message0": "Pi-hole summu",
+   "tooltip": "Summu ana ud-bi: queries (nwd DNS), blocked (hms), blocked_pct (hms igi), gravity (domain rim-bi), clients (tolko nwd) gu blocking (hms gal din nu). PIHOLE_URL gu PIHOLE_PASSWORD second-thought.ini-se. Kigiga-bi Pi-hole summu."
+  },
+  "rb_pihole_top_domains": {
+   "message0": "hms domain-nir %1",
+   "tooltip": "Nimmah, anaag ki-ag2-ki-bi hms domain: domain gu count (hms eger). Igi igi."
+  },
+  "rb_pihole_top_clients": {
+   "message0": "klient-er %1",
+   "tooltip": "Nimmah, anaag ki-ag2-ki-bi nwd klient: name, ip gu count (nwd). Igi igi."
+  },
+  "rb_pihole_blocking": {
+   "message0": "Pi-hole hms %1 sbn nu-ub-gal",
+   "tooltip": "Hms nu-ub-gal ana sbn-bi, Pi-hole gal-e igi. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."
+  },
+  "rb_pihole_enable": {
+   "message0": "Pi-hole hms gal",
+   "tooltip": "Hms gal-e igi. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."
+  },
+  "rb_pihole_allow": {
+   "message0": "%1 %2 Pi-hole allow rim-a",
+   "tooltip": "Domain allow rim-a su3, din remove. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."
+  },
+  "rb_pihole_deny": {
+   "message0": "%1 %2 Pi-hole deny rim-a",
+   "tooltip": "Domain deny rim-a su3, din remove. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."
   }
  },
  "options": {
@@ -918,7 +946,8 @@
   "SABnzbd": "SABnzbd",
   "Radarr and Sonarr": "Radarr u3 Sonarr",
   "Unraid": "Unraid",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "Pi-hole": "Pi-hole"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝",
@@ -1738,7 +1767,7 @@
   "read your MikroTik router or switch: its ports, modules, health and log": "𒉽 MikroTik-𒍪 𒋃: 𒆍𒁉, 𒋗𒁉, 𒁲𒁉 𒅇 𒁾𒁉",
   "UniFi": "UniFi",
   "UniFi clients": "𒇽 𒆭 UniFi",
-  "{n} clients": "𒇽 𒆭 {n}",
+  "{n} clients": "{n} klient",
   "UniFi network": "𒊓 UniFi",
   "read your UniFi network: who's connected, and how your UniFi devices are": "𒊓 UniFi-𒍪 𒋃: 𒀀𒁀 𒆟, 𒅇 𒃻 UniFi-𒍪 𒀀𒈾𒁶",
   "A Proxmox guest can be started, shut down or rebooted.": "𒇽𒆠𒁄 Proxmox 𒁲 𒅗 𒅇 𒄑 𒋳",
@@ -1806,7 +1835,14 @@
   "fetch an NZB file from NZBGeek and save it (asking you each time)": "NZB pisan NZBGeek-ta su3 aq hms-bi (mueash mungi4gi4)",
   "{n} found": "{n} inim",
   "NZBGeek search": "nwd NZBGeek",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on": "Pi-hole igi: nwd nir, hms igi, hms domain-nir gu klient-er, hms gal din nu",
+  "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)": "Pi-hole hms nu-ub-gal gu gal, allow gu deny rim-a mueash (mueash mungi4gi4)",
+  "{n} domains": "{n} domain",
+  "Pi-hole summary": "Pi-hole summu",
+  "Pi-hole top blocked domains": "Pi-hole-a hms domain-nir",
+  "Pi-hole top clients": "Pi-hole-a klient-er",
+  "Pi-hole": "Pi-hole"
  },
  "examples": {
   "review": {
@@ -2649,7 +2685,9 @@
   "plex": "plex",
   "windows": "windows",
   "Everything Everywhere All at Once": "Everything Everywhere All at Once",
-  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c"
+  "e9c515e02346086e3a477a5436d7bc8c": "e9c515e02346086e3a477a5436d7bc8c",
+  "ads.example.com": "ads.example.com",
+  "bad.example.com": "bad.example.com"
  },
  "python": {
   "\n(A previous run stopped part-way, but the program has changed since, so it starts afresh.)": "\n(ak saĝ-ĝa2 maš-a gub, ĝeš-ḫur kur2, gibil-ta saĝ ĝa2-ĝa2.)",
@@ -3414,7 +3452,7 @@
   "UniFi: {why}.": "UniFi: {why}.",
   "Second Thought only reads from UniFi, so it doesn't send {what}.": "Second Thought UniFi-ta šid dili, {what} nu-kin-gi4.",
   "UniFi clients": "lu2 kur9 UniFi",
-  "{n} clients": "lu2 kur9 {n}",
+  "{n} clients": "{n} klient",
   "UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).": "UniFi UNIFI_URL u3 UNIFI_API_KEY {where_keys} al dug4: ki (https://192.168.1.1-gin7) u3 niĝ2-du8 API Network-ta (Settings, Control Plane, Integrations).",
   "The UniFi console refused UNIFI_API_KEY.": "UniFi UNIFI_API_KEY nu-še-ga.",
   "UniFi Network {version}, {n} devices": "UniFi Network {version}, niĝ2 {n}",
@@ -3527,7 +3565,24 @@
   "fetch the NZB for {id} from NZBGeek": "NZB {id} NZBGeek-ta su3",
   "NZBGeek {version}": "NZBGeek {version}",
   "{n} days of retention": "{n} ud hms",
-  "NZBGeek": "NZBGeek"
+  "NZBGeek": "NZBGeek",
+  "{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.": "{who} {url_setting} gu {key_setting} igal {where_keys}: ki-ag2-ki-bi (sux http://pi.hole) gu kib-gu-a web-bi.",
+  "The {who} refused its password.": "{who} kib-gu-a-bi nu-gig-gig.",
+  "Pi-hole": "Pi-hole",
+  "Pi-hole summary": "Pi-hole summu",
+  "{queries} queries, {blocked} blocked ({blocked_pct} %)": "{queries} nwd, {blocked} hms ({blocked_pct} %)",
+  "blocking on": "hms-gal",
+  "blocking off": "hms-nu",
+  "Pi-hole top blocked domains": "Pi-hole-a hms domain-nir",
+  "{n} domains": "{n} domain",
+  "Pi-hole top clients": "Pi-hole-a klient-er",
+  "For how long? Give the seconds blocking should be off, like 60.": "Ad shw? Hb sbab d hms bykon of, kl 60.",
+  "disable Pi-hole's blocking for {n} seconds": "Pi-hole hms {n} sbn nu-ub-gal",
+  "enable Pi-hole's blocking": "Pi-hole hms gal",
+  "Which list (allow or deny), add or remove, and which domain?": "Aba? Rim (allow din deny), add din remove, domain aba?",
+  "{action} {domain} on Pi-hole's {which} list": "{action} {domain} Pi-hole {which} rim-a",
+  "added by Second Thought": "Second Thought-gu add",
+  "{n} queries, {blocked} blocked": "{n} nwd, {blocked} hms"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

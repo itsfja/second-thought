@@ -37,6 +37,7 @@ Made by tools/sync.py from i18n/de.json: edit that, not this.
 - Radarr and Sonarr: Radarr und Sonarr
 - Unraid: Unraid
 - NZBGeek: NZBGeek
+- Pi-hole: Pi-hole
 - Tools for the agent: drop them inside an agent block: Werkzeuge für den Agenten: in einen Agenten-Block ziehen
 - Listeners: they run while the exported program runs on schedule: Zuhörer: Sie laufen, während das exportierte Programm nach Zeitplan läuft
 - Read and send: Lesen und senden
