@@ -19,15 +19,15 @@ matches where you're running.
 - Never commit `second-thought.ini` or keys. Real-key checks (`tools/smoke_test.py`) cost money: Francis runs them,
   or says to.
 - Commit messages and PR bodies say what changed and why, in plain English, ending with the attribution lines:
-**Commands for the terminal must be single-line strings**, chained with `&&`, never multi-line blocks.
-  Multi-line pastes fragment bash history, so up-arrow recall then yields one orphaned line at a time and the
-  terminal becomes unusable for recall. One logical operation = one line.
-
   ```
   Co-authored-by: Vibe Nuage Agent <vibe@mistral.ai>
   Co-authored-by: itsfja <itsfja@users.noreply.github.com>
   ```
+**Commands for the terminal must be single-line strings**, chained with `&&`, never multi-line blocks.
+  Multi-line pastes fragment bash history, so up-arrow recall then yields one orphaned line at a time and the
+  terminal becomes unusable for recall. One logical operation = one line.
 
+  
 ## The environment (Mistral sandbox sessions)
 - **Clone:** the session clones the repo itself (e.g. `gh repo clone itsfja/second-thought -- --depth 1`); there is
   no preselected checkout. Work on a task branch, never directly on main.
