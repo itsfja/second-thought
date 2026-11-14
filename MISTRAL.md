@@ -18,16 +18,14 @@ matches where you're running.
 - The language issues (#129–139, `priority:8`) are under way again (Francis, November 2026): Classical Chinese (#129), Classical Syriac (#130), Church Slavonic (#132), Ottoman Turkish (#133), Pali (#134), Classical Nahuatl (#135), Sumerian (#137), Hittite (#138) and Gothic (#139) are done.
 - Never commit `second-thought.ini` or keys. Real-key checks (`tools/smoke_test.py`) cost money: Francis runs them,
   or says to.
+- **Commands for the terminal must be single-line strings**, chained with `&&`, never multi-line blocks.
+  Multi-line pastes fragment bash history, so up-arrow recall then yields one orphaned line at a time and the
+  terminal becomes unusable for recall. One logical operation = one line.
 - Commit messages and PR bodies say what changed and why, in plain English, ending with the attribution lines:
   ```
   Co-authored-by: Vibe Nuage Agent <vibe@mistral.ai>
   Co-authored-by: itsfja <itsfja@users.noreply.github.com>
   ```
-**Commands for the terminal must be single-line strings**, chained with `&&`, never multi-line blocks.
-  Multi-line pastes fragment bash history, so up-arrow recall then yields one orphaned line at a time and the
-  terminal becomes unusable for recall. One logical operation = one line.
-
-  
 ## The environment (Mistral sandbox sessions)
 - **Clone:** the session clones the repo itself (e.g. `gh repo clone itsfja/second-thought -- --depth 1`); there is
   no preselected checkout. Work on a task branch, never directly on main.
