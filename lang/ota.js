@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex yeni ogeler",
 "Tautulli history":"Tautulli gecmisi",
 "Tautulli watch time":"Tautulli izleme suresi",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"بو صفحه حساب claude.ai‌نینده فعالیّت eder، هر خدمتین مصرفی‌نی سایماز؛ Python‌یه ایخراج ایده‌رک، second-thought.ini‌ده آچارلر قویوب، بو آلت هر خدمتین مصرفی، پلانی و حدی و مازادینی بیلدیرور."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"بو صفحه حساب claude.ai‌نینده فعال‌یت ادر، هر خدمتین مصرفی‌نی سایماز. Python‌یه ایخراج ایده‌رک، second-thought.ini‌ده آچارلر قویوب، بو آلت هر خدمتین مصرفی، پلانی و حدی و مازادینی، آن ماکینه‌ده سایاراق بیلدیرور."
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},

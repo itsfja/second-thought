@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex νέα",
 "Tautulli history":"Tautulli ἱστορία",
 "Tautulli watch time":"Tautulli χρόνος θεάσεως",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Ἡ σελὶς ἐν τῷ claude.ai λογαρυσμῷ σου τρέχει, οὐκ ἄρα τὰ ἐξοδα ἑκάστης διακονίας μετρεῖ· ἐξάγαγε εἰς Πύθωνα, τῶν κλειδῶν ἐν second-thought.ini τεθέντων, καὶ ἐρεῖ τὸ ὄργανον τί ἑκάστη διακονία δαπανᾷ, τὸ σχέδιον καὶ τὸ ὅριον αὐτῆς, καὶ πᾶσαν ὑπερβολήν."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"Ἡ σελὶς ἐν τῷ claude.ai λογαρυσμῷ σου τρέχει, οὐκ ἄρα τὰ ἔξοδα ἑκάστης διακονίας μετρεῖ. ἐξάγαγε εἰς Πύθωνα, τῶν κλειδῶν ἐν second-thought.ini τεθέντων, καὶ ἐρεῖ τὸ ὄργανον τί ἑκάστη διακονία δαπανᾷ, τὸ σχέδιον καὶ τὸ ὅριον αὐτῆς, καὶ πᾶσαν ὑπερβολήν, ἐν ἐκείνῳ τῷ λογιστηρίῳ μετρούμενον."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

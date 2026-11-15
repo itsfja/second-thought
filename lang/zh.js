@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex 新增内容",
 "Tautulli history":"Tautulli 历史",
 "Tautulli watch time":"Tautulli 观看时长",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"此页面通过你的 claude.ai 账户运行，因此不统计各服务的花销；导出为 Python 并在 second-thought.ini 中填好密钥后，此工具会报告每个服务的花销、套餐与上限，以及超额部分。"
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"此页面通过你的 claude.ai 账户运行，因此不统计各服务的花销。导出为 Python 并在 second-thought.ini 中填好密钥后，此工具会报告每个服务的花销、套餐与上限，以及超额部分，计数于那台计算机上。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

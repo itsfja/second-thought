@@ -1900,7 +1900,7 @@
   "Plex new items": "Plex nytt",
   "Tautulli history": "Tautulli saga",
   "Tautulli watch time": "Tautulli ahtimal",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Þessi síða keyrir á claude.ai-reikningi þínum, telur því ekki útgjörf hvers þjónustu; flyttu út í Python, með lyklum í second-thought.ini, og segir þetta tól hvað hver þjónusta hefur eytt, áskrift og takmörk hennar, og alla yfirför."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Þessi síða keyrir á claude.ai-reikningi þínum, telur því ekki útgjörf hvers þjónustu. Flyttu út í Python, með lyklum í second-thought.ini, og segir þetta tól hvað hver þjónusta hefur eytt, áskrift og takmörk hennar, og alla yfirför, talið á þeirri tœlvu."
  },
  "examples": {
   "review": {

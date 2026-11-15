@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex newe thinges",
 "Tautulli history":"Tautulli historie",
 "Tautulli watch time":"Tautulli watching tyme",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Þis page renneþ on þi claude.ai compt, so it telleþ nouȝt of ech servys spending; bere it out to Pyþon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"Þis page renneþ on þi claude.ai compt, so it telleþ nouȝt of ech servys spending. Bere it out to Pyþeon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend, acounted on þat engyn."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

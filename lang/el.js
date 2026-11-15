@@ -1182,7 +1182,7 @@
 "Plex new items":"νέα Plex",
 "Tautulli history":"ιστορικό Tautulli",
 "Tautulli watch time":"χρόνος παρακολούθησης Tautulli",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Η σελίδα τρέχει στον λογαριασμό σας στο claude.ai, οπότε δεν μετρά τα έξοδα κάθε υπηρεσίας· εξαγάγετε σε Python, με κλειδιά στο second-thought.ini, και αυτό το εργαλείο θα αναφέρει τι έχει ξοδέψει κάθε υπηρεσία, το πλάνο και το όριό της, και τυχόν υπέρβαση."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"Η σελίδα τρέχει στον λογαριασμό σας στο claude.ai, οπότε δεν μετρά τα έξοδα κάθε υπηρεσίας. Εξάγετε σε Python, με κλειδιά στο second-thought.ini, και αυτό το εργαλείο θα αναφέρει τι έχει ξοδέψει κάθε υπηρεσία, το πλάνο και το όριό της, και τυχόν υπέρβαση, μετρημένη σε εκείνο τον υπολογιστή."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

@@ -1890,7 +1890,7 @@
   "Plex new items": "Plex yancuic",
   "Tautulli history": "Tautulli tlahtol",
   "Tautulli watch time": "Tautulli tlahtol-t",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Inīn āmatl ipan in motlaħpania in claude.ai momati, ic ahmo quipōhua in ītlaxtlahuiliztli in mochīhuā tlatequipanoāni. Xicmomakā īpan in Python, ica in tlatlapoāni ipan second-thought.ini, auh inīn tlachīhualoni quinpōhuāz tlein ōquitlaxtlāuhceh mochīhuā tlatequipanoāni, ītlanemiliz auh īītlatzonquīzaliz, auh acah tlācamiquiliz, ōmopōhua ipan in tlapōhualtepoztli."
  },
  "examples": {
   "review": {
@@ -3656,17 +3656,17 @@
   "{n} users": "{n} tlacameh",
   "Which stream? Give a session's id, from the sessions.": "Tlein tlatemolea? Xiquica in id, ipan tlachializtli.",
   "stop the {id} stream on Plex": "Plex {id} tlatemoztli quicelah",
-  ", over by {x}": ", over by {x}",
-  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nothing has been spent through this computer's keys yet, so there's nothing to count.",
-  "What each model service has been used, counted on this computer at list prices:": "What each model service has been used, counted on this computer at list prices:",
-  "no plan set: add {setting} in {where} to count it against a cap": "no plan set: add {setting} in {where} to count it against a cap",
-  "over the cap by {x}": "over the cap by {x}",
-  "the {plan} plan publishes no monthly cap": "the {plan} plan publishes no monthly cap",
-  "this hour": "this hour",
-  "this month": "this month",
-  "this week": "this week",
-  "today": "today",
-  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+  ", over by {x}": ", ītlatzonquīzalizhuan īpan {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Axcān ahtle ōquitlaxtlāuhceh ica in tlatlapoāni inīn tlapōhualtepoztli, ic ahtle huel ōmopōhua.",
+  "What each model service has been used, counted on this computer at list prices:": "Tlein ōmotequitlālih īīxiptla tlatequipanoāni mochīhuā, ōmopōhua ipan inīn tlapōhualtepoztli ica in tlaxtlahuilli:",
+  "no plan set: add {setting} in {where} to count it against a cap": "ahmo ōmoquixti tlanemiliztli: {setting} ōmpa {where} xicmotlali, ma ōmopōhua ītech ītlatzonquīzaliz",
+  "over the cap by {x}": "ītlatzonquīzalizhuan īpan {x}",
+  "the {plan} plan publishes no monthly cap": "in {plan} tlanemiliztli ahmo ōmōnēxtiā ītlatzonquīzaliz ipan mētztli",
+  "this hour": "inīn ōra",
+  "this month": "inīn mētztli",
+  "this week": "inīn chicōmilhuitl",
+  "today": "axcān",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% in ītlatzonquīzaliz ipan mētztli in {plan} tlanemiliztli {cap} (ōquitlaxtlāuh {spent}, ōmocuep yancuīc {when})",
   "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {

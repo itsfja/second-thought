@@ -1181,7 +1181,7 @@
 "Plex new items":"Plex之新物",
 "Tautulli history":"Tautulli之史",
 "Tautulli watch time":"Tautulli觀時",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"此頁行於爾claude.ai之籍，故不計各役之費；導出為Python，置鑰於second-thought.ini，此器則報各役所費、其制其限、並逾額者。"
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"此頁行於爾claude.ai之簽，故不計各役之費。導出為Python，置鑰於second-thought.ini，此器則報各役所費、其制其限、並踰額者，計於彼機。"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
