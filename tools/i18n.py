@@ -4,6 +4,7 @@
     python tools/i18n.py missing             # the words each language still needs, page and Python (exit 1 if any)
     python tools/i18n.py add words.json      # put new translations into every language file
     python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux, hit: cuneiform; got: Gothic)
+    python tools/i18n.py derive              # write the languages made from another's words (qnr: Old Norse in runes, from non)
 
 words.json says, for each English text, its translation in each language:
 
@@ -21,6 +22,10 @@ same way. Hittite (hit) uses the same sign list, written as Hittitologists do: s
 Sumerograms in capitals joined by dots (DUB.SAR), Akkadograms in capitals (A-NA), and an accent for the sign's index
 (ú is u2); an English abbreviation in capitals that should stay Latin is marked ^ (^MQTT). Gothic (got) is given in its usual
 transliteration (gutisk, þiudans, ƕas) and written letter for letter in the Gothic alphabet.
+
+Old Norse in runes (qnr) has no words of its own: its file is made from Old Norse's (non), the page's words written in
+the Younger Futhark and the Python words left in Latin letters. So words.json needs no qnr, "add" writes it again
+after adding, and "derive" writes it after any other change to i18n/non.json.
 
 After adding, run python tools/sync.py, then the tests.
 """
@@ -375,6 +380,152 @@ def _to_marked(text, missing, letters, convert):
 SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit", "got"}
 
 
+# ----- Old Norse in runes (#465) -----
+# The Younger Futhark's sixteen runes, in their long-branch shapes, spelled the way the Viking Age inscriptions spell:
+#   - one rune stands for several sounds: ᚢ for u, o, y, ø and v; ᛁ for i, e and j; ᛅ for a and æ; ᚴ for k and g;
+#     ᛏ for t and d; ᛒ for b and p; ᚦ for þ and ð; length isn't written
+#   - ei is ᛅᛁ (stain, steinn), au and ey are ᛅᚢ, and ǫ is ᛅᚢ too (tanmaurk, Danmǫrk, on the Jelling stone)
+#   - a doubled letter is written once, and n isn't written before k or g (kunukʀ, konungr)
+#   - the r of endings (from older z) is ᛦ: after a consonant that isn't a dental, and after the vowel of an ending
+#     (kunukʀ, stainaʀ, aftiʀ, þaiʀ); every other r is ᚱ
+#   - á (on) and án (without) are ᚬ and ᚬᚾ: the rune kept for a spoken through the nose
+# Unlike the script languages above, the words aren't written in a transliteration first: this reads the Old Norse
+# spelling of i18n/non.json itself, so names and modern words have to be told from Old Norse ones. tools/latin_kept.json
+# lists them: `names` (Claude, GitHub, Settings) and `words` (field names, values and modern words: name, title, email).
+# A word with a capital after its first letter, a number, or code's marks stays as it is too, and both sides of a
+# hyphen are judged apart (Homey-ᛏᛅᚴᛁ).
+RUNES = {"a": "ᛅ", "á": "ᛅ", "æ": "ᛅ", "e": "ᛁ", "é": "ᛁ", "i": "ᛁ", "í": "ᛁ", "j": "ᛁ", "o": "ᚢ", "ó": "ᚢ", "u": "ᚢ", "ú": "ᚢ",
+         "y": "ᚢ", "ý": "ᚢ", "ø": "ᚢ", "œ": "ᚢ", "ö": "ᛅᚢ", "ǫ": "ᛅᚢ", "v": "ᚢ", "w": "ᚢ", "b": "ᛒ", "p": "ᛒ", "d": "ᛏ", "t": "ᛏ",
+         "ð": "ᚦ", "þ": "ᚦ", "g": "ᚴ", "k": "ᚴ", "c": "ᚴ", "q": "ᚴ", "x": "ᚴᛋ", "z": "ᛋ", "f": "ᚠ", "h": "ᚼ", "l": "ᛚ", "m": "ᛘ",
+         "n": "ᚾ", "r": "ᚱ", "s": "ᛋ", "ʀ": "ᛦ"}
+RUNE_LETTERS = "a-záéíóúýæœøöǫþð"
+_RUNE_VOWELS = "aáeéiíoóuúyýæœøöǫ"
+_ENDING_R = {"þeir", "þær", "þér", "vér", "ér", "mér", "sér", "ór", "tveir", "þrír"}  # one syllable, and ᛦ all the same
+_KEPT = None
+
+
+def latin_kept():
+    """(names, words): the words that stay in Latin letters in a language written in another script from its own
+    Latin spelling, from tools/latin_kept.json."""
+    global _KEPT
+    if _KEPT is None:
+        d = json.loads((ROOT / "tools" / "latin_kept.json").read_text(encoding="utf-8"))
+        _KEPT = (set(d["names"]), set(d["words"]))
+    return _KEPT
+
+
+def younger_futhark(word):
+    """One Old Norse word, in lowercase, in runes: konungr → ᚴᚢᚾᚢᚴᛦ. None if it has a letter Old Norse doesn't."""
+    if not word or not re.fullmatch(f"[{RUNE_LETTERS}]+", word):
+        return None
+    if word in ("á", "án"):
+        return "ᚬ" + ("ᚾ" if word == "án" else "")
+    w = word.replace("th", "þ")
+    before = w[-2:-1]
+    if w.endswith("r") and before and before != "r":
+        ending = len(re.findall(f"[{_RUNE_VOWELS}]+", w)) > 1 if before in _RUNE_VOWELS else before not in "tdþð"
+        if ending or w in _ENDING_R:
+            w = w[:-1] + "ʀ"
+    w = re.sub(r"n(?=[kg])", "", w)
+    w = w.replace("ei", "ai").replace("ey", "au")
+    out = []
+    for i, c in enumerate(w):
+        if i and c == w[i - 1]:
+            continue  # a doubled letter is written once
+        out.append(RUNES[c])
+    text = "".join(out)
+    return re.sub(r"(.)\1+", r"\1", text)  # and so is a rune doubled by two letters that share it (ᚢ for o and u)
+
+
+def _rune_part(part, names, words):
+    """A word, or one side of a hyphen, with the marks around it: in runes unless it's a name, a kept word or code."""
+    m = re.fullmatch(r"([^\w]*)(.*?)([^\w]*)", part, re.S)
+    pre, core, post = m.groups()
+    if not core or core in names or core.lower() in words or core[:-1] in names and core[-1] == "s":
+        return part, True
+    if re.search(r"[0-9_]", core) or re.search(r"[A-ZÁÉÍÓÚÝÆŒØǪÞÐ]", core[1:]) or not core.isalpha():
+        return part, True
+    written = younger_futhark(core.lower())
+    return (part, True) if written is None else (pre + written + post, False)
+
+
+def to_runes(text, missing=None):
+    """A line of Old Norse in its Latin spelling, in Younger Futhark. Placeholders, %1, <tags>, names, kept words,
+    code, addresses and file names stay as they are."""
+    names, words = latin_kept()
+    out = []
+    for piece in re.split(r"(\{[^{}]*\}|%\d+|</?[a-zA-Z][^<>]*>|&\w+;|\s+)", text):
+        if not piece or piece.isspace() or re.fullmatch(r"\{[^{}]*\}|%\d+|</?[a-zA-Z][^<>]*>|&\w+;", piece, re.S):
+            out.append(piece)
+            continue
+        if re.search(r"[/@=\\~<>*#+]|://|\w\.\w|^--\w|^-[a-z]\b|^\.\w|\w:\w", piece):
+            # An address, a file name, a setting, an option or code. An Old Norse word joined to a file name or a
+            # quoted time is still written: claude.ai-ᚱᛅᛁᚴᚾᛁᚴᛁ, .json-ᛋᚴᛁᛅᛚ.
+            head, hyphen, tail = piece.rpartition("-")
+            if hyphen and re.search(r"\w\.\w+$|^\.\w+$|“$", head) and not re.search(r"[/@]", head) and re.fullmatch(r"[^\W\d_]+[.,;:)]*", tail):
+                tail = _rune_part(tail, names, words)[0]
+            out.append(head + hyphen + tail)
+            continue
+        parts = [_rune_part(p, names, words) for p in piece.split("-")]
+        if len(parts) > 1 and all(kept for _, kept in parts):
+            out.append(piece)
+            continue
+        out.append("-".join(p for p, _ in parts))
+    for i in range(2, len(out) - 2):  # "not a tool": an English a between two kept words isn't Old Norse á
+        if out[i] == "ᛅ" and all(re.fullmatch(r"[(„“\"']*[A-Za-z]+[,.;:)]*", out[j]) for j in (i - 2, i + 2)):
+            out[i] = "a"
+    return "".join(out)
+
+
+# Languages made from another's words: {code: (the language it's made from, how its page words are written, and what
+# its file says of itself)}. `python tools/i18n.py derive` writes i18n/<code>.json; the tests check it is up to date.
+DERIVED = {
+    "qnr": ("non", to_runes, {
+        "name": "ᚾᚢᚱᚢᚾᛏ ᛘᛅᛚ",
+        "font": "Noto Sans Runic",
+        "note": "Old Norse in runes: the words of i18n/non.json, written in the Younger Futhark (long-branch runes, U+16A0-U+16FF) "
+                "by tools/i18n.py (`python tools/i18n.py derive`): edit non.json, not this file. The page shows runes in blocks, "
+                "options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Runic font named in "
+                "\"font\"; python holds non.json's Latin spelling, which exported programs print, since few terminals have a "
+                "runic font. The spelling follows the Viking Age inscriptions: sixteen runes for all the sounds (ᚢ for u, o, y, "
+                "ø and v; ᛁ for i, e and j; ᚴ for k and g; ᛏ for t and d; ᛒ for b and p), no length marks, doubled letters "
+                "written once, n left out before k and g, ei as ᛅᛁ and ǫ as ᛅᚢ, and ᛦ for the r of endings. Names, modern "
+                "words, field names, keys and placeholders stay in Latin letters (tools/latin_kept.json lists them). The code "
+                "qnr is from ISO 639-3's private-use range (qaa-qtz), since Old Norse in runes (non-Runr) has no code of its own.",
+    }),
+}
+PAGE_SIDE = ("blocks", "options", "categories", "labels", "page", "examples", "starters", "blocklyMsg")
+
+
+def _written(value, write):
+    return {k: _written(v, write) for k, v in value.items()} if isinstance(value, dict) else write(value) if isinstance(value, str) else value
+
+
+def derived(code):
+    """i18n/<code>.json for a derived language, as it should be now: its source's words, the page's in the other script."""
+    source, write, about = DERIVED[code]
+    d = json.loads((I18N / f"{source}.json").read_text(encoding="utf-8"))
+    out = {}
+    for key, value in d.items():
+        if key == "name":
+            out.update(name=about["name"], blockly=d["blockly"], font=about["font"], note=about["note"])
+        elif key in ("page", "starters"):  # a text left as its English (a sample value, a name) stays as it is
+            out[key] = {english: text if text == english else write(text) for english, text in value.items()}
+        elif key in PAGE_SIDE:
+            out[key] = _written(value, write)
+        elif key not in ("blockly", "font", "note"):
+            out[key] = value
+    return out
+
+
+def cmd_derive():
+    for code in DERIVED:
+        write(I18N / f"{code}.json", derived(code))
+        print(f"Wrote i18n/{code}.json from i18n/{DERIVED[code][0]}.json.")
+    print("Now run: python tools/sync.py")
+    return 0
+
+
 # ----- The words each language needs -----
 def needed():
     """{"page": set of texts, "python": set of texts} that every language must translate, as the tests count them."""
@@ -423,7 +574,7 @@ def cmd_add(path):
     for section in ("page", "python"):
         for english, by_lang in (words.get(section) or {}).items():
             want = sorted(PLACEHOLDER.findall(english))
-            for code in sorted(set(langs) - set(by_lang)):
+            for code in sorted(set(langs) - set(by_lang) - set(DERIVED)):
                 problems.append(f"{section} “{english[:50]}”: no {code}")
             for code, text in by_lang.items():
                 if code not in files:
@@ -440,6 +591,9 @@ def cmd_add(path):
                 added += 1
     for code, data in files.items():
         write(langs[code], data)
+    for code in DERIVED:  # a language made from another's words follows it
+        if code in langs:
+            write(langs[code], derived(code))
     print(f"Added {added} translations.")
     for p in problems:
         print("  " + p)
@@ -450,6 +604,11 @@ def cmd_add(path):
 def main(argv):
     if argv[:1] == ["missing"]:
         return cmd_missing(set(argv[1:]))
+    if argv == ["derive"]:
+        return cmd_derive()
+    if argv[:1] == ["script"] and len(argv) == 3 and argv[1] in DERIVED:
+        print(DERIVED[argv[1]][1](argv[2]))
+        return 0
     if argv[:1] == ["add"] and len(argv) == 2:
         return cmd_add(argv[1])
     if argv[:1] == ["script"] and len(argv) == 3 and argv[1] in SCRIPTS:
