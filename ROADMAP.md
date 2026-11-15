@@ -42,6 +42,10 @@ The last eleven languages, merged to main: Sahidic Coptic and Middle Egyptian in
 
 The homelab and media connections, merged to main (unreleased): SABnzbd ([#397](https://github.com/itsfja/second-thought/issues/397)), Radarr and Sonarr ([#398](https://github.com/itsfja/second-thought/issues/398)), Unraid ([#399](https://github.com/itsfja/second-thought/issues/399)), NZBGeek ([#400](https://github.com/itsfja/second-thought/issues/400)), Pi-hole ([#401](https://github.com/itsfja/second-thought/issues/401)) and Plex and Tautulli ([#402](https://github.com/itsfja/second-thought/issues/402)) — the same reads-first, ask-first shape as the connections already in, each with a gallery program that only reads. The reviews' backlog is closed too: the program format stated once and checked ([#391](https://github.com/itsfja/second-thought/issues/391)), and the systemd and Task Scheduler examples in the docs ([#392](https://github.com/itsfja/second-thought/issues/392)).
 
+## What's next
+
+[ROADMAP-addendum.md](ROADMAP-addendum.md) has the ideas for what's next, features and design, in a suggested order. Each becomes an issue when it's taken up.
+
 ## If there's a successor
 
 Keep the three ideas at the top of this page. Rebuild around plain-English authoring with blocks as the form you inspect, a separate editor codebase from the start, and a versioned program format from day one.
