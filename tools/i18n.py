@@ -4,7 +4,7 @@
     python tools/i18n.py missing             # the words each language still needs, page and Python (exit 1 if any)
     python tools/i18n.py add words.json      # put new translations into every language file
     python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux, hit: cuneiform; got: Gothic)
-    python tools/i18n.py derive              # write the languages made from another's words (qnr: Old Norse in runes, from non)
+    python tools/i18n.py derive              # write the languages made from another's words (qnr and qar: Old Norse and Old English in runes)
 
 words.json says, for each English text, its translation in each language:
 
@@ -23,9 +23,10 @@ Sumerograms in capitals joined by dots (DUB.SAR), Akkadograms in capitals (A-NA)
 (ú is u2); an English abbreviation in capitals that should stay Latin is marked ^ (^MQTT). Gothic (got) is given in its usual
 transliteration (gutisk, þiudans, ƕas) and written letter for letter in the Gothic alphabet.
 
-Old Norse in runes (qnr) has no words of its own: its file is made from Old Norse's (non), the page's words written in
-the Younger Futhark and the Python words left in Latin letters. So words.json needs no qnr, "add" writes it again
-after adding, and "derive" writes it after any other change to i18n/non.json.
+Old Norse in runes (qnr) and Old English in runes (qar) have no words of their own: each file is made from its
+language's (non, ang), the page's words written in runes (the Younger Futhark, the Anglo-Saxon futhorc) and the Python
+words left in Latin letters. So words.json needs neither, "add" writes them again after adding, and "derive" writes
+them after any other change to i18n/non.json or i18n/ang.json.
 
 After adding, run python tools/sync.py, then the tests.
 """
@@ -437,7 +438,7 @@ def younger_futhark(word):
     return re.sub(r"(.)\1+", r"\1", text)  # and so is a rune doubled by two letters that share it (ᚢ for o and u)
 
 
-def _rune_part(part, names, words):
+def _rune_part(part, names, words, write):
     """A word, or one side of a hyphen, with the marks around it: in runes unless it's a name, a kept word or code."""
     m = re.fullmatch(r"([^\w]*)(.*?)([^\w]*)", part, re.S)
     pre, core, post = m.groups()
@@ -445,36 +446,95 @@ def _rune_part(part, names, words):
         return part, True
     if re.search(r"[0-9_]", core) or re.search(r"[A-ZÁÉÍÓÚÝÆŒØǪÞÐ]", core[1:]) or not core.isalpha():
         return part, True
-    written = younger_futhark(core.lower())
+    written = write(core.lower())
     return (part, True) if written is None else (pre + written + post, False)
 
 
-def to_runes(text, missing=None):
-    """A line of Old Norse in its Latin spelling, in Younger Futhark. Placeholders, %1, <tags>, names, kept words,
-    code, addresses and file names stay as they are."""
+_KEPT_WORD = r"[(„“\"'‘]*[A-Za-z_]+[,.;:)”’]*"
+_AND_OR = {"and", "oþþe", "ok", "eða", "og"}
+
+
+def _in_runes(text, write, code):
+    """A line in a language's Latin spelling, in runes, word by word with `write`. Placeholders, %1, <tags>, names,
+    kept words, code, addresses and file names stay as they are."""
     names, words = latin_kept()
-    out = []
+    own = _own(code)
+    out, own_at = [], {}
     for piece in re.split(r"(\{[^{}]*\}|%\d+|</?[a-zA-Z][^<>]*>|&\w+;|\s+)", text):
-        if not piece or piece.isspace() or re.fullmatch(r"\{[^{}]*\}|%\d+|</?[a-zA-Z][^<>]*>|&\w+;", piece, re.S):
+        if not piece:
+            continue
+        if piece.isspace() or re.fullmatch(r"\{[^{}]*\}|%\d+|</?[a-zA-Z][^<>]*>|&\w+;", piece, re.S):
             out.append(piece)
             continue
         if re.search(r"[/@=\\~<>*#+]|://|\w\.\w|^--\w|^-[a-z]\b|^\.\w|\w:\w", piece):
-            # An address, a file name, a setting, an option or code. An Old Norse word joined to a file name or a
-            # quoted time is still written: claude.ai-ᚱᛅᛁᚴᚾᛁᚴᛁ, .json-ᛋᚴᛁᛅᛚ.
+            # An address, a file name, a setting, an option or code. A word of the language joined to a file name or
+            # a quoted time is still written: claude.ai-ᚱᛅᛁᚴᚾᛁᚴᛁ, .json-ᛋᚴᛁᛅᛚ.
             head, hyphen, tail = piece.rpartition("-")
             if hyphen and re.search(r"\w\.\w+$|^\.\w+$|“$", head) and not re.search(r"[/@]", head) and re.fullmatch(r"[^\W\d_]+[.,;:)]*", tail):
-                tail = _rune_part(tail, names, words)[0]
+                tail = _rune_part(tail, names, words - own, write)[0]
             out.append(head + hyphen + tail)
             continue
-        parts = [_rune_part(p, names, words) for p in piece.split("-")]
+        if re.sub(r"\W", "", piece).lower() in own and piece == piece.lower():
+            own_at[len(out)] = piece  # on, to: the language's own word, unless it stands in a list of field names
+        parts = [_rune_part(p, names, words - own, write) for p in piece.split("-")]
         if len(parts) > 1 and all(kept for _, kept in parts):
             out.append(piece)
             continue
         out.append("-".join(p for p, _ in parts))
-    for i in range(2, len(out) - 2):  # "not a tool": an English a between two kept words isn't Old Norse á
-        if out[i] == "ᛅ" and all(re.fullmatch(r"[(„“\"']*[A-Za-z]+[,.;:)]*", out[j]) for j in (i - 2, i + 2)):
+    kept = lambda j: j >= 0 and bool(re.fullmatch(_KEPT_WORD, out[j])) and j not in own_at
+    and_or = _AND_OR | {write(w) for w in _AND_OR}
+    for i, latin in own_at.items():
+        # "entity, name, from and to": after a kept word and a comma, or closing such a list after and/or
+        before = i - 2
+        if kept(before) and out[before].rstrip(")”’").endswith(",") or \
+                before >= 2 and out[before] in and_or and (kept(before - 2) or before - 2 in own_at and out[before - 2] == own_at[before - 2]) \
+                and before >= 4 and out[before - 4].endswith(","):
+            out[i] = latin
+        else:
+            own_at[i] = None
+    own_at = {i: v for i, v in own_at.items() if v}
+    article = write("a")
+    for i in range(2, len(out) - 2):  # "not a tool": an English a between two kept words isn't the language's
+        if out[i] == article and all(re.fullmatch(_KEPT_WORD, out[j]) for j in (i - 2, i + 2)):
             out[i] = "a"
     return "".join(out)
+
+
+def _own(code):
+    """Words of the language itself that are spelled like kept words (Old English on, to, open)."""
+    return set(json.loads((ROOT / "tools" / "latin_kept.json").read_text(encoding="utf-8")).get("own", {}).get(code, []))
+
+
+def to_runes(text, missing=None):
+    """A line of Old Norse in its Latin spelling, in the Younger Futhark."""
+    return _in_runes(text, younger_futhark, "qnr")
+
+
+# ----- Old English in runes (#466) -----
+# The Anglo-Saxon futhorc, which has a rune for nearly every Old English letter, so this goes letter for letter, as the
+# Ruthwell Cross and the Franks Casket do:
+#   - æ is ᚫ, a is ᚪ, o is ᚩ, y is ᚣ, ea is ᛠ; eo and io are two runes (ᛖᚩ, ᛁᚩ), as on the Ruthwell Cross
+#   - ng is ᛝ (kyniŋc, ᛣᚣᚾᛁᛝᚳ), and h before t is ᛇ (almehttig, ᚪᛚᛗᛖᛇᛏᛏᛁᚷ)
+#   - þ and ð are both ᚦ, w (and ƿ) is ᚹ, x is ᛉ; c is ᚳ, and the k of a later word is ᛣ
+#   - doubled letters are written twice, as there; length marks and the dot of ġ and ċ aren't written
+FUTHORC = {"a": "ᚪ", "æ": "ᚫ", "b": "ᛒ", "c": "ᚳ", "d": "ᛞ", "e": "ᛖ", "f": "ᚠ", "g": "ᚷ", "h": "ᚻ", "i": "ᛁ", "j": "ᛄ", "k": "ᛣ",
+           "l": "ᛚ", "m": "ᛗ", "n": "ᚾ", "o": "ᚩ", "œ": "ᛟ", "p": "ᛈ", "q": "ᚳ", "r": "ᚱ", "s": "ᛋ", "t": "ᛏ", "u": "ᚢ", "v": "ᚠ",
+           "w": "ᚹ", "x": "ᛉ", "y": "ᚣ", "z": "ᛋ", "þ": "ᚦ", "ð": "ᚦ", "ŋ": "ᛝ", "ç": "ᛇ", "ɛ": "ᛠ"}
+_OE_PLAIN = str.maketrans("ǣāēīōūȳġċƿȝóéáíú", "æaeiouygcwgoeaiu")
+
+
+def futhorc(word):
+    """One Old English word, in lowercase, in runes: cyning → ᚳᚣᚾᛁᛝ. None if it has a letter Old English doesn't."""
+    w = word.translate(_OE_PLAIN)
+    if not w or not re.fullmatch("[a-zæœþð]+", w):
+        return None
+    w = w.replace("th", "þ").replace("ng", "ŋ").replace("ht", "çt").replace("ea", "ɛ").replace("qu", "cw")
+    return "".join(FUTHORC[c] for c in w)
+
+
+def to_futhorc(text, missing=None):
+    """A line of Old English in its Latin spelling, in the futhorc."""
+    return _in_runes(text, futhorc, "qar")
 
 
 # Languages made from another's words: {code: (the language it's made from, how its page words are written, and what
@@ -492,6 +552,19 @@ DERIVED = {
                 "written once, n left out before k and g, ei as ᛅᛁ and ǫ as ᛅᚢ, and ᛦ for the r of endings. Names, modern "
                 "words, field names, keys and placeholders stay in Latin letters (tools/latin_kept.json lists them). The code "
                 "qnr is from ISO 639-3's private-use range (qaa-qtz), since Old Norse in runes (non-Runr) has no code of its own.",
+    }),
+    "qar": ("ang", to_futhorc, {
+        "name": "ᚫᛝᛚᛁᛋᚳ",
+        "font": "Noto Sans Runic",
+        "note": "Old English in runes: the words of i18n/ang.json, written in the Anglo-Saxon futhorc (U+16A0-U+16FF) by "
+                "tools/i18n.py (`python tools/i18n.py derive`): edit ang.json, not this file. The page shows runes in blocks, "
+                "options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Runic font named in "
+                "\"font\"; python holds ang.json's Latin spelling, which exported programs print, since few terminals have a "
+                "runic font. The futhorc has a rune for nearly every Old English letter, so the words go letter for letter, as "
+                "on the Ruthwell Cross and the Franks Casket: ᚫ for æ, ᚪ for a, ᚩ for o, ᚣ for y, ᛠ for ea, ᛝ for ng, ᛇ for "
+                "the h of ht, ᚦ for þ and ð, ᚹ for w, with doubled letters written twice and no length marks. Names, modern "
+                "words, field names, keys and placeholders stay in Latin letters (tools/latin_kept.json lists them). The code "
+                "qar is from ISO 639-3's private-use range (qaa-qtz), since Old English in runes (ang-Runr) has no code of its own.",
     }),
 }
 PAGE_SIDE = ("blocks", "options", "categories", "labels", "page", "examples", "starters", "blocklyMsg")

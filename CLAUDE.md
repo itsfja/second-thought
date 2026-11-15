@@ -30,15 +30,16 @@ learn by trial and error.
   over the CPUs). `python tests/run_tests.py sources i18n gallery` is quicker.
 - **CI runs on GitHub Actions**, where `GITHUB_ACTIONS` is set; the tests clear it (tests/e2e/common.py).
 - **i18n merges:** `python tools/merge_i18n.py --install` once per clone.
-- **New words:** `python tools/i18n.py missing`, then write translations for all 30 languages (not qnr, below) into a JSON file and
+- **New words:** `python tools/i18n.py missing`, then write translations for all 30 languages (not qnr or qar, below) into a JSON file and
   `python tools/i18n.py add words.json` (Mycenaean Greek, Akkadian, Sumerian, Hittite, Middle Egyptian, Coptic, Syriac and Gothic romanised; the tool writes the scripts).
-- **Old Norse in runes (`qnr`, #465)** is made from `i18n/non.json`: never edit `i18n/qnr.json`. `i18n.py add` writes it
-  again; after any other change to non.json, run `python tools/i18n.py derive`. A new name or English field name that
-  must stay in Latin letters goes in `tools/latin_kept.json`.
+- **Old Norse in runes (`qnr`, #465) and Old English in runes (`qar`, #466)** are made from `i18n/non.json` and
+  `i18n/ang.json`: never edit `i18n/qnr.json` or `i18n/qar.json`. `i18n.py add` writes them again; after any other
+  change to non.json or ang.json, run `python tools/i18n.py derive`. A new name or English field name that must stay
+  in Latin letters goes in `tools/latin_kept.json` (`own` there lists Old English words spelled like one: on, to).
 
 ## The artifact
 The page is published at https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN. Publish `second-thought.html` with every
-`lang/<code>.js` as a supporting file at `lang/<code>.js` (all 31), to that URL. If the publish says files changed
+`lang/<code>.js` as a supporting file at `lang/<code>.js` (all 32), to that URL. If the publish says files changed
 since last seen, read them first (they'll match an earlier main), then publish.
 
 ## Loose ends
