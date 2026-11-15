@@ -169,6 +169,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 .gal-card .tip,.gal-card .by{color:var(--muted)}
 .gal-card .by{font-size:12px}
 .gal-card .can{border-inline-start:3px solid var(--line);padding-inline-start:8px}
+.gal-card.broken .can{color:var(--warn);border-inline-start-color:var(--warn)}
 /* Right to left: code, file names, and text that may be in either direction keep their own. */
 [dir=rtl] pre,[dir=rtl] code,[dir=rtl] .mono,[dir=rtl] #io-export-text,[dir=rtl] #io-paste,[dir=rtl] #io-name,[dir=rtl] .status,[dir=rtl] .sched-status{direction:ltr;text-align:left}
 [dir=rtl] .step-body:not(.mono),[dir=rtl] .result-text,[dir=rtl] .mem-val,[dir=rtl] .watch-body .v,[dir=rtl] .ask textarea{unicode-bidi:plaintext;text-align:start}

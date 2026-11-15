@@ -205,6 +205,8 @@ async def i18n_tests():
 
         for code in info["langs"]:
             pg, errors = await page(code)
+            await pg.click("#ex-toggle")  # Browse examples' cards are built on first open (#417)
+            await pg.wait_for_timeout(200)
             got = await pg.evaluate("""() => { const ws = Blockly.getMainWorkspace(), b = ws.newBlock('rb_start'), w = ws.newBlock('rb_wait');
                 const r = { lang:window.ST_LANG, start:b.toString(), wait:w.getField('UNIT').getText(), cat:ws.getToolbox().getToolboxItems()[0].getName(), ifmsg:Blockly.Msg.CONTROLS_IF_MSG_IF };
                 b.dispose(); w.dispose(); return r; }""")

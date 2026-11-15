@@ -16,6 +16,12 @@ async def gallery_tests():
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
+        check(await pg.eval_on_selector_all("#gal-body .gal-card", "e => e.length") == 0,
+              "no example card is built until Browse examples is opened (#417)")
+        await pg.click("#ex-toggle")
+        await pg.wait_for_timeout(400)
+        n_cards = await pg.eval_on_selector_all("#gal-body .gal-card", "e => e.length")
+        check(n_cards > 100, f"opening Browse examples builds its {n_cards} cards on first open")
         entries = await pg.evaluate("window.__gallery()")
         check(sorted(e["file"] for e in entries) == sorted(files), f"every file in gallery/ is in the page ({len(entries)} entries)")
         groups = await pg.eval_on_selector_all("#example optgroup", "e => e.map(g => g.label)")
@@ -57,6 +63,69 @@ async def gallery_tests():
             check(msg.startswith("Loaded") and caps[acts[0]["can"][0]][1] in msg,
                   f"a gallery file imports like any block file, saying what it can do ({msg})")
         check(not errors, "no page errors with the gallery" + (f": {errors[:2]}" if errors else ""))
+        await browser.close()
+
+
+async def broken_gallery_tests():
+    """A gallery file with a block the page doesn't have (#417): the page still starts, Run runs, the panels open, no
+    card is built until Browse examples is opened, and the broken program's card says it can't be loaded and why."""
+    print("A gallery program that won't load")
+    broken = {"key": "g_broken_test", "file": "broken-test.json", "category": "odds", "title": "Broken test",
+              "description": "A test program with a block this page doesn't have.", "tip": "Nothing to try.",
+              "author": "test", "runtime": "3.0.0", "version": 1,
+              "program": {"blocks": {"languageVersion": 0, "blocks": [
+                  {"type": "rb_start", "x": 30, "y": 30, "next": {"block": {"type": "rb_no_such_block", "x": 30, "y": 140}}}]}}}
+    m = re.search(r'(<script type="application/json" id="community-gallery">\n)([\s\S]*?)(\n</script>)', PAGE)
+    gallery = json.loads(m.group(2)) + [broken]
+    doc = ('<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>'
+           + PAGE[:m.start(2)] + json.dumps(gallery) + PAGE[m.end(2):] + "</body></html>")
+
+    async def broken_route(r):
+        if r.request.url == "http://test/":
+            return await r.fulfill(body=doc, content_type="text/html")
+        await route(r)
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        pg = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        errors = []
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        await pg.route("**/*", broken_route)
+        await pg.add_init_script(MOCK)
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        check(not errors, "the page starts with no page errors" + (f": {errors[:2]}" if errors else ""))
+        check(await pg.eval_on_selector_all("#gal-body .gal-card", "e => e.length") == 0,
+              "no example card is built until Browse examples is opened")
+        await pg.click("#ex-toggle")
+        await pg.wait_for_timeout(400)
+        cards = await pg.eval_on_selector_all("#gal-body .gal-card", "e => e.length")
+        check(cards > 100, f"opening Browse examples builds every card, the broken one included ({cards})")
+        card = await pg.evaluate("() => (document.querySelector('.gal-card[data-key=\"g_broken_test\"]') || {}).innerText || ''")
+        check("couldn't be loaded" in card and "rb_no_such_block" in card,
+              f"the broken program's card says it can't be loaded, and why ({card[:110]!r})")
+        check(not errors, "building the cards left no page errors" + (f": {errors[:2]}" if errors else ""))
+        # The page works with the broken entry there: Run runs, and every panel opens.
+        await pg.select_option("#example", "review")
+        await pg.click("#load")
+        status = await run_program(pg)
+        check(status.startswith("done"), f"Run runs with the broken gallery entry there ({status})")
+        for toggle in ("io-toggle", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
+            await pg.click("#" + toggle)
+        opened = await pg.evaluate("() => ['io', 'lib', 'mem', 'ha', 'bk', 'keys'].every(id => !document.getElementById(id).hidden)")
+        check(opened, "every panel opens")
+        # Loading the broken program itself says why, and leaves the canvas as it was.
+        blocks_before = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        await pg.select_option("#example", "g_broken_test")
+        await pg.click("#load")
+        await pg.wait_for_timeout(200)
+        msg = await pg.inner_text("#status")
+        check("couldn't be loaded" in msg and "rb_no_such_block" in msg,
+              f"loading it says it couldn't be loaded, and why ({msg[:110]!r})")
+        blocks_after = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        check(blocks_after == blocks_before and blocks_after > 0,
+              f"the canvas is left as it was ({blocks_before} blocks, then {blocks_after})")
+        check(not errors, "no page errors at the end" + (f": {errors[:2]}" if errors else ""))
         await browser.close()
 
 

@@ -51,11 +51,25 @@
       return CAPABILITIES.filter(c => got.has(c[0]));
     } finally { w.dispose(); }
   }
-  window.__gallery = () => GALLERY.map(g => ({ key:g.key, file:g.file, title:g.title, unknown:unknownTypes(g.program),
-    can:stateCapabilities(g.program).map(c => c[0]), card:(document.querySelector('.gal-card[data-key="' + g.key + '"]') || {}).innerText || "" }));
+  window.__gallery = () => GALLERY.map(g => {
+    let can = [], error = null;
+    try { can = stateCapabilities(g.program).map(c => c[0]); } catch (e) { error = e && e.message ? e.message : String(e); }
+    return { key:g.key, file:g.file, title:g.title, unknown:unknownTypes(g.program), can, error,
+      card:(document.querySelector('.gal-card[data-key="' + g.key + '"]') || {}).innerText || "" };
+  });
   const communityCaps = {};
+  /* What a shared program can do, or why it can't be loaded — worked out once, and never thrown: a program that
+     won't load says so on its card and in its description, and the rest of the page carries on (#417). */
+  function communityCapsFor(e){
+    if (!(e.key in communityCaps)) {
+      try { communityCaps[e.key] = { can:stateCapabilities(e.build()) }; }
+      catch (err) { communityCaps[e.key] = { error:err && err.message ? err.message : String(err) }; }
+    }
+    return communityCaps[e.key];
+  }
   function communityCanText(e){
-    if (!(e.key in communityCaps)) communityCaps[e.key] = stateCapabilities(e.build());
-    return capabilitySentence(communityCaps[e.key]) || tr("It only uses your models: it doesn't connect to anything else.");
+    const c = communityCapsFor(e);
+    if (c.error) return tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:c.error });
+    return capabilitySentence(c.can) || tr("It only uses your models: it doesn't connect to anything else.");
   }
 
