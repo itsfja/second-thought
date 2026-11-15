@@ -945,3 +945,28 @@ async def new_feature_page_tests(pg):
     status = await run_program(pg)
     stopped = [t for n, p_, t in await step_texts(pg) if n == "Run stopped"]
     check(status == "error" and stopped and "broadcasts" in stopped[0], "a saved program that broadcasts says why it can't run as a block")
+
+
+async def phone_palette_tests():
+    """On a 390-pixel phone, the palette rules in web/editor.css use Blockly 13's class names, so the palette stays
+    within the rule's width (#420); the test measures it, so a Blockly upgrade can't quietly undo it."""
+    print("The palette on a phone")
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        pg = await browser.new_page(viewport={"width": 390, "height": 844})
+        errors = []
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        await pg.route("**/*", route)
+        await pg.add_init_script(MOCK)
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        cats = await pg.eval_on_selector_all(".blocklyToolboxCategory", "e => e.length")
+        width = await pg.evaluate("() => { const t = document.querySelector('.blocklyToolbox'); return t ? Math.round(t.getBoundingClientRect().width) : -1; }")
+        check(cats > 0 and 0 < width <= 118,
+              f"at 390\u00d7844 the palette is {width}px wide, within the rule's 118px, across {cats} categories")
+        row = await pg.evaluate("""() => { const c = document.querySelector('.blocklyToolboxCategory'); if (!c) return null;
+            const s = getComputedStyle(c), l = getComputedStyle(c.querySelector('.blocklyToolboxCategoryLabel'));
+            return [s.height, s.lineHeight, l.fontSize]; }""")
+        check(row == ["24px", "24px", "12px"], f"the phone rules reach Blockly 13's rows and labels (height {row[0]}, line {row[1]}, label {row[2]})")
+        check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
+        await browser.close()
