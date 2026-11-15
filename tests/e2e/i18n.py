@@ -236,7 +236,7 @@ async def i18n_tests():
                       f"with {code} chosen, the page loads {t['font']} and its blocks show the signs; English doesn't load it ({f}, english: {english})")
             want = t.get("dir", "ltr")
             dirs = await pg.evaluate("""() => ({ page:document.documentElement.dir || 'ltr', blocks:Blockly.getMainWorkspace().RTL,
-                toolbox:getComputedStyle(document.querySelector('.blocklyToolboxDiv') || document.body).direction,
+                toolbox:getComputedStyle(document.querySelector('.blocklyToolbox') || document.body).direction,
                 code:getComputedStyle(document.getElementById('io-paste')).direction, log:getComputedStyle(document.body).direction })""")
             check(dirs["page"] == want and dirs["blocks"] == (want == "rtl") and dirs["log"] == want and dirs["code"] == "ltr",
                   f"with {code} chosen, the page and its blocks run {'right to left' if want == 'rtl' else 'left to right'}, and code stays left to right ({dirs})")
