@@ -101,7 +101,7 @@
        },
        "next": {
         "block": {
-         "type": "rb_telegram_send",
+         "type": "rb_tg_send",
          "inputs": {
           "TEXT": {
            "block": {
