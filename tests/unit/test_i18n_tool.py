@@ -99,6 +99,55 @@ class Scripts(unittest.TestCase):
         self.assertEqual((out, gaps), ("ka-zz-pe", {"zz"}))
 
 
+class Runes(unittest.TestCase):
+    """#465: Old Norse in the Younger Futhark, written from its Latin spelling as the inscriptions spell."""
+
+    def test_words_are_spelled_as_the_inscriptions_spell(self):
+        for norse, runes in [("konungr", "ᚴᚢᚾᚢᚴᛦ"),      # kunukʀ: o as ᚢ, g as ᚴ, no n before it, the ending's r as ᛦ
+                             ("steinn", "ᛋᛏᛅᛁᚾ"),         # stain: ei as ᛅᛁ, the doubled n once
+                             ("danmǫrk", "ᛏᛅᚾᛘᛅᚢᚱᚴ"),     # tanmaurk, as on the Jelling stone
+                             ("eptir", "ᛁᛒᛏᛁᛦ"), ("þeir", "ᚦᛅᛁᛦ"), ("faðir", "ᚠᛅᚦᛁᛦ"),
+                             ("haraldr", "ᚼᛅᚱᛅᛚᛏᚱ"),      # haraltr: ᚱ, not ᛦ, after a dental
+                             ("var", "ᚢᛅᚱ"), ("hverr", "ᚼᚢᛁᚱ"), ("á", "ᚬ"), ("án", "ᚬᚾ"), ("dróttinn", "ᛏᚱᚢᛏᛁᚾ")]:
+            with self.subTest(norse):
+                self.assertEqual(tool.younger_futhark(norse), runes)
+        self.assertIsNone(tool.younger_futhark("señor"))
+        self.assertTrue(all(0x16A0 <= ord(c) <= 0x16FF for c in "".join(tool.RUNES.values())))
+
+    def test_names_fields_code_and_placeholders_stay_in_latin_letters(self):
+        self.assertEqual(tool.to_runes("Claude ræðr hvat næst skal gera"), "Claude ᚱᛅᚦᚱ ᚼᚢᛅᛏ ᚾᛅᛋᛏ ᛋᚴᛅᛚ ᚴᛁᚱᛅ")
+        self.assertEqual(tool.to_runes("Set lyklana í second-thought.ini ok keyr --doctor."), "ᛋᛁᛏ ᛚᚢᚴᛚᛅᚾᛅ ᛁ second-thought.ini ᚢᚴ ᚴᛅᚢᚱ --doctor.")
+        self.assertEqual(tool.to_runes("sem skrár: name, path, modified, size (<b>{n}</b> MB), %1"), "ᛋᛁᛘ ᛋᚴᚱᛅᚱ: name, path, modified, size (<b>{n}</b> MB), %1")
+        self.assertEqual(tool.to_runes("Homey-tæki, {service}-boð ok claude.ai-reikningi"), "Homey-ᛏᛅᚴᛁ, {service}-ᛒᚢᚦ ᚢᚴ claude.ai-ᚱᛅᛁᚴᚾᛁᚴᛁ")
+        self.assertEqual(tool.to_runes("GitHub pull requests ok email (not a tool)"), "GitHub pull requests ᚢᚴ email (not a tool)")
+        self.assertEqual(tool.to_runes("Send boð, set gildi"), "ᛋᛁᚾᛏ ᛒᚢᚦ, ᛋᛁᛏ ᚴᛁᛚᛏᛁ", "send and set are Old Norse here, not English")
+
+    def test_the_runic_file_is_made_from_the_old_norse_one(self):
+        for code, (source, _, about) in tool.DERIVED.items():
+            with self.subTest(code):
+                have = json.loads((support.ROOT / "i18n" / f"{code}.json").read_text(encoding="utf-8"))
+                self.assertEqual(have, tool.derived(code), f"i18n/{code}.json is out of date: python tools/i18n.py derive, then python tools/sync.py")
+                norse = json.loads((support.ROOT / "i18n" / f"{source}.json").read_text(encoding="utf-8"))
+                self.assertEqual(have["python"], norse["python"], "exported programs print the Latin spelling")
+                self.assertEqual((have["name"], have["font"]), (about["name"], about["font"]))
+                self.assertEqual(have["page"]["Second Thought"], "Second Thought")
+                letters = [c for c in have["categories"]["Events"] + have["page"]["Save"] if c.isalpha()]
+                self.assertTrue(letters and all(0x16A0 <= ord(c) <= 0x16FF for c in letters), letters)
+
+    def test_add_writes_the_derived_language_again(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = pathlib.Path(tmp)
+            for code in ("non", "qnr"):
+                (tmp / f"{code}.json").write_text(json.dumps({"name": code, "blockly": "en", "page": {}, "python": {}}), encoding="utf-8")
+            (tmp / "new").mkdir()
+            words = tmp / "new" / "words.json"
+            words.write_text(json.dumps({"page": {"Save {n}": {"non": "Geym {n}"}}, "python": {"Saved": {"non": "Geymt"}}}), encoding="utf-8")
+            with mock.patch.object(tool, "I18N", tmp):
+                self.assertEqual(tool.cmd_add(str(words)), 0, "words.json needs no qnr")
+            runes = json.loads((tmp / "qnr.json").read_text(encoding="utf-8"))
+            self.assertEqual((runes["page"], runes["python"]), ({"Save {n}": "ᚴᛅᚢᛘ {n}"}, {"Saved": "Geymt"}))
+
+
 class Add(unittest.TestCase):
     def test_add_writes_every_language_and_checks_placeholders(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -13,7 +13,7 @@ mkdir -p vendor
 cd vendor
 for pkg in blockly@13.4.0 @blockly/field-multilineinput@13.4.0 axe-core@4.10.3 pdfjs-dist@3.11.174 @fontsource/noto-sans-linear-b@5.3.0 \
            @fontsource/noto-sans-devanagari@5.3.0 @fontsource/noto-sans-cuneiform@5.3.0 @fontsource/noto-sans-egyptian-hieroglyphs@5.3.0 @fontsource/noto-sans-coptic@5.3.0 @fontsource/noto-sans-syriac@5.3.0 \
-           @fontsource/noto-sans-gothic@5.3.0; do
+           @fontsource/noto-sans-gothic@5.3.0 @fontsource/noto-sans-runic@5.3.0; do
   name="${pkg%@*}"; name="${name#@blockly/}"
   if [ ! -d "$name" ]; then
     tarball=$(npm pack "$pkg" --silent)
