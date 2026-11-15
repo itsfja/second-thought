@@ -6,8 +6,8 @@ cmd=terminate_session is recorded in .changed. A library scan (GET /library/sect
 in .changed too.
 
 Anything else, a request without the token, or a Tautulli request without the right api_key, is recorded in
-.refused and answered 401, so a test can show nothing else was sent. The history rows carry dates made from
-time.time(), so "last N days" always covers them.
+.refused and answered 401, so a test can show nothing else was sent. The history rows and the newly added items
+carry dates made from time.time(), so "last N days" always covers the same ones, whenever the tests run.
 
     plex = FakePlex()
     host = plex.start()          # http://127.0.0.1:port, for PLEX_URL and TAUTULLI_URL
@@ -33,6 +33,7 @@ class FakePlex:
         self.calls, self.refused, self.changed = [], [], []
 
     AGO_HOURS = [26, 27, 70, 500]  # last night, last night, three days ago, beyond a week
+    ADDED_HOURS_AGO = [30, 100, 760]  # the newly added items: yesterday, four days ago, a month ago
 
     def history_rows(self, after):
         """Tautulli's rows, oldest first, with dates relative to now and the columns the real one sends."""
@@ -85,8 +86,10 @@ class FakePlex:
             self.changed.append("scan " + path.split("/")[3])
             return as_json({"MediaContainer": {}})
         if method == "GET" and path == "/library/recentlyAdded":
-            return as_json({"MediaContainer": {"Metadata": [{"title": r["title"], "addedAt": r["added"],
-                                                             "librarySectionTitle": r["library"]} for r in d["recent"]]}})
+            # The sample's own dates are fixed, so they grow old (#474): added yesterday, four days ago, a month ago.
+            return as_json({"MediaContainer": {"Metadata": [{"title": r["title"], "addedAt": int(time.time()) - ago * 3600,
+                                                             "librarySectionTitle": r["library"]}
+                                                            for r, ago in zip(d["recent"], self.ADDED_HOURS_AGO)]}})
         if method == "GET" and path == "/status/sessions":
             vid = []
             for s in d["sessions"]:
