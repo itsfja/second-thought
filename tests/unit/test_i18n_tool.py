@@ -122,6 +122,24 @@ class Runes(unittest.TestCase):
         self.assertEqual(tool.to_runes("GitHub pull requests ok email (not a tool)"), "GitHub pull requests ᚢᚴ email (not a tool)")
         self.assertEqual(tool.to_runes("Send boð, set gildi"), "ᛋᛁᚾᛏ ᛒᚢᚦ, ᛋᛁᛏ ᚴᛁᛚᛏᛁ", "send and set are Old Norse here, not English")
 
+    def test_old_english_goes_letter_for_letter_in_the_futhorc(self):
+        # #466: as the Ruthwell Cross and the Franks Casket spell
+        for english, runes in [("cyning", "ᚳᚣᚾᛁᛝ"), ("ænglisc", "ᚫᛝᛚᛁᛋᚳ"), ("niht", "ᚾᛁᛇᛏ"), ("almehttig", "ᚪᛚᛗᛖᛇᛏᛏᛁᚷ"),
+                               ("heofon", "ᚻᛖᚩᚠᚩᚾ"), ("lēaf", "ᛚᛠᚠ"), ("þæt", "ᚦᚫᛏ"), ("ƿord", "ᚹᚩᚱᛞ"), ("oþþe", "ᚩᚦᚦᛖ")]:
+            with self.subTest(english):
+                self.assertEqual(tool.futhorc(english), runes)
+        self.assertIsNone(tool.futhorc("señor"))
+        self.assertTrue(all(0x16A0 <= ord(c) <= 0x16FF for c in "".join(tool.FUTHORC.values())))
+
+    def test_old_english_words_spelled_like_field_names_are_told_apart(self):
+        # on, to, open and up are Old English words, and field names too: in a list of field names they stay as they are
+        self.assertEqual(tool.to_futhorc("sete þa cæga on second-thought.ini"), "ᛋᛖᛏᛖ ᚦᚪ ᚳᚫᚷᚪ ᚩᚾ second-thought.ini")
+        self.assertEqual(tool.to_futhorc("Wend person.alex to home on þam brede"), "ᚹᛖᚾᛞ person.alex ᛏᚩ home ᚩᚾ ᚦᚪᛗ ᛒᚱᛖᛞᛖ")
+        self.assertEqual(tool.to_futhorc("þis leaf open is"), "ᚦᛁᛋ ᛚᛠᚠ ᚩᛈᛖᚾ ᛁᛋ")
+        self.assertEqual(tool.to_futhorc("arc mid entity, name, from and to."), "ᚪᚱᚳ ᛗᛁᛞ entity, name, from ᚪᚾᛞ to.")
+        self.assertEqual(tool.to_futhorc("time, open, high, low and up (not a tool)"), "time, open, high, low ᚪᚾᛞ up (not a tool)")
+        self.assertEqual(tool.to_runes("Send boð til GitHub, on eða off"), "ᛋᛁᚾᛏ ᛒᚢᚦ ᛏᛁᛚ GitHub, on ᛁᚦᛅ off", "in Old Norse they are only field values")
+
     def test_the_runic_file_is_made_from_the_old_norse_one(self):
         for code, (source, _, about) in tool.DERIVED.items():
             with self.subTest(code):

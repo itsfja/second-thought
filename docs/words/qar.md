@@ -1,0 +1,46 @@
+# ᚫᛝᛚᛁᛋᚳ: everyday words
+
+Made by tools/sync.py from i18n/qar.json: edit that, not this.
+
+- Events: ᚷᛖᛚᛁᛗᛈᚢ
+- Control: ᚹᛠᛚᛞᚢᛝ
+- Wait & time: ᚪᛒᛁᛞ ᚪᚾᛞ ᛏᛁᛞ
+- Operators: ᚹᚣᚱᚳᛖᚱᚪᛋ
+- Text: ᚷᛖᚹᚱᛁᛏ
+- Variables: ᚹᛖᚾᛞᛚᛁᛝᚪᛋ
+- Lists: ᚷᛖᛏᚫᛚᚢ
+- My Blocks: ᛗᛁᚾᛖ ᛋᛏᚩᚳᚳᚪᛋ
+- Programs: ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏᚪ
+- Search results: ᚠᛁᚾᛞᚢᛝᚪ
+- Draft: ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ
+- Ask Claude: ᚪᛉᚪ Claude
+- Review: ᛋᚳᛠᚹᚢᛝ
+- Agent: ᚫᚱᛖᚾᛞᚱᚪᚳᚪ
+- Tools: ᛏᚩᛚ
+- Connections: ᚷᛖᛒᛁᚾᛞᚢ
+- You: ᚦᚢ
+- Records: ᚷᛖᛗᛠᚱᚳᚢ
+- Files: ᚠᚫᛏᛖᛚᛋᚪᛋ
+- Memory: ᚷᛖᛗᚣᚾᛞ
+- Pictures: ᚪᚾᛚᛁᚳᚾᛖᛋᛋᚪ
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: ᚢᛏᚷᚪᛝ
+- Coinbase: Coinbase
+- MikroTik: MikroTik
+- Solax: Solax
+- Powerwall: Powerwall
+- UniFi: UniFi
+- Proxmox: Proxmox
+- Docker: Docker
+- SABnzbd: SABnzbd
+- Radarr and Sonarr: Radarr ᚪᚾᛞ Sonarr
+- Unraid: Unraid
+- NZBGeek: NZBGeek
+- Pi-hole: Pi-hole
+- Plex: Plex
+- Tools for the agent: drop them inside an agent block: ᛏᚩᛚ ᚠᚩᚱ ᚦᚩᚾᛖ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ: ᛚᛖᚷᛖ ᚻᛁᛖ ᛁᚾᚾᚪᚾ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ ᛋᛏᚩᚳᚳᛖ
+- Listeners: they run while the exported program runs on schedule: ᚻᛚᚣᛋᛏᛖᚾᛞᚪᛋ: ᚻᛁᛖ ᚣᚱᚾᚪᚦ ᚦᚪ ᚻᚹᛁᛚᛖ ᚦᛖ ᚦᚫᛏ ᚢᛏᚷᛖᛚᚫᛞᛞᛖ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ ᛒᛖ ᛏᛁᛞᛋᛖᛏᚾᛖᛋᛋᛖ ᚣᚱᚾᚦ
+- Read and send: ᚱᚫᛞ ᚪᚾᛞ ᛋᛖᚾᛞ
+- Type in 'Find a block' above the canvas.: ᚹᚱᛁᛏ ᚩᚾ “ᚠᛁᚾᛞ ᛋᛏᚩᚳᚳ” ᚩᚠᛖᚱ ᚦᚪᛗ ᛒᚱᛖᛞᛖ.
+- No blocks match: ᚾᚪᚾ ᛋᛏᚩᚳᚳ ᚾᛖ ᚷᛖᛚᛁᛗᛈᚦ

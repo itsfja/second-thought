@@ -157,9 +157,10 @@ CI never runs it.
   Linear B, cuneiform, hieroglyphs, Coptic letters, Estrangela and Gothic letters (a Coptic or Syriac word marked `^`, such as an
   English name, stays in Latin letters, and a Syriac proclitic on it keeps a hyphen: `d^Claude` becomes `ܕ-Claude`),
   leaving `{placeholders}`, names and file names alone. `python tools/i18n.py script akk "…"` shows a line first.
-  Old Norse in runes (`i18n/qnr.json`) is made from Old Norse (`i18n/non.json`), so it needs no words of its own:
-  `add` writes it again, and `python tools/i18n.py derive` does after any other change to `non.json`. Names and English
-  field names that must stay in Latin letters there are listed in `tools/latin_kept.json`.
+  Old Norse in runes (`i18n/qnr.json`) and Old English in runes (`i18n/qar.json`) are made from Old Norse
+  (`i18n/non.json`) and Old English (`i18n/ang.json`), so they need no words of their own: `add` writes them again, and
+  `python tools/i18n.py derive` does after any other change to `non.json` or `ang.json`. Names and English field names
+  that must stay in Latin letters there are listed in `tools/latin_kept.json`.
 - **A gallery program:** see [`gallery/README.md`](gallery/README.md).
 - **A model service:** one entry in `SERVICES` in `providers.py`; see
   [Development and tests](#development-and-tests).
