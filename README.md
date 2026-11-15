@@ -70,7 +70,7 @@ New to all this? [**The picture book**](docs/ladybird-book.md) is a gentle, Lady
 </tr>
 </table>
 
-It also speaks 32 other languages besides English, from Spanish, Japanese and Classical Chinese to Akkadian, Sumerian and Hittite in cuneiform Gothic in its own alphabet, and Old Norse and Old English in runes ([Languages](docs/using-the-page.md#languages)), and works with 15 model services, with backups if one is down ([Models](docs/settings.md#models)).
+It also speaks 33 other languages besides English, from Spanish, Japanese and Classical Chinese to Akkadian, Sumerian and Hittite in cuneiform Gothic in its own alphabet, Old Norse and Old English in runes, and Church Slavonic in Glagolitic ([Languages](docs/using-the-page.md#languages)), and works with 15 model services, with backups if one is down ([Models](docs/settings.md#models)).
 
 ## Read more
 

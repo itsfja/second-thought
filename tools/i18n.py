@@ -4,7 +4,7 @@
     python tools/i18n.py missing             # the words each language still needs, page and Python (exit 1 if any)
     python tools/i18n.py add words.json      # put new translations into every language file
     python tools/i18n.py script gmy "ka-ra-pe {name}"   # show how a romanised line is written in Linear B (or akk, sux, hit: cuneiform; got: Gothic)
-    python tools/i18n.py derive              # write the languages made from another's words (qnr and qar: Old Norse and Old English in runes)
+    python tools/i18n.py derive              # write the languages made from another's words (qnr, qar, qcg: Old Norse and Old English in runes, Church Slavonic in Glagolitic)
 
 words.json says, for each English text, its translation in each language:
 
@@ -25,8 +25,9 @@ transliteration (gutisk, þiudans, ƕas) and written letter for letter in the Go
 
 Old Norse in runes (qnr) and Old English in runes (qar) have no words of their own: each file is made from its
 language's (non, ang), the page's words written in runes (the Younger Futhark, the Anglo-Saxon futhorc) and the Python
-words left in Latin letters. So words.json needs neither, "add" writes them again after adding, and "derive" writes
-them after any other change to i18n/non.json or i18n/ang.json.
+words left in Latin letters. Church Slavonic in Glagolitic (qcg) is made the same way from cu, letter
+for letter from its Cyrillic. So words.json needs none of the three, "add" writes them again after adding, and "derive"
+writes them after any other change to i18n/non.json, i18n/ang.json or i18n/cu.json.
 
 After adding, run python tools/sync.py, then the tests.
 """
@@ -537,6 +538,34 @@ def to_futhorc(text, missing=None):
     return _in_runes(text, futhorc, "qar")
 
 
+# ----- Church Slavonic in Glagolitic (#467) -----
+# Glagolitic, the alphabet the language was first written in, letter for letter from the Cyrillic of i18n/cu.json, as
+# the two alphabets were matched in the manuscripts: ѣ is ⱑ, and so are я and ꙗ (Glagolitic has one letter for both);
+# ы is ⱏⰹ (yer and izhe), ѿ is ⱉⱅ, и and й are ⰻ, і and ї are ⰹ, у, ѹ and ꙋ are ⱆ, є and ѥ are ⰵ. Capitals stay
+# capitals. Only Cyrillic letters change, so names, field names, code and placeholders, in Latin letters, stay as they are.
+_GLAGOLITIC = {"а": "AZU", "б": "BUKY", "в": "VEDE", "г": "GLAGOLI", "д": "DOBRO", "е": "YESTU", "ж": "ZHIVETE", "ѕ": "DZELO",
+               "з": "ZEMLJA", "ꙁ": "ZEMLJA", "и": "I", "й": "I", "ѝ": "I", "і": "IZHE", "ї": "IZHE", "ꙇ": "IZHE", "к": "KAKO", "л": "LJUDIJE",
+               "м": "MYSLITE", "н": "NASHI", "о": "ONU", "п": "POKOJI", "р": "RITSI", "с": "SLOVO", "т": "TVRIDO", "у": "UKU",
+               "ѹ": "UKU", "ꙋ": "UKU", "ф": "FRITU", "х": "HERU", "ѡ": "OTU", "щ": "SHTA", "ц": "TSI", "ч": "CHRIVI", "ш": "SHA",
+               "ъ": "YERU", "ь": "YERI", "ѣ": "YATI", "я": "YATI", "ꙗ": "YATI", "ю": "YU", "ѧ": "SMALL YUS", "ꙙ": "SMALL YUS",
+               "ѩ": "IOTATED SMALL YUS", "ѫ": "BIG YUS", "ꙛ": "BIG YUS", "ѭ": "IOTATED BIG YUS", "ѳ": "FITA", "ѵ": "IZHITSA",
+               "є": "YESTU", "ѥ": "YESTU", "ѐ": "YESTU", "э": "YESTU", "ё": "YO"}
+GLAGOLITIC = {}
+for _c, _name in _GLAGOLITIC.items():
+    GLAGOLITIC[_c] = unicodedata.lookup("GLAGOLITIC SMALL LETTER " + _name)
+    if _c.upper() != _c:
+        GLAGOLITIC[_c.upper()] = unicodedata.lookup("GLAGOLITIC CAPITAL LETTER " + _name)
+GLAGOLITIC.update({"ы": GLAGOLITIC["ъ"] + GLAGOLITIC["і"], "Ы": GLAGOLITIC["Ъ"] + GLAGOLITIC["і"],
+                   "ѿ": GLAGOLITIC["ѡ"] + GLAGOLITIC["т"], "Ѿ": GLAGOLITIC["Ѡ"] + GLAGOLITIC["т"],
+                   "̾": "", "́": "", "̀": "", "҃": ""})  # and no marks over the letters
+_TO_GLAGOLITIC = str.maketrans(GLAGOLITIC)
+
+
+def to_glagolitic(text, missing=None):
+    """A line of Church Slavonic in Cyrillic, in Glagolitic. Whatever isn't a Cyrillic letter stays as it is."""
+    return text.translate(_TO_GLAGOLITIC)
+
+
 # Languages made from another's words: {code: (the language it's made from, how its page words are written, and what
 # its file says of itself)}. `python tools/i18n.py derive` writes i18n/<code>.json; the tests check it is up to date.
 DERIVED = {
@@ -565,6 +594,18 @@ DERIVED = {
                 "the h of ht, ᚦ for þ and ð, ᚹ for w, with doubled letters written twice and no length marks. Names, modern "
                 "words, field names, keys and placeholders stay in Latin letters (tools/latin_kept.json lists them). The code "
                 "qar is from ISO 639-3's private-use range (qaa-qtz), since Old English in runes (ang-Runr) has no code of its own.",
+    }),
+    "qcg": ("cu", to_glagolitic, {
+        "name": to_glagolitic("словѣнскїй"),
+        "font": "Noto Sans Glagolitic",
+        "note": "Church Slavonic in Glagolitic: the words of i18n/cu.json, written in the Glagolitic alphabet (U+2C00-U+2C5F), "
+                "the one the language was first written in, by tools/i18n.py (`python tools/i18n.py derive`): edit cu.json, not "
+                "this file. The page shows Glagolitic in blocks, options, categories, labels, page, examples, starters and "
+                "blocklyMsg, with the Noto Sans Glagolitic font named in \"font\"; python holds cu.json's Cyrillic, which "
+                "exported programs print, since few terminals have a Glagolitic font. The letters go one for one, as the two "
+                "alphabets were matched in the manuscripts: ⱑ for ѣ, я and ꙗ; ⱏⰹ for ы; ⱉⱅ for ѿ; ⰻ for и and й; ⰹ for і and ї; "
+                "ⱆ for у, ѹ and ꙋ. Names, field names, keys and placeholders, in Latin letters, stay as they are. The code qcg "
+                "is from ISO 639-3's private-use range (qaa-qtz), since Church Slavonic in Glagolitic (cu-Glag) has no code of its own.",
     }),
 }
 PAGE_SIDE = ("blocks", "options", "categories", "labels", "page", "examples", "starters", "blocklyMsg")
