@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex nfr",
 "Tautulli history":"Tautulli soueu",
 "Tautulli watch time":"Tautulli hraw-t",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"ⲧⲥⲉⲗⲓⲥ ϣⲟⲡ ⲛϩⲧⲏⲛ ⲛ claude.ai, ⲁⲩⲱ ⲛϣⲁⲩⲱⲡ ⲙⲡⲉⲓϫⲱⲟⲩ ⲛⲧⲉ ⲟⲩⲙⲉⲩⲉ. ϣⲱⲡ ⲉⲣⲉ ⲉⲃⲟⲗ ϩⲛ Python, ϩⲛ ⲡⲉⲓϣⲟϣⲧ ϩⲣ second-thought.ini, ⲁⲩⲱ ⲡⲥⲕⲉⲩⲟⲥ ⲛⲁⲛ ϣⲱⲡ ⲡⲉⲓϫⲱⲟⲩ ⲛⲧⲉ ⲟⲩⲙⲉⲩⲉ, ⲡⲉⲧⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲛⲉϥ ⲡⲉ ⲡϩⲟⲣⲟⲥ, ⲁⲩⲱ ⲟⲩⲱⲡϣⲉⲃⲏ ⲛϩⲧⲏⲛ, ⲧⲁⲩⲇⲟⲕⲓⲙⲁⲍ ϩⲛ ⲡⲉⲓⲟⲣⲅⲁⲛⲟⲛ ⲡⲧ."
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2316,17 +2316,17 @@
 "{n} users":"{n} polzovateli",
 "Which stream? Give a session's id, from the sessions.":"Oun pi-stream? Nau pe id nte pi-sessia, hn pi-sessia.",
 "stop the {id} stream on Plex":"Plex stream {id} ostanoviti",
-", over by {x}":", over by {x}",
-"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
-"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
-"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
-"over the cap by {x}":"over the cap by {x}",
-"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
-"this hour":"this hour",
-"this month":"this month",
-"this week":"this week",
-"today":"today",
-"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+", over by {x}":", euphoros hn {x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"etbe peišošt nteiorganon pe hōrh mpōp nhat ōpšebē ntauaau, oukaste ōte taudokimaz.",
+"What each model service has been used, counted on this computer at list prices:":"oumeue nhsabe ku-etbe tautau, taudokimaz hn peiorganon pe kata ntimē:",
+"no plan set: add {setting} in {where} to count it against a cap":"ptoikonomia nu-tshoop: {setting} hn {where} šop ere, taudokimaz ef hn nhoros",
+"over the cap by {x}":"euphoros hn {x}",
+"the {plan} plan publishes no monthly cap":"petoikonomia n {plan} mn phoros mpebot",
+"this hour":"hn peiouōm",
+"this month":"hn peiebot",
+"this week":"kata sabbaton pe",
+"today":"mpehoou",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% mphoros mpebot n toikonomia n {plan} {cap} (afjōou {spent}, auaaf nbrre hn {when})",
 "{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{

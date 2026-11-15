@@ -1900,7 +1900,7 @@
   "Plex new items": "Plex の新しいアイテム",
   "Tautulli history": "Tautulli 履歴",
   "Tautulli watch time": "Tautulli 視聴時間",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "このページは claude.ai アカウントで動くため、各サービスの支出は数えません。second-thought.ini にキーを書いて Python に書き出せば、このツールは各サービスの支出、プランと上限、超過分を報告します。"
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "このページは claude.ai アカウントで動くため、各サービスの支出は数えません。second-thought.ini にキーを書いて Python に書き出せば、このツールは各サービスの支出、プランと上限、超過分を、そのコンピューター上で数えて報告します。"
  },
  "examples": {
   "review": {

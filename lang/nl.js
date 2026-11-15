@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex nieuwe items",
 "Tautulli history":"Tautulli-geschiedenis",
 "Tautulli watch time":"Tautulli kijktijd",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"De pagina draait op je claude.ai-account en telt dus niet wat elke dienst uitgeeft; exporteer naar Python, met sleutels in second-thought.ini, dan zegt deze tool wat elke dienst heeft uitgegeven, zijn abonnement en zijn limiet, en elke overschrijding."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"De pagina draait op je claude.ai-account en telt dus niet wat elke dienst uitgeeft. Exporteer naar Python, met sleutels in second-thought.ini, dan zegt deze tool wat elke dienst heeft uitgegeven, zijn abonnement en zijn limiet, en elke overschrijding, geteld op die computer."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

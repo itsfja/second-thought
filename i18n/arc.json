@@ -1901,7 +1901,7 @@
   "Plex new items": "Plex jdyd",
   "Tautulli history": "Tautulli tarikh",
   "Tautulli watch time": "Tautulli wqt shw",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "הדין עמודא על חשבונך די-claude.ai רהט, ולהן לא מני טבע כל חד מן שמשתא; אפק לפיתון, במפתחיא ב-second-thought.ini, וימסר הדין אסתימא מה טבע כל שמשתא, תכניתה ותחומה, וכל רביא."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "הדין עמודא על חשבונך די-claude.ai רהט, ולהן לא מני טבע כל חד מן שמשתא. אפק לפיתון, במפתחיא ב-second-thought.ini, וימסר הדין אסתימא מה טבע כל שמשתא, תכניתה ותחומה, וכל רביא, אתמני על ההוא חושבנא."
  },
  "examples": {
   "review": {

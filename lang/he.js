@@ -1183,7 +1183,7 @@
 "Plex new items":"פריטים חדשים ב-Plex",
 "Tautulli history":"היסטוריית Tautulli",
 "Tautulli watch time":"זמן צפייה ב-Tautulli",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"העמוד פועל בחשבון ה-claude.ai שלך, ולכן אינו מונה את ההוצאה של כל שירות; ייצאו ל-Python, עם מפתחות ב-second-thought.ini, והכלי הזה ידווח כמה כל שירות הוציא, את התוכנית והתקרה שלו, וכל חריגה."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"העמוד פועל בחשבון ה-claude.ai שלך, ולכן אינו מונה את ההוצאה של כל שירות. ייצאו ל-Python, עם מפתחות ב-second-thought.ini, והכלי הזה ידווח כמה כל שירות הוציא, את התוכנית והתקרה שלו, וכל חריגה, בכדי לספור על המחשב ההוא."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

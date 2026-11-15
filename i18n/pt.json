@@ -1900,7 +1900,7 @@
   "Plex new items": "novos itens do Plex",
   "Tautulli history": "histórico do Tautulli",
   "Tautulli watch time": "tempo de visionamento do Tautulli",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "A página corre na sua conta claude.ai, por isso não conta o gasto de cada serviço; exporte para Python, com as chaves em second-thought.ini, e esta ferramenta dirá o que cada serviço gastou, o seu plano e o seu limite, e qualquer excesso."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "A página corre na sua conta claude.ai, por isso não conta o gasto de cada serviço. Exporte para Python, com as chaves em second-thought.ini, e esta ferramenta dirá o que cada serviço gastou, o seu plano e o seu limite, e qualquer excesso, contado nesse computador."
  },
  "examples": {
   "review": {

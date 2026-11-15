@@ -1891,7 +1891,7 @@
   "Plex new items": "Plex nfr",
   "Tautulli history": "Tautulli hraw",
   "Tautulli watch time": "Tautulli hraw-t",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𓈙𓆑𓂧𓅱 𓅓 𓊪𓂋𓎛𓆓 𓈖 claude.ai 𓐍𓊪𓂋, 𓅱𓎛 𓎛𓅓 𓈖𓃀 𓈖 𓎛𓋴𓃀𓏏𓅱𓆑 𓎛𓂋 𓂋𓂧𓇋 𓂋 Python, 𓅓𓐍𓏏 𓐍𓏏𓅓𓅱 𓎛𓂋 second-thought.ini, 𓂝𓎛𓅱 𓊪𓈖 𓎛𓅓 𓈖𓃀 𓅱𓎛𓈖𓆑, 𓋴𓈙𓅓𓆑 𓐍𓂋𓆑, 𓅱𓎛 𓎛𓂋𓂝, 𓎛𓋴𓃀 𓎛𓂋 𓂝𓎛𓅱 𓊪𓏏, 𓆓𓂧𓆑"
  },
  "examples": {
   "review": {
@@ -3657,17 +3657,17 @@
   "{n} users": "{n} rmth",
   "Which stream? Give a session's id, from the sessions.": "Aba? Hb id n akhet, hr akhet.",
   "stop the {id} stream on Plex": "hms {id} hr Pi-hole",
-  ", over by {x}": ", over by {x}",
-  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nothing has been spent through this computer's keys yet, so there's nothing to count.",
-  "What each model service has been used, counted on this computer at list prices:": "What each model service has been used, counted on this computer at list prices:",
-  "no plan set: add {setting} in {where} to count it against a cap": "no plan set: add {setting} in {where} to count it against a cap",
-  "over the cap by {x}": "over the cap by {x}",
-  "the {plan} plan publishes no monthly cap": "the {plan} plan publishes no monthly cap",
-  "this hour": "this hour",
-  "this month": "this month",
-  "this week": "this week",
-  "today": "today",
-  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+  ", over by {x}": ", ḥr-ꜥ {x}",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "ḥr ḫtmw n ꜥḥw pn wḥ nn ḥpr, n ḥsb.tw nḥḥ.",
+  "What each model service has been used, counted on this computer at list prices:": "ḥm nb ku-it jr.n, ḥr ꜥḥw pn m ḥsb ḥr wḏ:",
+  "no plan set: add {setting} in {where} to count it against a cap": "sšm nn ḫpr: {setting} ḥr {where} ḥr rdj, ḥsb=f r ḫr",
+  "over the cap by {x}": "ḥr-ꜥ ḫr {x}",
+  "the {plan} plan publishes no monthly cap": "sšm n {plan} ḫr n ꜣbd nn ḫpr",
+  "this hour": "m wnwt pn",
+  "this month": "m ꜣbd pn",
+  "this week": "m sw pn",
+  "today": "m hrw pn",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% n ḫr n ꜣbd n sšm {plan} {cap} (wḥ.n {spent}, m mꜥw r {when})",
   "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {

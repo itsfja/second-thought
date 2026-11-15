@@ -8,6 +8,26 @@ import support
 FILES = sorted((support.ROOT / "i18n").glob("*.json"))
 
 
+def has_own_words(english):
+    """Whether a text has a word of English to translate: a word of three or more letters starting lowercase, outside
+    the {name} slots and <b>bold</b> marks. Names (Coinbase, Pi-hole, Docker {version}) and placeholder skeletons
+    ({window} {x}) have none, so they may stay as they are in any language."""
+    stripped = re.sub(r"\{[^{}]*\}|</?\w+>", "", english)
+    return any(w[0].islower() and len(w) >= 3 for w in re.findall(r"[^\W\d_]+(?:['’-][^\W\d_]+)*", stripped))
+
+
+# Texts a language shares with English rather than leaves untranslated: currencies (yen, euros), terms that are the
+# same word (premium, standard, error, tokens), and names with a word of English in them (Second Thought runtime…).
+# Middle English (enm) is exempt: its own words are English words, so its translations often are the English text.
+SHARED_WITH_ENGLISH = {
+    "US dollars", "Second Thought runtime {runtime_version}", "Second Thought on claude.ai",
+    "Home Assistant: homelab", "Email (sending)", "array {state}", "budget {n}", "container", "emails", "error",
+    "euros", "note", "pounds", "premium", "sent", "standard", "tokens", "versions", "yen", "yuan",
+    "{action} the Unraid {who} {name}", "{code}, {note} (1 US dollar = {rate})", "{got} topics", "{items} items",
+    "{list} and {last}", "{n} clients", "{n} containers", "{n} items", "{n} ports", "{n} records", "{n} sessions",
+    "{n} shares", "{n} topics", "{recs} items", "{recs} records", "~{n} tokens",
+}
+
 class Files(unittest.TestCase):
     def test_there_is_at_least_one(self):
         self.assertTrue(FILES)
@@ -50,6 +70,18 @@ class Files(unittest.TestCase):
                     self.assertTrue(isinstance(words, str) and words.strip(), english)
                     self.assertEqual(sorted(re.findall(r"\{\w+\}", english)), sorted(re.findall(r"\{\w+\}", words)), english)
                     self.assertEqual(re.findall(r"</?\w+>", english), re.findall(r"</?\w+>", words), english)
+
+    def test_no_text_left_in_english(self):
+        # #462: the tests only checked that each language has a text, not that it was translated. A translation the
+        # same as its English is a text left untranslated, unless it's a name, a skeleton, or a shared word.
+        for path in FILES:
+            if path.stem == "enm":
+                continue
+            with self.subTest(file=path.name):
+                d = json.loads(path.read_text(encoding="utf-8"))
+                left = [english for section in ("page", "python") for english, words in (d.get(section) or {}).items()
+                        if english == words and english not in SHARED_WITH_ENGLISH and has_own_words(english)]
+                self.assertEqual(left, [], "texts left the same as the English")
 
 
 if __name__ == "__main__":

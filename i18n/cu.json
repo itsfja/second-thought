@@ -1890,7 +1890,7 @@
   "Plex new items": "Plex novoe",
   "Tautulli history": "Tautulli istoria",
   "Tautulli watch time": "Tautulli vremia smotrenia",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "Сѣ страница на claude.ai тѣчетъ, того ради не считаетъ истрачьныѩ коѥѩждо службы; изнеси въ Пѵѳонъ, съ клѫчи въ second-thought.ini, и речетъ си подъобьіе колико коѥждо служба истрачи, планъ и граници ѥѩ, и всѧко прехождениѥ."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Сѧ страница на claude.ai тѧчетъ, того ради не считаетъ истрасьныѩ коєждо службыѕ. Изнеси въ Пѵѳонъ, съ клѫчи въ second-thought.ini, и речетъ си подъѡбьіе колико коєждо служба истрачи, планъ и границы ѥѩ, и всѧко преходженіѥ, считаемо на тѣмъ числительницѣ."
  },
  "examples": {
   "review": {

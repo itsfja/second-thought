@@ -1183,7 +1183,7 @@
 "Plex new items":"Plex jdyd",
 "Tautulli history":"Tautulli tarikh",
 "Tautulli watch time":"Tautulli wqt shw",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"ܕܦܐ ܪܚܬ ܥܠ ܚܫܘܒܢܟ dclaude.ai, ܘܡܬܘܠ ܗܢܐ ܠܐ ܡܢܐ ܢܦܩܬܐ ܕܟܘܠ ܡܫܡܫܢܐ. ܐܦܩ ܠ-Puton, ܒܩܝܡܐ second-thought.ini, ܘܡܢܐ ܗܢܐ ܡܢܐ ܐܡܐ ܢܦܩ ܟܘܠ ܡܫܡܫܢܐ, ܨܒܝܢܬܐ ܘܛܚܘܡܬܐ, ܘܟܘܠ ܚܘܝܐ ܕܛܚܘܡܐ, ܡܢ ܥܠ ܗܢܐ ܚܫܘܒܐ ܡܢܐ."
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2317,17 +2317,17 @@
 "{n} users":"{n} msthdmyn",
 "Which stream? Give a session's id, from the sessions.":"Ayna strym? Hb id sjl, mn sjlat.",
 "stop the {id} stream on Plex":"wqf strym {id} b Pi-hole",
-", over by {x}":", over by {x}",
-"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"Nothing has been spent through this computer's keys yet, so there's nothing to count.",
-"What each model service has been used, counted on this computer at list prices:":"What each model service has been used, counted on this computer at list prices:",
-"no plan set: add {setting} in {where} to count it against a cap":"no plan set: add {setting} in {where} to count it against a cap",
-"over the cap by {x}":"over the cap by {x}",
-"the {plan} plan publishes no monthly cap":"the {plan} plan publishes no monthly cap",
-"this hour":"this hour",
-"this month":"this month",
-"this week":"this week",
-"today":"today",
-"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+", over by {x}":", ḥayyān b{x}",
+"Nothing has been spent through this computer's keys yet, so there's nothing to count.":"ꜥad hdārā lā npaq men qlīdē dhānā ḥāšobā, lā meddem dmnē.",
+"What each model service has been used, counted on this computer at list prices:":"emmē dmwātā dmšamšānā ꜥaṭṭet, mna ꜥal hānā ḥāšobā bṭīmē ddmwātā:",
+"no plan set: add {setting} in {where} to count it against a cap":"lēt ṣebyānā: {setting} b{where} ṭab, mnē lzagraꜥā ḥaymen lṭḥumā",
+"over the cap by {x}":"lḥayyān lṭḥumā b{x}",
+"the {plan} plan publishes no monthly cap":"ṣebyānetā d{plan} lēt ṭḥumā yarḥāyā dḥaṭṭērā",
+"this hour":"bšāꜥā hānā",
+"this month":"byarḥā hānā",
+"this week":"bšabūꜥā hānā",
+"today":"yawmānā",
+"{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% men ṭḥumā yarḥāyā dṣebyānetā d{plan} {cap} (npaq {spent}, ḥaddet l{when})",
 "{window} {x}":"{window} {x}"
 },
 "blocklyMsg":{

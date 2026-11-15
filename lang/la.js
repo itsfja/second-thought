@@ -1182,7 +1182,7 @@
 "Plex new items":"Plex nova",
 "Tautulli history":"Tautulli acta",
 "Tautulli watch time":"Tautulli tempus videnti",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"Haec pagina in ratione claude.ai tua currit, igitur impensa cuiusque ministerii non numerat; in Pythonum expone, clavibus in second-thought.ini positis, et hoc instrumentum dicet quod cuiusque ministerii impenderit, rationem et summam eius, et omnem excessum."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"Haec pagina in ratione claude.ai tua currit, igitur impensa cuiusque ministerii non numerat. In Pythonum expone, clavibus in second-thought.ini positis, et hoc instrumentum dicet quod cuiusque ministerii impenderit, rationem et summam eius, et omnem excessum, in illo computatro numeratum."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

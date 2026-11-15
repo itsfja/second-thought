@@ -1891,7 +1891,7 @@
   "Plex new items": "Plex nava",
   "Tautulli history": "Tautulli itihaso",
   "Tautulli watch time": "Tautulli passana-kalo",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.": "The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "इदं पृष्ठं तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययं न गणयति। Python-वसेन निर्यास्य, second-thought.ini-वसेतु कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च, तस्मिन् सङ्गणके गणयित्वा निवेदयति।"
  },
  "examples": {
   "review": {
@@ -3657,17 +3657,17 @@
   "{n} users": "{n} upasagga",
   "Which stream? Give a session's id, from the sessions.": "Ko savaho? Dehi ekassa samavayassa id, samavayehi.",
   "stop the {id} stream on Plex": "Plex {id} savam nivattetu",
-  ", over by {x}": ", over by {x}",
-  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "Nothing has been spent through this computer's keys yet, so there's nothing to count.",
-  "What each model service has been used, counted on this computer at list prices:": "What each model service has been used, counted on this computer at list prices:",
-  "no plan set: add {setting} in {where} to count it against a cap": "no plan set: add {setting} in {where} to count it against a cap",
-  "over the cap by {x}": "over the cap by {x}",
-  "the {plan} plan publishes no monthly cap": "the {plan} plan publishes no monthly cap",
-  "this hour": "this hour",
-  "this month": "this month",
-  "this week": "this week",
-  "today": "today",
-  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})",
+  ", over by {x}": ", सीमातो {x} अधिकं",
+  "Nothing has been spent through this computer's keys yet, so there's nothing to count.": "इमस्स सङ्गणकस्स कुञ्चिकाहि अदानि किञ्चिद् वयित्वा न अस्ति, तस्मा गणयितुं किञ्चिद् न अस्ति।",
+  "What each model service has been used, counted on this computer at list prices:": "प्रत्येकसेवायाः पटिरूपेण उपयुक्तं किं, इमस्मिन् सङ्गणके सूचिमूलेहि गणयित्वा:",
+  "no plan set: add {setting} in {where} to count it against a cap": "योजना न स्थापिता: {setting} {where} स्थापय, सीमायाः गणनाय",
+  "over the cap by {x}": "सीमातो {x} अधिकं",
+  "the {plan} plan publishes no monthly cap": "{plan}-योजना मासिकां सीमां न प्रकाशयति",
+  "this hour": "इमस्सं होरायं",
+  "this month": "इमस्स मासे",
+  "this week": "इमस्स सत्ताहे",
+  "today": "अज्ज",
+  "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% इमस्स {plan}-योजनायाः मासिक्याः सीमायाः {cap} ({spent} वयित्वा, {when} नवीकरोति)",
   "{window} {x}": "{window} {x}"
  },
  "blocklyMsg": {

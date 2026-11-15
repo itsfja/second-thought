@@ -1182,7 +1182,7 @@
 "Plex new items":"nuevos elementos de Plex",
 "Tautulli history":"historial de Tautulli",
 "Tautulli watch time":"tiempo de visionado de Tautulli",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"La página funciona con tu cuenta de claude.ai, así que no cuenta lo gastado en cada servicio; expórtala a Python, con las claves en second-thought.ini, y esta herramienta informará de lo que ha gastado cada servicio, su plan y su tope, y cualquier exceso."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"La página funciona con tu cuenta de claude.ai, así que no cuenta lo gastado en cada servicio. Expórtala a Python, con las claves en second-thought.ini, y esta herramienta informará de lo que ha gastado cada servicio, su plan y su tope, y cualquier exceso, contado en ese ordenador."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

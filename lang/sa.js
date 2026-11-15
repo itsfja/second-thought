@@ -1183,7 +1183,7 @@
 "Plex new items":"Plex nava",
 "Tautulli history":"Tautulli itihasah",
 "Tautulli watch time":"Tautulli drishti-kalah",
-"The page runs on your claude.ai account, so it doesn't count each service's spending; export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend.":"इयं पृष्ठः तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययः न गणयति; Python-म् प्रति निर्यास्य, second-thought.ini-मध्ये कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च निवेदयति."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"इयं पृष्ठः तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययः न गणयति। Python-म् प्रति निर्यास्य, second-thought.ini-मध्ये कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च, तस्मिन् सङ्गणके गणयित्वा निवेदयति।"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
