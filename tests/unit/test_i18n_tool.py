@@ -140,6 +140,18 @@ class Runes(unittest.TestCase):
         self.assertEqual(tool.to_futhorc("time, open, high, low and up (not a tool)"), "time, open, high, low ᚪᚾᛞ up (not a tool)")
         self.assertEqual(tool.to_runes("Send boð til GitHub, on eða off"), "ᛋᛁᚾᛏ ᛒᚢᚦ ᛏᛁᛚ GitHub, on ᛁᚦᛅ off", "in Old Norse they are only field values")
 
+    def test_church_slavonic_goes_letter_for_letter_in_glagolitic(self):
+        # #467: only Cyrillic letters change, capitals stay capitals, and marks over letters aren't written
+        self.assertEqual(tool.to_glagolitic("словѣнскїй"), "ⱄⰾⱁⰲⱑⱀⱄⰽⰹⰻ")
+        self.assertEqual(tool.to_glagolitic("Посланникъ: дѣлай къ %1"), "Ⱂⱁⱄⰾⰰⱀⱀⰻⰽⱏ: ⰴⱑⰾⰰⰻ ⰽⱏ %1")
+        self.assertEqual(tool.to_glagolitic("чины ѿ GitHub, {name} и ꙗзыкъ; всѐ"), "ⱍⰻⱀⱏⰹ ⱉⱅ GitHub, {name} ⰻ ⱑⰸⱏⰹⰽⱏ; ⰲⱄⰵ")
+        self.assertEqual(tool.to_glagolitic("name, title, <b>second-thought.ini</b>"), "name, title, <b>second-thought.ini</b>")
+        written = "".join(tool.GLAGOLITIC.values())
+        self.assertTrue(all(0x2C00 <= ord(c) <= 0x2C5F for c in written))
+        cu = (support.ROOT / "i18n" / "cu.json").read_text(encoding="utf-8")
+        left = sorted({c for c in tool.to_glagolitic(cu) if 0x400 <= ord(c) <= 0x52F or 0xA640 <= ord(c) <= 0xA69F})
+        self.assertEqual(left, [], "every Cyrillic letter cu.json uses has its Glagolitic one")
+
     def test_the_runic_file_is_made_from_the_old_norse_one(self):
         for code, (source, _, about) in tool.DERIVED.items():
             with self.subTest(code):
@@ -150,7 +162,8 @@ class Runes(unittest.TestCase):
                 self.assertEqual((have["name"], have["font"]), (about["name"], about["font"]))
                 self.assertEqual(have["page"]["Second Thought"], "Second Thought")
                 letters = [c for c in have["categories"]["Events"] + have["page"]["Save"] if c.isalpha()]
-                self.assertTrue(letters and all(0x16A0 <= ord(c) <= 0x16FF for c in letters), letters)
+                first, last = (0x2C00, 0x2C5F) if code == "qcg" else (0x16A0, 0x16FF)
+                self.assertTrue(letters and all(first <= ord(c) <= last for c in letters), letters)
 
     def test_add_writes_the_derived_language_again(self):
         with tempfile.TemporaryDirectory() as tmp:
