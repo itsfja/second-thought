@@ -55,25 +55,28 @@
     const b = document.getElementById("log-tests");
     if (b) { b.hidden = !programTests.length; b.textContent = tr("Run tests ({n})", { n:programTests.length }); }
   }
-  let saved = null;
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
-  try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
-  try { load(saved || EXAMPLES.review()); } catch(e) { load(EXAMPLES.review()); }
-  ws.addChangeListener(ev => {
-    if (ev.isUiEvent) return;
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(saveWs())); localStorage.setItem(STORE_KEY + ":version", String(FORMAT_VERSION)); } catch(e) {}
-  });
+  /* The toolbar's buttons are set up before anything that reads data the editor didn't write (what it saved last
+     time, the gallery, imports), so a bad file can't leave the page without its buttons (#417). */
   $("zin").onclick = () => ws.zoomCenter(1);
   $("zout").onclick = () => ws.zoomCenter(-1);
   $("zfit").onclick = () => ws.zoomToFit();
-  (function fillExamples(){
+  // The Example menu is filled at start-up (it is only names); Browse examples' cards wait for the panel's first open.
+  function fillExampleMenu(){
     const sel = $("example");
     EXAMPLE_CATEGORIES.forEach(cat => {
       const g = document.createElement("optgroup"); g.label = tr(cat);
       EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => { const o = document.createElement("option"); o.value = e.key; o.textContent = e.title; g.appendChild(o); });
       sel.appendChild(g);
     });
-    const body = $("gal-body");
+  }
+  let galleryFilled = false;
+  // The cards are built the first time Browse examples opens, not at start-up: building them all, and loading every
+  // shared program to say what it can do, is most of the page's start-up work — and one program that won't load gets
+  // its own card, saying why, and doesn't stop the rest (#417).
+  function fillGallery(){
+    if (galleryFilled) return;
+    galleryFilled = true;
+    const sel = $("example"), body = $("gal-body");
     EXAMPLE_CATEGORIES.forEach(cat => {
       const sec = document.createElement("div"); sec.className = "gal-cat";
       const h = document.createElement("h3"); h.textContent = tr(cat); sec.appendChild(h);
@@ -85,21 +88,30 @@
       const grid = document.createElement("div"); grid.className = "gal-grid";
       EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => {
         const card = document.createElement("div"); card.className = "gal-card"; card.dataset.key = e.key;
-        const t = document.createElement("h4"); t.textContent = e.title;
-        const d = document.createElement("p"); d.textContent = e.desc;
-        const tip = document.createElement("p"); tip.className = "tip"; tip.textContent = tr("Try: {tip}", { tip:e.tip });
-        const btn = document.createElement("button"); btn.type = "button"; btn.textContent = e.community ? tr("Load this program") : tr("Load this example");
-        btn.onclick = () => { sel.value = e.key; loadExample(e.key); toggleGallery(false); };
-        if (e.community) {
-          const by = document.createElement("p"); by.className = "by"; by.textContent = tr("Shared by {author}, made with runtime {runtime}.", { author:e.author, runtime:e.runtime });
-          const can = document.createElement("p"); can.className = "can"; can.textContent = communityCanText(e);
-          card.append(t, by, d, can, tip, btn);
-        } else card.append(t, d, tip, btn);
+        try {
+          const t = document.createElement("h4"); t.textContent = e.title;
+          const d = document.createElement("p"); d.textContent = e.desc;
+          const tip = document.createElement("p"); tip.className = "tip"; tip.textContent = tr("Try: {tip}", { tip:e.tip });
+          const btn = document.createElement("button"); btn.type = "button"; btn.textContent = e.community ? tr("Load this program") : tr("Load this example");
+          btn.onclick = () => { sel.value = e.key; loadExample(e.key); toggleGallery(false); };
+          if (e.community) {
+            const by = document.createElement("p"); by.className = "by"; by.textContent = tr("Shared by {author}, made with runtime {runtime}.", { author:e.author, runtime:e.runtime });
+            const can = document.createElement("p"); can.className = "can"; can.textContent = communityCanText(e);
+            if (communityCapsFor(e).error) card.classList.add("broken");
+            card.append(t, by, d, can, tip, btn);
+          } else card.append(t, d, tip, btn);
+        } catch (ex) {
+          const t = document.createElement("h4"); t.textContent = e.title || e.key;
+          const can = document.createElement("p"); can.className = "can";
+          can.textContent = tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:ex && ex.message ? ex.message : tr("unknown error") });
+          card.classList.add("broken");
+          card.append(t, can);
+        }
         grid.appendChild(card);
       });
       sec.appendChild(grid); body.appendChild(sec);
     });
-  })();
+  }
   function describeExample(key){
     const e = exampleByKey(key), el = $("ex-desc");
     el.innerHTML = "";
@@ -107,9 +119,21 @@
     const b = document.createElement("b"); b.textContent = e.title + ": ";
     el.append(b, document.createTextNode(e.desc + (e.community ? " " + communityCanText(e) + " " + tr("Shared by {author}.", { author:e.author }) : "") + " " + tr("Try: {tip}", { tip:e.tip })));
   }
-  function loadExample(key){ setTests([]); load(exampleState(key)); describeExample(key); try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {} }
+  function loadExample(key){
+    setTests([]);
+    const prev = saveWs();
+    try {
+      load(exampleState(key));
+      describeExample(key);
+      try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {}
+    } catch(e) {
+      try { load(prev); } catch(e2) {}
+      $("status").textContent = tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:e && e.message ? e.message : tr("unknown error") });
+    }
+  }
   function toggleGallery(open){
     const g = $("gallery"); if (open === undefined) open = g.hidden;
+    if (open) fillGallery();  // the cards are built on the panel's first open, not at start-up
     g.hidden = !open; $("ex-toggle").setAttribute("aria-expanded", String(open));
     setTimeout(() => Blockly.svgResize(ws), 0);
   }
@@ -117,6 +141,7 @@
   $("ha-toggle").onclick = () => toggleHaPanel();
   $("ha-filter").addEventListener("input", renderHaPanel);
   $("example").addEventListener("change", e => describeExample(e.target.value));
+  fillExampleMenu();
   describeExample($("example").value);
   $("load").onclick = () => loadExample($("example").value);
   const mq = window.matchMedia("(prefers-color-scheme: dark)");
@@ -139,3 +164,14 @@
     if (open) $("keys-title").focus();
     setTimeout(() => Blockly.svgResize(ws), 0);
   };
+
+  /* What the page kept from last time loads once every button above is set, so a saved program that won't load
+     can't stop the page starting (#417). */
+  let saved = null;
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
+  try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
+  try { load(saved || EXAMPLES.review()); } catch(e) { try { load(EXAMPLES.review()); } catch(e2) {} }
+  ws.addChangeListener(ev => {
+    if (ev.isUiEvent) return;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saveWs())); localStorage.setItem(STORE_KEY + ":version", String(FORMAT_VERSION)); } catch(e) {}
+  });

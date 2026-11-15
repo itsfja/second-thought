@@ -174,6 +174,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 .gal-card .tip,.gal-card .by{color:var(--muted)}
 .gal-card .by{font-size:12px}
 .gal-card .can{border-inline-start:3px solid var(--line);padding-inline-start:8px}
+.gal-card.broken .can{color:var(--warn);border-inline-start-color:var(--warn)}
 /* Right to left: code, file names, and text that may be in either direction keep their own. */
 [dir=rtl] pre,[dir=rtl] code,[dir=rtl] .mono,[dir=rtl] #io-export-text,[dir=rtl] #io-paste,[dir=rtl] #io-name,[dir=rtl] .status,[dir=rtl] .sched-status{direction:ltr;text-align:left}
 [dir=rtl] .step-body:not(.mono),[dir=rtl] .result-text,[dir=rtl] .mem-val,[dir=rtl] .watch-body .v,[dir=rtl] .ask textarea{unicode-bidi:plaintext;text-align:start}
@@ -18758,12 +18759,26 @@ HOW TO MAP CODE
       return CAPABILITIES.filter(c => got.has(c[0]));
     } finally { w.dispose(); }
   }
-  window.__gallery = () => GALLERY.map(g => ({ key:g.key, file:g.file, title:g.title, unknown:unknownTypes(g.program),
-    can:stateCapabilities(g.program).map(c => c[0]), card:(document.querySelector('.gal-card[data-key="' + g.key + '"]') || {}).innerText || "" }));
+  window.__gallery = () => GALLERY.map(g => {
+    let can = [], error = null;
+    try { can = stateCapabilities(g.program).map(c => c[0]); } catch (e) { error = e && e.message ? e.message : String(e); }
+    return { key:g.key, file:g.file, title:g.title, unknown:unknownTypes(g.program), can, error,
+      card:(document.querySelector('.gal-card[data-key="' + g.key + '"]') || {}).innerText || "" };
+  });
   const communityCaps = {};
+  /* What a shared program can do, or why it can't be loaded — worked out once, and never thrown: a program that
+     won't load says so on its card and in its description, and the rest of the page carries on (#417). */
+  function communityCapsFor(e){
+    if (!(e.key in communityCaps)) {
+      try { communityCaps[e.key] = { can:stateCapabilities(e.build()) }; }
+      catch (err) { communityCaps[e.key] = { error:err && err.message ? err.message : String(err) }; }
+    }
+    return communityCaps[e.key];
+  }
   function communityCanText(e){
-    if (!(e.key in communityCaps)) communityCaps[e.key] = stateCapabilities(e.build());
-    return capabilitySentence(communityCaps[e.key]) || tr("It only uses your models: it doesn't connect to anything else.");
+    const c = communityCapsFor(e);
+    if (c.error) return tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:c.error });
+    return capabilitySentence(c.can) || tr("It only uses your models: it doesn't connect to anything else.");
   }
 
   // 08-workspace.js: The Blockly workspace: injecting it, saving and loading, the autosave.
@@ -18823,25 +18838,28 @@ HOW TO MAP CODE
     const b = document.getElementById("log-tests");
     if (b) { b.hidden = !programTests.length; b.textContent = tr("Run tests ({n})", { n:programTests.length }); }
   }
-  let saved = null;
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
-  try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
-  try { load(saved || EXAMPLES.review()); } catch(e) { load(EXAMPLES.review()); }
-  ws.addChangeListener(ev => {
-    if (ev.isUiEvent) return;
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(saveWs())); localStorage.setItem(STORE_KEY + ":version", String(FORMAT_VERSION)); } catch(e) {}
-  });
+  /* The toolbar's buttons are set up before anything that reads data the editor didn't write (what it saved last
+     time, the gallery, imports), so a bad file can't leave the page without its buttons (#417). */
   $("zin").onclick = () => ws.zoomCenter(1);
   $("zout").onclick = () => ws.zoomCenter(-1);
   $("zfit").onclick = () => ws.zoomToFit();
-  (function fillExamples(){
+  // The Example menu is filled at start-up (it is only names); Browse examples' cards wait for the panel's first open.
+  function fillExampleMenu(){
     const sel = $("example");
     EXAMPLE_CATEGORIES.forEach(cat => {
       const g = document.createElement("optgroup"); g.label = tr(cat);
       EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => { const o = document.createElement("option"); o.value = e.key; o.textContent = e.title; g.appendChild(o); });
       sel.appendChild(g);
     });
-    const body = $("gal-body");
+  }
+  let galleryFilled = false;
+  // The cards are built the first time Browse examples opens, not at start-up: building them all, and loading every
+  // shared program to say what it can do, is most of the page's start-up work — and one program that won't load gets
+  // its own card, saying why, and doesn't stop the rest (#417).
+  function fillGallery(){
+    if (galleryFilled) return;
+    galleryFilled = true;
+    const sel = $("example"), body = $("gal-body");
     EXAMPLE_CATEGORIES.forEach(cat => {
       const sec = document.createElement("div"); sec.className = "gal-cat";
       const h = document.createElement("h3"); h.textContent = tr(cat); sec.appendChild(h);
@@ -18853,21 +18871,30 @@ HOW TO MAP CODE
       const grid = document.createElement("div"); grid.className = "gal-grid";
       EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => {
         const card = document.createElement("div"); card.className = "gal-card"; card.dataset.key = e.key;
-        const t = document.createElement("h4"); t.textContent = e.title;
-        const d = document.createElement("p"); d.textContent = e.desc;
-        const tip = document.createElement("p"); tip.className = "tip"; tip.textContent = tr("Try: {tip}", { tip:e.tip });
-        const btn = document.createElement("button"); btn.type = "button"; btn.textContent = e.community ? tr("Load this program") : tr("Load this example");
-        btn.onclick = () => { sel.value = e.key; loadExample(e.key); toggleGallery(false); };
-        if (e.community) {
-          const by = document.createElement("p"); by.className = "by"; by.textContent = tr("Shared by {author}, made with runtime {runtime}.", { author:e.author, runtime:e.runtime });
-          const can = document.createElement("p"); can.className = "can"; can.textContent = communityCanText(e);
-          card.append(t, by, d, can, tip, btn);
-        } else card.append(t, d, tip, btn);
+        try {
+          const t = document.createElement("h4"); t.textContent = e.title;
+          const d = document.createElement("p"); d.textContent = e.desc;
+          const tip = document.createElement("p"); tip.className = "tip"; tip.textContent = tr("Try: {tip}", { tip:e.tip });
+          const btn = document.createElement("button"); btn.type = "button"; btn.textContent = e.community ? tr("Load this program") : tr("Load this example");
+          btn.onclick = () => { sel.value = e.key; loadExample(e.key); toggleGallery(false); };
+          if (e.community) {
+            const by = document.createElement("p"); by.className = "by"; by.textContent = tr("Shared by {author}, made with runtime {runtime}.", { author:e.author, runtime:e.runtime });
+            const can = document.createElement("p"); can.className = "can"; can.textContent = communityCanText(e);
+            if (communityCapsFor(e).error) card.classList.add("broken");
+            card.append(t, by, d, can, tip, btn);
+          } else card.append(t, d, tip, btn);
+        } catch (ex) {
+          const t = document.createElement("h4"); t.textContent = e.title || e.key;
+          const can = document.createElement("p"); can.className = "can";
+          can.textContent = tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:ex && ex.message ? ex.message : tr("unknown error") });
+          card.classList.add("broken");
+          card.append(t, can);
+        }
         grid.appendChild(card);
       });
       sec.appendChild(grid); body.appendChild(sec);
     });
-  })();
+  }
   function describeExample(key){
     const e = exampleByKey(key), el = $("ex-desc");
     el.innerHTML = "";
@@ -18875,9 +18902,21 @@ HOW TO MAP CODE
     const b = document.createElement("b"); b.textContent = e.title + ": ";
     el.append(b, document.createTextNode(e.desc + (e.community ? " " + communityCanText(e) + " " + tr("Shared by {author}.", { author:e.author }) : "") + " " + tr("Try: {tip}", { tip:e.tip })));
   }
-  function loadExample(key){ setTests([]); load(exampleState(key)); describeExample(key); try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {} }
+  function loadExample(key){
+    setTests([]);
+    const prev = saveWs();
+    try {
+      load(exampleState(key));
+      describeExample(key);
+      try { ws.zoomToFit(); if (ws.getScale() > 0.9) ws.setScale(0.9); } catch(e) {}
+    } catch(e) {
+      try { load(prev); } catch(e2) {}
+      $("status").textContent = tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:e && e.message ? e.message : tr("unknown error") });
+    }
+  }
   function toggleGallery(open){
     const g = $("gallery"); if (open === undefined) open = g.hidden;
+    if (open) fillGallery();  // the cards are built on the panel's first open, not at start-up
     g.hidden = !open; $("ex-toggle").setAttribute("aria-expanded", String(open));
     setTimeout(() => Blockly.svgResize(ws), 0);
   }
@@ -18885,6 +18924,7 @@ HOW TO MAP CODE
   $("ha-toggle").onclick = () => toggleHaPanel();
   $("ha-filter").addEventListener("input", renderHaPanel);
   $("example").addEventListener("change", e => describeExample(e.target.value));
+  fillExampleMenu();
   describeExample($("example").value);
   $("load").onclick = () => loadExample($("example").value);
   const mq = window.matchMedia("(prefers-color-scheme: dark)");
@@ -18907,6 +18947,17 @@ HOW TO MAP CODE
     if (open) $("keys-title").focus();
     setTimeout(() => Blockly.svgResize(ws), 0);
   };
+
+  /* What the page kept from last time loads once every button above is set, so a saved program that won't load
+     can't stop the page starting (#417). */
+  let saved = null;
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
+  try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
+  try { load(saved || EXAMPLES.review()); } catch(e) { try { load(EXAMPLES.review()); } catch(e2) {} }
+  ws.addChangeListener(ev => {
+    if (ev.isUiEvent) return;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saveWs())); localStorage.setItem(STORE_KEY + ":version", String(FORMAT_VERSION)); } catch(e) {}
+  });
   // 09-import-export.js: Import and export: block files, backup models, Save as GitHub Actions.
   /* ---------- Import / export ---------- */
   /* ----- Backup models: tried in order when the primary (the Model menu) fails on a step ----- */
