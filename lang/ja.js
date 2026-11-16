@@ -2360,6 +2360,8 @@
 "has a link":"リンクあり",
 "{n} words; the limit is {limit}":"{n} 語。上限は {limit}",
 "not valid JSON":"有効なJSONではない",
-"no link in it":"リンクがない"
+"no link in it":"リンクがない",
+"this runtime holds {n} signing keys and checks each release's signature against them":"このランタイムは {n} 個の署名鍵を持ち、各リリースの署名をそれらで検証します",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"署名鍵はまだ設定されていないため、--update-runtime はリリースの SHA-256 のみを検証します"
 }
 };

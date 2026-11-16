@@ -2360,6 +2360,8 @@
 "has a link":"hat einen Link",
 "{n} words; the limit is {limit}":"{n} Wörter; das Limit ist {limit}",
 "not valid JSON":"kein gültiges JSON",
-"no link in it":"kein Link darin"
+"no link in it":"kein Link darin",
+"this runtime holds {n} signing keys and checks each release's signature against them":"dieses Runtime hält {n} Signaturschlüssel und prüft die Signatur jedes Releases dagegen",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"es ist noch kein Signaturschlüssel gesetzt, also prüft --update-runtime nur die SHA-256 des Releases"
 }
 };

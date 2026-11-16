@@ -29,11 +29,21 @@ run `python tools/sync.py --check` (which rebuilds `python/runtime.py` from the 
 compare the result with the file attached to the release. A release that doesn't match its own tagged source is one not
 to use.
 
-Releases are also signed with an Ed25519 key kept off GitHub ([#311](https://github.com/itsfja/second-thought/issues/311)):
+Releases are also signed with Ed25519 keys kept off GitHub ([#311](https://github.com/itsfja/second-thought/issues/311), [#429](https://github.com/itsfja/second-thought/issues/429)):
 `tools/sign_runtime.py` signs each release's `runtime.py` on the maintainer's computer, the `.sig` is attached to the
-release, and the runtime holds the key's public half (`UPDATE_SIGNING_KEY` in update.py), so `--update-runtime` refuses
-a runtime that isn't signed by it — whoever can publish a release, or take over the account, can't make a matching
-pair the way they can with the SHA-256. Until the first signed release, the key is empty and only the SHA-256 applies.
+release, and the runtime holds the public halves of two keys — the working one (`UPDATE_SIGNING_KEY` in update.py) and
+a spare (`UPDATE_SIGNING_SPARE_KEY`) whose private half is kept somewhere else. `--update-runtime` accepts a release
+signed by either and refuses one signed by neither — whoever can publish a release, or take over the account, can't
+make a matching pair the way they can with the SHA-256. `--doctor` says on its Runtime line that this runtime checks
+signatures, and how many keys it holds. Until the first signed release, both keys are empty and only the SHA-256 applies.
+
+Retiring a key (lost, leaked, or just time to change it), so it never requires re-exporting every program: make a new
+spare with `tools/sign_runtime.py --make-key`, put the old spare's public half in `UPDATE_SIGNING_KEY` and the new
+spare's in `UPDATE_SIGNING_SPARE_KEY` in the release's runtime, and sign that release with the old spare's private
+half. Programs still on an older runtime accept the new one, because they hold the old spare too; once they've updated,
+they hold the new pair and no longer accept the retired key — the release after that can drop it entirely, and its
+private half can be deleted. A single key could never be changed this way: once it's inside every exported program,
+losing it means exporting each program again.
 
 ## What an exported program can do
 

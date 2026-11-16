@@ -3728,7 +3728,9 @@
   "has a link": "लिंक है",
   "{n} words; the limit is {limit}": "{n} शब्द; सीमा {limit}",
   "not valid JSON": "न वाली JSON",
-  "no link in it": "न लिंक है"
+  "no link in it": "न लिंक है",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "अयं runtime {n} हस्ताक्षरण-केयानि धारयति, प्रत्येकं विमोजनं ज तेषुः परीक्षयति",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "अद्य अपि हस्ताक्षरण-केयम् न नियतं, अतः --update-runtime केवलं विमोजनस्य SHA-256 परीक्षयति"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

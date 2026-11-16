@@ -3728,7 +3728,9 @@
   "has a link": "ተንንንይግእ አብርታየ",
   "{n} words; the limit is {limit}": "{n} ኍልቈ ቃላት ዘ; መድመሣእ {limit}",
   "not valid JSON": "አላአ አብርታየ JSON",
-  "no link in it": "አላአ ተንንንይግእ"
+  "no link in it": "አላአ ተንንንይግእ",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "runtime {n} እንተዝ ከልታየዝ የንታየ, እታሏ በንታየ ከልታየ የንታየ",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "እንተ ንታየእ ከልታየዝ; --update-runtime የንታቢ SHA-256 የንታየ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

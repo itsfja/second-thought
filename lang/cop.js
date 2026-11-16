@@ -2360,7 +2360,9 @@
 "has a link":"hype mmof",
 "{n} words; the limit is {limit}":"šom {n}; pe {limit}",
 "not valid JSON":"a-anoušop JSON",
-"no link in it":"a-anhype"
+"no link in it":"a-anhype",
+"this runtime holds {n} signing keys and checks each release's signature against them":"pai runtime ounte {n} hmk n htm; htm n release m pai",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"hmk n ounte pai; --update-runtime SHA-256 n release pai rnp"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

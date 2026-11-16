@@ -3728,6 +3728,8 @@
   "has a link": "יש קישור",
   "{n} words; the limit is {limit}": "{n} מילים; ההגבלה היא {limit}",
   "not valid JSON": "לא JSON תקין",
-  "no link in it": "אין קישור בפנים"
+  "no link in it": "אין קישור בפנים",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "ה-runtime מחזיק {n} מפתחות חתימה ובודק את החתימה של כל גרסה",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "עדיין לא נקבע מפתח חתימה, לכן --update-runtime בודק רק את SHA-256 של הגרסה"
  }
 }

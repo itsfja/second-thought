@@ -2360,7 +2360,9 @@
 "has a link":"hath a link",
 "{n} words; the limit is {limit}":"{n} wordes; the lemit is {limit}",
 "not valid JSON":"nat trewe JSON",
-"no link in it":"no link in it"
+"no link in it":"no link in it",
+"this runtime holds {n} signing keys and checks each release's signature against them":"this runtime holdeth {n} sealing keyes and checks the seal of eche reles with hem",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"na sealing key is set yet, so --update-runtime checks anly the SHA-256 of the reles"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

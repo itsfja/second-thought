@@ -2361,7 +2361,9 @@
 "has a link":"hæfþ hlenc",
 "{n} words; the limit is {limit}":"{n} word; þæt endemǣle is {limit}",
 "not valid JSON":"nis riht JSON",
-"no link in it":"nā hlenc on him"
+"no link in it":"nā hlenc on him",
+"this runtime holds {n} signing keys and checks each release's signature against them":"þis runtime heldeþ {n} cíean to underteynenne, and sceawaþ þa underteynunge ælcere forþgesceaftes mid þǣm",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ná is nænig cíe to underteynenne setet yet, swa --update-runtime sceawaþ ān þæt SHA-256 þære forþgesceaftes"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

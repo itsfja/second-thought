@@ -3717,7 +3717,9 @@
   "has a link": "有聯",
   "{n} words; the limit is {limit}": "{n} 字；限 {limit}",
   "not valid JSON": "非合JSON",
-  "no link in it": "內無聯"
+  "no link in it": "內無聯",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "此運行時持簽署鑰 {n} 枚，以之驗各發佈之簽署",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "尚未置簽署鑰，故 --update-runtime 僅驗發佈之 SHA-256"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",
