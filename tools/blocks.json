@@ -343,6 +343,52 @@
   "capability": null
  },
  {
+  "type": "rb_chk_json",
+  "words": "is valid JSON",
+  "slots": [],
+  "tooltip": "Fails the review unless the draft is valid JSON.",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_chk_link",
+  "words": "has a link",
+  "slots": [],
+  "tooltip": "Fails the review unless the draft contains a link (http://… or www.…).",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_chk_max_words",
+  "words": "at most %1 words",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "Counts the draft's words exactly — models count badly — and fails the review if there are more. The problem says the real count, like '231 words; the limit is 200'.",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_chk_mentions",
+  "words": "mentions %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Fails the review unless the draft contains these words (case doesn't matter).",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_chk_no_mention",
+  "words": "doesn't mention %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Fails the review if the draft contains these words (case doesn't matter).",
+  "category": "Review",
+  "capability": null
+ },
+ {
   "type": "rb_choose",
   "words": "let me choose from %1",
   "slots": [
@@ -1452,7 +1498,7 @@
   "slots": [
    "CRITERIA"
   ],
-  "tooltip": "Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one.",
+  "tooltip": "Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model.",
   "category": "Review",
   "capability": null
  },
@@ -1496,7 +1542,7 @@
   "slots": [
    "CRITERIA"
   ],
-  "tooltip": "One review. Use 'draft passed review' and 'review problems' afterwards.",
+  "tooltip": "One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer.",
   "category": "Review",
   "capability": null
  },

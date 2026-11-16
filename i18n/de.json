@@ -395,7 +395,8 @@
    "message0": "den Entwurf prüfen anhand von %1",
    "message1": "bis zu %1 Runden; wenn er durchfällt, tue",
    "message2": "%1",
-   "tooltip": "Claude kritisiert den Entwurf. Fällt er durch, laufen die Blöcke darin, dann kritisiert er erneut. In jeder Runde prüft der Prüfer auch, dass frühere Probleme nicht zurückgekehrt sind. Sind die Runden aufgebraucht, wird der Entwurf mit den wenigsten Problemen behalten, nicht einfach der letzte."
+   "tooltip": "Claude kritisiert den Entwurf. Fällt er durch, laufen die Blöcke darin, dann kritisiert er erneut. In jeder Runde prüft der Prüfer auch, dass frühere Probleme nicht zurückgekehrt sind. Sind die Runden aufgebraucht, wird der Entwurf mit den wenigsten Problemen behalten, nicht einfach der letzte.",
+   "message3": "und prüfen %1"
   },
   "rb_reset_timer": {
    "message0": "Stoppuhr zurücksetzen"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "den Entwurf prüfen anhand von %1",
-   "tooltip": "Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“."
+   "tooltip": "Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“.",
+   "message1": "und prüfen %1"
   },
   "rb_revise": {
    "message0": "überarbeiten, um die Probleme der Prüfung zu beheben %1 mit dem Web",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "den Stream %1 auf Plex stoppen",
    "tooltip": "Stoppt einen Stream (Tautullis terminate). Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."
+  },
+  "rb_chk_max_words": {
+   "message0": "höchstens %1 Wörter",
+   "tooltip": "Schlägt die Prüfung fehl, wenn der Entwurf mehr Wörter hat; das Problem nennt die wirkliche Zahl."
+  },
+  "rb_chk_mentions": {
+   "message0": "erwähnt %1",
+   "tooltip": "Schlägt fehl, wenn der Entwurf diese Wörter nicht enthält (Groß-/Kleinschreibung egal)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "erwähnt nicht %1",
+   "tooltip": "Schlägt fehl, wenn der Entwurf diese Wörter enthält (Groß-/Kleinschreibung egal)."
+  },
+  "rb_chk_json": {
+   "message0": "ist gültiges JSON",
+   "tooltip": "Schlägt fehl, wenn der Entwurf kein gültiges JSON ist."
+  },
+  "rb_chk_link": {
+   "message0": "hat einen Link",
+   "tooltip": "Schlägt fehl, wenn der Entwurf keinen Link enthält (http://… oder www.…)."
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Zurück zum Entwurf aus Runde {round}:Er erfüllte die meisten Regeln ({n} von {total}). Die Runden danach haben ihn nicht verbessert.",
   "met": "erfüllt",
   "not met": "nicht erfüllt",
-  "met {n} of {total}": "{n} von {total} erfüllt"
+  "met {n} of {total}": "{n} von {total} erfüllt",
+  "at most {n} words": "höchstens {n} Wörter",
+  "mentions {x}": "erwähnt {x}",
+  "doesn't mention {x}": "erwähnt nicht {x}",
+  "is valid JSON": "ist gültiges JSON",
+  "has a link": "hat einen Link",
+  "{n} words; the limit is {limit}": "{n} Wörter; das Limit ist {limit}",
+  "not valid JSON": "kein gültiges JSON",
+  "no link in it": "kein Link darin"
  },
  "examples": {
   "review": {
@@ -3689,6 +3719,14 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Zurück zum Entwurf aus Runde {round}:Er erfüllte die meisten Regeln ({n} von {total}). Die Runden danach haben ihn nicht verbessert.",
   "met": "erfüllt",
   "not met": "nicht erfüllt",
-  "table": "Tabelle"
+  "table": "Tabelle",
+  "at most {n} words": "höchstens {n} Wörter",
+  "mentions {x}": "erwähnt {x}",
+  "doesn't mention {x}": "erwähnt nicht {x}",
+  "is valid JSON": "ist gültiges JSON",
+  "has a link": "hat einen Link",
+  "{n} words; the limit is {limit}": "{n} Wörter; das Limit ist {limit}",
+  "not valid JSON": "kein gültiges JSON",
+  "no link in it": "kein Link darin"
  }
 }

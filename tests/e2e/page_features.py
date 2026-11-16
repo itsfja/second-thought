@@ -161,6 +161,25 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and len(revises) == 2 and "Don't bring them back" not in revises[0]
           and "Don't bring them back:\n- too long\n\nDraft:" in revises[1], "revise is told which problems earlier rounds fixed, so it doesn't bring them back")
     check("Earlier rounds" not in prompts[-1], "a review outside the loop isn't shown the loop's earlier problems")
+
+    print("Exact checks in a review (#425)")
+    chk_prog = script(blk("rb_set_draft", inputs={"TEXT": tx("one two three four five six")}),
+                      blk("rb_review", inputs={"CRITERIA": tx(""), "CHECKS": {"block": blk("rb_chk_max_words", inputs={"N": nm(5)})}}),
+                      add(val(blk("rb_problems"))))
+    status, steps, items, prompts = await scripted(chk_prog, [])
+    check(status.startswith("done") and items == ["6 words; the limit is 5"] and not prompts,
+          f"a review with only exact checks makes no model call, and the problem carries the real count ({items}, {len(prompts)} json prompts)")
+    await load_state(pg, chk_prog)
+    EXTRA["t_checks"] = await export_python(pg, "t_checks")
+    chk_loop = script(blk("rb_set_draft", inputs={"TEXT": tx("one two three")}),
+                      blk("rb_reflect", inputs={"CRITERIA": tx("clear"), "ROUNDS": nm(1), "FIX": {"block": blk("rb_revise")},
+                                                "CHECKS": {"block": blk("rb_chk_max_words", inputs={"N": nm(2)})}}),
+                      add(val(blk("rb_draft"))))
+    status, steps, items, prompts = await scripted(chk_loop, [ok, ok])
+    table = [t for n, p_, t in steps if n == "Rules by round"]
+    check(status.startswith("done") and table and "at most 2 words" in table[-1] and "3 words; the limit is 2" in table[-1],
+          f"an exact check shows as a rule in the round table ({(table[-1][:110] if table else '')!r})")
+
     status, steps, items, prompts = await scripted(checkpoint_prog(), [])
     check(status.startswith("done") and items == ["r1", "good 1"] and [n for n, *_ in steps].count("Back to checkpoint \u201ccp\u201d") == 1,
           f"go back to checkpoint restores the draft, result and variables, and works more than once ({items})")

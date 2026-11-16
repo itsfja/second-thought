@@ -583,6 +583,48 @@
     return prevUnmet.map(str).find(p => now.has(p)) || null;
   }
   window.__stuckRule = stuckRule;
+  // The review's exact checks, worked out by code, not by a model (#425): each [kind, value] becomes a verdict
+  // {rule, met, problem, shows}. Matches exact_checks in exported programs; the cases are in tests/parity/checks.json.
+  const LINK_RE = /https?:\/\/\S+|www\.\S+/i;
+  function exactChecks(text, checks){
+    const t = str(text), out = [];
+    for (const c of (checks || [])) {
+      if (!c) continue;
+      const kind = str(c[0]).trim(), val = c.length > 1 ? c[1] : null;
+      if (kind === "max_words") {
+        let n = num(val); if (n === null || n === undefined || isNaN(n)) n = 0;
+        const w = str(t).split(/\s+/).filter(Boolean).length;
+        out.push({ rule:tr("at most {n} words", { n }), met:w <= n, shows:"",
+                   problem: w <= n ? "" : tr("{n} words; the limit is {limit}", { n:w, limit:n }) });
+      } else if (kind === "mentions" || kind === "no_mention") {
+        const x = str(val), hit = !!x && t.toLowerCase().includes(x.toLowerCase());
+        if (kind === "mentions")
+          out.push({ rule:tr("mentions {x}", { x }), met:hit, shows:"", problem: hit ? "" : tr("doesn't mention {x}", { x }) });
+        else
+          out.push({ rule:tr("doesn't mention {x}", { x }), met:!hit, shows:"", problem: hit ? tr("mentions {x}", { x }) : "" });
+      } else if (kind === "json") {
+        let ok = true; try { JSON.parse(t); } catch(e) { ok = false; }
+        out.push({ rule:tr("is valid JSON"), met:ok, shows:"", problem: ok ? "" : tr("not valid JSON") });
+      } else if (kind === "link") {
+        const m = LINK_RE.exec(t);
+        out.push({ rule:tr("has a link"), met:!!m, shows:"", problem: m ? "" : tr("no link in it") });
+      }
+    }
+    return out;
+  }
+  // The check blocks inside a review block's 'and check' input, as [kind, value] (#425).
+  async function collectChecks(b, tc){
+    const out = [];
+    for (let t = b.getInputTargetBlock("CHECKS"); t; t = t.getNextBlock()) {
+      if (t.isEnabled && !t.isEnabled()) continue;
+      if (t.type === "rb_chk_max_words") out.push(["max_words", num(await input(t, tc, "N", 0))]);
+      else if (t.type === "rb_chk_mentions") out.push(["mentions", str(await input(t, tc, "TEXT", ""))]);
+      else if (t.type === "rb_chk_no_mention") out.push(["no_mention", str(await input(t, tc, "TEXT", ""))]);
+      else if (t.type === "rb_chk_json") out.push(["json", null]);
+      else if (t.type === "rb_chk_link") out.push(["link", null]);
+    }
+    return out;
+  }
   // The rules by round as table rows, for the run log (#424).
   function rulesTableRows(loop){
     const rounds = loop.rounds || [], rules = [];
@@ -603,18 +645,31 @@
       addStep("Web address in the task", { text:tr("The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.") }).done("note", "warn");
   }
 
-  async function reviewOnce(criteria, label, inLoop){
+  async function reviewOnce(criteria, checks, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
     const rules = parseRules(criteria);
+    const cv = exactChecks(run.draft, checks);  // the exact checks, worked out by code, no model call (#425)
     const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
       loop.earlier.map(e => "- " + e).join("\n") : "";
-    const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
-    const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
-      "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
-      '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
-      "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
-    const res = reviewVerdicts(rules, v);
+    let res;
+    if (rules.length) {  // written rules are judged by the model; with only exact checks there is no model call (#425)
+      const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
+      const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
+        "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
+        '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
+        "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+      res = reviewVerdicts(rules, v);
+      res.verdicts = cv.concat(res.verdicts);
+      res.approved = res.verdicts.every(x => x.met) && res.approved;
+      res.problems = [...new Set(res.verdicts.filter(x => !x.met).map(x => x.problem || x.rule).concat(res.problems))];
+      res.met = res.verdicts.filter(x => x.met).length;
+      res.unmet = res.verdicts.filter(x => !x.met).map(x => x.rule);
+    } else {
+      res = { approved: cv.every(x => x.met),
+              problems: cv.filter(x => !x.met).map(x => x.problem || x.rule),
+              verdicts: cv, met: cv.filter(x => x.met).length, unmet: cv.filter(x => !x.met).map(x => x.rule) };
+    }
     const approved = res.approved;
     run.approved = approved;
     run.problems = approved ? [] : (res.problems.length ? res.problems : ["Does not yet meet the criteria."]);
@@ -622,7 +677,7 @@
     if (loop) {
       loop.round++;
       if (!loop.best || res.met >= loop.best.met)  // the best draft meets the most rules; a tie goes to the newer draft
-        loop.best = { draft:run.draft, problems:run.problems.slice(), met:res.met, total:rules.length, n:run.problems.length, round:loop.round };
+        loop.best = { draft:run.draft, problems:run.problems.slice(), met:res.met, total:rules.length + cv.length, n:run.problems.length, round:loop.round };
       run.problems.forEach(p => { if (!loop.earlier.includes(p)) loop.earlier.push(p); });
       loop.earlier = loop.earlier.slice(-12);
       // No progress: the same rule failed this round as the one before (#424)
@@ -875,17 +930,18 @@
         addStep(tr("Back to checkpoint \u201c{name}\u201d", { name }), { text:run.draft ? tr("Restored the task, draft, review, result and variables. Draft: {draft}", { draft:short(run.draft, 80) }) : tr("Restored the task, draft, review, result and variables.") }).done("restored", "ok");
         break;
       }
-      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), tr("Review")); break; }
+      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), await collectChecks(b, tc), tr("Review")); break; }
       case "rb_reflect": {
         needDraft();
         const criteria = str(await input(b, tc, "CRITERIA"));
+        const checks = await collectChecks(b, tc);
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
         run.reflect = { earlier:[], best:null, round:0, same:0, lastUnmet:[], rounds:[], table:null };
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
-            const { approved, step } = await reviewOnce(criteria, tr("Review, round {n}", { n:round }), true);
+            const { approved, step } = await reviewOnce(criteria, checks, tr("Review, round {n}", { n:round }), true);
             // the rules by round, shown in the log as the rounds happen (#424)
             if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
             run.reflect.table.table(rulesTableRows(run.reflect));

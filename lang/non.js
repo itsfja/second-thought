@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"ný skrá"},
 "rb_rec_set":{"message0":"set %1 af %2 í %3","tooltip":"Breytir einum reit skrár (oftast skrár-breytu)."},
 "rb_receive":{"message0":"þá er ek fæ %1","tooltip":"Keyrir kubbana hér fyrir neðan hvert sinn er þessi boð eru kǫlluð. Mǫrg ferli mega hlýða á sǫmu boð."},
-"rb_reflect":{"message0":"dœm frumritit eptir %1","message1":"allt at %1 umferðum; þá er þat bregzk, ger","message2":"%1","tooltip":"Claude dœmir frumritit. Ef þat bregzk, keyra kubbarnir hér inni, ok þá dœmir hann aptr. Hverja umferð skoðar dómarinn ok at fyrri brestir hafi eigi aptr komit. Ef umferðirnar þrjóta, er haldit því frumriti er fæsta bresti hefir, eigi einungis hinu síðasta."},
+"rb_reflect":{"message0":"dœm frumritit eptir %1","message1":"allt at %1 umferðum; þá er þat bregzk, ger","message2":"%1","tooltip":"Claude dœmir frumritit. Ef þat bregzk, keyra kubbarnir hér inni, ok þá dœmir hann aptr. Hverja umferð skoðar dómarinn ok at fyrri brestir hafi eigi aptr komit. Ef umferðirnar þrjóta, er haldit því frumriti er fæsta bresti hefir, eigi einungis hinu síðasta.","message3":"og athuga %1"},
 "rb_reset_timer":{"message0":"endrset stundamæli"},
 "rb_result":{"message0":"lúk ok sýn úrslitin","tooltip":"Lýkr ferðinni. Sýnir hvat þú bættir við úrslitin, eða frumritit ef þú bættir engu við."},
 "rb_result_text":{"message0":"úrslitin hingat til","tooltip":"Allt er bætt var við úrslitin, sem rit."},
 "rb_retry":{"message0":"reyn aptr allt at %1 sinnum","message1":"%1","tooltip":"Ef nakkvat hér inni bregzk svá at ǫnnur tilraun mætti bœta (slitit samband, ruglat svar), bíðr þat lítt ok keyrir þat aptr."},
-"rb_review":{"message0":"dœm frumritit eptir %1","tooltip":"Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á."},
+"rb_review":{"message0":"dœm frumritit eptir %1","tooltip":"Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á.","message1":"og athuga %1"},
 "rb_revise":{"message0":"endrbœt at laga bresti dómsins %1 með vefnum","tooltip":"Claude lagar þá bresti er hinn síðasti dómr fann."},
 "rb_rework":{"message0":"endrger frumritit: %1","tooltip":"Claude ritar frumritit aptr eptir fyrirmælum þínum."},
 "rb_rewrite":{"message0":"rita %1 aptr til %2","tooltip":"Svá sem: rita (frumrit) aptr til (snú á frakkneska tungu)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli saga, sidustu %1 daga","tooltip":"Listi faerslna, ein fyrir hvada sagth var a thessa daga, ur Tautulli: user, title, when og transcode (hvort thad var umbreytt). Hann les only. Tharf TAUTULLI_URL og TAUTULLI_API_KEY i second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli ahtimal, sidustu %1 daga","tooltip":"Listi faerslna, ein fyrir hvern mann sem sagthi a thessa daga, ur Tautulli: user og hours. Hann les only."},
 "rb_plex_scan":{"message0":"skanna %1 safnbokina a Plex","tooltip":"Skannar eina safnbok fyrir nyjar skrar. Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."},
-"rb_plex_stop":{"message0":"stoppa strauminn %1 a Plex","tooltip":"Stoppar einn straum (Tautulli terminate). Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."}
+"rb_plex_stop":{"message0":"stoppa strauminn %1 a Plex","tooltip":"Stoppar einn straum (Tautulli terminate). Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."},
+"rb_chk_max_words":{"message0":"í mesta lagi %1 orð","tooltip":"Brestur ef frumritið á fleiri orð; vandamálið segir rétta tölu."},
+"rb_chk_mentions":{"message0":"nefnir %1","tooltip":"Brestur nema frumritið innihaldi þessi orð (stafsetning skiptir ekki máli)."},
+"rb_chk_no_mention":{"message0":"nefnir eigi %1","tooltip":"Brestur ef frumritið inniheldur þessi orð (stafsetning skiptir ekki máli)."},
+"rb_chk_json":{"message0":"er gilt JSON","tooltip":"Brestur nema frumritið sé gilt JSON."},
+"rb_chk_link":{"message0":"á tengil","tooltip":"Brestur nema frumritið innihaldi tengil (http://… eða www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Fór aptr til frumrits ór umferð {round}:hann hafði flesta lǫg haldin ({n} af {total}). Umferðirnar eptir þat bœttu eigi um.",
 "met":"haldin",
 "not met":"eigi haldin",
-"met {n} of {total}":"{n} af {total} haldnir"
+"met {n} of {total}":"{n} af {total} haldnir",
+"at most {n} words":"í mesta lagi {n} orð",
+"mentions {x}":"nefnir {x}",
+"doesn't mention {x}":"nefnir eigi {x}",
+"is valid JSON":"er gilt JSON",
+"has a link":"á tengil",
+"{n} words; the limit is {limit}":"{n} orð; hámarkið er {limit}",
+"not valid JSON":"ógilt JSON",
+"no link in it":"enginn tengill"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Fór aptr til frumrits ór umferð {round}:hann hafði flesta lǫg haldin ({n} af {total}). Umferðirnar eptir þat bœttu eigi um.",
 "met":"haldin",
 "not met":"eigi haldin",
-"table":"tafla"
+"table":"tafla",
+"at most {n} words":"í mesta lagi {n} orð",
+"mentions {x}":"nefnir {x}",
+"doesn't mention {x}":"nefnir eigi {x}",
+"is valid JSON":"er gilt JSON",
+"has a link":"á tengil",
+"{n} words; the limit is {limit}":"{n} orð; hámarkið er {limit}",
+"not valid JSON":"ógilt JSON",
+"no link in it":"enginn tengill"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

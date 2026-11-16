@@ -374,10 +374,15 @@ Records:
 
 Review:
   rb_better (A, B, CRITERIA): better of %1 and %2 for %3
+  rb_chk_json: is valid JSON — Fails the review unless the draft is valid JSON.
+  rb_chk_link: has a link — Fails the review unless the draft contains a link (http://… or www.…).
+  rb_chk_max_words (N): at most %1 words — Counts the draft's words exactly — models count badly — and fails the review if there are more. The problem says the real count, like '231 words; the limit is 200'.
+  rb_chk_mentions (TEXT): mentions %1 — Fails the review unless the draft contains these words (case doesn't matter).
+  rb_chk_no_mention (TEXT): doesn't mention %1 — Fails the review if the draft contains these words (case doesn't matter).
   rb_passed: draft passed review
   rb_problems: review problems
-  rb_reflect (CRITERIA): review the draft against %1 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one.
-  rb_review (CRITERIA): review the draft against %1 — One review. Use 'draft passed review' and 'review problems' afterwards.
+  rb_reflect (CRITERIA): review the draft against %1 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model.
+  rb_review (CRITERIA): review the draft against %1 — One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer.
   rb_score (TEXT, CRITERIA): score %1 out of 10 for %2
 
 SABnzbd:

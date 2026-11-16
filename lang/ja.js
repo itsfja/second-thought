@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"新しいレコード"},
 "rb_rec_set":{"message0":"%2 の %1 を %3 にする","tooltip":"レコード（たいていはレコード変数）の一つのフィールドを変えます。"},
 "rb_receive":{"message0":"%1 を受け取ったとき","tooltip":"このメッセージが送られるたびに下のブロックを実行します。複数のスクリプトが同じメッセージを待てます。"},
-"rb_reflect":{"message0":"%1 に照らして下書きをレビュー","message1":"最大 %1 回まで。不合格なら次を実行","message2":"%1","tooltip":"Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。"},
+"rb_reflect":{"message0":"%1 に照らして下書きをレビュー","message1":"最大 %1 回まで。不合格なら次を実行","message2":"%1","tooltip":"Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。","message3":"さらに確認 %1"},
 "rb_reset_timer":{"message0":"タイマーをリセット"},
 "rb_result":{"message0":"終えて結果を表示","tooltip":"実行を終えます。結果に追加したものを表示し、何も追加していなければ下書きを表示します。"},
 "rb_result_text":{"message0":"これまでの結果","tooltip":"結果に追加されたすべてを、テキストで。"},
 "rb_retry":{"message0":"最大 %1 回やり直す","message1":"%1","tooltip":"中の何かが、もう一度やれば直りそうな形で失敗したとき（接続が切れた、返事が崩れた）、少し待ってからもう一度実行します。"},
-"rb_review":{"message0":"%1 に照らして下書きをレビュー","tooltip":"1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。"},
+"rb_review":{"message0":"%1 に照らして下書きをレビュー","tooltip":"1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。","message1":"さらに確認 %1"},
 "rb_revise":{"message0":"レビューの問題を直すように修正 %1 ウェブを使う","tooltip":"Claude が前回のレビューで見つかった問題を直します。"},
 "rb_rework":{"message0":"下書きを手直し：%1","tooltip":"Claude があなたの指示に沿って下書きを書き直します。"},
 "rb_rewrite":{"message0":"%1 を %2 ように書き直す","tooltip":"例：（下書き）を（フランス語に訳す）ように書き直す。"},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli 履歴、過去 %1 日","tooltip":"記録のリスト、この日数で視聴された各ものにつき 1 つ、Tautulli から：user、title、when、transcode（トランスコードされたか）。読み取り専用です。second-thought.ini に TAUTULLI_URL と TAUTULLI_API_KEY が必要。"},
 "rb_tautulli_watchtime":{"message0":"Tautulli 視聴時間、過去 %1 日","tooltip":"記録のリスト、この日数で視聴した各人につき 1 つ、Tautulli から：user と hours。読み取り専用です。"},
 "rb_plex_scan":{"message0":"Plex の %1 ライブラリをスキャンする","tooltip":"1 つのライブラリを新しいファイルを探してスキャンします。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
-"rb_plex_stop":{"message0":"Plex のストリーム %1 を停止する","tooltip":"1 つのストリームを停止します（Tautulli の terminate）。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"}
+"rb_plex_stop":{"message0":"Plex のストリーム %1 を停止する","tooltip":"1 つのストリームを停止します（Tautulli の terminate）。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"},
+"rb_chk_max_words":{"message0":"%1 語以下","tooltip":"下書きが語数を超えると不合格。問題に実際の語数を示します。"},
+"rb_chk_mentions":{"message0":"%1 を言及","tooltip":"下書きにこれらの語がなければ不合格（大文字・小文字は区別しません）。"},
+"rb_chk_no_mention":{"message0":"%1 に言及しない","tooltip":"下書きにこれらの語があれば不合格（大文字・小文字は区別しません）。"},
+"rb_chk_json":{"message0":"有効なJSON","tooltip":"下書きが有効なJSONでなければ不合格。"},
+"rb_chk_link":{"message0":"リンクあり","tooltip":"下書きにリンクがなければ不合格（http://… または www.…）。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"毎日","weekdays":"平日","weekends":"週末"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} 回目の下書きに戻りました。それが最も多くのルールを満たしていました（{total} 個中 {n} 個）。その後の回では改善されませんでした。",
 "met":"満たした",
 "not met":"満たさず",
-"met {n} of {total}":"{total} 個中 {n} 個を満たした"
+"met {n} of {total}":"{total} 個中 {n} 個を満たした",
+"at most {n} words":"{n} 語以下",
+"mentions {x}":"{x} を言及",
+"doesn't mention {x}":"{x} に言及しない",
+"is valid JSON":"有効なJSON",
+"has a link":"リンクあり",
+"{n} words; the limit is {limit}":"{n} 語。上限は {limit}",
+"not valid JSON":"有効なJSONではない",
+"no link in it":"リンクがない"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} 回目の下書きに戻りました。それが最も多くのルールを満たしていました（{total} 個中 {n} 個）。その後の回では改善されませんでした。",
 "met":"満たした",
 "not met":"満たさず",
-"table":"表"
+"table":"表",
+"at most {n} words":"{n} 語以下",
+"mentions {x}":"{x} を言及",
+"doesn't mention {x}":"{x} に言及しない",
+"is valid JSON":"有効なJSON",
+"has a link":"リンクあり",
+"{n} words; the limit is {limit}":"{n} 語。上限は {limit}",
+"not valid JSON":"有効なJSONではない",
+"no link in it":"リンクがない"
 }
 };

@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude دن بر لیسته ایسته: %1","tooltip":"Claude اوزرنده دونه‌بیله‌جكڭ بر لیسته ایله جواب ویرر."},
 "rb_rewrite":{"message0":"%1 یی %2 اولارق یڭیدن یاز","tooltip":"مثلا: (مسوده) یی (فرانسزجه‌یه ترجمه ایت) اولارق یڭیدن یاز."},
 "rb_extract":{"message0":"%2 دن %1 چیقار"},
-"rb_reflect":{"message0":"مسوده‌یی %1 ه گوره تدقیق ایت","message1":"%1 دوره‌یه قدر؛ مقبول اولمازسه، شونی یاپ","message2":"%1","tooltip":"Claude مسوده‌یی تنقید ایدر. مقبول اولمازسه ایچنده‌كی قطعه‌لر اجرا اولونور، صوڭرا ینه تنقید ایدر. هر دوره‌ده مدقق اسكی قصورلرڭ گری گلمدیكنی ده یوقلار. دوره‌لر بیترسه، یالڭز صوڭكی دكل، اڭ آز قصورلی مسوده صاقلانیر."},
-"rb_review":{"message0":"مسوده‌یی %1 ه گوره تدقیق ایت","tooltip":"بر تدقیق. صوڭره «مسوده تدقیقدن كچدی» و «تدقیق قصورلری» نی قوللان."},
+"rb_reflect":{"message0":"مسوده‌یی %1 ه گوره تدقیق ایت","message1":"%1 دوره‌یه قدر؛ مقبول اولمازسه، شونی یاپ","message2":"%1","tooltip":"Claude مسوده‌یی تنقید ایدر. مقبول اولمازسه ایچنده‌كی قطعه‌لر اجرا اولونور، صوڭرا ینه تنقید ایدر. هر دوره‌ده مدقق اسكی قصورلرڭ گری گلمدیكنی ده یوقلار. دوره‌لر بیترسه، یالڭز صوڭكی دكل، اڭ آز قصورلی مسوده صاقلانیر.","message3":"ve kontrol et %1"},
+"rb_review":{"message0":"مسوده‌یی %1 ه گوره تدقیق ایت","tooltip":"بر تدقیق. صوڭره «مسوده تدقیقدن كچدی» و «تدقیق قصورلری» نی قوللان.","message1":"ve kontrol et %1"},
 "rb_passed":{"message0":"مسوده تدقیقدن كچدی"},
 "rb_problems":{"message0":"تدقیق قصورلری"},
 "rb_score":{"message0":"%2 ایچون %1 ه اوندن نومره ویر"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli gecmisi, son %1 gun","tooltip":"Kayit listesi, bu kadar gunde izlenen her sey icin bir tane, Tautulli'den: user, title, when ve transcode (donusturuldu mu). Sadece okur. second-thought.ini icinde TAUTULLI_URL ve TAUTULLI_API_KEY gerekir."},
 "rb_tautulli_watchtime":{"message0":"Tautulli izleme suresi, son %1 gun","tooltip":"Kayit listesi, bu kadar gunde izleyen her kisi icin bir tane, Tautulli'den: user ve hours. Sadece okur."},
 "rb_plex_scan":{"message0":"Plex'teki %1 kutuphanesini taramak","tooltip":"Bir kutuphaneyi yeni dosyalar icin tarar. Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten degismez."},
-"rb_plex_stop":{"message0":"Plex'teki %1 akisini durdurmak","tooltip":"Bir akisi durdurur (Tautulli'nin terminate'i). Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten degismez."}
+"rb_plex_stop":{"message0":"Plex'teki %1 akisini durdurmak","tooltip":"Bir akisi durdurur (Tautulli'nin terminate'i). Baska hicbir sey sormasa bile sana her seferinde once sorar ve evet diyecek kimse yoksa yapilmaz. Bu sayfada hicbir sey gercekten degismez."},
+"rb_chk_max_words":{"message0":"en fazla %1 kelime","tooltip":"Taslak sınırdan fazla kelime içerirse kalır; sorun gerçek sayıyı söyler."},
+"rb_chk_mentions":{"message0":"%1 anar","tooltip":"Taslak bu kelimeleri içermiyorsa kalır (büyük/küçük harf fark etmez)."},
+"rb_chk_no_mention":{"message0":"%1 anmaz","tooltip":"Taslak bu kelimeleri içeriyorsa kalır (büyük/küçük harf fark etmez)."},
+"rb_chk_json":{"message0":"geçerli JSON'dur","tooltip":"Taslak geçerli JSON değilse kalır."},
+"rb_chk_link":{"message0":"bir bağlantısı var","tooltip":"Taslakta bağlantı yoksa kalır (http://… veya www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} en çok kurala riayet ediyordu ({total} taneden {n} tanesi). اوندن صوڭره‌كی دوره‌لر اونی اصلاح ایتمدی.",
 "met":"riayet olundu",
 "not met":"riayet olunmadı",
-"met {n} of {total}":"{total} kuraldan {n} tanesi riayet olundu"
+"met {n} of {total}":"{total} kuraldan {n} tanesi riayet olundu",
+"at most {n} words":"en fazla {n} kelime",
+"mentions {x}":"{x} anar",
+"doesn't mention {x}":"{x} anmaz",
+"is valid JSON":"geçerli JSON'dur",
+"has a link":"bir bağlantısı var",
+"{n} words; the limit is {limit}":"{n} kelime; sınır {limit}",
+"not valid JSON":"geçerli JSON değil",
+"no link in it":"içinde bağlantı yok"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} en çok kurala riayet ediyordu ({total} taneden {n} tanesi). اوندن صوڭره‌كی دوره‌لر اونی اصلاح ایتمدی.",
 "met":"riayet olundu",
 "not met":"riayet olunmadı",
-"table":"levha"
+"table":"levha",
+"at most {n} words":"en fazla {n} kelime",
+"mentions {x}":"{x} anar",
+"doesn't mention {x}":"{x} anmaz",
+"is valid JSON":"geçerli JSON'dur",
+"has a link":"bir bağlantısı var",
+"{n} words; the limit is {limit}":"{n} kelime; sınır {limit}",
+"not valid JSON":"geçerli JSON değil",
+"no link in it":"içinde bağlantı yok"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

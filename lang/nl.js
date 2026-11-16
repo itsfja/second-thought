@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nieuw record"},
 "rb_rec_set":{"message0":"%1 van %2 instellen op %3","tooltip":"Wijzigt één veld van een record (meestal een recordvariabele)."},
 "rb_receive":{"message0":"wanneer ik %1 ontvang","tooltip":"Voert de blokken eronder uit telkens wanneer dit bericht wordt uitgezonden. Meerdere scripts kunnen naar hetzelfde bericht luisteren."},
-"rb_reflect":{"message0":"beoordeel het concept op %1","message1":"tot %1 rondes; als het niet slaagt, doe","message2":"%1","tooltip":"Claude beoordeelt het concept kritisch. Slaagt het niet, dan draaien de blokken erin en beoordeelt hij opnieuw. Elke ronde controleert de beoordelaar ook dat eerdere problemen niet zijn teruggekomen. Zijn de rondes op, dan wordt het concept met de minste problemen bewaard, niet gewoon het laatste."},
+"rb_reflect":{"message0":"beoordeel het concept op %1","message1":"tot %1 rondes; als het niet slaagt, doe","message2":"%1","tooltip":"Claude beoordeelt het concept kritisch. Slaagt het niet, dan draaien de blokken erin en beoordeelt hij opnieuw. Elke ronde controleert de beoordelaar ook dat eerdere problemen niet zijn teruggekomen. Zijn de rondes op, dan wordt het concept met de minste problemen bewaard, niet gewoon het laatste.","message3":"en controleer %1"},
 "rb_reset_timer":{"message0":"timer resetten"},
 "rb_result":{"message0":"afronden en het resultaat tonen","tooltip":"Beëindigt de run. Toont wat je aan het resultaat hebt toegevoegd, of het concept als je niets hebt toegevoegd."},
 "rb_result_text":{"message0":"het resultaat tot nu toe","tooltip":"Alles wat aan het resultaat is toegevoegd, als tekst."},
 "rb_retry":{"message0":"tot %1 keer opnieuw proberen","message1":"%1","tooltip":"Mislukt er iets erin op een manier die een tweede poging kan oplossen (een verbroken verbinding, een verminkt antwoord), dan wacht het even en voert het opnieuw uit."},
-"rb_review":{"message0":"beoordeel het concept op %1","tooltip":"Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’."},
+"rb_review":{"message0":"beoordeel het concept op %1","tooltip":"Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’.","message1":"en controleer %1"},
 "rb_revise":{"message0":"herzien om de problemen uit de beoordeling op te lossen %1 met het web","tooltip":"Claude lost de problemen op die de laatste beoordeling vond."},
 "rb_rework":{"message0":"het concept herwerken: %1","tooltip":"Claude herschrijft het concept volgens jouw instructie."},
 "rb_rewrite":{"message0":"%1 herschrijven: %2","tooltip":"Bijvoorbeeld: (concept) herschrijven: (vertaal naar het Frans)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli-geschiedenis, laatste %1 dagen","tooltip":"Een lijst met records, één voor alles wat in zoveel dagen is bekeken, van Tautulli: user, title, when en transcode (of het getranscodeerd was). Hij leest alleen. Heeft TAUTULLI_URL en TAUTULLI_API_KEY nodig in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli kijktijd, laatste %1 dagen","tooltip":"Een lijst met records, één voor iedereen die in zoveel dagen keek, van Tautulli: user en hours. Hij leest alleen."},
 "rb_plex_scan":{"message0":"de %1-bibliotheek op Plex scannen","tooltip":"Scant één bibliotheek op nieuwe bestanden. Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
-"rb_plex_stop":{"message0":"de stream %1 op Plex stoppen","tooltip":"Stopt één stream (Tautulli's terminate). Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."}
+"rb_plex_stop":{"message0":"de stream %1 op Plex stoppen","tooltip":"Stopt één stream (Tautulli's terminate). Hij vraagt het je altijd eerst, ook als niets anders iets vraagt, en is er niemand om ja te zeggen, dan gebeurt het niet. Op deze pagina verandert niets echt."},
+"rb_chk_max_words":{"message0":"hooguit %1 woorden","tooltip":"Faalt als het concept meer woorden heeft; het probleem noemt het echte aantal."},
+"rb_chk_mentions":{"message0":"vermeldt %1","tooltip":"Faalt als het concept deze woorden niet bevat (hoofdletters maken niet uit)."},
+"rb_chk_no_mention":{"message0":"vermeldt niet %1","tooltip":"Faalt als het concept deze woorden bevat (hoofdletters maken niet uit)."},
+"rb_chk_json":{"message0":"is geldige JSON","tooltip":"Faalt als het concept geen geldige JSON is."},
+"rb_chk_link":{"message0":"heeft een link","tooltip":"Faalt als het concept geen link heeft (http://… of www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Terug naar het concept uit ronde {round}:dat haalde de meeste regels ({n} van {total}). De rondes erna verbeterden het niet.",
 "met":"gehaald",
 "not met":"niet gehaald",
-"met {n} of {total}":"{n} van {total} gehaald"
+"met {n} of {total}":"{n} van {total} gehaald",
+"at most {n} words":"hooguit {n} woorden",
+"mentions {x}":"vermeldt {x}",
+"doesn't mention {x}":"vermeldt niet {x}",
+"is valid JSON":"is geldige JSON",
+"has a link":"heeft een link",
+"{n} words; the limit is {limit}":"{n} woorden; de limiet is {limit}",
+"not valid JSON":"geen geldige JSON",
+"no link in it":"geen link erin"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Terug naar het concept uit ronde {round}:dat haalde de meeste regels ({n} van {total}). De rondes erna verbeterden het niet.",
 "met":"gehaald",
 "not met":"niet gehaald",
-"table":"tabel"
+"table":"tabel",
+"at most {n} words":"hooguit {n} woorden",
+"mentions {x}":"vermeldt {x}",
+"doesn't mention {x}":"vermeldt niet {x}",
+"is valid JSON":"is geldige JSON",
+"has a link":"heeft een link",
+"{n} words; the limit is {limit}":"{n} woorden; de limiet is {limit}",
+"not valid JSON":"geen geldige JSON",
+"no link in it":"geen link erin"
 }
 };

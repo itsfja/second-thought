@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"नूतनः अभिलेखः"},
 "rb_rec_set":{"message0":"%2 इत्यस्य %1 %3 इति स्थापय","tooltip":"अभिलेखस्य एकं क्षेत्रं परिवर्तयति (प्रायः अभिलेखचरस्य)।"},
 "rb_receive":{"message0":"यदा अहं %1 प्राप्नोमि","tooltip":"यदा यदा अयं सन्देशः उद्घोष्यते तदा तदा अधःस्थान् खण्डान् चालयति। बहवः प्रक्रमाः एकमेव सन्देशं शृण्वन्ति।"},
-"rb_reflect":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","message1":"%1 आवर्तनानि यावत्; यदा विफलं, कुरु","message2":"%1","tooltip":"Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।"},
+"rb_reflect":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","message1":"%1 आवर्तनानि यावत्; यदा विफलं, कुरु","message2":"%1","tooltip":"Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।","message3":"और जांच %1"},
 "rb_reset_timer":{"message0":"समयमापकं पुनःस्थापय"},
 "rb_result":{"message0":"समापय परिणामं च दर्शय","tooltip":"चालनं समापयति। त्वया परिणामे यत् योजितं तत् दर्शयति, यदि किमपि न योजितं तर्हि प्रारूपम्।"},
 "rb_result_text":{"message0":"इदानीं यावत् परिणामः","tooltip":"परिणामे योजितं सर्वं, पाठरूपेण।"},
 "rb_retry":{"message0":"%1 वारान् यावत् पुनः प्रयतस्व","message1":"%1","tooltip":"यदि अन्तः किमपि तथा विफलं यथा द्वितीयः प्रयत्नः तत् समादध्यात् (त्रुटितः सम्बन्धः, विकृतम् उत्तरम्), किञ्चित् प्रतीक्ष्य पुनः चालयति।"},
-"rb_review":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","tooltip":"एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।"},
+"rb_review":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","tooltip":"एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।","message1":"और जांच %1"},
 "rb_revise":{"message0":"समीक्षायाः दोषान् शोधयितुं संस्कुरु %1 जालस्य साहाय्येन","tooltip":"अन्तिमया समीक्षया लब्धान् दोषान् Claude शोधयति।"},
 "rb_rework":{"message0":"प्रारूपं पुनः रचय: %1","tooltip":"Claude तव निर्देशम् अनुसृत्य प्रारूपं पुनः लिखति।"},
 "rb_rewrite":{"message0":"%1 पुनः लिख: %2","tooltip":"यथा: (प्रारूपम्) पुनः लिख: (फ्रेञ्चभाषायाम् अनूदय)।"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli itihasah, %1 dinam","tooltip":"Smrtinam sucih, pratyeksya kim etesu dinesu drishtam, Tautulli: user, title, when ca transcode. Kevalam pathati. TAUTULLI_URL TAUTULLI_API_KEY second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli drishti-kalah, %1 dinam","tooltip":"Smrtinam sucih, pratyeksya yah etesu dinesu apaśyat, Tautulli: user ca hours. Kevalam pathati."},
 "rb_plex_scan":{"message0":"Plex %1 pustakalayam parikshitu","tooltip":"Pustakalayam nava-patra-anvesane parikshati. Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."},
-"rb_plex_stop":{"message0":"Plex %1 pravaham sthapayitum","tooltip":"Ekam pravaham sthapayati (Tautulli terminate). Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."}
+"rb_plex_stop":{"message0":"Plex %1 pravaham sthapayitum","tooltip":"Ekam pravaham sthapayati (Tautulli terminate). Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."},
+"rb_chk_max_words":{"message0":"%1 शब्द न से अधिक","tooltip":"महिक शब्द"},
+"rb_chk_mentions":{"message0":"कहता है %1","tooltip":"न शब्द"},
+"rb_chk_no_mention":{"message0":"न कहता है %1","tooltip":"शब्द मि"},
+"rb_chk_json":{"message0":"JSON वाली","tooltip":"न वाली JSON"},
+"rb_chk_link":{"message0":"लिंक है","tooltip":"न लिंक"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -1189,7 +1194,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} अधिक नियम ({n} मिं {total})। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
 "met":"सिद्धः",
 "not met":"असिद्ध",
-"met {n} of {total}":"{n} मिं {total}"
+"met {n} of {total}":"{n} मिं {total}",
+"at most {n} words":"{n} शब्द न से अधिक",
+"mentions {x}":"कहता है {x}",
+"doesn't mention {x}":"न कहता है {x}",
+"is valid JSON":"JSON वाली",
+"has a link":"लिंक है",
+"{n} words; the limit is {limit}":"{n} शब्द; सीमा {limit}",
+"not valid JSON":"न वाली JSON",
+"no link in it":"न लिंक है"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2340,7 +2353,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} अधिक नियम ({n} मिं {total})। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
 "met":"सिद्धः",
 "not met":"असिद्ध",
-"table":"पत्र"
+"table":"पत्र",
+"at most {n} words":"{n} शब्द न से अधिक",
+"mentions {x}":"कहता है {x}",
+"doesn't mention {x}":"न कहता है {x}",
+"is valid JSON":"JSON वाली",
+"has a link":"लिंक है",
+"{n} words; the limit is {limit}":"{n} शब्द; सीमा {limit}",
+"not valid JSON":"न वाली JSON",
+"no link in it":"न लिंक है"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

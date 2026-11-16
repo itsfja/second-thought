@@ -66,7 +66,10 @@
     { kind:"category", name:"Review", categorystyle:"review", contents:[
       B("rb_reflect", { CRITERIA:L("accurate; clear; under 200 words"), ROUNDS:N(3) }),
       B("rb_review", { CRITERIA:L("accurate; clear") }), B("rb_passed"), B("rb_problems"),
-      B("rb_score", { CRITERIA:T("clear and accurate") }), B("rb_better", { CRITERIA:T("clarity") })
+      B("rb_score", { CRITERIA:T("clear and accurate") }), B("rb_better", { CRITERIA:T("clarity") }),
+      { kind:"sep", gap:"24" },
+      B("rb_chk_max_words", { N:N(200) }), B("rb_chk_mentions", { TEXT:T("sourdough") }), B("rb_chk_no_mention", { TEXT:T("dough") }),
+      B("rb_chk_json"), B("rb_chk_link")
     ]},
     { kind:"category", name:"Agent", categorystyle:"agent", contents:[
       B("rb_agent", { GOAL:L("Plan a bake for this weekend that suits what I have in"), STEPS:N(6),

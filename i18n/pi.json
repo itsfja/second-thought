@@ -146,11 +146,13 @@
    "message0": "आलेखं %1 अनुसारेन समेक्ख",
    "message1": "याव %1 वारा; असम्पन्ने, करोहि",
    "message2": "%1",
-   "tooltip": "Claude आलेखं वीमंसति। असम्पन्ने अन्तोखण्डा चालियन्ति, ततो पुन वीमंसति। पच्चेकं वारे समेक्खको पुब्बदोसा न पच्चागता ति पि पस्सति। वारेसु खीणेसु, न पच्छिमो एव, अप्पतरदोसो आलेखो रक्खीयति।"
+   "tooltip": "Claude आलेखं वीमंसति। असम्पन्ने अन्तोखण्डा चालियन्ति, ततो पुन वीमंसति। पच्चेकं वारे समेक्खको पुब्बदोसा न पच्चागता ति पि पस्सति। वारेसु खीणेसु, न पच्छिमो एव, अप्पतरदोसो आलेखो रक्खीयति।",
+   "message3": "और जांच %1"
   },
   "rb_review": {
    "message0": "आलेखं %1 अनुसारेन समेक्ख",
-   "tooltip": "एका समेक्खा। पच्छा “आलेखो समेक्खं उत्तिण्णो” “समेक्खादोसा” च उपयुञ्ज।"
+   "tooltip": "एका समेक्खा। पच्छा “आलेखो समेक्खं उत्तिण्णो” “समेक्खादोसा” च उपयुञ्ज।",
+   "message1": "और जांच %1"
   },
   "rb_passed": {
    "message0": "आलेखो समेक्खं उत्तिण्णो"
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "message0": "Plex %1 savam nivattetu",
    "tooltip": "Ekam savam nivatteti (Tautulli terminate). Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."
+  },
+  "rb_chk_max_words": {
+   "message0": "%1 शब्द न से अधिक",
+   "tooltip": "न शब्द"
+  },
+  "rb_chk_mentions": {
+   "message0": "कहति %1",
+   "tooltip": "न शब्द"
+  },
+  "rb_chk_no_mention": {
+   "message0": "न कहति %1",
+   "tooltip": "शब्द"
+  },
+  "rb_chk_json": {
+   "message0": "JSON वाली",
+   "tooltip": "न वाली JSON"
+  },
+  "rb_chk_link": {
+   "message0": "लिंक",
+   "tooltip": "न लिंक"
   }
  },
  "options": {
@@ -1897,7 +1919,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मि {total}). ततो पच्छिमा वारा तं न सोधेसुं।",
   "met": "कत",
   "not met": "अकत",
-  "met {n} of {total}": "{n} मि {total}"
+  "met {n} of {total}": "{n} मि {total}",
+  "at most {n} words": "{n} शब्द न से अधिक",
+  "mentions {x}": "कहति {x}",
+  "doesn't mention {x}": "न कहति {x}",
+  "is valid JSON": "JSON वाली",
+  "has a link": "लिंक है",
+  "{n} words; the limit is {limit}": "{n} शब्द; सीमा {limit}",
+  "not valid JSON": "न वाली JSON",
+  "no link in it": "न लिंक"
  },
  "examples": {
   "review": {
@@ -3680,7 +3710,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मि {total}). ततो पच्छिमा वारा तं न सोधेसुं।",
   "met": "कत",
   "not met": "अकत",
-  "table": "पत्रम"
+  "table": "पत्रम",
+  "at most {n} words": "{n} शब्द न से अधिक",
+  "mentions {x}": "कहति {x}",
+  "doesn't mention {x}": "न कहति {x}",
+  "is valid JSON": "JSON वाली",
+  "has a link": "लिंक है",
+  "{n} words; the limit is {limit}": "{n} शब्द; सीमा {limit}",
+  "not valid JSON": "न वाली JSON",
+  "no link in it": "न लिंक"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

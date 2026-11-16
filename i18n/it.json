@@ -395,7 +395,8 @@
    "message0": "rivedi la bozza secondo %1",
    "message1": "fino a %1 giri; se non passa, fai",
    "message2": "%1",
-   "tooltip": "Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima."
+   "tooltip": "Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima.",
+   "message3": "e controlla %1"
   },
   "rb_reset_timer": {
    "message0": "azzera il timer"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "rivedi la bozza secondo %1",
-   "tooltip": "Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione»."
+   "tooltip": "Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione».",
+   "message1": "e controlla %1"
   },
   "rb_revise": {
    "message0": "rivedi per correggere i problemi della revisione %1 usando il web",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "fermare lo stream %1 su Plex",
    "tooltip": "Ferma uno stream (il terminate di Tautulli). Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."
+  },
+  "rb_chk_max_words": {
+   "message0": "al massimo %1 parole",
+   "tooltip": "Fallisce se la bozza ha più parole; il problema indica il numero reale."
+  },
+  "rb_chk_mentions": {
+   "message0": "menziona %1",
+   "tooltip": "Fallisce se la bozza non contiene queste parole (maiuscole/minuscole irrilevanti)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "non menziona %1",
+   "tooltip": "Fallisce se la bozza contiene queste parole (maiuscole/minuscole irrilevanti)."
+  },
+  "rb_chk_json": {
+   "message0": "è JSON valido",
+   "tooltip": "Fallisce se la bozza non è JSON valido."
+  },
+  "rb_chk_link": {
+   "message0": "ha un link",
+   "tooltip": "Fallisce se la bozza non ha un link (http://… o www.…)."
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Tornato alla bozza del giro {round}:rispettava più regole ({n} su {total}). I giri successivi non l'hanno migliorata.",
   "met": "rispettata",
   "not met": "non rispettata",
-  "met {n} of {total}": "{n} su {total} rispettate"
+  "met {n} of {total}": "{n} su {total} rispettate",
+  "at most {n} words": "al massimo {n} parole",
+  "mentions {x}": "menziona {x}",
+  "doesn't mention {x}": "non menziona {x}",
+  "is valid JSON": "è JSON valido",
+  "has a link": "ha un link",
+  "{n} words; the limit is {limit}": "{n} parole; il limite è {limit}",
+  "not valid JSON": "non è JSON valido",
+  "no link in it": "nessun link"
  },
  "examples": {
   "review": {
@@ -3689,6 +3719,14 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Tornato alla bozza del giro {round}:rispettava più regole ({n} su {total}). I giri successivi non l'hanno migliorata.",
   "met": "rispettata",
   "not met": "non rispettata",
-  "table": "tabella"
+  "table": "tabella",
+  "at most {n} words": "al massimo {n} parole",
+  "mentions {x}": "menziona {x}",
+  "doesn't mention {x}": "non menziona {x}",
+  "is valid JSON": "è JSON valido",
+  "has a link": "ha un link",
+  "{n} words; the limit is {limit}": "{n} parole; il limite è {limit}",
+  "not valid JSON": "non è JSON valido",
+  "no link in it": "nessun link"
  }
 }

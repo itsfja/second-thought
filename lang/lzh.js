@@ -40,8 +40,8 @@
 "rb_ask_list":{"message0":"問 Claude 以列：%1","tooltip":"Claude 以列答之，可循而遍之。"},
 "rb_rewrite":{"message0":"改寫 %1 為 %2","tooltip":"譬如：改寫（稿）為（譯為法蘭西語）。"},
 "rb_extract":{"message0":"自 %2 取 %1"},
-"rb_reflect":{"message0":"依 %1 審其稿","message1":"至多 %1 回；不中則行","message2":"%1","tooltip":"Claude 評其稿。不中，則行其內之塊，而復評之。每回審者並察前失之不復。回盡，則存其失最少之稿，非徒其末者。"},
-"rb_review":{"message0":"依 %1 審其稿","tooltip":"一審也。後用「稿中審」及「審之失」。"},
+"rb_reflect":{"message0":"依 %1 審其稿","message1":"至多 %1 回；不中則行","message2":"%1","tooltip":"Claude 評其稿。不中，則行其內之塊，而復評之。每回審者並察前失之不復。回盡，則存其失最少之稿，非徒其末者。","message3":"又驗 %1"},
+"rb_review":{"message0":"依 %1 審其稿","tooltip":"一審也。後用「稿中審」及「審之失」。","message1":"又驗 %1"},
 "rb_passed":{"message0":"稿中審"},
 "rb_problems":{"message0":"審之失"},
 "rb_score":{"message0":"以 %2 評之，十分得 %1"},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli之史，近%1日","tooltip":"錄之列，此日數所觀者各一錄，出自Tautulli：user、title、when與transcode（轉之否）。惟讀而已。需TAUTULLI_URL與TAUTULLI_API_KEY於second-thought.ini。"},
 "rb_tautulli_watchtime":{"message0":"Tautulli觀時，近%1日","tooltip":"錄之列，此日數所觀之人各一錄，出自Tautulli：user與hours。惟讀而已。"},
 "rb_plex_scan":{"message0":"掃Plex之%1書庫","tooltip":"掃一書庫以尋新檔。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"},
-"rb_plex_stop":{"message0":"止Plex之%1流","tooltip":"止一流（Tautulli之terminate）。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"}
+"rb_plex_stop":{"message0":"止Plex之%1流","tooltip":"止一流（Tautulli之terminate）。恆先問於汝，縱他皆不問，無人在而應之則不行。此頁實無所變。"},
+"rb_chk_max_words":{"message0":"不逾 %1 字","tooltip":"稿逾字數則敗；敗者書實數。"},
+"rb_chk_mentions":{"message0":"書 %1","tooltip":"稿闕此言則敗（大小書無別）。"},
+"rb_chk_no_mention":{"message0":"不書 %1","tooltip":"稿有此言則敗（大小書無別）。"},
+"rb_chk_json":{"message0":"合乎JSON","tooltip":"稿非合JSON則敗。"},
+"rb_chk_link":{"message0":"有聯","tooltip":"稿無聯則敗（http://… 或 www.…）。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -1187,7 +1192,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"返至第 {round} 回之稿：其合規最多（{total} 規之中 {n}）。其後諸回不勝之。",
 "met":"合",
 "not met":"不合",
-"met {n} of {total}":"{total} 規之中合 {n} 規"
+"met {n} of {total}":"{total} 規之中合 {n} 規",
+"at most {n} words":"不逾 {n} 字",
+"mentions {x}":"書 {x}",
+"doesn't mention {x}":"不書 {x}",
+"is valid JSON":"合乎JSON",
+"has a link":"有聯",
+"{n} words; the limit is {limit}":"{n} 字；限 {limit}",
+"not valid JSON":"非合JSON",
+"no link in it":"內無聯"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2338,7 +2351,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"返至第 {round} 回之稿：其合規最多（{total} 規之中 {n}）。其後諸回不勝之。",
 "met":"合",
 "not met":"不合",
-"table":"表"
+"table":"表",
+"at most {n} words":"不逾 {n} 字",
+"mentions {x}":"書 {x}",
+"doesn't mention {x}":"不書 {x}",
+"is valid JSON":"合乎JSON",
+"has a link":"有聯",
+"{n} words; the limit is {limit}":"{n} 字；限 {limit}",
+"not valid JSON":"非合JSON",
+"no link in it":"內無聯"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

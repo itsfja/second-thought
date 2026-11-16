@@ -395,7 +395,8 @@
    "message0": "按 %1 审阅草稿",
    "message1": "最多 %1 轮；不通过时执行",
    "message2": "%1",
-   "tooltip": "Claude 评审草稿。如果不通过，里面的积木会运行，然后再评审一次。每一轮审阅者也会检查之前的问题没有再出现。轮数用完时，保留问题最少的草稿，而不只是最后一份。"
+   "tooltip": "Claude 评审草稿。如果不通过，里面的积木会运行，然后再评审一次。每一轮审阅者也会检查之前的问题没有再出现。轮数用完时，保留问题最少的草稿，而不只是最后一份。",
+   "message3": "并检查 %1"
   },
   "rb_reset_timer": {
    "message0": "重置计时器"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "按 %1 审阅草稿",
-   "tooltip": "一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。"
+   "tooltip": "一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。",
+   "message1": "并检查 %1"
   },
   "rb_revise": {
    "message0": "修改以解决审阅发现的问题 %1 使用网络",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "停止 Plex 上的 %1 串流",
    "tooltip": "停止一个串流（Tautulli 的 terminate）。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"
+  },
+  "rb_chk_max_words": {
+   "message0": "最多 %1 个字",
+   "tooltip": "草稿超过字数则不合格；问题会写出实际字数。"
+  },
+  "rb_chk_mentions": {
+   "message0": "提到 %1",
+   "tooltip": "草稿中没有这些词则不合格（不区分大小写）。"
+  },
+  "rb_chk_no_mention": {
+   "message0": "不提 %1",
+   "tooltip": "草稿中出现这些词则不合格（不区分大小写）。"
+  },
+  "rb_chk_json": {
+   "message0": "是有效的JSON",
+   "tooltip": "草稿不是有效JSON则不合格。"
+  },
+  "rb_chk_link": {
+   "message0": "包含链接",
+   "tooltip": "草稿中没有链接则不合格（http://… 或 www.…）。"
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "回到了第 {round} 轮的草稿：它满足的规则最多（{total} 条中的 {n} 条）。之后的轮次没有改进它。",
   "met": "满足",
   "not met": "未满足",
-  "met {n} of {total}": "满足 {total} 条中的 {n} 条"
+  "met {n} of {total}": "满足 {total} 条中的 {n} 条",
+  "at most {n} words": "{n} 个字以内",
+  "mentions {x}": "提到 {x}",
+  "doesn't mention {x}": "不提 {x}",
+  "is valid JSON": "是有效的JSON",
+  "has a link": "包含链接",
+  "{n} words; the limit is {limit}": "{n} 个字；上限是 {limit}",
+  "not valid JSON": "不是有效的JSON",
+  "no link in it": "里面没有链接"
  },
  "examples": {
   "review": {
@@ -3689,6 +3719,14 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "回到了第 {round} 轮的草稿：它满足的规则最多（{total} 条中的 {n} 条）。之后的轮次没有改进它。",
   "met": "满足",
   "not met": "未满足",
-  "table": "表格"
+  "table": "表格",
+  "at most {n} words": "{n} 个字以内",
+  "mentions {x}": "提到 {x}",
+  "doesn't mention {x}": "不提 {x}",
+  "is valid JSON": "是有效的JSON",
+  "has a link": "包含链接",
+  "{n} words; the limit is {limit}": "{n} 个字；上限是 {limit}",
+  "not valid JSON": "不是有效的JSON",
+  "no link in it": "里面没有链接"
  }
 }

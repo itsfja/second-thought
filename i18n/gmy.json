@@ -396,7 +396,8 @@
    "message0": "𐀁𐀐𐀲𐀽 𐀐𐀇𐀍 𐀏𐀲 %1",
    "message1": "𐀕𐀑 %1 𐀓𐀒𐀫; 𐀃𐀳 𐀀𐀔𐀲𐀚𐀂, 𐀡𐀁𐀮",
    "message2": "%1",
-   "tooltip": "Claude 𐀓𐀪𐀚𐀂 𐀐𐀇𐀍. 𐀁 𐀀𐀔𐀲𐀚𐀂, 𐀠𐀪𐀵 𐀁𐀚𐀵𐀰 𐀏𐀨𐀃𐀯, 𐀏𐀂 𐀀𐀠 Claude 𐀓𐀪𐀚𐀂. 𐀁𐀏𐀵 𐀓𐀒𐀫 𐀁𐀐𐀲𐀳𐀩 𐀏𐀂 𐀃𐀨𐀁 𐀃𐀞 𐀞𐀨𐀔𐀲 𐀞𐀨𐀍 𐀃𐀄 𐀁𐀞𐀚𐀨𐀳. 𐀁 𐀓𐀒𐀫 𐀞𐀄𐀃𐀲𐀂, 𐀐𐀇𐀍 𐀕𐀲 𐀁𐀨𐀑𐀭 𐀞𐀨𐀔𐀲 𐀢𐀨𐀭𐀁𐀲𐀂, 𐀃𐀄 𐀗𐀜 𐀄𐀲𐀲."
+   "tooltip": "Claude 𐀓𐀪𐀚𐀂 𐀐𐀇𐀍. 𐀁 𐀀𐀔𐀲𐀚𐀂, 𐀠𐀪𐀵 𐀁𐀚𐀵𐀰 𐀏𐀨𐀃𐀯, 𐀏𐀂 𐀀𐀠 Claude 𐀓𐀪𐀚𐀂. 𐀁𐀏𐀵 𐀓𐀒𐀫 𐀁𐀐𐀲𐀳𐀩 𐀏𐀂 𐀃𐀨𐀁 𐀃𐀞 𐀞𐀨𐀔𐀲 𐀞𐀨𐀍 𐀃𐀄 𐀁𐀞𐀚𐀨𐀳. 𐀁 𐀓𐀒𐀫 𐀞𐀄𐀃𐀲𐀂, 𐀐𐀇𐀍 𐀕𐀲 𐀁𐀨𐀑𐀭 𐀞𐀨𐀔𐀲 𐀢𐀨𐀭𐀁𐀲𐀂, 𐀃𐀄 𐀗𐀜 𐀄𐀲𐀲.",
+   "message3": "𐀳𐀐𐀳𐀮 %1"
   },
   "rb_reset_timer": {
    "message0": "𐀚𐀺 𐀡𐀁𐀮 𐀒𐀫𐀜𐀕𐀳𐀫"
@@ -416,7 +417,8 @@
   },
   "rb_review": {
    "message0": "𐀁𐀐𐀲𐀽 𐀐𐀇𐀍 𐀏𐀲 %1",
-   "tooltip": "𐀃𐀚 𐀁𐀐𐀮𐀲𐀯. 𐀐𐀨𐀃𐀠𐀳 “𐀐𐀇𐀍 𐀁𐀐𐀮𐀲𐀯 𐀞𐀩𐀨𐀳” 𐀏𐀂 “𐀁𐀐𐀮𐀲𐀯 𐀞𐀨𐀔𐀲”."
+   "tooltip": "𐀃𐀚 𐀁𐀐𐀮𐀲𐀯. 𐀐𐀨𐀃𐀠𐀳 “𐀐𐀇𐀍 𐀁𐀐𐀮𐀲𐀯 𐀞𐀩𐀨𐀳” 𐀏𐀂 “𐀁𐀐𐀮𐀲𐀯 𐀞𐀨𐀔𐀲”.",
+   "message1": "𐀳𐀐𐀳𐀮 %1"
   },
   "rb_revise": {
    "message0": "𐀇𐀃𐀵𐀮 𐀃𐀞 𐀁𐀐𐀮𐀲𐀯 𐀞𐀨𐀔𐀲 𐀂𐀀𐀭𐀲𐀂 %1 𐀟𐀨𐀲𐀫",
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "message0": "thana %1 stream on Plex stillan",
    "tooltip": "Stilleth an stream (Tautulli terminate). Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja 𐀊, hit 𐀚 deth. A thessum blade naenung sothlice 𐀚 wendth."
+  },
+  "rb_chk_max_words": {
+   "message0": "𐀁𐀟 %1 𐀃𐀄𐀑 𐀁𐀐",
+   "tooltip": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀁𐀨𐀑𐀭 𐀁𐀟 𐀕𐀲 𐀁𐀐"
+  },
+  "rb_chk_mentions": {
+   "message0": "𐀕𐀔𐀮 %1",
+   "tooltip": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀕𐀔𐀮 𐀃𐀄 𐀁𐀐"
+  },
+  "rb_chk_no_mention": {
+   "message0": "𐀃𐀄 𐀕𐀔𐀮 %1",
+   "tooltip": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀕𐀔𐀮 𐀁𐀐"
+  },
+  "rb_chk_json": {
+   "message0": "JSON 𐀁𐀳𐀃",
+   "tooltip": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 JSON 𐀀𐀐𐀲 𐀁𐀳𐀃"
+  },
+  "rb_chk_link": {
+   "message0": "𐀸𐀳 𐀀𐀐𐀲",
+   "tooltip": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀸𐀳 𐀀𐀐𐀲"
   }
  },
  "options": {
@@ -1907,7 +1929,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀀𐀢 𐀓𐀒𐀫 {round}:e-ke 𐀡𐀫𐀳𐀐 {n} 𐀳 {total}. 𐀓𐀒𐀫 𐀕𐀲 𐀀𐀵 𐀃𐀄 𐀟𐀴𐀍 𐀁𐀡𐀁𐀮.",
   "met": "𐀁𐀐",
   "not met": "𐀀𐀐",
-  "met {n} of {total}": "𐀁𐀐 {n} 𐀳 {total}"
+  "met {n} of {total}": "𐀁𐀐 {n} 𐀳 {total}",
+  "at most {n} words": "𐀁𐀟 {n} 𐀃𐀄𐀑 𐀁𐀐",
+  "mentions {x}": "𐀕𐀔𐀮 {x}",
+  "doesn't mention {x}": "𐀃𐀄 𐀕𐀔𐀮 {x}",
+  "is valid JSON": "JSON 𐀁𐀳𐀃",
+  "has a link": "𐀸𐀳 𐀀𐀐𐀲",
+  "{n} words; the limit is {limit}": "𐀁𐀟 {n}; 𐀳𐀩𐀗 {limit}",
+  "not valid JSON": "JSON 𐀀𐀐𐀲 𐀁𐀳𐀃",
+  "no link in it": "𐀸𐀳 𐀀𐀐𐀲"
  },
  "examples": {
   "review": {
@@ -3690,7 +3720,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "a-pi e-pi ke-di-jo a-pu ku-ko-ro {round}:e-ke po-ro-te-ke {n} te {total}. ku-ko-ro me-ta a-to o-u pe-ti-jo e-po-e-se.",
   "met": "e-ke",
   "not met": "a-ke",
-  "table": "pu-ka-ta"
+  "table": "pu-ka-ta",
+  "at most {n} words": "e-pe {n} o-u-ki e-ke",
+  "mentions {x}": "me-ma-se {x}",
+  "doesn't mention {x}": "o-u me-ma-se {x}",
+  "is valid JSON": "JSON e-te-o",
+  "has a link": "we-te a-ke-ta",
+  "{n} words; the limit is {limit}": "e-pe {n}; te-re-mo {limit}",
+  "not valid JSON": "JSON a-ke-ta e-te-o",
+  "no link in it": "we-te a-ke-ta"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

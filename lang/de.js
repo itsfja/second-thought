@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"neuer Datensatz"},
 "rb_rec_set":{"message0":"%1 von %2 auf %3 setzen","tooltip":"Ändert ein Feld eines Datensatzes (meist einer Datensatz-Variablen)."},
 "rb_receive":{"message0":"wenn ich %1 empfange","tooltip":"Führt die Blöcke darunter aus, sobald diese Nachricht gesendet wird. Mehrere Skripte können auf dieselbe Nachricht hören."},
-"rb_reflect":{"message0":"den Entwurf prüfen anhand von %1","message1":"bis zu %1 Runden; wenn er durchfällt, tue","message2":"%1","tooltip":"Claude kritisiert den Entwurf. Fällt er durch, laufen die Blöcke darin, dann kritisiert er erneut. In jeder Runde prüft der Prüfer auch, dass frühere Probleme nicht zurückgekehrt sind. Sind die Runden aufgebraucht, wird der Entwurf mit den wenigsten Problemen behalten, nicht einfach der letzte."},
+"rb_reflect":{"message0":"den Entwurf prüfen anhand von %1","message1":"bis zu %1 Runden; wenn er durchfällt, tue","message2":"%1","tooltip":"Claude kritisiert den Entwurf. Fällt er durch, laufen die Blöcke darin, dann kritisiert er erneut. In jeder Runde prüft der Prüfer auch, dass frühere Probleme nicht zurückgekehrt sind. Sind die Runden aufgebraucht, wird der Entwurf mit den wenigsten Problemen behalten, nicht einfach der letzte.","message3":"und prüfen %1"},
 "rb_reset_timer":{"message0":"Stoppuhr zurücksetzen"},
 "rb_result":{"message0":"beenden und das Ergebnis zeigen","tooltip":"Beendet den Lauf. Zeigt, was Sie zum Ergebnis hinzugefügt haben, oder den Entwurf, wenn Sie nichts hinzugefügt haben."},
 "rb_result_text":{"message0":"das bisherige Ergebnis","tooltip":"Alles, was zum Ergebnis hinzugefügt wurde, als Text."},
 "rb_retry":{"message0":"bis zu %1 Mal wiederholen","message1":"%1","tooltip":"Schlägt etwas darin auf eine Weise fehl, die ein zweiter Versuch beheben könnte (eine abgebrochene Verbindung, eine verstümmelte Antwort), wartet es kurz und führt es erneut aus."},
-"rb_review":{"message0":"den Entwurf prüfen anhand von %1","tooltip":"Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“."},
+"rb_review":{"message0":"den Entwurf prüfen anhand von %1","tooltip":"Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“.","message1":"und prüfen %1"},
 "rb_revise":{"message0":"überarbeiten, um die Probleme der Prüfung zu beheben %1 mit dem Web","tooltip":"Claude behebt die Probleme, die die letzte Prüfung gefunden hat."},
 "rb_rework":{"message0":"den Entwurf überarbeiten: %1","tooltip":"Claude schreibt den Entwurf nach Ihrer Anweisung neu."},
 "rb_rewrite":{"message0":"%1 umschreiben: %2","tooltip":"Zum Beispiel: (Entwurf) umschreiben: (ins Französische übersetzen)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli-Verlauf, letzte %1 Tage","tooltip":"Eine Liste von Datensätzen, einer für alles, was in so vielen Tagen angesehen wurde, von Tautulli: user, title, when und transcode (ob es umgewandelt wurde). Es liest nur. Braucht TAUTULLI_URL und TAUTULLI_API_KEY in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli Sehzeit, letzte %1 Tage","tooltip":"Eine Liste von Datensätzen, einer für jede Person, die in so vielen Tagen ansah, von Tautulli: user und hours. Es liest nur."},
 "rb_plex_scan":{"message0":"die %1-Bibliothek auf Plex durchsuchen","tooltip":"Durchsucht eine Bibliothek nach neuen Dateien. Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
-"rb_plex_stop":{"message0":"den Stream %1 auf Plex stoppen","tooltip":"Stoppt einen Stream (Tautullis terminate). Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."}
+"rb_plex_stop":{"message0":"den Stream %1 auf Plex stoppen","tooltip":"Stoppt einen Stream (Tautullis terminate). Es fragt dich jedes Mal zuerst, auch wenn nichts anderes fragt, und wenn niemand Ja sagen kann, passiert nichts. Auf dieser Seite ändert sich nichts wirklich."},
+"rb_chk_max_words":{"message0":"höchstens %1 Wörter","tooltip":"Schlägt die Prüfung fehl, wenn der Entwurf mehr Wörter hat; das Problem nennt die wirkliche Zahl."},
+"rb_chk_mentions":{"message0":"erwähnt %1","tooltip":"Schlägt fehl, wenn der Entwurf diese Wörter nicht enthält (Groß-/Kleinschreibung egal)."},
+"rb_chk_no_mention":{"message0":"erwähnt nicht %1","tooltip":"Schlägt fehl, wenn der Entwurf diese Wörter enthält (Groß-/Kleinschreibung egal)."},
+"rb_chk_json":{"message0":"ist gültiges JSON","tooltip":"Schlägt fehl, wenn der Entwurf kein gültiges JSON ist."},
+"rb_chk_link":{"message0":"hat einen Link","tooltip":"Schlägt fehl, wenn der Entwurf keinen Link enthält (http://… oder www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"jeden Tag","weekdays":"an Wochentagen","weekends":"am Wochenende"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Zurück zum Entwurf aus Runde {round}:Er erfüllte die meisten Regeln ({n} von {total}). Die Runden danach haben ihn nicht verbessert.",
 "met":"erfüllt",
 "not met":"nicht erfüllt",
-"met {n} of {total}":"{n} von {total} erfüllt"
+"met {n} of {total}":"{n} von {total} erfüllt",
+"at most {n} words":"höchstens {n} Wörter",
+"mentions {x}":"erwähnt {x}",
+"doesn't mention {x}":"erwähnt nicht {x}",
+"is valid JSON":"ist gültiges JSON",
+"has a link":"hat einen Link",
+"{n} words; the limit is {limit}":"{n} Wörter; das Limit ist {limit}",
+"not valid JSON":"kein gültiges JSON",
+"no link in it":"kein Link darin"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Zurück zum Entwurf aus Runde {round}:Er erfüllte die meisten Regeln ({n} von {total}). Die Runden danach haben ihn nicht verbessert.",
 "met":"erfüllt",
 "not met":"nicht erfüllt",
-"table":"Tabelle"
+"table":"Tabelle",
+"at most {n} words":"höchstens {n} Wörter",
+"mentions {x}":"erwähnt {x}",
+"doesn't mention {x}":"erwähnt nicht {x}",
+"is valid JSON":"ist gültiges JSON",
+"has a link":"hat einen Link",
+"{n} words; the limit is {limit}":"{n} Wörter; das Limit ist {limit}",
+"not valid JSON":"kein gültiges JSON",
+"no link in it":"kein Link darin"
 }
 };

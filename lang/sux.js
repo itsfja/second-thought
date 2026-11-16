@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude 𒂠 𒀠 𒅗: %1","tooltip":"Claude 𒂠𒁕 𒅗 𒄄, 𒃻 𒃻 𒋗𒍪𒂠 𒁺."},
 "rb_rewrite":{"message0":"%1 %2-𒁶 𒉋 𒊬","tooltip":"𒅆𒁺: (𒁾𒊕) (𒅴 Faransa-𒂠 𒉽)-𒁶 𒉋 𒊬."},
 "rb_extract":{"message0":"%2-𒋫 %1 𒌓𒁺"},
-"rb_reflect":{"message0":"𒁾𒊕 %1 𒅆𒂃","message1":"𒂗𒈾 %1 𒀀𒁺; 𒉡𒋛𒁲𒀀 𒀝","message2":"%1","tooltip":"Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀."},
-"rb_review":{"message0":"𒁾𒊕 %1 𒅆𒂃","tooltip":"𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷."},
+"rb_reflect":{"message0":"𒁾𒊕 %1 𒅆𒂃","message1":"𒂗𒈾 %1 𒀀𒁺; 𒉡𒋛𒁲𒀀 𒀝","message2":"%1","tooltip":"Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀.","message3":"𒊩𒌨𒁺 %1"},
+"rb_review":{"message0":"𒁾𒊕 %1 𒅆𒂃","tooltip":"𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷.","message1":"𒊩𒌨𒁺 %1"},
 "rb_passed":{"message0":"𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺"},
 "rb_problems":{"message0":"𒉡𒋛𒁲 𒅆𒂃𒀀"},
 "rb_score":{"message0":"%1 10-𒀀 %2-𒂠 𒋃"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli sa, %1 ud","tooltip":"Nimmah, anaag ki-ag2-ki-bi igi ud-bi, Tautulli-se: user, title, igi gu transcode. Igi igi. TAUTULLI_URL gu TAUTULLI_API_KEY second-thought.ini-se."},
 "rb_tautulli_watchtime":{"message0":"Tautulli igi-sa, %1 ud","tooltip":"Nimmah, anaag ki-ag2-ki-bi lu igi ud-bi, Tautulli-se: user gu igi-sa. Igi igi."},
 "rb_plex_scan":{"message0":"dub-sar %1 Plex-a skn","tooltip":"Dub-sar nfr-a skn. Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
-"rb_plex_stop":{"message0":"ak %1 Plex-a nu-ub-gal","tooltip":"Ak nu-ub-gal (Tautulli terminate). Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."}
+"rb_plex_stop":{"message0":"ak %1 Plex-a nu-ub-gal","tooltip":"Ak nu-ub-gal (Tautulli terminate). Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."},
+"rb_chk_max_words":{"message0":"%1 𒅗 𒉡𒀝","tooltip":"𒅗 𒌉𒊏 𒉡𒀝"},
+"rb_chk_mentions":{"message0":"𒅗 %1 𒌇","tooltip":"𒅗 𒉡𒌇 𒅗"},
+"rb_chk_no_mention":{"message0":"𒅗 %1 𒉡𒌇","tooltip":"𒅗 𒌇 𒅗"},
+"rb_chk_json":{"message0":"JSON 𒍣","tooltip":"JSON 𒉡𒍣 𒅗"},
+"rb_chk_link":{"message0":"𒊬 𒌇","tooltip":"𒊬 𒉡𒌇 𒅗"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒃻𒉆","weekdays":"𒌓 𒆥𒅗","weekends":"𒌓 𒄑𒇲𒅗"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"𒁾𒊕 𒀀𒁺 {round}-𒂠 𒉏 {n} 𒊭 {total} 𒌇. 𒀀𒁺 𒂕𒊏 𒉡𒊷.",
 "met":"𒌇",
 "not met":"𒉡𒌇",
-"met {n} of {total}":"𒌇 {n} 𒊭 {total}"
+"met {n} of {total}":"𒌇 {n} 𒊭 {total}",
+"at most {n} words":"{n} 𒅗 𒉡𒀝",
+"mentions {x}":"𒅗 {x} 𒌇",
+"doesn't mention {x}":"𒅗 {x} 𒉡𒌇",
+"is valid JSON":"JSON 𒍣𒁶",
+"has a link":"𒊬 𒌇",
+"{n} words; the limit is {limit}":"{n} 𒅗; {limit} 𒉡𒀝",
+"not valid JSON":"JSON 𒉡𒍣",
+"no link in it":"𒊬 𒉡𒌇"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"dub-saĝ a-ra2 {round}-še3 nim {n} ša {total} tuku. a-ra2 eĝer-ra nu-sa6.",
 "met":"tuku",
 "not met":"nu-tuku",
-"table":"dub"
+"table":"dub",
+"at most {n} words":"{n} inim nu-ak",
+"mentions {x}":"inim {x} tuku",
+"doesn't mention {x}":"inim {x} nu-tuku",
+"is valid JSON":"JSON zid-gin7",
+"has a link":"sar tuku",
+"{n} words; the limit is {limit}":"{n} inim; {limit} nu-ak",
+"not valid JSON":"JSON nu-zid",
+"no link in it":"sar nu-tuku"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

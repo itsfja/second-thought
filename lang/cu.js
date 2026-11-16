@@ -40,8 +40,8 @@
 "rb_ask_list":{"message0":"вопроси Claude рѧда: %1","tooltip":"Claude ѿвѣщаетъ рѧдомъ, егоже можеши проити."},
 "rb_rewrite":{"message0":"перепиши %1 въ %2","tooltip":"На примѣръ: перепиши (начертанїе) въ (преложи на фругскїй)."},
 "rb_extract":{"message0":"извлецы %1 изъ %2"},
-"rb_reflect":{"message0":"испытай начертанїе по %1","message1":"до %1 кратъ; аще не удовлетворитъ, сотвори","message2":"%1","tooltip":"Claude судитъ начертанїе. Аще не удовлетворитъ, звѣна внутрь текутъ, и паки судитъ. Во всѧкъ кратъ испытатель смотритъ и прежнихъ погрѣшностей невозвращенїѧ. Аще кратѡвъ не достанетъ, хранитсѧ начертанїе съ меньшими погрѣшностьми, а не послѣднее токмо."},
-"rb_review":{"message0":"испытай начертанїе по %1","tooltip":"Едино испытанїе. По семъ употреби «начертанїе прошло испытанїе» и «погрѣшности испытанїѧ»."},
+"rb_reflect":{"message0":"испытай начертанїе по %1","message1":"до %1 кратъ; аще не удовлетворитъ, сотвори","message2":"%1","tooltip":"Claude судитъ начертанїе. Аще не удовлетворитъ, звѣна внутрь текутъ, и паки судитъ. Во всѧкъ кратъ испытатель смотритъ и прежнихъ погрѣшностей невозвращенїѧ. Аще кратѡвъ не достанетъ, хранитсѧ начертанїе съ меньшими погрѣшностьми, а не послѣднее токмо.","message3":"и провѣри %1"},
+"rb_review":{"message0":"испытай начертанїе по %1","tooltip":"Едино испытанїе. По семъ употреби «начертанїе прошло испытанїе» и «погрѣшности испытанїѧ».","message1":"и провѣри %1"},
 "rb_passed":{"message0":"начертанїе прошло испытанїе"},
 "rb_problems":{"message0":"погрѣшности испытанїѧ"},
 "rb_score":{"message0":"оцѣни %1 изъ 10 по %2"},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli istoria, poslednie %1 dni","tooltip":"Spisakъ zapisii, po edinъ za vseako smotrenie vъ tolmi dniehъ, otъ Tautulli: user, title, when i transcode (daliko preobrazovano bystъ). Toliko chtetъ. Trebuetъ TAUTULLI_URL i TAUTULLI_API_KEY vъ second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli vremia smotrenia, poslednie %1 dni","tooltip":"Spisakъ zapisii, po edinъ za vseako lico, ezhe vъ tolmi dniehъ smotrie, otъ Tautulli: user i hours. Toliko chtetъ."},
 "rb_plex_scan":{"message0":"iskati novyja vъ knigie %1 na Plex","tooltip":"Iskaetъ vъ edinoi knigie novyja files. Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."},
-"rb_plex_stop":{"message0":"ostanoviti potokъ %1 na Plex","tooltip":"Ostanovliaetъ edinъ potokъ (Tautulli terminate). Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."}
+"rb_plex_stop":{"message0":"ostanoviti potokъ %1 na Plex","tooltip":"Ostanovliaetъ edinъ potokъ (Tautulli terminate). Te voprahaetъ vsegda prъveye, asche i nichьcto zhe ino ne voprahaetъ, i ne sъshtou chlovekou rekshou da, ne byvaetъ. Na sei stranici nichьcto zhe istino ne mieniaetъ se."},
+"rb_chk_max_words":{"message0":"не паче %1 словъ","tooltip":"Прѣстѫпаетъ аще черновикъ болѣе словъ имать; ꙁадача истиньное число кажетъ."},
+"rb_chk_mentions":{"message0":"речетъ %1","tooltip":"Прѣстѫпаетъ ꙗко черновикъ сихъ словъ не имать (вєличина боуквъ не ꙗвлꙗѥтъ сѧ)."},
+"rb_chk_no_mention":{"message0":"не речетъ %1","tooltip":"Прѣстѫпаетъ ꙗко черновикъ сихъ словъ имать (вєличина боуквъ не ꙗвлꙗѥтъ сѧ)."},
+"rb_chk_json":{"message0":"истиньно JSON ѥстъ","tooltip":"Прѣстѫпаетъ ꙗко черновикъ истиньна JSON не ѥстъ."},
+"rb_chk_link":{"message0":"имать ссылꙋ","tooltip":"Прѣстѫпаетъ ꙗко черновикъ ссылꙋ не имать (http://… или www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"на всѧкъ день","weekdays":"въ дни дѣланїѧ","weekends":"въ дни ѿдыха"},
@@ -1187,7 +1192,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Возвратихсѧ къ начертанїю ѿ круга {round}:имѣ наибольшε правъ ({n} ꙗꙁ {total}). Кругѡве по немъ не улучшиша его.",
 "met":"съблюдено",
 "not met":"не съблюдено",
-"met {n} of {total}":"{n} ꙗꙁ {total} съблюденꙛ"
+"met {n} of {total}":"{n} ꙗꙁ {total} съблюденꙛ",
+"at most {n} words":"не паче {n} словъ",
+"mentions {x}":"речетъ {x}",
+"doesn't mention {x}":"не речетъ {x}",
+"is valid JSON":"истиньно JSON ѥстъ",
+"has a link":"имать ссылꙋ",
+"{n} words; the limit is {limit}":"{n} словъ; предѣлъ {limit} ѥстъ",
+"not valid JSON":"не истиньно JSON",
+"no link in it":"ни єдинꙛ ꙁвена нѣстъ"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2338,7 +2351,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Возвратихсѧ къ начертанїю ѿ круга {round}:имѣ наибольшε правъ ({n} ꙗꙁ {total}). Кругѡве по немъ не улучшиша его.",
 "met":"съблюдено",
 "not met":"не съблюдено",
-"table":"таблица"
+"table":"таблица",
+"at most {n} words":"не паче {n} словъ",
+"mentions {x}":"речетъ {x}",
+"doesn't mention {x}":"не речетъ {x}",
+"is valid JSON":"истиньно JSON ѥстъ",
+"has a link":"имать ссылꙋ",
+"{n} words; the limit is {limit}":"{n} словъ; предѣлъ {limit} ѥстъ",
+"not valid JSON":"не истиньно JSON",
+"no link in it":"ни єдинꙛ ꙁвена нѣстъ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

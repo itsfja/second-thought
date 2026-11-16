@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nova scheda"},
 "rb_rec_set":{"message0":"statue %1 ex %2 ad %3","tooltip":"Unum campum schedae mutat (plerumque variabilis schedae)."},
 "rb_receive":{"message0":"cum accipio %1","tooltip":"Lateres infra exsequitur quotiens hic nuntius praedicatur. Plura scripta eundem nuntium auscultare possunt."},
-"rb_reflect":{"message0":"recognosce adumbrationem secundum %1","message1":"usque ad %1 circuitus; si deficit, fac","message2":"%1","tooltip":"Claude adumbrationem censet. Si deficit, lateres intus currunt, deinde iterum censet. Quoque circuitu recognitor etiam inspicit ne vitia priora redierint. Si circuitus deficiunt, adumbratio cum paucissimis vitiis servatur, non solum ultima."},
+"rb_reflect":{"message0":"recognosce adumbrationem secundum %1","message1":"usque ad %1 circuitus; si deficit, fac","message2":"%1","tooltip":"Claude adumbrationem censet. Si deficit, lateres intus currunt, deinde iterum censet. Quoque circuitu recognitor etiam inspicit ne vitia priora redierint. Si circuitus deficiunt, adumbratio cum paucissimis vitiis servatur, non solum ultima.","message3":"et proba %1"},
 "rb_reset_timer":{"message0":"renova horologium"},
 "rb_result":{"message0":"fini et ostende effectum","tooltip":"Exsecutionem finit. Ostendit quae ad effectum addidisti, aut adumbrationem si nihil addidisti."},
 "rb_result_text":{"message0":"effectus adhuc","tooltip":"Omnia ad effectum addita, ut textus."},
 "rb_retry":{"message0":"itera usque ad %1 vices","message1":"%1","tooltip":"Si quid intus deficit modo quem secundus conatus sanare possit (conexio amissa, responsum confusum), paulum exspectat et iterum exsequitur."},
-"rb_review":{"message0":"recognosce adumbrationem secundum %1","tooltip":"Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis»."},
+"rb_review":{"message0":"recognosce adumbrationem secundum %1","tooltip":"Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis».","message1":"et proba %1"},
 "rb_revise":{"message0":"retracta ut vitia recognitionis corrigas %1 ope interretis","tooltip":"Claude vitia corrigit quae ultima recognitio invenit."},
 "rb_rework":{"message0":"retracta adumbrationem: %1","tooltip":"Claude adumbrationem rescribit secundum praeceptum tuum."},
 "rb_rewrite":{"message0":"rescribe %1 ut %2","tooltip":"Exempli gratia: rescribe (adumbrationem) ut (in Gallicum verte)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli acta, novissima %1 dies","tooltip":"Index memoriarum, una quoque re in tot diebus visa, ex Tautulli: user, title, when et transcode (num conversa). Solum legit. Indiget TAUTULLI_URL et TAUTULLI_API_KEY in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli tempus videnti, novissima %1 dies","tooltip":"Index memoriarum, una quoque persona quae in tot diebus spectavit, ex Tautulli: user et hours. Solum legit."},
 "rb_plex_scan":{"message0":"bibliothecam %1 in Plex perscrutari","tooltip":"Perscrutatur unam bibliothecam quaerens nova files. Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."},
-"rb_plex_stop":{"message0":"fluxum %1 in Plex sistere","tooltip":"Sistit unum fluxum (Tautulli terminate). Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."}
+"rb_plex_stop":{"message0":"fluxum %1 in Plex sistere","tooltip":"Sistit unum fluxum (Tautulli terminate). Te semper primo interrogat, etiam cum nihil aliud interrogat, et nullo dicente ita, nihil fit. In hac pagina nihil vere mutatur."},
+"rb_chk_max_words":{"message0":"plurimum %1 verba","tooltip":"Deficit si adumbratio plus verborum habet; problema numerum verum dicit."},
+"rb_chk_mentions":{"message0":"%1 nominat","tooltip":"Deficit nisi adumbratio haec verba contineat (maiúsculas non refert)."},
+"rb_chk_no_mention":{"message0":"%1 non nominat","tooltip":"Deficit si adumbratio haec verba contineat (maiúsculas non refert)."},
+"rb_chk_json":{"message0":"JSON validum est","tooltip":"Deficit nisi adumbratio JSON validum sit."},
+"rb_chk_link":{"message0":"nexum habet","tooltip":"Deficit nisi adumbratio nexum habeat (http://… aut www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Ad adumbrationem circuitus {round} plurimas regulas servavit ({n} ex {total}). Circuitus post eum eam non emendaverunt.",
 "met":"servata",
 "not met":"non servata",
-"met {n} of {total}":"{n} ex {total} servatae"
+"met {n} of {total}":"{n} ex {total} servatae",
+"at most {n} words":"plurimum {n} verba",
+"mentions {x}":"{x} nominat",
+"doesn't mention {x}":"{x} non nominat",
+"is valid JSON":"JSON validum est",
+"has a link":"nexum habet",
+"{n} words; the limit is {limit}":"{n} verba; limes {limit} est",
+"not valid JSON":"JSON invalidum",
+"no link in it":"nullum nexum"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Ad adumbrationem circuitus {round} plurimas regulas servavit ({n} ex {total}). Circuitus post eum eam non emendaverunt.",
 "met":"servata",
 "not met":"non servata",
-"table":"tabula"
+"table":"tabula",
+"at most {n} words":"plurimum {n} verba",
+"mentions {x}":"{x} nominat",
+"doesn't mention {x}":"{x} non nominat",
+"is valid JSON":"JSON validum est",
+"has a link":"nexum habet",
+"{n} words; the limit is {limit}":"{n} verba; limes {limit} est",
+"not valid JSON":"JSON invalidum",
+"no link in it":"nullum nexum"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

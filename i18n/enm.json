@@ -395,7 +395,8 @@
    "message0": "examyne the draughte agayns %1",
    "message1": "up to %1 roundes; whan it failleth, do",
    "message2": "%1",
-   "tooltip": "Claude demeth the draughte. If it failleth, the blokkes withinne rennen, and than he demeth it eft. Every rounde the examinour loketh eek that olde defautes ben nat comen agayn. If the roundes ben spent, the draughte with fewest defautes is kept, nat oonly the laste."
+   "tooltip": "Claude demeth the draughte. If it failleth, the blokkes withinne rennen, and than he demeth it eft. Every rounde the examinour loketh eek that olde defautes ben nat comen agayn. If the roundes ben spent, the draughte with fewest defautes is kept, nat oonly the laste.",
+   "message3": "and checke %1"
   },
   "rb_reset_timer": {
    "message0": "sette the orloge agayn"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "examyne the draughte agayns %1",
-   "tooltip": "Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward."
+   "tooltip": "Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward.",
+   "message1": "and checke %1"
   },
   "rb_revise": {
    "message0": "amende to correcte the examinacioun defautes %1 by the webbe",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "stopping the %1 stream on Plex",
    "tooltip": "Stoppeth oon stream (Tautulli's terminate). It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."
+  },
+  "rb_chk_max_words": {
+   "message0": "at most %1 wordes",
+   "tooltip": "Failleth if the draughte hath mo wordes; the problem telleth the trewe nombre."
+  },
+  "rb_chk_mentions": {
+   "message0": "nameth %1",
+   "tooltip": "Failleth unless the draughte conteyneth these wordes (case mattere nat)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "nameth nat %1",
+   "tooltip": "Failleth if the draughte conteyneth these wordes (case mattere nat)."
+  },
+  "rb_chk_json": {
+   "message0": "is trewe JSON",
+   "tooltip": "Failleth unless the draughte be trewe JSON."
+  },
+  "rb_chk_link": {
+   "message0": "hath a link",
+   "tooltip": "Failleth unless the draughte hath a link (http://… or www.…)."
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Wente bak to the draughte of rounde {round}:it kepte the moste rewles ({n} of {total}). The roundes after it amended it nat.",
   "met": "kept",
   "not met": "nat kept",
-  "met {n} of {total}": "{n} of {total} kept"
+  "met {n} of {total}": "{n} of {total} kept",
+  "at most {n} words": "at most {n} wordes",
+  "mentions {x}": "nameth {x}",
+  "doesn't mention {x}": "nameth nat {x}",
+  "is valid JSON": "is trewe JSON",
+  "has a link": "hath a link",
+  "{n} words; the limit is {limit}": "{n} wordes; the lemit is {limit}",
+  "not valid JSON": "nat trewe JSON",
+  "no link in it": "no link in it"
  },
  "examples": {
   "review": {
@@ -3689,7 +3719,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Wente bak to the draughte of rounde {round}:it kepte the moste rewles ({n} of {total}). The roundes after it amended it nat.",
   "met": "kept",
   "not met": "nat kept",
-  "table": "table"
+  "table": "table",
+  "at most {n} words": "at most {n} wordes",
+  "mentions {x}": "nameth {x}",
+  "doesn't mention {x}": "nameth nat {x}",
+  "is valid JSON": "is trewe JSON",
+  "has a link": "hath a link",
+  "{n} words; the limit is {limit}": "{n} wordes; the lemit is {limit}",
+  "not valid JSON": "nat trewe JSON",
+  "no link in it": "no link in it"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

@@ -88,5 +88,5 @@
   updateSchedChip();
   // For tests/editor, which runs these in Node without a browser: the editor's functions that need no page.
   window.__editorUnits = { calcText, calcValue, timePlusText, nextDueFor, actionsCrons, migrateProgram, unknownTypes, tr, codeHash, readExported,
-    localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows };
+    localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows, exactChecks };
 })();

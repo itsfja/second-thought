@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"𐍆𐍂𐌰𐌹𐌷𐌽 Claude 𐌿𐍆𐌰𐍂𐌼𐌴𐌻𐌴𐌹𐌽𐌰𐌹𐍃: %1","tooltip":"Claude 𐌿𐍆𐌰𐍂𐌼𐌴𐌻𐌹 𐌰𐌽𐌳𐌷𐌰𐍆𐌾𐌹𐌸, 𐌸𐌰𐍄𐌴𐌹 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐍄𐌰𐌿𐌾𐌰𐌽 𐌼𐌰𐌷𐍄."},
 "rb_rewrite":{"message0":"%1 𐌳𐌿 %2 𐌰𐍆𐍄𐍂𐌰 𐌼𐌴𐌻𐌴𐌹","tooltip":"𐍃𐍅𐌴: (𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹) 𐌳𐌿 (𐍂𐌰𐌶𐌳𐌰𐌹 Frankiska) 𐌰𐍆𐍄𐍂𐌰 𐌼𐌴𐌻𐌴𐌹."},
 "rb_extract":{"message0":"%1 𐌿𐍃 %2 𐌿𐍃𐍄𐌹𐌿𐌷"},
-"rb_reflect":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌱𐌹 %1 𐍃𐌰𐌹𐍈","message1":"%1 𐌲𐌰𐍃𐌰𐌹𐍈; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍄𐌰𐍅𐌴𐌹","message2":"%1","tooltip":"Claude 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍃𐍄𐌰𐌹𐌽𐍉𐍃 𐌹𐌽𐌽𐌰𐌽𐌰 𐍄𐌰𐌿𐌾𐌰𐌽𐌳, 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐍃𐌰𐌹𐍈𐌹𐌸. 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍄𐌰𐍅𐌹 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐍆𐌰𐌹𐍂𐌽𐌾𐍉𐍃 𐌽𐌹 𐌰𐍆𐍄𐍂𐌰 𐌵𐌴𐌼𐌰𐌽 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐍄𐌰𐍅𐌹 𐌿𐍃𐍄𐌹𐌿𐌷𐌹𐌸, 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌻𐌴𐌹𐍄𐌹𐌻𐌹𐍃𐍄𐍉𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌷𐌰𐌱𐌰𐌹𐌸, 𐌽𐌹 𐍃𐍀𐌴𐌳𐌹𐍃𐍄𐍉𐍃."},
-"rb_review":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌱𐌹 %1 𐍃𐌰𐌹𐍈","tooltip":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐌽𐍃. 𐌰𐍆𐌰𐍂 𐌸𐌰𐌼𐌼𐌰 “𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌲𐍉𐌸” 𐌾𐌰𐌷 “𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐌰𐌹𐍃” 𐌱𐍂𐌿𐌺𐌴𐌹."},
+"rb_reflect":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌱𐌹 %1 𐍃𐌰𐌹𐍈","message1":"%1 𐌲𐌰𐍃𐌰𐌹𐍈; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍄𐌰𐍅𐌴𐌹","message2":"%1","tooltip":"Claude 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍃𐍄𐌰𐌹𐌽𐍉𐍃 𐌹𐌽𐌽𐌰𐌽𐌰 𐍄𐌰𐌿𐌾𐌰𐌽𐌳, 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐍃𐌰𐌹𐍈𐌹𐌸. 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍄𐌰𐍅𐌹 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐍆𐌰𐌹𐍂𐌽𐌾𐍉𐍃 𐌽𐌹 𐌰𐍆𐍄𐍂𐌰 𐌵𐌴𐌼𐌰𐌽 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐍄𐌰𐍅𐌹 𐌿𐍃𐍄𐌹𐌿𐌷𐌹𐌸, 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌻𐌴𐌹𐍄𐌹𐌻𐌹𐍃𐍄𐍉𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌷𐌰𐌱𐌰𐌹𐌸, 𐌽𐌹 𐍃𐍀𐌴𐌳𐌹𐍃𐍄𐍉𐍃.","message3":"𐌾𐌰𐌷 𐍃𐌰𐌺𐌰𐌽 %1"},
+"rb_review":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌱𐌹 %1 𐍃𐌰𐌹𐍈","tooltip":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐌽𐍃. 𐌰𐍆𐌰𐍂 𐌸𐌰𐌼𐌼𐌰 “𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌲𐍉𐌸” 𐌾𐌰𐌷 “𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐌰𐌹𐍃” 𐌱𐍂𐌿𐌺𐌴𐌹.","message1":"𐌾𐌰𐌷 𐍃𐌰𐌺𐌰𐌽 %1"},
 "rb_passed":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌲𐍉𐌸"},
 "rb_problems":{"message0":"𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐌰𐌹𐍃"},
 "rb_score":{"message0":"%1 𐌿𐍃 10 𐌱𐌹 %2 𐌲𐌰𐍂𐌰𐌸"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli stear, lasta %1 dagans","tooltip":"Rind gewrita, an fyrir hvert thon thar in thans dagans geseon was, fram Tautulli: user, title, when and transcode. Hit raedeth an. Hit beheth TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli sight-tima, lasta %1 dagans","tooltip":"Rind gewrita, an fyrir hvern mann thar in thans dagans seah, fram Tautulli: user and hours. Hit raedeth an."},
 "rb_plex_scan":{"message0":"thana %1 bokere on Plex scannie","tooltip":"Scanneth an bokere fyrir niwe files. Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
-"rb_plex_stop":{"message0":"thana %1 stream on Plex stillan","tooltip":"Stilleth an stream (Tautulli terminate). Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."}
+"rb_plex_stop":{"message0":"thana %1 stream on Plex stillan","tooltip":"Stilleth an stream (Tautulli terminate). Hit ascieeth thik aefre aerest, theah naenung other ascie, and mid naenum menn til at segja ja, hit ne deth. A thessum blade naenung sothlice ne wendth."},
+"rb_chk_max_words":{"message0":"𐌽𐌹 𐌼𐌰𐌸 𐌸𐌰𐌽𐌰 %1 𐍅𐌰𐌿𐍂𐌳","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌸𐌰𐌹𐍅𐌰 𐍅𐌰𐌿𐍂𐌳 𐌼𐌰𐌸 𐌸𐌰𐌽𐌰"},
+"rb_chk_mentions":{"message0":"𐌼𐌰𐌸𐌹 %1","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌸𐌰𐌹𐍅𐌰 𐌼𐌰𐌸𐌹"},
+"rb_chk_no_mention":{"message0":"𐌽𐌹 𐌼𐌰𐌸𐌹 %1","tooltip":"𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌸𐌰𐌹𐍅𐌰 𐌼𐌰𐌸𐌹"},
+"rb_chk_json":{"message0":"𐌹𐍃𐍄 𐌲𐌰𐍅𐌰𐍃 JSON","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌲𐌰𐍅𐌰𐍃 JSON"},
+"rb_chk_link":{"message0":"𐌷𐌰𐌱𐌰𐌹𐌳 𐌱𐌰𐌽𐌳𐌹","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌱𐌰𐌽𐌳𐌹 𐌷𐌰𐌱𐌰𐌹𐌳"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐌳𐌰𐌲𐌰 𐍈𐌰𐌼𐌼𐌴𐌷","weekdays":"𐌳𐌰𐌲𐌰𐌼 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌹𐍃","weekends":"𐌳𐌰𐌲𐌰𐌼 𐌲𐌰𐌵𐌿𐌼𐌸𐌰𐌹𐍃"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"𐌰𐍆𐍄𐍂𐌰 𐌳𐌿 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐌰𐌹 𐌿𐍃 𐍄𐌰𐍅𐌾𐌰 {round}:liuga {n} 𐌰𐍆 {total} 𐌲𐌰𐍆𐌿𐌻𐍄𐌰. 𐍄𐌰𐍅𐌾𐌰 𐌰𐍆𐌰𐍂 𐌽𐌹 𐌱𐌰𐍄𐌹𐌶𐍉.",
 "met":"𐌲𐌰𐍆𐌿𐌻𐍄𐌰",
 "not met":"𐌽𐌹 𐌲𐌰𐍆𐌿𐌻𐍄𐌰",
-"met {n} of {total}":"𐌲𐌰𐍆𐌿𐌻𐍄𐌰 {n} 𐌰𐍆 {total}"
+"met {n} of {total}":"𐌲𐌰𐍆𐌿𐌻𐍄𐌰 {n} 𐌰𐍆 {total}",
+"at most {n} words":"𐌽𐌹 𐌼𐌰𐌸 𐌸𐌰𐌽𐌰 {n} 𐍅𐌰𐌿𐍂𐌳",
+"mentions {x}":"𐌼𐌰𐌸𐌹 {x}",
+"doesn't mention {x}":"𐌽𐌹 𐌼𐌰𐌸𐌹 {x}",
+"is valid JSON":"𐌹𐍃𐍄 𐌲𐌰𐍅𐌰𐍃 JSON",
+"has a link":"𐌷𐌰𐌱𐌰𐌹𐌳 𐌱𐌰𐌽𐌳𐌹",
+"{n} words; the limit is {limit}":"{n} 𐍅𐌰𐌿𐍂𐌳; 𐌸𐌰𐍄𐌰 𐌼𐌰𐍂𐌺 {limit}",
+"not valid JSON":"𐌽𐌹 𐌲𐌰𐍅𐌰𐍃 JSON",
+"no link in it":"𐌽𐌹 𐌱𐌰𐌽𐌳𐌹 𐌹𐌽 𐌹𐌶𐍅𐌹𐍃"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"aftra du frumagameleinai us tawja {round}:liuga {n} af {total} gafulta. tawja afar ni batizo.",
 "met":"gafulta",
 "not met":"ni gafulta",
-"table":"boka"
+"table":"boka",
+"at most {n} words":"ni maþ þana {n} waurd",
+"mentions {x}":"maþi {x}",
+"doesn't mention {x}":"ni maþi {x}",
+"is valid JSON":"ist gawas JSON",
+"has a link":"habaid bandi",
+"{n} words; the limit is {limit}":"{n} waurd; þata mark {limit}",
+"not valid JSON":"ni gawas JSON",
+"no link in it":"ni bandi in izwis"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

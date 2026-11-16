@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"niwe gemearc"},
 "rb_rec_set":{"message0":"sete %1 of %2 to %3","tooltip":"Wendeþ an feld gemearces (oftost gemearces wendling)."},
 "rb_receive":{"message0":"þonne ic onfo %1","tooltip":"Fremeþ þa stoccas beneoþan swa oft swa þis ærendgewrit biþ geboden. Manega endebyrdnessa magon hlystan þam ylcan ærendgewrite."},
-"rb_reflect":{"message0":"sceawa þæt frumgewrit be %1","message1":"oþ %1 ymbgangas; gif hit mistimþ, do","message2":"%1","tooltip":"Claude demeþ þæt frumgewrit. Gif hit mistimþ, þa stoccas þærinne yrnaþ, and he hit eft demeþ. Ælce ymbgange se sceawere eac locaþ þæt ærran leahtras eft ne comon. Gif þa ymbgangas ateoriaþ, þæt frumgewrit mid fewestum leahtrum biþ gehealden, na ana þæt ytemeste."},
+"rb_reflect":{"message0":"sceawa þæt frumgewrit be %1","message1":"oþ %1 ymbgangas; gif hit mistimþ, do","message2":"%1","tooltip":"Claude demeþ þæt frumgewrit. Gif hit mistimþ, þa stoccas þærinne yrnaþ, and he hit eft demeþ. Ælce ymbgange se sceawere eac locaþ þæt ærran leahtras eft ne comon. Gif þa ymbgangas ateoriaþ, þæt frumgewrit mid fewestum leahtrum biþ gehealden, na ana þæt ytemeste.","message3":"and besceawa %1"},
 "rb_reset_timer":{"message0":"edniwa tidmetend"},
 "rb_result":{"message0":"geendige and ætyw þone wæstm","tooltip":"Geendaþ þa fremminge. Ætywþ þæt þu to þam wæstme ihtest, oþþe þæt frumgewrit gif þu naht ne ihtest."},
 "rb_result_text":{"message0":"se wæstm oþ þis","tooltip":"Eall þæt to þam wæstme geiht wæs, swa gewrit."},
 "rb_retry":{"message0":"fanda eft oþ %1 siþum","message1":"%1","tooltip":"Gif hwæt þærinne mistimþ on wisan þe oþer fandung mihte gebetan (forloren gebind, gemenged andswaru), hit abit hwon and fremeþ hit eft."},
-"rb_review":{"message0":"sceawa þæt frumgewrit be %1","tooltip":"An sceawung. Bruc “frumgewrit oferferde sceawunge” and “sceawunge leahtras” æfterweard."},
+"rb_review":{"message0":"sceawa þæt frumgewrit be %1","tooltip":"An sceawung. Bruc “frumgewrit oferferde sceawunge” and “sceawunge leahtras” æfterweard.","message1":"and besceawa %1"},
 "rb_revise":{"message0":"edwyrc to betanne þære sceawunge leahtras %1 þurh þæt webb","tooltip":"Claude beteþ þa leahtras þe seo ytemeste sceawung funde."},
 "rb_rework":{"message0":"edwyrc þæt frumgewrit: %1","tooltip":"Claude writ þæt frumgewrit eft æfter þinre lare."},
 "rb_rewrite":{"message0":"edwrit %1 to %2","tooltip":"Swa: edwrit (frumgewrit) to (awend on Frencisc)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli stear, lasta %1 dagas","tooltip":"Rind gewrita, an for aelcum thinge in thans dagum geseonne, fram Tautulli: user, title, when and transcode (hwaether hit waes wendod). Hit raedeth an. Hit beheth TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli sight-tima, lasta %1 dagas","tooltip":"Rind gewrita, an for aelcum menn the in thans dagum geseah, fram Tautulli: user and hours. Hit raedeth an."},
 "rb_plex_scan":{"message0":"thone %1 bocere on Plex scannie","tooltip":"Scanneth an bocere for niwe files. Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."},
-"rb_plex_stop":{"message0":"thone %1 stream on Plex gestillan","tooltip":"Stilleth an stream (Tautulli terminate). Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."}
+"rb_plex_stop":{"message0":"thone %1 stream on Plex gestillan","tooltip":"Stilleth an stream (Tautulli terminate). Hit ascieeth the aefre aerest, theah naenung other ascie, and mid naenum menn to secgenne gea, hit ne deth. On thissum traefe naenung sothlice ne wendth."},
+"rb_chk_max_words":{"message0":"nā mā þonne %1 word","tooltip":"Fellþ gif se frumgewrit mā word hæbbe; se dōm segþ þone rihtan tācen."},
+"rb_chk_mentions":{"message0":"namieþ %1","tooltip":"Fellþ buton gif se frumgewrit þās word habe (bogan stæfcræft ne mannaþ)."},
+"rb_chk_no_mention":{"message0":"ne namieþ %1","tooltip":"Fellþ gif se frumgewrit þās word hæbbe (bogan stæfcræft ne mannaþ)."},
+"rb_chk_json":{"message0":"is riht JSON","tooltip":"Fellþ buton gif se frumgewrit næbbe riht JSON."},
+"rb_chk_link":{"message0":"hæfþ hlenc","tooltip":"Fellþ buton gif se frumgewrit næbbe hlenc (http://… oþþe www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Eode eft to þam frumgewrite of ymbgange {round}:hit hēold þā mǣstan ǣ ({n} of {total}). Þa ymbgangas æfter him ne betton hit.",
 "met":"heold",
 "not met":"ne heold",
-"met {n} of {total}":"{n} of {total} heldon"
+"met {n} of {total}":"{n} of {total} heldon",
+"at most {n} words":"nā mā þonne {n} word",
+"mentions {x}":"namieþ {x}",
+"doesn't mention {x}":"ne namieþ {x}",
+"is valid JSON":"is riht JSON",
+"has a link":"hæfþ hlenc",
+"{n} words; the limit is {limit}":"{n} word; þæt endemǣle is {limit}",
+"not valid JSON":"nis riht JSON",
+"no link in it":"nā hlenc on him"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Eode eft to þam frumgewrite of ymbgange {round}:hit hēold þā mǣstan ǣ ({n} of {total}). Þa ymbgangas æfter him ne betton hit.",
 "met":"heold",
 "not met":"ne heold",
-"table":"tæfl"
+"table":"tæfl",
+"at most {n} words":"nā mā þonne {n} word",
+"mentions {x}":"namieþ {x}",
+"doesn't mention {x}":"ne namieþ {x}",
+"is valid JSON":"is riht JSON",
+"has a link":"hæfþ hlenc",
+"{n} words; the limit is {limit}":"{n} word; þæt endemǣle is {limit}",
+"not valid JSON":"nis riht JSON",
+"no link in it":"nā hlenc on him"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

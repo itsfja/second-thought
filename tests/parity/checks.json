@@ -1,0 +1,38 @@
+{
+ "about": "The review's exact checks (#425): exact_checks in the runtime (python/second_thought/core.py) and exactChecks on the page (web/editor/19-interpreter.js) work out each [kind, value] check on the draft and give the same verdicts {rule, met, problem, shows}. tests/unit/test_checks.py and tests/editor/checks.test.cjs both read this.",
+ "exact_checks": {
+  "answers": [
+   ["one two three", [["max_words", 5]],
+    [{"rule": "at most 5 words", "met": true, "problem": "", "shows": ""}]],
+   ["one two three four five six", [["max_words", 5]],
+    [{"rule": "at most 5 words", "met": false, "problem": "6 words; the limit is 5", "shows": ""}]],
+   ["one two three four five six", [["max_words", 6]],
+    [{"rule": "at most 6 words", "met": true, "problem": "", "shows": ""}]],
+   ["Rye bread is best", [["mentions", "rye"]],
+    [{"rule": "mentions rye", "met": true, "problem": "", "shows": ""}]],
+   ["Rye bread is best", [["mentions", "sourdough"]],
+    [{"rule": "mentions sourdough", "met": false, "problem": "doesn't mention sourdough", "shows": ""}]],
+   ["no clichés here", [["no_mention", "clichés"]],
+    [{"rule": "doesn't mention clichés", "met": false, "problem": "mentions clichés", "shows": ""}]],
+   ["hello there", [["no_mention", "rye"]],
+    [{"rule": "doesn't mention rye", "met": true, "problem": "", "shows": ""}]],
+   ["{\"a\": 1}", [["json", null]],
+    [{"rule": "is valid JSON", "met": true, "problem": "", "shows": ""}]],
+   ["not json {", [["json", null]],
+    [{"rule": "is valid JSON", "met": false, "problem": "not valid JSON", "shows": ""}]],
+   ["see https://example.com/x for more", [["link", null]],
+    [{"rule": "has a link", "met": true, "problem": "", "shows": ""}]],
+   ["see www.example.com now", [["link", null]],
+    [{"rule": "has a link", "met": true, "problem": "", "shows": ""}]],
+   ["no address here", [["link", null]],
+    [{"rule": "has a link", "met": false, "problem": "no link in it", "shows": ""}]],
+   ["a b c", [["max_words", 2], ["mentions", "b"], ["link", null]],
+    [{"rule": "at most 2 words", "met": false, "problem": "3 words; the limit is 2", "shows": ""},
+     {"rule": "mentions b", "met": true, "problem": "", "shows": ""},
+     {"rule": "has a link", "met": false, "problem": "no link in it", "shows": ""}]],
+   ["anything", [], []],
+   ["anything", [["made_up_kind", 1]], []],
+   ["anything", null, []]
+  ]
+ }
+}

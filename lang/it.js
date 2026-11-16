@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nuovo record"},
 "rb_rec_set":{"message0":"imposta %1 di %2 a %3","tooltip":"Cambia un campo di un record (di solito una variabile record)."},
 "rb_receive":{"message0":"quando ricevo %1","tooltip":"Esegue i blocchi sotto ogni volta che questo messaggio viene trasmesso. Più script possono ascoltare lo stesso messaggio."},
-"rb_reflect":{"message0":"rivedi la bozza secondo %1","message1":"fino a %1 giri; se non passa, fai","message2":"%1","tooltip":"Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima."},
+"rb_reflect":{"message0":"rivedi la bozza secondo %1","message1":"fino a %1 giri; se non passa, fai","message2":"%1","tooltip":"Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima.","message3":"e controlla %1"},
 "rb_reset_timer":{"message0":"azzera il timer"},
 "rb_result":{"message0":"termina e mostra il risultato","tooltip":"Termina l'esecuzione. Mostra ciò che hai aggiunto al risultato, o la bozza se non hai aggiunto nulla."},
 "rb_result_text":{"message0":"il risultato finora","tooltip":"Tutto ciò che è stato aggiunto al risultato, come testo."},
 "rb_retry":{"message0":"riprova fino a %1 volte","message1":"%1","tooltip":"Se qualcosa all'interno fallisce in un modo che un secondo tentativo potrebbe risolvere (una connessione caduta, una risposta incomprensibile), aspetta un po' e lo esegue di nuovo."},
-"rb_review":{"message0":"rivedi la bozza secondo %1","tooltip":"Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione»."},
+"rb_review":{"message0":"rivedi la bozza secondo %1","tooltip":"Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione».","message1":"e controlla %1"},
 "rb_revise":{"message0":"rivedi per correggere i problemi della revisione %1 usando il web","tooltip":"Claude corregge i problemi trovati dall'ultima revisione."},
 "rb_rework":{"message0":"rielabora la bozza: %1","tooltip":"Claude riscrive la bozza seguendo la tua istruzione."},
 "rb_rewrite":{"message0":"riscrivi %1 per %2","tooltip":"Per esempio: riscrivi (bozza) per (tradurre in francese)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"cronologia Tautulli, ultimi %1 giorni","tooltip":"Una lista di record, una per ogni cosa guardata in quei giorni, da Tautulli: user, title, when e transcode (se era transcodificata). Legge soltanto. Serve TAUTULLI_URL e TAUTULLI_API_KEY in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"tempo di visione Tautulli, ultimi %1 giorni","tooltip":"Una lista di record, una per ogni persona che ha guardato in quei giorni, da Tautulli: user e hours. Legge soltanto."},
 "rb_plex_scan":{"message0":"scansione della libreria %1 su Plex","tooltip":"Fa la scansione di una libreria per cercare file nuovi. Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."},
-"rb_plex_stop":{"message0":"fermare lo stream %1 su Plex","tooltip":"Ferma uno stream (il terminate di Tautulli). Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."}
+"rb_plex_stop":{"message0":"fermare lo stream %1 su Plex","tooltip":"Ferma uno stream (il terminate di Tautulli). Te lo chiede ogni volta, anche quando nient'altro lo fa, e senza nessuno per dire sì, non succede. In questa pagina nulla cambia davvero."},
+"rb_chk_max_words":{"message0":"al massimo %1 parole","tooltip":"Fallisce se la bozza ha più parole; il problema indica il numero reale."},
+"rb_chk_mentions":{"message0":"menziona %1","tooltip":"Fallisce se la bozza non contiene queste parole (maiuscole/minuscole irrilevanti)."},
+"rb_chk_no_mention":{"message0":"non menziona %1","tooltip":"Fallisce se la bozza contiene queste parole (maiuscole/minuscole irrilevanti)."},
+"rb_chk_json":{"message0":"è JSON valido","tooltip":"Fallisce se la bozza non è JSON valido."},
+"rb_chk_link":{"message0":"ha un link","tooltip":"Fallisce se la bozza non ha un link (http://… o www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ogni giorno","weekdays":"nei giorni feriali","weekends":"nel fine settimana"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Tornato alla bozza del giro {round}:rispettava più regole ({n} su {total}). I giri successivi non l'hanno migliorata.",
 "met":"rispettata",
 "not met":"non rispettata",
-"met {n} of {total}":"{n} su {total} rispettate"
+"met {n} of {total}":"{n} su {total} rispettate",
+"at most {n} words":"al massimo {n} parole",
+"mentions {x}":"menziona {x}",
+"doesn't mention {x}":"non menziona {x}",
+"is valid JSON":"è JSON valido",
+"has a link":"ha un link",
+"{n} words; the limit is {limit}":"{n} parole; il limite è {limit}",
+"not valid JSON":"non è JSON valido",
+"no link in it":"nessun link"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Tornato alla bozza del giro {round}:rispettava più regole ({n} su {total}). I giri successivi non l'hanno migliorata.",
 "met":"rispettata",
 "not met":"non rispettata",
-"table":"tabella"
+"table":"tabella",
+"at most {n} words":"al massimo {n} parole",
+"mentions {x}":"menziona {x}",
+"doesn't mention {x}":"non menziona {x}",
+"is valid JSON":"è JSON valido",
+"has a link":"ha un link",
+"{n} words; the limit is {limit}":"{n} parole; il limite è {limit}",
+"not valid JSON":"non è JSON valido",
+"no link in it":"nessun link"
 }
 };

@@ -440,6 +440,19 @@
     const vname = b => b.getField("VAR").getText();
     const enabled = b => !b.isEnabled || b.isEnabled();
     const listVar = t => t && t.type === "variables_get" ? pyStr(vname(t)) : "None";
+    // A review block's 'and check' blocks, as a Python list of (kind, value) for R.review(..., checks=...) (#425).
+    const pyChecks = bb => {
+      const parts = [];
+      for (let t = bb.getInputTargetBlock("CHECKS"); t; t = t.getNextBlock()) {
+        if (!enabled(t)) continue;
+        if (t.type === "rb_chk_max_words") parts.push('("max_words", ' + inp(t, "N", "0") + ')');
+        else if (t.type === "rb_chk_mentions") parts.push('("mentions", ' + inp(t, "TEXT", '""') + ')');
+        else if (t.type === "rb_chk_no_mention") parts.push('("no_mention", ' + inp(t, "TEXT", '""') + ')');
+        else if (t.type === "rb_chk_json") parts.push('("json", None)');
+        else if (t.type === "rb_chk_link") parts.push('("link", None)');
+      }
+      return "[" + parts.join(", ") + "]";
+    };
 
     function inp(b, name, dflt){ const t = b.getInputTargetBlock(name); return t ? expr(t) : dflt; }
     function expr(b){
@@ -652,15 +665,16 @@
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
           case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
-          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ")"); break;
+          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ", checks=" + pyChecks(b) + ")"); break;
           case "rb_reflect": {
-            const crit = tmp("criteria"), max = tmp("max_rounds"), rnd = tmp("round");
+            const crit = tmp("criteria"), chk = tmp("checks"), max = tmp("max_rounds"), rnd = tmp("round");
             E(crit + " = " + I("CRITERIA", '""'));
+            E(chk + " = " + pyChecks(b));
             E(max + " = R.rounds(" + I("ROUNDS", "3") + ")");
             E("with R.reviewing():");
             out.push(pad + "    for " + rnd + " in range(1, " + max + " + 2):");
             out.push(pad + "        R.tick()");
-            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True):");
+            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True, checks=" + chk + "):");
             out.push(pad + "            break");
             out.push(pad + "        if " + rnd + " > " + max + ":");
             out.push(pad + "            R.out_of_rounds()");

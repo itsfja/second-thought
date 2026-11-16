@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"שטרא חדתא"},
 "rb_rec_set":{"message0":"שוי %1 ד-%2 ל-%3","tooltip":"משני חקלא חד בשטרא (בדרך כלל משתניא דשטרא)."},
 "rb_receive":{"message0":"כד אנא מקבל %1","tooltip":"מרהט לבנין דלתחתא כל אימת דאגרתא הדא מתכרזא. סדרין סגיאין יכלין למשמע לאגרתא חדא."},
-"rb_reflect":{"message0":"בדוק טופסא כלקבל %1","message1":"עד %1 סבובין; כד נפיל, עביד","message2":"%1","tooltip":"Claude בדיק טופסא. אי נפיל, לבנין דבגוה רהטין, ובתר כן בדיק תוב. בכל סבובא בודקא בדיק נמי דפגמין קדמאין לא תבו. אי סבוביא שלמו, טופסא דאית ביה פגמין זעירין נטיר, לא בתראה לחוד."},
+"rb_reflect":{"message0":"בדוק טופסא כלקבל %1","message1":"עד %1 סבובין; כד נפיל, עביד","message2":"%1","tooltip":"Claude בדיק טופסא. אי נפיל, לבנין דבגוה רהטין, ובתר כן בדיק תוב. בכל סבובא בודקא בדיק נמי דפגמין קדמאין לא תבו. אי סבוביא שלמו, טופסא דאית ביה פגמין זעירין נטיר, לא בתראה לחוד.","message3":"ܡܦܕܐ %1"},
 "rb_reset_timer":{"message0":"אתקין שעונא"},
 "rb_result":{"message0":"שלים ואחוי פירא","tooltip":"משלים הלוכא. מחוי מה דאוספת לפירא, או טופסא אי לא אוספת מדעם."},
 "rb_result_text":{"message0":"פירא עד כען","tooltip":"כל מה דאתוסף לפירא, ככתבא."},
 "rb_retry":{"message0":"נסי תוב עד %1 זמנין","message1":"%1","tooltip":"אי מדעם בגוה נפיל באורחא דנסיונא תניינא יכיל לתקנא (קשרא דאתפסק, פתגמא משבשא), מתין קליל ומרהט תוב."},
-"rb_review":{"message0":"בדוק טופסא כלקבל %1","tooltip":"בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\"."},
+"rb_review":{"message0":"בדוק טופסא כלקבל %1","tooltip":"בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\".","message1":"ܡܦܕܐ %1"},
 "rb_revise":{"message0":"תקן פגמי בדיקתא %1 בסיוע רשתא","tooltip":"Claude מתקן פגמיא דבדיקתא בתרייתא אשכחת."},
 "rb_rework":{"message0":"עביד טופסא מן חדת: %1","tooltip":"Claude כתב טופסא מן חדת כפקודתך."},
 "rb_rewrite":{"message0":"כתוב %1 מן חדת: %2","tooltip":"כגון: כתוב (טופסא) מן חדת: (תרגם ללשן צרפתאה)."},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli tarikh, akhr %1 ywm","tooltip":"rhta dktba, lda lkl sh shwh f had ywm, mn Tautulli: user, title, aymt w transcode. bqra fqt. hty' TAUTULLI_URL w TAUTULLI_API_KEY b second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli wqt shw, akhr %1 ywm","tooltip":"rhta dktba, lda lkl sh shwh f had ywm, mn Tautulli: user w sb'. bqra fqt."},
 "rb_plex_scan":{"message0":"mswh ktb %1 b Pi-hole","tooltip":"mswh ktb l ashya jyda. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
-"rb_plex_stop":{"message0":"wqf strym %1 b Pi-hole","tooltip":"wqf strym (Tautulli terminate). shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."}
+"rb_plex_stop":{"message0":"wqf strym %1 b Pi-hole","tooltip":"wqf strym (Tautulli terminate). shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
+"rb_chk_max_words":{"message0":"ܠܐ ܝܬܝܪ ܡܢ %1 ܡܠ̈ܝܪ","tooltip":"ܠܐ ܬܩܢ ܐܢ ܡܠ̈ܝܢ ܝܬܝܪ ܡܢ"},
+"rb_chk_mentions":{"message0":"ܐܡܠ %1","tooltip":"ܠܐ ܬܩܢ ܐܢ ܐܡܪ"},
+"rb_chk_no_mention":{"message0":"ܠܐ ܐܡܠ %1","tooltip":"ܬܩܢ ܐܢ ܐܡܪ"},
+"rb_chk_json":{"message0":"JSON ܠܘيܠܐ","tooltip":"ܠܐ ܬܩܝܢ JSON"},
+"rb_chk_link":{"message0":"ܐܘتܐ ܠܘيܠܐ","tooltip":"ܠܐ ܬܩܢ ܐܘܬܐ"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -1189,7 +1194,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"תב לטופסא מן סבובא {round}:ܝܬܝܪ ܡܢ ܫܘܦܪ̈ܐ ({n} ܡܢ {total}). סבוביא דבתריה לא אתקנוהי.",
 "met":"ܥܒܕ",
 "not met":"ܠܐ ܥܒܕ",
-"met {n} of {total}":"ܥܒܕ {n} ܡܢ {total}"
+"met {n} of {total}":"ܥܒܕ {n} ܡܢ {total}",
+"at most {n} words":"ܠܐ ܝܬܝܪ ܡܢ {n} ܡܠ̈ܝܪ",
+"mentions {x}":"ܐܡܠ {x}",
+"doesn't mention {x}":"ܠܐ ܐܡܠ {x}",
+"is valid JSON":"JSON ܠܘيܠܐ",
+"has a link":"ܐܘتܐ ܠܘيܠܐ",
+"{n} words; the limit is {limit}":"{n} ܡܠ̈ܝܪ; ܣܟܡܐ {limit}",
+"not valid JSON":"ܠܐ ܠܘيܠܐ JSON",
+"no link in it":"ܠܐ ܐܘتܐ"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2340,7 +2353,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"תב לטופסא מן סבבא {round}:ܝܬܝܪ ܡܢ ܫܘܦܪ̈ܐ ({n} ܡܢ {total}). סבביא דבתרה לא שפרו עליה.",
 "met":"ܥܒܕ",
 "not met":"ܠܐ ܥܒܕ",
-"table":"ܠܘܚܐ"
+"table":"ܠܘܚܐ",
+"at most {n} words":"ܠܐ ܝܬܝܪ ܡܢ {n} ܡܠ̈ܝܪ",
+"mentions {x}":"ܐܡܠ {x}",
+"doesn't mention {x}":"ܠܐ ܐܡܠ {x}",
+"is valid JSON":"JSON ܠܘيܠܐ",
+"has a link":"ܐܘتܐ ܠܘيܠܐ",
+"{n} words; the limit is {limit}":"{n} ܡܠ̈ܝܪ; ܣܟܡܐ {limit}",
+"not valid JSON":"ܠܐ ܠܘيܠܐ JSON",
+"no link in it":"ܠܐ ܐܘتܐ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

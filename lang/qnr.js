@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"ᚾᚢ ᛋᚴᚱᛅ"},
 "rb_rec_set":{"message0":"ᛋᛁᛏ %1 ᛅᚠ %2 ᛁ %3","tooltip":"ᛒᚱᛅᚢᛏᛁᛦ ᛅᛁᚾᚢᛘ ᚱᛅᛁᛏ ᛋᚴᚱᛅᚱ (ᚢᚠᛏᛅᛋᛏ ᛋᚴᚱᛅᚱ-ᛒᚱᛅᚢᛏᚢ)."},
 "rb_receive":{"message0":"ᚦᛅ ᛁᚱ ᛁᚴ ᚠᛅ %1","tooltip":"ᚴᛅᚢᚱᛁᛦ ᚴᚢᛒᛅᚾᛅ ᚼᛁᚱ ᚠᚢᚱᛁᛦ ᚾᛁᚦᛅᚾ ᚼᚢᛁᚱᛏ ᛋᛁᚾ ᛁᚱ ᚦᛁᛋᛁ ᛒᚢᚦ ᛁᚱᚢ ᚴᛅᚢᛚᚢᚦ. ᛘᛅᚢᚱᚴ ᚠᛁᚱᛚᛁ ᛘᛁᚴᛅ ᚼᛚᚢᚦᛅ ᚬ ᛋᛅᚢᛘᚢ ᛒᚢᚦ."},
-"rb_reflect":{"message0":"ᛏᚢᛘ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᛒᛏᛁᛦ %1","message1":"ᛅᛚᛏ ᛅᛏ %1 ᚢᛘᚠᛁᚱᚦᚢᛘ; ᚦᛅ ᛁᚱ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛁᚱ","message2":"%1","tooltip":"Claude ᛏᚢᛘᛁᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ. ᛁᚠ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛅᚢᚱᛅ ᚴᚢᛒᛅᚱᚾᛁᛦ ᚼᛁᚱ ᛁᚾᛁ, ᚢᚴ ᚦᛅ ᛏᚢᛘᛁᛦ ᚼᛅᚾ ᛅᛒᛏᚱ. ᚼᚢᛁᚱᛁᛅ ᚢᛘᚠᛁᚱᚦ ᛋᚴᚢᚦᛅᛦ ᛏᚢᛘᛅᚱᛁᚾ ᚢᚴ ᛅᛏ ᚠᚢᚱᛁ ᛒᚱᛁᛋᛏᛁᛦ ᚼᛅᚠᛁ ᛅᛁᚴᛁ ᛅᛒᛏᚱ ᚴᚢᛘᛁᛏ. ᛁᚠ ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᚦᚱᛁᚢᛏᛅ, ᛁᚱ ᚼᛅᛚᛏᛁᛏ ᚦᚢᛁ ᚠᚱᚢᛘᚱᛁᛏᛁ ᛁᚱ ᚠᛅᛋᛏᛅ ᛒᚱᛁᛋᛏᛁ ᚼᛁᚠᛁᛦ, ᛅᛁᚴᛁ ᛅᛁᚾᚢᚴᛁᛋ ᚼᛁᚾᚢ ᛋᛁᚦᛅᛋᛏᛅ."},
+"rb_reflect":{"message0":"ᛏᚢᛘ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᛒᛏᛁᛦ %1","message1":"ᛅᛚᛏ ᛅᛏ %1 ᚢᛘᚠᛁᚱᚦᚢᛘ; ᚦᛅ ᛁᚱ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛁᚱ","message2":"%1","tooltip":"Claude ᛏᚢᛘᛁᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ. ᛁᚠ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛅᚢᚱᛅ ᚴᚢᛒᛅᚱᚾᛁᛦ ᚼᛁᚱ ᛁᚾᛁ, ᚢᚴ ᚦᛅ ᛏᚢᛘᛁᛦ ᚼᛅᚾ ᛅᛒᛏᚱ. ᚼᚢᛁᚱᛁᛅ ᚢᛘᚠᛁᚱᚦ ᛋᚴᚢᚦᛅᛦ ᛏᚢᛘᛅᚱᛁᚾ ᚢᚴ ᛅᛏ ᚠᚢᚱᛁ ᛒᚱᛁᛋᛏᛁᛦ ᚼᛅᚠᛁ ᛅᛁᚴᛁ ᛅᛒᛏᚱ ᚴᚢᛘᛁᛏ. ᛁᚠ ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᚦᚱᛁᚢᛏᛅ, ᛁᚱ ᚼᛅᛚᛏᛁᛏ ᚦᚢᛁ ᚠᚱᚢᛘᚱᛁᛏᛁ ᛁᚱ ᚠᛅᛋᛏᛅ ᛒᚱᛁᛋᛏᛁ ᚼᛁᚠᛁᛦ, ᛅᛁᚴᛁ ᛅᛁᚾᚢᚴᛁᛋ ᚼᛁᚾᚢ ᛋᛁᚦᛅᛋᛏᛅ.","message3":"ᚢᚴ ᛅᚦᚢᚴᛅ %1"},
 "rb_reset_timer":{"message0":"ᛁᚾᛏᚱᛋᛁᛏ ᛋᛏᚢᚾᛏᛅᛘᛅᛚᛁ"},
 "rb_result":{"message0":"ᛚᚢᚴ ᚢᚴ ᛋᚢᚾ ᚢᚱᛋᛚᛁᛏᛁᚾ","tooltip":"ᛚᚢᚴᛦ ᚠᛁᚱᚦᛁᚾᛁ. ᛋᚢᚾᛁᛦ ᚼᚢᛅᛏ ᚦᚢ ᛒᛅᛏᛁᛦ ᚢᛁᚦ ᚢᚱᛋᛚᛁᛏᛁᚾ, ᛁᚦᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᚠ ᚦᚢ ᛒᛅᛏᛁᛦ ᛁᚴᚢ ᚢᛁᚦ."},
 "rb_result_text":{"message0":"ᚢᚱᛋᛚᛁᛏᛁᚾ ᚼᛁᚴᛅᛏ ᛏᛁᛚ","tooltip":"ᛅᛚᛏ ᛁᚱ ᛒᛅᛏ ᚢᛅᚱ ᚢᛁᚦ ᚢᚱᛋᛚᛁᛏᛁᚾ, ᛋᛁᛘ ᚱᛁᛏ."},
 "rb_retry":{"message0":"ᚱᛅᚢᚾ ᛅᛒᛏᚱ ᛅᛚᛏ ᛅᛏ %1 ᛋᛁᚾᚢᛘ","message1":"%1","tooltip":"ᛁᚠ ᚾᛅᚴᚢᛅᛏ ᚼᛁᚱ ᛁᚾᛁ ᛒᚱᛁᚴᛋᚴ ᛋᚢᛅ ᛅᛏ ᛅᚢᚾᚢᛦ ᛏᛁᛚᚱᛅᚢᚾ ᛘᛅᛏᛁ ᛒᚢᛏᛅ (ᛋᛚᛁᛏᛁᛏ ᛋᛅᛘᛒᛅᚾᛏ, ᚱᚢᚴᛚᛅᛏ ᛋᚢᛅᚱ), ᛒᛁᚦᚱ ᚦᛅᛏ ᛚᛁᛏ ᚢᚴ ᚴᛅᚢᚱᛁᛦ ᚦᛅᛏ ᛅᛒᛏᚱ."},
-"rb_review":{"message0":"ᛏᚢᛘ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᛒᛏᛁᛦ %1","tooltip":"ᛅᛁᚾ ᛏᚢᛘᛦ. ᚾᚢᛏᛅ „ᚠᚱᚢᛘᚱᛁᛏ ᛋᛏᚢᚦᛋᚴ ᛏᚢᛘ“ ᚢᚴ „ᛒᚱᛁᛋᛏᛁᛦ ᛏᚢᛘᛋᛁᚾᛋ“ ᛁᛒᛏᛁᛦ ᚬ."},
+"rb_review":{"message0":"ᛏᚢᛘ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᛒᛏᛁᛦ %1","tooltip":"ᛅᛁᚾ ᛏᚢᛘᛦ. ᚾᚢᛏᛅ „ᚠᚱᚢᛘᚱᛁᛏ ᛋᛏᚢᚦᛋᚴ ᛏᚢᛘ“ ᚢᚴ „ᛒᚱᛁᛋᛏᛁᛦ ᛏᚢᛘᛋᛁᚾᛋ“ ᛁᛒᛏᛁᛦ ᚬ.","message1":"ᚢᚴ ᛅᚦᚢᚴᛅ %1"},
 "rb_revise":{"message0":"ᛁᚾᛏᚱᛒᚢᛏ ᛅᛏ ᛚᛅᚴᛅ ᛒᚱᛁᛋᛏᛁ ᛏᚢᛘᛋᛁᚾᛋ %1 ᛘᛁᚦ ᚢᛁᚠᚾᚢᛘ","tooltip":"Claude ᛚᛅᚴᛅᛦ ᚦᛅ ᛒᚱᛁᛋᛏᛁ ᛁᚱ ᚼᛁᚾ ᛋᛁᚦᛅᛋᛏᛁ ᛏᚢᛘᛦ ᚠᛅᚾ."},
 "rb_rework":{"message0":"ᛁᚾᛏᚱᚴᛁᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ: %1","tooltip":"Claude ᚱᛁᛏᛅᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛅᛒᛏᚱ ᛁᛒᛏᛁᛦ ᚠᚢᚱᛁᚱᛘᛅᛚᚢᛘ ᚦᛁᚾᚢᛘ."},
 "rb_rewrite":{"message0":"ᚱᛁᛏᛅ %1 ᛅᛒᛏᚱ ᛏᛁᛚ %2","tooltip":"ᛋᚢᛅ ᛋᛁᛘ: ᚱᛁᛏᛅ (ᚠᚱᚢᛘᚱᛁᛏ) ᛅᛒᛏᚱ ᛏᛁᛚ (ᛋᚾᚢ ᚬ ᚠᚱᛅᚴᚾᛁᛋᚴᛅ ᛏᚢᚴᚢ)."},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli ᛋᛅᚴᛅ, ᛋᛁᛏᚢᛋᛏᚢ %1 ᛏᛅᚴᛅ","tooltip":"ᛚᛁᛋᛏᛁ ᚠᛅᛁᚱᛋᛚᚾᛅ, ᛅᛁᚾ ᚠᚢᚱᛁᛦ ᚼᚢᛅᛏᛅ ᛋᛅᚴᚦ ᚢᛅᚱ ᛅ ᚦᛁᛋᛅ ᛏᛅᚴᛅ, ᚢᚱ Tautulli: user, title, when ᚢᚴ transcode (ᚼᚢᚱᛏ ᚦᛅᛏ ᚢᛅᚱ ᚢᛘᛒᚱᛅᚢᛏ). ᚼᛅᚾ ᛚᛁᛋ only. ᚦᛅᚱᚠ TAUTULLI_URL ᚢᚴ TAUTULLI_API_KEY ᛁ second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli ᛅᚼᛏᛁᛘᛅᛚ, ᛋᛁᛏᚢᛋᛏᚢ %1 ᛏᛅᚴᛅ","tooltip":"ᛚᛁᛋᛏᛁ ᚠᛅᛁᚱᛋᛚᚾᛅ, ᛅᛁᚾ ᚠᚢᚱᛁᛦ ᚼᚢᛁᚱᚾ ᛘᛅᚾ ᛋᛁᛘ ᛋᛅᚴᚦᛁ ᛅ ᚦᛁᛋᛅ ᛏᛅᚴᛅ, ᚢᚱ Tautulli: user ᚢᚴ hours. ᚼᛅᚾ ᛚᛁᛋ only."},
 "rb_plex_scan":{"message0":"ᛋᚴᛅᚾᛅ %1 ᛋᛅᚠᚾᛒᚢᚴᛁᚾᛅ ᛅ Plex","tooltip":"ᛋᚴᛅᚾᛅᛦ ᛅᛁᚾᛅ ᛋᛅᚠᚾᛒᚢᚴ ᚠᚢᚱᛁᛦ ᚾᚢᛁᛅᛦ ᛋᚴᚱᛅᚱ. ᚼᛅᚾ ᛋᛒᚢᚱ ᚦᛁᚴ ᛅᛚᛏᛅᚠ ᚠᚢᚱᛋᛏ, ᚦᚢᛏ ᛁᚴᛁᚱᛏ ᛅᚾᛅᛏ ᛋᛒᚢᚱᛁ, ᚢᚴ ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᛏᛁᛚ ᛅᛏ ᛋᛁᚴᛁᛅ ᛁᛅ, ᚴᛁᚱᛁᛋᛏ ᛁᚴᛁᚱᛏ. ᛅ ᚦᛁᛋᛅᚱᛁ ᛋᛁᛏᚢ ᛒᚱᛅᚢᛏᛁᛋᛏ ᛁᚴᛁᚱᛏ ᛁ ᛅᛚᚢᚱᚢ."},
-"rb_plex_stop":{"message0":"ᛋᛏᚢᛒᛅ ᛋᛏᚱᛅᚢᛘᛁᚾ %1 ᛅ Plex","tooltip":"ᛋᛏᚢᛒᛅᛦ ᛅᛁᚾ ᛋᛏᚱᛅᚢᛘ (Tautulli terminate). ᚼᛅᚾ ᛋᛒᚢᚱ ᚦᛁᚴ ᛅᛚᛏᛅᚠ ᚠᚢᚱᛋᛏ, ᚦᚢᛏ ᛁᚴᛁᚱᛏ ᛅᚾᛅᛏ ᛋᛒᚢᚱᛁ, ᚢᚴ ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᛏᛁᛚ ᛅᛏ ᛋᛁᚴᛁᛅ ᛁᛅ, ᚴᛁᚱᛁᛋᛏ ᛁᚴᛁᚱᛏ. ᛅ ᚦᛁᛋᛅᚱᛁ ᛋᛁᛏᚢ ᛒᚱᛅᚢᛏᛁᛋᛏ ᛁᚴᛁᚱᛏ ᛁ ᛅᛚᚢᚱᚢ."}
+"rb_plex_stop":{"message0":"ᛋᛏᚢᛒᛅ ᛋᛏᚱᛅᚢᛘᛁᚾ %1 ᛅ Plex","tooltip":"ᛋᛏᚢᛒᛅᛦ ᛅᛁᚾ ᛋᛏᚱᛅᚢᛘ (Tautulli terminate). ᚼᛅᚾ ᛋᛒᚢᚱ ᚦᛁᚴ ᛅᛚᛏᛅᚠ ᚠᚢᚱᛋᛏ, ᚦᚢᛏ ᛁᚴᛁᚱᛏ ᛅᚾᛅᛏ ᛋᛒᚢᚱᛁ, ᚢᚴ ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᛏᛁᛚ ᛅᛏ ᛋᛁᚴᛁᛅ ᛁᛅ, ᚴᛁᚱᛁᛋᛏ ᛁᚴᛁᚱᛏ. ᛅ ᚦᛁᛋᛅᚱᛁ ᛋᛁᛏᚢ ᛒᚱᛅᚢᛏᛁᛋᛏ ᛁᚴᛁᚱᛏ ᛁ ᛅᛚᚢᚱᚢ."},
+"rb_chk_max_words":{"message0":"ᛁ ᛘᛁᛋᛏᛅ ᛚᛅᚴᛁ %1 ᚢᚱᚦ","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᛁᚠ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᚬ ᚠᛚᛅᛁᚱᛁ ᚢᚱᚦ; ᚢᛅᚾᛏᛅᛘᛅᛚᛁᚦ ᛋᛁᚴᛁᛦ ᚱᛁᛏᛅ ᛏᛅᚢᛚᚢ."},
+"rb_chk_mentions":{"message0":"ᚾᛁᚠᚾᛁᛦ %1","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛅᛚᛏᛁ ᚦᛁᛋᛁ ᚢᚱᚦ (ᛋᛏᛅᚠᛋᛁᛏᚾᛁᚴ ᛋᚴᛁᛒᛏᛁᛦ ᛁᚴᛁ ᛘᛅᛚᛁ)."},
+"rb_chk_no_mention":{"message0":"ᚾᛁᚠᚾᛁᛦ ᛅᛁᚴᛁ %1","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᛁᚠ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛁᛚᛏᚢᛦ ᚦᛁᛋᛁ ᚢᚱᚦ (ᛋᛏᛅᚠᛋᛁᛏᚾᛁᚴ ᛋᚴᛁᛒᛏᛁᛦ ᛁᚴᛁ ᛘᛅᛚᛁ)."},
+"rb_chk_json":{"message0":"ᛁᚱ ᚴᛁᛚᛏ JSON","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛋᛁ ᚴᛁᛚᛏ JSON."},
+"rb_chk_link":{"message0":"ᚬ ᛏᛁᚴᛁᛚ","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛅᛚᛏᛁ ᛏᛁᚴᛁᛚ (http://… ᛁᚦᛅ ᚢ.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ᚼᚢᛁᚱᚾ ᛏᛅᚴ","weekdays":"ᚢᛁᚱᚴᛅ ᛏᛅᚴᛅ","weekends":"ᚢᛘ ᚼᛁᛚᚴᛅᛦ"},
@@ -1189,7 +1194,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ᚠᚢᚱ ᛅᛒᛏᚱ ᛏᛁᛚ ᚠᚱᚢᛘᚱᛁᛏᛋ ᚢᛦ ᚢᛘᚠᛁᚱᚦ {round}:ᚼᛅᚾ ᚼᛅᚠᚦᛁ ᚠᛚᛁᛋᛏᛅ ᛚᛅᚢᚴ ᚼᛅᛚᛏᛁᚾ ({n} ᛅᚠ {total}). ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᛁᛒᛏᛁᛦ ᚦᛅᛏ ᛒᚢᛏᚢ ᛅᛁᚴᛁ ᚢᛘ.",
 "met":"ᚼᛅᛚᛏᛁᚾ",
 "not met":"ᛅᛁᚴᛁ ᚼᛅᛚᛏᛁᚾ",
-"met {n} of {total}":"{n} ᛅᚠ {total} ᚼᛅᛚᛏᚾᛁᛦ"
+"met {n} of {total}":"{n} ᛅᚠ {total} ᚼᛅᛚᛏᚾᛁᛦ",
+"at most {n} words":"ᛁ ᛘᛁᛋᛏᛅ ᛚᛅᚴᛁ {n} ᚢᚱᚦ",
+"mentions {x}":"ᚾᛁᚠᚾᛁᛦ {x}",
+"doesn't mention {x}":"ᚾᛁᚠᚾᛁᛦ ᛅᛁᚴᛁ {x}",
+"is valid JSON":"ᛁᚱ ᚴᛁᛚᛏ JSON",
+"has a link":"ᚬ ᛏᛁᚴᛁᛚ",
+"{n} words; the limit is {limit}":"{n} ᚢᚱᚦ; ᚼᛅᛘᛅᚱᚴᛁᚦ ᛁᚱ {limit}",
+"not valid JSON":"ᚢᚴᛁᛚᛏ JSON",
+"no link in it":"ᛁᚴᛁᚾ ᛏᛁᚴᛁᛚ"
 },
 "examples":{
 "review":{"title":"ᚼᚱᛁᚴᛦ ᛏᚢᛘᛋ","desc":"Claude ᚱᛁᛏᛅᛦ ᚢᛘ autolyse, ᛒᚱᚢᚠᛅᛦ ᚦᛅᛏ ᛁᛒᛏᛁᛦ ᚱᛁᚴᛚᚢᛘ ᚦᛁᚾᚢᛘ, ᚢᚴ ᛚᛅᚴᛅᛦ ᚼᚢᛅᛏᚴᛁ ᛁᚱ ᛒᚱᛁᚴᛋᚴ, ᛅᛚᛏ ᛅᛏ 3 ᚢᛘᚠᛁᚱᚦᚢᛘ.","tip":"ᛒᚱᛅᚢᛏ ᚢᛁᚱᚴᛁᚾᚢ ᛁ ᛒᛚᛅ ᚴᚢᛒᛁᚾᚢᛘ ᚢᚴ ᚱᛁᚴᛚᚢᚾᚢᛘ ᛁ ᚼᛁᚾᚢᛘ ᛒᚢᚱᛒᚢᚱᛅᛚᛁᛏᛅ."},
@@ -2340,7 +2353,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Fór aptr til frumrits ór umferð {round}:hann hafði flesta lǫg haldin ({n} af {total}). Umferðirnar eptir þat bœttu eigi um.",
 "met":"haldin",
 "not met":"eigi haldin",
-"table":"tafla"
+"table":"tafla",
+"at most {n} words":"í mesta lagi {n} orð",
+"mentions {x}":"nefnir {x}",
+"doesn't mention {x}":"nefnir eigi {x}",
+"is valid JSON":"er gilt JSON",
+"has a link":"á tengil",
+"{n} words; the limit is {limit}":"{n} orð; hámarkið er {limit}",
+"not valid JSON":"ógilt JSON",
+"no link in it":"enginn tengill"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

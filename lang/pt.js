@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"novo registo"},
 "rb_rec_set":{"message0":"definir %1 de %2 para %3","tooltip":"Muda um campo de um registo (normalmente uma variável de registo)."},
 "rb_receive":{"message0":"quando receber %1","tooltip":"Executa os blocos abaixo sempre que esta mensagem é difundida. Vários scripts podem ouvir a mesma mensagem."},
-"rb_reflect":{"message0":"rever o rascunho segundo %1","message1":"até %1 rondas; se falhar, fazer","message2":"%1","tooltip":"O Claude critica o rascunho. Se falhar, correm os blocos lá dentro e depois critica outra vez. Em cada ronda o revisor também verifica que os problemas anteriores não voltaram. Se as rondas acabarem, fica o rascunho com menos problemas, não simplesmente o último."},
+"rb_reflect":{"message0":"rever o rascunho segundo %1","message1":"até %1 rondas; se falhar, fazer","message2":"%1","tooltip":"O Claude critica o rascunho. Se falhar, correm os blocos lá dentro e depois critica outra vez. Em cada ronda o revisor também verifica que os problemas anteriores não voltaram. Se as rondas acabarem, fica o rascunho com menos problemas, não simplesmente o último.","message3":"e verificar %1"},
 "rb_reset_timer":{"message0":"reiniciar o cronómetro"},
 "rb_result":{"message0":"terminar e mostrar o resultado","tooltip":"Termina a execução. Mostra o que adicionou ao resultado, ou o rascunho se não adicionou nada."},
 "rb_result_text":{"message0":"o resultado até agora","tooltip":"Tudo o que foi adicionado ao resultado, como texto."},
 "rb_retry":{"message0":"tentar novamente até %1 vezes","message1":"%1","tooltip":"Se algo lá dentro falhar de uma forma que uma segunda tentativa possa resolver (uma ligação que caiu, uma resposta truncada), espera um pouco e volta a executar."},
-"rb_review":{"message0":"rever o rascunho segundo %1","tooltip":"Uma revisão. Use depois «o rascunho passou na revisão» e «problemas da revisão»."},
+"rb_review":{"message0":"rever o rascunho segundo %1","tooltip":"Uma revisão. Use depois «o rascunho passou na revisão» e «problemas da revisão».","message1":"e verificar %1"},
 "rb_revise":{"message0":"rever para corrigir os problemas da revisão %1 usando a web","tooltip":"O Claude corrige os problemas que a última revisão encontrou."},
 "rb_rework":{"message0":"refazer o rascunho: %1","tooltip":"O Claude reescreve o rascunho seguindo a sua instrução."},
 "rb_rewrite":{"message0":"reescrever %1 para %2","tooltip":"Por exemplo: reescrever (rascunho) para (traduzir para francês)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"histórico do Tautulli, últimos %1 dias","tooltip":"Uma lista de registos, um por cada coisa vista nesses dias, do Tautulli: user, title, when e transcode (se foi transcodificada). Só lê. Precisa de TAUTULLI_URL e TAUTULLI_API_KEY em second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"tempo de visionamento do Tautulli, últimos %1 dias","tooltip":"Uma lista de registos, um por cada pessoa que viu algo nesses dias, do Tautulli: user e hours. Só lê."},
 "rb_plex_scan":{"message0":"procurar novos ficheiros na biblioteca %1 no Plex","tooltip":"Procura novos ficheiros numa biblioteca. Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
-"rb_plex_stop":{"message0":"parar o stream %1 no Plex","tooltip":"Para um stream (o terminate do Tautulli). Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."}
+"rb_plex_stop":{"message0":"parar o stream %1 no Plex","tooltip":"Para um stream (o terminate do Tautulli). Pergunta-to sempre, mesmo quando nada mais o faz, e sem ninguém para dizer sim, nada acontece. Nesta página nada muda a sério."},
+"rb_chk_max_words":{"message0":"no máximo %1 palavras","tooltip":"Falha se o rascunho tiver mais palavras; o problema diz o número real."},
+"rb_chk_mentions":{"message0":"menciona %1","tooltip":"Falha se o rascunho não tiver estas palavras (maiúsculas não importam)."},
+"rb_chk_no_mention":{"message0":"não menciona %1","tooltip":"Falha se o rascunho tiver estas palavras (maiúsculas não importam)."},
+"rb_chk_json":{"message0":"é JSON válido","tooltip":"Falha se o rascunho não for JSON válido."},
+"rb_chk_link":{"message0":"tem um link","tooltip":"Falha se o rascunho não tiver um link (http://… ou www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos os dias","weekdays":"nos dias úteis","weekends":"ao fim de semana"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Voltou ao rascunho da ronda {round}:cumpria mais regras ({n} de {total}). As rondas seguintes não o melhoraram.",
 "met":"cumprida",
 "not met":"não cumprida",
-"met {n} of {total}":"{n} de {total} cumpridas"
+"met {n} of {total}":"{n} de {total} cumpridas",
+"at most {n} words":"no máximo {n} palavras",
+"mentions {x}":"menciona {x}",
+"doesn't mention {x}":"não menciona {x}",
+"is valid JSON":"é JSON válido",
+"has a link":"tem um link",
+"{n} words; the limit is {limit}":"{n} palavras; o limite é {limit}",
+"not valid JSON":"não é JSON válido",
+"no link in it":"não tem link"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Voltou ao rascunho da ronda {round}:cumpria mais regras ({n} de {total}). As rondas seguintes não o melhoraram.",
 "met":"cumprida",
 "not met":"não cumprida",
-"table":"tabela"
+"table":"tabela",
+"at most {n} words":"no máximo {n} palavras",
+"mentions {x}":"menciona {x}",
+"doesn't mention {x}":"não menciona {x}",
+"is valid JSON":"é JSON válido",
+"has a link":"tem um link",
+"{n} words; the limit is {limit}":"{n} palavras; o limite é {limit}",
+"not valid JSON":"não é JSON válido",
+"no link in it":"não tem link"
 }
 };
