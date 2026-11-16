@@ -19,6 +19,14 @@ WASHING_EMAIL = {"blocks": {"languageVersion": 0, "blocks": [
               "inputs": {"VALUE": {"block": {"type": "text", "fields": {"TEXT": "London"}}}}}}}]}}
 
 
+# A program using a service block the hand-written guide never named: the generated catalogue does (#422).
+_pihole_summary = val(blk("rb_pihole_summary"))
+_pihole_text = join(tx("Pi-hole blocked more than 20% yesterday: "), _pihole_summary)
+PIHOLE = {"blocks": {"languageVersion": 0, "blocks": [
+    blk("rb_when_time", fields={"HOUR": 8, "MINUTE": 0, "DAYS": "every"},
+        nxt=blk("rb_tg_send", inputs={"TEXT": _pihole_text}))]}}
+
+
 async def describe_tests():
     print("Describe a program")
     async with async_playwright() as p:
@@ -99,5 +107,18 @@ async def describe_tests():
         await pg.click("#describe-undo")
         types = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).map(b => b.type)")
         check("rb_tg_send" not in types and "rb_add_result" in types, "Undo puts the previous program back")
+
+        # A service the hand-written guide never named: the generated catalogue names it, so Describe a program
+        # can build with it (#422).
+        await pg.evaluate("r => { window.__jsonScript = r; window.__jsonPrompts = []; }",
+                          [{"program": PIHOLE, "summary": "Each morning it says how much Pi-hole blocked.", "unmapped": []}])
+        await pg.fill("#describe-text", "each morning, tell me on Telegram if Pi-hole blocked more than 20% yesterday")
+        await pg.click("#describe-build")
+        await pg.wait_for_selector("#describe-load:not([hidden])", timeout=15000)
+        prompt = (await pg.evaluate("window.__jsonPrompts"))[-1]
+        check("rb_pihole_summary" in prompt, "the prompt Describe a program sends names the Pi-hole block (the catalogue is generated, #422)")
+        await pg.click("#describe-load")
+        types = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).map(b => b.type)")
+        check("rb_pihole_summary" in types and "rb_tg_send" in types, f"the built program uses the Pi-hole block ({types})")
         check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
         await browser.close()

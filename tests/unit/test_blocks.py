@@ -65,6 +65,17 @@ class List(unittest.TestCase):
         self.assertEqual(named - TYPES, set(),
                          f"the conversion guide names blocks not on the list: {sorted(named - TYPES)}")
 
+    def test_guide_covers_every_block(self):
+        # The catalogue between the sync markers is generated from the list (#422), so Describe a program
+        # can build with any block, not the 140 the hand-written guide knew.
+        text = (ROOT / "prompts" / "convert-guide.txt").read_text(encoding="utf-8")
+        missing = [b["type"] for b in BLOCKS if not re.search(r"\b" + re.escape(b["type"]) + r"\b", text)]
+        self.assertEqual(missing, [], f"the guide's catalogue is missing blocks: {missing[:8]}")
+
+    def test_guide_is_fresh(self):
+        self.assertEqual((ROOT / "prompts" / "convert-guide.txt").read_text(encoding="utf-8"), sync.guide_text(),
+                         "prompts/convert-guide.txt is out of date (the block list changed): run python tools/sync.py")
+
     def test_examples_use_only_listed_blocks(self):
         for name in ("04-examples.js", "06-example-library.js"):
             with self.subTest(file=name):
