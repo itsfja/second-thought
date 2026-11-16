@@ -1,0 +1,1986 @@
+[
+ {
+  "type": "rb_add_result",
+  "words": "add %1 to the result",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Output",
+  "capability": null
+ },
+ {
+  "type": "rb_agent",
+  "words": "agent: work toward %1",
+  "slots": [
+   "GOAL"
+  ],
+  "tooltip": "Claude decides what to do next: each step it picks one of the tools inside, sees what happened, and carries on until the goal is met or the steps run out. Its final answer goes in the draft. Each step is one model call. With 'make a plan first' ticked, it writes a short plan with its first step and keeps it up to date, at no extra cost.",
+  "category": "Agent",
+  "capability": null
+ },
+ {
+  "type": "rb_agent_builtin",
+  "words": "tool: %1",
+  "slots": [
+   "KIND"
+  ],
+  "tooltip": "A ready-made tool for the agent. 'Work out sums' and 'clock times' get numbers and times exactly right, instead of the model guessing. 'Check text' has a separate reviewer judge the agent's work. On this page, feeds, GitHub, Telegram, email and the calendar use sample data; exported Python uses your own (put the keys in second-thought.ini), and reads web pages for real. Sending, commenting and 'control devices' ask you before each one, because what the agent reads (a web page, a note) could try to steer it. Choose 'no asking' only if you trust everything it reads. Unlocking, opening and disarming always ask.",
+  "category": "Tools",
+  "capability": null
+ },
+ {
+  "type": "rb_agent_fr24",
+  "words": "Flightradar24 tools",
+  "slots": [],
+  "tooltip": "Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python.",
+  "category": "Tools",
+  "capability": null
+ },
+ {
+  "type": "rb_agent_kraken",
+  "words": "Kraken tools %1",
+  "slots": [
+   "MODE"
+  ],
+  "tooltip": "Gives the agent Kraken's own tools, from kraken-cli: market prices, your balances and orders, and paper trading at live prices. Live trading also lets it place real orders, but every tool that can move money asks you first, even when nobody else does, and never runs on a schedule or on GitHub Actions. Needs kraken-cli installed, and KRAKEN_API_KEY and KRAKEN_API_SECRET in second-thought.ini for your account (prices and paper trading need no key). Only in exported Python.",
+  "category": "Tools",
+  "capability": null
+ },
+ {
+  "type": "rb_agent_mcp",
+  "words": "tools from MCP server %1 %2",
+  "slots": [
+   "SERVER",
+   "ASK"
+  ],
+  "tooltip": "Gives the agent every tool an MCP server offers: files, GitHub, databases, calendars and much more, from the whole MCP ecosystem. Set the server up in second-thought.ini as MCP_<NAME> = the command that starts it (like npx -y @modelcontextprotocol/server-filesystem ~/recipes) or its https:// address. Only in exported Python: on this page the agent works without these tools.",
+  "category": "Tools",
+  "capability": "mcp"
+ },
+ {
+  "type": "rb_agent_steps",
+  "words": "agent's steps",
+  "slots": [],
+  "tooltip": "What the most recent agent in this run did: a list of records with step, tool, input, result and status (done, bad input, tool error, refused, repeat, not a tool, unreadable, empty answer, stopped, answer).",
+  "category": "Agent",
+  "capability": null
+ },
+ {
+  "type": "rb_agent_tool",
+  "words": "tool: My Block %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "Lets the agent run one of your My Blocks. Its inputs become the tool's inputs, and what it returns is the result the agent sees. Describe it clearly: the description is all the agent knows about it. Input types, for example 'flour grams: number; water grams: number - grams of water', say what each input must be: text, number, yes/no, list or any. The agent's input is checked before the block runs. 'Ask me before each use' starts ticked, because what the agent reads (a web page, a note) could try to steer it: untick it for blocks that only work things out and change nothing.",
+  "category": "Tools",
+  "capability": null
+ },
+ {
+  "type": "rb_answer",
+  "words": "answer",
+  "slots": [],
+  "tooltip": "",
+  "category": "You",
+  "capability": null
+ },
+ {
+  "type": "rb_approve",
+  "words": "I approve %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Shows the text and waits for you to approve or send it back.",
+  "category": "You",
+  "capability": null
+ },
+ {
+  "type": "rb_arr_diskspace",
+  "words": "%1 diskspace",
+  "slots": [
+   "WHICH"
+  ],
+  "tooltip": "A list of records, one for each of its folders: path, label, free_gb and total_gb.",
+  "category": "Radarr and Sonarr",
+  "capability": "arr_read"
+ },
+ {
+  "type": "rb_arr_missing",
+  "words": "%1 wanted list",
+  "slots": [
+   "WHICH"
+  ],
+  "tooltip": "A list of records, one for each movie or episode with no file: title, added (when it was added) and id.",
+  "category": "Radarr and Sonarr",
+  "capability": "arr_read"
+ },
+ {
+  "type": "rb_arr_queue",
+  "words": "%1 queue",
+  "slots": [
+   "WHICH"
+  ],
+  "tooltip": "A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue.",
+  "category": "Radarr and Sonarr",
+  "capability": "arr_read"
+ },
+ {
+  "type": "rb_arr_search",
+  "words": "search %1 for what's missing",
+  "slots": [
+   "WHICH"
+  ],
+  "tooltip": "Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches.",
+  "category": "Radarr and Sonarr",
+  "capability": "arr_control"
+ },
+ {
+  "type": "rb_ask",
+  "words": "ask Claude %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Claude answers in text.",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_first",
+  "words": "ask me before %1",
+  "slots": [
+   "WHAT"
+  ],
+  "tooltip": "From here on, the program shows what it's about to do and waits for you to allow it. If you say no, it skips that step and carries on. Exported Python asks in the terminal; a scheduled run with nobody there skips it.",
+  "category": "You",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_list",
+  "words": "ask Claude for a list: %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Claude replies with a list you can loop over.",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_me",
+  "words": "ask me %1 and wait",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Pauses the run until you type an answer in the log.",
+  "category": "You",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_number",
+  "words": "ask Claude for a number: %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_record",
+  "words": "ask Claude for a record with fields %1 : %2",
+  "slots": [
+   "FIELDS",
+   "TEXT"
+  ],
+  "tooltip": "Fields separated by commas, for example: title, score, notes.",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_records",
+  "words": "ask Claude for a list of records with fields %1 : %2",
+  "slots": [
+   "FIELDS",
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_ask_yesno",
+  "words": "Claude says yes to %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Claude answers a yes/no question.",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_better",
+  "words": "better of %1 and %2 for %3",
+  "slots": [
+   "A",
+   "B",
+   "CRITERIA"
+  ],
+  "tooltip": "",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_broadcast",
+  "words": "broadcast %1",
+  "slots": [
+   "MSG"
+  ],
+  "tooltip": "Starts every 'when I receive' script for this message, then carries straight on.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_broadcast_wait",
+  "words": "broadcast %1 and wait",
+  "slots": [
+   "MSG"
+  ],
+  "tooltip": "Starts every 'when I receive' script for this message and waits until they have all finished.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_broadcast_with",
+  "words": "broadcast %1 with %2",
+  "slots": [
+   "MSG",
+   "VALUE"
+  ],
+  "tooltip": "Starts every 'when I receive' script for the message. Each one gets the value as its 'message value'.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_broadcast_with_wait",
+  "words": "broadcast %1 with %2 and wait",
+  "slots": [
+   "MSG",
+   "VALUE"
+  ],
+  "tooltip": "",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_budget",
+  "words": "limit this run to %1 %2",
+  "slots": [
+   "TOKENS",
+   "UNIT"
+  ],
+  "tooltip": "Before each model call, checks how many tokens this run has used, or what it has spent at the models' list prices. Once it reaches this amount, the run stops. 0 means no limit. In dollars, a model with no known price can't be counted, so the run stops rather than going on with no limit. On this page the counts are estimates; exported Python uses the exact counts.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_cal_when",
+  "words": "when a calendar event starts in %1 minutes",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text.",
+  "category": "Connections",
+  "capability": "calendar"
+ },
+ {
+  "type": "rb_calendar",
+  "words": "calendar for the next %1 days",
+  "slots": [
+   "DAYS"
+  ],
+  "tooltip": "Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar.",
+  "category": "Connections",
+  "capability": "calendar"
+ },
+ {
+  "type": "rb_chat",
+  "words": "chat %1 : %2",
+  "slots": [
+   "NAME",
+   "TEXT"
+  ],
+  "tooltip": "Sends a message in a named conversation. Claude sees the earlier turns of that conversation.",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_chat_reset",
+  "words": "start conversation %1 afresh",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_checkpoint_restore",
+  "words": "go back to checkpoint %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "Puts the task, draft, review, result and variables back as they were at 'save checkpoint'. Memory, files and messages already sent aren't undone.",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_checkpoint_save",
+  "words": "save checkpoint %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "Remembers the task, draft, review, result and variables as they are now, under this name, for the rest of the run.",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_choose",
+  "words": "let me choose from %1",
+  "slots": [
+   "LIST"
+  ],
+  "tooltip": "",
+  "category": "You",
+  "capability": null
+ },
+ {
+  "type": "rb_clear_instructions",
+  "words": "clear instructions for Claude",
+  "slots": [],
+  "tooltip": "",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_coinbase_balances",
+  "words": "Coinbase balances",
+  "slots": [],
+  "tooltip": "A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio.",
+  "category": "Coinbase",
+  "capability": "coinbase_read"
+ },
+ {
+  "type": "rb_coinbase_cancel",
+  "words": "cancel Coinbase order %1",
+  "slots": [
+   "ORDER"
+  ],
+  "tooltip": "Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there.",
+  "category": "Coinbase",
+  "capability": "coinbase_trade"
+ },
+ {
+  "type": "rb_coinbase_candles",
+  "words": "Coinbase %1 prices of %2 for the last %3",
+  "slots": [
+   "SIZE",
+   "PRODUCT",
+   "N"
+  ],
+  "tooltip": "A list of records, oldest first, one for each day or hour (up to 350): time, open, high, low, close and volume.",
+  "category": "Coinbase",
+  "capability": "coinbase_read"
+ },
+ {
+  "type": "rb_coinbase_order",
+  "words": "place Coinbase order: %1 %2 of %3",
+  "slots": [
+   "SIDE",
+   "AMOUNT",
+   "PRODUCT"
+  ],
+  "tooltip": "Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold.",
+  "category": "Coinbase",
+  "capability": "coinbase_trade"
+ },
+ {
+  "type": "rb_coinbase_orders",
+  "words": "Coinbase %1",
+  "slots": [
+   "WHICH"
+  ],
+  "tooltip": "Your open orders (id, product, side, size, price, filled and created), or your latest fills (time, product, side, size, price, fee and order).",
+  "category": "Coinbase",
+  "capability": "coinbase_read"
+ },
+ {
+  "type": "rb_coinbase_preview",
+  "words": "preview Coinbase order: %1 %2 of %3",
+  "slots": [
+   "SIDE",
+   "AMOUNT",
+   "PRODUCT"
+  ],
+  "tooltip": "What a market order would come to, without placing it: a record with size, spend, fee, total, slippage and warnings. Buy spends an amount of the second currency (50 of BTC-GBP spends £50); sell sells an amount of the first (0.01 of BTC-GBP sells 0.01 BTC). Nothing changes.",
+  "category": "Coinbase",
+  "capability": "coinbase_read"
+ },
+ {
+  "type": "rb_coinbase_price",
+  "words": "%1 of %2 on Coinbase",
+  "slots": [
+   "WHAT",
+   "PRODUCT"
+  ],
+  "tooltip": "A trading pair's latest price, like BTC-GBP's in pounds, or how much it has changed in the last 24 hours, in percent. Spot trading pairs only.",
+  "category": "Coinbase",
+  "capability": "coinbase_read"
+ },
+ {
+  "type": "rb_coinbase_value",
+  "words": "Coinbase portfolio value",
+  "slots": [],
+  "tooltip": "What your Coinbase portfolio is worth, in your currency.",
+  "category": "Coinbase",
+  "capability": "coinbase_read"
+ },
+ {
+  "type": "rb_contains",
+  "words": "%1 contains %2",
+  "slots": [
+   "A",
+   "B"
+  ],
+  "tooltip": "True if the first text includes the second (ignores case).",
+  "category": "Operators",
+  "capability": null
+ },
+ {
+  "type": "rb_discord_send",
+  "words": "send Discord message %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.",
+  "category": "Connections",
+  "capability": "discord_send"
+ },
+ {
+  "type": "rb_discord_when",
+  "words": "when a Discord message arrives containing %1",
+  "slots": [
+   "CONTAINS"
+  ],
+  "tooltip": "Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.",
+  "category": "Connections",
+  "capability": "discord_read"
+ },
+ {
+  "type": "rb_docker_containers",
+  "words": "Docker containers",
+  "slots": [],
+  "tooltip": "A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack.",
+  "category": "Docker",
+  "capability": "docker_read"
+ },
+ {
+  "type": "rb_docker_logs",
+  "words": "Docker logs of %1, last %2 lines",
+  "slots": [
+   "NAME",
+   "N"
+  ],
+  "tooltip": "The last lines a container wrote, its output and its errors together, oldest first.",
+  "category": "Docker",
+  "capability": "docker_read"
+ },
+ {
+  "type": "rb_docker_power",
+  "words": "%1 Docker container %2",
+  "slots": [
+   "ACTION",
+   "NAME"
+  ],
+  "tooltip": "Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts.",
+  "category": "Docker",
+  "capability": "docker_control"
+ },
+ {
+  "type": "rb_docker_stats",
+  "words": "Docker memory and CPU",
+  "slots": [],
+  "tooltip": "A list of records, one for each running container: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a container with no limit) and memory (% of the limit).",
+  "category": "Docker",
+  "capability": "docker_read"
+ },
+ {
+  "type": "rb_draft",
+  "words": "draft",
+  "slots": [],
+  "tooltip": "",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_email_send",
+  "words": "send email to %1 subject %2 %3",
+  "slots": [
+   "TO",
+   "SUBJECT",
+   "TEXT"
+  ],
+  "tooltip": "Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown.",
+  "category": "Connections",
+  "capability": "email_send"
+ },
+ {
+  "type": "rb_email_when",
+  "words": "when an email arrives containing %1",
+  "slots": [
+   "CONTAINS"
+  ],
+  "tooltip": "Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text.",
+  "category": "Connections",
+  "capability": "email_read"
+ },
+ {
+  "type": "rb_error",
+  "words": "the error",
+  "slots": [],
+  "tooltip": "What went wrong in the most recent failure.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_event",
+  "words": "what arrived: %1",
+  "slots": [
+   "KEY"
+  ],
+  "tooltip": "Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record.",
+  "category": "Connections",
+  "capability": null
+ },
+ {
+  "type": "rb_every",
+  "words": "every %1 %2",
+  "slots": [
+   "N",
+   "UNIT"
+  ],
+  "tooltip": "Runs repeatedly while Schedules is on and this page is open. The first run is one interval after you turn Schedules on.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_extract",
+  "words": "extract %1 from %2",
+  "slots": [
+   "WHAT",
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_feed_news",
+  "words": "news from feed %1",
+  "slots": [
+   "URL"
+  ],
+  "tooltip": "The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.",
+  "category": "Connections",
+  "capability": "feeds"
+ },
+ {
+  "type": "rb_feed_when",
+  "words": "when there's something new in feed %1",
+  "slots": [
+   "URL"
+  ],
+  "tooltip": "Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.",
+  "category": "Connections",
+  "capability": "feeds"
+ },
+ {
+  "type": "rb_file_choose",
+  "words": "text of a file I choose",
+  "slots": [],
+  "tooltip": "Pauses the run so you can pick a PDF, a Word .docx, or a text file. Gives back the file's text.",
+  "category": "Files",
+  "capability": "files_read"
+ },
+ {
+  "type": "rb_file_save",
+  "words": "save %1 as file %2 . %3",
+  "slots": [
+   "VALUE",
+   "NAME",
+   "EXT"
+  ],
+  "tooltip": "Offers the text as a download. The browser asks you to confirm.",
+  "category": "Files",
+  "capability": "files_save"
+ },
+ {
+  "type": "rb_finish_with",
+  "words": "finish with %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Output",
+  "capability": null
+ },
+ {
+  "type": "rb_folder_files",
+  "words": "files in folder %1 matching %2",
+  "slots": [
+   "FOLDER",
+   "MATCH"
+  ],
+  "tooltip": "The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files.",
+  "category": "Connections",
+  "capability": "folder"
+ },
+ {
+  "type": "rb_folder_when",
+  "words": "when a file appears in folder %1",
+  "slots": [
+   "FOLDER"
+  ],
+  "tooltip": "Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks.",
+  "category": "Connections",
+  "capability": "folder"
+ },
+ {
+  "type": "rb_generate",
+  "words": "write a first draft %1 using the web",
+  "slots": [
+   "WEB"
+  ],
+  "tooltip": "Claude writes a draft that completes the task.",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_gh_issue_when",
+  "words": "when a new issue is opened in %1",
+  "slots": [
+   "REPO"
+  ],
+  "tooltip": "Runs the blocks below when someone opens an issue in this GitHub project (checked every 5 minutes; pull requests don't count). 'What arrived' gives repo, number, title, body, author, labels, link and text.",
+  "category": "Connections",
+  "capability": "github_read"
+ },
+ {
+  "type": "rb_gh_release_when",
+  "words": "when a release is published in %1",
+  "slots": [
+   "REPO"
+  ],
+  "tooltip": "Runs the blocks below when this GitHub project publishes a release (checked every 15 minutes). 'What arrived' gives repo, tag, name, previous_tag, notes, link and text.",
+  "category": "Connections",
+  "capability": "github_read"
+ },
+ {
+  "type": "rb_gh_when",
+  "words": "when a pull request asks for my review",
+  "slots": [],
+  "tooltip": "Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text.",
+  "category": "Connections",
+  "capability": "github_read"
+ },
+ {
+  "type": "rb_ha_attr",
+  "words": "%1 of entity %2",
+  "slots": [
+   "ATTR",
+   "ENTITY"
+  ],
+  "tooltip": "One attribute of an entity, for example 'current_temperature' or 'friendly_name'.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_call",
+  "words": "call %1 on %2 with %3",
+  "slots": [
+   "SERVICE",
+   "ENTITY",
+   "DATA"
+  ],
+  "tooltip": "Calls a service, for example light.turn_off. Optional data is JSON like {\"temperature\": 20}. Unlocking, opening and disarming always ask you first.",
+  "category": "Home Assistant",
+  "capability": "ha_act"
+ },
+ {
+  "type": "rb_ha_event_when",
+  "words": "when Home Assistant event %1 happens with %2",
+  "slots": [
+   "EVENT",
+   "DATA"
+  ],
+  "tooltip": "Runs the blocks below the moment Home Assistant sends this event: a button or remote press (zha_event, deconz_event), an automation firing (automation_triggered), a phone notification action, or your own event. Type 'anything' for every event. The second box is optional words the event's data must contain, such as the remote's name. 'What arrived' gives event_type, entity, data, time and text, plus each field of the event's data. On this page, right-click it and choose 'Run this script' to try it with a sample event.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_find",
+  "words": "entities matching %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "A list of records (entity, name, state, unit, area) for every entity whose id, name, area or state contains all these words. '*' means everything.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_history",
+  "words": "history of %1 for the last %2 hours",
+  "slots": [
+   "ENTITY",
+   "HOURS"
+  ],
+  "tooltip": "A list of records (time, state) showing how the entity changed.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_notify",
+  "words": "notify %1 : %2",
+  "slots": [
+   "TARGET",
+   "TEXT"
+  ],
+  "tooltip": "Sends a notification. Target is a notify service such as notify.mobile_app_my_phone, or persistent_notification for the Home Assistant sidebar.",
+  "category": "Home Assistant",
+  "capability": "ha_act"
+ },
+ {
+  "type": "rb_ha_snapshot",
+  "words": "snapshot from %1",
+  "slots": [
+   "CAMERA"
+  ],
+  "tooltip": "A picture from a camera entity. Use it with the Pictures blocks.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_speak",
+  "words": "say %1 on %2",
+  "slots": [
+   "TEXT",
+   "PLAYER"
+  ],
+  "tooltip": "Speaks the text on a media player, using Home Assistant's text-to-speech.",
+  "category": "Home Assistant",
+  "capability": "ha_act"
+ },
+ {
+  "type": "rb_ha_state",
+  "words": "state of %1",
+  "slots": [
+   "ENTITY"
+  ],
+  "tooltip": "The entity's current state, for example 'on', 'locked' or 19.5.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_summary",
+  "words": "readings for %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "A plain-text list of matching entities and their states, ready to put into a question for Claude.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_trigger",
+  "words": "what changed",
+  "slots": [],
+  "tooltip": "In a 'when … changes' script: a record with entity, name, from and to.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_ha_when",
+  "words": "when %1 changes to %2",
+  "slots": [
+   "ENTITY",
+   "STATE"
+  ],
+  "tooltip": "Runs the blocks below when this entity changes. Type 'anything' to react to any change. Inside, 'what changed' says what happened.",
+  "category": "Home Assistant",
+  "capability": "ha_read"
+ },
+ {
+  "type": "rb_homey_find",
+  "words": "Homey devices matching %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "A list of records, one for each device whose name, zone or kind contains all these words ('*' for every device): name, zone, class, and each of its values.",
+  "category": "Homey",
+  "capability": "homey_read"
+ },
+ {
+  "type": "rb_homey_flow",
+  "words": "run Homey flow %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "Starts one of your Homey flows, by its name. A flow can do anything your Homey can, including sending a Homey notification.",
+  "category": "Homey",
+  "capability": "homey_act"
+ },
+ {
+  "type": "rb_homey_set",
+  "words": "set Homey device %1 %2 to %3",
+  "slots": [
+   "DEVICE",
+   "CAPABILITY",
+   "VALUE"
+  ],
+  "tooltip": "Sets a value, like onoff to off, dim to 0.5 or target_temperature to 19. 'Ask me before any smart home action' makes it ask first; unlocking, opening and disarming always ask. On this page it changes the sample home.",
+  "category": "Homey",
+  "capability": "homey_act"
+ },
+ {
+  "type": "rb_homey_set_variable",
+  "words": "set Homey variable %1 to %2",
+  "slots": [
+   "NAME",
+   "VALUE"
+  ],
+  "tooltip": "Changes a Homey Logic variable, so your flows can use it.",
+  "category": "Homey",
+  "capability": "homey_act"
+ },
+ {
+  "type": "rb_homey_value",
+  "words": "%1 of Homey device %2",
+  "slots": [
+   "CAPABILITY",
+   "DEVICE"
+  ],
+  "tooltip": "One value of a Homey device, by the device's name: onoff (on or off), dim (0 to 1), measure_temperature, measure_power and so on. 'Homey devices matching' shows what each device has.",
+  "category": "Homey",
+  "capability": "homey_read"
+ },
+ {
+  "type": "rb_homey_variable",
+  "words": "Homey variable %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "The value of a Homey Logic variable, by its name.",
+  "category": "Homey",
+  "capability": "homey_read"
+ },
+ {
+  "type": "rb_homey_when",
+  "words": "when Homey device %1 %2 changes",
+  "slots": [
+   "DEVICE",
+   "CAPABILITY"
+  ],
+  "tooltip": "Runs the blocks below when this Homey device's value changes (checked every 10 seconds). Type 'anything' for any of its values. 'What arrived' gives device, zone, capability, from, to and text. On this page, right-click it and choose 'Run this script' to try it.",
+  "category": "Homey",
+  "capability": "homey_read"
+ },
+ {
+  "type": "rb_img_ask",
+  "words": "ask Claude %1 about picture %2",
+  "slots": [
+   "TEXT",
+   "IMG"
+  ],
+  "tooltip": "Claude looks at the picture and answers.",
+  "category": "Pictures",
+  "capability": null
+ },
+ {
+  "type": "rb_img_change",
+  "words": "change picture %1 : %2",
+  "slots": [
+   "IMG",
+   "TEXT"
+  ],
+  "tooltip": "Claude redraws the picture with your change. A photo comes back as a new illustration.",
+  "category": "Pictures",
+  "capability": null
+ },
+ {
+  "type": "rb_img_choose",
+  "words": "picture I choose",
+  "slots": [],
+  "tooltip": "Pauses the run so you can pick a picture (JPEG, PNG, WebP, GIF or SVG).",
+  "category": "Pictures",
+  "capability": "files_read"
+ },
+ {
+  "type": "rb_img_draw",
+  "words": "draw a picture of %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Claude draws an illustration as SVG (flat shapes, diagrams, icons). It can't make photos.",
+  "category": "Pictures",
+  "capability": null
+ },
+ {
+  "type": "rb_img_save",
+  "words": "save picture %1 as %2",
+  "slots": [
+   "IMG",
+   "FORMAT"
+  ],
+  "tooltip": "Offers the picture as a download. The browser asks you to confirm.",
+  "category": "Pictures",
+  "capability": "files_save"
+ },
+ {
+  "type": "rb_img_score",
+  "words": "score picture %1 out of 10 for %2",
+  "slots": [
+   "IMG",
+   "CRITERIA"
+  ],
+  "tooltip": "",
+  "category": "Pictures",
+  "capability": null
+ },
+ {
+  "type": "rb_img_show",
+  "words": "show picture %1",
+  "slots": [
+   "IMG"
+  ],
+  "tooltip": "",
+  "category": "Pictures",
+  "capability": null
+ },
+ {
+  "type": "rb_longtext",
+  "words": "%1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Long text. Press Enter for a new line; lines wrap at 80 characters.",
+  "category": "Text",
+  "capability": null
+ },
+ {
+  "type": "rb_mem_add",
+  "words": "add %1 to remembered list %2 %3",
+  "slots": [
+   "VALUE",
+   "NAME",
+   "KIND"
+  ],
+  "tooltip": "Adds an item to a remembered list. If the list already exists it keeps its own kind and expiry.",
+  "category": "Memory",
+  "capability": null
+ },
+ {
+  "type": "rb_mem_forget",
+  "words": "forget %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "",
+  "category": "Memory",
+  "capability": "memory"
+ },
+ {
+  "type": "rb_mem_get",
+  "words": "recall %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "The remembered value, or empty text if nothing is remembered under this name.",
+  "category": "Memory",
+  "capability": "memory"
+ },
+ {
+  "type": "rb_mem_has",
+  "words": "I remember %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "",
+  "category": "Memory",
+  "capability": "memory"
+ },
+ {
+  "type": "rb_mem_names",
+  "words": "names I remember",
+  "slots": [],
+  "tooltip": "",
+  "category": "Memory",
+  "capability": "memory"
+ },
+ {
+  "type": "rb_mem_set",
+  "words": "remember %1 as %2 %3",
+  "slots": [
+   "VALUE",
+   "NAME",
+   "KIND"
+  ],
+  "tooltip": "While this page is open: kept across runs until you reload or close the page. Forever: saved until you forget it.",
+  "category": "Memory",
+  "capability": null
+ },
+ {
+  "type": "rb_mem_set_for",
+  "words": "remember %1 as %2 for %3 %4",
+  "slots": [
+   "VALUE",
+   "NAME",
+   "N",
+   "UNIT"
+  ],
+  "tooltip": "Saved like 'forever', but forgotten automatically after this long (up to 365 days).",
+  "category": "Memory",
+  "capability": "memory"
+ },
+ {
+  "type": "rb_mikrotik_health",
+  "words": "MikroTik health",
+  "slots": [],
+  "tooltip": "A record about the router or switch itself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and any other sensors it has.",
+  "category": "MikroTik",
+  "capability": "mikrotik_read"
+ },
+ {
+  "type": "rb_mikrotik_log",
+  "words": "MikroTik log, last %1 lines",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "The last lines of the router's log, oldest first, each as \"time topics: message\".",
+  "category": "MikroTik",
+  "capability": "mikrotik_read"
+ },
+ {
+  "type": "rb_mikrotik_ports",
+  "words": "MikroTik ports",
+  "slots": [],
+  "tooltip": "A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch.",
+  "category": "MikroTik",
+  "capability": "mikrotik_read"
+ },
+ {
+  "type": "rb_mikrotik_sfp",
+  "words": "MikroTik SFP modules",
+  "slots": [],
+  "tooltip": "A list of records, one for each SFP module plugged in: port, module, temperature (°C), rx_power and tx_power (dBm).",
+  "category": "MikroTik",
+  "capability": "mikrotik_read"
+ },
+ {
+  "type": "rb_mqtt_publish",
+  "words": "publish MQTT %1 to topic %2 keep it %3",
+  "slots": [
+   "TEXT",
+   "TOPIC",
+   "RETAIN"
+  ],
+  "tooltip": "Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown.",
+  "category": "Connections",
+  "capability": "mqtt_publish"
+ },
+ {
+  "type": "rb_mqtt_read",
+  "words": "latest MQTT message on %1",
+  "slots": [
+   "TOPIC"
+  ],
+  "tooltip": "The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics.",
+  "category": "Connections",
+  "capability": "mqtt_read"
+ },
+ {
+  "type": "rb_mqtt_when",
+  "words": "when an MQTT message arrives on %1",
+  "slots": [
+   "TOPIC"
+  ],
+  "tooltip": "Runs the blocks below when a message arrives on this MQTT topic. + stands for one level and # for everything below, like zigbee2mqtt/#. 'What arrived' gives its topic and text, plus the fields of a JSON message.",
+  "category": "Connections",
+  "capability": "mqtt_read"
+ },
+ {
+  "type": "rb_msg_value",
+  "words": "message value",
+  "slots": [],
+  "tooltip": "The value sent with the broadcast that started this script (or woke this 'wait until I receive'). In a program run by 'run program', the value it was given.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_now",
+  "words": "current %1",
+  "slots": [
+   "PART"
+  ],
+  "tooltip": "",
+  "category": "Wait & time",
+  "capability": null
+ },
+ {
+  "type": "rb_nzbgeek_fetch",
+  "words": "fetch the NZB for %1",
+  "slots": [
+   "ID"
+  ],
+  "tooltip": "Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches.",
+  "category": "NZBGeek",
+  "capability": "nzbgeek_fetch"
+ },
+ {
+  "type": "rb_nzbgeek_search",
+  "words": "search NZBGeek for %1",
+  "slots": [
+   "QUERY"
+  ],
+  "tooltip": "A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search.",
+  "category": "NZBGeek",
+  "capability": "nzbgeek_read"
+ },
+ {
+  "type": "rb_page_when",
+  "words": "when the web page %1 changes",
+  "slots": [
+   "URL"
+  ],
+  "tooltip": "Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.",
+  "category": "Connections",
+  "capability": "web"
+ },
+ {
+  "type": "rb_passed",
+  "words": "draft passed review",
+  "slots": [],
+  "tooltip": "",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_pause",
+  "words": "pause until I click Continue: %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "A checkpoint. Shows the note in the log and waits for you.",
+  "category": "Wait & time",
+  "capability": null
+ },
+ {
+  "type": "rb_pihole_allow",
+  "words": "%1 %2 on Pi-hole's allow list",
+  "slots": [
+   "ACTION",
+   "DOMAIN"
+  ],
+  "tooltip": "Puts a domain on the allow list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes.",
+  "category": "Pi-hole",
+  "capability": "pihole_control"
+ },
+ {
+  "type": "rb_pihole_blocking",
+  "words": "disable Pi-hole blocking for %1 seconds",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "Turns blocking off for that many seconds, then Pi-hole turns it back on itself. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes.",
+  "category": "Pi-hole",
+  "capability": "pihole_control"
+ },
+ {
+  "type": "rb_pihole_deny",
+  "words": "%1 %2 on Pi-hole's deny list",
+  "slots": [
+   "ACTION",
+   "DOMAIN"
+  ],
+  "tooltip": "Puts a domain on the deny list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes.",
+  "category": "Pi-hole",
+  "capability": "pihole_control"
+ },
+ {
+  "type": "rb_pihole_enable",
+  "words": "enable Pi-hole blocking",
+  "slots": [],
+  "tooltip": "Turns blocking back on. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes.",
+  "category": "Pi-hole",
+  "capability": "pihole_control"
+ },
+ {
+  "type": "rb_pihole_summary",
+  "words": "Pi-hole summary",
+  "slots": [],
+  "tooltip": "One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking (whether blocking is on). Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. On this page it uses a sample Pi-hole.",
+  "category": "Pi-hole",
+  "capability": "pihole_read"
+ },
+ {
+  "type": "rb_pihole_top_clients",
+  "words": "top %1 clients",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, one for each of the devices that asked the most: name, ip and count (how many queries). It only reads.",
+  "category": "Pi-hole",
+  "capability": "pihole_read"
+ },
+ {
+  "type": "rb_pihole_top_domains",
+  "words": "top %1 blocked domains",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, one for each of the most-blocked domains: domain and count (how many times it was blocked). It only reads.",
+  "category": "Pi-hole",
+  "capability": "pihole_read"
+ },
+ {
+  "type": "rb_plex_libraries",
+  "words": "Plex libraries",
+  "slots": [],
+  "tooltip": "A list of records, one for each library: name, type (movie, show or artist) and count (how many items it has). It only reads.",
+  "category": "Plex",
+  "capability": "plex_read"
+ },
+ {
+  "type": "rb_plex_recent",
+  "words": "Plex new items, last %1 days",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, one for each item added in that many days: title, library and added (when it was added). It only reads.",
+  "category": "Plex",
+  "capability": "plex_read"
+ },
+ {
+  "type": "rb_plex_scan",
+  "words": "scan the %1 library on Plex",
+  "slots": [
+   "LIBRARY"
+  ],
+  "tooltip": "Scans one library for new files. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes.",
+  "category": "Plex",
+  "capability": "plex_control"
+ },
+ {
+  "type": "rb_plex_server",
+  "words": "Plex server",
+  "slots": [],
+  "tooltip": "One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server.",
+  "category": "Plex",
+  "capability": "plex_read"
+ },
+ {
+  "type": "rb_plex_sessions",
+  "words": "Plex sessions",
+  "slots": [],
+  "tooltip": "A list of records, one for each thing playing now: id (the session's id), user, title, player, state (playing or paused) and transcode (whether the server is transcoding it). It only reads.",
+  "category": "Plex",
+  "capability": "plex_read"
+ },
+ {
+  "type": "rb_plex_stop",
+  "words": "stop the %1 stream on Plex",
+  "slots": [
+   "ID"
+  ],
+  "tooltip": "Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes.",
+  "category": "Plex",
+  "capability": "plex_control"
+ },
+ {
+  "type": "rb_powerwall_now",
+  "words": "Powerwall figures",
+  "slots": [],
+  "tooltip": "A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall.",
+  "category": "Powerwall",
+  "capability": "powerwall_read"
+ },
+ {
+  "type": "rb_powerwall_reserve",
+  "words": "set Powerwall backup reserve to %1 %",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes.",
+  "category": "Powerwall",
+  "capability": "powerwall_control"
+ },
+ {
+  "type": "rb_problems",
+  "words": "review problems",
+  "slots": [],
+  "tooltip": "",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_prompt",
+  "words": "prompt %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "Text from your prompt library (open Programs to add prompts).",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_proxmox_guests",
+  "words": "Proxmox guests",
+  "slots": [],
+  "tooltip": "A list of records, one for each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours), and for one that's stopped, onboot (whether it should start with the node).",
+  "category": "Proxmox",
+  "capability": "proxmox_read"
+ },
+ {
+  "type": "rb_proxmox_nodes",
+  "words": "Proxmox nodes",
+  "slots": [],
+  "tooltip": "A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster.",
+  "category": "Proxmox",
+  "capability": "proxmox_read"
+ },
+ {
+  "type": "rb_proxmox_power",
+  "words": "%1 Proxmox guest %2",
+  "slots": [
+   "ACTION",
+   "VMID"
+  ],
+  "tooltip": "Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops.",
+  "category": "Proxmox",
+  "capability": "proxmox_control"
+ },
+ {
+  "type": "rb_proxmox_storage",
+  "words": "Proxmox storage",
+  "slots": [],
+  "tooltip": "A list of records, one for each storage on each node: storage, node, used (%), used_gb, size_gb and status.",
+  "category": "Proxmox",
+  "capability": "proxmox_read"
+ },
+ {
+  "type": "rb_proxmox_tasks",
+  "words": "Proxmox tasks of the last %1 hours",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user.",
+  "category": "Proxmox",
+  "capability": "proxmox_read"
+ },
+ {
+  "type": "rb_rec_get",
+  "words": "%1 of %2",
+  "slots": [
+   "KEY",
+   "REC"
+  ],
+  "tooltip": "",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_rec_has",
+  "words": "%1 has field %2",
+  "slots": [
+   "REC",
+   "KEY"
+  ],
+  "tooltip": "",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_rec_keys",
+  "words": "fields of %1",
+  "slots": [
+   "REC"
+  ],
+  "tooltip": "",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_rec_new",
+  "words": "new record",
+  "slots": [],
+  "tooltip": "",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_rec_set",
+  "words": "set %1 of %2 to %3",
+  "slots": [
+   "KEY",
+   "REC",
+   "VALUE"
+  ],
+  "tooltip": "Changes one field of a record (usually a record variable).",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_receive",
+  "words": "when I receive %1",
+  "slots": [
+   "MSG"
+  ],
+  "tooltip": "Runs the blocks below whenever this message is broadcast. Several scripts can listen for the same message.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_reflect",
+  "words": "review the draft against %1",
+  "slots": [
+   "CRITERIA"
+  ],
+  "tooltip": "Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one.",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_reset_timer",
+  "words": "reset timer",
+  "slots": [],
+  "tooltip": "",
+  "category": "Wait & time",
+  "capability": null
+ },
+ {
+  "type": "rb_result",
+  "words": "finish and show the result",
+  "slots": [],
+  "tooltip": "Ends the run. Shows what you added to the result, or the draft if you added nothing.",
+  "category": "Output",
+  "capability": null
+ },
+ {
+  "type": "rb_result_text",
+  "words": "the result so far",
+  "slots": [],
+  "tooltip": "Everything added to the result, as text.",
+  "category": "Files",
+  "capability": null
+ },
+ {
+  "type": "rb_retry",
+  "words": "retry up to %1 times",
+  "slots": [
+   "TIMES"
+  ],
+  "tooltip": "If something inside fails in a way a second try could fix (a dropped connection, a garbled reply), waits a little and runs it again.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_review",
+  "words": "review the draft against %1",
+  "slots": [
+   "CRITERIA"
+  ],
+  "tooltip": "One review. Use 'draft passed review' and 'review problems' afterwards.",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_revise",
+  "words": "revise to fix the review's problems %1 using the web",
+  "slots": [
+   "WEB"
+  ],
+  "tooltip": "Claude fixes the problems the last review found.",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_rework",
+  "words": "rework the draft: %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Claude rewrites the draft following your instruction.",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_rewrite",
+  "words": "rewrite %1 to %2",
+  "slots": [
+   "TEXT",
+   "HOW"
+  ],
+  "tooltip": "For example: rewrite (draft) to (translate into French).",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_run_program",
+  "words": "run program %1 with %2",
+  "slots": [
+   "NAME",
+   "VALUE"
+  ],
+  "tooltip": "Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported.",
+  "category": "Programs",
+  "capability": null
+ },
+ {
+  "type": "rb_sabnzbd_diskspace",
+  "words": "SABnzbd diskspace",
+  "slots": [],
+  "tooltip": "A list of records, one for each of SABnzbd's folders (the download folder first): folder and free_gb.",
+  "category": "SABnzbd",
+  "capability": "sabnzbd_read"
+ },
+ {
+  "type": "rb_sabnzbd_history",
+  "words": "SABnzbd history, last %1 hours",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, one for each job that finished in that time: name, status (Completed or Failed), size_mb, when it finished and, for a failure, why it failed.",
+  "category": "SABnzbd",
+  "capability": "sabnzbd_read"
+ },
+ {
+  "type": "rb_sabnzbd_pause",
+  "words": "%1 SABnzbd",
+  "slots": [
+   "ACTION"
+  ],
+  "tooltip": "Pauses or resumes the whole download queue. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really pauses.",
+  "category": "SABnzbd",
+  "capability": "sabnzbd_control"
+ },
+ {
+  "type": "rb_sabnzbd_queue",
+  "words": "SABnzbd queue",
+  "slots": [],
+  "tooltip": "A list of records, one for each job in the download queue: name, size_mb, left_mb, percent, eta (time left, like 0:12:34) and status (Downloading, Queued, Paused). On this page it uses a sample queue.",
+  "category": "SABnzbd",
+  "capability": "sabnzbd_read"
+ },
+ {
+  "type": "rb_say",
+  "words": "say %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Writes a note in the run log.",
+  "category": "Output",
+  "capability": null
+ },
+ {
+  "type": "rb_score",
+  "words": "score %1 out of 10 for %2",
+  "slots": [
+   "TEXT",
+   "CRITERIA"
+  ],
+  "tooltip": "",
+  "category": "Review",
+  "capability": null
+ },
+ {
+  "type": "rb_set_draft",
+  "words": "set draft to %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_set_instructions",
+  "words": "set instructions for Claude to %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Sent with every Claude call after this block, for example a role, tone or house style.",
+  "category": "Ask Claude",
+  "capability": null
+ },
+ {
+  "type": "rb_setup_check",
+  "words": "this program's setup check",
+  "slots": [],
+  "tooltip": "The same checks as running the program with --doctor, as text: each key, package and connection it uses, with ok, FAIL or NOTE. It only reads: nothing is sent, switched or charged. Only in exported Python; on this page it says so.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_show",
+  "words": "show the draft in the log",
+  "slots": [],
+  "tooltip": "",
+  "category": "Output",
+  "capability": null
+ },
+ {
+  "type": "rb_slack_send",
+  "words": "send Slack message %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.",
+  "category": "Connections",
+  "capability": "slack_send"
+ },
+ {
+  "type": "rb_slack_when",
+  "words": "when a Slack message arrives containing %1",
+  "slots": [
+   "CONTAINS"
+  ],
+  "tooltip": "Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.",
+  "category": "Connections",
+  "capability": "slack_read"
+ },
+ {
+  "type": "rb_solax_now",
+  "words": "Solax figures",
+  "slots": [],
+  "tooltip": "A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter.",
+  "category": "Solax",
+  "capability": "solax_read"
+ },
+ {
+  "type": "rb_sort",
+  "words": "sort %1 by %2 %3",
+  "slots": [
+   "LIST",
+   "KEY",
+   "ORDER"
+  ],
+  "tooltip": "Sorts a list of records by a field. Leave the field empty to sort plain items.",
+  "category": "Records",
+  "capability": null
+ },
+ {
+  "type": "rb_start",
+  "words": "when Run is clicked",
+  "slots": [],
+  "tooltip": "Every program starts here. Blocks below it run top to bottom. Several of these run side by side.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_stop",
+  "words": "stop the run",
+  "slots": [],
+  "tooltip": "End the run here. Anything already in the result is shown.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_task",
+  "words": "set task to %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Sets what the AI should produce.",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_task_get",
+  "words": "task",
+  "slots": [],
+  "tooltip": "",
+  "category": "Draft",
+  "capability": null
+ },
+ {
+  "type": "rb_tautulli_history",
+  "words": "Tautulli history, last %1 days",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, one for each thing watched in that many days, from Tautulli: user, title, when and transcode (whether it was transcoded). It only reads. Needs TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini.",
+  "category": "Plex",
+  "capability": "plex_read"
+ },
+ {
+  "type": "rb_tautulli_watchtime",
+  "words": "Tautulli watch time, last %1 days",
+  "slots": [
+   "N"
+  ],
+  "tooltip": "A list of records, one for each person who watched in that many days, from Tautulli: user and hours. It only reads.",
+  "category": "Plex",
+  "capability": "plex_read"
+ },
+ {
+  "type": "rb_tg_message",
+  "words": "Telegram message %1",
+  "slots": [
+   "PART"
+  ],
+  "tooltip": "The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script.",
+  "category": "Connections",
+  "capability": "telegram_read"
+ },
+ {
+  "type": "rb_tg_send",
+  "words": "send Telegram message %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.",
+  "category": "Connections",
+  "capability": "telegram_send"
+ },
+ {
+  "type": "rb_tg_when",
+  "words": "when a Telegram message arrives containing %1",
+  "slots": [
+   "CONTAINS"
+  ],
+  "tooltip": "Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message.",
+  "category": "Connections",
+  "capability": "telegram_read"
+ },
+ {
+  "type": "rb_timer",
+  "words": "timer",
+  "slots": [],
+  "tooltip": "Seconds since the run started or the timer was reset.",
+  "category": "Wait & time",
+  "capability": null
+ },
+ {
+  "type": "rb_tokens_used",
+  "words": "tokens used so far",
+  "slots": [],
+  "tooltip": "Tokens this run has used: sent plus received. An estimate on this page, exact in exported Python.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_try",
+  "words": "try",
+  "slots": [],
+  "tooltip": "Runs the first part. If anything in it fails, runs the second part instead of stopping the run.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_unifi_clients",
+  "words": "UniFi clients",
+  "slots": [],
+  "tooltip": "A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network.",
+  "category": "UniFi",
+  "capability": "unifi_read"
+ },
+ {
+  "type": "rb_unifi_devices",
+  "words": "UniFi devices",
+  "slots": [],
+  "tooltip": "A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%).",
+  "category": "UniFi",
+  "capability": "unifi_read"
+ },
+ {
+  "type": "rb_unraid_array",
+  "words": "Unraid array",
+  "slots": [],
+  "tooltip": "One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb, total_gb and uptime. On this page it uses a sample server.",
+  "category": "Unraid",
+  "capability": "unraid_read"
+ },
+ {
+  "type": "rb_unraid_container_power",
+  "words": "%1 Unraid container %2",
+  "slots": [
+   "ACTION",
+   "NAME"
+  ],
+  "tooltip": "Starts or stops one Docker container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops.",
+  "category": "Unraid",
+  "capability": "unraid_control"
+ },
+ {
+  "type": "rb_unraid_containers",
+  "words": "Unraid containers",
+  "slots": [],
+  "tooltip": "A list of records, one for each Docker container: name, state (running, exited, ...), status and auto_start (whether Unraid starts it with the array).",
+  "category": "Unraid",
+  "capability": "unraid_read"
+ },
+ {
+  "type": "rb_unraid_disks",
+  "words": "Unraid disks",
+  "slots": [],
+  "tooltip": "A list of records, one for each disk in the array, parity first then data then cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb.",
+  "category": "Unraid",
+  "capability": "unraid_read"
+ },
+ {
+  "type": "rb_unraid_parity",
+  "words": "check Unraid's parity",
+  "slots": [],
+  "tooltip": "Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks.",
+  "category": "Unraid",
+  "capability": "unraid_control"
+ },
+ {
+  "type": "rb_unraid_shares",
+  "words": "Unraid shares",
+  "slots": [],
+  "tooltip": "A list of records, one for each user share: name, free_gb, used_gb and total_gb.",
+  "category": "Unraid",
+  "capability": "unraid_read"
+ },
+ {
+  "type": "rb_unraid_vm_power",
+  "words": "%1 Unraid VM %2",
+  "slots": [
+   "ACTION",
+   "NAME"
+  ],
+  "tooltip": "Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops.",
+  "category": "Unraid",
+  "capability": "unraid_control"
+ },
+ {
+  "type": "rb_unraid_vms",
+  "words": "Unraid VMs",
+  "slots": [],
+  "tooltip": "A list of records, one for each virtual machine: name and state (RUNNING, SHUTOFF, ...).",
+  "category": "Unraid",
+  "capability": "unraid_read"
+ },
+ {
+  "type": "rb_use_model",
+  "words": "use model %1",
+  "slots": [
+   "TIER"
+  ],
+  "tooltip": "Switch model for the AI blocks after this one. Models other than Claude run in exported Python; in this page Claude stands in for them.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_wait",
+  "words": "wait %1 %2",
+  "slots": [
+   "SECS",
+   "UNIT"
+  ],
+  "tooltip": "Pause this script (up to 24 hours).",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_wait_msg",
+  "words": "wait until I receive %1",
+  "slots": [
+   "MSG"
+  ],
+  "tooltip": "Pause this script until another script broadcasts the message.",
+  "category": "Wait & time",
+  "capability": null
+ },
+ {
+  "type": "rb_wait_time",
+  "words": "wait until %1 : %2",
+  "slots": [
+   "HOUR",
+   "MINUTE"
+  ],
+  "tooltip": "Pause until this time (24-hour clock). If it has passed today, waits until tomorrow.",
+  "category": "Wait & time",
+  "capability": null
+ },
+ {
+  "type": "rb_wait_until",
+  "words": "wait until %1",
+  "slots": [
+   "COND"
+  ],
+  "tooltip": "Pause until the condition is true. Checked twice a second, or every 10 seconds if it asks Claude.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_web_search",
+  "words": "search the web for %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "In exported Python this searches the live web. In this page Claude can't browse, so it answers from its own knowledge and the log says so.",
+  "category": "Ask Claude",
+  "capability": "web"
+ },
+ {
+  "type": "rb_webhook_when",
+  "words": "when a web request arrives at / %1",
+  "slots": [
+   "PATH"
+  ],
+  "tooltip": "Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address.",
+  "category": "Connections",
+  "capability": "webhook"
+ },
+ {
+  "type": "rb_when_time",
+  "words": "when it's %1 : %2 %3",
+  "slots": [
+   "HOUR",
+   "MINUTE",
+   "DAYS"
+  ],
+  "tooltip": "Runs at this time (24-hour clock) while Schedules is on and this page is open.",
+  "category": "Events",
+  "capability": null
+ },
+ {
+  "type": "rb_with_any_model",
+  "words": "with OpenRouter model %1",
+  "slots": [
+   "MODEL"
+  ],
+  "tooltip": "Runs just the blocks inside on any model OpenRouter offers. Type its name from openrouter.ai/models, for example mistralai/mistral-small or google/gemma-4-31b-it. openrouter/auto picks one for you. Runs in exported Python (needs OPENROUTER_API_KEY); in this page Claude stands in.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_with_model",
+  "words": "with model %1",
+  "slots": [
+   "TIER"
+  ],
+  "tooltip": "Runs just the blocks inside on this model, then goes back to the model before. Models other than Claude run in exported Python; in this page Claude stands in for them.",
+  "category": "Control",
+  "capability": null
+ },
+ {
+  "type": "rb_word_count",
+  "words": "word count of %1",
+  "slots": [
+   "TEXT"
+  ],
+  "tooltip": "",
+  "category": "Text",
+  "capability": null
+ }
+]
