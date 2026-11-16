@@ -8,7 +8,8 @@ on:
 
 jobs:
   # Whether a pull request changes anything but Markdown. The end-to-end jobs (the slow ones) are skipped when it
-  # doesn't; the unit tests always run, since some of them read README.md, CHANGELOG.md and gallery/README.md.
+  # doesn't; the unit tests always run, since they read README.md, CHANGELOG.md and gallery/README.md, and check the
+  # docs' counts and links (tests/unit/test_docs.py, #419).
   changes:
     runs-on: ubuntu-latest
     outputs:
