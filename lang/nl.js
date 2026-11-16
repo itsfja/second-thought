@@ -2360,6 +2360,8 @@
 "has a link":"heeft een link",
 "{n} words; the limit is {limit}":"{n} woorden; de limiet is {limit}",
 "not valid JSON":"geen geldige JSON",
-"no link in it":"geen link erin"
+"no link in it":"geen link erin",
+"this runtime holds {n} signing keys and checks each release's signature against them":"deze runtime heeft {n} ondertekeningssleutels en controleert de handtekening van elke release daarmee",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"er is nog geen ondertekeningssleutel ingesteld, dus --update-runtime controleert alleen de SHA-256 van de release"
 }
 };

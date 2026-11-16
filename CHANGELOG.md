@@ -22,6 +22,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+### Security
+- The runtime holds two release-signing keys, the working one and a spare kept somewhere else, and `--update-runtime` accepts a release signed by either (#429): `UPDATE_SIGNING_KEY` and `UPDATE_SIGNING_SPARE_KEY` in update.py. A key can now be retired by dropping it from the next release's runtime — [SECURITY.md](SECURITY.md) says how — instead of losing it and having to re-export every program, and `--doctor` says on its Runtime line that this runtime checks signatures, and how many keys it holds. Until the first signed release both keys are empty and the SHA-256 check applies as before (#311).
+
 ### Added
 - **Exact checks in a review** (#425): the *review the draft against …* and *review … up to N rounds* blocks have an **and check** slot holding *at most … words*, *mentions …*, *doesn't mention …*, *is valid JSON* and *has a link*. The runtime works them out itself — numbers are calculated, not guessed — so they cost no model call and always give the same answer; a review with only exact checks makes no model call at all. A failure goes into the problems with the real number ("231 words; the limit is 200"), and each check shows as a rule in the rules-by-round table.
 - **A new agent tool, `ai_usage`** (the **model services: usage, plans and limits** choice): it reports what each of the person's model services has been used — spent this hour, today, this week and this month, the plan and monthly cap set for it and how much of that is gone or overspent, any allowances, and the rate limits the services themselves reported — counted on this computer, at list prices, like the end-of-run lines. On the page the tool says spending is only counted in exported Python, since the page runs on the person's claude.ai account. The gallery program **AI spend report** sends the report to Telegram each morning.

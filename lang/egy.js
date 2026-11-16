@@ -2360,7 +2360,9 @@
 "has a link":"sꜣḫ mꜣꜥ",
 "{n} words; the limit is {limit}":"mdw {n}; mꜣꜥ {limit}",
 "not valid JSON":"nn mꜣꜥ JSON",
-"no link in it":"nn sꜣḫ"
+"no link in it":"nn sꜣḫ",
+"this runtime holds {n} signing keys and checks each release's signature against them":"runtime pn {n} ḫtm.w m jrt pn, ḫtm n.w n release pn m rnp",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ḫtm.w ꜥnḫ m jrt pn; --update-runtime šꜣꜥ SHA-256 n release pn"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

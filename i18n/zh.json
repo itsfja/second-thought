@@ -3727,6 +3727,8 @@
   "has a link": "包含链接",
   "{n} words; the limit is {limit}": "{n} 个字；上限是 {limit}",
   "not valid JSON": "不是有效的JSON",
-  "no link in it": "里面没有链接"
+  "no link in it": "里面没有链接",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "此运行时持有 {n} 个签名密钥，并用它们校验每个版本的签名",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "尚未设置签名密钥，因此 --update-runtime 只校验版本的 SHA-256"
  }
 }

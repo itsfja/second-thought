@@ -3718,7 +3718,9 @@
   "has a link": "имать ссылꙋ",
   "{n} words; the limit is {limit}": "{n} словъ; предѣлъ {limit} ѥстъ",
   "not valid JSON": "не истиньно JSON",
-  "no link in it": "ни єдинꙛ ꙁвена нѣстъ"
+  "no link in it": "ни єдинꙛ ꙁвена нѣстъ",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "этот runtime держит {n} ключей подписи и проверяет подпись каждого релиза ими",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ключ подписи ещё не задан, поэтому --update-runtime проверяет только SHA-256 релиза"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Ⱂⱃⰻⰾⱁⰶⰻ ⱅⱁⰾⰽⱏ",

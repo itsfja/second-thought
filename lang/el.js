@@ -2360,6 +2360,8 @@
 "has a link":"έχει σύνδεσμο",
 "{n} words; the limit is {limit}":"{n} λέξεις· το όριο είναι {limit}",
 "not valid JSON":"μη έγκυρο JSON",
-"no link in it":"χωρίς σύνδεσμο"
+"no link in it":"χωρίς σύνδεσμο",
+"this runtime holds {n} signing keys and checks each release's signature against them":"αυτό το runtime κατέχει {n} κλειδιά υπογραφής και ελέγχει την υπογραφή κάθε έκδοσης με αυτά",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"δεν έχει οριστεί ακόμα κλειδί υπογραφής, οπότε το --update-runtime ελέγχει μόνο το SHA-256 της έκδοσης"
 }
 };

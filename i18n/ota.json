@@ -3718,7 +3718,9 @@
   "has a link": "bir bağlantısı var",
   "{n} words; the limit is {limit}": "{n} kelime; sınır {limit}",
   "not valid JSON": "geçerli JSON değil",
-  "no link in it": "içinde bağlantı yok"
+  "no link in it": "içinde bağlantı yok",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "bu runtime {n} imzalama anahtarı tutar ve her sürümün imzasını onlarla kontrol eder",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "henüz imzalama anahtarı ayarlanmadı, bu yüzden --update-runtime yalnızca sürümün SHA-256 değerini kontrol eder"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

@@ -2360,7 +2360,9 @@
 "has a link":"लिंक है",
 "{n} words; the limit is {limit}":"{n} शब्द; सीमा {limit}",
 "not valid JSON":"न वाली JSON",
-"no link in it":"न लिंक"
+"no link in it":"न लिंक",
+"this runtime holds {n} signing keys and checks each release's signature against them":"अयं runtime {n} हत्थक्खित-केयानि धारेति, पज्जेकं विमोजनं ज तेसु परीक्खति",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"अदानि पि हत्थक्खित-केयम् न नियतं, तस्मा --update-runtime केवलं विमोजनस्स SHA-256 परीक्खति"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

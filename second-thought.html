@@ -8561,6 +8561,10 @@ class Doctor:
         update = self.update_status()
         if update:
             row(update[0], "Runtime", update[1])
+        keys = self.signing_keys()
+        row("ok" if keys else "NOTE", "Runtime",
+            tr("this runtime holds {n} signing keys and checks each release's signature against them", n=len(keys)) if keys else
+            tr("no signing key is set yet, so --update-runtime checks only the release's SHA-256"))
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=" + ".join(SETTINGS_PATHS)) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
         for text in self.settings_notes():
@@ -8678,12 +8682,16 @@ RELEASES = "https://api.github.com/repos/itsfja/second-thought/releases"
 UPDATE_TIMEOUT = 20
 RUNTIME_ASSET_LIMIT = 8_000_000
 
-# The public half of the key releases are signed with (#311): 32 bytes of Ed25519 public key, as 64 hex characters.
-# The private half never touches GitHub: each release's runtime.py is signed on the maintainer's computer
-# (tools/sign_runtime.py) and the .sig is attached to the release. --update-runtime then refuses a runtime whose
-# signature doesn't match, so whoever can publish a release can't publish a runtime this program will run. Empty means
+# The public halves of the keys releases are signed with (#311, #429): each is 32 bytes of an Ed25519 public key,
+# as 64 hex characters. UPDATE_SIGNING_KEY is the working key that signs the releases; UPDATE_SIGNING_SPARE_KEY is the
+# spare, whose private half is kept somewhere else, so one key can be retired without re-exporting every program:
+# a release signed by either is accepted, and the next release's runtime drops the retired one (SECURITY.md says how).
+# The private halves never touch GitHub: each release's runtime.py is signed on the maintainer's computer
+# (tools/sign_runtime.py) and the .sig is attached to the release. --update-runtime then refuses a runtime signed by
+# neither key, so whoever can publish a release can't publish a runtime this program will run. Both empty means
 # no release has been signed yet, and --update-runtime keeps checking the SHA-256 as before.
 UPDATE_SIGNING_KEY = ""
+UPDATE_SIGNING_SPARE_KEY = ""
 
 # Pure-Python Ed25519 signature checking (RFC 8032): the standard library has none, and an exported program installs
 # nothing. Only verification: signing happens off GitHub, with tools/sign_runtime.py.
@@ -8806,6 +8814,12 @@ class Updates:
     """Part of Runtime: whether a newer runtime is out, and putting one into this program file."""
 
     @staticmethod
+    def signing_keys():
+        """The public halves (as bytes) this runtime accepts a release's signature from (#429): the working key and
+        the spare, whichever is set."""
+        return [bytes.fromhex(k) for k in (UPDATE_SIGNING_KEY, UPDATE_SIGNING_SPARE_KEY) if k]
+
+    @staticmethod
     def _releases_get(url, limit=3_000_000):
         headers = {"Accept": "application/vnd.github+json", "User-Agent": "second-thought-runtime/" + RUNTIME_VERSION}
         with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=UPDATE_TIMEOUT) as r:
@@ -8891,7 +8905,8 @@ class Updates:
         if len(body) > RUNTIME_ASSET_LIMIT or not expected or hashlib.sha256(body).hexdigest() != expected[0].lower():
             print(tr("The downloaded runtime doesn't match its SHA-256, so it wasn't used. Nothing was changed."))
             return 1
-        if UPDATE_SIGNING_KEY:
+        keys = self.signing_keys()
+        if keys:
             sig = b""
             if assets.get("runtime.py.sig"):
                 try:
@@ -8899,7 +8914,7 @@ class Updates:
                     sig = base64.b64decode(raw.decode("utf-8", "replace").strip(), validate=True)
                 except (urllib.error.URLError, OSError, ValueError):
                     sig = b""
-            if not _ed25519_ok(sig, body, bytes.fromhex(UPDATE_SIGNING_KEY)):
+            if not any(_ed25519_ok(sig, body, key) for key in keys):
                 print(tr("Release {latest} isn't signed by the key this runtime holds, so it wasn't used. Nothing was changed.", latest=latest))
                 return 1
         try:

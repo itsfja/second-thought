@@ -584,6 +584,10 @@ class Doctor:
         update = self.update_status()
         if update:
             row(update[0], "Runtime", update[1])
+        keys = self.signing_keys()
+        row("ok" if keys else "NOTE", "Runtime",
+            tr("this runtime holds {n} signing keys and checks each release's signature against them", n=len(keys)) if keys else
+            tr("no signing key is set yet, so --update-runtime checks only the release's SHA-256"))
         row("ok" if SETTINGS_PATH else "NOTE", "Settings", tr("read {settings_path}", settings_path=" + ".join(SETTINGS_PATHS)) if SETTINGS_PATH else
             tr("no second-thought.ini found next to the program, in this folder or in your home folder, so only environment variables are used"))
         for text in self.settings_notes():

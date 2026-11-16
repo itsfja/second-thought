@@ -44,8 +44,9 @@ def ed25519_sign(msg, seed_hex):
     return r_bytes + s.to_bytes(32, "little"), pub.hex()
 
 
-def with_signing_key(runtime, key_hex):
-    return re.sub(r'^UPDATE_SIGNING_KEY = "[^"]*"', f'UPDATE_SIGNING_KEY = "{key_hex}"', runtime, count=1, flags=re.M)
+def with_signing_keys(runtime, working="", spare=""):
+    out = re.sub(r'^UPDATE_SIGNING_KEY = "[^"]*"', f'UPDATE_SIGNING_KEY = "{working}"', runtime, count=1, flags=re.M)
+    return re.sub(r'^UPDATE_SIGNING_SPARE_KEY = "[^"]*"', f'UPDATE_SIGNING_SPARE_KEY = "{spare}"', out, count=1, flags=re.M)
 
 
 class Releases:
@@ -206,6 +207,19 @@ class Doctor(unittest.TestCase):
         os.environ["RB_UPDATE_CHECK"] = "no"
         self.assertIsNone(self.rt.update_status())
 
+    def test_signing_keys_are_the_keys_that_are_set(self):
+        # #429: --doctor's Runtime line says this runtime checks signatures, and signing_keys() is what it reads.
+        saved = update.UPDATE_SIGNING_KEY, update.UPDATE_SIGNING_SPARE_KEY
+        try:
+            update.UPDATE_SIGNING_KEY, update.UPDATE_SIGNING_SPARE_KEY = "", ""
+            self.assertEqual(self.rt.signing_keys(), [])
+            update.UPDATE_SIGNING_KEY, update.UPDATE_SIGNING_SPARE_KEY = "11" * 32, ""
+            self.assertEqual(self.rt.signing_keys(), [b"\x11" * 32])
+            update.UPDATE_SIGNING_SPARE_KEY = "22" * 32
+            self.assertEqual(self.rt.signing_keys(), [b"\x11" * 32, b"\x22" * 32])
+        finally:
+            update.UPDATE_SIGNING_KEY, update.UPDATE_SIGNING_SPARE_KEY = saved
+
 
 class UpdateInPlace(unittest.TestCase):
     """Runs a real program file with --update-runtime, as someone would."""
@@ -286,21 +300,30 @@ class UpdateInPlace(unittest.TestCase):
 
 
 class SignedRelease(UpdateInPlace):
-    """A runtime that holds a signing key (#311) refuses a release that isn't signed by it."""
+    """A runtime that holds signing keys (#311, #429) accepts a release signed by either and refuses the rest."""
 
     SEED = "9d61b19deffd5a60ba844af492ec2cc44449c56967b326719603b61e15d72a9d"
 
-    def test_a_signed_release_updates(self):
+    def test_a_release_signed_by_the_working_key_updates(self):
         new_runtime = as_version(RUNTIME, NEXT)
         sig, pub_hex = ed25519_sign(new_runtime.encode("utf-8"), self.SEED)
-        self.write(with_signing_key(exported(RUNTIME), pub_hex))
+        self.write(with_signing_keys(exported(RUNTIME), working=pub_hex, spare="22" * 32))
+        self.gh.release(NEXT, new_runtime, sig=sig)
+        r = self.run_it("--update-runtime")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn(f"from {RUNTIME_VERSION} to {NEXT}", r.stdout)
+
+    def test_a_release_signed_by_the_spare_key_updates(self):
+        new_runtime = as_version(RUNTIME, NEXT)
+        sig, pub_hex = ed25519_sign(new_runtime.encode("utf-8"), self.SEED)
+        self.write(with_signing_keys(exported(RUNTIME), working="11" * 32, spare=pub_hex))
         self.gh.release(NEXT, new_runtime, sig=sig)
         r = self.run_it("--update-runtime")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn(f"from {RUNTIME_VERSION} to {NEXT}", r.stdout)
 
     def test_an_unsigned_release_is_refused(self):
-        before = with_signing_key(exported(RUNTIME), "11" * 32)
+        before = with_signing_keys(exported(RUNTIME), working="11" * 32, spare="22" * 32)
         self.write(before)
         self.gh.release(NEXT, as_version(RUNTIME, NEXT))
         r = self.run_it("--update-runtime")
@@ -309,7 +332,7 @@ class SignedRelease(UpdateInPlace):
         self.assertEqual(self.read(), before)
 
     def test_a_wrongly_signed_release_is_refused(self):
-        before = with_signing_key(exported(RUNTIME), "11" * 32)
+        before = with_signing_keys(exported(RUNTIME), working="11" * 32, spare="22" * 32)
         self.write(before)
         self.gh.release(NEXT, as_version(RUNTIME, NEXT), sig=b"\x01" * 64)
         r = self.run_it("--update-runtime")

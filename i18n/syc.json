@@ -3719,7 +3719,9 @@
   "has a link": "ḥablā šarīr",
   "{n} words; the limit is {limit}": "meltā {n}; šiyāmā {limit}",
   "not valid JSON": "lā šarīr JSON",
-  "no link in it": "lā ḥablā"
+  "no link in it": "lā ḥablā",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "hānā runtime naḥeš {n} mappteyē d-ḥetmā, w-ḥetmā d-kol šaršerā b-hén",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "lā ꜥadmeḥ mappteḥā d-ḥetmā mtzā; --update-runtime naḥeš balḥod SHA-256 d-šaršerā"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

@@ -3717,7 +3717,9 @@
   "has a link": "quipiya ce huitztiliztli",
   "{n} words; the limit is {limit}": "{n} tlahtolli; ōmōtl {limit}",
   "not valid JSON": "ahmo cualli JSON",
-  "no link in it": "ahmo huitztiliztli ipan"
+  "no link in it": "ahmo huitztiliztli ipan",
+  "this runtime holds {n} signing keys and checks each release's signature against them": "inin runtime quipiya {n} tlatquitilli tlachializtli huan quinmomaquilia in tlachializtli in mochintin tlanelhuiliztin",
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ayamo tlapatilli tlachializtli mochipa, ic --update-runtime san quinmomaquilia in SHA-256 in tlanelhuiliztli"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

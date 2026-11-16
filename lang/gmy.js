@@ -2361,7 +2361,9 @@
 "has a link":"we-te a-ke-ta",
 "{n} words; the limit is {limit}":"e-pe {n}; te-re-mo {limit}",
 "not valid JSON":"JSON a-ke-ta e-te-o",
-"no link in it":"we-te a-ke-ta"
+"no link in it":"we-te a-ke-ta",
+"this runtime holds {n} signing keys and checks each release's signature against them":"runtime {n} ka-ra-pe-ta e-ke, te-ke-te-se e-ra-ke",
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"o-u a-ke-ta ka-ra-pe; --update-runtime SHA-256 ta te-ke-te-se"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",
