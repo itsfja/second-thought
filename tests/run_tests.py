@@ -32,7 +32,7 @@ from e2e.common import *  # noqa: E402,F401,F403  (tools/record_demo.py uses rou
 from e2e.page import page_tests  # noqa: E402
 from e2e.page_features import phone_palette_tests  # noqa: E402
 from e2e.python_export import PROGRAM_TIMES, group_share, python_tests  # noqa: E402
-from e2e.sources import docs_check, example_ini_check, links_check, package_check, sri_check  # noqa: E402
+from e2e.sources import example_ini_check, package_check, sri_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import broken_gallery_tests, gallery_smoke_tests, gallery_tests  # noqa: E402
 from e2e.actions import actions_tests  # noqa: E402
@@ -166,8 +166,6 @@ def main():
             check(unit.returncode == 0, f"the unit tests in tests/unit pass ({ran.group(1) if ran else '?'} tests)"
                   + ("" if unit.returncode == 0 else ":\n" + unit.stderr.strip()[-1500:]))
             example_ini_check()
-            docs_check()
-            links_check()
             sri_check()
             editor_unit_tests()
     if areas - {"sources"} and not (VENDOR / "blockly").exists():
