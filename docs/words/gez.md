@@ -1,0 +1,46 @@
+# ግዕዝ: everyday words
+
+Made by tools/sync.py from i18n/gez.json: edit that, not this.
+
+- Events: ኵነታት
+- Control: ምልክና
+- Wait & time: ጽንሐት ወጊዜ
+- Operators: ገባርያን
+- Text: ጽሑፍ
+- Variables: ተወላጥያን
+- Lists: ዝርዝራት
+- My Blocks: ግንፋላትየ
+- Programs: ሥርዐታት
+- Search results: ፍሬ ኅሠሣ
+- Draft: ቅድመ ጽሑፍ
+- Ask Claude: ስአል Claude
+- Review: ሐተታ
+- Agent: ላእክ
+- Tools: ንዋያት
+- Connections: ተራክቦታት
+- You: አንተ
+- Records: ጦማራት
+- Files: መጻሕፍት
+- Memory: ዝክር
+- Pictures: ሥዕላት
+- Home Assistant: Home Assistant
+- Homey: Homey
+- Output: ጸአት
+- Coinbase: Coinbase
+- MikroTik: MikroTik
+- Solax: Solax
+- Powerwall: Powerwall
+- UniFi: UniFi
+- Proxmox: Proxmox
+- Docker: Docker
+- SABnzbd: SABnzbd
+- Radarr and Sonarr: Radarr ወ Sonarr
+- Unraid: Unraid
+- NZBGeek: NZBGeek
+- Pi-hole: Pi-hole
+- Plex: Plex
+- Tools for the agent: drop them inside an agent block: ንዋያተ ላእክ፡ ደዮሙ ውስተ ግንፋለ ላእክ
+- Listeners: they run while the exported program runs on schedule: ሰማዕያን፡ ይረውጹ እንዘ ይረውጽ ሥርዐት ዘወፅአ በበጊዜሁ
+- Read and send: አንብብ ወፈኑ
+- Type in 'Find a block' above the canvas.: ጸሐፍ ውስተ 'ርከብ ግንፋለ' መልዕልተ ሰሌዳ።
+- No blocks match: አልቦ ግንፋል ዘይሰነአው
