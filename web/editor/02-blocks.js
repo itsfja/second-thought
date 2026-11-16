@@ -170,7 +170,7 @@
     rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control" };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
-    "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
+    "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_chk_json rb_chk_link rb_chk_max_words rb_chk_mentions rb_chk_no_mention rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
     "rb_event rb_every rb_extract rb_finish_with rb_generate rb_img_ask rb_img_change rb_img_draw rb_img_score rb_img_show rb_longtext " +
     "rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
     "rb_reflect rb_reset_timer rb_result rb_result_text rb_retry rb_review rb_revise rb_rework rb_rewrite rb_run_program rb_say rb_score " +
@@ -315,13 +315,33 @@
       message0:"review the draft against %1", args0:[val("CRITERIA")],
       message1:"up to %1 rounds; when it fails, do", args1:[val("ROUNDS")],
       message2:"%1", args2:[{ type:"input_statement", name:"FIX" }],
+      message3:"and check %1", args3:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one." },
-    S("rb_review", "review the draft against %1", [val("CRITERIA")], { style:"review", tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards." }),
+      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model." },
+    { type:"rb_review",
+      message0:"review the draft against %1", args0:[val("CRITERIA")],
+      message1:"and check %1", args1:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
+      previousStatement:null, nextStatement:null, style:"review",
+      tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer." },
     V("rb_passed", "draft passed review", [], "Boolean", { style:"review" }),
     V("rb_problems", "review problems", [], "Array", { style:"review" }),
     V("rb_score", "score %1 out of 10 for %2", [val("TEXT"), val("CRITERIA")], "Number", { style:"review", inputsInline:true }),
     V("rb_better", "better of %1 and %2 for %3", [val("A"), val("B"), val("CRITERIA")], "String", { style:"review", inputsInline:true }),
+    { type:"rb_chk_max_words", message0:"at most %1 words", args0:[val("N")],
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Counts the draft's words exactly — models count badly — and fails the review if there are more. The problem says the real count, like '231 words; the limit is 200'." },
+    { type:"rb_chk_mentions", message0:"mentions %1", args0:[val("TEXT")],
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review unless the draft contains these words (case doesn't matter)." },
+    { type:"rb_chk_no_mention", message0:"doesn't mention %1", args0:[val("TEXT")],
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review if the draft contains these words (case doesn't matter)." },
+    { type:"rb_chk_json", message0:"is valid JSON",
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review unless the draft is valid JSON." },
+    { type:"rb_chk_link", message0:"has a link",
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review unless the draft contains a link (http://… or www.…)." },
     /* You */
     S("rb_ask_me", "ask me %1 and wait", [val("TEXT")], { style:"you", inputsInline:true, tooltip:"Pauses the run until you type an answer in the log." }),
     V("rb_answer", "answer", [], "String", { style:"you" }),

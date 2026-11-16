@@ -437,6 +437,53 @@ def stuck_rule(prev_unmet, unmet):
     return next((to_str(p) for p in prev_unmet if to_str(p) in now), None)
 
 
+LINK_RE = re.compile(r"https?://\S+|www\.\S+", re.I)
+
+
+def _intish(v):
+    n = num(v)
+    return int(n) if float(n).is_integer() else n
+
+
+def exact_checks(text, checks):
+    """The review's exact checks, worked out by code, not by a model (#425): each [kind, value] in checks becomes a
+    verdict {rule, met, problem, shows}. kinds: max_words (at most value words), mentions / no_mention (the draft
+    does / doesn't contain value, case doesn't matter), json (the draft is valid JSON), link (the draft has a link).
+    A failure's problem carries the real number. The page's exactChecks does the same."""
+    t = to_str(text)
+    out = []
+    for c in checks or []:
+        if not isinstance(c, (list, tuple)) or not c:
+            continue
+        kind, val = to_str(c[0]).strip(), (c[1] if len(c) > 1 else None)
+        if kind == "max_words":
+            n, w = _intish(val), word_count(t)
+            out.append({"rule": tr("at most {n} words", n=n), "met": w <= n, "shows": "",
+                        "problem": "" if w <= n else tr("{n} words; the limit is {limit}", n=w, limit=n)})
+        elif kind in ("mentions", "no_mention"):
+            x = to_str(val)
+            hit = bool(x) and x.casefold() in t.casefold()
+            if kind == "mentions":
+                out.append({"rule": tr("mentions {x}", x=x), "met": hit, "shows": "",
+                            "problem": "" if hit else tr("doesn't mention {x}", x=x)})
+            else:
+                out.append({"rule": tr("doesn't mention {x}", x=x), "met": not hit, "shows": "",
+                            "problem": tr("mentions {x}", x=x) if hit else ""})
+        elif kind == "json":
+            try:
+                json.loads(t)
+                ok = True
+            except (ValueError, TypeError):
+                ok = False
+            out.append({"rule": tr("is valid JSON"), "met": ok, "shows": "",
+                        "problem": "" if ok else tr("not valid JSON")})
+        elif kind == "link":
+            m = LINK_RE.search(t)
+            out.append({"rule": tr("has a link"), "met": bool(m), "shows": "",
+                        "problem": "" if m else tr("no link in it")})
+    return out
+
+
 def seen_addresses(text):
     """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
     out = set()

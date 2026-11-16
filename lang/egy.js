@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"𓈖𓆓 Claude 𓂋 𓂋𓐍𓏏: %1","tooltip":"Claude 𓅱𓈙𓃀 𓅓 𓂋𓐍𓏏 𓊪𓎛𓂋𓎡 𓎛𓂋𓋴"},
 "rb_rewrite":{"message0":"𓋴𓈙 𓅓 𓅓𓄿𓅱𓏏 %1 𓂋 %2","tooltip":"𓅓𓇋: 𓋴𓈙 𓅓 𓅓𓄿𓅱𓏏 (𓋴𓈙𓅱) 𓂋 (𓅱𓎛𓂝 𓂋 𓅓𓂧𓅱 𓈖 Frꜥns)."},
 "rb_extract":{"message0":"𓈙𓂧 %1 𓅓 %2"},
-"rb_reflect":{"message0":"𓋴𓇋𓊪 𓋴𓈙𓅱 𓂋 %1","message1":"𓂋 𓋴𓊪 %1; 𓇋𓂋 𓅱𓉔𓆑, 𓇋𓂋","message2":"%1","tooltip":"Claude 𓋴𓇋𓊪 𓋴𓈙𓅱 𓇋𓂋 𓅱𓉔𓆑, 𓇋𓈖𓂋𓅱 𓅓 𓄡𓈖𓅱 𓇋𓂋, 𓋴𓇋𓊪 𓅓 𓅱𓎛𓅓 𓅓 𓋴𓊪 𓈖𓃀 𓋴𓇋𓊪𓅱 𓊪𓏏𓂋 𓇋𓋴𓆑𓏏 𓐍𓄿𓂝 𓈖 𓇋𓅱𓋴 𓅓 𓅱𓎛𓅓 𓇋𓂋 𓎡𓅓 𓋴𓊪𓅱, 𓋴𓈙𓅱 𓄡𓂋 𓇋𓋴𓆑𓏏 𓐍𓅓𓏏 𓋴𓄿𓅱, 𓈖 𓎛𓄿𓅱 𓐍𓄿𓂝"},
-"rb_review":{"message0":"𓋴𓇋𓊪 𓋴𓈙𓅱 𓂋 %1","tooltip":"𓋴𓇋𓊪 𓅱𓂝 𓇋𓂋 '𓋴𓈙𓅱 𓆓𓄿 𓋴𓇋𓊪' 𓎛𓈖𓂝 '𓇋𓋴𓆑𓏏 𓈖𓏏 𓋴𓇋𓊪' 𓅓𓐍𓏏"},
+"rb_reflect":{"message0":"𓋴𓇋𓊪 𓋴𓈙𓅱 𓂋 %1","message1":"𓂋 𓋴𓊪 %1; 𓇋𓂋 𓅱𓉔𓆑, 𓇋𓂋","message2":"%1","tooltip":"Claude 𓋴𓇋𓊪 𓋴𓈙𓅱 𓇋𓂋 𓅱𓉔𓆑, 𓇋𓈖𓂋𓅱 𓅓 𓄡𓈖𓅱 𓇋𓂋, 𓋴𓇋𓊪 𓅓 𓅱𓎛𓅓 𓅓 𓋴𓊪 𓈖𓃀 𓋴𓇋𓊪𓅱 𓊪𓏏𓂋 𓇋𓋴𓆑𓏏 𓐍𓄿𓂝 𓈖 𓇋𓅱𓋴 𓅓 𓅱𓎛𓅓 𓇋𓂋 𓎡𓅓 𓋴𓊪𓅱, 𓋴𓈙𓅱 𓄡𓂋 𓇋𓋴𓆑𓏏 𓐍𓅓𓏏 𓋴𓄿𓅱, 𓈖 𓎛𓄿𓅱 𓐍𓄿𓂝","message3":"𓅓𓄿𓂝 %1"},
+"rb_review":{"message0":"𓋴𓇋𓊪 𓋴𓈙𓅱 𓂋 %1","tooltip":"𓋴𓇋𓊪 𓅱𓂝 𓇋𓂋 '𓋴𓈙𓅱 𓆓𓄿 𓋴𓇋𓊪' 𓎛𓈖𓂝 '𓇋𓋴𓆑𓏏 𓈖𓏏 𓋴𓇋𓊪' 𓅓𓐍𓏏","message1":"𓅓𓄿𓂝 %1"},
 "rb_passed":{"message0":"𓋴𓈙𓅱 𓆓𓄿 𓋴𓇋𓊪"},
 "rb_problems":{"message0":"𓇋𓋴𓆑𓏏 𓈖𓏏 𓋴𓇋𓊪"},
 "rb_score":{"message0":"𓎛𓋴𓃀 %1 𓅓 10 𓈖 %2"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli hraw, akhr %1 ywm","tooltip":"rhta dktba, lda lkl ma f had ywm, mn Tautulli: user, title, when w transcode. bqra fqt. hty' TAUTULLI_URL w TAUTULLI_API_KEY b second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli hraw-t, akhr %1 ywm","tooltip":"rhta dktba, lda lkl rmt ma f had ywm, mn Tautulli: user w hms. bqra fqt."},
 "rb_plex_scan":{"message0":"skn shen %1 hr Pi-hole","tooltip":"skn shen l nfr jded. aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. bhn dawkta la sh bshryra."},
-"rb_plex_stop":{"message0":"hms %1 hr Pi-hole","tooltip":"hms id (Tautulli terminate). aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. bhn dawkta la sh bshryra."}
+"rb_plex_stop":{"message0":"hms %1 hr Pi-hole","tooltip":"hms id (Tautulli terminate). aq n.k aq aq, aq aq aq aq, at n rmt hr aq nfr, aq aq. bhn dawkta la sh bshryra."},
+"rb_chk_max_words":{"message0":"𓅓𓂧𓅱 %1 𓅓𓄿𓐍𓏏","tooltip":"𓇋𓂋𓋴𓏏 𓅓𓄿𓐍𓏏 𓅓𓂧𓅱 𓅓𓄿𓐍𓏏"},
+"rb_chk_mentions":{"message0":"𓅓𓂧 %1","tooltip":"𓈖𓈖 𓅓𓂧"},
+"rb_chk_no_mention":{"message0":"𓈖𓈖 𓅓𓂧 %1","tooltip":"𓇋𓂋 𓅓𓂧"},
+"rb_chk_json":{"message0":"JSON 𓅓𓄿𓂝","tooltip":"𓈖𓈖 𓅓𓄿𓂝 JSON"},
+"rb_chk_link":{"message0":"𓋴𓄿𓐍 𓅓𓄿𓂝","tooltip":"𓈖𓈖 𓋴𓄿𓐍"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𓅓 𓉔𓂋𓅱 𓈖𓃀","weekdays":"𓅓 𓉔𓂋𓅱 𓈖 𓃀𓄿𓎡","weekends":"𓅓 𓉔𓂋𓅱 𓈖 𓎛𓏏𓊪"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"𓂝𓈖𓈖 𓂋 𓋴𓈙𓅱 𓈖 𓋴𓊪 {round}:mꜣꜥt {n} 𓂋 {total} 𓅓 𓋴𓊪𓅱 𓎛𓂋𓋴𓄿𓆑 𓈖 𓋴𓅓𓈖𓐍𓋴𓈖 𓋴𓅱",
 "met":"𓅓",
 "not met":"𓈖𓈖",
-"met {n} of {total}":"𓅓 {n} 𓂋 {total}"
+"met {n} of {total}":"𓅓 {n} 𓂋 {total}",
+"at most {n} words":"𓅓𓂧𓅱 {n} 𓅓𓄿𓐍𓏏",
+"mentions {x}":"𓅓𓂧 {x}",
+"doesn't mention {x}":"𓈖𓈖 𓅓𓂧 {x}",
+"is valid JSON":"JSON 𓅓𓄿𓂝",
+"has a link":"𓋴𓄿𓐍 𓅓𓄿𓂝",
+"{n} words; the limit is {limit}":"𓅓𓂧𓅱 {n}; 𓅓𓄿𓂝 {limit}",
+"not valid JSON":"𓈖𓈖 𓅓𓄿𓂝 JSON",
+"no link in it":"𓈖𓈖 𓋴𓄿𓐍"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ꜥnn r sšw n sp {round}:mꜣꜥt {n} r {total} m. spw ḥr-sꜣ=f n smnḫ=sn sw.",
 "met":"m",
 "not met":"nn",
-"table":"ꜣḫt"
+"table":"ꜣḫt",
+"at most {n} words":"mdw {n} m-ꜣḫt",
+"mentions {x}":"md {x}",
+"doesn't mention {x}":"nn md {x}",
+"is valid JSON":"JSON mꜣꜥ",
+"has a link":"sꜣḫ mꜣꜥ",
+"{n} words; the limit is {limit}":"mdw {n}; mꜣꜥ {limit}",
+"not valid JSON":"nn mꜣꜥ JSON",
+"no link in it":"nn sꜣḫ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

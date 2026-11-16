@@ -396,7 +396,8 @@
    "message0": "प्रारूपं %1 अनुसृत्य समीक्षस्व",
    "message1": "%1 आवर्तनानि यावत्; यदा विफलं, कुरु",
    "message2": "%1",
-   "tooltip": "Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।"
+   "tooltip": "Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।",
+   "message3": "और जांच %1"
   },
   "rb_reset_timer": {
    "message0": "समयमापकं पुनःस्थापय"
@@ -416,7 +417,8 @@
   },
   "rb_review": {
    "message0": "प्रारूपं %1 अनुसृत्य समीक्षस्व",
-   "tooltip": "एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।"
+   "tooltip": "एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।",
+   "message1": "और जांच %1"
   },
   "rb_revise": {
    "message0": "समीक्षायाः दोषान् शोधयितुं संस्कुरु %1 जालस्य साहाय्येन",
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "message0": "Plex %1 pravaham sthapayitum",
    "tooltip": "Ekam pravaham sthapayati (Tautulli terminate). Tvam sarvada prathamam prcchati, anyat kimapi na prcchati sati api, na ca ko'pi ham iti vaktum saknoti tada na kincit karoti. Asmin prsthe kimapi vastutah na parivartate."
+  },
+  "rb_chk_max_words": {
+   "message0": "%1 शब्द न से अधिक",
+   "tooltip": "महिक शब्द"
+  },
+  "rb_chk_mentions": {
+   "message0": "कहता है %1",
+   "tooltip": "न शब्द"
+  },
+  "rb_chk_no_mention": {
+   "message0": "न कहता है %1",
+   "tooltip": "शब्द मि"
+  },
+  "rb_chk_json": {
+   "message0": "JSON वाली",
+   "tooltip": "न वाली JSON"
+  },
+  "rb_chk_link": {
+   "message0": "लिंक है",
+   "tooltip": "न लिंक"
   }
  },
  "options": {
@@ -1907,7 +1929,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मिं {total})। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
   "met": "सिद्धः",
   "not met": "असिद्ध",
-  "met {n} of {total}": "{n} मिं {total}"
+  "met {n} of {total}": "{n} मिं {total}",
+  "at most {n} words": "{n} शब्द न से अधिक",
+  "mentions {x}": "कहता है {x}",
+  "doesn't mention {x}": "न कहता है {x}",
+  "is valid JSON": "JSON वाली",
+  "has a link": "लिंक है",
+  "{n} words; the limit is {limit}": "{n} शब्द; सीमा {limit}",
+  "not valid JSON": "न वाली JSON",
+  "no link in it": "न लिंक है"
  },
  "examples": {
   "review": {
@@ -3690,7 +3720,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मिं {total})। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
   "met": "सिद्धः",
   "not met": "असिद्ध",
-  "table": "पत्र"
+  "table": "पत्र",
+  "at most {n} words": "{n} शब्द न से अधिक",
+  "mentions {x}": "कहता है {x}",
+  "doesn't mention {x}": "न कहता है {x}",
+  "is valid JSON": "JSON वाली",
+  "has a link": "लिंक है",
+  "{n} words; the limit is {limit}": "{n} शब्द; सीमा {limit}",
+  "not valid JSON": "न वाली JSON",
+  "no link in it": "न लिंक है"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

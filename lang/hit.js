@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude-𒀭 𒆏𒁍𒌋𒉿𒅈 𒁍𒉡𒍑: %1","tooltip":"Claude 𒆏𒁍𒌋𒉿𒅈 𒂕𒉺 𒈨𒈠𒄿, 𒆪𒅔 𒂕𒉺 𒂕𒉺 𒄿𒉿𒅆."},
 "rb_rewrite":{"message0":"%1 𒀀𒈾 %2 𒂕𒉺 𒄢𒀸","tooltip":"𒈠𒄴𒄩𒀭: (𒄩𒀭𒋼𒄑𒍣 𒁾) 𒀀𒈾 (Faransa-𒈠𒍝 𒈨𒈪𒀭) 𒂕𒉺 𒄢𒀸."},
 "rb_extract":{"message0":"%1 𒅖𒌅 %2 𒅈𒄩 𒁕"},
-"rb_reflect":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒈾 %1 𒀀𒍑","message1":"%1 𒄿𒉿𒌋𒉿𒅈𒅆; 𒈠𒀀𒀭 𒌌 𒅆𒂟, 𒄿𒉿","message2":"%1","tooltip":"Claude 𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒍑𒍣. 𒁖𒆪 𒌌 𒅆𒂟, 𒋞𒄭𒀀 𒀭𒁕𒀭 𒄿𒉿𒀭𒍣, 𒉡 𒂕𒉺 𒀀𒍑𒍣. 𒄿𒉿𒌋𒉿𒅈 𒄷𒌋𒈠𒀭 𒊭𒆪𒉿𒋻 𒉿𒀸𒋫𒌌 𒅗𒊒𒌑𒄿𒇷 𒌌 𒂕𒉺 𒌑𒀉 𒀀𒍑𒍣. 𒁖𒆪 𒄿𒉿𒌋𒉿𒅈 𒍣𒅔𒈾𒀭𒍣, 𒄩𒀭𒋼𒄑𒍣 𒁾 𒉿𒀸𒋫𒌌 𒌉 𒄯𒍣, 𒀊𒁉𒄑𒍣𒉿 𒌌."},
-"rb_review":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒈾 %1 𒀀𒍑","tooltip":"𒊭𒆪𒉿𒋻 1. 𒂕𒀭 “𒄩𒀭𒋼𒄑𒍣 𒁾 𒅆𒂟” 𒅇 “𒉿𒀸𒋫𒌌 𒊭𒆪𒉿𒋻” 𒄿𒉿."},
+"rb_reflect":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒈾 %1 𒀀𒍑","message1":"%1 𒄿𒉿𒌋𒉿𒅈𒅆; 𒈠𒀀𒀭 𒌌 𒅆𒂟, 𒄿𒉿","message2":"%1","tooltip":"Claude 𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒍑𒍣. 𒁖𒆪 𒌌 𒅆𒂟, 𒋞𒄭𒀀 𒀭𒁕𒀭 𒄿𒉿𒀭𒍣, 𒉡 𒂕𒉺 𒀀𒍑𒍣. 𒄿𒉿𒌋𒉿𒅈 𒄷𒌋𒈠𒀭 𒊭𒆪𒉿𒋻 𒉿𒀸𒋫𒌌 𒅗𒊒𒌑𒄿𒇷 𒌌 𒂕𒉺 𒌑𒀉 𒀀𒍑𒍣. 𒁖𒆪 𒄿𒉿𒌋𒉿𒅈 𒍣𒅔𒈾𒀭𒍣, 𒄩𒀭𒋼𒄑𒍣 𒁾 𒉿𒀸𒋫𒌌 𒌉 𒄯𒍣, 𒀊𒁉𒄑𒍣𒉿 𒌌.","message3":"𒆪𒀉𒋫 %1"},
+"rb_review":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒈾 %1 𒀀𒍑","tooltip":"𒊭𒆪𒉿𒋻 1. 𒂕𒀭 “𒄩𒀭𒋼𒄑𒍣 𒁾 𒅆𒂟” 𒅇 “𒉿𒀸𒋫𒌌 𒊭𒆪𒉿𒋻” 𒄿𒉿.","message1":"𒆪𒀉𒋫 %1"},
 "rb_passed":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒅆𒂟"},
 "rb_problems":{"message0":"𒉿𒀸𒋫𒌌 𒊭𒆪𒉿𒋻𒀸"},
 "rb_score":{"message0":"%1 𒄿𒈾 10 𒀀𒈾 %2 𒋃"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli mema, %1 memal","tooltip":"Mema tarnas, kuis tarnas mema memal, Tautulli: user, title, tarnas u transcode. Tarna only. PLEX_URL u PLEX_TOKEN second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli tarnas memas, %1 memal","tooltip":"Mema tarnas, kuis tarnas arha mema memal, Tautulli: user u memal. Tarna only."},
 "rb_plex_scan":{"message0":"tuppa %1 Plex tarkasnai","tooltip":"Tuppa nfr tarkasnai. Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
-"rb_plex_stop":{"message0":"tarnas %1 Plex of","tooltip":"Tarnas of (Tautulli terminate). Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."}
+"rb_plex_stop":{"message0":"tarnas %1 Plex of","tooltip":"Tarnas of (Tautulli terminate). Tuwaz kuwapit arha ehu, kuwapi UL arha ehu, u kuwat UL kisari, UL ki. Kuwapi UL dai suneu."},
+"rb_chk_max_words":{"message0":"%1 𒆪𒅖 𒆪𒅖𒀭𒍝 𒌌 𒅈𒄩","tooltip":"𒉿𒀸𒋫𒌌 𒂕𒀭 𒌌 𒆪𒅖 𒆪𒅖𒀭𒍝 𒅈𒄩"},
+"rb_chk_mentions":{"message0":"𒈨𒈠𒄿 %1","tooltip":"𒌌 𒉿𒀸𒋫𒌌 𒈨𒈠𒄿"},
+"rb_chk_no_mention":{"message0":"𒌌 𒈨𒈠𒄿 %1","tooltip":"𒉿𒀸𒋫𒌌 𒈨𒈠𒄿"},
+"rb_chk_json":{"message0":"JSON 𒊬𒊑","tooltip":"𒌌 𒉿𒀸𒋫𒌌 JSON 𒊬𒊑"},
+"rb_chk_link":{"message0":"linkaš 𒅈𒄩","tooltip":"𒌌 𒉿𒀸𒋫𒌌 linkaš 𒅈𒄩"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌓𒄰 𒄷𒌋𒈠𒀭","weekdays":"𒌓𒄰 𒀀𒉌𒉿𒀜𒋫𒀸","weekends":"𒌓𒄰 𒉿𒅈𒉺𒀸"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"𒂕𒉺 𒀀𒈾 𒄩𒀭𒋼𒄑𒍣 𒁾 𒅖𒌅 𒄿𒉿𒌋𒉿𒅈 {round}:ḫar-ki {n} 𒊭 {total} 𒉿𒀸𒋫𒌌. 𒄿𒉿𒌋𒉿𒅈 𒂕𒀭 𒌌 𒅆𒂟.",
 "met":"𒉿𒀸𒋫𒌌",
 "not met":"𒌌 𒉿𒀸𒋫𒌌",
-"met {n} of {total}":"𒉿𒀸𒋫𒌌 {n} 𒊭 {total}"
+"met {n} of {total}":"𒉿𒀸𒋫𒌌 {n} 𒊭 {total}",
+"at most {n} words":"{n} 𒆪𒅖 𒆪𒅖𒀭𒍝 𒌌 𒅈𒄩",
+"mentions {x}":"𒈨𒈠𒄿 {x}",
+"doesn't mention {x}":"𒌌 𒈨𒈠𒄿 {x}",
+"is valid JSON":"JSON 𒊬𒊑",
+"has a link":"linkaš 𒅈𒄩",
+"{n} words; the limit is {limit}":"{n} 𒆪𒅖 𒆪𒅖𒀭𒍝; 𒅈𒄩 {limit}",
+"not valid JSON":"𒌌 𒊬𒊑 JSON",
+"no link in it":"𒌌 𒅈𒄩 linkaš"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"EGIR-pa A-NA ḫa-an-te-ez-zi DUB IŠ-TU i-ya-u-wa-ar {round}:ḫarki {n} ša {total} wa-aš-ta-ul. i-ya-u-wa-ar EGIR-an UL SIG5.",
 "met":"wa-aš-ta-ul",
 "not met":"UL wa-aš-ta-ul",
-"table":"DUB"
+"table":"DUB",
+"at most {n} words":"{n} ku-iš ku-iš-an-za ul ar-ḫa",
+"mentions {x}":"me-ma-i {x}",
+"doesn't mention {x}":"UL me-ma-i {x}",
+"is valid JSON":"JSON šar-ri",
+"has a link":"linkaš ar-ḫa",
+"{n} words; the limit is {limit}":"{n} ku-iš ku-iš-an-za; ar-ḫa {limit}",
+"not valid JSON":"UL šar-ri JSON",
+"no link in it":"UL ar-ḫa linkaš"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

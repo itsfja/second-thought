@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"newe recorde"},
 "rb_rec_set":{"message0":"sette %1 of %2 to %3","tooltip":"Chaungeth oon feeld of a recorde (moost ofte a variable of recorde)."},
 "rb_receive":{"message0":"whan I receyve %1","tooltip":"Renneth the blokkes bynethe as ofte as this message is cryed. Many processes may herkne for the same message."},
-"rb_reflect":{"message0":"examyne the draughte agayns %1","message1":"up to %1 roundes; whan it failleth, do","message2":"%1","tooltip":"Claude demeth the draughte. If it failleth, the blokkes withinne rennen, and than he demeth it eft. Every rounde the examinour loketh eek that olde defautes ben nat comen agayn. If the roundes ben spent, the draughte with fewest defautes is kept, nat oonly the laste."},
+"rb_reflect":{"message0":"examyne the draughte agayns %1","message1":"up to %1 roundes; whan it failleth, do","message2":"%1","tooltip":"Claude demeth the draughte. If it failleth, the blokkes withinne rennen, and than he demeth it eft. Every rounde the examinour loketh eek that olde defautes ben nat comen agayn. If the roundes ben spent, the draughte with fewest defautes is kept, nat oonly the laste.","message3":"and checke %1"},
 "rb_reset_timer":{"message0":"sette the orloge agayn"},
 "rb_result":{"message0":"make an ende and shewe the effect","tooltip":"Endeth the rennyng. Sheweth that thou haddest added to the effect, or the draughte if thou haddest added nothyng."},
 "rb_result_text":{"message0":"the effect as yet","tooltip":"Al that was added to the effect, as text."},
 "rb_retry":{"message0":"assaye agayn up to %1 tymes","message1":"%1","tooltip":"If somwhat withinne failleth in a manere that a seconde assay myghte amende (a broken knotte, a garbled answere), it abideth a litel and renneth it agayn."},
-"rb_review":{"message0":"examyne the draughte agayns %1","tooltip":"Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward."},
+"rb_review":{"message0":"examyne the draughte agayns %1","tooltip":"Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward.","message1":"and checke %1"},
 "rb_revise":{"message0":"amende to correcte the examinacioun defautes %1 by the webbe","tooltip":"Claude correcteth the defautes that the laste examinacioun foond."},
 "rb_rework":{"message0":"werke the draughte newe: %1","tooltip":"Claude writeth the draughte agayn after thyn instruccioun."},
 "rb_rewrite":{"message0":"write %1 agayn to %2","tooltip":"As thus: write (draughte) agayn to (translate into Frenssh)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli historie, laste %1 dayes","tooltip":"A liste of records, oon for everich thing watched in so many dayes, fro Tautulli: user, title, when and transcode (whether it was turned). It only redeth. It hath nede of TAUTULLI_URL and TAUTULLI_API_KEY in second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli watching tyme, laste %1 dayes","tooltip":"A liste of records, oon for everich persone that watched in so many dayes, fro Tautulli: user and hours. It only redeth."},
 "rb_plex_scan":{"message0":"scannen the %1 library on Plex","tooltip":"Scanneth oon library for newe files. It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."},
-"rb_plex_stop":{"message0":"stopping the %1 stream on Plex","tooltip":"Stoppeth oon stream (Tautulli's terminate). It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."}
+"rb_plex_stop":{"message0":"stopping the %1 stream on Plex","tooltip":"Stoppeth oon stream (Tautulli's terminate). It axeth thee alwey first, though nothing ellis axe, and with no wight to sayn ye, it doth noght. In this page nothing chaungeth in sooth."},
+"rb_chk_max_words":{"message0":"at most %1 wordes","tooltip":"Failleth if the draughte hath mo wordes; the problem telleth the trewe nombre."},
+"rb_chk_mentions":{"message0":"nameth %1","tooltip":"Failleth unless the draughte conteyneth these wordes (case mattere nat)."},
+"rb_chk_no_mention":{"message0":"nameth nat %1","tooltip":"Failleth if the draughte conteyneth these wordes (case mattere nat)."},
+"rb_chk_json":{"message0":"is trewe JSON","tooltip":"Failleth unless the draughte be trewe JSON."},
+"rb_chk_link":{"message0":"hath a link","tooltip":"Failleth unless the draughte hath a link (http://… or www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Wente bak to the draughte of rounde {round}:it kepte the moste rewles ({n} of {total}). The roundes after it amended it nat.",
 "met":"kept",
 "not met":"nat kept",
-"met {n} of {total}":"{n} of {total} kept"
+"met {n} of {total}":"{n} of {total} kept",
+"at most {n} words":"at most {n} wordes",
+"mentions {x}":"nameth {x}",
+"doesn't mention {x}":"nameth nat {x}",
+"is valid JSON":"is trewe JSON",
+"has a link":"hath a link",
+"{n} words; the limit is {limit}":"{n} wordes; the lemit is {limit}",
+"not valid JSON":"nat trewe JSON",
+"no link in it":"no link in it"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Wente bak to the draughte of rounde {round}:it kepte the moste rewles ({n} of {total}). The roundes after it amended it nat.",
 "met":"kept",
 "not met":"nat kept",
-"table":"table"
+"table":"table",
+"at most {n} words":"at most {n} wordes",
+"mentions {x}":"nameth {x}",
+"doesn't mention {x}":"nameth nat {x}",
+"is valid JSON":"is trewe JSON",
+"has a link":"hath a link",
+"{n} words; the limit is {limit}":"{n} wordes; the lemit is {limit}",
+"not valid JSON":"nat trewe JSON",
+"no link in it":"no link in it"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"ⰲⱁⱂⱃⱁⱄⰻ Claude ⱃⱔⰴⰰ: %1","tooltip":"Claude ⱉⱅⰲⱑⱋⰰⰵⱅⱏ ⱃⱔⰴⱁⰿⱏ, ⰵⰳⱁⰶⰵ ⰿⱁⰶⰵⱎⰻ ⱂⱃⱁⰻⱅⰻ."},
 "rb_rewrite":{"message0":"ⱂⰵⱃⰵⱂⰻⱎⰻ %1 ⰲⱏ %2","tooltip":"Ⱀⰰ ⱂⱃⰻⰿⱑⱃⱏ: ⱂⰵⱃⰵⱂⰻⱎⰻ (ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ) ⰲⱏ (ⱂⱃⰵⰾⱁⰶⰻ ⱀⰰ ⱇⱃⱆⰳⱄⰽⰹⰻ)."},
 "rb_extract":{"message0":"ⰻⰸⰲⰾⰵⱌⱏⰹ %1 ⰻⰸⱏ %2"},
-"rb_reflect":{"message0":"ⰻⱄⱂⱏⰹⱅⰰⰻ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱁ %1","message1":"ⰴⱁ %1 ⰽⱃⰰⱅⱏ; ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⱄⱁⱅⰲⱁⱃⰻ","message2":"%1","tooltip":"Claude ⱄⱆⰴⰻⱅⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ. Ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⰸⰲⱑⱀⰰ ⰲⱀⱆⱅⱃⱐ ⱅⰵⰽⱆⱅⱏ, ⰻ ⱂⰰⰽⰻ ⱄⱆⰴⰻⱅⱏ. Ⰲⱁ ⰲⱄⱔⰽⱏ ⰽⱃⰰⱅⱏ ⰻⱄⱂⱏⰹⱅⰰⱅⰵⰾⱐ ⱄⰿⱁⱅⱃⰻⱅⱏ ⰻ ⱂⱃⰵⰶⱀⰻⱈⱏ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰵⰻ ⱀⰵⰲⱁⰸⰲⱃⰰⱋⰵⱀⰹⱔ. Ⰰⱋⰵ ⰽⱃⰰⱅⱉⰲⱏ ⱀⰵ ⰴⱁⱄⱅⰰⱀⰵⱅⱏ, ⱈⱃⰰⱀⰻⱅⱄⱔ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱄⱏ ⰿⰵⱀⱐⱎⰻⰿⰻ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⱐⰿⰻ, ⰰ ⱀⰵ ⱂⱁⱄⰾⱑⰴⱀⰵⰵ ⱅⱁⰽⰿⱁ."},
-"rb_review":{"message0":"ⰻⱄⱂⱏⰹⱅⰰⰻ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱁ %1","tooltip":"Ⰵⰴⰻⱀⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ. Ⱂⱁ ⱄⰵⰿⱏ ⱆⱂⱁⱅⱃⰵⰱⰻ «ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱃⱁⱎⰾⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ» ⰻ «ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰻ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ»."},
+"rb_reflect":{"message0":"ⰻⱄⱂⱏⰹⱅⰰⰻ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱁ %1","message1":"ⰴⱁ %1 ⰽⱃⰰⱅⱏ; ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⱄⱁⱅⰲⱁⱃⰻ","message2":"%1","tooltip":"Claude ⱄⱆⰴⰻⱅⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ. Ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⰸⰲⱑⱀⰰ ⰲⱀⱆⱅⱃⱐ ⱅⰵⰽⱆⱅⱏ, ⰻ ⱂⰰⰽⰻ ⱄⱆⰴⰻⱅⱏ. Ⰲⱁ ⰲⱄⱔⰽⱏ ⰽⱃⰰⱅⱏ ⰻⱄⱂⱏⰹⱅⰰⱅⰵⰾⱐ ⱄⰿⱁⱅⱃⰻⱅⱏ ⰻ ⱂⱃⰵⰶⱀⰻⱈⱏ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰵⰻ ⱀⰵⰲⱁⰸⰲⱃⰰⱋⰵⱀⰹⱔ. Ⰰⱋⰵ ⰽⱃⰰⱅⱉⰲⱏ ⱀⰵ ⰴⱁⱄⱅⰰⱀⰵⱅⱏ, ⱈⱃⰰⱀⰻⱅⱄⱔ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱄⱏ ⰿⰵⱀⱐⱎⰻⰿⰻ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⱐⰿⰻ, ⰰ ⱀⰵ ⱂⱁⱄⰾⱑⰴⱀⰵⰵ ⱅⱁⰽⰿⱁ.","message3":"ⰻ ⱂⱃⱁⰲⱑⱃⰻ %1"},
+"rb_review":{"message0":"ⰻⱄⱂⱏⰹⱅⰰⰻ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱁ %1","tooltip":"Ⰵⰴⰻⱀⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ. Ⱂⱁ ⱄⰵⰿⱏ ⱆⱂⱁⱅⱃⰵⰱⰻ «ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱃⱁⱎⰾⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ» ⰻ «ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰻ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ».","message1":"ⰻ ⱂⱃⱁⰲⱑⱃⰻ %1"},
 "rb_passed":{"message0":"ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱃⱁⱎⰾⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ"},
 "rb_problems":{"message0":"ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰻ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ"},
 "rb_score":{"message0":"ⱁⱌⱑⱀⰻ %1 ⰻⰸⱏ 10 ⱂⱁ %2"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli istoria, poslednie %1 dni","tooltip":"Spisakⱏ zapisii, po edinⱏ za vseako smotrenie vⱏ tolmi dniehⱏ, otⱏ Tautulli: user, title, when i transcode (daliko preobrazovano bystⱏ). Toliko chtetⱏ. Trebuetⱏ TAUTULLI_URL i TAUTULLI_API_KEY vⱏ second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli vremia smotrenia, poslednie %1 dni","tooltip":"Spisakⱏ zapisii, po edinⱏ za vseako lico, ezhe vⱏ tolmi dniehⱏ smotrie, otⱏ Tautulli: user i hours. Toliko chtetⱏ."},
 "rb_plex_scan":{"message0":"iskati novyja vⱏ knigie %1 na Plex","tooltip":"Iskaetⱏ vⱏ edinoi knigie novyja files. Te voprahaetⱏ vsegda prⱏveye, asche i nichⱐcto zhe ino ne voprahaetⱏ, i ne sⱏshtou chlovekou rekshou da, ne byvaetⱏ. Na sei stranici nichⱐcto zhe istino ne mieniaetⱏ se."},
-"rb_plex_stop":{"message0":"ostanoviti potokⱏ %1 na Plex","tooltip":"Ostanovliaetⱏ edinⱏ potokⱏ (Tautulli terminate). Te voprahaetⱏ vsegda prⱏveye, asche i nichⱐcto zhe ino ne voprahaetⱏ, i ne sⱏshtou chlovekou rekshou da, ne byvaetⱏ. Na sei stranici nichⱐcto zhe istino ne mieniaetⱏ se."}
+"rb_plex_stop":{"message0":"ostanoviti potokⱏ %1 na Plex","tooltip":"Ostanovliaetⱏ edinⱏ potokⱏ (Tautulli terminate). Te voprahaetⱏ vsegda prⱏveye, asche i nichⱐcto zhe ino ne voprahaetⱏ, i ne sⱏshtou chlovekou rekshou da, ne byvaetⱏ. Na sei stranici nichⱐcto zhe istino ne mieniaetⱏ se."},
+"rb_chk_max_words":{"message0":"ⱀⰵ ⱂⰰⱍⰵ %1 ⱄⰾⱁⰲⱏ","tooltip":"Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⰰⱋⰵ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⰱⱁⰾⱑⰵ ⱄⰾⱁⰲⱏ ⰻⰿⰰⱅⱐ; ⰸⰰⰴⰰⱍⰰ ⰻⱄⱅⰻⱀⱐⱀⱁⰵ ⱍⰻⱄⰾⱁ ⰽⰰⰶⰵⱅⱏ."},
+"rb_chk_mentions":{"message0":"ⱃⰵⱍⰵⱅⱏ %1","tooltip":"Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⱄⰻⱈⱏ ⱄⰾⱁⰲⱏ ⱀⰵ ⰻⰿⰰⱅⱐ (ⰲⰵⰾⰻⱍⰻⱀⰰ ⰱⱁⱆⰽⰲⱏ ⱀⰵ ⱑⰲⰾⱑⰵⱅⱏ ⱄⱔ)."},
+"rb_chk_no_mention":{"message0":"ⱀⰵ ⱃⰵⱍⰵⱅⱏ %1","tooltip":"Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⱄⰻⱈⱏ ⱄⰾⱁⰲⱏ ⰻⰿⰰⱅⱐ (ⰲⰵⰾⰻⱍⰻⱀⰰ ⰱⱁⱆⰽⰲⱏ ⱀⰵ ⱑⰲⰾⱑⰵⱅⱏ ⱄⱔ)."},
+"rb_chk_json":{"message0":"ⰻⱄⱅⰻⱀⱐⱀⱁ JSON ⰵⱄⱅⱏ","tooltip":"Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⰻⱄⱅⰻⱀⱐⱀⰰ JSON ⱀⰵ ⰵⱄⱅⱏ."},
+"rb_chk_link":{"message0":"ⰻⰿⰰⱅⱐ ⱄⱄⱏⰹⰾⱆ","tooltip":"Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⱄⱄⱏⰹⰾⱆ ⱀⰵ ⰻⰿⰰⱅⱐ (http://… ⰻⰾⰻ www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ⱀⰰ ⰲⱄⱔⰽⱏ ⰴⰵⱀⱐ","weekdays":"ⰲⱏ ⰴⱀⰻ ⰴⱑⰾⰰⱀⰹⱔ","weekends":"ⰲⱏ ⰴⱀⰻ ⱉⱅⰴⱏⰹⱈⰰ"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Ⰲⱁⰸⰲⱃⰰⱅⰻⱈⱄⱔ ⰽⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⱓ ⱉⱅ ⰽⱃⱆⰳⰰ {round}:ⰻⰿⱑ ⱀⰰⰻⰱⱁⰾⱐⱎε ⱂⱃⰰⰲⱏ ({n} ⱑⰸ {total}). Ⰽⱃⱆⰳⱉⰲⰵ ⱂⱁ ⱀⰵⰿⱏ ⱀⰵ ⱆⰾⱆⱍⱎⰻⱎⰰ ⰵⰳⱁ.",
 "met":"ⱄⱏⰱⰾⱓⰴⰵⱀⱁ",
 "not met":"ⱀⰵ ⱄⱏⰱⰾⱓⰴⰵⱀⱁ",
-"met {n} of {total}":"{n} ⱑⰸ {total} ⱄⱏⰱⰾⱓⰴⰵⱀⱘ"
+"met {n} of {total}":"{n} ⱑⰸ {total} ⱄⱏⰱⰾⱓⰴⰵⱀⱘ",
+"at most {n} words":"ⱀⰵ ⱂⰰⱍⰵ {n} ⱄⰾⱁⰲⱏ",
+"mentions {x}":"ⱃⰵⱍⰵⱅⱏ {x}",
+"doesn't mention {x}":"ⱀⰵ ⱃⰵⱍⰵⱅⱏ {x}",
+"is valid JSON":"ⰻⱄⱅⰻⱀⱐⱀⱁ JSON ⰵⱄⱅⱏ",
+"has a link":"ⰻⰿⰰⱅⱐ ⱄⱄⱏⰹⰾⱆ",
+"{n} words; the limit is {limit}":"{n} ⱄⰾⱁⰲⱏ; ⱂⱃⰵⰴⱑⰾⱏ {limit} ⰵⱄⱅⱏ",
+"not valid JSON":"ⱀⰵ ⰻⱄⱅⰻⱀⱐⱀⱁ JSON",
+"no link in it":"ⱀⰻ ⰵⰴⰻⱀⱘ ⰸⰲⰵⱀⰰ ⱀⱑⱄⱅⱏ"
 },
 "examples":{
 "review":{"title":"Ⱉⰱⱈⱁⰶⰴⰵⱀⰹⰵ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ","desc":"Claude ⱂⰻⱎⰵⱅⱏ ⱉ autolyse, ⰻⱄⱂⱏⰹⱅⱆⰵⱅⱏ ⱂⱁ ⱂⱃⰰⰲⰻⰾⰰⰿⱏ ⱅⰲⱁⰻⰿⱏ, ⰻ ⰻⱄⱂⱃⰰⰲⰾⱑⰵⱅⱏ ⱀⰵⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⰲⱎⰵⰵ, ⰴⱁ 3 ⰽⱃⰰⱅⱏ.","tip":"Ⱂⱃⰵⰿⱑⱀⰻ ⰴⱑⰾⱁ ⰲⱏ ⱄⰻⱀⰵⰿⱏ ⰸⰲⱑⱀⱑ ⰻ ⱂⱃⰰⰲⰻⰾⰰ ⰲⱏ ⰱⰰⰳⱃⱔⱀⱁⰿⱏ."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Возвратихсѧ къ начертанїю ѿ круга {round}:имѣ наибольшε правъ ({n} ꙗꙁ {total}). Кругѡве по немъ не улучшиша его.",
 "met":"съблюдено",
 "not met":"не съблюдено",
-"table":"таблица"
+"table":"таблица",
+"at most {n} words":"не паче {n} словъ",
+"mentions {x}":"речетъ {x}",
+"doesn't mention {x}":"не речетъ {x}",
+"is valid JSON":"истиньно JSON ѥстъ",
+"has a link":"имать ссылꙋ",
+"{n} words; the limit is {limit}":"{n} словъ; предѣлъ {limit} ѥстъ",
+"not valid JSON":"не истиньно JSON",
+"no link in it":"ни єдинꙛ ꙁвена нѣстъ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Ⱂⱃⰻⰾⱁⰶⰻ ⱅⱁⰾⰽⱏ",

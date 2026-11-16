@@ -396,7 +396,8 @@
    "message0": "𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑",
    "message1": "𒀀𒁲 %1 𒊓𒄴𒄷𒊏𒋾𒅎; 𒄿𒉡𒈠 𒄿𒄩𒀜𒁲, 𒂊𒁍𒍑",
    "message2": "%1",
-   "tooltip": "Claude 𒈠𒀸𒁕𒊏𒄠 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒄿𒄩𒀜𒁲, 𒇷𒅁𒈾𒌅𒌝 𒊭 𒇷𒅁𒁉 𒅁𒁍𒊭, 𒌋 𒋗𒌦𒈾𒄠 𒄿𒁀𒅈𒊑. 𒄿𒈾 𒊓𒄴𒄷𒌨𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒁀𒊒𒌝 𒄭𒁕𒌅𒌝 𒉺𒈾𒌅𒌝 𒆷 𒄿𒌅𒊏 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒊓𒄴𒄷𒊏𒌅𒌝 𒅅𒈬𒊏, 𒈠𒀸𒁕𒊒𒌝 𒊭 𒄭𒁕𒌅𒋗 𒈠𒁕 𒈾𒍢𒅕, 𒌌 𒉿𒅈𒆪𒌝 𒂊𒁲𒅖𒋗."
+   "tooltip": "Claude 𒈠𒀸𒁕𒊏𒄠 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒄿𒄩𒀜𒁲, 𒇷𒅁𒈾𒌅𒌝 𒊭 𒇷𒅁𒁉 𒅁𒁍𒊭, 𒌋 𒋗𒌦𒈾𒄠 𒄿𒁀𒅈𒊑. 𒄿𒈾 𒊓𒄴𒄷𒌨𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒁀𒊒𒌝 𒄭𒁕𒌅𒌝 𒉺𒈾𒌅𒌝 𒆷 𒄿𒌅𒊏 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒊓𒄴𒄷𒊏𒌅𒌝 𒅅𒈬𒊏, 𒈠𒀸𒁕𒊒𒌝 𒊭 𒄭𒁕𒌅𒋗 𒈠𒁕 𒈾𒍢𒅕, 𒌌 𒉿𒅈𒆪𒌝 𒂊𒁲𒅖𒋗.",
+   "message3": "𒌑 𒊭𒅗𒀭 %1"
   },
   "rb_reset_timer": {
    "message0": "𒋗𒌓 𒋛𒈠𒉌𒅎 𒋼𒅕𒊑"
@@ -416,7 +417,8 @@
   },
   "rb_review": {
    "message0": "𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑",
-   "tooltip": "𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠."
+   "tooltip": "𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠.",
+   "message1": "𒌑 𒊭𒅗𒀭 %1"
   },
   "rb_revise": {
    "message0": "𒄭𒁕𒋾 𒁉𒊑𒅎 𒋗𒋼𒊺𒅕 %1 𒄿𒈾 𒆠 𒊺𒋾𒅎",
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "tooltip": "Massartu 𒅗𒉺𒌅 (Tautulli 𒋼𒅕𒈪𒈾𒋼). Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒.",
    "message0": "𒈠𒊍𒊓𒅈𒌅 %1 𒀀𒈾 Plex 𒅗𒉺𒌅"
+  },
+  "rb_chk_max_words": {
+   "message0": "𒀀𒈨𒇻 %1 𒆷 𒀀𒊭",
+   "tooltip": "𒈠𒀸𒁕𒊒𒌝 𒀀𒈨𒇻 𒀀𒊭 𒌌 𒌑𒁀𒀠𒆷𒀜"
+  },
+  "rb_chk_mentions": {
+   "message0": "𒍝𒅗𒅈 %1",
+   "tooltip": "𒈠𒀸𒁕𒊒𒌝 𒍝𒅗𒅈 𒌌 𒇷𒄣"
+  },
+  "rb_chk_no_mention": {
+   "message0": "𒌌 𒍝𒅗𒅈 %1",
+   "tooltip": "𒈠𒀸𒁕𒊒𒌝 𒍝𒅗𒅈 𒇷𒄣"
+  },
+  "rb_chk_json": {
+   "message0": "JSON 𒊭𒀝𒉡𒌝",
+   "tooltip": "𒈠𒀸𒁕𒊒𒌝 JSON 𒌌 𒊭𒀝𒉡 𒇷𒄣"
+  },
+  "rb_chk_link": {
+   "message0": "𒆠𒈠 𒊭𒊏𒁍𒌝",
+   "tooltip": "𒈠𒀸𒁕𒊒𒌝 𒊭𒊏𒁍𒌝 𒌌 𒇷𒄣"
   }
  },
  "options": {
@@ -1907,7 +1929,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒊭 𒊓𒄴𒄷𒌨𒋾𒅎 {round} 1e2ḫâtuš 𒆠𒈾𒋾𒅎 {n} 𒊭 {total}. 𒊓𒄴𒄷𒊏𒌅𒌝 𒉿𒅈𒆠𒀀𒌅𒌝 𒌌 𒌑𒊭𒋾𒊏𒋗.",
   "met": "1e2ḫâtuš",
   "not met": "𒌌 1e2ḫâtu",
-  "met {n} of {total}": "1e2ḫâtu {n} 𒊭 {total}"
+  "met {n} of {total}": "1e2ḫâtu {n} 𒊭 {total}",
+  "at most {n} words": "{n} 𒀀𒈨𒇻 𒆷 𒀀𒊭",
+  "mentions {x}": "𒍝𒅗𒅈 {x}",
+  "doesn't mention {x}": "𒌌 𒍝𒅗𒅈 {x}",
+  "is valid JSON": "JSON 𒊭𒀝𒉡𒌝",
+  "has a link": "𒆠𒈠 𒊭𒊏𒁍𒌝",
+  "{n} words; the limit is {limit}": "{n} 𒀀𒈨𒇻; 𒄩𒅈𒊏𒉡𒌝 {limit}",
+  "not valid JSON": "𒌌 𒊭𒀝𒉡 JSON",
+  "no link in it": "𒊭𒊏𒁍𒌝 𒆷 𒊭𒀝𒉡"
  },
  "examples": {
   "review": {
@@ -3690,7 +3720,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ana mašṭarim ša saḫḫurtim {round} 1e2ḫâtuš kīnatim {n} ša {total}. saḫḫurātum warkiātum ul ušatirāšu.",
   "met": "1e2ḫâtuš",
   "not met": "ul 1e2ḫâtu",
-  "table": "ṭuppi"
+  "table": "ṭuppi",
+  "at most {n} words": "{n} amēlū lā ašâ",
+  "mentions {x}": "zakar {x}",
+  "doesn't mention {x}": "ul zakar {x}",
+  "is valid JSON": "JSON šaknum",
+  "has a link": "kīma šarābum",
+  "{n} words; the limit is {limit}": "{n} amēlū; ḫarrānum {limit}",
+  "not valid JSON": "ul šaknu JSON",
+  "no link in it": "šarābum lā šaknu"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

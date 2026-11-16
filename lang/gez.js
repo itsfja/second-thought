@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"ጦማር ሐዲስ"},
 "rb_rec_set":{"message0":"አንብር %1 ዘ %2 ከመ %3","tooltip":"ይዌልጥ አሐደ ክፍለ ጦማር (መብዝኅቶ ተወላጤ ጦማር)።"},
 "rb_receive":{"message0":"ሶበ እትሜጦ %1","tooltip":"ይረውጽ ግንፋላተ ዘታሕቴሁ ኵሎ ጊዜ ሶበ ትሰበክ ዛቲ መልእክት። ብዙኅ ፍኖታት ይክሉ ይስምዑ አሐተ መልእክተ።"},
-"rb_reflect":{"message0":"ሕትት ቅድመ ጽሑፈ በከመ %1","message1":"እስከ %1 ዙረታት፤ ሶበ ይወድቅ፣ ግበር","message2":"%1","tooltip":"Claude ይሔትት ቅድመ ጽሑፈ። እመ ወድቀ፣ ይረውጹ ግንፋላት ዘውስጡ፣ ወእምዝ ይሔትት ዳግመ። በበ ዙረት ሐታቲ ይሔትት ከመ ኢተመይጡ ጌጋያት ቀደምት። እመ ኀልቁ ዙረታት፣ ይትዐቀብ ቅድመ ጽሑፍ ዘውሑድ ጌጋያቲሁ፣ አኮ ደኃሪ ባሕቲቱ።"},
+"rb_reflect":{"message0":"ሕትት ቅድመ ጽሑፈ በከመ %1","message1":"እስከ %1 ዙረታት፤ ሶበ ይወድቅ፣ ግበር","message2":"%1","tooltip":"Claude ይሔትት ቅድመ ጽሑፈ። እመ ወድቀ፣ ይረውጹ ግንፋላት ዘውስጡ፣ ወእምዝ ይሔትት ዳግመ። በበ ዙረት ሐታቲ ይሔትት ከመ ኢተመይጡ ጌጋያት ቀደምት። እመ ኀልቁ ዙረታት፣ ይትዐቀብ ቅድመ ጽሑፍ ዘውሑድ ጌጋያቲሁ፣ አኮ ደኃሪ ባሕቲቱ።","message3":"ወልባልእ %1"},
 "rb_reset_timer":{"message0":"አሐድስ ኈላቌ ጊዜ"},
 "rb_result":{"message0":"ፈጽም ወአርኢ ፍሬ","tooltip":"ይፌጽም ሩጸተ። ያርኢ ዘወሰከ ለፍሬ፣ አው ቅድመ ጽሑፈ እመ አልቦ ዘወሰከ።"},
 "rb_result_text":{"message0":"ፍሬ እስከ ይእዜ","tooltip":"ኵሉ ዘተወስከ ለፍሬ፣ ከመ ጽሑፍ።"},
 "rb_retry":{"message0":"ፈትን ዳግመ እስከ %1 ጊዜያተ","message1":"%1","tooltip":"እመ ወድቀ ነገር በውስጡ በዘይክል ፈተና ካልእ ያስተራትዖ (ተራክቦ ዘተበትከ፣ ተሰጥዎ ዘተሐውከ)፣ ይጸንሕ ንስቲተ ወይረውጾ ዳግመ።"},
-"rb_review":{"message0":"ሕትት ቅድመ ጽሑፈ በከመ %1","tooltip":"አሐቲ ሐተታ። ተበቋዕ በ'ቅድመ ጽሑፍ ኀለፈ ሐተታ' ወ'ጌጋያተ ሐተታ' እምድኅሬሁ።"},
+"rb_review":{"message0":"ሕትት ቅድመ ጽሑፈ በከመ %1","tooltip":"አሐቲ ሐተታ። ተበቋዕ በ'ቅድመ ጽሑፍ ኀለፈ ሐተታ' ወ'ጌጋያተ ሐተታ' እምድኅሬሁ።","message1":"ወልባልእ %1"},
 "rb_revise":{"message0":"አስተራትዕ ጌጋያተ ሐተታ %1 በመርበብ","tooltip":"Claude ያስተራትዕ ጌጋያተ ዘረከበት ሐተታ ደኃሪት።"},
 "rb_rework":{"message0":"ግበር ዳግመ ቅድመ ጽሑፈ፡ %1","tooltip":"Claude ይጽሕፍ ዳግመ ቅድመ ጽሑፈ በከመ ትእዛዝከ።"},
 "rb_rewrite":{"message0":"ጸሐፍ ዳግመ %1 ከመ %2","tooltip":"በአርአያ፡ ጸሐፍ ዳግመ (ቅድመ ጽሑፍ) ከመ (ተርጕም ኀበ ልሳነ ፈረንሳይ)።"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"ዜና Tautulli፣ %1 መዋዕል ደኃርያን","tooltip":"ዝርዝረ ጦማራት፣ አሐዱ ለለ ዘተርእየ በእሉ መዋዕል፣ እም Tautulli፡ user, title, when ወ transcode (እመ ተወለጠ)። ያነብብ ባሕቲቱ። ይፈቅድ TAUTULLI_URL ወ TAUTULLI_API_KEY ውስተ second-thought.ini።"},
 "rb_tautulli_watchtime":{"message0":"ጊዜ ርእይ ዘ Tautulli፣ %1 መዋዕል ደኃርያን","tooltip":"ዝርዝረ ጦማራት፣ አሐዱ ለለ ሰብእ ዘርእየ በእሉ መዋዕል፣ እም Tautulli፡ user ወ hours። ያነብብ ባሕቲቱ።"},
 "rb_plex_scan":{"message0":"ኅሥሥ ቤተ መጻሕፍት %1 በ Plex","tooltip":"የኀሥሥ አሐደ ቤተ መጻሕፍት ለመጻሕፍት ሐደስት። ዘልፈ ይሴአለከ ቅድመ፣ እመሂ አልቦ ካልእ ዘይሴአል፣ ወእመ አልቦ ሰብእ ዘይብል እወ ኢይረውጽ። በዝንቱ ገጽ አልቦ ዘይትዌለጥ በአማን።"},
-"rb_plex_stop":{"message0":"አቅም ውሒዘ %1 በ Plex","tooltip":"ያቀውም አሐደ ውሒዘ (terminate ዘ Tautulli)። ዘልፈ ይሴአለከ ቅድመ፣ እመሂ አልቦ ካልእ ዘይሴአል፣ ወእመ አልቦ ሰብእ ዘይብል እወ ኢይረውጽ። በዝንቱ ገጽ አልቦ ዘይትዌለጥ በአማን።"}
+"rb_plex_stop":{"message0":"አቅም ውሒዘ %1 በ Plex","tooltip":"ያቀውም አሐደ ውሒዘ (terminate ዘ Tautulli)። ዘልፈ ይሴአለከ ቅድመ፣ እመሂ አልቦ ካልእ ዘይሴአል፣ ወእመ አልቦ ሰብእ ዘይብል እወ ኢይረውጽ። በዝንቱ ገጽ አልቦ ዘይትዌለጥ በአማን።"},
+"rb_chk_max_words":{"message0":"%1 ኍልቈ ቃላት ዘ አላአ አሰራይግአ","tooltip":"አብርታየ የንሳይቡንሁየ"},
+"rb_chk_mentions":{"message0":"ሰልዕ %1","tooltip":"አላአ ሰልዕ"},
+"rb_chk_no_mention":{"message0":"አላአ ሰልዕ %1","tooltip":"ሰልዕ"},
+"rb_chk_json":{"message0":"JSON አብርታየ","tooltip":"አላአ አብርታየ JSON"},
+"rb_chk_link":{"message0":"ተንንንይግእ አብርታየ","tooltip":"አላአ ተንንንይግእ"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ኵሎ ዕለተ","weekdays":"በመዋዕለ ግብር","weekends":"በሰንበታት"},
@@ -1189,7 +1194,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ተመይጠ ኀበ ቅድመ ጽሑፍ ዘዙረት {round}፡ሓያግ ({n} ላእ {total})። ዙረታት ዘእምድኅሬሁ ኢያሠነይዎ።",
 "met":"ወልሱልእ",
 "not met":"ʾälä አላአ",
-"met {n} of {total}":"{n} ላእ {total}"
+"met {n} of {total}":"{n} ላእ {total}",
+"at most {n} words":"{n} ኍልቈ ቃላት ዘ አላአ አሰራይግአ",
+"mentions {x}":"ሰልዕ {x}",
+"doesn't mention {x}":"አላአ ሰልዕ {x}",
+"is valid JSON":"JSON አብርታየ",
+"has a link":"ተንንንይግእ አብርታየ",
+"{n} words; the limit is {limit}":"{n} ኍልቈ ቃላት ዘ; መድመሣእ {limit}",
+"not valid JSON":"አላአ አብርታየ JSON",
+"no link in it":"አላአ ተንንንይግእ"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},
@@ -2340,7 +2353,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ተመይጠ ኀበ ቅድመ ጽሑፍ ዘዙረት {round}፡ሓያግ ({n} ላእ {total})። ዙረታት ዘእምድኅሬሁ ኢያሠነይዎ።",
 "met":"ወልሱልእ",
 "not met":"ʾälä አላአ",
-"table":"ታልባልእ"
+"table":"ታልባልእ",
+"at most {n} words":"{n} ኍልቈ ቃላት ዘ አላአ አሰራይግአ",
+"mentions {x}":"ሰልዕ {x}",
+"doesn't mention {x}":"አላአ ሰልዕ {x}",
+"is valid JSON":"JSON አብርታየ",
+"has a link":"ተንንንይግእ አብርታየ",
+"{n} words; the limit is {limit}":"{n} ኍልቈ ቃላት ዘ; መድመሣእ {limit}",
+"not valid JSON":"አላአ አብርታየ JSON",
+"no link in it":"አላአ ተንንንይግእ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ወስክ ትርጓሜ",

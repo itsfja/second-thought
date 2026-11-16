@@ -42,8 +42,8 @@
 "rb_ask_list":{"message0":"ܫܐܠ ܠ-Claude ܣܕܪܐ: %1","tooltip":"Claude ܥܢܐ ܒܣܕܪܐ ܕܡܫܟܚ ܐܢܬ ܕܬܗܦܘܟ ܥܠܘܗܝ."},
 "rb_rewrite":{"message0":"ܟܬܘܒ ܬܘܒ %1 l%2","tooltip":"ܐܟ ܗܢܐ: ܟܬܘܒ ܬܘܒ (ܪܘܫܡܐ) l(targem ܠܦܪܢܓܝܐ)."},
 "rb_extract":{"message0":"ܫܩܘܠ %1 ܡܢ %2"},
-"rb_reflect":{"message0":"ܒܚܢ ܪܘܫܡܐ ܠܘܬ %1","message1":"ܥܕܡܐ l%1 ܙܒܢܝܢ; ܟܕ ܢܦܠ, ܥܒܕ","message2":"%1","tooltip":"Claude ܕܐܢ ܠܪܘܫܡܐ. ܐܢ ܢܦܠ, ܠܒܢܐ ܕܠܓܘ ܪܗܛܢ, ܘܗܦܟ ܕܐܢ. ܒܟܘܠ ܙܒܢܐ ܒܚܘܚܐ ܚܙܐ ܐܦ ܕܡܚܫܠܬܐ ܩܕܡܝܬܐ ܠܐ ܗܦܟ ܐܬܘ. ܐܢ ܫܠܡܘ ܙܒܢܐ, ܪܘܫܡܐ ܕܒܝܗ ܙܥܘܪܢ ܡܚܫܠܬܐ ܡܬܢܛܪ, ܠܐ ܚܪܝܐ ܒܠܚܘܕ."},
-"rb_review":{"message0":"ܒܚܢ ܪܘܫܡܐ ܠܘܬ %1","tooltip":"ܒܘܚܪܢܐ ܚܕ. ܒܬܪ ܗܕܐ ܐܛܥܢ 'ܪܘܫܡܐ ܥܒܪ ܒܘܚܪܢܐ' ܘ'ܡܚܫܠܬܐ ܕܒܘܚܪܢܐ'."},
+"rb_reflect":{"message0":"ܒܚܢ ܪܘܫܡܐ ܠܘܬ %1","message1":"ܥܕܡܐ l%1 ܙܒܢܝܢ; ܟܕ ܢܦܠ, ܥܒܕ","message2":"%1","tooltip":"Claude ܕܐܢ ܠܪܘܫܡܐ. ܐܢ ܢܦܠ, ܠܒܢܐ ܕܠܓܘ ܪܗܛܢ, ܘܗܦܟ ܕܐܢ. ܒܟܘܠ ܙܒܢܐ ܒܚܘܚܐ ܚܙܐ ܐܦ ܕܡܚܫܠܬܐ ܩܕܡܝܬܐ ܠܐ ܗܦܟ ܐܬܘ. ܐܢ ܫܠܡܘ ܙܒܢܐ, ܪܘܫܡܐ ܕܒܝܗ ܙܥܘܪܢ ܡܚܫܠܬܐ ܡܬܢܛܪ, ܠܐ ܚܪܝܐ ܒܠܚܘܕ.","message3":"u-mḥaššl %1"},
+"rb_review":{"message0":"ܒܚܢ ܪܘܫܡܐ ܠܘܬ %1","tooltip":"ܒܘܚܪܢܐ ܚܕ. ܒܬܪ ܗܕܐ ܐܛܥܢ 'ܪܘܫܡܐ ܥܒܪ ܒܘܚܪܢܐ' ܘ'ܡܚܫܠܬܐ ܕܒܘܚܪܢܐ'.","message1":"u-mḥaššl %1"},
 "rb_passed":{"message0":"ܪܘܫܡܐ ܥܒܪ ܒܘܚܪܢܐ"},
 "rb_problems":{"message0":"ܡܚܫܠܬܐ ܕܒܘܚܪܢܐ"},
 "rb_score":{"message0":"ܫܡܐ %1 ܡܢ 10 l%2"},
@@ -207,7 +207,12 @@
 "rb_tautulli_history":{"message0":"Tautulli tarikh, akhr %1 ywm","tooltip":"rhta dktba, lda lkl sh shwh f had ywm, mn Tautulli: user, title, aymt w transcode. bqra fqt. hty' TAUTULLI_URL w TAUTULLI_API_KEY b second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli wqt shw, akhr %1 ywm","tooltip":"rhta dktba, lda lkl sh shwh f had ywm, mn Tautulli: user w sb'. bqra fqt."},
 "rb_plex_scan":{"message0":"mswh ktb %1 b Pi-hole","tooltip":"mswh ktb l ashya jyda. shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
-"rb_plex_stop":{"message0":"wqf strym %1 b Pi-hole","tooltip":"wqf strym (Tautulli terminate). shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."}
+"rb_plex_stop":{"message0":"wqf strym %1 b Pi-hole","tooltip":"wqf strym (Tautulli terminate). shall lk kl zbn qdmyta, af kd la ahrnyta shl, wkd lyt dnemr ha, la abd. bhn dawkta la sh bshryra."},
+"rb_chk_max_words":{"message0":"ܡܠܬܐ %1 ܠܐ ܐܒܬܪ","tooltip":"ܠܐ ܡܫܟ ܐܝܢ ܡܠܬܐ ܐܒܬܪ"},
+"rb_chk_mentions":{"message0":"ܐܡܪܐ %1","tooltip":"ܠܐ ܡܫܟ ܐܡܪܐ"},
+"rb_chk_no_mention":{"message0":"ܠܐ ܐܡܪܐ %1","tooltip":"ܡܫܟ ܐܡܪܐ"},
+"rb_chk_json":{"message0":"JSON ܫܪܝܪܐ","tooltip":"ܠܐ ܫܪܝܪ JSON"},
+"rb_chk_link":{"message0":"ܚܒܠܐ ܫܪܝܪ","tooltip":"ܠܐ ܚܒܠܐ ܫܪܝܪ"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ܟܘܠ ܝܘܡ","weekdays":"ܒܝܘܡܬܐ ܕܥܒܕܐ","weekends":"ܒܫܒܬܐ"},
@@ -1189,7 +1194,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ܗܦܟ ܠܪܘܫܡܐ ܕܚܕܪܐ {round}:namus {n} ܡܢ {total} ܥܒܕ. ܚܕܪܐ ܕܒܬܪܝܗ ܠܐ ܫܦܪ ܥܠܝܗ.",
 "met":"ܥܒܕ",
 "not met":"ܠܐ ܥܒܕ",
-"met {n} of {total}":"ܥܒܕ {n} ܡܢ {total}"
+"met {n} of {total}":"ܥܒܕ {n} ܡܢ {total}",
+"at most {n} words":"ܡܠܬܐ {n} ܠܐ ܐܒܬܪ",
+"mentions {x}":"ܐܡܪܐ {x}",
+"doesn't mention {x}":"ܠܐ ܐܡܪܐ {x}",
+"is valid JSON":"JSON ܫܪܝܪܐ",
+"has a link":"ܚܒܠܐ ܫܪܝܪ",
+"{n} words; the limit is {limit}":"ܡܠܬܐ {n}; ܫܝܝܡܐ {limit}",
+"not valid JSON":"ܠܐ ܫܪܝܪ JSON",
+"no link in it":"ܠܐ ܚܒܠܐ"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2340,7 +2353,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"hpak lrušmā dḥdārā {round}:namus {n} men {total} ꜥḇad. ḥdārē dbātrēh lā šappar ꜥlēh.",
 "met":"ꜥḇad",
 "not met":"lā ꜥḇad",
-"table":"luḥā"
+"table":"luḥā",
+"at most {n} words":"meltā {n} lā ꜣaḇtar",
+"mentions {x}":"ꜣamrā {x}",
+"doesn't mention {x}":"lā ꜣamrā {x}",
+"is valid JSON":"JSON šarīrā",
+"has a link":"ḥablā šarīr",
+"{n} words; the limit is {limit}":"meltā {n}; šiyāmā {limit}",
+"not valid JSON":"lā šarīr JSON",
+"no link in it":"lā ḥablā"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

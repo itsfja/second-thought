@@ -395,7 +395,8 @@
    "message0": "%1 に照らして下書きをレビュー",
    "message1": "最大 %1 回まで。不合格なら次を実行",
    "message2": "%1",
-   "tooltip": "Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。"
+   "tooltip": "Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。",
+   "message3": "さらに確認 %1"
   },
   "rb_reset_timer": {
    "message0": "タイマーをリセット"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "%1 に照らして下書きをレビュー",
-   "tooltip": "1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。"
+   "tooltip": "1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。",
+   "message1": "さらに確認 %1"
   },
   "rb_revise": {
    "message0": "レビューの問題を直すように修正 %1 ウェブを使う",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "Plex のストリーム %1 を停止する",
    "tooltip": "1 つのストリームを停止します（Tautulli の terminate）。他の何も尋ねなくても常にまずあなたに尋ね、誰も「はい」と言えなければ実行しません。このページでは何も実際には変わりません。"
+  },
+  "rb_chk_max_words": {
+   "message0": "%1 語以下",
+   "tooltip": "下書きが語数を超えると不合格。問題に実際の語数を示します。"
+  },
+  "rb_chk_mentions": {
+   "message0": "%1 を言及",
+   "tooltip": "下書きにこれらの語がなければ不合格（大文字・小文字は区別しません）。"
+  },
+  "rb_chk_no_mention": {
+   "message0": "%1 に言及しない",
+   "tooltip": "下書きにこれらの語があれば不合格（大文字・小文字は区別しません）。"
+  },
+  "rb_chk_json": {
+   "message0": "有効なJSON",
+   "tooltip": "下書きが有効なJSONでなければ不合格。"
+  },
+  "rb_chk_link": {
+   "message0": "リンクあり",
+   "tooltip": "下書きにリンクがなければ不合格（http://… または www.…）。"
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} 回目の下書きに戻りました。それが最も多くのルールを満たしていました（{total} 個中 {n} 個）。その後の回では改善されませんでした。",
   "met": "満たした",
   "not met": "満たさず",
-  "met {n} of {total}": "{total} 個中 {n} 個を満たした"
+  "met {n} of {total}": "{total} 個中 {n} 個を満たした",
+  "at most {n} words": "{n} 語以下",
+  "mentions {x}": "{x} を言及",
+  "doesn't mention {x}": "{x} に言及しない",
+  "is valid JSON": "有効なJSON",
+  "has a link": "リンクあり",
+  "{n} words; the limit is {limit}": "{n} 語。上限は {limit}",
+  "not valid JSON": "有効なJSONではない",
+  "no link in it": "リンクがない"
  },
  "examples": {
   "review": {
@@ -3689,6 +3719,14 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} 回目の下書きに戻りました。それが最も多くのルールを満たしていました（{total} 個中 {n} 個）。その後の回では改善されませんでした。",
   "met": "満たした",
   "not met": "満たさず",
-  "table": "表"
+  "table": "表",
+  "at most {n} words": "{n} 語以下",
+  "mentions {x}": "{x} を言及",
+  "doesn't mention {x}": "{x} に言及しない",
+  "is valid JSON": "有効なJSON",
+  "has a link": "リンクあり",
+  "{n} words; the limit is {limit}": "{n} 語。上限は {limit}",
+  "not valid JSON": "有効なJSONではない",
+  "no link in it": "リンクがない"
  }
 }

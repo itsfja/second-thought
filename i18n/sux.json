@@ -146,11 +146,13 @@
    "message0": "𒁾𒊕 %1 𒅆𒂃",
    "message1": "𒂗𒈾 %1 𒀀𒁺; 𒉡𒋛𒁲𒀀 𒀝",
    "message2": "%1",
-   "tooltip": "Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀."
+   "tooltip": "Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀.",
+   "message3": "𒊩𒌨𒁺 %1"
   },
   "rb_review": {
    "message0": "𒁾𒊕 %1 𒅆𒂃",
-   "tooltip": "𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷."
+   "tooltip": "𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷.",
+   "message1": "𒊩𒌨𒁺 %1"
   },
   "rb_passed": {
    "message0": "𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺"
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "message0": "ak %1 Plex-a nu-ub-gal",
    "tooltip": "Ak nu-ub-gal (Tautulli terminate). Mueash mungi4gi4, igal igal nugigi4, lu igal nuduga, nugal. Kigiga-bi ki-a nu-ub-su3."
+  },
+  "rb_chk_max_words": {
+   "message0": "%1 𒅗 𒉡𒀝",
+   "tooltip": "𒅗 𒌉𒊏 𒉡𒀝"
+  },
+  "rb_chk_mentions": {
+   "message0": "𒅗 %1 𒌇",
+   "tooltip": "𒅗 𒉡𒌇 𒅗"
+  },
+  "rb_chk_no_mention": {
+   "message0": "𒅗 %1 𒉡𒌇",
+   "tooltip": "𒅗 𒌇 𒅗"
+  },
+  "rb_chk_json": {
+   "message0": "JSON 𒍣",
+   "tooltip": "JSON 𒉡𒍣 𒅗"
+  },
+  "rb_chk_link": {
+   "message0": "𒊬 𒌇",
+   "tooltip": "𒊬 𒉡𒌇 𒅗"
   }
  },
  "options": {
@@ -1897,7 +1919,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "𒁾𒊕 𒀀𒁺 {round}-𒂠 𒉏 {n} 𒊭 {total} 𒌇. 𒀀𒁺 𒂕𒊏 𒉡𒊷.",
   "met": "𒌇",
   "not met": "𒉡𒌇",
-  "met {n} of {total}": "𒌇 {n} 𒊭 {total}"
+  "met {n} of {total}": "𒌇 {n} 𒊭 {total}",
+  "at most {n} words": "{n} 𒅗 𒉡𒀝",
+  "mentions {x}": "𒅗 {x} 𒌇",
+  "doesn't mention {x}": "𒅗 {x} 𒉡𒌇",
+  "is valid JSON": "JSON 𒍣𒁶",
+  "has a link": "𒊬 𒌇",
+  "{n} words; the limit is {limit}": "{n} 𒅗; {limit} 𒉡𒀝",
+  "not valid JSON": "JSON 𒉡𒍣",
+  "no link in it": "𒊬 𒉡𒌇"
  },
  "examples": {
   "review": {
@@ -3680,7 +3710,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "dub-saĝ a-ra2 {round}-še3 nim {n} ša {total} tuku. a-ra2 eĝer-ra nu-sa6.",
   "met": "tuku",
   "not met": "nu-tuku",
-  "table": "dub"
+  "table": "dub",
+  "at most {n} words": "{n} inim nu-ak",
+  "mentions {x}": "inim {x} tuku",
+  "doesn't mention {x}": "inim {x} nu-tuku",
+  "is valid JSON": "JSON zid-gin7",
+  "has a link": "sar tuku",
+  "{n} words; the limit is {limit}": "{n} inim; {limit} nu-ak",
+  "not valid JSON": "JSON nu-zid",
+  "no link in it": "sar nu-tuku"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

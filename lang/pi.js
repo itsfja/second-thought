@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude सूचिं याच: %1","tooltip":"Claude सूचिया पटिवदति, यं त्वं अनुपरिवत्तेतुं सक्कोसि।"},
 "rb_rewrite":{"message0":"%1 %2 इति पुन लिख","tooltip":"निदस्सनं: (आलेखं) (फरासिभासाय परिवत्तेहि) इति पुन लिख।"},
 "rb_extract":{"message0":"%2 इतो %1 उद्धर"},
-"rb_reflect":{"message0":"आलेखं %1 अनुसारेन समेक्ख","message1":"याव %1 वारा; असम्पन्ने, करोहि","message2":"%1","tooltip":"Claude आलेखं वीमंसति। असम्पन्ने अन्तोखण्डा चालियन्ति, ततो पुन वीमंसति। पच्चेकं वारे समेक्खको पुब्बदोसा न पच्चागता ति पि पस्सति। वारेसु खीणेसु, न पच्छिमो एव, अप्पतरदोसो आलेखो रक्खीयति।"},
-"rb_review":{"message0":"आलेखं %1 अनुसारेन समेक्ख","tooltip":"एका समेक्खा। पच्छा “आलेखो समेक्खं उत्तिण्णो” “समेक्खादोसा” च उपयुञ्ज।"},
+"rb_reflect":{"message0":"आलेखं %1 अनुसारेन समेक्ख","message1":"याव %1 वारा; असम्पन्ने, करोहि","message2":"%1","tooltip":"Claude आलेखं वीमंसति। असम्पन्ने अन्तोखण्डा चालियन्ति, ततो पुन वीमंसति। पच्चेकं वारे समेक्खको पुब्बदोसा न पच्चागता ति पि पस्सति। वारेसु खीणेसु, न पच्छिमो एव, अप्पतरदोसो आलेखो रक्खीयति।","message3":"और जांच %1"},
+"rb_review":{"message0":"आलेखं %1 अनुसारेन समेक्ख","tooltip":"एका समेक्खा। पच्छा “आलेखो समेक्खं उत्तिण्णो” “समेक्खादोसा” च उपयुञ्ज।","message1":"और जांच %1"},
 "rb_passed":{"message0":"आलेखो समेक्खं उत्तिण्णो"},
 "rb_problems":{"message0":"समेक्खादोसा"},
 "rb_score":{"message0":"%2 अत्थाय %1 दससु अङ्केहि गणेहि"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli itihaso, %1 divasa","tooltip":"Mulhanam santanam, ekam ekam imesu divasesu dittha, Tautulli: user, title, when ca transcode. Patham yeva. TAUTULLI_URL TAUTULLI_API_KEY second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli passana-kalo, %1 divasa","tooltip":"Mulhanam santanam, ekam ekam yam imesu divasesu apassi, Tautulli: user ca hours. Patham yeva."},
 "rb_plex_scan":{"message0":"Plex %1 potthakagaram parigganhitu","tooltip":"Potthakagaram nava-panna-anvesaya parigganhiti. Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."},
-"rb_plex_stop":{"message0":"Plex %1 savam nivattetu","tooltip":"Ekam savam nivatteti (Tautulli terminate). Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."}
+"rb_plex_stop":{"message0":"Plex %1 savam nivattetu","tooltip":"Ekam savam nivatteti (Tautulli terminate). Sabbada tam pathamam pucchito, kinci annam appucchito pi, natthi kenaci evati vattum, na hoti. Imasmi pannapattiye kimpi na saccato parivattati."},
+"rb_chk_max_words":{"message0":"%1 शब्द न से अधिक","tooltip":"न शब्द"},
+"rb_chk_mentions":{"message0":"कहति %1","tooltip":"न शब्द"},
+"rb_chk_no_mention":{"message0":"न कहति %1","tooltip":"शब्द"},
+"rb_chk_json":{"message0":"JSON वाली","tooltip":"न वाली JSON"},
+"rb_chk_link":{"message0":"लिंक","tooltip":"न लिंक"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"सब्बदिवसे","weekdays":"कम्मदिवसेसु","weekends":"सत्ताहन्तेसु"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} अधिक नियम ({n} मि {total}). ततो पच्छिमा वारा तं न सोधेसुं।",
 "met":"कत",
 "not met":"अकत",
-"met {n} of {total}":"{n} मि {total}"
+"met {n} of {total}":"{n} मि {total}",
+"at most {n} words":"{n} शब्द न से अधिक",
+"mentions {x}":"कहति {x}",
+"doesn't mention {x}":"न कहति {x}",
+"is valid JSON":"JSON वाली",
+"has a link":"लिंक है",
+"{n} words; the limit is {limit}":"{n} शब्द; सीमा {limit}",
+"not valid JSON":"न वाली JSON",
+"no link in it":"न लिंक"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"{round} अधिक नियम ({n} मि {total}). ततो पच्छिमा वारा तं न सोधेसुं।",
 "met":"कत",
 "not met":"अकत",
-"table":"पत्रम"
+"table":"पत्रम",
+"at most {n} words":"{n} शब्द न से अधिक",
+"mentions {x}":"कहति {x}",
+"doesn't mention {x}":"न कहति {x}",
+"is valid JSON":"JSON वाली",
+"has a link":"लिंक है",
+"{n} words; the limit is {limit}":"{n} शब्द; सीमा {limit}",
+"not valid JSON":"न वाली JSON",
+"no link in it":"न लिंक"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

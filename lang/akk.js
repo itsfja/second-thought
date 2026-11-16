@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"𒅆𒀉𒊒𒌝 𒅖𒋗𒌝"},
 "rb_rec_set":{"message0":"%1 𒊭 %2 𒀀𒈾 %3 𒋗𒆪𒌦","tooltip":"𒅅𒆷𒄠 𒅖𒋼𒅔 𒊭 𒅆𒀉𒊑𒅎 𒌑𒈾𒀝𒅗𒅈 (𒈠𒁲𒅖 𒅆𒉌𒀉 𒅆𒀉𒊑𒅎)."},
 "rb_receive":{"message0":"𒄿𒉡𒈠 %1 𒀀𒇷𒅅𒆠","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒈠𒋾𒈠 𒅆𒅁𒊒𒌝 𒀭𒉡𒌝 𒅖𒊭𒊍𒋢. 𒅁𒊺𒌅𒌝 𒈠𒁺𒌅𒌝 𒀀𒈾 𒅆𒅁𒊑𒅎 𒅖𒋼𒅔 𒄿𒊺𒅎𒈨𒀀."},
-"rb_reflect":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑","message1":"𒀀𒁲 %1 𒊓𒄴𒄷𒊏𒋾𒅎; 𒄿𒉡𒈠 𒄿𒄩𒀜𒁲, 𒂊𒁍𒍑","message2":"%1","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒄿𒄩𒀜𒁲, 𒇷𒅁𒈾𒌅𒌝 𒊭 𒇷𒅁𒁉 𒅁𒁍𒊭, 𒌋 𒋗𒌦𒈾𒄠 𒄿𒁀𒅈𒊑. 𒄿𒈾 𒊓𒄴𒄷𒌨𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒁀𒊒𒌝 𒄭𒁕𒌅𒌝 𒉺𒈾𒌅𒌝 𒆷 𒄿𒌅𒊏 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒊓𒄴𒄷𒊏𒌅𒌝 𒅅𒈬𒊏, 𒈠𒀸𒁕𒊒𒌝 𒊭 𒄭𒁕𒌅𒋗 𒈠𒁕 𒈾𒍢𒅕, 𒌌 𒉿𒅈𒆪𒌝 𒂊𒁲𒅖𒋗."},
+"rb_reflect":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑","message1":"𒀀𒁲 %1 𒊓𒄴𒄷𒊏𒋾𒅎; 𒄿𒉡𒈠 𒄿𒄩𒀜𒁲, 𒂊𒁍𒍑","message2":"%1","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒄿𒄩𒀜𒁲, 𒇷𒅁𒈾𒌅𒌝 𒊭 𒇷𒅁𒁉 𒅁𒁍𒊭, 𒌋 𒋗𒌦𒈾𒄠 𒄿𒁀𒅈𒊑. 𒄿𒈾 𒊓𒄴𒄷𒌨𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒁀𒊒𒌝 𒄭𒁕𒌅𒌝 𒉺𒈾𒌅𒌝 𒆷 𒄿𒌅𒊏 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒊓𒄴𒄷𒊏𒌅𒌝 𒅅𒈬𒊏, 𒈠𒀸𒁕𒊒𒌝 𒊭 𒄭𒁕𒌅𒋗 𒈠𒁕 𒈾𒍢𒅕, 𒌌 𒉿𒅈𒆪𒌝 𒂊𒁲𒅖𒋗.","message3":"𒌑 𒊭𒅗𒀭 %1"},
 "rb_reset_timer":{"message0":"𒋗𒌓 𒋛𒈠𒉌𒅎 𒋼𒅕𒊑"},
 "rb_result":{"message0":"𒄖𒈬𒌨 𒌋 𒍢𒋫𒄠 𒆪𒌌𒇷𒅎","tooltip":"𒂊𒁉𒅖𒋫𒄠 𒌑𒂵𒄠𒈠𒅈. 𒊭 𒀀𒈾 𒍢𒋾𒅎 𒌅𒊏𒀜𒁺 𒌑𒅗𒀠𒆷𒄠, 𒌑𒇻 𒈠𒀸𒁕𒊏𒄠 𒋗𒌝𒈠 𒈪𒅎𒈠 𒆷 𒌅𒊏𒀜𒁺."},
 "rb_result_text":{"message0":"𒍢𒌅𒌝 𒀀𒁲 𒄿𒈾𒀭𒈾","tooltip":"𒅗𒆷 𒊭 𒀀𒈾 𒍢𒋾𒅎 𒌑𒊏𒀜𒁺, 𒆠𒈠 𒀀𒉿𒋾𒅎."},
 "rb_retry":{"message0":"𒀀𒁲 %1 𒊭𒉌𒋗 𒋗𒌦𒉌","message1":"%1","tooltip":"𒋗𒌝𒈠 𒈪𒅎𒈠 𒄿𒈾 𒇷𒅁𒁉 𒄴𒁲 𒆠𒈠 𒂊𒁉𒅖𒌅𒌝 𒊭𒉌𒌅𒌝 𒌑𒊭𒀝𒆷𒇻 (𒊑𒅅𒋢𒌝 𒁀𒀜𒄣𒌝, 𒀀𒁉𒅋𒌅𒌝 𒂊𒅆𒌅𒌝), 𒄿𒍝𒄠 𒄿𒋡𒀠 𒌋 𒋗𒌦𒈾𒄠 𒅁𒁉𒅖."},
-"rb_review":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑","tooltip":"𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠."},
+"rb_review":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑","tooltip":"𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠.","message1":"𒌑 𒊭𒅗𒀭 %1"},
 "rb_revise":{"message0":"𒄭𒁕𒋾 𒁉𒊑𒅎 𒋗𒋼𒊺𒅕 %1 𒄿𒈾 𒆠 𒊺𒋾𒅎","tooltip":"Claude 𒄭𒁕𒋾𒅎 𒊭 𒁉𒊒𒌝 𒉿𒅈𒆪𒌝 𒅅𒋗𒁺 𒍑𒋼𒅖𒊺𒅕."},
 "rb_rework":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒅖𒅆𒅖 𒂊𒁍𒍑: %1","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒆠𒈠 𒁲𒈪𒅗 𒅖𒅆𒅖 𒄿𒊭𒀜𒁕𒅈."},
 "rb_rewrite":{"message0":"%1 𒅖𒅆𒅖 𒋗𒌅𒌨: %2","tooltip":"𒆠𒈠: (𒈠𒀸𒁕𒊏𒄠) 𒅖𒅆𒅖 𒋗𒌅𒌨: (𒀀𒈾 𒇷𒊭𒉌𒅎 𒊭 Faransa 𒋗𒌒𒅆𒄴)."},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"tooltip":"Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒈠𒊍𒊓𒅈𒋾𒅎 𒊓 𒌨𒊑, 𒄑𒌅 Tautulli: user, 𒋾𒀉𒇷, 𒈠𒊍𒊓𒅈𒌅 𒌑 transcode. Sadu mahta. TAUTULLI_URL 𒌑 TAUTULLI_API_KEY 𒄿𒈾 second-thought.ini.","message0":"Tautulli 𒋫𒅈𒋛𒋢, %1 𒌨𒊒"},
 "rb_tautulli_watchtime":{"tooltip":"Tuppatu, 𒌅𒌒𒁍 𒀀𒈾 𒀀𒈨𒇷 𒊓 𒌨𒊑, 𒄑𒌅 Tautulli: user 𒌑 𒈠𒊍𒊓𒅈𒌅. Sadu mahta.","message0":"Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪, %1 𒌨𒊒"},
 "rb_plex_scan":{"tooltip":"Tuppu 𒀀𒈾 𒌅𒌒𒉺𒋾𒅎 𒈾𒊍𒊑𒅎 𒄑𒌅. Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒.","message0":"𒌅𒌒𒉺 %1 𒀀𒈾 Plex 𒈠𒊍𒊓𒅈𒌅"},
-"rb_plex_stop":{"tooltip":"Massartu 𒅗𒉺𒌅 (Tautulli 𒋼𒅕𒈪𒈾𒋼). Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒.","message0":"𒈠𒊍𒊓𒅈𒌅 %1 𒀀𒈾 Plex 𒅗𒉺𒌅"}
+"rb_plex_stop":{"tooltip":"Massartu 𒅗𒉺𒌅 (Tautulli 𒋼𒅕𒈪𒈾𒋼). Anaku 𒅗𒋢 𒄭𒋢 𒄑𒌅, 𒌑 𒌝 𒀀𒈨𒇷 𒆷 𒊓𒁺, 𒆷 𒄿𒁍𒊻. Umu 𒀭𒉡 𒆷 𒄑𒋼𒅔 𒈠𒊍𒊓𒊒.","message0":"𒈠𒊍𒊓𒅈𒌅 %1 𒀀𒈾 Plex 𒅗𒉺𒌅"},
+"rb_chk_max_words":{"message0":"𒀀𒈨𒇻 %1 𒆷 𒀀𒊭","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒀀𒈨𒇻 𒀀𒊭 𒌌 𒌑𒁀𒀠𒆷𒀜"},
+"rb_chk_mentions":{"message0":"𒍝𒅗𒅈 %1","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒍝𒅗𒅈 𒌌 𒇷𒄣"},
+"rb_chk_no_mention":{"message0":"𒌌 𒍝𒅗𒅈 %1","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒍝𒅗𒅈 𒇷𒄣"},
+"rb_chk_json":{"message0":"JSON 𒊭𒀝𒉡𒌝","tooltip":"𒈠𒀸𒁕𒊒𒌝 JSON 𒌌 𒊭𒀝𒉡 𒇷𒄣"},
+"rb_chk_link":{"message0":"𒆠𒈠 𒊭𒊏𒁍𒌝","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒊭𒊏𒁍𒌝 𒌌 𒇷𒄣"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -1189,7 +1194,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒊭 𒊓𒄴𒄷𒌨𒋾𒅎 {round} 1e2ḫâtuš 𒆠𒈾𒋾𒅎 {n} 𒊭 {total}. 𒊓𒄴𒄷𒊏𒌅𒌝 𒉿𒅈𒆠𒀀𒌅𒌝 𒌌 𒌑𒊭𒋾𒊏𒋗.",
 "met":"1e2ḫâtuš",
 "not met":"𒌌 1e2ḫâtu",
-"met {n} of {total}":"1e2ḫâtu {n} 𒊭 {total}"
+"met {n} of {total}":"1e2ḫâtu {n} 𒊭 {total}",
+"at most {n} words":"{n} 𒀀𒈨𒇻 𒆷 𒀀𒊭",
+"mentions {x}":"𒍝𒅗𒅈 {x}",
+"doesn't mention {x}":"𒌌 𒍝𒅗𒅈 {x}",
+"is valid JSON":"JSON 𒊭𒀝𒉡𒌝",
+"has a link":"𒆠𒈠 𒊭𒊏𒁍𒌝",
+"{n} words; the limit is {limit}":"{n} 𒀀𒈨𒇻; 𒄩𒅈𒊏𒉡𒌝 {limit}",
+"not valid JSON":"𒌌 𒊭𒀝𒉡 JSON",
+"no link in it":"𒊭𒊏𒁍𒌝 𒆷 𒊭𒀝𒉡"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2340,7 +2353,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ana mašṭarim ša saḫḫurtim {round} 1e2ḫâtuš kīnatim {n} ša {total}. saḫḫurātum warkiātum ul ušatirāšu.",
 "met":"1e2ḫâtuš",
 "not met":"ul 1e2ḫâtu",
-"table":"ṭuppi"
+"table":"ṭuppi",
+"at most {n} words":"{n} amēlū lā ašâ",
+"mentions {x}":"zakar {x}",
+"doesn't mention {x}":"ul zakar {x}",
+"is valid JSON":"JSON šaknum",
+"has a link":"kīma šarābum",
+"{n} words; the limit is {limit}":"{n} amēlū; ḫarrānum {limit}",
+"not valid JSON":"ul šaknu JSON",
+"no link in it":"šarābum lā šaknu"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

@@ -19,7 +19,7 @@ from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
 from .providers import CURRENCY, ModelCalls, amount_text, fixed_rate, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
 from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
-    _locked, _need_picture, _private_open, _short, _write_json, clean_svg, field_list, num, parse_rules, read_text_file, record_schema, review_verdicts,
+    _locked, _need_picture, _private_open, _short, _write_json, clean_svg, exact_checks, field_list, num, parse_rules, read_text_file, record_schema, review_verdicts,
     round_js, stuck_rule, to_bool, to_list, to_record, to_str)
 from .connectors import Connections
 from .mcp import MCPTools
@@ -1063,20 +1063,31 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             lines.append("| " + cell(rule) + " | " + " | ".join(cells) + " |")
         return "\n".join(lines)
 
-    async def review(self, criteria, label="Review", in_loop=False):
+    async def review(self, criteria, label="Review", in_loop=False, checks=None):
         self._need_draft()
         rules = parse_rules(criteria)
+        cv = exact_checks(self.draft, checks)  # the exact checks, worked out by code, no model call (#425)
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
                    "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
-        rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
-        v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
-                             "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
-                             '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
-                             '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
-                             "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
-                             "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
-        res = review_verdicts(rules, v)
+        if rules:  # written rules are judged by the model; with only exact checks there is no model call (#425)
+            rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
+            v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
+                                 "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
+                                 '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
+                                 '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
+                                 "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
+                                 "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            res = review_verdicts(rules, v)
+            res["verdicts"] = cv + res["verdicts"]
+            res["approved"] = all(x["met"] for x in res["verdicts"]) and res["approved"]
+            res["problems"] = list(dict.fromkeys([x["problem"] or x["rule"] for x in res["verdicts"] if not x["met"]] + res["problems"]))
+            res["met"] = sum(1 for x in res["verdicts"] if x["met"])
+            res["unmet"] = [x["rule"] for x in res["verdicts"] if not x["met"]]
+        else:
+            res = {"approved": all(x["met"] for x in cv),
+                   "problems": [x["problem"] or x["rule"] for x in cv if not x["met"]],
+                   "verdicts": cv, "met": sum(1 for x in cv if x["met"]), "unmet": [x["rule"] for x in cv if not x["met"]]}
         approved = res["approved"]
         self.approved = approved
         self.problems = [] if approved else (res["problems"] or ["Does not yet meet the criteria."])
@@ -1086,7 +1097,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             best = loop["best"]
             if best is None or res["met"] >= best["met"]:  # the best draft meets the most rules; a tie goes to the newer draft
                 loop["best"] = {"draft": self.draft, "problems": list(self.problems), "met": res["met"],
-                                "total": len(rules), "n": len(self.problems), "round": loop["round"]}
+                                "total": len(rules) + len(cv), "n": len(self.problems), "round": loop["round"]}
             for p_ in self.problems:
                 if p_ not in loop["earlier"]:
                     loop["earlier"].append(p_)

@@ -395,7 +395,8 @@
    "message0": "dœm frumritit eptir %1",
    "message1": "allt at %1 umferðum; þá er þat bregzk, ger",
    "message2": "%1",
-   "tooltip": "Claude dœmir frumritit. Ef þat bregzk, keyra kubbarnir hér inni, ok þá dœmir hann aptr. Hverja umferð skoðar dómarinn ok at fyrri brestir hafi eigi aptr komit. Ef umferðirnar þrjóta, er haldit því frumriti er fæsta bresti hefir, eigi einungis hinu síðasta."
+   "tooltip": "Claude dœmir frumritit. Ef þat bregzk, keyra kubbarnir hér inni, ok þá dœmir hann aptr. Hverja umferð skoðar dómarinn ok at fyrri brestir hafi eigi aptr komit. Ef umferðirnar þrjóta, er haldit því frumriti er fæsta bresti hefir, eigi einungis hinu síðasta.",
+   "message3": "og athuga %1"
   },
   "rb_reset_timer": {
    "message0": "endrset stundamæli"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "dœm frumritit eptir %1",
-   "tooltip": "Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á."
+   "tooltip": "Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á.",
+   "message1": "og athuga %1"
   },
   "rb_revise": {
    "message0": "endrbœt at laga bresti dómsins %1 með vefnum",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "stoppa strauminn %1 a Plex",
    "tooltip": "Stoppar einn straum (Tautulli terminate). Hann spyr thig alltaf fyrst, thott ekkert annad spyrji, og ef enginn er til ad segja ja, gerist ekkert. A thessari sidu breytist ekkert i alvoru."
+  },
+  "rb_chk_max_words": {
+   "message0": "í mesta lagi %1 orð",
+   "tooltip": "Brestur ef frumritið á fleiri orð; vandamálið segir rétta tölu."
+  },
+  "rb_chk_mentions": {
+   "message0": "nefnir %1",
+   "tooltip": "Brestur nema frumritið innihaldi þessi orð (stafsetning skiptir ekki máli)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "nefnir eigi %1",
+   "tooltip": "Brestur ef frumritið inniheldur þessi orð (stafsetning skiptir ekki máli)."
+  },
+  "rb_chk_json": {
+   "message0": "er gilt JSON",
+   "tooltip": "Brestur nema frumritið sé gilt JSON."
+  },
+  "rb_chk_link": {
+   "message0": "á tengil",
+   "tooltip": "Brestur nema frumritið innihaldi tengil (http://… eða www.…)."
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Fór aptr til frumrits ór umferð {round}:hann hafði flesta lǫg haldin ({n} af {total}). Umferðirnar eptir þat bœttu eigi um.",
   "met": "haldin",
   "not met": "eigi haldin",
-  "met {n} of {total}": "{n} af {total} haldnir"
+  "met {n} of {total}": "{n} af {total} haldnir",
+  "at most {n} words": "í mesta lagi {n} orð",
+  "mentions {x}": "nefnir {x}",
+  "doesn't mention {x}": "nefnir eigi {x}",
+  "is valid JSON": "er gilt JSON",
+  "has a link": "á tengil",
+  "{n} words; the limit is {limit}": "{n} orð; hámarkið er {limit}",
+  "not valid JSON": "ógilt JSON",
+  "no link in it": "enginn tengill"
  },
  "examples": {
   "review": {
@@ -3689,7 +3719,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Fór aptr til frumrits ór umferð {round}:hann hafði flesta lǫg haldin ({n} af {total}). Umferðirnar eptir þat bœttu eigi um.",
   "met": "haldin",
   "not met": "eigi haldin",
-  "table": "tafla"
+  "table": "tafla",
+  "at most {n} words": "í mesta lagi {n} orð",
+  "mentions {x}": "nefnir {x}",
+  "doesn't mention {x}": "nefnir eigi {x}",
+  "is valid JSON": "er gilt JSON",
+  "has a link": "á tengil",
+  "{n} words; the limit is {limit}": "{n} orð; hámarkið er {limit}",
+  "not valid JSON": "ógilt JSON",
+  "no link in it": "enginn tengill"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

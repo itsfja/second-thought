@@ -40,8 +40,8 @@
 "rb_ask_list":{"message0":"Xicnequi ce mecatl itech Claude: %1","tooltip":"Claude quinānquilia ica ce mecatl in huel ticmotlalōz."},
 "rb_rewrite":{"message0":"Occeppa xictlahcuilo %1 iuhqui %2","tooltip":"Machiyōtl: occeppa xictlahcuilo (achtlahcuilōlli) iuhqui (ic caxtiltēcatlahtōlli xiccuepa)."},
 "rb_extract":{"message0":"Xicquīxti %1 itech %2"},
-"rb_reflect":{"message0":"Xictlatta in achtlahcuilōlli ica %1","message1":"ixquichcāuh %1 cepa; intlā ahmo yēctli, xicchīhua","message2":"%1","tooltip":"Claude quitlatta in achtlahcuilōlli. Intlā ahmo yēctli, mochīhuah in tlaxtlapalli in itic, niman occeppa quitlatta. Cēcen cepa in tlattani no quitta ahmo mocuepah in achto tlatlacōlli. Intlā tlamih in cepa, mopiya in achtlahcuilōlli in achi tlatlacōle, ahmo zan in zātepan."},
-"rb_review":{"message0":"Xictlatta in achtlahcuilōlli ica %1","tooltip":"Ce tlattaliztli. Zātepan xictequitlālli «In achtlahcuilōlli ōquiz» ihuān «In tlatlacōlli»."},
+"rb_reflect":{"message0":"Xictlatta in achtlahcuilōlli ica %1","message1":"ixquichcāuh %1 cepa; intlā ahmo yēctli, xicchīhua","message2":"%1","tooltip":"Claude quitlatta in achtlahcuilōlli. Intlā ahmo yēctli, mochīhuah in tlaxtlapalli in itic, niman occeppa quitlatta. Cēcen cepa in tlattani no quitta ahmo mocuepah in achto tlatlacōlli. Intlā tlamih in cepa, mopiya in achtlahcuilōlli in achi tlatlacōle, ahmo zan in zātepan.","message3":"auh xiquita %1"},
+"rb_review":{"message0":"Xictlatta in achtlahcuilōlli ica %1","tooltip":"Ce tlattaliztli. Zātepan xictequitlālli «In achtlahcuilōlli ōquiz» ihuān «In tlatlacōlli».","message1":"auh xiquita %1"},
 "rb_passed":{"message0":"In achtlahcuilōlli ōquiz"},
 "rb_problems":{"message0":"In tlatlacōlli"},
 "rb_score":{"message0":"Xicpōhua %1 ic mahtlactli ic %2"},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli tlahtol, %1 tonalli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlahtol ini tonalli, Tautulli: user, title, when ihuan transcode. Zan quipoua. TAUTULLI_URL ihuan TAUTULLI_API_KEY second-thought.ini ipan."},
 "rb_tautulli_watchtime":{"message0":"Tautulli tlahtol-t, %1 tonalli","tooltip":"Tlacuilolli in tlapoualli, ce ipampa centetl tlacatl in tlahtol ini tonalli, Tautulli: user ihuan hmoou. Zan quipoua."},
 "rb_plex_scan":{"message0":"Plex %1 amoxcalli tlatlalia","tooltip":"In amoxcalli tlatlalia ipampa yancuic tlamantli. Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
-"rb_plex_stop":{"message0":"Plex %1 tlatemoztli quicelah","tooltip":"Ce tlatemoztli quicelah (Tautulli terminate). Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."}
+"rb_plex_stop":{"message0":"Plex %1 tlatemoztli quicelah","tooltip":"Ce tlatemoztli quicelah (Tautulli terminate). Centetl ipampa mitztlahtlaniz, zan ye no ihuan in tlein amo mitztlahtlaniz, ihuan intla aca amo quimilhuiz quenh, amo chihualoz. Ipan ini amoxtli aca amo quihuehca."},
+"rb_chk_max_words":{"message0":"za %1 tlahtolli","tooltip":"Ahmo cualli in achtlahcuilōlli quipiya achi tlēp tlāhtolli; in tlatlacōlli quipiya in achi tlapōhualli."},
+"rb_chk_mentions":{"message0":"quītoa %1","tooltip":"Ahmo cualli in achtlahcuilōlli quipiya in tlahtolli (tlahcuilōlli monequi ahmo)."},
+"rb_chk_no_mention":{"message0":"ahmo quītoa %1","tooltip":"Ahmo cualli in achtlahcuilōlli quipiya in tlahtolli (tlahcuilōlli monequi ahmo)."},
+"rb_chk_json":{"message0":"cualli JSON","tooltip":"Ahmo cualli in achtlahcuilōlli ahmo cualli JSON."},
+"rb_chk_link":{"message0":"quipiya ce huitztiliztli","tooltip":"Ahmo cualli in achtlahcuilōlli ahmo quipiya huitztiliztli (http://… ahnozo www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -1187,7 +1192,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Ōmocuep ic in achtlahcuilōlli itech in cepa {round}:quipiya in achi huel neltiliztli ({n} ipan {total}). In zātepan cepa ahmo ōquiyēctilihqueh.",
 "met":"quiyēquitl",
 "not met":"ahmo quiyēquitl",
-"met {n} of {total}":"{n} pan {total} quiyēquitl"
+"met {n} of {total}":"{n} pan {total} quiyēquitl",
+"at most {n} words":"za {n} tlahtolli",
+"mentions {x}":"quītoa {x}",
+"doesn't mention {x}":"ahmo quītoa {x}",
+"is valid JSON":"cualli JSON",
+"has a link":"quipiya ce huitztiliztli",
+"{n} words; the limit is {limit}":"{n} tlahtolli; ōmōtl {limit}",
+"not valid JSON":"ahmo cualli JSON",
+"no link in it":"ahmo huitztiliztli ipan"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2338,7 +2351,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Ōmocuep ic in achtlahcuilōlli itech in cepa {round}:quipiya in achi huel neltiliztli ({n} ipan {total}). In zātepan cepa ahmo ōquiyēctilihqueh.",
 "met":"quiyēquitl",
 "not met":"ahmo quiyēquitl",
-"table":"amatl"
+"table":"amatl",
+"at most {n} words":"za {n} tlahtolli",
+"mentions {x}":"quītoa {x}",
+"doesn't mention {x}":"ahmo quītoa {x}",
+"is valid JSON":"cualli JSON",
+"has a link":"quipiya ce huitztiliztli",
+"{n} words; the limit is {limit}":"{n} tlahtolli; ōmōtl {limit}",
+"not valid JSON":"ahmo cualli JSON",
+"no link in it":"ahmo huitztiliztli ipan"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

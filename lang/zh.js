@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"新记录"},
 "rb_rec_set":{"message0":"把 %2 的 %1 设为 %3","tooltip":"修改记录的一个字段（通常是记录变量）。"},
 "rb_receive":{"message0":"当我收到 %1","tooltip":"每当这条消息被广播时运行下面的积木。多个脚本可以收听同一条消息。"},
-"rb_reflect":{"message0":"按 %1 审阅草稿","message1":"最多 %1 轮；不通过时执行","message2":"%1","tooltip":"Claude 评审草稿。如果不通过，里面的积木会运行，然后再评审一次。每一轮审阅者也会检查之前的问题没有再出现。轮数用完时，保留问题最少的草稿，而不只是最后一份。"},
+"rb_reflect":{"message0":"按 %1 审阅草稿","message1":"最多 %1 轮；不通过时执行","message2":"%1","tooltip":"Claude 评审草稿。如果不通过，里面的积木会运行，然后再评审一次。每一轮审阅者也会检查之前的问题没有再出现。轮数用完时，保留问题最少的草稿，而不只是最后一份。","message3":"并检查 %1"},
 "rb_reset_timer":{"message0":"重置计时器"},
 "rb_result":{"message0":"结束并显示结果","tooltip":"结束运行。显示你加入结果的内容；如果什么都没加，就显示草稿。"},
 "rb_result_text":{"message0":"目前的结果","tooltip":"加入结果的所有内容，作为文本。"},
 "rb_retry":{"message0":"最多重试 %1 次","message1":"%1","tooltip":"如果里面的某件事以重试可能修好的方式失败（连接中断、回复乱码），稍等一下再运行一次。"},
-"rb_review":{"message0":"按 %1 审阅草稿","tooltip":"一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。"},
+"rb_review":{"message0":"按 %1 审阅草稿","tooltip":"一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。","message1":"并检查 %1"},
 "rb_revise":{"message0":"修改以解决审阅发现的问题 %1 使用网络","tooltip":"Claude 修正上一次审阅发现的问题。"},
 "rb_rework":{"message0":"改写草稿：%1","tooltip":"Claude 按照你的指示重写草稿。"},
 "rb_rewrite":{"message0":"把 %1 改写为 %2","tooltip":"例如：把（草稿）改写为（翻译成法语）。"},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"Tautulli 历史，最近 %1 天","tooltip":"记录列表，这个天数里观看的每一项一条，来自 Tautulli：user、title、when 和 transcode（是否转码）。它只读取。需要在 second-thought.ini 中设置 TAUTULLI_URL 和 TAUTULLI_API_KEY。"},
 "rb_tautulli_watchtime":{"message0":"Tautulli 观看时长，最近 %1 天","tooltip":"记录列表，这个天数里观看的每一个人一条，来自 Tautulli：user 和 hours。它只读取。"},
 "rb_plex_scan":{"message0":"扫描 Plex 上的 %1 媒体库","tooltip":"扫描一个媒体库寻找新文件。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"},
-"rb_plex_stop":{"message0":"停止 Plex 上的 %1 串流","tooltip":"停止一个串流（Tautulli 的 terminate）。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"}
+"rb_plex_stop":{"message0":"停止 Plex 上的 %1 串流","tooltip":"停止一个串流（Tautulli 的 terminate）。它总是先问你，即使别的都不问，没有人在场说“是”就不会运行。此页面上什么都不会真的改变。"},
+"rb_chk_max_words":{"message0":"最多 %1 个字","tooltip":"草稿超过字数则不合格；问题会写出实际字数。"},
+"rb_chk_mentions":{"message0":"提到 %1","tooltip":"草稿中没有这些词则不合格（不区分大小写）。"},
+"rb_chk_no_mention":{"message0":"不提 %1","tooltip":"草稿中出现这些词则不合格（不区分大小写）。"},
+"rb_chk_json":{"message0":"是有效的JSON","tooltip":"草稿不是有效JSON则不合格。"},
+"rb_chk_link":{"message0":"包含链接","tooltip":"草稿中没有链接则不合格（http://… 或 www.…）。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"回到了第 {round} 轮的草稿：它满足的规则最多（{total} 条中的 {n} 条）。之后的轮次没有改进它。",
 "met":"满足",
 "not met":"未满足",
-"met {n} of {total}":"满足 {total} 条中的 {n} 条"
+"met {n} of {total}":"满足 {total} 条中的 {n} 条",
+"at most {n} words":"{n} 个字以内",
+"mentions {x}":"提到 {x}",
+"doesn't mention {x}":"不提 {x}",
+"is valid JSON":"是有效的JSON",
+"has a link":"包含链接",
+"{n} words; the limit is {limit}":"{n} 个字；上限是 {limit}",
+"not valid JSON":"不是有效的JSON",
+"no link in it":"里面没有链接"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"回到了第 {round} 轮的草稿：它满足的规则最多（{total} 条中的 {n} 条）。之后的轮次没有改进它。",
 "met":"满足",
 "not met":"未满足",
-"table":"表格"
+"table":"表格",
+"at most {n} words":"{n} 个字以内",
+"mentions {x}":"提到 {x}",
+"doesn't mention {x}":"不提 {x}",
+"is valid JSON":"是有效的JSON",
+"has a link":"包含链接",
+"{n} words; the limit is {limit}":"{n} 个字；上限是 {limit}",
+"not valid JSON":"不是有效的JSON",
+"no link in it":"里面没有链接"
 }
 };

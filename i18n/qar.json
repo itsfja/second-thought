@@ -396,7 +396,8 @@
    "message0": "ᛋᚳᛠᚹᚪ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛒᛖ %1",
    "message1": "ᚩᚦ %1 ᚣᛗᛒᚷᚪᛝᚪᛋ; ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᛞᚩ",
    "message2": "%1",
-   "tooltip": "Claude ᛞᛖᛗᛖᚦ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ. ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᚦᚪ ᛋᛏᚩᚳᚳᚪᛋ ᚦᚫᚱᛁᚾᚾᛖ ᚣᚱᚾᚪᚦ, ᚪᚾᛞ ᚻᛖ ᚻᛁᛏ ᛖᚠᛏ ᛞᛖᛗᛖᚦ. ᚫᛚᚳᛖ ᚣᛗᛒᚷᚪᛝᛖ ᛋᛖ ᛋᚳᛠᚹᛖᚱᛖ ᛠᚳ ᛚᚩᚳᚪᚦ ᚦᚫᛏ ᚫᚱᚱᚪᚾ ᛚᛠᛇᛏᚱᚪᛋ ᛖᚠᛏ ᚾᛖ ᚳᚩᛗᚩᚾ. ᚷᛁᚠ ᚦᚪ ᚣᛗᛒᚷᚪᛝᚪᛋ ᚪᛏᛖᚩᚱᛁᚪᚦ, ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛗᛁᛞ ᚠᛖᚹᛖᛋᛏᚢᛗ ᛚᛠᛇᛏᚱᚢᛗ ᛒᛁᚦ ᚷᛖᚻᛠᛚᛞᛖᚾ, ᚾᚪ ᚪᚾᚪ ᚦᚫᛏ ᚣᛏᛖᛗᛖᛋᛏᛖ."
+   "tooltip": "Claude ᛞᛖᛗᛖᚦ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ. ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᚦᚪ ᛋᛏᚩᚳᚳᚪᛋ ᚦᚫᚱᛁᚾᚾᛖ ᚣᚱᚾᚪᚦ, ᚪᚾᛞ ᚻᛖ ᚻᛁᛏ ᛖᚠᛏ ᛞᛖᛗᛖᚦ. ᚫᛚᚳᛖ ᚣᛗᛒᚷᚪᛝᛖ ᛋᛖ ᛋᚳᛠᚹᛖᚱᛖ ᛠᚳ ᛚᚩᚳᚪᚦ ᚦᚫᛏ ᚫᚱᚱᚪᚾ ᛚᛠᛇᛏᚱᚪᛋ ᛖᚠᛏ ᚾᛖ ᚳᚩᛗᚩᚾ. ᚷᛁᚠ ᚦᚪ ᚣᛗᛒᚷᚪᛝᚪᛋ ᚪᛏᛖᚩᚱᛁᚪᚦ, ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛗᛁᛞ ᚠᛖᚹᛖᛋᛏᚢᛗ ᛚᛠᛇᛏᚱᚢᛗ ᛒᛁᚦ ᚷᛖᚻᛠᛚᛞᛖᚾ, ᚾᚪ ᚪᚾᚪ ᚦᚫᛏ ᚣᛏᛖᛗᛖᛋᛏᛖ.",
+   "message3": "ᚪᚾᛞ ᛒᛖᛋᚳᛠᚹᚪ %1"
   },
   "rb_reset_timer": {
    "message0": "ᛖᛞᚾᛁᚹᚪ ᛏᛁᛞᛗᛖᛏᛖᚾᛞ"
@@ -416,7 +417,8 @@
   },
   "rb_review": {
    "message0": "ᛋᚳᛠᚹᚪ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛒᛖ %1",
-   "tooltip": "ᚪᚾ ᛋᚳᛠᚹᚢᛝ. ᛒᚱᚢᚳ “ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚩᚠᛖᚱᚠᛖᚱᛞᛖ ᛋᚳᛠᚹᚢᛝᛖ” ᚪᚾᛞ “ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ” ᚫᚠᛏᛖᚱᚹᛠᚱᛞ."
+   "tooltip": "ᚪᚾ ᛋᚳᛠᚹᚢᛝ. ᛒᚱᚢᚳ “ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚩᚠᛖᚱᚠᛖᚱᛞᛖ ᛋᚳᛠᚹᚢᛝᛖ” ᚪᚾᛞ “ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ” ᚫᚠᛏᛖᚱᚹᛠᚱᛞ.",
+   "message1": "ᚪᚾᛞ ᛒᛖᛋᚳᛠᚹᚪ %1"
   },
   "rb_revise": {
    "message0": "ᛖᛞᚹᚣᚱᚳ ᛏᚩ ᛒᛖᛏᚪᚾᚾᛖ ᚦᚫᚱᛖ ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ %1 ᚦᚢᚱᚻ ᚦᚫᛏ ᚹᛖᛒᛒ",
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "message0": "ᚦᚩᚾᛖ %1 ᛋᛏᚱᛠᛗ ᚩᚾ Plex ᚷᛖᛋᛏᛁᛚᛚᚪᚾ",
    "tooltip": "ᛋᛏᛁᛚᛚᛖᚦ ᚪᚾ ᛋᛏᚱᛠᛗ (Tautulli terminate). ᚻᛁᛏ ᚪᛋᚳᛁᛖᛖᚦ ᚦᛖ ᚪᛖᚠᚱᛖ ᚪᛖᚱᛖᛋᛏ, ᚦᛠᚻ ᚾᚪᛖᚾᚢᛝ ᚩᚦᛖᚱ ᚪᛋᚳᛁᛖ, ᚪᚾᛞ ᛗᛁᛞ ᚾᚪᛖᚾᚢᛗ ᛗᛖᚾᚾ ᛏᚩ ᛋᛖᚳᚷᛖᚾᚾᛖ ᚷᛠ, ᚻᛁᛏ ᚾᛖ ᛞᛖᚦ. ᚩᚾ ᚦᛁᛋᛋᚢᛗ ᛏᚱᚪᛖᚠᛖ ᚾᚪᛖᚾᚢᛝ ᛋᚩᚦᛚᛁᚳᛖ ᚾᛖ ᚹᛖᚾᛞᚦ."
+  },
+  "rb_chk_max_words": {
+   "message0": "ᚾᚪ ᛗᚪ ᚦᚩᚾᚾᛖ %1 ᚹᚩᚱᛞ",
+   "tooltip": "ᚠᛖᛚᛚᚦ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛗᚪ ᚹᚩᚱᛞ ᚻᚫᛒᛒᛖ; ᛋᛖ ᛞᚩᛗ ᛋᛖᚷᚦ ᚦᚩᚾᛖ ᚱᛁᛇᛏᚪᚾ ᛏᚪᚳᛖᚾ."
+  },
+  "rb_chk_mentions": {
+   "message0": "ᚾᚪᛗᛁᛖᚦ %1",
+   "tooltip": "ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚦᚪᛋ ᚹᚩᚱᛞ ᚻᚪᛒᛖ (ᛒᚩᚷᚪᚾ ᛋᛏᚫᚠᚳᚱᚫᚠᛏ ᚾᛖ ᛗᚪᚾᚾᚪᚦ)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "ᚾᛖ ᚾᚪᛗᛁᛖᚦ %1",
+   "tooltip": "ᚠᛖᛚᛚᚦ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚦᚪᛋ ᚹᚩᚱᛞ ᚻᚫᛒᛒᛖ (ᛒᚩᚷᚪᚾ ᛋᛏᚫᚠᚳᚱᚫᚠᛏ ᚾᛖ ᛗᚪᚾᚾᚪᚦ)."
+  },
+  "rb_chk_json": {
+   "message0": "ᛁᛋ ᚱᛁᛇᛏ JSON",
+   "tooltip": "ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚾᚫᛒᛒᛖ ᚱᛁᛇᛏ JSON."
+  },
+  "rb_chk_link": {
+   "message0": "ᚻᚫᚠᚦ ᚻᛚᛖᚾᚳ",
+   "tooltip": "ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚾᚫᛒᛒᛖ ᚻᛚᛖᚾᚳ (http://… ᚩᚦᚦᛖ ᚹᚹᚹ.…)."
   }
  },
  "options": {
@@ -1907,7 +1929,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ᛖᚩᛞᛖ ᛖᚠᛏ ᛏᚩ ᚦᚪᛗ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏᛖ ᚩᚠ ᚣᛗᛒᚷᚪᛝᛖ {round}:ᚻᛁᛏ ᚻᛖᚩᛚᛞ ᚦᚪ ᛗᚫᛋᛏᚪᚾ ᚫ ({n} ᚩᚠ {total}). ᚦᚪ ᚣᛗᛒᚷᚪᛝᚪᛋ ᚫᚠᛏᛖᚱ ᚻᛁᛗ ᚾᛖ ᛒᛖᛏᛏᚩᚾ ᚻᛁᛏ.",
   "met": "ᚻᛖᚩᛚᛞ",
   "not met": "ᚾᛖ ᚻᛖᚩᛚᛞ",
-  "met {n} of {total}": "{n} ᚩᚠ {total} ᚻᛖᛚᛞᚩᚾ"
+  "met {n} of {total}": "{n} ᚩᚠ {total} ᚻᛖᛚᛞᚩᚾ",
+  "at most {n} words": "ᚾᚪ ᛗᚪ ᚦᚩᚾᚾᛖ {n} ᚹᚩᚱᛞ",
+  "mentions {x}": "ᚾᚪᛗᛁᛖᚦ {x}",
+  "doesn't mention {x}": "ᚾᛖ ᚾᚪᛗᛁᛖᚦ {x}",
+  "is valid JSON": "ᛁᛋ ᚱᛁᛇᛏ JSON",
+  "has a link": "ᚻᚫᚠᚦ ᚻᛚᛖᚾᚳ",
+  "{n} words; the limit is {limit}": "{n} ᚹᚩᚱᛞ; ᚦᚫᛏ ᛖᚾᛞᛖᛗᚫᛚᛖ ᛁᛋ {limit}",
+  "not valid JSON": "ᚾᛁᛋ ᚱᛁᛇᛏ JSON",
+  "no link in it": "ᚾᚪ ᚻᛚᛖᚾᚳ ᚩᚾ ᚻᛁᛗ"
  },
  "examples": {
   "review": {
@@ -3690,7 +3720,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Eode eft to þam frumgewrite of ymbgange {round}:hit hēold þā mǣstan ǣ ({n} of {total}). Þa ymbgangas æfter him ne betton hit.",
   "met": "heold",
   "not met": "ne heold",
-  "table": "tæfl"
+  "table": "tæfl",
+  "at most {n} words": "nā mā þonne {n} word",
+  "mentions {x}": "namieþ {x}",
+  "doesn't mention {x}": "ne namieþ {x}",
+  "is valid JSON": "is riht JSON",
+  "has a link": "hæfþ hlenc",
+  "{n} words; the limit is {limit}": "{n} word; þæt endemǣle is {limit}",
+  "not valid JSON": "nis riht JSON",
+  "no link in it": "nā hlenc on him"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ᚣᚳ ᚳᚹᛁᛞᛖ",

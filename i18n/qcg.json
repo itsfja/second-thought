@@ -146,11 +146,13 @@
    "message0": "ⰻⱄⱂⱏⰹⱅⰰⰻ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱁ %1",
    "message1": "ⰴⱁ %1 ⰽⱃⰰⱅⱏ; ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⱄⱁⱅⰲⱁⱃⰻ",
    "message2": "%1",
-   "tooltip": "Claude ⱄⱆⰴⰻⱅⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ. Ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⰸⰲⱑⱀⰰ ⰲⱀⱆⱅⱃⱐ ⱅⰵⰽⱆⱅⱏ, ⰻ ⱂⰰⰽⰻ ⱄⱆⰴⰻⱅⱏ. Ⰲⱁ ⰲⱄⱔⰽⱏ ⰽⱃⰰⱅⱏ ⰻⱄⱂⱏⰹⱅⰰⱅⰵⰾⱐ ⱄⰿⱁⱅⱃⰻⱅⱏ ⰻ ⱂⱃⰵⰶⱀⰻⱈⱏ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰵⰻ ⱀⰵⰲⱁⰸⰲⱃⰰⱋⰵⱀⰹⱔ. Ⰰⱋⰵ ⰽⱃⰰⱅⱉⰲⱏ ⱀⰵ ⰴⱁⱄⱅⰰⱀⰵⱅⱏ, ⱈⱃⰰⱀⰻⱅⱄⱔ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱄⱏ ⰿⰵⱀⱐⱎⰻⰿⰻ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⱐⰿⰻ, ⰰ ⱀⰵ ⱂⱁⱄⰾⱑⰴⱀⰵⰵ ⱅⱁⰽⰿⱁ."
+   "tooltip": "Claude ⱄⱆⰴⰻⱅⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ. Ⰰⱋⰵ ⱀⰵ ⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⱅⱏ, ⰸⰲⱑⱀⰰ ⰲⱀⱆⱅⱃⱐ ⱅⰵⰽⱆⱅⱏ, ⰻ ⱂⰰⰽⰻ ⱄⱆⰴⰻⱅⱏ. Ⰲⱁ ⰲⱄⱔⰽⱏ ⰽⱃⰰⱅⱏ ⰻⱄⱂⱏⰹⱅⰰⱅⰵⰾⱐ ⱄⰿⱁⱅⱃⰻⱅⱏ ⰻ ⱂⱃⰵⰶⱀⰻⱈⱏ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰵⰻ ⱀⰵⰲⱁⰸⰲⱃⰰⱋⰵⱀⰹⱔ. Ⰰⱋⰵ ⰽⱃⰰⱅⱉⰲⱏ ⱀⰵ ⰴⱁⱄⱅⰰⱀⰵⱅⱏ, ⱈⱃⰰⱀⰻⱅⱄⱔ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱄⱏ ⰿⰵⱀⱐⱎⰻⰿⰻ ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⱐⰿⰻ, ⰰ ⱀⰵ ⱂⱁⱄⰾⱑⰴⱀⰵⰵ ⱅⱁⰽⰿⱁ.",
+   "message3": "ⰻ ⱂⱃⱁⰲⱑⱃⰻ %1"
   },
   "rb_review": {
    "message0": "ⰻⱄⱂⱏⰹⱅⰰⰻ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱁ %1",
-   "tooltip": "Ⰵⰴⰻⱀⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ. Ⱂⱁ ⱄⰵⰿⱏ ⱆⱂⱁⱅⱃⰵⰱⰻ «ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱃⱁⱎⰾⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ» ⰻ «ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰻ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ»."
+   "tooltip": "Ⰵⰴⰻⱀⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ. Ⱂⱁ ⱄⰵⰿⱏ ⱆⱂⱁⱅⱃⰵⰱⰻ «ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱃⱁⱎⰾⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ» ⰻ «ⱂⱁⰳⱃⱑⱎⱀⱁⱄⱅⰻ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ».",
+   "message1": "ⰻ ⱂⱃⱁⰲⱑⱃⰻ %1"
   },
   "rb_passed": {
    "message0": "ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ ⱂⱃⱁⱎⰾⱁ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ"
@@ -797,6 +799,26 @@
   "rb_plex_stop": {
    "message0": "ostanoviti potokⱏ %1 na Plex",
    "tooltip": "Ostanovliaetⱏ edinⱏ potokⱏ (Tautulli terminate). Te voprahaetⱏ vsegda prⱏveye, asche i nichⱐcto zhe ino ne voprahaetⱏ, i ne sⱏshtou chlovekou rekshou da, ne byvaetⱏ. Na sei stranici nichⱐcto zhe istino ne mieniaetⱏ se."
+  },
+  "rb_chk_max_words": {
+   "message0": "ⱀⰵ ⱂⰰⱍⰵ %1 ⱄⰾⱁⰲⱏ",
+   "tooltip": "Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⰰⱋⰵ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⰱⱁⰾⱑⰵ ⱄⰾⱁⰲⱏ ⰻⰿⰰⱅⱐ; ⰸⰰⰴⰰⱍⰰ ⰻⱄⱅⰻⱀⱐⱀⱁⰵ ⱍⰻⱄⰾⱁ ⰽⰰⰶⰵⱅⱏ."
+  },
+  "rb_chk_mentions": {
+   "message0": "ⱃⰵⱍⰵⱅⱏ %1",
+   "tooltip": "Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⱄⰻⱈⱏ ⱄⰾⱁⰲⱏ ⱀⰵ ⰻⰿⰰⱅⱐ (ⰲⰵⰾⰻⱍⰻⱀⰰ ⰱⱁⱆⰽⰲⱏ ⱀⰵ ⱑⰲⰾⱑⰵⱅⱏ ⱄⱔ)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "ⱀⰵ ⱃⰵⱍⰵⱅⱏ %1",
+   "tooltip": "Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⱄⰻⱈⱏ ⱄⰾⱁⰲⱏ ⰻⰿⰰⱅⱐ (ⰲⰵⰾⰻⱍⰻⱀⰰ ⰱⱁⱆⰽⰲⱏ ⱀⰵ ⱑⰲⰾⱑⰵⱅⱏ ⱄⱔ)."
+  },
+  "rb_chk_json": {
+   "message0": "ⰻⱄⱅⰻⱀⱐⱀⱁ JSON ⰵⱄⱅⱏ",
+   "tooltip": "Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⰻⱄⱅⰻⱀⱐⱀⰰ JSON ⱀⰵ ⰵⱄⱅⱏ."
+  },
+  "rb_chk_link": {
+   "message0": "ⰻⰿⰰⱅⱐ ⱄⱄⱏⰹⰾⱆ",
+   "tooltip": "Ⱂⱃⱑⱄⱅⱘⱂⰰⰵⱅⱏ ⱑⰽⱁ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ ⱄⱄⱏⰹⰾⱆ ⱀⰵ ⰻⰿⰰⱅⱐ (http://… ⰻⰾⰻ www.…)."
   }
  },
  "options": {
@@ -1897,7 +1919,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Ⰲⱁⰸⰲⱃⰰⱅⰻⱈⱄⱔ ⰽⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⱓ ⱉⱅ ⰽⱃⱆⰳⰰ {round}:ⰻⰿⱑ ⱀⰰⰻⰱⱁⰾⱐⱎε ⱂⱃⰰⰲⱏ ({n} ⱑⰸ {total}). Ⰽⱃⱆⰳⱉⰲⰵ ⱂⱁ ⱀⰵⰿⱏ ⱀⰵ ⱆⰾⱆⱍⱎⰻⱎⰰ ⰵⰳⱁ.",
   "met": "ⱄⱏⰱⰾⱓⰴⰵⱀⱁ",
   "not met": "ⱀⰵ ⱄⱏⰱⰾⱓⰴⰵⱀⱁ",
-  "met {n} of {total}": "{n} ⱑⰸ {total} ⱄⱏⰱⰾⱓⰴⰵⱀⱘ"
+  "met {n} of {total}": "{n} ⱑⰸ {total} ⱄⱏⰱⰾⱓⰴⰵⱀⱘ",
+  "at most {n} words": "ⱀⰵ ⱂⰰⱍⰵ {n} ⱄⰾⱁⰲⱏ",
+  "mentions {x}": "ⱃⰵⱍⰵⱅⱏ {x}",
+  "doesn't mention {x}": "ⱀⰵ ⱃⰵⱍⰵⱅⱏ {x}",
+  "is valid JSON": "ⰻⱄⱅⰻⱀⱐⱀⱁ JSON ⰵⱄⱅⱏ",
+  "has a link": "ⰻⰿⰰⱅⱐ ⱄⱄⱏⰹⰾⱆ",
+  "{n} words; the limit is {limit}": "{n} ⱄⰾⱁⰲⱏ; ⱂⱃⰵⰴⱑⰾⱏ {limit} ⰵⱄⱅⱏ",
+  "not valid JSON": "ⱀⰵ ⰻⱄⱅⰻⱀⱐⱀⱁ JSON",
+  "no link in it": "ⱀⰻ ⰵⰴⰻⱀⱘ ⰸⰲⰵⱀⰰ ⱀⱑⱄⱅⱏ"
  },
  "examples": {
   "review": {
@@ -3680,7 +3710,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Возвратихсѧ къ начертанїю ѿ круга {round}:имѣ наибольшε правъ ({n} ꙗꙁ {total}). Кругѡве по немъ не улучшиша его.",
   "met": "съблюдено",
   "not met": "не съблюдено",
-  "table": "таблица"
+  "table": "таблица",
+  "at most {n} words": "не паче {n} словъ",
+  "mentions {x}": "речетъ {x}",
+  "doesn't mention {x}": "не речетъ {x}",
+  "is valid JSON": "истиньно JSON ѥстъ",
+  "has a link": "имать ссылꙋ",
+  "{n} words; the limit is {limit}": "{n} словъ; предѣлъ {limit} ѥстъ",
+  "not valid JSON": "не истиньно JSON",
+  "no link in it": "ни єдинꙛ ꙁвена нѣстъ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Ⱂⱃⰻⰾⱁⰶⰻ ⱅⱁⰾⰽⱏ",

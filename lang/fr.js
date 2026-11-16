@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nouvelle fiche"},
 "rb_rec_set":{"message0":"mettre %1 de %2 à %3","tooltip":"Change un champ d'une fiche (en général une variable de fiche)."},
 "rb_receive":{"message0":"quand je reçois %1","tooltip":"Exécute les blocs en dessous chaque fois que ce message est diffusé. Plusieurs scripts peuvent écouter le même message."},
-"rb_reflect":{"message0":"relire le brouillon selon %1","message1":"jusqu'à %1 tours ; s'il échoue, faire","message2":"%1","tooltip":"Claude critique le brouillon. S'il échoue, les blocs à l'intérieur s'exécutent, puis il le critique à nouveau. À chaque tour, le relecteur vérifie aussi que les problèmes précédents ne sont pas revenus. Si les tours s'épuisent, c'est le brouillon avec le moins de problèmes qui est gardé, pas seulement le dernier."},
+"rb_reflect":{"message0":"relire le brouillon selon %1","message1":"jusqu'à %1 tours ; s'il échoue, faire","message2":"%1","tooltip":"Claude critique le brouillon. S'il échoue, les blocs à l'intérieur s'exécutent, puis il le critique à nouveau. À chaque tour, le relecteur vérifie aussi que les problèmes précédents ne sont pas revenus. Si les tours s'épuisent, c'est le brouillon avec le moins de problèmes qui est gardé, pas seulement le dernier.","message3":"et vérifier %1"},
 "rb_reset_timer":{"message0":"remettre le chronomètre à zéro"},
 "rb_result":{"message0":"terminer et afficher le résultat","tooltip":"Termine l'exécution. Affiche ce que vous avez ajouté au résultat, ou le brouillon si vous n'avez rien ajouté."},
 "rb_result_text":{"message0":"le résultat jusqu'ici","tooltip":"Tout ce qui a été ajouté au résultat, en texte."},
 "rb_retry":{"message0":"réessayer jusqu'à %1 fois","message1":"%1","tooltip":"Si quelque chose à l'intérieur échoue d'une façon qu'un nouvel essai pourrait régler (une connexion coupée, une réponse illisible), attend un peu et le relance."},
-"rb_review":{"message0":"relire le brouillon selon %1","tooltip":"Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture »."},
+"rb_review":{"message0":"relire le brouillon selon %1","tooltip":"Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture ».","message1":"et vérifier %1"},
 "rb_revise":{"message0":"réviser pour corriger les problèmes de la relecture %1 en utilisant le web","tooltip":"Claude corrige les problèmes trouvés par la dernière relecture."},
 "rb_rework":{"message0":"retravailler le brouillon : %1","tooltip":"Claude réécrit le brouillon en suivant votre instruction."},
 "rb_rewrite":{"message0":"réécrire %1 pour %2","tooltip":"Par exemple : réécrire (brouillon) pour (traduire en anglais)."},
@@ -205,7 +205,12 @@
 "rb_tautulli_history":{"message0":"historique Tautulli, %1 derniers jours","tooltip":"Une liste de fiches, une pour chaque chose regardée depuis ce nombre de jours, de Tautulli : user, title, when et transcode (si c'était transcodé). Il ne fait que lire. Il faut TAUTULLI_URL et TAUTULLI_API_KEY dans second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"temps de visionnage Tautulli, %1 derniers jours","tooltip":"Une liste de fiches, une pour chaque personne qui a regardé depuis ce nombre de jours, de Tautulli : user et hours. Il ne fait que lire."},
 "rb_plex_scan":{"message0":"analyser la bibliothèque %1 sur Plex","tooltip":"Analyse une bibliothèque pour trouver les nouveaux fichiers. Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne change vraiment."},
-"rb_plex_stop":{"message0":"arrêter le flux %1 sur Plex","tooltip":"Arrête un flux (le terminate de Tautulli). Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne change vraiment."}
+"rb_plex_stop":{"message0":"arrêter le flux %1 sur Plex","tooltip":"Arrête un flux (le terminate de Tautulli). Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne change vraiment."},
+"rb_chk_max_words":{"message0":"au plus %1 mots","tooltip":"Échoue si le brouillon a plus de mots ; le problème donne le vrai nombre."},
+"rb_chk_mentions":{"message0":"mentionne %1","tooltip":"Échoue si le brouillon ne contient pas ces mots (la casse importe peu)."},
+"rb_chk_no_mention":{"message0":"ne mentionne pas %1","tooltip":"Échoue si le brouillon contient ces mots (la casse importe peu)."},
+"rb_chk_json":{"message0":"est un JSON valide","tooltip":"Échoue si le brouillon n'est pas un JSON valide."},
+"rb_chk_link":{"message0":"a un lien","tooltip":"Échoue si le brouillon n'a pas de lien (http://… ou www.…)."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"tous les jours","weekdays":"en semaine","weekends":"le week-end"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Retour au brouillon du tour {round} il respectait le plus de règles ({n} sur {total}). Les tours suivants ne l'ont pas amélioré.",
 "met":"respectée",
 "not met":"non respectée",
-"met {n} of {total}":"{n} sur {total} respectées"
+"met {n} of {total}":"{n} sur {total} respectées",
+"at most {n} words":"au plus {n} mots",
+"mentions {x}":"mentionne {x}",
+"doesn't mention {x}":"ne mentionne pas {x}",
+"is valid JSON":"est un JSON valide",
+"has a link":"a un lien",
+"{n} words; the limit is {limit}":"{n} mots ; la limite est {limit}",
+"not valid JSON":"n'est pas un JSON valide",
+"no link in it":"n'a aucun lien"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2339,6 +2352,14 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Retour au brouillon du tour {round} il respectait le plus de règles ({n} sur {total}). Les tours suivants ne l'ont pas amélioré.",
 "met":"respectée",
 "not met":"non respectée",
-"table":"tableau"
+"table":"tableau",
+"at most {n} words":"au plus {n} mots",
+"mentions {x}":"mentionne {x}",
+"doesn't mention {x}":"ne mentionne pas {x}",
+"is valid JSON":"est un JSON valide",
+"has a link":"a un lien",
+"{n} words; the limit is {limit}":"{n} mots ; la limite est {limit}",
+"not valid JSON":"n'est pas un JSON valide",
+"no link in it":"n'a aucun lien"
 }
 };

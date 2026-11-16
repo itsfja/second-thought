@@ -550,6 +550,10 @@ def python_tests(codes, share=None):
             code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_checkpoint.py")], env, tmp)
             out = out.replace("\r\n", "\n")
             check(code_ == 0 and "RESULT\n" + "=" * 60 + "\nr1\n\ngood 1\n" in out, "t_checkpoint.py goes back to its checkpoint, twice" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_checks.py")], dict(env, FAKE_JSON_SCRIPT=json.dumps([])), tmp)
+            out = out.replace("\r\n", "\n")
+            check(code_ == 0 and "6 words; the limit is 5" in out and "RESULT" in out,
+                  "t_checks.py works the review's exact checks out in Python, with no model call (#425)" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
             print("Cut-off replies and streaming in Python")
             (pathlib.Path(tmp) / "t_long.py").write_text(EXTRA["t_long"], encoding="utf-8")
             def long_py(**e):

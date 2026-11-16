@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"ϣⲓⲛⲉ nClaude ⲉⲧⲃⲉ ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ: %1","tooltip":"Claude ϣⲁϥⲟⲩⲱϣⲃ ϩⲛ ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ ⲉⲕⲕⲱⲧⲉ ⲉⲣⲟϥ."},
 "rb_rewrite":{"message0":"ⲥϩⲁⲓ %1 ⲛⲕⲉⲥⲟⲡ ⲉ %2","tooltip":"ϩⲱⲥ: ⲥϩⲁⲓ (ⲡⲥϩⲁⲓ) ⲛⲕⲉⲥⲟⲡ ⲉ (ϩⲉⲣⲙⲉⲛⲉⲩⲉ ⲛⲧⲁⲥⲡⲉ ⲛϥⲣⲁⲛⲅⲟⲥ)."},
 "rb_extract":{"message0":"ϫⲓ %1 ⲉⲃⲟⲗ ϩⲛ %2"},
-"rb_reflect":{"message0":"ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ ⲕⲁⲧⲁ %1","message1":"ϣⲁⲟⲩⲱϣ %1 ⲛⲥⲟⲡ; ⲉϣϫⲉ ⲁϥϩⲉ, ⲁⲣⲓ","message2":"%1","tooltip":"Claude ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ. ⲉϣϫⲉ ⲁϥϩⲉ, ⲛⲱⲛⲉ ⲉⲧϩⲛ ϣⲁⲩⲁⲁⲩ, ⲁⲩⲱ ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲛⲕⲉⲥⲟⲡ. ⲕⲁⲧⲁ ⲥⲟⲡ ⲛⲓⲙ ⲡⲉⲣⲉⲥⲇⲟⲕⲓⲙⲁⲍⲉ ϣⲁϥⲛⲁⲩ ϫⲉ ⲛϩⲓⲥⲉ ⲛⲧϣⲟⲣⲡ ⲛⲥⲉⲉⲓⲛⲉ ⲁⲛ ⲟⲛ. ⲉϣϫⲉ ⲛⲥⲟⲡ ϫⲱⲕ ⲉⲃⲟⲗ, ⲡⲥϩⲁⲓ ⲉⲧⲉⲣⲉ ⲛϩⲓⲥⲉ ⲙⲙⲟϥ ⲕⲟⲩⲓ ϣⲁϥϩⲁⲣⲉϩ ⲉⲣⲟϥ, ⲟⲩⲕ ⲡⲉϩⲁⲉ ⲟⲩⲁⲁϥ ⲁⲛ."},
-"rb_review":{"message0":"ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ ⲕⲁⲧⲁ %1","tooltip":"ⲟⲩⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲛⲟⲩⲱⲧ. ⲁⲣⲓ 'ⲡⲥϩⲁⲓ ⲁϥⲉⲓ ⲉⲃⲟⲗ' ⲙⲛ 'ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ' ⲙⲛⲛⲥⲱⲥ."},
+"rb_reflect":{"message0":"ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ ⲕⲁⲧⲁ %1","message1":"ϣⲁⲟⲩⲱϣ %1 ⲛⲥⲟⲡ; ⲉϣϫⲉ ⲁϥϩⲉ, ⲁⲣⲓ","message2":"%1","tooltip":"Claude ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ. ⲉϣϫⲉ ⲁϥϩⲉ, ⲛⲱⲛⲉ ⲉⲧϩⲛ ϣⲁⲩⲁⲁⲩ, ⲁⲩⲱ ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲛⲕⲉⲥⲟⲡ. ⲕⲁⲧⲁ ⲥⲟⲡ ⲛⲓⲙ ⲡⲉⲣⲉⲥⲇⲟⲕⲓⲙⲁⲍⲉ ϣⲁϥⲛⲁⲩ ϫⲉ ⲛϩⲓⲥⲉ ⲛⲧϣⲟⲣⲡ ⲛⲥⲉⲉⲓⲛⲉ ⲁⲛ ⲟⲛ. ⲉϣϫⲉ ⲛⲥⲟⲡ ϫⲱⲕ ⲉⲃⲟⲗ, ⲡⲥϩⲁⲓ ⲉⲧⲉⲣⲉ ⲛϩⲓⲥⲉ ⲙⲙⲟϥ ⲕⲟⲩⲓ ϣⲁϥϩⲁⲣⲉϩ ⲉⲣⲟϥ, ⲟⲩⲕ ⲡⲉϩⲁⲉ ⲟⲩⲁⲁϥ ⲁⲛ.","message3":"a-šop %1"},
+"rb_review":{"message0":"ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ ⲕⲁⲧⲁ %1","tooltip":"ⲟⲩⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲛⲟⲩⲱⲧ. ⲁⲣⲓ 'ⲡⲥϩⲁⲓ ⲁϥⲉⲓ ⲉⲃⲟⲗ' ⲙⲛ 'ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ' ⲙⲛⲛⲥⲱⲥ.","message1":"a-šop %1"},
 "rb_passed":{"message0":"ⲡⲥϩⲁⲓ ⲁϥⲉⲓ ⲉⲃⲟⲗ ϩⲛ ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ"},
 "rb_problems":{"message0":"ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ"},
 "rb_score":{"message0":"ⲱⲡ %1 ϩⲛ 10 ⲉⲧⲃⲉ %2"},
@@ -206,7 +206,12 @@
 "rb_tautulli_history":{"message0":"Tautulli soueu, %1 oush","tooltip":"Oudap nimmont, ouaaou nim nte pe-smotrenie etbe ouses oush, hn Tautulli: user, title, when nem transcode. Hnho only. Outab TAUTULLI_URL nem TAUTULLI_API_KEY hn second-thought.ini."},
 "rb_tautulli_watchtime":{"message0":"Tautulli hraw-t, %1 oush","tooltip":"Oudap nimmont, ouaaou nim nte pi-rmt etbe ouses oush, hn Tautulli: user nem hmoou. Hnho only."},
 "rb_plex_scan":{"message0":"Plex bibliotheca %1 skn","tooltip":"Skn pi-bibliotheca etbe nfr nfr. Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."},
-"rb_plex_stop":{"message0":"Plex stream %1 ostanoviti","tooltip":"Ostanoviti ou-stream (Tautulli terminate). Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."}
+"rb_plex_stop":{"message0":"Plex stream %1 ostanoviti","tooltip":"Ostanoviti ou-stream (Tautulli terminate). Nanoun nak nim ntero prwte, sarehoe nim alla nanoun, nem ere ouaaou mrre nashoi nai, oude ouosh nare oumetn. Hn pei-selide oume ntennaou ere oumetn."},
+"rb_chk_max_words":{"message0":"%1 ϣⲟⲙ ⲁⲩⲓⲃ","tooltip":"a-šop ϣⲟⲙ ⲁⲩⲓⲃ"},
+"rb_chk_mentions":{"message0":"ϣⲟⲙ %1 ⲙⲙⲟϥ","tooltip":"a-anšom ⲙⲙⲟϥ"},
+"rb_chk_no_mention":{"message0":"ϣⲟⲙ %1 mn-mmof","tooltip":"ϣⲟⲙ ⲙⲙⲟϥ"},
+"rb_chk_json":{"message0":"JSON ⲟⲩⲁⲓⲃⲉ","tooltip":"a-anouaibe JSON"},
+"rb_chk_link":{"message0":"ϩⲩⲡⲉ ⲙⲙⲟϥ","tooltip":"a-anhype ⲙⲙⲟϥ"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ϩⲟⲟⲩ ⲛⲓⲙ","weekdays":"ϩⲛ ⲛϩⲟⲟⲩ ⲛϩⲱⲃ","weekends":"ϩⲛ ⲛϩⲟⲟⲩ ⲛⲙⲧⲟⲛ"},
@@ -1188,7 +1193,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"ⲁϥⲕⲟⲧⲉ ⲉⲡⲥϩⲁⲓ ⲙⲡⲥⲟⲡ {round}:nomos {n} ⲉⲙ {total} ⲟⲛ. ⲛⲥⲟⲡ ⲙⲛⲛⲥⲱϥ ⲙⲡⲟⲩⲧⲁϩⲟϥ.",
 "met":"ⲟⲛ",
 "not met":"ⲁⲛⲟ",
-"met {n} of {total}":"ⲟⲛ {n} ⲉⲙ {total}"
+"met {n} of {total}":"ⲟⲛ {n} ⲉⲙ {total}",
+"at most {n} words":"{n} ϣⲟⲙ ⲁⲩⲓⲃ",
+"mentions {x}":"ϣⲟⲙ {x} ⲙⲙⲟϥ",
+"doesn't mention {x}":"ϣⲟⲙ {x} mn-mmof",
+"is valid JSON":"JSON ⲟⲩⲁⲓⲃⲉ",
+"has a link":"ϩⲩⲡⲉ ⲙⲙⲟϥ",
+"{n} words; the limit is {limit}":"ϣⲟⲙ {n}; ⲡⲉ {limit}",
+"not valid JSON":"a-anoušop JSON",
+"no link in it":"a-anhype"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2339,7 +2352,15 @@
 "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"afkote epshai mpsop {round}:nomos {n} em {total} on. nsop mnnsōf mpoutahof.",
 "met":"on",
 "not met":"ano",
-"table":"pap"
+"table":"pap",
+"at most {n} words":"{n} šom auib",
+"mentions {x}":"šom {x} mmof",
+"doesn't mention {x}":"šom {x} mn-mmof",
+"is valid JSON":"JSON ouaibe",
+"has a link":"hype mmof",
+"{n} words; the limit is {limit}":"šom {n}; pe {limit}",
+"not valid JSON":"a-anoušop JSON",
+"no link in it":"a-anhype"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

@@ -1878,6 +1878,53 @@ def stuck_rule(prev_unmet, unmet):
     return next((to_str(p) for p in prev_unmet if to_str(p) in now), None)
 
 
+LINK_RE = re.compile(r"https?://\S+|www\.\S+", re.I)
+
+
+def _intish(v):
+    n = num(v)
+    return int(n) if float(n).is_integer() else n
+
+
+def exact_checks(text, checks):
+    """The review's exact checks, worked out by code, not by a model (#425): each [kind, value] in checks becomes a
+    verdict {rule, met, problem, shows}. kinds: max_words (at most value words), mentions / no_mention (the draft
+    does / doesn't contain value, case doesn't matter), json (the draft is valid JSON), link (the draft has a link).
+    A failure's problem carries the real number. The page's exactChecks does the same."""
+    t = to_str(text)
+    out = []
+    for c in checks or []:
+        if not isinstance(c, (list, tuple)) or not c:
+            continue
+        kind, val = to_str(c[0]).strip(), (c[1] if len(c) > 1 else None)
+        if kind == "max_words":
+            n, w = _intish(val), word_count(t)
+            out.append({"rule": tr("at most {n} words", n=n), "met": w <= n, "shows": "",
+                        "problem": "" if w <= n else tr("{n} words; the limit is {limit}", n=w, limit=n)})
+        elif kind in ("mentions", "no_mention"):
+            x = to_str(val)
+            hit = bool(x) and x.casefold() in t.casefold()
+            if kind == "mentions":
+                out.append({"rule": tr("mentions {x}", x=x), "met": hit, "shows": "",
+                            "problem": "" if hit else tr("doesn't mention {x}", x=x)})
+            else:
+                out.append({"rule": tr("doesn't mention {x}", x=x), "met": not hit, "shows": "",
+                            "problem": tr("mentions {x}", x=x) if hit else ""})
+        elif kind == "json":
+            try:
+                json.loads(t)
+                ok = True
+            except (ValueError, TypeError):
+                ok = False
+            out.append({"rule": tr("is valid JSON"), "met": ok, "shows": "",
+                        "problem": "" if ok else tr("not valid JSON")})
+        elif kind == "link":
+            m = LINK_RE.search(t)
+            out.append({"rule": tr("has a link"), "met": bool(m), "shows": "",
+                        "problem": "" if m else tr("no link in it")})
+    return out
+
+
 def seen_addresses(text):
     """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
     out = set()
@@ -9918,20 +9965,31 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             lines.append("| " + cell(rule) + " | " + " | ".join(cells) + " |")
         return "\n".join(lines)
 
-    async def review(self, criteria, label="Review", in_loop=False):
+    async def review(self, criteria, label="Review", in_loop=False, checks=None):
         self._need_draft()
         rules = parse_rules(criteria)
+        cv = exact_checks(self.draft, checks)  # the exact checks, worked out by code, no model call (#425)
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
                    "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
-        rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
-        v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
-                             "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
-                             '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
-                             '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
-                             "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
-                             "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
-        res = review_verdicts(rules, v)
+        if rules:  # written rules are judged by the model; with only exact checks there is no model call (#425)
+            rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
+            v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
+                                 "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
+                                 '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
+                                 '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
+                                 "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
+                                 "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            res = review_verdicts(rules, v)
+            res["verdicts"] = cv + res["verdicts"]
+            res["approved"] = all(x["met"] for x in res["verdicts"]) and res["approved"]
+            res["problems"] = list(dict.fromkeys([x["problem"] or x["rule"] for x in res["verdicts"] if not x["met"]] + res["problems"]))
+            res["met"] = sum(1 for x in res["verdicts"] if x["met"])
+            res["unmet"] = [x["rule"] for x in res["verdicts"] if not x["met"]]
+        else:
+            res = {"approved": all(x["met"] for x in cv),
+                   "problems": [x["problem"] or x["rule"] for x in cv if not x["met"]],
+                   "verdicts": cv, "met": sum(1 for x in cv if x["met"]), "unmet": [x["rule"] for x in cv if not x["met"]]}
         approved = res["approved"]
         self.approved = approved
         self.problems = [] if approved else (res["problems"] or ["Does not yet meet the criteria."])
@@ -9941,7 +9999,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             best = loop["best"]
             if best is None or res["met"] >= best["met"]:  # the best draft meets the most rules; a tie goes to the newer draft
                 loop["best"] = {"draft": self.draft, "problems": list(self.problems), "met": res["met"],
-                                "total": len(rules), "n": len(self.problems), "round": loop["round"]}
+                                "total": len(rules) + len(cv), "n": len(self.problems), "round": loop["round"]}
             for p_ in self.problems:
                 if p_ not in loop["earlier"]:
                     loop["earlier"].append(p_)
@@ -16210,10 +16268,15 @@ Records:
 
 Review:
   rb_better (A, B, CRITERIA): better of %1 and %2 for %3
+  rb_chk_json: is valid JSON — Fails the review unless the draft is valid JSON.
+  rb_chk_link: has a link — Fails the review unless the draft contains a link (http://… or www.…).
+  rb_chk_max_words (N): at most %1 words — Counts the draft's words exactly — models count badly — and fails the review if there are more. The problem says the real count, like '231 words; the limit is 200'.
+  rb_chk_mentions (TEXT): mentions %1 — Fails the review unless the draft contains these words (case doesn't matter).
+  rb_chk_no_mention (TEXT): doesn't mention %1 — Fails the review if the draft contains these words (case doesn't matter).
   rb_passed: draft passed review
   rb_problems: review problems
-  rb_reflect (CRITERIA): review the draft against %1 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one.
-  rb_review (CRITERIA): review the draft against %1 — One review. Use 'draft passed review' and 'review problems' afterwards.
+  rb_reflect (CRITERIA): review the draft against %1 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model.
+  rb_review (CRITERIA): review the draft against %1 — One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer.
   rb_score (TEXT, CRITERIA): score %1 out of 10 for %2
 
 SABnzbd:
@@ -16581,7 +16644,7 @@ HOW TO MAP CODE
     rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control" };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
-    "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
+    "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_chk_json rb_chk_link rb_chk_max_words rb_chk_mentions rb_chk_no_mention rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
     "rb_event rb_every rb_extract rb_finish_with rb_generate rb_img_ask rb_img_change rb_img_draw rb_img_score rb_img_show rb_longtext " +
     "rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
     "rb_reflect rb_reset_timer rb_result rb_result_text rb_retry rb_review rb_revise rb_rework rb_rewrite rb_run_program rb_say rb_score " +
@@ -16726,13 +16789,33 @@ HOW TO MAP CODE
       message0:"review the draft against %1", args0:[val("CRITERIA")],
       message1:"up to %1 rounds; when it fails, do", args1:[val("ROUNDS")],
       message2:"%1", args2:[{ type:"input_statement", name:"FIX" }],
+      message3:"and check %1", args3:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft with the fewest problems is kept, not just the last one." },
-    S("rb_review", "review the draft against %1", [val("CRITERIA")], { style:"review", tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards." }),
+      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model." },
+    { type:"rb_review",
+      message0:"review the draft against %1", args0:[val("CRITERIA")],
+      message1:"and check %1", args1:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
+      previousStatement:null, nextStatement:null, style:"review",
+      tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer." },
     V("rb_passed", "draft passed review", [], "Boolean", { style:"review" }),
     V("rb_problems", "review problems", [], "Array", { style:"review" }),
     V("rb_score", "score %1 out of 10 for %2", [val("TEXT"), val("CRITERIA")], "Number", { style:"review", inputsInline:true }),
     V("rb_better", "better of %1 and %2 for %3", [val("A"), val("B"), val("CRITERIA")], "String", { style:"review", inputsInline:true }),
+    { type:"rb_chk_max_words", message0:"at most %1 words", args0:[val("N")],
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Counts the draft's words exactly — models count badly — and fails the review if there are more. The problem says the real count, like '231 words; the limit is 200'." },
+    { type:"rb_chk_mentions", message0:"mentions %1", args0:[val("TEXT")],
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review unless the draft contains these words (case doesn't matter)." },
+    { type:"rb_chk_no_mention", message0:"doesn't mention %1", args0:[val("TEXT")],
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review if the draft contains these words (case doesn't matter)." },
+    { type:"rb_chk_json", message0:"is valid JSON",
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review unless the draft is valid JSON." },
+    { type:"rb_chk_link", message0:"has a link",
+      previousStatement:"Check", nextStatement:"Check", style:"review",
+      tooltip:"Fails the review unless the draft contains a link (http://… or www.…)." },
     /* You */
     S("rb_ask_me", "ask me %1 and wait", [val("TEXT")], { style:"you", inputsInline:true, tooltip:"Pauses the run until you type an answer in the log." }),
     V("rb_answer", "answer", [], "String", { style:"you" }),
@@ -17134,7 +17217,10 @@ HOW TO MAP CODE
     { kind:"category", name:"Review", categorystyle:"review", contents:[
       B("rb_reflect", { CRITERIA:L("accurate; clear; under 200 words"), ROUNDS:N(3) }),
       B("rb_review", { CRITERIA:L("accurate; clear") }), B("rb_passed"), B("rb_problems"),
-      B("rb_score", { CRITERIA:T("clear and accurate") }), B("rb_better", { CRITERIA:T("clarity") })
+      B("rb_score", { CRITERIA:T("clear and accurate") }), B("rb_better", { CRITERIA:T("clarity") }),
+      { kind:"sep", gap:"24" },
+      B("rb_chk_max_words", { N:N(200) }), B("rb_chk_mentions", { TEXT:T("sourdough") }), B("rb_chk_no_mention", { TEXT:T("dough") }),
+      B("rb_chk_json"), B("rb_chk_link")
     ]},
     { kind:"category", name:"Agent", categorystyle:"agent", contents:[
       B("rb_agent", { GOAL:L("Plan a bake for this weekend that suits what I have in"), STEPS:N(6),
@@ -20231,6 +20317,19 @@ HOW TO MAP CODE
     const vname = b => b.getField("VAR").getText();
     const enabled = b => !b.isEnabled || b.isEnabled();
     const listVar = t => t && t.type === "variables_get" ? pyStr(vname(t)) : "None";
+    // A review block's 'and check' blocks, as a Python list of (kind, value) for R.review(..., checks=...) (#425).
+    const pyChecks = bb => {
+      const parts = [];
+      for (let t = bb.getInputTargetBlock("CHECKS"); t; t = t.getNextBlock()) {
+        if (!enabled(t)) continue;
+        if (t.type === "rb_chk_max_words") parts.push('("max_words", ' + inp(t, "N", "0") + ')');
+        else if (t.type === "rb_chk_mentions") parts.push('("mentions", ' + inp(t, "TEXT", '""') + ')');
+        else if (t.type === "rb_chk_no_mention") parts.push('("no_mention", ' + inp(t, "TEXT", '""') + ')');
+        else if (t.type === "rb_chk_json") parts.push('("json", None)');
+        else if (t.type === "rb_chk_link") parts.push('("link", None)');
+      }
+      return "[" + parts.join(", ") + "]";
+    };
 
     function inp(b, name, dflt){ const t = b.getInputTargetBlock(name); return t ? expr(t) : dflt; }
     function expr(b){
@@ -20443,15 +20542,16 @@ HOW TO MAP CODE
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
           case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
-          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ")"); break;
+          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ", checks=" + pyChecks(b) + ")"); break;
           case "rb_reflect": {
-            const crit = tmp("criteria"), max = tmp("max_rounds"), rnd = tmp("round");
+            const crit = tmp("criteria"), chk = tmp("checks"), max = tmp("max_rounds"), rnd = tmp("round");
             E(crit + " = " + I("CRITERIA", '""'));
+            E(chk + " = " + pyChecks(b));
             E(max + " = R.rounds(" + I("ROUNDS", "3") + ")");
             E("with R.reviewing():");
             out.push(pad + "    for " + rnd + " in range(1, " + max + " + 2):");
             out.push(pad + "        R.tick()");
-            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True):");
+            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True, checks=" + chk + "):");
             out.push(pad + "            break");
             out.push(pad + "        if " + rnd + " > " + max + ":");
             out.push(pad + "            R.out_of_rounds()");
@@ -24214,6 +24314,48 @@ HOW TO MAP CODE
     return prevUnmet.map(str).find(p => now.has(p)) || null;
   }
   window.__stuckRule = stuckRule;
+  // The review's exact checks, worked out by code, not by a model (#425): each [kind, value] becomes a verdict
+  // {rule, met, problem, shows}. Matches exact_checks in exported programs; the cases are in tests/parity/checks.json.
+  const LINK_RE = /https?:\/\/\S+|www\.\S+/i;
+  function exactChecks(text, checks){
+    const t = str(text), out = [];
+    for (const c of (checks || [])) {
+      if (!c) continue;
+      const kind = str(c[0]).trim(), val = c.length > 1 ? c[1] : null;
+      if (kind === "max_words") {
+        let n = num(val); if (n === null || n === undefined || isNaN(n)) n = 0;
+        const w = str(t).split(/\s+/).filter(Boolean).length;
+        out.push({ rule:tr("at most {n} words", { n }), met:w <= n, shows:"",
+                   problem: w <= n ? "" : tr("{n} words; the limit is {limit}", { n:w, limit:n }) });
+      } else if (kind === "mentions" || kind === "no_mention") {
+        const x = str(val), hit = !!x && t.toLowerCase().includes(x.toLowerCase());
+        if (kind === "mentions")
+          out.push({ rule:tr("mentions {x}", { x }), met:hit, shows:"", problem: hit ? "" : tr("doesn't mention {x}", { x }) });
+        else
+          out.push({ rule:tr("doesn't mention {x}", { x }), met:!hit, shows:"", problem: hit ? tr("mentions {x}", { x }) : "" });
+      } else if (kind === "json") {
+        let ok = true; try { JSON.parse(t); } catch(e) { ok = false; }
+        out.push({ rule:tr("is valid JSON"), met:ok, shows:"", problem: ok ? "" : tr("not valid JSON") });
+      } else if (kind === "link") {
+        const m = LINK_RE.exec(t);
+        out.push({ rule:tr("has a link"), met:!!m, shows:"", problem: m ? "" : tr("no link in it") });
+      }
+    }
+    return out;
+  }
+  // The check blocks inside a review block's 'and check' input, as [kind, value] (#425).
+  async function collectChecks(b, tc){
+    const out = [];
+    for (let t = b.getInputTargetBlock("CHECKS"); t; t = t.getNextBlock()) {
+      if (t.isEnabled && !t.isEnabled()) continue;
+      if (t.type === "rb_chk_max_words") out.push(["max_words", num(await input(t, tc, "N", 0))]);
+      else if (t.type === "rb_chk_mentions") out.push(["mentions", str(await input(t, tc, "TEXT", ""))]);
+      else if (t.type === "rb_chk_no_mention") out.push(["no_mention", str(await input(t, tc, "TEXT", ""))]);
+      else if (t.type === "rb_chk_json") out.push(["json", null]);
+      else if (t.type === "rb_chk_link") out.push(["link", null]);
+    }
+    return out;
+  }
   // The rules by round as table rows, for the run log (#424).
   function rulesTableRows(loop){
     const rounds = loop.rounds || [], rules = [];
@@ -24234,18 +24376,31 @@ HOW TO MAP CODE
       addStep("Web address in the task", { text:tr("The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.") }).done("note", "warn");
   }
 
-  async function reviewOnce(criteria, label, inLoop){
+  async function reviewOnce(criteria, checks, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
     const rules = parseRules(criteria);
+    const cv = exactChecks(run.draft, checks);  // the exact checks, worked out by code, no model call (#425)
     const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
       loop.earlier.map(e => "- " + e).join("\n") : "";
-    const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
-    const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
-      "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
-      '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
-      "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
-    const res = reviewVerdicts(rules, v);
+    let res;
+    if (rules.length) {  // written rules are judged by the model; with only exact checks there is no model call (#425)
+      const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
+      const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
+        "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
+        '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
+        "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+      res = reviewVerdicts(rules, v);
+      res.verdicts = cv.concat(res.verdicts);
+      res.approved = res.verdicts.every(x => x.met) && res.approved;
+      res.problems = [...new Set(res.verdicts.filter(x => !x.met).map(x => x.problem || x.rule).concat(res.problems))];
+      res.met = res.verdicts.filter(x => x.met).length;
+      res.unmet = res.verdicts.filter(x => !x.met).map(x => x.rule);
+    } else {
+      res = { approved: cv.every(x => x.met),
+              problems: cv.filter(x => !x.met).map(x => x.problem || x.rule),
+              verdicts: cv, met: cv.filter(x => x.met).length, unmet: cv.filter(x => !x.met).map(x => x.rule) };
+    }
     const approved = res.approved;
     run.approved = approved;
     run.problems = approved ? [] : (res.problems.length ? res.problems : ["Does not yet meet the criteria."]);
@@ -24253,7 +24408,7 @@ HOW TO MAP CODE
     if (loop) {
       loop.round++;
       if (!loop.best || res.met >= loop.best.met)  // the best draft meets the most rules; a tie goes to the newer draft
-        loop.best = { draft:run.draft, problems:run.problems.slice(), met:res.met, total:rules.length, n:run.problems.length, round:loop.round };
+        loop.best = { draft:run.draft, problems:run.problems.slice(), met:res.met, total:rules.length + cv.length, n:run.problems.length, round:loop.round };
       run.problems.forEach(p => { if (!loop.earlier.includes(p)) loop.earlier.push(p); });
       loop.earlier = loop.earlier.slice(-12);
       // No progress: the same rule failed this round as the one before (#424)
@@ -24506,17 +24661,18 @@ HOW TO MAP CODE
         addStep(tr("Back to checkpoint \u201c{name}\u201d", { name }), { text:run.draft ? tr("Restored the task, draft, review, result and variables. Draft: {draft}", { draft:short(run.draft, 80) }) : tr("Restored the task, draft, review, result and variables.") }).done("restored", "ok");
         break;
       }
-      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), tr("Review")); break; }
+      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), await collectChecks(b, tc), tr("Review")); break; }
       case "rb_reflect": {
         needDraft();
         const criteria = str(await input(b, tc, "CRITERIA"));
+        const checks = await collectChecks(b, tc);
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
         run.reflect = { earlier:[], best:null, round:0, same:0, lastUnmet:[], rounds:[], table:null };
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
-            const { approved, step } = await reviewOnce(criteria, tr("Review, round {n}", { n:round }), true);
+            const { approved, step } = await reviewOnce(criteria, checks, tr("Review, round {n}", { n:round }), true);
             // the rules by round, shown in the log as the rounds happen (#424)
             if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
             run.reflect.table.table(rulesTableRows(run.reflect));
@@ -25174,6 +25330,6 @@ HOW TO MAP CODE
   updateSchedChip();
   // For tests/editor, which runs these in Node without a browser: the editor's functions that need no page.
   window.__editorUnits = { calcText, calcValue, timePlusText, nextDueFor, actionsCrons, migrateProgram, unknownTypes, tr, codeHash, readExported,
-    localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows };
+    localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows, exactChecks };
 })();
 </script>

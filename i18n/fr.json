@@ -395,7 +395,8 @@
    "message0": "relire le brouillon selon %1",
    "message1": "jusqu'à %1 tours ; s'il échoue, faire",
    "message2": "%1",
-   "tooltip": "Claude critique le brouillon. S'il échoue, les blocs à l'intérieur s'exécutent, puis il le critique à nouveau. À chaque tour, le relecteur vérifie aussi que les problèmes précédents ne sont pas revenus. Si les tours s'épuisent, c'est le brouillon avec le moins de problèmes qui est gardé, pas seulement le dernier."
+   "tooltip": "Claude critique le brouillon. S'il échoue, les blocs à l'intérieur s'exécutent, puis il le critique à nouveau. À chaque tour, le relecteur vérifie aussi que les problèmes précédents ne sont pas revenus. Si les tours s'épuisent, c'est le brouillon avec le moins de problèmes qui est gardé, pas seulement le dernier.",
+   "message3": "et vérifier %1"
   },
   "rb_reset_timer": {
    "message0": "remettre le chronomètre à zéro"
@@ -415,7 +416,8 @@
   },
   "rb_review": {
    "message0": "relire le brouillon selon %1",
-   "tooltip": "Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture »."
+   "tooltip": "Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture ».",
+   "message1": "et vérifier %1"
   },
   "rb_revise": {
    "message0": "réviser pour corriger les problèmes de la relecture %1 en utilisant le web",
@@ -796,6 +798,26 @@
   "rb_plex_stop": {
    "message0": "arrêter le flux %1 sur Plex",
    "tooltip": "Arrête un flux (le terminate de Tautulli). Il te le demande à chaque fois, même quand rien d'autre ne le demande, et sans personne pour dire oui, rien ne se passe. Sur cette page, rien ne change vraiment."
+  },
+  "rb_chk_max_words": {
+   "message0": "au plus %1 mots",
+   "tooltip": "Échoue si le brouillon a plus de mots ; le problème donne le vrai nombre."
+  },
+  "rb_chk_mentions": {
+   "message0": "mentionne %1",
+   "tooltip": "Échoue si le brouillon ne contient pas ces mots (la casse importe peu)."
+  },
+  "rb_chk_no_mention": {
+   "message0": "ne mentionne pas %1",
+   "tooltip": "Échoue si le brouillon contient ces mots (la casse importe peu)."
+  },
+  "rb_chk_json": {
+   "message0": "est un JSON valide",
+   "tooltip": "Échoue si le brouillon n'est pas un JSON valide."
+  },
+  "rb_chk_link": {
+   "message0": "a un lien",
+   "tooltip": "Échoue si le brouillon n'a pas de lien (http://… ou www.…)."
   }
  },
  "options": {
@@ -1906,7 +1928,15 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Retour au brouillon du tour {round} il respectait le plus de règles ({n} sur {total}). Les tours suivants ne l'ont pas amélioré.",
   "met": "respectée",
   "not met": "non respectée",
-  "met {n} of {total}": "{n} sur {total} respectées"
+  "met {n} of {total}": "{n} sur {total} respectées",
+  "at most {n} words": "au plus {n} mots",
+  "mentions {x}": "mentionne {x}",
+  "doesn't mention {x}": "ne mentionne pas {x}",
+  "is valid JSON": "est un JSON valide",
+  "has a link": "a un lien",
+  "{n} words; the limit is {limit}": "{n} mots ; la limite est {limit}",
+  "not valid JSON": "n'est pas un JSON valide",
+  "no link in it": "n'a aucun lien"
  },
  "examples": {
   "review": {
@@ -3689,6 +3719,14 @@
   "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Retour au brouillon du tour {round} il respectait le plus de règles ({n} sur {total}). Les tours suivants ne l'ont pas amélioré.",
   "met": "respectée",
   "not met": "non respectée",
-  "table": "tableau"
+  "table": "tableau",
+  "at most {n} words": "au plus {n} mots",
+  "mentions {x}": "mentionne {x}",
+  "doesn't mention {x}": "ne mentionne pas {x}",
+  "is valid JSON": "est un JSON valide",
+  "has a link": "a un lien",
+  "{n} words; the limit is {limit}": "{n} mots ; la limite est {limit}",
+  "not valid JSON": "n'est pas un JSON valide",
+  "no link in it": "n'a aucun lien"
  }
 }
