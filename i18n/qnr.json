@@ -1584,7 +1584,6 @@
   "Using {model}": "ᚾᚢᛏᛅᛦ {model}",
   "Using {model} for the blocks inside": "ᚾᚢᛏᛅᛦ {model} ᚠᚢᚱᛁᛦ ᚴᚢᛒᛅᚾᛅ ᚼᛁᚱ ᛁᚾᛁ",
   "Waiting for you to confirm the download…": "ᛒᛁᚦᚱ ᚦᛁᛋ ᛅᛏ ᚦᚢ ᛋᛏᛅᚦᚠᛁᛋᛏᛁᛦ ᚾᛁᚦᚱᚼᛅᛚᛁᛏ…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "ᚠᚢᚱ ᛅᛒᛏᚱ ᛏᛁᛚ ᚠᚱᚢᛘᚱᛁᛏᛋ ᚢᛦ ᚢᛘᚠᛁᚱᚦ {round}: ᚦᛅᛏ ᚼᛅᚠᚦᛁ ᚠᛅᛋᛏᛅ ᛒᚱᛁᛋᛏᛁ ({n}). ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᛁᛒᛏᛁᛦ ᚦᛅᛏ ᛒᚢᛏᚢ ᛅᛁᚴᛁ ᚢᛘ.",
   "Which Homey device? Give its name, like Kitchen light.": "ᚼᚢᛁᚱᛏ Homey-ᛏᛅᚴᛁ? ᚴᛁᚠ ᚾᛅᚠᚾ ᚦᛁᛋ, ᛋᛁᛘ ᛁᛚᛏᚼᚢᛋᛚᛁᚢᛋ.",
   "Why: {why}": "ᚼᚢᛁ: {why}",
   "Woke {n} waiting script.": "ᚢᛅᚴᛏᛁ {n} ᛒᛁᚦᛅᚾᛏᛅ ᚠᛁᚱᛚᛁ.",
@@ -1756,7 +1755,6 @@
   "Text changed in {n} blocks.": "ᛏᛁᚴᛋᛏᛁ ᛒᚱᛅᚢᛏᛁᛋᛏ ᛁ {n} ᚴᚢᛒᚢᛘ.",
   "Review stuck": "ᛏᚢᛘᛦ ᛋᛅᛏ ᚠᛅᛋᛏᚱ",
   "stuck": "ᚠᛅᛋᛏᚱ",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ᛏᚢᛘᚱᛁᚾ ᚠᛅᚾ ᛋᛅᚢᛘᚢ ᚴᛅᛚᛅ ᛁᛒᛏᛁᛦ ᛏᚢᛅᚱ ᛒᚢᛏᚱ, ᛋᚢᛅ ᛅᛏ ᛒᚢᛏᚱ ᛘᛁᚴᚢ ᛅᛁᚴᛁ ᛒᚢᛏᛅ ᚦᛅ. ᚠᚢᚱᛁᛏᛁᚾᚢ ᛋᚴᚢᚱᛏᛁᛦ ᛁᚠ ᛏᛁᛚ ᚢᛁᛚ ᚾᛅᚴᚢᛅᛏ ᛁᚱ ᚦᚢᛁ ᚢᛅᚱ ᛅᛁᚴᛁ ᚴᛁᚠᛁᛏ, ᛋᛁᛘ ᚢᛁᚠᛋᛁᚦᚢ, ᛋᚴᚱᛅ ᛁᚦᛅ ᛋᛅᚾᛁᚾᛏᛁ: ᚴᛁᚠ ᚦᚢᛁ ᚦᛅᛏ (ᛁ ᚢᛁᚱᚴᛁᚾᚢ, ᛏᛁᛚ ᛏᚢᛘᛁᛋ, ᛁᚦᛅ ᚴᛁᚴᚾᚢᛘ ᛁᚱᛁᚾᛏᚱᛁᚴᛅ ᛁᚱ ᚢᛁᚠᛋᛁᚦᚢᛦ ᛘᛅ ᛚᛁᛋᛅ), ᚢᚴ ᚱᛁᚾ ᛋᛁᚦᛅᚾ ᛅᛒᛏᚱ.",
   "Using the web": "ᛘᛁᚦ ᚢᛁᚠᚾᚢᛘ",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "ᚦᛁᛋᛁ ᛋᛁᚦᛅ ᛘᛅ ᛅᛁᚴᛁ ᚾᚢᛏᛅ ᚢᛁᚠᛁᚾ, ᛋᚢᛅ ᛅᛏ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᚼᛁᚱ ᚠᚢᚱᛁᛦ ᚢᚠᛅᚾ ᚢᛅᚱ ᚱᛁᛏᛅᛏ ᚬᚾ ᚼᛅᚾᛋ. ᚢᛏᚠᛚᚢᛏᛅ ᚠᚢᚱᛁᛏᛁᛏ ᚾᚢᛏᛁᛦ ᚢᛁᚠᛁᚾ.",
   "Web address in the task": "ᚢᛁᚠᚾᛅᚠᚾ ᛁ ᚢᛁᚱᚴᛁᚾᚢ",
@@ -1901,7 +1899,15 @@
   "Plex new items": "Plex ᚾᚢᛏ",
   "Tautulli history": "Tautulli ᛋᛅᚴᛅ",
   "Tautulli watch time": "Tautulli ᛅᚼᛏᛁᛘᛅᛚ",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ᚦᛁᛋᛁ ᛋᛁᚦᛅ ᚴᛅᚢᚱᛁᛦ ᚬ claude.ai-ᚱᛅᛁᚴᚾᛁᚴᛁ ᚦᛁᚾᚢᛘ, ᛏᛁᛚᚢᛦ ᚦᚢᛁ ᛁᚴᛁ ᚢᛏᚴᛁᛅᚢᚱᚠ ᚼᚢᛁᚱᛋ ᚦᛁᚢᚾᚢᛋᛏᚢ. ᚠᛚᚢᛏᚢ ᚢᛏ ᛁ Python, ᛘᛁᚦ ᛚᚢᚴᛚᚢᛘ ᛁ second-thought.ini, ᚢᚴ ᛋᛁᚴᛁᛦ ᚦᛁᛏᛅ ᛏᚢᛚ ᚼᚢᛅᚦ ᚼᚢᛁᚱ ᚦᛁᚢᚾᚢᛋᛏᛅ ᚼᛁᚠᚢᛦ ᛅᚢᛏ, ᛅᛋᚴᚱᛁᚠᛏ ᚢᚴ ᛏᛅᚴᛘᛅᚢᚱᚴ ᚼᛁᚾᛅᛦ, ᚢᚴ ᛅᛚᛅ ᚢᚠᛁᚱᚠᛅᚢᛦ, ᛏᛅᛚᛁᚦ ᚬ ᚦᛅᛁᚱᛁ ᛏᚢᛚᚢ."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ᚦᛁᛋᛁ ᛋᛁᚦᛅ ᚴᛅᚢᚱᛁᛦ ᚬ claude.ai-ᚱᛅᛁᚴᚾᛁᚴᛁ ᚦᛁᚾᚢᛘ, ᛏᛁᛚᚢᛦ ᚦᚢᛁ ᛁᚴᛁ ᚢᛏᚴᛁᛅᚢᚱᚠ ᚼᚢᛁᚱᛋ ᚦᛁᚢᚾᚢᛋᛏᚢ. ᚠᛚᚢᛏᚢ ᚢᛏ ᛁ Python, ᛘᛁᚦ ᛚᚢᚴᛚᚢᛘ ᛁ second-thought.ini, ᚢᚴ ᛋᛁᚴᛁᛦ ᚦᛁᛏᛅ ᛏᚢᛚ ᚼᚢᛅᚦ ᚼᚢᛁᚱ ᚦᛁᚢᚾᚢᛋᛏᛅ ᚼᛁᚠᚢᛦ ᛅᚢᛏ, ᛅᛋᚴᚱᛁᚠᛏ ᚢᚴ ᛏᛅᚴᛘᛅᚢᚱᚴ ᚼᛁᚾᛅᛦ, ᚢᚴ ᛅᛚᛅ ᚢᚠᛁᚱᚠᛅᚢᛦ, ᛏᛅᛚᛁᚦ ᚬ ᚦᛅᛁᚱᛁ ᛏᚢᛚᚢ.",
+  "Rule": "ᛚᛅᚢᚴᛦ",
+  "Round {n}": "ᚢᛘᚠᛁᚱᚦ {n}",
+  "Rules by round": "ᛚᛅᚢᚴ ᚢᛘ ᚢᛘᚠᛁᚱᚦᛁᛦ",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ᛋᛅᛘᛁ ᛚᛅᚢᚴᛦ ᚢᛅᚱ ᛅᛁᚴᛁ ᚼᛅᛚᛏᛁᚾ ᛁ ᛏᚢᛅᚱ ᚢᛘᚠᛁᚱᚦᛁᛦ ᛁ ᚱᛅᚢᚦ, ᛋᚢᛅ ᛅᛏ ᛒᚢᛏᚱ ᛘᛁᚴᚢ ᛅᛁᚴᛁ ᛒᚢᛏ ᚼᛅᚾ. ᚠᚢᚱᛁᛏᛁᚾᚢ ᛋᚴᚢᚱᛏᛁᛦ ᛁᚠ ᛏᛁᛚ ᚢᛁᛚ ᚾᛅᚴᚢᛅᛏ ᛁᚱ ᚦᚢᛁ ᚢᛅᚱ ᛅᛁᚴᛁ ᚴᛁᚠᛁᛏ, ᛋᛁᛘ ᚢᛁᚠᛋᛁᚦᚢ, ᛋᚴᚱᛅ ᛁᚦᛅ ᛋᛅᚾᛁᚾᛏᛁ: ᚴᛁᚠ ᚦᚢᛁ ᚦᛅᛏ (ᛁ ᚢᛁᚱᚴᛁᚾᚢ, ᛏᛁᛚ ᛏᚢᛘᛁᛋ, ᛁᚦᛅ ᚴᛁᚴᚾᚢᛘ ᛁᚱᛁᚾᛏᚱᛁᚴᛅ ᛁᚱ ᚢᛁᚠᛋᛁᚦᚢᛦ ᛘᛅ ᛚᛁᛋᛅ), ᚢᚴ ᚱᛁᚾ ᛋᛁᚦᛅᚾ ᛅᛒᛏᚱ.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ᚠᚢᚱ ᛅᛒᛏᚱ ᛏᛁᛚ ᚠᚱᚢᛘᚱᛁᛏᛋ ᚢᛦ ᚢᛘᚠᛁᚱᚦ {round}:ᚼᛅᚾ ᚼᛅᚠᚦᛁ ᚠᛚᛁᛋᛏᛅ ᛚᛅᚢᚴ ᚼᛅᛚᛏᛁᚾ ({n} ᛅᚠ {total}). ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᛁᛒᛏᛁᛦ ᚦᛅᛏ ᛒᚢᛏᚢ ᛅᛁᚴᛁ ᚢᛘ.",
+  "met": "ᚼᛅᛚᛏᛁᚾ",
+  "not met": "ᛅᛁᚴᛁ ᚼᛅᛚᛏᛁᚾ",
+  "met {n} of {total}": "{n} ᛅᚠ {total} ᚼᛅᛚᛏᚾᛁᛦ"
  },
  "examples": {
   "review": {
@@ -3118,7 +3124,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "Vefbeiðnir, {x}: hlýða enn eigi. At kveikja á þeim, {note}",
   "Web requests: {note}": "Vefbeiðnir: {note}",
   "Web search: {q}": "Vefleit: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Fór aptr til frumrits ór umferð {round}: þat hafði fæsta bresti ({n}). Umferðirnar eptir þat bœttu eigi um.",
   "Which Homey device? Give its name, like Kitchen light.": "Hvert Homey-tæki? Gef nafn þess, sem Eldhúsljós.",
   "Why: {why}": "Hví: {why}",
   "Write a first draft": "Rita fyrsta frumrit",
@@ -3453,7 +3458,6 @@
   "{n} of them can change things": "{n} þeira megu hluti breyta",
   "Review stuck": "Dómr sat fastr",
   "stuck": "fastr",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dómrinn fann sömu galla eptir tvær bœtr, svá at bœtr megu eigi bœta þá. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
   "Web address in the task": "Vefnafn í verkinu",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Verkit nefnir vefnafn, en þetta spor má eigi opna þat. Merk 'með vefnum' á steininum, eða set orð síðunnar í verkit.",
   "Sources not read": "Heimildir ólesnar",
@@ -3678,7 +3682,15 @@
   "this week": "þessa viku",
   "today": "í dag",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% af mánaðartakmörkum {cap} áskriftarinnar {plan} ({spent} eytt, endurstillt {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Lǫgr",
+  "Round {n}": "umferð {n}",
+  "Rules by round": "Lǫg um umferðir",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Sami lǫgr var eigi haldinn í tvær umferðir í röð, svá at bœtr megu eigi bœtt hann. Forritinu skortir ef til vill nakkvat er því var eigi gefit, sem vefsíðu, skrá eða sannindi: gef því þat (í verkinu, til dœmis, eða gegnum erindreka er vefsíður má lesa), ok renn síðan aptr.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Fór aptr til frumrits ór umferð {round}:hann hafði flesta lǫg haldin ({n} af {total}). Umferðirnar eptir þat bœttu eigi um.",
+  "met": "haldin",
+  "not met": "eigi haldin",
+  "table": "tafla"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

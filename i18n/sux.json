@@ -1483,7 +1483,6 @@
   "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "𒅗 𒄄 𒈨 𒀠 𒅗 𒉡𒌇: {problem}.\n𒅗 𒄄 𒋛 𒁲 𒉋 𒇷 𒋻.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "𒅗 𒄄 𒍠 𒁍𒀀 𒆭, 𒉣𒈨 𒆠 𒁺𒁀𒋫 𒋛𒀀 𒇷 𒋻.",
   "The reply wasn't readable JSON, so this step was wasted.": "𒅗 𒄄 JSON 𒋃𒉈 𒉡𒈨𒀀, 𒄊 𒉈 𒍣.",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒅆𒂃𒀀 𒋛 𒁲 2-𒋫 𒂕𒁉𒀀 𒉡𒋛𒁲 𒁹𒀀 𒅗, 𒋛 𒁲 𒉡𒀝. 𒄑𒄯 𒃻 𒉡𒋧𒈠 𒀠 𒅗, 𒅆𒁾 𒊓, 𒁾 𒇻 𒅗 𒍣𒁶: 𒋧 (𒆥𒀀, 𒇻 𒆥𒄄𒀀 𒅆𒁾 𒊓 𒋃𒁕𒋫), 𒂕𒁉𒀀 𒉋 𒀝.",
   "The run stopped.": "𒀝 𒁺.",
   "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "𒂍 𒅆𒁺 𒀩 “{id}” 𒉡𒌇. camera.front_door, camera.driveway, camera.garden, camera.garage 𒇻 camera.pet 𒆥.",
   "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "𒂍 𒅆𒁺 𒃻 “{id}” 𒉡𒌇. Home Assistant 𒂃 𒃻𒁉 𒅆 𒁇𒊑𒉈.",
@@ -1560,7 +1559,6 @@
   "Waiting {time}": "{time} 𒅅",
   "Watch values": "𒃻 𒅆 𒁇",
   "Web address in the task": "𒆠 𒊓 𒆥𒀀",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "𒁾𒊕 𒀀𒁺 {round}-𒂠 𒄄: 𒉡𒋛𒁲 𒌉𒉌 𒌇 ({n}). 𒀀𒁺 𒂕𒊏 𒉡𒊷.",
   "What the result must do": "𒃻𒀝 𒀀𒈾 𒀝𒉈",
   "What the result must do, separated by semicolons, like: under 200 words; names the date": "𒃻𒀝 𒀀𒈾 𒀝𒉈, “;”-𒋫 𒁇, 𒉈𒁶: 𒅗 200-𒋫 𒌉; 𒌓 𒉺 𒌓𒁺",
   "When {entity} changes": "𒌓 {entity} 𒉽",
@@ -1891,7 +1889,15 @@
   "Plex new items": "Plex nfr",
   "Tautulli history": "Tautulli sa",
   "Tautulli watch time": "Tautulli igi-sa",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𒅆𒁾 claude.ai-ka 𒆪, 𒃻𒂃𒂊𒉈 𒆬𒁉 𒉡𒃻𒀝. Python-𒀀 𒋗𒀀 𒂷𒂷, 𒃻𒂃𒂊𒉈 second-thought.ini-a 𒂷𒂷, 𒄑𒆪𒁉 𒃻𒂃𒂊𒉈 𒆬 𒍣𒁉, 𒄑𒄯𒁉 𒍠𒁉, 𒆬 𒍠 𒋛𒀀𒁉, 𒄑𒋃 𒉈𒀀 𒃻𒀝, 𒅗 𒂷𒂷."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𒅆𒁾 claude.ai-ka 𒆪, 𒃻𒂃𒂊𒉈 𒆬𒁉 𒉡𒃻𒀝. Python-𒀀 𒋗𒀀 𒂷𒂷, 𒃻𒂃𒂊𒉈 second-thought.ini-a 𒂷𒂷, 𒄑𒆪𒁉 𒃻𒂃𒂊𒉈 𒆬 𒍣𒁉, 𒄑𒄯𒁉 𒍠𒁉, 𒆬 𒍠 𒋛𒀀𒁉, 𒄑𒋃 𒉈𒀀 𒃻𒀝, 𒅗 𒂷𒂷.",
+  "Rule": "𒉏",
+  "Round {n}": "𒌒 {n}",
+  "Rules by round": "𒉏 𒌒",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒌒 2-𒋫 𒉏 𒉡𒋛𒁲 𒅗, 𒋛 𒁲 𒉡𒀝. 𒄑𒄯 𒃻 𒉡𒋧𒈠 𒀠 𒅗, 𒅆𒁾 𒊓, 𒁾 𒇻 𒅗 𒍣𒁶: 𒋧 (𒆥𒀀, 𒇻 𒆥𒄄𒀀 𒅆𒁾 𒊓 𒋃𒁕𒋫), 𒂕𒁉𒀀 𒉋 𒀝.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "𒁾𒊕 𒀀𒁺 {round}-𒂠 𒉏 {n} 𒊭 {total} 𒌇. 𒀀𒁺 𒂕𒊏 𒉡𒊷.",
+  "met": "𒌇",
+  "not met": "𒉡𒌇",
+  "met {n} of {total}": "𒌇 {n} 𒊭 {total}"
  },
  "examples": {
   "review": {
@@ -3133,7 +3139,6 @@
   "The reply didn't have the expected shape: {bad}.": "inim gi4 me al dug4 nu-tuku: {bad}.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "inim gi4 zag gid2-a ku4, abgal ki gub-ba-ta diri en3 tar.",
   "The reply wasn't readable JSON, so this step was wasted.": "inim gi4 JSON šid-de3 nu-me-a, ĝiri3 ne zi.",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "igi-du8-a si sa2 2-ta eĝer-bi-a nu-si-sa2 diš-a dug4, si sa2 nu-ak. ĝeš-ḫur niĝ2 nu-šum2-ma al dug4, igi-dub sa, dub lu inim zid-gin7: šum2 (kiĝ2-a, lu kin-gi4-a igi-dub sa šid-da-ta), eĝer-bi-a gibil ak.",
   "The run stopped.": "ak gub.",
   "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "ak u4-tur-tur {x}-ta diri (max_seconds second-thought.ini-a), gub.",
   "The task is empty. Type what you want into 'set task to'.": "kiĝ2 nu-si-a. niĝ2 al dug4-zu “kiĝ2 … ĝar”-a sar.",
@@ -3201,7 +3206,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "a2-aĝ2-ĝa2 sa, {x}: ĝeštug2 nu-ĝar. du8-de3, {note}",
   "Web requests: {note}": "a2-aĝ2-ĝa2 sa: {note}",
   "Web search: {q}": "sa-a kiĝ2: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "dub-saĝ a-ra2 {round}-še3 gi4: nu-si-sa2 tur-ni tuku ({n}). a-ra2 eĝer-ra nu-sa6.",
   "What changed: {url}": "a-na kur2: {url}",
   "What it can do is the same as before.": "a-na ak-e saĝ-ĝa2-gin7-am3.",
   "What was wrong": "a-na nu-si-sa2",
@@ -3668,7 +3672,15 @@
   "this week": "7-u4-7-u4 ne-a",
   "today": "ud ne-a",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% zag iti-a ĝiš-ḫur {plan}-ka {cap} ({spent} zi, {when} gibil)",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "nim",
+  "Round {n}": "ara2 {n}",
+  "Rules by round": "nim ara2",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ara2 2-ta nim nu-si-sa2 dug4, si sa2 nu-ak. ĝeš-ḫur niĝ2 nu-šum2-ma al dug4, igi-dub sa, dub lu inim zid-gin7: šum2 (kiĝ2-a, lu kin-gi4-a igi-dub sa šid-da-ta), eĝer-bi-a gibil ak.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "dub-saĝ a-ra2 {round}-še3 nim {n} ša {total} tuku. a-ra2 eĝer-ra nu-sa6.",
+  "met": "tuku",
+  "not met": "nu-tuku",
+  "table": "dub"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

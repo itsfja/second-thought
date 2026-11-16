@@ -1583,7 +1583,6 @@
   "Using {model}": "Χρῆται {model}",
   "Using {model} for the blocks inside": "Χρῆται {model} ταῖς ἔσω πλίνθοις",
   "Waiting for you to confirm the download…": "Μένει ἕως ἂν βεβαιώσῃς τὴν καταγωγήν…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Ἐπανῆλθεν εἰς τὸ σχέδιον τοῦ κύκλου {round}· ἐλάχιστα σφάλματα εἶχεν ({n}). Οἱ ὕστερον κύκλοι οὐκ ἐβελτίωσαν αὐτό.",
   "Which Homey device? Give its name, like Kitchen light.": "Ποία μηχανὴ Homey; Δὸς τὸ ὄνομα αὐτῆς, οἷον Φῶς μαγειρείου.",
   "Why: {why}": "Διὰ τί· {why}",
   "Woke {n} waiting script.": "Ἤγειρε {n} σειρὰν μένουσαν.",
@@ -1755,7 +1754,6 @@
   "Text changed in {n} blocks.": "Ὁ λόγος ἐν {n} πλίνθοις ἐμεταλλάγη.",
   "Review stuck": "Ἡ ἐξέτασις ἐνέμεινεν",
   "stuck": "ἐνέμεινεν",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
   "Using the web": "Διὰ τοῦ δικτύου",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Ἥδε ἡ σελὶς τῷ δικτύῳ χρῆσθαι οὐ δύναται, ὥστε τὸ ἄνω σχέδιον ἄνευ αὐτοῦ ἐγράφη. Τὸ δὲ ἐξαχθὲν πρόγραμμα τῷ δικτύῳ χρῆται.",
   "Web address in the task": "Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
@@ -1900,7 +1898,15 @@
   "Plex new items": "Plex νέα",
   "Tautulli history": "Tautulli ἱστορία",
   "Tautulli watch time": "Tautulli χρόνος θεάσεως",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Ἡ σελὶς ἐν τῷ claude.ai λογαρυσμῷ σου τρέχει, οὐκ ἄρα τὰ ἔξοδα ἑκάστης διακονίας μετρεῖ. ἐξάγαγε εἰς Πύθωνα, τῶν κλειδῶν ἐν second-thought.ini τεθέντων, καὶ ἐρεῖ τὸ ὄργανον τί ἑκάστη διακονία δαπανᾷ, τὸ σχέδιον καὶ τὸ ὅριον αὐτῆς, καὶ πᾶσαν ὑπερβολήν, ἐν ἐκείνῳ τῷ λογιστηρίῳ μετρούμενον."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Ἡ σελὶς ἐν τῷ claude.ai λογαρυσμῷ σου τρέχει, οὐκ ἄρα τὰ ἔξοδα ἑκάστης διακονίας μετρεῖ. ἐξάγαγε εἰς Πύθωνα, τῶν κλειδῶν ἐν second-thought.ini τεθέντων, καὶ ἐρεῖ τὸ ὄργανον τί ἑκάστη διακονία δαπανᾷ, τὸ σχέδιον καὶ τὸ ὅριον αὐτῆς, καὶ πᾶσαν ὑπερβολήν, ἐν ἐκείνῳ τῷ λογιστηρίῳ μετρούμενον.",
+  "Rule": "Κανών",
+  "Round {n}": "κύκλος {n}",
+  "Rules by round": "Κανόνες κατὰ κύκλον",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ὁ αὐτὸς κανὼν δύο κύκλους ἐφεξῆς οὐκ ἐφυλάχθη, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὸν διορθῶσαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Ἐπανῆλθεν εἰς τὸ σχέδιον τοῦ κύκλου {round}· πλείονας κανόνας ἐφύλαξεν ({n} ἐκ {total}). Οἱ ὕστερον κύκλοι οὐκ ἐβελτίωσαν αὐτό.",
+  "met": "ἐφυλάχθη",
+  "not met": "οὐκ ἐφυλάχθη",
+  "met {n} of {total}": "{n} ἐκ {total} ἐφυλάχθησαν"
  },
  "examples": {
   "review": {
@@ -3117,7 +3123,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "Αἰτήσεις δικτύου, {x}· οὔπω ἀκούει. Ἵνα ἐνεργοποιήσῃς, {note}",
   "Web requests: {note}": "Αἰτήσεις δικτύου· {note}",
   "Web search: {q}": "Ζήτησις ἐν δικτύῳ· {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Ἐπανῆλθεν εἰς τὸ σχέδιον τοῦ κύκλου {round}· ἐλάχιστα σφάλματα εἶχεν ({n}). Οἱ ὕστερον κύκλοι οὐκ ἐβελτίωσαν αὐτό.",
   "Which Homey device? Give its name, like Kitchen light.": "Ποία μηχανὴ Homey; Δὸς τὸ ὄνομα αὐτῆς, οἷον Φῶς μαγειρείου.",
   "Why: {why}": "Διὰ τί· {why}",
   "Write a first draft": "Γράψον πρῶτον σχέδιον",
@@ -3452,7 +3457,6 @@
   "{n} of them can change things": "{n} ἐξ αὐτῶν δύναται πράγματα μεταβάλλειν",
   "Review stuck": "Ἡ ἐξέτασις ἐνέμεινεν",
   "stuck": "ἐνέμεινεν",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ἡ ἐξέτασις μετὰ δύο διορθώσεις τὰ αὐτὰ ἁμαρτήματα εὗρεν, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὰ ἰᾶσθαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
   "Web address in the task": "Διεύθυνσις τοῦ δικτύου ἐν τῷ ἔργῳ",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Τὸ ἔργον διεύθυνσιν τοῦ δικτύου ὀνομάζει, ἀλλ' ὅδε ὁ βαθμὸς αὐτὴν ἀνοίγειν οὐ δύναται. Σημείωσον 'διὰ τοῦ δικτύου' ἐπὶ τῷ πλινθίῳ, ἢ θὲς τοὺς τῆς σελίδος λόγους ἐν τῷ ἔργῳ.",
   "Sources not read": "Πηγαὶ οὐκ ἀναγνωσθεῖσαι",
@@ -3677,7 +3681,15 @@
   "this week": "ταύτῃ τῇ ἑβδομάδι",
   "today": "σήμερον",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% τοῦ μηνιαίου ὁρίου {cap} τοῦ σχέδίου {plan} ({spent} δεδαπανημέναν, ἐπανέρχεται {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Κανών",
+  "Round {n}": "κύκλος {n}",
+  "Rules by round": "Κανόνες κατὰ κύκλον",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ὁ αὐτὸς κανὼν δύο κύκλους ἐφεξῆς οὐκ ἐφυλάχθη, ὥστε ἡ διόρθωσις οὐ δύναται αὐτὸν διορθῶσαι. Τῷ προγράμματι ἴσως λείπει τι ὃ οὐκ ἐδόθη, οἷον σελὶς τοῦ δικτύου, βιβλίον ἢ πρᾶγμα· δὸς αὐτῷ τοῦτο (ἐν τῷ ἔργῳ, φέρε εἰπεῖν, ἢ διὰ πράκτορος ὃς σελίδας ἀναγιγνώσκει) καὶ αὖθις τρέχε.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Ἐπανῆλθεν εἰς τὸ σχέδιον τοῦ κύκλου {round}· πλείονας κανόνας ἐφύλαξεν ({n} ἐκ {total}). Οἱ ὕστερον κύκλοι οὐκ ἐβελτίωσαν αὐτό.",
+  "met": "ἐφυλάχθη",
+  "not met": "οὐκ ἐφυλάχθη",
+  "table": "πίναξ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

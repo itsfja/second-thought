@@ -866,7 +866,6 @@
 "Using {model}":"משתמש ב-{model}",
 "Using {model} for the blocks inside":"משתמש ב-{model} לבלוקים שבפנים",
 "Waiting for you to confirm the download…":"מחכה שתאשרו את ההורדה…",
-"Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.":"חזר לטיוטה מסבב {round}: היו בה הכי מעט בעיות ({n}). הסבבים שאחריה לא שיפרו אותה.",
 "Which Homey device? Give its name, like Kitchen light.":"איזה מכשיר Homey? תנו את השם שלו, כמו Kitchen light.",
 "Why: {why}":"למה: {why}",
 "Woke {n} waiting script.":"העיר {n} תסריט ממתין.",
@@ -1038,7 +1037,6 @@
 "Text changed in {n} blocks.":"הטקסט השתנה ב־{n} בלוקים.",
 "Review stuck":"הביקורת נתקעה",
 "stuck":"תקוע",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
 "Using the web":"בעזרת הרשת",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"הדף הזה לא יכול להשתמש ברשת, ולכן הטיוטה שלמעלה נכתבה בלעדיה. התוכנית המיוצאת משתמשת ברשת.",
 "Web address in the task":"כתובת אינטרנט במשימה",
@@ -1183,7 +1181,15 @@
 "Plex new items":"פריטים חדשים ב-Plex",
 "Tautulli history":"היסטוריית Tautulli",
 "Tautulli watch time":"זמן צפייה ב-Tautulli",
-"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"העמוד פועל בחשבון ה-claude.ai שלך, ולכן אינו מונה את ההוצאה של כל שירות. ייצאו ל-Python, עם מפתחות ב-second-thought.ini, והכלי הזה ידווח כמה כל שירות הוציא, את התוכנית והתקרה שלו, וכל חריגה, בכדי לספור על המחשב ההוא."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"העמוד פועל בחשבון ה-claude.ai שלך, ולכן אינו מונה את ההוצאה של כל שירות. ייצאו ל-Python, עם מפתחות ב-second-thought.ini, והכלי הזה ידווח כמה כל שירות הוציא, את התוכנית והתקרה שלו, וכל חריגה, בכדי לספור על המחשב ההוא.",
+"Rule":"כלל",
+"Round {n}":"סבב {n}",
+"Rules by round":"כללים לפי סבב",
+"The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"אותו כלל לא מולא בשני סבבים רצופים, ולכן התיקון לא יכול לתקן אותו. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
+"Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"חזר לטיוטה מסבב {round}:מילא את מספר הכללים ({n} מתוך {total}). הסבבים שאחריה לא שיפרו אותה.",
+"met":"מולא",
+"not met":"לא מולא",
+"met {n} of {total}":"{n} מתוך {total} מולאו"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -1768,7 +1774,6 @@
 "Web requests, {x}: still not listening. To turn them on, {note}":"בקשות רשת, {x}: עדיין לא מאזין. כדי להפעיל אותן, {note}",
 "Web requests: {note}":"בקשות רשת: {note}",
 "Web search: {q}":"חיפוש ברשת: {q}",
-"Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.":"חזר לטיוטה מסבב {round}: היו בה הכי מעט בעיות ({n}). הסבבים שאחריה לא שיפרו אותה.",
 "Which Homey device? Give its name, like Kitchen light.":"איזה מכשיר Homey? תנו את השם שלו, כמו Kitchen light.",
 "Why: {why}":"למה: {why}",
 "Write a first draft":"כתיבת טיוטה ראשונה",
@@ -2103,7 +2108,6 @@
 "{n} of them can change things":"{n} מהם יכולים לשנות דברים",
 "Review stuck":"הביקורת נתקעה",
 "stuck":"תקוע",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"הביקורת מצאה את אותן בעיות אחרי שני תיקונים, כך שתיקון לא יכול לפתור אותן. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
 "Web address in the task":"כתובת אינטרנט במשימה",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"המשימה מזכירה כתובת אינטרנט, אבל השלב הזה לא יכול לפתוח אותה. סמנו 'בעזרת הרשת' בבלוק, או שימו את טקסט הדף במשימה.",
 "Sources not read":"מקורות שלא נקראו",
@@ -2328,6 +2332,14 @@
 "this week":"השבוע",
 "today":"היום",
 "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% מהתקרה החודשית של {cap} של תוכנית {plan} ({spent} הוצאו, מתאפס ב-{when})",
-"{window} {x}":"{window} {x}"
+"{window} {x}":"{window} {x}",
+"Rule":"כלל",
+"Round {n}":"סבב {n}",
+"Rules by round":"כללים לפי סבב",
+"The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"אותו כלל לא מולא בשני סבבים רצופים, ולכן התיקון לא יכול לתקן אותו. ייתכן שחסר לתוכנית משהו שלא קיבלה, כמו דף אינטרנט, קובץ או עובדה: תנו לה אותו (במשימה, למשל, או דרך סוכן שיכול לקרוא דפי אינטרנט) והריצו שוב.",
+"Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"חזר לטיוטה מסבב {round}:מילא את מספר הכללים ({n} מתוך {total}). הסבבים שאחריה לא שיפרו אותה.",
+"met":"מולא",
+"not met":"לא מולא",
+"table":"טבלה"
 }
 };

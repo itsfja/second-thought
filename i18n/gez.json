@@ -1584,7 +1584,6 @@
   "Using {model}": "ይትበቋዕ በ {model}",
   "Using {model} for the blocks inside": "ይትበቋዕ በ {model} ለግንፋላት ዘውስጡ",
   "Waiting for you to confirm the download…": "ይጸንሐከ ከመ ታጽንዕ አውርዶ…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "ተመይጠ ኀበ ቅድመ ጽሑፍ ዘዙረት {round}፡ ቦቱ ጌጋያት ዘውሑድ ({n})። ዙረታት ዘእምድኅሬሁ ኢያሠነይዎ።",
   "Which Homey device? Give its name, like Kitchen light.": "አይ ንዋየ ቤት ዘ Homey? ሀብ ስሞ፣ ከመ Kitchen light።",
   "Why: {why}": "በእንተ ምንት፡ {why}",
   "Woke {n} waiting script.": "አንቅሀ {n} ፍኖተ ዘይጸንሕ።",
@@ -1756,7 +1755,6 @@
   "Text changed in {n} blocks.": "ጽሑፍ ተወለጠ በ {n} ግንፋላት።",
   "Review stuck": "ሐተታ ተዐቅጸት",
   "stuck": "ተዐቅጸ",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ሐተታ አንሥአት እሎንተ ጌጋያተ ድኅረ ክልኤቱ ተራትዖ፣ በእንተዝ ተራትዖ ኢይክል ያስተራትዖሙ። ሥርዐት ዮጊ ይፈቅድ ነገረ ዘኢተውህበ ሎቱ፣ ከመ ገጸ መርበብ፣ መጽሐፍ አው ነገር እሙን፡ ሀቦ ውእተ (በግብር፣ አው በላእክ ዘይክል ያንብብ ገጻተ መርበብ)፣ ወእምዝ ሩጽ ዳግመ።",
   "Using the web": "በመርበብ",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "ዝንቱ ገጽ ኢይክል ይትበቋዕ በመርበብ፣ በእንተዝ ቅድመ ጽሑፍ ዘበላዕሉ ተጽሕፈ ዘእንበሌሁ። ሥርዐት ዘወፅአ ይትበቋዕ በመርበብ።",
   "Web address in the task": "መካነ መርበብ በግብር",
@@ -1901,7 +1899,15 @@
   "Plex new items": "ክፍላት ሐደስት ዘ Plex",
   "Tautulli history": "ዜና Tautulli",
   "Tautulli watch time": "ጊዜ ርእይ ዘ Tautulli",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ገጽ ይረውጽ በመዝገበ claude.ai ዘዚአከ፣ በእንተዝ ኢይኌልቍ ዘአውፅአ ኵሉ አገልግሎት። አውፅእ ኀበ Python፣ ምስለ መራኁት ውስተ second-thought.ini፣ ወዝንቱ ንዋይ ይዜኑ ዘአውፅአ ኵሉ አገልግሎት፣ ምክሮ ወወሰኖ፣ ወኵሎ ዘተረፈ እምወሰን፣ ዘተኈለቈ በውእቱ መኈልቍ።"
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ገጽ ይረውጽ በመዝገበ claude.ai ዘዚአከ፣ በእንተዝ ኢይኌልቍ ዘአውፅአ ኵሉ አገልግሎት። አውፅእ ኀበ Python፣ ምስለ መራኁት ውስተ second-thought.ini፣ ወዝንቱ ንዋይ ይዜኑ ዘአውፅአ ኵሉ አገልግሎት፣ ምክሮ ወወሰኖ፣ ወኵሎ ዘተረፈ እምወሰን፣ ዘተኈለቈ በውእቱ መኈልቍ።",
+  "Rule": "ሓያግ",
+  "Round {n}": "ዙረት {n}",
+  "Rules by round": "ሓያግ ዙረት",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ሐተታ ሓያግ 2 ዙረት አላአ። በእንተዝ ተራትዖ ኢይክል ያስተራትዖሙ። ሥርዐት ዮጊ ይፈቅድ ነገረ ዘኢተውህበ ሎቱ፣ ከመ ገጸ መርበብ፣ መጽሐፍ አው ነገር እሙን፡ ሀቦ ውእተ (በግብር፣ አው በላእክ ዘይክል ያንብብ ገጻተ መርበብ)፣ ወእምዝ ሩጽ ዳግመ።",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ተመይጠ ኀበ ቅድመ ጽሑፍ ዘዙረት {round}፡ሓያግ ({n} ላእ {total})። ዙረታት ዘእምድኅሬሁ ኢያሠነይዎ።",
+  "met": "ወልሱልእ",
+  "not met": "ʾälä አላአ",
+  "met {n} of {total}": "{n} ላእ {total}"
  },
  "examples": {
   "review": {
@@ -3118,7 +3124,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "ስእለታተ መርበብ፣ {x}፡ ዓዲ ኢይሰምዕ። ከመ ታርኅዎሙ፣ {note}",
   "Web requests: {note}": "ስእለታተ መርበብ፡ {note}",
   "Web search: {q}": "ኅሠሣ መርበብ፡ {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "ተመይጠ ኀበ ቅድመ ጽሑፍ ዘዙረት {round}፡ ቦቱ ጌጋያት ዘውሑድ ({n})። ዙረታት ዘእምድኅሬሁ ኢያሠነይዎ።",
   "Which Homey device? Give its name, like Kitchen light.": "አይ ንዋየ ቤት ዘ Homey? ሀብ ስሞ፣ ከመ Kitchen light።",
   "Why: {why}": "በእንተ ምንት፡ {why}",
   "Write a first draft": "ጸሐፍ ቅድመ ጽሑፈ ቀዳሜ",
@@ -3453,7 +3458,6 @@
   "{n} of them can change things": "{n} እምኔሆሙ ይክሉ ይወልጡ ነገረ",
   "Review stuck": "ሐተታ ተዐቅጸት",
   "stuck": "ተዐቅጸ",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ሐተታ አንሥአት እሎንተ ጌጋያተ ድኅረ ክልኤቱ ተራትዖ፣ በእንተዝ ተራትዖ ኢይክል ያስተራትዖሙ። ሥርዐት ዮጊ ይፈቅድ ነገረ ዘኢተውህበ ሎቱ፣ ከመ ገጸ መርበብ፣ መጽሐፍ አው ነገር እሙን፡ ሀቦ ውእተ (በግብር፣ አው በላእክ ዘይክል ያንብብ ገጻተ መርበብ)፣ ወእምዝ ሩጽ ዳግመ።",
   "Web address in the task": "መካነ መርበብ በግብር",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "ግብር ይሰሚ መካነ መርበብ፣ ወባሕቱ ዝንቱ መዓርግ ኢይክል ያርኅዎ። ኅትም 'በመርበብ' በግንፋል፣ አው ደይ ቃላተ ገጽ ውስተ ግብር።",
   "Sources not read": "አንቅዕት ዘኢተነቡ",
@@ -3678,7 +3682,15 @@
   "this week": "በዛቲ ሱባዔ",
   "today": "ዮም",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% እምወሰነ ወርኅ {cap} ዘምክረ {plan} ({spent} ወፅአ፣ ይትሐደስ {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "ሓያግ",
+  "Round {n}": "ዙረት {n}",
+  "Rules by round": "ሓያግ ዙረት",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ሐተታ ሓያግ 2 ዙረት አላአ። በእንተዝ ተራትዖ ኢይክል ያስተራትዖሙ። ሥርዐት ዮጊ ይፈቅድ ነገረ ዘኢተውህበ ሎቱ፣ ከመ ገጸ መርበብ፣ መጽሐፍ አው ነገር እሙን፡ ሀቦ ውእተ (በግብር፣ አው በላእክ ዘይክል ያንብብ ገጻተ መርበብ)፣ ወእምዝ ሩጽ ዳግመ።",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ተመይጠ ኀበ ቅድመ ጽሑፍ ዘዙረት {round}፡ሓያግ ({n} ላእ {total})። ዙረታት ዘእምድኅሬሁ ኢያሠነይዎ።",
+  "met": "ወልሱልእ",
+  "not met": "ʾälä አላአ",
+  "table": "ታልባልእ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

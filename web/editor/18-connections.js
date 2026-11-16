@@ -1081,12 +1081,15 @@
         if (!a("text")) fail(tr("review_text needs some text to check."));
         if (!a("criteria")) fail(tr("review_text needs criteria to check against."));
         const s = addStep(tr("Check: {criteria}", { criteria:short(a("criteria"), 55) }));
-        const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
-          "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
-          "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
-        const problems = Array.isArray(v.problems) ? v.problems.map(str).filter(x => x.trim()) : [];
-        const out = v.approved === true ? "Passes every criterion." : "Doesn't pass yet. Problems:\n" + (problems.length ? problems : ["It doesn't yet meet the criteria."]).map(x => "- " + x).join("\n");
-        s.text(out); s.done(v.approved === true ? tr("passes") : tr("needs work"), v.approved === true ? "ok" : "warn");
+        const rules = parseRules(a("criteria"));
+        const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(a("criteria"));
+        const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these rules, one per line:\n" + ruleList +
+          "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the text that show it"}], "problems": ["specific fixable problem"]}. ' +
+          "approved is true only if every rule is met; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+        const res = reviewVerdicts(rules, v);
+        const problems = res.problems.filter(x => x.trim());
+        const out = res.approved ? "Passes every criterion." : "Doesn't pass yet. Problems:\n" + (problems.length ? problems : ["It doesn't yet meet the criteria."]).map(x => "- " + x).join("\n");
+        s.text(out); s.done(res.approved ? tr("passes") : tr("needs work"), res.approved ? "ok" : "warn");
         return out;
       }
       case "read_feed": return feedText(sampleFeedItems(a("url"), inp.limit == null ? 10 : inp.limit));

@@ -10,7 +10,9 @@
     list:obj({ items:{ type:"array", items:{ type:"string" } } }, ["items"]),
     score:obj({ score:{ type:"number" } }, ["score"]),
     pick:obj({ pick:{ type:"integer", enum:[1, 2] }, reason:{ type:"string" } }, ["pick"]),
-    review:obj({ approved:{ type:"boolean" }, problems:{ type:"array", items:{ type:"string" } } }, ["approved"]),
+    review:obj({ approved:{ type:"boolean" },
+                 rules:{ type:"array", items:obj({ rule:{ type:"string" }, met:{ type:"boolean" }, problem:{ type:"string" }, shows:{ type:"string" } }, ["rule", "met"]) },
+                 problems:{ type:"array", items:{ type:"string" } } }, ["approved"]),
     agent:obj({ tool:{ type:"string" }, input:{ type:"object" }, why:{ type:"string" }, done:{ type:"boolean" }, answer:{ type:"string" },
                 plan:{ type:"array", items:{ type:"string" } } })
   };
@@ -549,17 +551,47 @@
   const needTask = () => { if (!run.task) fail(tr("Add a 'set task to' block before this step.")); };
   const needDraft = () => { if (!run.draft) fail(tr("There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.")); };
 
-  // Whether two review problems say the same thing (#331): the same words, or mostly the same longer words. Matches
-  // same_problem in exported programs.
-  function sameProblem(a, b){
-    if (str(a).trim().toLowerCase() === str(b).trim().toLowerCase()) return true;
-    const words = t => new Set((str(t).toLowerCase().match(/[a-z0-9]+/g) || []).filter(w => w.length > 3));
-    const wa = words(a), wb = words(b);
-    if (!wa.size || !wb.size) return false;
-    let both = 0; wa.forEach(w => { if (wb.has(w)) both++; });
-    return both >= 0.6 * Math.min(wa.size, wb.size);
+  // The review's rules (#424): the criteria split on semicolons and on lines, so rules can be typed one to a line as
+  // well as with semicolons. Matches parse_rules in exported programs; the cases are in tests/parity/review.json.
+  function parseRules(criteria){
+    return str(criteria).split(/[;\n]/).map(r => r.trim()).filter(Boolean);
   }
-  window.__sameProblem = sameProblem;
+  // The reviewer's verdict for each rule, from its JSON reply (#424). Matches review_verdicts in exported programs.
+  function reviewVerdicts(rules, v){
+    v = v && typeof v === "object" ? v : {};
+    const got = Array.isArray(v.rules) ? v.rules : null;
+    const extra = Array.isArray(v.problems) ? v.problems.map(str).filter(Boolean) : [];
+    if (!got) {  // old shape (no "rules"): no per-rule verdicts, just the flat problems list
+      const approved = v.approved === true;
+      return { approved, problems:[...new Set(extra)], verdicts:[], met:approved ? rules.length : 0, unmet:[] };
+    }
+    const verdicts = rules.map((r, i) => {
+      let e = got.find(x => x && typeof x === "object" && str(x.rule).trim() === r) || null;
+      if (!e && i < got.length && got[i] && typeof got[i] === "object") e = got[i];
+      if (!e) e = { met:v.approved === true };
+      return { rule:r, met:e.met === true, problem:str(e.problem || ""), shows:str(e.shows || "") };
+    });
+    const approved = verdicts.length ? verdicts.every(x => x.met) : v.approved === true;
+    const own = verdicts.filter(x => !x.met).map(x => x.problem || x.rule);
+    const problems = [...new Set(own.concat(extra))];
+    return { approved, problems, verdicts, met:verdicts.filter(x => x.met).length, unmet:verdicts.filter(x => !x.met).map(x => x.rule) };
+  }
+  // The rule that failed in both of the last two rounds, if any — a stuck review loop (#424): no wording comparison.
+  // Matches stuck_rule in exported programs.
+  function stuckRule(prevUnmet, unmet){
+    const now = new Set(unmet.map(str));
+    return prevUnmet.map(str).find(p => now.has(p)) || null;
+  }
+  window.__stuckRule = stuckRule;
+  // The rules by round as table rows, for the run log (#424).
+  function rulesTableRows(loop){
+    const rounds = loop.rounds || [], rules = [];
+    rounds.forEach(r => r.verdicts.forEach(v => { if (!rules.includes(v.rule)) rules.push(v.rule); }));
+    return [[tr("Rule")].concat(rounds.map(r => tr("Round {n}", { n:r.round })))].concat(rules.map(rule => [rule].concat(rounds.map(r => {
+      const v = r.verdicts.find(x => x.rule === rule);
+      return v && v.met ? tr("met") : tr("not met") + (v && v.problem ? ": " + v.problem : "");
+    }))));
+  }
 
   // A draft or revise step and the web (#332): ticked, this page can't search, so say the exported program will; not
   // ticked but the task names a web address, say the step can't open it.
@@ -574,27 +606,30 @@
   async function reviewOnce(criteria, label, inLoop){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
+    const rules = parseRules(criteria);
     const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
       loop.earlier.map(e => "- " + e).join("\n") : "";
-    const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" + criteria +
+    const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
+    const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
       "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
-      '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
-      "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
-    const approved = v.approved === true;
-    const problems = Array.isArray(v.problems) ? v.problems.map(str).filter(Boolean) : [];
+      '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
+      "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+    const res = reviewVerdicts(rules, v);
+    const approved = res.approved;
     run.approved = approved;
-    run.problems = approved ? [] : (problems.length ? problems : ["Does not yet meet the criteria."]);
+    run.problems = approved ? [] : (res.problems.length ? res.problems : ["Does not yet meet the criteria."]);
+    run.verdicts = res.verdicts;
     if (loop) {
       loop.round++;
-      if (!loop.best || run.problems.length <= loop.best.n)  // a tie goes to the newer draft
-        loop.best = { draft:run.draft, problems:run.problems.slice(), n:run.problems.length, round:loop.round };
+      if (!loop.best || res.met >= loop.best.met)  // the best draft meets the most rules; a tie goes to the newer draft
+        loop.best = { draft:run.draft, problems:run.problems.slice(), met:res.met, total:rules.length, n:run.problems.length, round:loop.round };
       run.problems.forEach(p => { if (!loop.earlier.includes(p)) loop.earlier.push(p); });
       loop.earlier = loop.earlier.slice(-12);
-      // No progress: nothing new, and no fewer problems than the round before (#331)
-      const last = loop.last;
-      const same = !approved && last && run.problems.length >= last.length && run.problems.every(p => last.some(q => sameProblem(p, q)));
+      // No progress: the same rule failed this round as the one before (#424)
+      const same = !approved && stuckRule(loop.lastUnmet || [], res.unmet) !== null;
       loop.same = same ? (loop.same || 0) + 1 : 0;
-      loop.last = run.problems.slice();
+      loop.lastUnmet = res.unmet.slice();
+      (loop.rounds = loop.rounds || []).push({ round:loop.round, verdicts:res.verdicts });
     }
     if (approved) { s.text(tr("Meets every criterion.")); s.done("approved", "ok"); }
     else { s.list(run.problems); s.done("needs work", "warn"); }
@@ -846,26 +881,30 @@
         const criteria = str(await input(b, tc, "CRITERIA"));
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
-        run.reflect = { earlier:[], best:null, round:0, last:null, same:0 };
+        run.reflect = { earlier:[], best:null, round:0, same:0, lastUnmet:[], rounds:[], table:null };
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
             const { approved, step } = await reviewOnce(criteria, tr("Review, round {n}", { n:round }), true);
+            // the rules by round, shown in the log as the rounds happen (#424)
+            if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
+            run.reflect.table.table(rulesTableRows(run.reflect));
+            run.reflect.table.done(tr("met {n} of {total}", { n:run.reflect.rounds[run.reflect.rounds.length - 1].verdicts.filter(v => v.met).length, total:(run.reflect.best || {}).total || 0 }), "ok");
             if (approved) break;
             if (round > max) {
               step.done("failed, out of rounds", "bad"); run.outOfRounds = true;
               const best = run.reflect.best;
               if (best && best.round !== run.reflect.round) {
                 run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false;
-                addStep("Kept the best draft", { text:tr("Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.", { round:best.round, n:best.n }) }).done("best draft", "warn");
+                addStep("Kept the best draft", { text:tr("Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.", { round:best.round, n:best.met, total:best.total }) }).done("best draft", "warn");
               }
               break;
             }
-            if (run.reflect.same >= 2) {  // the same problems after two revisions in a row: revising can't fix them (#331)
+            if (run.reflect.same >= 2) {  // the same rule failed in two rounds running: revising can't fix it (#424)
               step.done("stuck", "bad"); run.outOfRounds = true;
               const best = run.reflect.best;
               if (best && best.round !== run.reflect.round) { run.draft = best.draft; run.problems = best.problems.slice(); run.approved = false; }
-              addStep("Review stuck", { text:tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.") }).done("stuck", "warn");
+              addStep("Review stuck", { text:tr("The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.") }).done("stuck", "warn");
               break;
             }
             if ((await body(b, "FIX", tc)) === "break") break;

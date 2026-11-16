@@ -1537,7 +1537,6 @@
   "Waiting until {time} tomorrow": "ϣⲁϥϩⲩⲡⲟⲙⲉⲓⲛⲉ ϣⲁⲛⲧⲉ {time} ⲣⲁⲥⲧé",
   "Waiting {time}": "ϣⲁϥϩⲩⲡⲟⲙⲉⲓⲛⲉ {time}",
   "Watch values": "ⲛⲁⲩ ⲉⲛⲡⲉⲧϣⲓⲃⲉ",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "ⲁϥⲕⲟⲧⲉ ⲉⲡⲥϩⲁⲓ ⲙⲡⲥⲟⲡ {round}: ⲛⲉϥϩⲓⲥⲉ ⲕⲟⲩï ({n}). ⲛⲥⲟⲡ ⲙⲛⲛⲥⲱϥ ⲙⲡⲟⲩⲧⲁϩⲟϥ.",
   "What the result must do": "ⲡⲉⲧⲉⲣⲉ ⲡⲕⲁⲣⲡⲟⲥ ⲛⲁⲁⲁϥ",
   "What the result must do, separated by semicolons, like: under 200 words; names the date": "ⲡⲉⲧⲉⲣⲉ ⲡⲕⲁⲣⲡⲟⲥ ⲛⲁⲁⲁϥ, ⲉⲩⲡⲱⲣϫ ϩⲛ ⲟⲩ semicolon, ϩⲱⲥ: ϩⲁⲡⲥϩ 200 ⲛϣⲁϫⲉ; ϫⲱ ⲙⲡϩⲟⲟⲩ",
   "When {entity} changes": "ϩⲟⲧⲁⲛ {entity} ϣⲁϥϣⲓⲃⲉ",
@@ -1746,7 +1745,6 @@
   "Text changed in {n} blocks.": "Ϧⲉⲛ {n} ⳛ⳱⳱ⳉ ⲡⲥⲁϫⲓ ⲛ̄ⲧⲁⲓⲟ.",
   "Review stuck": "ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥⲁϩⲟ ⲉⲣⲁⲧϫ",
   "stuck": "ⲁⲥⲁϩⲟ",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥϫⲟ ⲛⲛⲓⲡⲉⲧⲕⲱⲃ ⲛⲧⲉⲣⲧⲡⲉ ⲙⲛⲛⲥⲁ ⲥⲙⲛⲧⲓ ⲥⲛⲁⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲧⲁⲗϭⲟ ⲙⲙⲟⲟⲩ. ⲉⲓⲉ ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲉⲣⲉ ⲟⲩϩⲱⲃ ϣⲁⲁⲧ ⲙⲙⲟϥ ⲉⲧⲉ ⲙⲡⲟⲩⲧⲁⲁϥ ⲛⲁϥ, ⲛϩⲉ ⲛⲟⲩϣⲱϣⲧ ⲛⲧⲉ web, ⲟⲩϫⲱⲱⲙⲉ ⲏ ⲟⲩⲙⲉ: ⲙⲁ ⲛⲁϥ ⲙⲙⲟϥ (ϩⲙ ⲡϣⲓⲛⲉ, ⲏ ϩⲓⲧⲛ ⲟⲩⲁⲅⲅⲉⲗⲟⲥ ⲉϥϣⲟϣ ⲛⲛϣⲱϣⲧ ⲛⲧⲉ web), ⲁⲩⲱ ⲁⲁϥ ⲟⲛ.",
   "Using the web": "ϩⲓⲧⲛ ⲡϣⲛⲉ",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "ⲡⲉϫⲱⲱⲙⲉ ⲡⲁⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲉⲡ ⲡϣⲛⲉ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲛⲧⲁⲩⲥⲕϩⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲉⲧⲥⲁ ⲡⲧⲡⲉ ⲁϫⲙ ⲡϣⲛⲉ. ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲛⲧⲁⲩⲛⲧϥ ⲉⲃⲟⲗ ϣⲁϥⲉⲉⲡ ⲡϣⲛⲉ.",
   "Web address in the task": "ⲡⲣⲓⲛ ⲛⲡϣⲛⲉ ϩⲙ ⲡϣⲓⲛⲉ",
@@ -1891,7 +1889,15 @@
   "Plex new items": "Plex nfr",
   "Tautulli history": "Tautulli soueu",
   "Tautulli watch time": "Tautulli hraw-t",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ⲧⲥⲉⲗⲓⲥ ϣⲟⲡ ⲛϩⲧⲏⲛ ⲛ claude.ai, ⲁⲩⲱ ⲛϣⲁⲩⲱⲡ ⲙⲡⲉⲓϫⲱⲟⲩ ⲛⲧⲉ ⲟⲩⲙⲉⲩⲉ. ϣⲱⲡ ⲉⲣⲉ ⲉⲃⲟⲗ ϩⲛ Python, ϩⲛ ⲡⲉⲓϣⲟϣⲧ ϩⲣ second-thought.ini, ⲁⲩⲱ ⲡⲥⲕⲉⲩⲟⲥ ⲛⲁⲛ ϣⲱⲡ ⲡⲉⲓϫⲱⲟⲩ ⲛⲧⲉ ⲟⲩⲙⲉⲩⲉ, ⲡⲉⲧⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲛⲉϥ ⲡⲉ ⲡϩⲟⲣⲟⲥ, ⲁⲩⲱ ⲟⲩⲱⲡϣⲉⲃⲏ ⲛϩⲧⲏⲛ, ⲧⲁⲩⲇⲟⲕⲓⲙⲁⲍ ϩⲛ ⲡⲉⲓⲟⲣⲅⲁⲛⲟⲛ ⲡⲧ."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ⲧⲥⲉⲗⲓⲥ ϣⲟⲡ ⲛϩⲧⲏⲛ ⲛ claude.ai, ⲁⲩⲱ ⲛϣⲁⲩⲱⲡ ⲙⲡⲉⲓϫⲱⲟⲩ ⲛⲧⲉ ⲟⲩⲙⲉⲩⲉ. ϣⲱⲡ ⲉⲣⲉ ⲉⲃⲟⲗ ϩⲛ Python, ϩⲛ ⲡⲉⲓϣⲟϣⲧ ϩⲣ second-thought.ini, ⲁⲩⲱ ⲡⲥⲕⲉⲩⲟⲥ ⲛⲁⲛ ϣⲱⲡ ⲡⲉⲓϫⲱⲟⲩ ⲛⲧⲉ ⲟⲩⲙⲉⲩⲉ, ⲡⲉⲧⲟⲓⲕⲟⲛⲟⲙⲓⲁ ⲛⲉϥ ⲡⲉ ⲡϩⲟⲣⲟⲥ, ⲁⲩⲱ ⲟⲩⲱⲡϣⲉⲃⲏ ⲛϩⲧⲏⲛ, ⲧⲁⲩⲇⲟⲕⲓⲙⲁⲍ ϩⲛ ⲡⲉⲓⲟⲣⲅⲁⲛⲟⲛ ⲡⲧ.",
+  "Rule": "ⲛⲟⲙⲟⲥ",
+  "Round {n}": "ⲥⲟⲡ {n}",
+  "Rules by round": "ⲛⲟⲙⲟⲥ ⲥⲟⲡ",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲁⲥϫⲟ ⲛⲛⲛⲟⲙⲟⲥ 2 ⲙⲙⲥⲟⲡ ⲥⲛⲁⲩ, ⲉⲧⲃⲉ ⲡⲁⲓ ⲡⲥⲙⲛⲧⲓ ⲛⲛⲉϥϣϭⲟⲙ ⲉⲧⲁⲗϭⲟ ⲙⲙⲟⲟⲩ. ⲉⲓⲉ ⲡⲓⲣⲟⲅⲣⲁⲙⲙⲁ ⲉⲣⲉ ⲟⲩϩⲱⲃ ϣⲁⲁⲧ ⲙⲙⲟϥ ⲉⲧⲉ ⲙⲡⲟⲩⲧⲁⲁϥ ⲛⲁϥ, ⲛϩⲉ ⲛⲟⲩϣⲱϣⲧ ⲛⲧⲉ web, ⲟⲩϫⲱⲱⲙⲉ ⲏ ⲟⲩⲙⲉ: ⲙⲁ ⲛⲁϥ ⲙⲙⲟϥ (ϩⲙ ⲡϣⲓⲛⲉ, ⲏ ϩⲓⲧⲛ ⲟⲩⲁⲅⲅⲉⲗⲟⲥ ⲉϥϣⲟϣ ⲛⲛϣⲱϣⲧ ⲛⲧⲉ web), ⲁⲩⲱ ⲁⲁϥ ⲟⲛ.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ⲁϥⲕⲟⲧⲉ ⲉⲡⲥϩⲁⲓ ⲙⲡⲥⲟⲡ {round}:nomos {n} ⲉⲙ {total} ⲟⲛ. ⲛⲥⲟⲡ ⲙⲛⲛⲥⲱϥ ⲙⲡⲟⲩⲧⲁϩⲟϥ.",
+  "met": "ⲟⲛ",
+  "not met": "ⲁⲛⲟ",
+  "met {n} of {total}": "ⲟⲛ {n} ⲉⲙ {total}"
  },
  "examples": {
   "review": {
@@ -3191,7 +3197,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "nšine nte web, {x}: nšfsōtm an tenou. eouōnou, {note}",
   "Web requests: {note}": "nšine nte web: {note}",
   "Web search: {q}": "šine hn web: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "afkote epshai mpsop {round}: nefhise kouï ({n}). nsop mnnsōf mpoutahof.",
   "What changed: {url}": "petašibe: {url}",
   "What it can do is the same as before.": "petfeire mmof šēš mn ntšorp.",
   "What was wrong": "petšōne",
@@ -3443,7 +3448,6 @@
   "{n} of them can change things": "{n} nhētou šaujōbe nhenhōb",
   "Review stuck": "tdokimasia asaho eratj",
   "stuck": "asaho",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "tdokimasia asjo nnipetkōb ntertpe mnnsa smnti snau, etbe pai psmnti nnefšcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on.",
   "Web address in the task": "prin npšne hm pšine",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "pšine jō mprin npšne, alla ptšoši pai nnefšcom eouōn mmof. tōte 'hitn pšne' hijm pōne, ē ma nnšaje mpjōōme hm pšine.",
   "Sources not read": "nskhai mpouōš",
@@ -3668,7 +3672,15 @@
   "this week": "kata sabbaton pe",
   "today": "mpehoou",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% mphoros mpebot n toikonomia n {plan} {cap} (afjōou {spent}, auaaf nbrre hn {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "nomos",
+  "Round {n}": "sop {n}",
+  "Rules by round": "nomos sop",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "tdokimasia asjo nnnomos 2 mmsop snau, etbe pai psmnti nnefṡcom etalco mmoou. eie pirogramma ere ouhōb šaat mmof ete mpoutaaf naf, nhe noušōšt nte web, oujōōme ē oume: ma naf mmof (hm pšine, ē hitn ouaggelos efšoš nnšōšt nte web), auō aaf on.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "afkote epshai mpsop {round}:nomos {n} em {total} on. nsop mnnsōf mpoutahof.",
+  "met": "on",
+  "not met": "ano",
+  "table": "pap"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

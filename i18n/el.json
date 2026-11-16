@@ -1583,7 +1583,6 @@
   "Using {model}": "Χρήση του {model}",
   "Using {model} for the blocks inside": "Χρήση του {model} για τα μπλοκ μέσα",
   "Waiting for you to confirm the download…": "Αναμονή για επιβεβαίωση της λήψης…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Επιστροφή στο πρόχειρο του γύρου {round}: είχε τα λιγότερα προβλήματα ({n}). Οι επόμενοι γύροι δεν το βελτίωσαν.",
   "Which Homey device? Give its name, like Kitchen light.": "Ποια συσκευή Homey; Δώστε το όνομά της, π.χ. Φως κουζίνας.",
   "Why: {why}": "Γιατί: {why}",
   "Woke {n} waiting script.": "Ξύπνησε {n} σενάριο σε αναμονή.",
@@ -1755,7 +1754,6 @@
   "Text changed in {n} blocks.": "Το κείμενο άλλαξε σε {n} μπλοκ.",
   "Review stuck": "Ο έλεγχος κόλλησε",
   "stuck": "κόλλησε",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
   "Using the web": "Με χρήση του ιστού",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Αυτή η σελίδα δεν μπορεί να χρησιμοποιήσει τον ιστό, οπότε το πρόχειρο παραπάνω γράφτηκε χωρίς αυτόν. Το εξαγόμενο πρόγραμμα χρησιμοποιεί τον ιστό.",
   "Web address in the task": "Διεύθυνση ιστού στην εργασία",
@@ -1900,7 +1898,15 @@
   "Plex new items": "νέα Plex",
   "Tautulli history": "ιστορικό Tautulli",
   "Tautulli watch time": "χρόνος παρακολούθησης Tautulli",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Η σελίδα τρέχει στον λογαριασμό σας στο claude.ai, οπότε δεν μετρά τα έξοδα κάθε υπηρεσίας. Εξάγετε σε Python, με κλειδιά στο second-thought.ini, και αυτό το εργαλείο θα αναφέρει τι έχει ξοδέψει κάθε υπηρεσία, το πλάνο και το όριό της, και τυχόν υπέρβαση, μετρημένη σε εκείνο τον υπολογιστή."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Η σελίδα τρέχει στον λογαριασμό σας στο claude.ai, οπότε δεν μετρά τα έξοδα κάθε υπηρεσίας. Εξάγετε σε Python, με κλειδιά στο second-thought.ini, και αυτό το εργαλείο θα αναφέρει τι έχει ξοδέψει κάθε υπηρεσία, το πλάνο και το όριό της, και τυχόν υπέρβαση, μετρημένη σε εκείνο τον υπολογιστή.",
+  "Rule": "Κανόνας",
+  "Round {n}": "γύρος {n}",
+  "Rules by round": "Κανόνες ανά γύρο",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο ίδιος κανόνας δεν τηρήθηκε σε δύο γύρους στη σειρά, οπότε η διόρθωση δεν μπορεί να τον διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Επιστροφή στο πρόχειρο του γύρου {round}:είχε τηρήσει τους περισσότερους κανόνες ({n} από {total}). Οι επόμενοι γύροι δεν το βελτίωσαν.",
+  "met": "τηρήθηκε",
+  "not met": "δεν τηρήθηκε",
+  "met {n} of {total}": "{n} από {total} τηρήθηκαν"
  },
  "examples": {
   "review": {
@@ -3117,7 +3123,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "Αιτήματα ιστού, {x}: ακόμα δεν ακούει. Για να ενεργοποιηθούν: {note}",
   "Web requests: {note}": "Αιτήματα ιστού: {note}",
   "Web search: {q}": "Αναζήτηση στο διαδίκτυο: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Επιστροφή στο πρόχειρο του γύρου {round}: είχε τα λιγότερα προβλήματα ({n}). Οι επόμενοι γύροι δεν το βελτίωσαν.",
   "Which Homey device? Give its name, like Kitchen light.": "Ποια συσκευή Homey; Δώστε το όνομά της, π.χ. Φως κουζίνας.",
   "Why: {why}": "Γιατί: {why}",
   "Write a first draft": "Γράψε ένα πρώτο πρόχειρο",
@@ -3452,7 +3457,6 @@
   "{n} of them can change things": "{n} από αυτά μπορούν να αλλάξουν πράγματα",
   "Review stuck": "Ο έλεγχος κόλλησε",
   "stuck": "κόλλησε",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο έλεγχος βρήκε τα ίδια προβλήματα μετά από δύο αναθεωρήσεις, άρα η αναθεώρηση δεν μπορεί να τα διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
   "Web address in the task": "Διεύθυνση ιστού στην εργασία",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Η εργασία αναφέρει μια διεύθυνση ιστού, αλλά αυτό το βήμα δεν μπορεί να την ανοίξει. Τσέκαρε 'με χρήση του ιστού' στο μπλοκ ή βάλε το κείμενο της σελίδας στην εργασία.",
   "Sources not read": "Πηγές που δεν διαβάστηκαν",
@@ -3677,6 +3681,14 @@
   "this week": "αυτή την εβδομάδα",
   "today": "σήμερα",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% του μηνιαίου ορίου {cap} του πλάνου {plan} ({spent} ξοδεμένα, μηδενίζει {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Κανόνας",
+  "Round {n}": "γύρος {n}",
+  "Rules by round": "Κανόνες ανά γύρο",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Ο ίδιος κανόνας δεν τηρήθηκε σε δύο γύρους στη σειρά, οπότε η διόρθωση δεν μπορεί να τον διορθώσει. Ίσως το πρόγραμμα χρειάζεται κάτι που δεν του δόθηκε, όπως μια ιστοσελίδα, ένα αρχείο ή ένα γεγονός: δώσ' του το (στην εργασία, για παράδειγμα, ή μέσω ενός πράκτορα που διαβάζει ιστοσελίδες) και τρέξ' το ξανά.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Επιστροφή στο πρόχειρο του γύρου {round}:είχε τηρήσει τους περισσότερους κανόνες ({n} από {total}). Οι επόμενοι γύροι δεν το βελτίωσαν.",
+  "met": "τηρήθηκε",
+  "not met": "δεν τηρήθηκε",
+  "table": "πίνακας"
  }
 }

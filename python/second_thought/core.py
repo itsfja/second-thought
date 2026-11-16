@@ -396,6 +396,47 @@ def same_problem(a, b):
     return bool(wa and wb) and len(wa & wb) >= 0.6 * min(len(wa), len(wb))
 
 
+def parse_rules(criteria):
+    """The review's rules: the criteria split on semicolons and on lines, so rules can be typed one to a line as well
+    as with semicolons (#424). The page's parseRules does the same; the cases are in tests/parity/review.json."""
+    return [r.strip() for r in re.split(r"[;\n]", to_str(criteria)) if r.strip()]
+
+
+def review_verdicts(rules, reply):
+    """The reviewer's verdict for each rule, from its JSON reply (#424): one {rule, met, problem, shows} per rule — met
+    or not, the problem, and the words in the draft that show it. approved is true only if every rule is met; problems
+    are the unmet rules' problems plus any extra ones the reviewer listed. A reply in the old shape (no "rules") gives
+    no per-rule verdicts, only its flat problems list. The page's reviewVerdicts does the same."""
+    v = reply if isinstance(reply, dict) else {}
+    got = v.get("rules") if isinstance(v.get("rules"), list) else None
+    extra = [to_str(p) for p in v["problems"] if to_str(p)] if isinstance(v.get("problems"), list) else []
+    if got is None:  # old shape (no "rules"): no per-rule verdicts, just the flat problems list
+        approved = v.get("approved") is True
+        return {"approved": approved, "problems": list(dict.fromkeys(extra)), "verdicts": [],
+                "met": len(rules) if approved else 0, "unmet": []}
+    verdicts = []
+    for i, r in enumerate(rules):
+        e = next((x for x in got if isinstance(x, dict) and to_str(x.get("rule")).strip() == r), None)
+        if e is None and i < len(got) and isinstance(got[i], dict):
+            e = got[i]
+        if e is None:
+            e = {"met": v.get("approved") is True}
+        verdicts.append({"rule": r, "met": e.get("met") is True,
+                         "problem": to_str(e.get("problem") or ""), "shows": to_str(e.get("shows") or "")})
+    approved = all(x["met"] for x in verdicts) if verdicts else v.get("approved") is True
+    own = [x["problem"] or x["rule"] for x in verdicts if not x["met"]]
+    problems = list(dict.fromkeys(own + extra))
+    return {"approved": approved, "problems": problems, "verdicts": verdicts,
+            "met": sum(1 for x in verdicts if x["met"]), "unmet": [x["rule"] for x in verdicts if not x["met"]]}
+
+
+def stuck_rule(prev_unmet, unmet):
+    """The rule that failed in both of the last two rounds, if any — that's a stuck review loop (#424): revising can't
+    fix it. No wording comparison, unlike same_problem. The page's stuckRule does the same."""
+    now = {to_str(u) for u in unmet}
+    return next((to_str(p) for p in prev_unmet if to_str(p) in now), None)
+
+
 def seen_addresses(text):
     """Every web address in text, whole, without trailing punctuation or slashes: what an agent was given or read (#304)."""
     out = set()
@@ -788,7 +829,11 @@ SCHEMAS = {
     "list": _obj({"items": {"type": "array", "items": {"type": "string"}}}, ["items"]),
     "score": _obj({"score": {"type": "number"}}, ["score"]),
     "pick": _obj({"pick": {"type": "integer", "enum": [1, 2]}, "reason": {"type": "string"}}, ["pick"]),
-    "review": _obj({"approved": {"type": "boolean"}, "problems": {"type": "array", "items": {"type": "string"}}}, ["approved"]),
+    "review": _obj({"approved": {"type": "boolean"},
+                    "rules": {"type": "array", "items": _obj({"rule": {"type": "string"}, "met": {"type": "boolean"},
+                                                             "problem": {"type": "string"}, "shows": {"type": "string"}},
+                                                            ["rule", "met"])},
+                    "problems": {"type": "array", "items": {"type": "string"}}}, ["approved"]),
     "agent": _obj({"tool": {"type": "string"}, "input": {"type": "object"}, "why": {"type": "string"},
                    "done": {"type": "boolean"}, "answer": {"type": "string"},
                    "plan": {"type": "array", "items": {"type": "string"}}}),

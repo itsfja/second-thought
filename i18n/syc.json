@@ -1484,7 +1484,6 @@
   "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "ܠܦܬܓܡܐ ܠܐ ܗܘܐ ܐܣܟܝܡܐ ܕܡܬܣܟܐ: {problem}.\nܫܐܠ ܙܒܢ ܚܪܝܬܐ ܠܦܬܓܡܐ ܡܬܩܢܐ.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "ܦܬܓܡܐ ܡܛܐ ܠܬܚܘܡܐ ܕܐܘܪܟܐ, ܘܡܬܘܠ ܗܢܐ ܐܬܒܥܝ ܡܢ ܕܡܘܬܐ ܕܬܝܙܠ ܡܢ ܐܝܟܐ ܕܦܣܩܬ.",
   "The reply wasn't readable JSON, so this step was wasted.": "ܦܬܓܡܐ ܠܐ ܗܘܐ JSON ܕܡܬܩܪܐ, ܘܡܬܘܠ ܗܢܐ ܗܕܐ ܕܪܓܐ ܐܬܒܕܬ.",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ܒܘܚܪܢܐ ܐܪܝܡ ܗܠܝܢ ܡܚܫܠܬܐ ܒܬܪ ܬܪܝܢ ܬܘܩܢܐ, ܘܡܬܘܠ ܗܢܐ ܬܘܩܢܐ ܠܐ ܡܫܟܚ ܕܢܬܩܢܝܢ. ܛܘܟܣܐ ܡܫܟܚ ܕܣܢܐ ܡܕܡ ܕܠܐ ܐܬܝܗܒ ܠܗ, ܐܟ ܕܦܐ ܕܪܫܬܐ, ܦܢܓܐ ܐܘ ܨܒܘܐ: ܗܒ ܠܗ (ܒܥܒܕܐ, ܐܘ ܒܫܠܝܚܐ ܕܡܫܟܚ ܕܢܩܪܐ ܕܦܐ ܕܪܫܬܐ), ܘܒܬܪ ܪܗܛ ܬܘܒ.",
   "The run stopped.": "ܪܗܛܐ ܦܣܩ.",
   "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "ܒܝܬܐ ܕܛܘܦܣܐ ܠܝܬ ܠܗ ܩܡܝܪܐ ܕܫܡܗ “{id}”. ܢܣܝ camera.front_door, camera.driveway, camera.garden, camera.garage ܐܘ camera.pet.",
   "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "ܒܝܬܐ ܕܛܘܦܣܐ ܠܝܬ ܠܗ ܡܕܡ ܕܫܡܗ “{id}”. ܦܬܚ ܓܒܐ ܕ-Home Assistant ܠܡܚܙܐ ܡܐ ܕܐܝܬ ܠܗ.",
@@ -1561,7 +1560,6 @@
   "Waiting {time}": "ܡܣܟܐ {time}",
   "Watch values": "ܢܛܘܪ ܫܘܚܠܦܐ",
   "Web address in the task": "ܥܠܩܬܐ ܕܪܫܬܐ ܒܥܒܕܐ",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "ܗܦܟ ܠܪܘܫܡܐ ܕܚܕܪܐ {round}: ܙܥܘܪܢ ܗܘܝ ܡܚܫܠܬܝܗ ({n}). ܚܕܪܐ ܕܒܬܪܝܗ ܠܐ ܫܦܪ ܥܠܝܗ.",
   "What the result must do": "ܡܐ ܘܠܗ ܠܦܝܪܐ ܕܢܥܒܕ",
   "What the result must do, separated by semicolons, like: under 200 words; names the date": "ܡܐ ܘܠܗ ܠܦܝܪܐ ܕܢܥܒܕ, ܡܦܪܫܝܢ ܒܢܘܩܙܐ ܡܦܠܓܐ, ܐܟ: ܬܚܬ 200 ܡܠܐ; ܡܫܡܐ ܝܘܡܐ",
   "When {entity} changes": "ܟܕ {entity} ܡܬܚܠܦ",
@@ -1892,7 +1890,15 @@
   "Plex new items": "Plex jdyd",
   "Tautulli history": "Tautulli tarikh",
   "Tautulli watch time": "Tautulli wqt shw",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ܕܦܐ ܪܚܬ ܥܠ ܚܫܘܒܢܟ dclaude.ai, ܘܡܬܘܠ ܗܢܐ ܠܐ ܡܢܐ ܢܦܩܬܐ ܕܟܘܠ ܡܫܡܫܢܐ. ܐܦܩ ܠ-Puton, ܒܩܝܡܐ second-thought.ini, ܘܡܢܐ ܗܢܐ ܡܢܐ ܐܡܐ ܢܦܩ ܟܘܠ ܡܫܡܫܢܐ, ܨܒܝܢܬܐ ܘܛܚܘܡܬܐ, ܘܟܘܠ ܚܘܝܐ ܕܛܚܘܡܐ, ܡܢ ܥܠ ܗܢܐ ܚܫܘܒܐ ܡܢܐ."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "ܕܦܐ ܪܚܬ ܥܠ ܚܫܘܒܢܟ dclaude.ai, ܘܡܬܘܠ ܗܢܐ ܠܐ ܡܢܐ ܢܦܩܬܐ ܕܟܘܠ ܡܫܡܫܢܐ. ܐܦܩ ܠ-Puton, ܒܩܝܡܐ second-thought.ini, ܘܡܢܐ ܗܢܐ ܡܢܐ ܐܡܐ ܢܦܩ ܟܘܠ ܡܫܡܫܢܐ, ܨܒܝܢܬܐ ܘܛܚܘܡܬܐ, ܘܟܘܠ ܚܘܝܐ ܕܛܚܘܡܐ, ܡܢ ܥܠ ܗܢܐ ܚܫܘܒܐ ܡܢܐ.",
+  "Rule": "ܢܡܘܣ",
+  "Round {n}": "ܣܪ {n}",
+  "Rules by round": "ܢܡܘܣ ܣܪ",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ܒܘܪܢܐ ܚܪܬܢ ܢܡܘܣ 2 ܬܘܩܢܐ ܠܐ ܡܫܟ, ܘܡܬܘܠ ܚܢܐ ܬܘܩܢܐ ܠܐ ܡܫܟ. ܛܘܟܣܐ ܡܫܟܚ ܕܣܢܐ ܡܕܡ ܕܠܐ ܥܬܝܗܒ ܠܗ, ܥܟ ܕܦܐ ܕܪܫܬܐ, ܦܢܓܐ ܥܘ ܨܒܘܐ: ܗܒ ܠܗ (ܒܥܒܕܐ, ܥܘ ܒܫܠܝܚܐ ܕܡܫܟܚ ܕܢܩܪܐ ܕܦܐ ܕܪܫܬܐ), ܘܒܬܪ ܪܗܛ ܬܘܒ.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ܗܦܟ ܠܪܘܫܡܐ ܕܚܕܪܐ {round}:namus {n} ܡܢ {total} ܥܒܕ. ܚܕܪܐ ܕܒܬܪܝܗ ܠܐ ܫܦܪ ܥܠܝܗ.",
+  "met": "ܥܒܕ",
+  "not met": "ܠܐ ܥܒܕ",
+  "met {n} of {total}": "ܥܒܕ {n} ܡܢ {total}"
  },
  "examples": {
   "review": {
@@ -3134,7 +3140,6 @@
   "The reply didn't have the expected shape: {bad}.": "lpetgāmā lā hwā ꜣeskēmā dmetsakkē: {bad}.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "petgāmā maṭṭā ltḥumā dꜣurkā, wmettul hānā ꜣetbꜥī men dmutā dtēzal men ꜣaykā dpesqat.",
   "The reply wasn't readable JSON, so this step was wasted.": "petgāmā lā hwā JSON dmetqrē, wmettul hānā hādē dargā ꜣetabdat.",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "buḥrānā ꜣarīm hālēn mḥaššlātā bātar trēn tuqqānē, wmettul hānā tuqqānā lā meškaḥ dnetqnēn. ṭuksā meškaḥ dsānē meddem dlā ꜣetyheb leh, ꜣak dappā dreštā, pengā ꜣaw ṣebwā: hab leh (bꜥbādā, ꜣaw bšlīḥā dmeškaḥ dneqrē dappē dreštā), wbātar rhaṭ tub.",
   "The run stopped.": "rahṭā psaq.",
   "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "rahṭā nged yattīr men {x} rpēpē (max_seconds bsecond-thought.ini), wmettul hānā psaq.",
   "The task is empty. Type what you want into 'set task to'.": "ꜥbādā sraq. ktob mā dṣābē ꜣnt b'sīm ꜥbādā'.",
@@ -3202,7 +3207,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "bāꜥwātā dreštā, {x}: ꜥdakkēl lā mṣayyat. lmepṭaḥhon, {note}",
   "Web requests: {note}": "bāꜥwātā dreštā: {note}",
   "Web search: {q}": "bāꜥutā breštā: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "hpak lrušmā dḥdārā {round}: zꜥorān hwāy mḥaššlātēh ({n}). ḥdārē dbātrēh lā šappar ꜥlēh.",
   "What changed: {url}": "mā deštaḥlap: {url}",
   "What it can do is the same as before.": "mā dmeškaḥ dneꜥbed hākwāt ꜣak dqdām.",
   "What was wrong": "mā dhwā ṭāꜥē",
@@ -3669,7 +3673,15 @@
   "this week": "bšabūꜥā hānā",
   "today": "yawmānā",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% men ṭḥumā yarḥāyā dṣebyānetā d{plan} {cap} (npaq {spent}, ḥaddet l{when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "namus",
+  "Round {n}": "sara {n}",
+  "Rules by round": "namus sara",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "buṛānā ḥarṫan namus 2 tuqqānē lā meška, wmettul ḥānā tuqqānē lā meška. ṭuksā meškaḥ dsānē meddem dlā ꜣetyheb leh, ꜣak dappā dreštā, pengā ꜣaw ṣebwā: hab leh (bꜥbādā, ꜣaw bšlīḥā dmeškaḥ dneqrē dappē dreštā), wbātar rhaṭ tub.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "hpak lrušmā dḥdārā {round}:namus {n} men {total} ꜥḇad. ḥdārē dbātrēh lā šappar ꜥlēh.",
+  "met": "ꜥḇad",
+  "not met": "lā ꜥḇad",
+  "table": "luḥā"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

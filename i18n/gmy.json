@@ -1584,7 +1584,6 @@
   "Using {model}": "𐀐𐀨𐀲𐀂 {model}",
   "Using {model} for the blocks inside": "𐀐𐀨𐀲𐀂 {model} 𐀄𐀟𐀩 𐀠𐀪𐀵 𐀁𐀚𐀵𐀰",
   "Waiting for you to confirm the download…": "𐀕𐀚𐀂 𐀁𐀒𐀳 𐀟𐀞𐀂𐀃𐀮𐀂 𐀏𐀲𐀐𐀔…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀀𐀢 𐀓𐀒𐀫 {round}: 𐀁𐀨𐀑𐀭 𐀞𐀨𐀔𐀲 𐀁𐀐 ({n}). 𐀓𐀒𐀫 𐀕𐀲 𐀀𐀵 𐀃𐀄 𐀟𐀴𐀍 𐀁𐀡𐀁𐀮.",
   "Which Homey device? Give its name, like Kitchen light.": "𐀡𐀴𐀊 Homey 𐀕𐀏𐀙? 𐀈𐀮 𐀃𐀜𐀔, 𐀃𐀄𐀵 𐀞𐀺 𐀔𐀐𐀩𐀍.",
   "Why: {why}": "𐀇𐀀 𐀴: {why}",
   "Woke {n} waiting script.": "𐀁𐀐𐀩𐀮 {n} 𐀮𐀨 𐀕𐀚𐀃𐀭.",
@@ -1756,7 +1755,6 @@
   "Text changed in {n} blocks.": "𐀒𐀵𐀙 ina {n} 𐀵𐀫𐀐𐀩.",
   "Review stuck": "𐀁𐀐𐀮𐀲𐀯 𐀁𐀐𐀵",
   "stuck": "𐀁𐀐𐀵",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𐀁𐀐𐀮𐀲𐀯 𐀕𐀲 𐀉𐀺 𐀁𐀞𐀐𐀮𐀲 𐀵𐀵 𐀒𐀏𐀲 𐀁𐀩𐀁, 𐀃𐀄𐀑 𐀁𐀞𐀐𐀮𐀲 𐀀𐀐𐀲𐀚. 𐀐𐀩𐀯𐀍 𐀔𐀲 𐀞𐀫𐀳𐀐 𐀃𐀄𐀑 𐀁𐀵𐀐, 𐀞𐀑𐀙, 𐀢𐀏𐀲 𐀁𐀳𐀃: 𐀈𐀮 𐀵𐀵 (𐀁𐀚 𐀁𐀏𐀨, 𐀁𐀵𐀐 𐀀𐀏𐀲 𐀞𐀑𐀙 𐀁𐀩𐀄𐀐𐀳), 𐀀𐀞𐀨 𐀁𐀡𐀟.",
   "Using the web": "𐀟𐀨𐀲𐀫",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "𐀵𐀵 𐀞𐀑𐀙 𐀃𐀄𐀑 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲, 𐀵𐀨𐀟𐀨𐀭𐀕𐀜 𐀀𐀚𐀄 𐀁𐀨𐀟. 𐀐𐀩𐀯𐀍 𐀁𐀏𐀨𐀵 𐀟𐀨𐀲𐀫 𐀐𐀩𐀲.",
   "Web address in the task": "𐀃𐀜𐀔 𐀟𐀨𐀲𐀫 𐀁𐀚 𐀁𐀏𐀨",
@@ -1901,7 +1899,15 @@
   "Plex new items": "Plex niwe",
   "Tautulli history": "Tautulli stear",
   "Tautulli watch time": "Tautulli sight-tima",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𐀆𐀵 𐀁𐀛𐀐𐀩 𐀀𐀡 claude.ai 𐀞𐀫𐀒𐀺, 𐀏𐀒𐀙 𐀁𐀄𐀐𐀺𐀲 𐀀𐀙𐀩𐀐𐀕𐀜. 𐀞𐀕 Python 𐀃𐀡𐀮, 𐀏𐀨𐀹 second-thought.ini 𐀁𐀛𐀐, 𐀃𐀏𐀜 𐀵𐀆 𐀏𐀒𐀙 𐀁𐀄𐀐𐀺𐀲 𐀀𐀙𐀩𐀐, 𐀱𐀔𐀡𐀫 𐀳𐀩𐀔, 𐀏𐀒𐀙 𐀳𐀩𐀔 𐀇𐀪, 𐀫𐀒𐀵 𐀫𐀑𐀯𐀳𐀪𐀍 𐀀𐀪𐀵𐀕𐀵."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𐀆𐀵 𐀁𐀛𐀐𐀩 𐀀𐀡 claude.ai 𐀞𐀫𐀒𐀺, 𐀏𐀒𐀙 𐀁𐀄𐀐𐀺𐀲 𐀀𐀙𐀩𐀐𐀕𐀜. 𐀞𐀕 Python 𐀃𐀡𐀮, 𐀏𐀨𐀹 second-thought.ini 𐀁𐀛𐀐, 𐀃𐀏𐀜 𐀵𐀆 𐀏𐀒𐀙 𐀁𐀄𐀐𐀺𐀲 𐀀𐀙𐀩𐀐, 𐀱𐀔𐀡𐀫 𐀳𐀩𐀔, 𐀏𐀒𐀙 𐀳𐀩𐀔 𐀇𐀪, 𐀫𐀒𐀵 𐀫𐀑𐀯𐀳𐀪𐀍 𐀀𐀪𐀵𐀕𐀵.",
+  "Rule": "𐀡𐀫𐀳𐀐",
+  "Round {n}": "𐀓𐀒𐀫 {n}",
+  "Rules by round": "𐀡𐀫𐀳𐀐 𐀓𐀒𐀫",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𐀡𐀫𐀳𐀐 𐀉𐀺 𐀓𐀒𐀫 𐀀𐀐𐀲𐀚, 𐀃𐀄𐀑 𐀁𐀞𐀐𐀮𐀲 𐀀𐀐𐀲𐀚. 𐀐𐀩𐀯𐀍 𐀔𐀲 𐀞𐀫𐀳𐀐 𐀃𐀄𐀑 𐀁𐀵𐀐, 𐀞𐀑𐀙, 𐀢𐀏𐀲 𐀁𐀳𐀃: 𐀈𐀮 𐀵𐀵 (𐀁𐀚 𐀁𐀏𐀨, 𐀁𐀵𐀐 𐀀𐀏𐀲 𐀞𐀑𐀙 𐀁𐀩𐀄𐀐𐀳), 𐀀𐀞𐀨 𐀁𐀡𐀟.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "𐀀𐀠 𐀁𐀠 𐀐𐀇𐀍 𐀀𐀢 𐀓𐀒𐀫 {round}:e-ke 𐀡𐀫𐀳𐀐 {n} 𐀳 {total}. 𐀓𐀒𐀫 𐀕𐀲 𐀀𐀵 𐀃𐀄 𐀟𐀴𐀍 𐀁𐀡𐀁𐀮.",
+  "met": "𐀁𐀐",
+  "not met": "𐀀𐀐",
+  "met {n} of {total}": "𐀁𐀐 {n} 𐀳 {total}"
  },
  "examples": {
   "review": {
@@ -3118,7 +3124,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "di-ku-tu-o e-ro-te-ma-ta, {x}: e-ti o-u a-ko-wo-e-i. a-na-pe-se-e, {note}",
   "Web requests: {note}": "di-ku-tu-o e-ro-te-ma-ta: {note}",
   "Web search: {q}": "di-ku-tu-o ze-te-ma: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "a-pi e-pi ke-di-jo a-pu ku-ko-ro {round}: e-ra-ki-sa pa-ra-ma-ta e-ke ({n}). ku-ko-ro me-ta a-to o-u pe-ti-jo e-po-e-se.",
   "Which Homey device? Give its name, like Kitchen light.": "po-ti-ja Homey me-ka-na? do-se o-no-ma, o-u-to pa-wo ma-ke-re-jo.",
   "Why: {why}": "di-a ti: {why}",
   "Write a first draft": "ka-ra-pe po-ro-to ke-di-jo",
@@ -3453,7 +3458,6 @@
   "{n} of them can change things": "{n} a-me-u-si-ja ka-re-ma-ta",
   "Review stuck": "e-ke-se-ta-si e-ke-to",
   "stuck": "e-ke-to",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "e-ke-se-ta-si me-ta du-wo e-pa-ke-se-ta to-to ko-ka-ta e-re-e, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe.",
   "Web address in the task": "o-no-ma pe-ra-ta-ro e-ne e-ka-ra",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "e-ka-ra o-no-ma pe-ra-ta-ro e-re-e, o-u-ki a-no-ke to-to po-pe. pe-ra-ta-ro e-pi ra-ta ka-ra-pe, e pa-ki-na wo-ka e-ne e-ka-ra te-ke.",
   "Sources not read": "pa-ki-na a-na-ke-no-sa",
@@ -3678,7 +3682,15 @@
   "this week": "e-pa-do-ma to-to",
   "today": "to-to a-ka-ru-wo",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% te-re-ma me-ni-jo su-ma-po-ro {plan} {cap} (a-na-re-ke {spent}, ne-wo {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "po-ro-te-ke",
+  "Round {n}": "ku-ko-ro {n}",
+  "Rules by round": "po-ro-te-ke ku-ko-ro",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "po-ro-te-ke du-wo ku-ko-ro a-ke-ta-ne, o-u-ki e-pa-ke-se-ta a-ke-ta-ne. ke-re-si-jo ma-ta pa-ro-te-ke o-u-ki e-to-ke, pa-ki-na, pu-ka-ta e-te-o: do-se to-to (e-ne e-ka-ra, e-to-ke a-ka-ta pa-ki-na e-re-u-ke-te), a-pa-ra e-po-pe.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "a-pi e-pi ke-di-jo a-pu ku-ko-ro {round}:e-ke po-ro-te-ke {n} te {total}. ku-ko-ro me-ta a-to o-u pe-ti-jo e-po-e-se.",
+  "met": "e-ke",
+  "not met": "a-ke",
+  "table": "pu-ka-ta"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

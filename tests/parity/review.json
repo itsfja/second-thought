@@ -1,0 +1,212 @@
+{
+ "about": "review (#424): parse_rules splits the criteria into rules (semicolons or one per line), review_verdicts works out the reviewer's verdict for each rule from its JSON reply, and stuck_rule finds the rule that failed in both of the last two rounds. The runtime (parse_rules, review_verdicts, stuck_rule in python/second_thought/core.py) and the page (parseRules, reviewVerdicts, stuckRule in web/editor/19-interpreter.js) give the same answers; tests/unit/test_review.py and tests/editor/review.test.cjs both read this.",
+ "parse_rules": {
+  "answers": [
+   [
+    "accurate and specific; beginner friendly",
+    [
+     "accurate and specific",
+     "beginner friendly"
+    ]
+   ],
+   [
+    "under 200 words\njargon explained",
+    [
+     "under 200 words",
+     "jargon explained"
+    ]
+   ],
+   [
+    "one; two\n\nthree ;  four ",
+    [
+     "one",
+     "two",
+     "three",
+     "four"
+    ]
+   ],
+   [
+    "",
+    []
+   ],
+   [
+    ";;\n;",
+    []
+   ]
+  ]
+ },
+ "review_verdicts": {
+  "answers": [
+   [
+    [
+     "accurate",
+     "short"
+    ],
+    {
+     "approved": false,
+     "rules": [
+      {
+       "rule": "accurate",
+       "met": true
+      },
+      {
+       "rule": "short",
+       "met": false,
+       "problem": "231 words",
+       "shows": "the whole draft"
+      }
+     ],
+     "problems": [
+      "231 words"
+     ]
+    },
+    {
+     "approved": false,
+     "problems": [
+      "231 words"
+     ],
+     "met": 1,
+     "unmet": [
+      "short"
+     ],
+     "verdicts": [
+      {
+       "rule": "accurate",
+       "met": true,
+       "problem": "",
+       "shows": ""
+      },
+      {
+       "rule": "short",
+       "met": false,
+       "problem": "231 words",
+       "shows": "the whole draft"
+      }
+     ]
+    }
+   ],
+   [
+    [
+     "accurate",
+     "short"
+    ],
+    {
+     "approved": true,
+     "problems": []
+    },
+    {
+     "approved": true,
+     "problems": [],
+     "met": 2,
+     "unmet": [],
+     "verdicts": []
+    }
+   ],
+   [
+    [
+     "accurate",
+     "short"
+    ],
+    {
+     "approved": false,
+     "problems": [
+      "too vague"
+     ]
+    },
+    {
+     "approved": false,
+     "problems": [
+      "too vague"
+     ],
+     "met": 0,
+     "unmet": [],
+     "verdicts": []
+    }
+   ],
+   [
+    [
+     "accurate",
+     "short"
+    ],
+    {
+     "approved": false,
+     "rules": [
+      {
+       "rule": "short",
+       "met": false,
+       "problem": "too long"
+      },
+      {
+       "rule": "accurate",
+       "met": true
+      }
+     ]
+    },
+    {
+     "approved": false,
+     "problems": [
+      "too long"
+     ],
+     "met": 1,
+     "unmet": [
+      "short"
+     ],
+     "verdicts": [
+      {
+       "rule": "accurate",
+       "met": true,
+       "problem": "",
+       "shows": ""
+      },
+      {
+       "rule": "short",
+       "met": false,
+       "problem": "too long",
+       "shows": ""
+      }
+     ]
+    }
+   ]
+  ]
+ },
+ "stuck_rule": {
+  "answers": [
+   [
+    [
+     "a"
+    ],
+    [
+     "a"
+    ],
+    "a"
+   ],
+   [
+    [
+     "a",
+     "b"
+    ],
+    [
+     "b",
+     "c"
+    ],
+    "b"
+   ],
+   [
+    [
+     "a"
+    ],
+    [
+     "b"
+    ],
+    null
+   ],
+   [
+    [],
+    [
+     "a"
+    ],
+    null
+   ]
+  ]
+ }
+}

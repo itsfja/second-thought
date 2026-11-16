@@ -1584,7 +1584,6 @@
   "Using {model}": "משמש ב-{model}",
   "Using {model} for the blocks inside": "משמש ב-{model} ללבנין דבגוה",
   "Waiting for you to confirm the download…": "מתין דתאשר אחתתא…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "תב לטופסא מן סבובא {round}: הוו ביה פגמין זעירין ({n}). סבוביא דבתריה לא אתקנוהי.",
   "Which Homey device? Give its name, like Kitchen light.": "הי מאנא דHomey? הב שמיה, כגון Kitchen light.",
   "Why: {why}": "למה: {why}",
   "Woke {n} waiting script.": "אתער {n} סדר מתין.",
@@ -1756,7 +1755,6 @@
   "Text changed in {n} blocks.": "אשתני מללא ב {n} לבנין.",
   "Review stuck": "בדיקא אתעכבת",
   "stuck": "מתעכב",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
   "Using the web": "בסיוע רשתא",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "דפא הדין לא מצי לאשתמשא ברשתא, הלכך טופסא דלעיל אתכתיב בלאו הכי. פרוגרמא דאפיקו משתמש ברשתא.",
   "Web address in the task": "כתובת רשתא בעבידתא",
@@ -1901,7 +1899,15 @@
   "Plex new items": "Plex jdyd",
   "Tautulli history": "Tautulli tarikh",
   "Tautulli watch time": "Tautulli wqt shw",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "הדין עמודא על חשבונך די-claude.ai רהט, ולהן לא מני טבע כל חד מן שמשתא. אפק לפיתון, במפתחיא ב-second-thought.ini, וימסר הדין אסתימא מה טבע כל שמשתא, תכניתה ותחומה, וכל רביא, אתמני על ההוא חושבנא."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "הדין עמודא על חשבונך די-claude.ai רהט, ולהן לא מני טבע כל חד מן שמשתא. אפק לפיתון, במפתחיא ב-second-thought.ini, וימסר הדין אסתימא מה טבע כל שמשתא, תכניתה ותחומה, וכל רביא, אתמני על ההוא חושבנא.",
+  "Rule": "ܫܘܦܪܐ",
+  "Round {n}": "ܕܘܪܐ {n}",
+  "Rules by round": "ܫܘܦܪ̈ܐ ܕܘܪ̈ܐ",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ܒܕܝܩܬܐ ܐܫܟܚܬܐ ܬܪ̈ܝܢ ܕܘܪ̈ܝܢ ܚܕ ܫܘܦܪܐ, ܗܠܟܐ ܬܩܢܐ ܠܐ ܡܨܦܪܐ ܠܗ̇. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "תב לטופסא מן סבובא {round}:ܝܬܝܪ ܡܢ ܫܘܦܪ̈ܐ ({n} ܡܢ {total}). סבוביא דבתריה לא אתקנוהי.",
+  "met": "ܥܒܕ",
+  "not met": "ܠܐ ܥܒܕ",
+  "met {n} of {total}": "ܥܒܕ {n} ܡܢ {total}"
  },
  "examples": {
   "review": {
@@ -3118,7 +3124,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "בעותי רשתא, {x}: עדיין לא שמעין. לאדלקא יתהון, {note}",
   "Web requests: {note}": "בעותי רשתא: {note}",
   "Web search: {q}": "בעו ברשתא: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "תב לטופסא מן סבבא {round}: הוו ביה קלקלין זעירין ({n}). סבביא דבתרה לא שפרו עליה.",
   "Which Homey device? Give its name, like Kitchen light.": "איזה מאן Homey? הב שמיה, כגון Kitchen light.",
   "Why: {why}": "למה: {why}",
   "Write a first draft": "כתוב טופסא קדמאה",
@@ -3453,7 +3458,6 @@
   "{n} of them can change things": "{n} מנהון משנין מדעם",
   "Review stuck": "בדיקא אתעכבת",
   "stuck": "מתעכב",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "בדיקא אשכחת הנהו מומי גופייהו בתר תרתין תקנתא, הלכך תקנתא לא מצי מתקנא להון. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
   "Web address in the task": "כתובת רשתא בעבידתא",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "עבידתא מדכרא כתובת רשתא, ברם דרגא הדין לא מצי למפתחה. סמן 'בסיוע רשתא' על לבנתא, או שוי מילי דדפא בעבידתא.",
   "Sources not read": "מקורין דלא אתקריו",
@@ -3678,7 +3682,15 @@
   "this week": "בשבועא הדין",
   "today": "אידנא",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% מן תחומא דירחא {cap} די תכניתא {plan} ({spent} טבע, אתחדת {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "ܫܘܦܪܐ",
+  "Round {n}": "ܕܘܪܐ {n}",
+  "Rules by round": "ܫܘܦܪ̈ܐ ܕܘܪ̈ܐ",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "ܒܕܝܩܬܐ ܐܫܟܚܬܐ ܬܪ̈ܝܢ ܕܘܪ̈ܝܢ ܚܕ ܫܘܦܪܐ, ܗܠܟܐ ܬܩܢܐ ܠܐ ܡܨܦܪܐ ܠܗ̇. דלמא חסיר לפרוגרמא מידעם דלא אתיהיב ליה, כגון דפא דאינטרנט, קובצא או עובדא: הב ליה (בעבידתא, למשל, או על ידי שליחא דקרי דפי אינטרנט), ותוב הריץ.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "תב לטופסא מן סבבא {round}:ܝܬܝܪ ܡܢ ܫܘܦܪ̈ܐ ({n} ܡܢ {total}). סבביא דבתרה לא שפרו עליה.",
+  "met": "ܥܒܕ",
+  "not met": "ܠܐ ܥܒܕ",
+  "table": "ܠܘܚܐ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

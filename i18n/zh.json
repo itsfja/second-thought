@@ -1583,7 +1583,6 @@
   "Using {model}": "正在使用 {model}",
   "Using {model} for the blocks inside": "里面的积木正在使用 {model}",
   "Waiting for you to confirm the download…": "等待你确认下载…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "回到了第 {round} 轮的草稿：它的问题最少（{n} 个）。之后的几轮没有改进它。",
   "Which Homey device? Give its name, like Kitchen light.": "哪个 Homey 设备？请给出它的名字，例如 厨房灯。",
   "Why: {why}": "原因：{why}",
   "Woke {n} waiting script.": "唤醒了 {n} 个等待中的脚本。",
@@ -1755,7 +1754,6 @@
   "Text changed in {n} blocks.": "{n} 个积木的文字有改动。",
   "Review stuck": "审阅卡住了",
   "stuck": "卡住",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
   "Using the web": "使用网络",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "这个页面无法使用网络，所以上面的草稿是在没有网络的情况下写的。导出的程序会使用网络。",
   "Web address in the task": "任务中的网址",
@@ -1900,7 +1898,15 @@
   "Plex new items": "Plex 新增内容",
   "Tautulli history": "Tautulli 历史",
   "Tautulli watch time": "Tautulli 观看时长",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "此页面通过你的 claude.ai 账户运行，因此不统计各服务的花销。导出为 Python 并在 second-thought.ini 中填好密钥后，此工具会报告每个服务的花销、套餐与上限，以及超额部分，计数于那台计算机上。"
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "此页面通过你的 claude.ai 账户运行，因此不统计各服务的花销。导出为 Python 并在 second-thought.ini 中填好密钥后，此工具会报告每个服务的花销、套餐与上限，以及超额部分，计数于那台计算机上。",
+  "Rule": "规则",
+  "Round {n}": "第 {n} 轮",
+  "Rules by round": "各轮规则",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "同一条规则连续两轮未满足，所以修改无法解决。程序可能缺少某些未提供的东西，例如网页、文件或事实：请把它提供给程序（比如写在任务里，或通过能读网页的代理），然后重新运行。",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "回到了第 {round} 轮的草稿：它满足的规则最多（{total} 条中的 {n} 条）。之后的轮次没有改进它。",
+  "met": "满足",
+  "not met": "未满足",
+  "met {n} of {total}": "满足 {total} 条中的 {n} 条"
  },
  "examples": {
   "review": {
@@ -3117,7 +3123,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "网络请求，{x}：仍未在收听。要打开它们：{note}",
   "Web requests: {note}": "网络请求：{note}",
   "Web search: {q}": "网络搜索：{q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "回到了第 {round} 轮的草稿：它的问题最少（{n} 个）。之后的几轮没有改进它。",
   "Which Homey device? Give its name, like Kitchen light.": "哪个 Homey 设备？请给出它的名字，例如 厨房灯。",
   "Why: {why}": "原因：{why}",
   "Write a first draft": "写第一版草稿",
@@ -3452,7 +3457,6 @@
   "{n} of them can change things": "其中 {n} 个可以改动内容",
   "Review stuck": "审阅卡住了",
   "stuck": "卡住",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "两次修改后，审阅仍提出相同的问题，所以修改无法解决它们。程序可能缺少它没有得到的东西，比如一个网页、一个文件或一个事实：把它给程序（例如写进任务里，或通过能读取网页的代理），然后再运行一次。",
   "Web address in the task": "任务中的网址",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "任务里提到了一个网址，但这一步无法打开它。在积木上勾选“使用网络”，或者把网页的文字放进任务里。",
   "Sources not read": "未读过的来源",
@@ -3677,6 +3681,14 @@
   "this week": "本周",
   "today": "今天",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{plan} 套餐月度上限 {cap} 的 {pct}%（已支出 {spent}，{when} 重置）",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "规则",
+  "Round {n}": "第 {n} 轮",
+  "Rules by round": "各轮规则",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "同一条规则连续两轮未满足，所以修改无法解决。程序可能缺少某些未提供的东西，例如网页、文件或事实：请把它提供给程序（比如写在任务里，或通过能读网页的代理），然后重新运行。",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "回到了第 {round} 轮的草稿：它满足的规则最多（{total} 条中的 {n} 条）。之后的轮次没有改进它。",
+  "met": "满足",
+  "not met": "未满足",
+  "table": "表格"
  }
 }
