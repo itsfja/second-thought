@@ -1584,7 +1584,6 @@
   "Using {model}": "{model} 𒄿𒇷𒅅𒆠",
   "Using {model} for the blocks inside": "{model} 𒀀𒈾 𒇷𒅁𒈾𒋾𒅎 𒊭 𒇷𒅁𒁉 𒄿𒇷𒅅𒆠",
   "Waiting for you to confirm the download…": "𒆪𒌦𒈾𒄠 𒊭 𒇷𒆠𒅎 𒄿𒋡𒀠…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒊭 𒊓𒄴𒄷𒌨𒋾𒅎 {round} 𒄿𒌅𒌨: 𒄭𒁕𒌅𒋗 𒈠𒁕 ({n}). 𒊓𒄴𒄷𒊏𒌅𒌝 𒉿𒅈𒆠𒀀𒌅𒌝 𒌌 𒌑𒊭𒋾𒊏𒋗.",
   "Which Homey device? Give its name, like Kitchen light.": "𒀀𒄿𒌅𒌝 𒌑𒉡𒌓 Homey? 𒋗𒌝𒊭 𒄿𒁲𒅔, 𒆠𒈠 Kitchen light.",
   "Why: {why}": "𒄠𒈪𒉌: {why}",
   "Woke {n} waiting script.": "{n} 𒂊𒁉𒅖𒋫𒄠 𒊭 𒄿𒋡𒇻 𒀉𒆠.",
@@ -1756,7 +1755,6 @@
   "Text changed in {n} blocks.": "𒅆𒅁𒊒 𒄿𒈾 {n} 𒀊𒉌 𒊭𒉡.",
   "Review stuck": "𒁉𒊒𒌝 𒅅𒆷",
   "stuck": "𒅗𒇷",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒁉𒊒𒌝 𒉿𒅈𒆠 𒅆𒈾 𒋾𒅅𒉌 𒄭𒁕𒋾𒅎 𒅖𒋾𒀀𒋾𒅎 𒅅𒁉, 𒀸𒋗𒌝 𒆠𒄠 𒋾𒅅𒉡𒌝 𒌌 𒄿𒇷 𒀀𒈾 𒋗𒋼𒋗𒊑𒅎. 𒀀𒈾 𒈾𒊑𒅎 𒈪𒅎𒈠 𒊭 𒆷 𒄿𒇷𒅅𒄣 𒄩𒅆𒄴, 𒆠𒈠 𒌅𒌒𒁉𒅎, 𒅆𒀉𒊑𒅎 𒌑𒇻 𒀀𒉿𒋾𒅎 𒆠𒈾𒋾𒅎: 𒋗𒌅 𒀀𒈾 𒈾𒊑𒅎 𒆠𒅖 (𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒇻 𒄿𒈾 𒁲𒈪𒅎 𒊭 𒌅𒌒𒁉 𒄿𒊭𒊍𒋢), 𒌑 𒌅𒌨 𒂊𒁍𒍑.",
   "Using the web": "𒄿𒈾 𒆠 𒊺𒋾𒅎",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "𒌅𒌒𒁍𒌝 𒀭𒉡𒌝 𒀀𒈾 𒊺𒋾𒅎 𒌌 𒄿𒇷, 𒀸𒋗𒌝 𒆠𒄠 𒈠𒀸𒁕𒊒𒌝 𒂊𒇷𒅖 𒄿𒈾 𒁀𒇻𒌝 𒊺𒋾 𒊭𒁲𒅕. 𒈾𒊒𒌝 𒊭 𒌑𒊺𒍮 𒊺𒋫𒄠 𒄿𒆷𒀝𒆠.",
   "Web address in the task": "𒋗𒈬𒌝 𒊭 𒊺𒋾𒅎 𒄿𒈾 𒅆𒁉𒅕𒋾𒅎",
@@ -1901,7 +1899,15 @@
   "Plex new items": "Plex 𒈾𒊍𒊒",
   "Tautulli history": "Tautulli 𒋫𒅈𒋛𒋢",
   "Tautulli watch time": "Tautulli 𒈠𒊍𒊓𒅈𒌅 𒊓 𒌑𒈪",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𒌅𒌒𒁍𒌝 𒄿𒈾 𒉌𒅅𒅗𒊍𒋛𒅎 𒊭 claude.ai 𒌑𒊭𒅈𒁍, 𒅗𒊍𒉺𒀜 𒅗𒆷 𒀊𒅗𒀠𒇷𒅎 𒄿𒈾 𒌅𒌒𒊭𒅈𒊒𒋾𒅎 𒀭𒉌𒋾𒅎 𒌌 𒅎𒈠𒀭𒉌. 𒀀𒈾 Python 𒋗𒌨𒋗𒌒, 𒅗𒀝𒅗𒋾𒅎 𒄿𒈾 second-thought.ini 𒋗𒆪𒌦, 𒌑 𒌑𒉡𒌅𒌝 𒅗𒊍𒁉𒅎 𒅗𒆷 𒀊𒅗𒀠𒇷𒅎 𒈾𒀜𒉡, 𒊑𒅅𒋛𒅎 𒌑 𒈪𒄑𒊏𒄠, 𒌑 𒅗𒊍𒁉𒅎 𒂊𒇷 𒈪𒄑𒊑𒅎, 𒄿𒈾 𒌅𒌒𒊭𒅈𒊒𒋾𒅎 𒀭𒉌𒋾𒅎 𒅎𒈠𒀭𒉌, 𒄿𒋡𒀊𒁉."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "𒌅𒌒𒁍𒌝 𒄿𒈾 𒉌𒅅𒅗𒊍𒋛𒅎 𒊭 claude.ai 𒌑𒊭𒅈𒁍, 𒅗𒊍𒉺𒀜 𒅗𒆷 𒀊𒅗𒀠𒇷𒅎 𒄿𒈾 𒌅𒌒𒊭𒅈𒊒𒋾𒅎 𒀭𒉌𒋾𒅎 𒌌 𒅎𒈠𒀭𒉌. 𒀀𒈾 Python 𒋗𒌨𒋗𒌒, 𒅗𒀝𒅗𒋾𒅎 𒄿𒈾 second-thought.ini 𒋗𒆪𒌦, 𒌑 𒌑𒉡𒌅𒌝 𒅗𒊍𒁉𒅎 𒅗𒆷 𒀊𒅗𒀠𒇷𒅎 𒈾𒀜𒉡, 𒊑𒅅𒋛𒅎 𒌑 𒈪𒄑𒊏𒄠, 𒌑 𒅗𒊍𒁉𒅎 𒂊𒇷 𒈪𒄑𒊑𒅎, 𒄿𒈾 𒌅𒌒𒊭𒅈𒊒𒋾𒅎 𒀭𒉌𒋾𒅎 𒅎𒈠𒀭𒉌, 𒄿𒋡𒀊𒁉.",
+  "Rule": "𒆠𒉡𒌝",
+  "Round {n}": "𒊓𒄴𒄩𒁍𒊒 {n}",
+  "Rules by round": "𒆠𒈾𒌅𒌝 𒊭 𒊓𒄴𒄩𒁍𒊒",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "𒆠𒉡𒌝 𒉿𒅈𒆠 𒅆𒈾 𒊓𒄴𒄩𒁍𒌨𒋾𒅎 𒅖𒋫𒋾𒅎 𒅅𒁉, 𒀸𒋗𒌝 𒆠𒄠 𒋾𒅅𒉡𒌝 𒌌 𒄿𒇷 𒀀𒈾 𒋗𒋼𒋗𒊑𒅎. 𒀀𒈾 𒈾𒊑𒅎 𒈪𒅎𒈠 𒊭 𒆷 𒄿𒇷𒅅𒄣 𒄩𒅆𒄴, 𒆠𒈠 𒌅𒌒𒁉𒅎, 𒅆𒀉𒊑𒅎 𒌑𒇻 𒀀𒉿𒋾𒅎 𒆠𒈾𒋾𒅎: 𒋗𒌅 𒀀𒈾 𒈾𒊑𒅎 𒆠𒅖 (𒄿𒈾 𒅆𒁉𒅕𒋾𒅎 𒇻 𒄿𒈾 𒁲𒈪𒅎 𒊭 𒌅𒌒𒁉 𒄿𒊭𒊍𒋢), 𒌑 𒌅𒌨 𒂊𒁍𒍑.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒊭 𒊓𒄴𒄷𒌨𒋾𒅎 {round} 1e2ḫâtuš 𒆠𒈾𒋾𒅎 {n} 𒊭 {total}. 𒊓𒄴𒄷𒊏𒌅𒌝 𒉿𒅈𒆠𒀀𒌅𒌝 𒌌 𒌑𒊭𒋾𒊏𒋗.",
+  "met": "1e2ḫâtuš",
+  "not met": "𒌌 1e2ḫâtu",
+  "met {n} of {total}": "1e2ḫâtu {n} 𒊭 {total}"
  },
  "examples": {
   "review": {
@@ -3118,7 +3124,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "erišāt šētim, {x}: adi inanna ul išemme. ana petîšina, {note}",
   "Web requests: {note}": "erišāt šētim: {note}",
   "Web search: {q}": "ḫiāṭ šētim: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "ana mašṭarim ša saḫḫurtim {round} itūr: ḫiṭâtušu maṭâ ({n}). saḫḫurātum warkiātum ul ušatirāšu.",
   "Which Homey device? Give its name, like Kitchen light.": "ayyītum unūt Homey? šumša idin, kīma Kitchen light.",
   "Why: {why}": "ammīni: {why}",
   "Write a first draft": "mašṭaram panîm šaṭārum",
@@ -3453,7 +3458,6 @@
   "{n} of them can change things": "{n} ina libbišunu mimma ušannâ",
   "Review stuck": "bīrum ikla",
   "stuck": "kali",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "bīrum warki šinā tiqnī ḫiṭâtim ištiātim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš.",
   "Web address in the task": "šumum ša šētim ina šipirtim",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "šipirtum šuma ša šētim iqbi, u ṭēmum annûm ul ipette. ina libitti 'ina qê šētim' šumi, ulū awâtim ša ṭuppim ina šipirtim šukun.",
   "Sources not read": "šumū lā šasû",
@@ -3678,7 +3682,15 @@
   "this week": "ina šebûtim annîtim",
   "today": "ūmum annûm",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% ša miṣrim ša warḫim ša riksim {plan} {cap} ({spent} nadnu, {when} utēr)",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "kīnum",
+  "Round {n}": "saḫḫāburu {n}",
+  "Rules by round": "kīnātum ša saḫḫāburu",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "kīnum warki šinâ saḫḫāburtim ištâtim iqbi, aššum kīam tiqnum ul ile ana šutēšurim. ana narêm mimma ša lā ileqqû ḫašiḫ, kīma ṭuppim, šiṭrim ulū awatim kīnatim: šūtu ana narêm qīš (ina šipirtim lū ina ṭēmim ša ṭuppī išassû), u tūr epuš.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "ana mašṭarim ša saḫḫurtim {round} 1e2ḫâtuš kīnatim {n} ša {total}. saḫḫurātum warkiātum ul ušatirāšu.",
+  "met": "1e2ḫâtuš",
+  "not met": "ul 1e2ḫâtu",
+  "table": "ṭuppi"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

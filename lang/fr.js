@@ -865,7 +865,6 @@
 "Using {model}":"Utilise {model}",
 "Using {model} for the blocks inside":"Utilise {model} pour les blocs à l'intérieur",
 "Waiting for you to confirm the download…":"En attente de votre confirmation du téléchargement…",
-"Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.":"Retour au brouillon du tour {round} : il avait le moins de problèmes ({n}). Les tours suivants ne l'ont pas amélioré.",
 "Which Homey device? Give its name, like Kitchen light.":"Quel appareil Homey ? Donnez son nom, comme Kitchen light.",
 "Why: {why}":"Pourquoi : {why}",
 "Woke {n} waiting script.":"{n} script en attente réveillé.",
@@ -1037,7 +1036,6 @@
 "Text changed in {n} blocks.":"Texte modifié dans {n} blocs.",
 "Review stuck":"Relecture bloquée",
 "stuck":"bloqué",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
 "Using the web":"En utilisant le web",
 "This page can't use the web, so the draft above was written without it. The exported program uses the web.":"Cette page ne peut pas utiliser le web : le brouillon ci-dessus a été écrit sans. Le programme exporté utilise le web.",
 "Web address in the task":"Adresse web dans la tâche",
@@ -1182,7 +1180,15 @@
 "Plex new items":"nouveaux éléments Plex",
 "Tautulli history":"historique Tautulli",
 "Tautulli watch time":"temps de visionnage Tautulli",
-"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"La page tourne sur votre compte claude.ai et ne compte donc pas les dépenses de chaque service. Exportez en Python, avec les clés dans second-thought.ini, et cet outil dira ce que chaque service a dépensé, son offre et son plafond, et tout dépassement, compté sur cet ordinateur."
+"The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.":"La page tourne sur votre compte claude.ai et ne compte donc pas les dépenses de chaque service. Exportez en Python, avec les clés dans second-thought.ini, et cet outil dira ce que chaque service a dépensé, son offre et son plafond, et tout dépassement, compté sur cet ordinateur.",
+"Rule":"Règle",
+"Round {n}":"tour {n}",
+"Rules by round":"Règles par tour",
+"The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La même règle n'a pas été respectée pendant deux tours d'affilée : réviser ne peut donc pas la corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
+"Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Retour au brouillon du tour {round} il respectait le plus de règles ({n} sur {total}). Les tours suivants ne l'ont pas amélioré.",
+"met":"respectée",
+"not met":"non respectée",
+"met {n} of {total}":"{n} sur {total} respectées"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -1767,7 +1773,6 @@
 "Web requests, {x}: still not listening. To turn them on, {note}":"Requêtes web, {x} : toujours pas à l'écoute. Pour les activer, {note}",
 "Web requests: {note}":"Requêtes web : {note}",
 "Web search: {q}":"Recherche web : {q}",
-"Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.":"Retour au brouillon du tour {round} : il avait le moins de problèmes ({n}). Les tours suivants ne l'ont pas amélioré.",
 "Which Homey device? Give its name, like Kitchen light.":"Quel appareil Homey ? Donnez son nom, comme Kitchen light.",
 "Why: {why}":"Pourquoi : {why}",
 "Write a first draft":"Écrire un premier brouillon",
@@ -2102,7 +2107,6 @@
 "{n} of them can change things":"{n} d'entre eux peuvent modifier des choses",
 "Review stuck":"Relecture bloquée",
 "stuck":"bloqué",
-"The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La relecture a relevé les mêmes problèmes après deux révisions : réviser ne peut donc pas les corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
 "Web address in the task":"Adresse web dans la tâche",
 "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.":"La tâche cite une adresse web, mais cette étape ne peut pas l'ouvrir. Cochez 'en utilisant le web' sur le bloc, ou mettez le texte de la page dans la tâche.",
 "Sources not read":"Sources non lues",
@@ -2327,6 +2331,14 @@
 "this week":"cette semaine",
 "today":"aujourd'hui",
 "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})":"{pct}% du plafond mensuel de {cap} de l'offre {plan} ({spent} dépensés, revient à {when})",
-"{window} {x}":"{window} {x}"
+"{window} {x}":"{window} {x}",
+"Rule":"Règle",
+"Round {n}":"tour {n}",
+"Rules by round":"Règles par tour",
+"The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.":"La même règle n'a pas été respectée pendant deux tours d'affilée : réviser ne peut donc pas la corriger. Il manque peut-être au programme quelque chose qu'on ne lui a pas donné, comme une page web, un fichier ou un fait : donnez-le-lui (dans la tâche, par exemple, ou via un agent qui sait lire des pages web), puis relancez.",
+"Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.":"Retour au brouillon du tour {round} il respectait le plus de règles ({n} sur {total}). Les tours suivants ne l'ont pas amélioré.",
+"met":"respectée",
+"not met":"non respectée",
+"table":"tableau"
 }
 };

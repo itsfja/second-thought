@@ -118,6 +118,12 @@ window.claude = { use: async n => {
       const input = {}; m[2].split(',').map(x => x.trim()).filter(Boolean).forEach((k, i) => input[k] = String(500 + i * 350));
       return Object.assign({ tool:m[1], input, why:'test' }, p.includes('Planning is on') ? { plan:['test plan step'] } : {});
     }
+    if (p.includes('"rules"')) {  // a rule-by-rule review prompt (#424): answer in the same shape
+      reviews++;
+      const rs = (p.match(/^\d+\. .+$/gm) || []).map(l => l.replace(/^\d+\. /, ''));
+      const ap = reviews % 2 === 0;
+      return { approved:ap, rules:rs.map(r => ({ rule:r, met:ap, problem:ap ? '' : 'too vague', shows:'' })), problems:ap ? [] : ['too vague'] };
+    }
     if (p.includes('"approved"')) { reviews++; return { approved:reviews % 2 === 0, problems:reviews % 2 ? ['too vague'] : [] }; }
     if (p.includes('"items": [<objects')) return [{ title:'A', score:4 }, { title:'B', score:9 }];
     if (p.includes('"items": [<short strings>]')) return ['idea one', 'idea two', 'idea three'];
@@ -472,7 +478,7 @@ def review_loop_prog(rounds=3):
     fix = blk("math_change", fields={"VAR": {"id": "v_n"}}, inputs={"DELTA": nm(1)},
               nxt=blk("rb_set_draft", inputs={"TEXT": join(tx("v"), getv("v_n"))}))
     return with_vars(script(setv("v_n", nm(1)), blk("rb_set_draft", inputs={"TEXT": join(tx("v"), getv("v_n"))}),
-                            blk("rb_reflect", inputs={"CRITERIA": tx("clear"), "ROUNDS": nm(rounds), "FIX": {"block": fix}}),
+                            blk("rb_reflect", inputs={"CRITERIA": tx("clear; short; titled"), "ROUNDS": nm(rounds), "FIX": {"block": fix}}),
                             add(val(blk("rb_draft"))), add(val(blk("rb_problems")))), var("v_n", "n"))
 
 

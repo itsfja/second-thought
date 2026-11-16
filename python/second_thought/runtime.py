@@ -19,8 +19,8 @@ from .settings import RUNTIME_VERSION, WHERE_KEYS, on_github_actions
 from .providers import CURRENCY, ModelCalls, amount_text, fixed_rate, band_text, call_cost, model_byline, model_label, money, per_dollar, rate_note
 from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, HA_WATCH_SECONDS, LOG_DIR, MAX_DEPTH, MAX_SCRIPTS, MAX_SECONDS, MAX_STEPS,
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
-    _locked, _need_picture, _private_open, _short, _write_json, clean_svg, field_list, num, read_text_file, record_schema, round_js, same_problem,
-    to_bool, to_list, to_record, to_str)
+    _locked, _need_picture, _private_open, _short, _write_json, clean_svg, field_list, num, parse_rules, read_text_file, record_schema, review_verdicts,
+    round_js, stuck_rule, to_bool, to_list, to_record, to_str)
 from .connectors import Connections
 from .mcp import MCPTools
 from .agent import AgentTools
@@ -1034,52 +1034,80 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 
     @contextlib.contextmanager
     def reviewing(self):
-        """Around a 'review … up to N rounds' loop: remembers each round's problems and its best draft."""
+        """Around a 'review … up to N rounds' loop: remembers each round's verdicts and its best draft."""
         before = self.reflect
-        self.reflect = {"earlier": [], "best": None, "round": 0, "last": None, "same": 0}
+        self.reflect = {"earlier": [], "best": None, "round": 0, "same": 0, "last_unmet": [], "rounds": []}
         try:
             yield
         finally:
             self.reflect = before
 
+    def review_table(self):
+        """The rules by round as a markdown table, for the run log (#424): met, or not met with the problem."""
+        rounds = (self.reflect or {}).get("rounds") or []
+        if not rounds:
+            return ""
+        rules = []
+        for r in rounds:
+            for v in r["verdicts"]:
+                if v["rule"] not in rules:
+                    rules.append(v["rule"])
+        cell = lambda s: to_str(s).replace("|", "\\|").replace("\n", " ")  # noqa: E731
+        lines = ["| " + tr("Rule") + " | " + " | ".join(tr("Round {n}", n=r["round"]) for r in rounds) + " |",
+                 "|" + "---|" * (len(rounds) + 1)]
+        for rule in rules:
+            cells = []
+            for r in rounds:
+                v = next((x for x in r["verdicts"] if x["rule"] == rule), None)
+                cells.append(tr("met") if v and v["met"] else tr("not met") + (": " + cell(v["problem"]) if v and v["problem"] else ""))
+            lines.append("| " + cell(rule) + " | " + " | ".join(cells) + " |")
+        return "\n".join(lines)
+
     async def review(self, criteria, label="Review", in_loop=False):
         self._need_draft()
+        rules = parse_rules(criteria)
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
                    "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
-        v = await self._call("You are a strict reviewer. Judge the draft ONLY against these criteria (separated by semicolons):\n" +
-                             to_str(criteria) + "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
-                             '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
-                             "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
-        approved = v["approved"] is True
-        problems = [to_str(p) for p in (v.get("problems") or [])]
+        rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
+        v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
+                             "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
+                             '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
+                             '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
+                             "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
+                             "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+        res = review_verdicts(rules, v)
+        approved = res["approved"]
         self.approved = approved
-        self.problems = [] if approved else ([p for p in problems if p] or ["Does not yet meet the criteria."])
+        self.problems = [] if approved else (res["problems"] or ["Does not yet meet the criteria."])
+        self.verdicts = res["verdicts"]
         if loop is not None:
             loop["round"] += 1
             best = loop["best"]
-            if best is None or len(self.problems) <= best["n"]:  # a tie goes to the newer draft
-                loop["best"] = {"draft": self.draft, "problems": list(self.problems), "n": len(self.problems), "round": loop["round"]}
+            if best is None or res["met"] >= best["met"]:  # the best draft meets the most rules; a tie goes to the newer draft
+                loop["best"] = {"draft": self.draft, "problems": list(self.problems), "met": res["met"],
+                                "total": len(rules), "n": len(self.problems), "round": loop["round"]}
             for p_ in self.problems:
                 if p_ not in loop["earlier"]:
                     loop["earlier"].append(p_)
             del loop["earlier"][:-12]
-            # No progress: nothing new, and no fewer problems than the round before (#331)
-            last = loop["last"]
-            same = (not approved and last is not None and len(self.problems) >= len(last)
-                    and all(any(same_problem(p_, q) for q in last) for p_ in self.problems))
+            # No progress: the same rule failed this round as the one before (#424)
+            same = not approved and stuck_rule(loop["last_unmet"], res["unmet"]) is not None
             loop["same"] = loop["same"] + 1 if same else 0
-            loop["last"] = list(self.problems)
+            loop["last_unmet"] = list(res["unmet"])
+            loop["rounds"].append({"round": loop["round"], "verdicts": res["verdicts"]})
         if approved:
+            if loop is not None and loop.get("rounds"):
+                self.log(tr("Rules by round"), self.review_table(), tr("table"))
             self.log(label, tr("Meets every criterion."), tr("approved"))
         else:
             self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
         return approved
 
     def stuck(self):
-        """True, having said why, once a review loop's review has raised the same problems after two revisions in a row
-        (#331): revising can't fix them, probably because the program lacks something, so the loop stops there and
-        keeps its best draft rather than spending its remaining rounds."""
+        """True, having said why, once the same rule has failed in two rounds running (#424): revising can't fix it,
+        probably because the program lacks something, so the loop stops there and keeps its best draft rather than
+        spending its remaining rounds."""
         loop = self.reflect or {}
         if loop.get("same", 0) < 2:
             return False
@@ -1087,7 +1115,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         best = loop.get("best")
         if best and best["round"] != loop["round"]:
             self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
-        self.log(tr("Review stuck"), tr("The review raised the same problems after two revisions, so revising can't fix them. The program may need "
+        if loop.get("rounds"):
+            self.log(tr("Rules by round"), self.review_table(), tr("table"))
+        self.log(tr("Review stuck"), tr("The same rule failed in two rounds running, so revising can't fix it. The program may need "
                                         "something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or "
                                         "through an agent that can read web pages), then run again."), tr("stuck"))
         return True
@@ -1100,7 +1130,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         best = (self.reflect or {}).get("best")
         if best and best["round"] != self.reflect["round"]:
             self.draft, self.problems, self.approved = best["draft"], list(best["problems"]), False
-            self.log(tr("Kept the best draft"), tr("Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.", round=best['round'], n=best['n']), tr("best draft"))
+            if (self.reflect or {}).get("rounds"):
+                self.log(tr("Rules by round"), self.review_table(), tr("table"))
+            self.log(tr("Kept the best draft"), tr("Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.", round=best['round'], n=best['met'], total=best['total']), tr("best draft"))
         self.log(tr("Review"), tr("Out of rounds. Keeping the best effort."), tr("failed"))
 
     # ----- Checkpoints -----
@@ -1357,7 +1389,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         saved_vars = dict(self.vars)
         self.task, self.draft, self.problems, self.approved, self.answer = "", "", [], None, ""
         self.result, self.out_of_rounds_hit, self.instructions, self.chats, self.last_error = [], False, "", {}, ""
-        self.checkpoints, self.reflect, self.agent_trace = {}, None, []
+        self.checkpoints, self.reflect, self.agent_trace, self.verdicts = {}, None, [], []
         self.vars.clear()
         token = MESSAGE_VALUE.set(value)
         self.programs.append(name)
@@ -1654,7 +1686,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                         self.ending = False  # the run has ended; the check is one more call
                         self.task, self.draft = "The result of one run of this program.", text or tr("(no result)")
                         passed = await self.review(criteria, tr("Test check"))
-                        problems = list(self.problems)
+                        # name the rule that failed (#424)
+                        problems = [f"{v['rule']}: {v['problem'] or tr('not met')}" for v in self.verdicts if not v["met"]] or list(self.problems)
                     results.append((name, passed, problems))
             finally:
                 globals()["MEMORY_FILE"] = real_memory

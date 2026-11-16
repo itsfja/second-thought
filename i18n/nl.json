@@ -1583,7 +1583,6 @@
   "Using {model}": "{model} gebruiken",
   "Using {model} for the blocks inside": "{model} gebruiken voor de blokken erin",
   "Waiting for you to confirm the download…": "Wachten tot je de download bevestigt…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Terug naar het concept uit ronde {round}: dat had de minste problemen ({n}). De rondes erna verbeterden het niet.",
   "Which Homey device? Give its name, like Kitchen light.": "Welk Homey-apparaat? Geef de naam, zoals Keukenlamp.",
   "Why: {why}": "Waarom: {why}",
   "Woke {n} waiting script.": "{n} wachtend script gewekt.",
@@ -1755,7 +1754,6 @@
   "Text changed in {n} blocks.": "Tekst gewijzigd in {n} blokken.",
   "Review stuck": "Beoordeling loopt vast",
   "stuck": "vastgelopen",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
   "Using the web": "Met het web",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Deze pagina kan het web niet gebruiken, dus het concept hierboven is zonder geschreven. Het geëxporteerde programma gebruikt het web.",
   "Web address in the task": "Webadres in de taak",
@@ -1900,7 +1898,15 @@
   "Plex new items": "Plex nieuwe items",
   "Tautulli history": "Tautulli-geschiedenis",
   "Tautulli watch time": "Tautulli kijktijd",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "De pagina draait op je claude.ai-account en telt dus niet wat elke dienst uitgeeft. Exporteer naar Python, met sleutels in second-thought.ini, dan zegt deze tool wat elke dienst heeft uitgegeven, zijn abonnement en zijn limiet, en elke overschrijding, geteld op die computer."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "De pagina draait op je claude.ai-account en telt dus niet wat elke dienst uitgeeft. Exporteer naar Python, met sleutels in second-thought.ini, dan zegt deze tool wat elke dienst heeft uitgegeven, zijn abonnement en zijn limiet, en elke overschrijding, geteld op die computer.",
+  "Rule": "Regel",
+  "Round {n}": "ronde {n}",
+  "Rules by round": "Regels per ronde",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dezelfde regel is in twee rondes achter elkaar niet gehaald, dus herzien lost het niet op. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Terug naar het concept uit ronde {round}:dat haalde de meeste regels ({n} van {total}). De rondes erna verbeterden het niet.",
+  "met": "gehaald",
+  "not met": "niet gehaald",
+  "met {n} of {total}": "{n} van {total} gehaald"
  },
  "examples": {
   "review": {
@@ -3117,7 +3123,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "Webverzoeken, {x}: luistert nog niet. Om ze aan te zetten: {note}",
   "Web requests: {note}": "Webverzoeken: {note}",
   "Web search: {q}": "Zoeken op het web: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Terug naar het concept uit ronde {round}: dat had de minste problemen ({n}). De rondes erna verbeterden het niet.",
   "Which Homey device? Give its name, like Kitchen light.": "Welk Homey-apparaat? Geef de naam, zoals Keukenlamp.",
   "Why: {why}": "Waarom: {why}",
   "Write a first draft": "Een eerste concept schrijven",
@@ -3452,7 +3457,6 @@
   "{n} of them can change things": "{n} daarvan kunnen iets veranderen",
   "Review stuck": "Beoordeling loopt vast",
   "stuck": "vastgelopen",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "De beoordeling noemde na twee herzieningen dezelfde problemen, dus herzien kan ze niet oplossen. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
   "Web address in the task": "Webadres in de taak",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "De taak noemt een webadres, maar deze stap kan het niet openen. Vink 'met het web' aan op het blok, of zet de tekst van de pagina in de taak.",
   "Sources not read": "Bronnen niet gelezen",
@@ -3677,6 +3681,14 @@
   "this week": "deze week",
   "today": "vandaag",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% van de maandlimiet van {cap} van het {plan}-abonnement ({spent} uitgegeven, stelt terug op {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Regel",
+  "Round {n}": "ronde {n}",
+  "Rules by round": "Regels per ronde",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Dezelfde regel is in twee rondes achter elkaar niet gehaald, dus herzien lost het niet op. Het programma mist misschien iets wat het niet heeft gekregen, zoals een webpagina, een bestand of een feit: geef het dat (in de taak bijvoorbeeld, of via een agent die webpagina's kan lezen) en voer het daarna opnieuw uit.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Terug naar het concept uit ronde {round}:dat haalde de meeste regels ({n} van {total}). De rondes erna verbeterden het niet.",
+  "met": "gehaald",
+  "not met": "niet gehaald",
+  "table": "tabel"
  }
 }

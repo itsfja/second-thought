@@ -1483,7 +1483,6 @@
   "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "पटिवचनस्स पच्चासीसिताकारो न अहोसि: {problem}.\nसोधितपटिवचनं एकवारं पुन याचति।",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "पटिवचनं दीघतासीमं पापुणि, तस्मा पटिरूपं यत्थ अट्ठासि ततो पवत्तेतुं याचितं।",
   "The reply wasn't readable JSON, so this step was wasted.": "पटिवचनं पठितब्बं JSON न अहोसि, तस्मा इदं पदं मोघं अहोसि।",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "समेक्खा द्वीहि पटिसङ्खारेहि पच्छापि ते एव दोसे उट्ठापेसि, तस्मा पटिसङ्खारो ते सोधेतुं न सक्कोति। किच्चक्कमस्स अदिन्नं किञ्चि इच्छितं सिया, यथा जालपत्तं, सञ्चिका, तथं वा: तं देहि (किच्चे, यथा, जालपत्तानि पठितुं समत्थेन पटिनिधिना वा), ततो पुन चालेहि।",
   "The run stopped.": "चालनं ठितं।",
   "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "निदस्सनघरे “{id}” नामकं छायायन्तं नत्थि। camera.front_door, camera.driveway, camera.garden, camera.garage, camera.pet वा वीमंस।",
   "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "निदस्सनघरे “{id}” नामकं वत्थु नत्थि। तस्स वत्थूनि पस्सितुं Home Assistant-फलकं विवर।",
@@ -1560,7 +1559,6 @@
   "Waiting {time}": "{time} आगमेति",
   "Watch values": "मूलानि ओलोकेहि",
   "Web address in the task": "किच्चे जालठानं",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "{round} वारस्स आलेखं पच्चागतं: तस्स अप्पतमा दोसा ({n}). ततो पच्छिमा वारा तं न सोधेसुं।",
   "What the result must do": "फलं किं कातब्बं",
   "What the result must do, separated by semicolons, like: under 200 words; names the date": "फलं किं कातब्बं, अड्ढविरामेहि विभत्तं, यथा: 200 पदतो ऊनं; दिनं नामेति",
   "When {entity} changes": "यदा {entity} परिवत्तति",
@@ -1891,7 +1889,15 @@
   "Plex new items": "Plex nava",
   "Tautulli history": "Tautulli itihaso",
   "Tautulli watch time": "Tautulli passana-kalo",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "इदं पृष्ठं तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययं न गणयति। Python-वसेन निर्यास्य, second-thought.ini-वसेतु कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च, तस्मिन् सङ्गणके गणयित्वा निवेदयति।"
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "इदं पृष्ठं तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययं न गणयति। Python-वसेन निर्यास्य, second-thought.ini-वसेतु कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च, तस्मिन् सङ्गणके गणयित्वा निवेदयति।",
+  "Rule": "नियम",
+  "Round {n}": "{n} वार",
+  "Rules by round": "वार नियम",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "नियम द्व वार अकत। किच्चक्कमस्स अदिन्नं किञ्चि इच्छितं सिया, यथा जालपत्तं, सञ्चिका, तथं वा: तं देहि (किच्चे, यथा, जालपत्तानि पठितुं समत्थेन पटिनिधिना वा), ततो पुन चालेहि।",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मि {total}). ततो पच्छिमा वारा तं न सोधेसुं।",
+  "met": "कत",
+  "not met": "अकत",
+  "met {n} of {total}": "{n} मि {total}"
  },
  "examples": {
   "review": {
@@ -3133,7 +3139,6 @@
   "The reply didn't have the expected shape: {bad}.": "पटिवचनस्स पच्चासीसिताकारो न अहोसि: {bad}.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "पटिवचनं दीघतासीमं पापुणि, तस्मा पटिरूपं यत्थ अट्ठासि ततो पवत्तेतुं याचितं।",
   "The reply wasn't readable JSON, so this step was wasted.": "पटिवचनं पठितब्बं JSON न अहोसि, तस्मा इदं पदं मोघं अहोसि।",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "समेक्खा द्वीहि पटिसङ्खारेहि पच्छापि ते एव दोसे उट्ठापेसि, तस्मा पटिसङ्खारो ते सोधेतुं न सक्कोति। किच्चक्कमस्स अदिन्नं किञ्चि इच्छितं सिया, यथा जालपत्तं, सञ्चिका, तथं वा: तं देहि (किच्चे, यथा, जालपत्तानि पठितुं समत्थेन पटिनिधिना वा), ततो पुन चालेहि।",
   "The run stopped.": "चालनं ठितं।",
   "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "चालनं {x} विनाडीहि दीघतरं अहोसि (second-thought.ini max_seconds), तस्मा अट्ठासि।",
   "The task is empty. Type what you want into 'set task to'.": "किच्चं तुच्छं। इच्छितं “किच्चं … इति ठपेहि” लिख।",
@@ -3201,7 +3206,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "जालयाचना, {x}: यावज्ज न सुणाति। ता सक्रिया कातुं, {note}",
   "Web requests: {note}": "जालयाचना: {note}",
   "Web search: {q}": "जालपरियेसना: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "{round} वारस्स आलेखं पच्चागतं: तस्स अप्पतमा दोसा ({n}). ततो पच्छिमा वारा तं न सोधेसुं।",
   "What changed: {url}": "किं परिवत्ति: {url}",
   "What it can do is the same as before.": "यं कातुं सक्कोति तं पुब्बसदिसं।",
   "What was wrong": "किं विरुद्धं अहोसि",
@@ -3668,7 +3672,15 @@
   "this week": "इमस्स सत्ताहे",
   "today": "अज्ज",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% इमस्स {plan}-योजनायाः मासिक्याः सीमायाः {cap} ({spent} वयित्वा, {when} नवीकरोति)",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "नियम",
+  "Round {n}": "{n} वार",
+  "Rules by round": "वार नियम",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "नियम द्व वार अकत। किच्चक्कमस्स अदिन्नं किञ्चि इच्छितं सिया, यथा जालपत्तं, सञ्चिका, तथं वा: तं देहि (किच्चे, यथा, जालपत्तानि पठितुं समत्थेन पटिनिधिना वा), ततो पुन चालेहि।",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मि {total}). ततो पच्छिमा वारा तं न सोधेसुं।",
+  "met": "कत",
+  "not met": "अकत",
+  "table": "पत्रम"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

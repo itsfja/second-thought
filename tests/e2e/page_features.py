@@ -119,36 +119,44 @@ async def new_feature_page_tests(pg):
     await load_state(pg, num_prog("one", "two"))
     EXTRA["t_json"] = await export_python(pg, "t_json")
 
-    print("Review loop: best draft, earlier rounds, checkpoints")
-    nope = lambda *p_: {"approved": False, "problems": list(p_)}  # noqa: E731
-    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a"), nope("a", "b", "c"), nope("a", "b")])
+    print("Review loop: rules by round, best draft, earlier rounds, checkpoints")
+    RULES = ["clear", "short", "titled"]  # review_loop_prog's criteria
+    def nope(*bad):  # a review reply failing the named rules (#424)
+        return {"approved": False,
+                "rules": [{"rule": r, "met": r not in bad, "problem": "" if r not in bad else f"fix {r}", "shows": ""} for r in RULES],
+                "problems": [f"fix {r}" for r in bad]}
+    ok = {"approved": True, "rules": [{"rule": r, "met": True, "problem": "", "shows": ""} for r in RULES], "problems": []}
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear", "short"), nope("titled"), nope("clear"), nope("clear", "short", "titled")])
     kept = [t for n, p_, t in steps if n == "Kept the best draft"]
-    check(status.startswith("done") and items == ["v2", "a"] and kept and "round 2" in kept[0] and "fewest problems (1)" in kept[0],
-          f"out of rounds, the draft with the fewest problems is kept, with its own problems ({items})")
-    check("Earlier rounds" not in prompts[0] and "Earlier rounds of this review found" in prompts[1] and "- a\n- b" in prompts[1]
-          and "- a\n- b\n- c" in prompts[3], "each round, the reviewer is shown the problems earlier rounds found")
-    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a"), {"approved": True}])
+    table = [t for n, p_, t in steps if n == "Rules by round"]
+    check(status.startswith("done") and items == ["v3", "fix clear"] and kept and "round 3" in kept[0] and "most rules (2 of 3)" in kept[0],
+          f"out of rounds, the draft that met the most rules is kept, with its own problems ({items})")
+    check(table and "Rule" in table[-1] and "Round 1" in table[-1] and "Round 4" in table[-1] and "not met: fix clear" in table[-1] and "met" in table[-1],
+          "the log shows the rules by round as a table")
+    check("Earlier rounds" not in prompts[0] and "Earlier rounds of this review found" in prompts[1] and "- fix clear\n- fix short" in prompts[1]
+          and "- fix clear\n- fix short\n- fix titled" in prompts[3], "each round, the reviewer is shown the problems earlier rounds found")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear"), ok])
     check(status.startswith("done") and items[0] == "v2" and "Kept the best draft" not in [n for n, *_ in steps], "an approved draft is kept as it is")
-    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a"), nope("a", "c"), nope("a")])
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear"), nope("short"), nope("titled"), nope("clear")])
     check(status.startswith("done") and items[0] == "v4" and "Kept the best draft" not in [n for n, *_ in steps],
-          "when the last draft is as good as any, it stays (a tie goes to the newer draft)")
-    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a", "b"), nope("a", "b"), nope("A", "b "), nope("a", "b")])
+          "when the last draft meets as many rules as any, it stays (a tie goes to the newer draft)")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear"), nope("clear"), nope("clear"), nope("clear")])
     stuck = [t for n, p_, t in steps if n == "Review stuck"]
-    check(status.startswith("done") and items[0] == "v3" and stuck and "can't fix them" in stuck[0] and len(prompts) == 3
+    check(status.startswith("done") and items[0] == "v3" and stuck and "two rounds running" in stuck[0] and len(prompts) == 3
           and "in the same words" in prompts[1],
-          f"the same problems after two revisions in a row stop the loop early, saying why (#331) ({items}, {len(prompts)} reviews)")
-    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("a"), nope("a"), nope("b"), nope("b"), nope("b")])
+          f"the same rule failing in rounds running stops the loop early, saying why (#424) ({items}, {len(prompts)} reviews)")
+    status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear"), nope("clear"), nope("short"), nope("short"), nope("short")])
     check("Review stuck" not in [n for n, *_ in steps] and len(prompts) == 4,
-          "a new problem resets the count, so the loop only stops when it's really stuck")
-    same = await pg.evaluate("""() => [__sameProblem('The draft is not specific to github.com/itsfja/second-thought, offering only a generic checklist instead.',
-        'The response is not specific to github.com/itsfja/second-thought; it provides a generic checklist rather than an analysis.'),
-        __sameProblem('Too long', 'Has no title')]""")
-    check(same == [True, False], f"two wordings of one problem count as the same, different problems don't ({same})")
+          "a different rule failing resets the count, so the loop only stops when it's really stuck")
+    same = await pg.evaluate("() => [__stuckRule(['clear'], ['clear', 'short']), __stuckRule(['clear'], ['short']), __stuckRule([], ['clear'])]")
+    check(same == ["clear", None, None], f"stuckness is by rule identity, not by wording ({same})")
     revise_loop = script(blk("rb_set_draft", inputs={"TEXT": tx("x")}),
                          blk("rb_reflect", inputs={"CRITERIA": tx("short; titled"), "ROUNDS": nm(2), "FIX": {"block": blk("rb_revise")}}),
                          blk("rb_review", inputs={"CRITERIA": tx("short")}))
     await pg.evaluate("window.__textPrompts = []")
-    status, steps, items, prompts = await scripted(revise_loop, [nope("too long", "no title"), nope("no title"), nope("no title"), {"approved": True}])
+    prob = {"short": "too long", "titled": "no title"}
+    r2 = lambda *bad: {"approved": False, "rules": [{"rule": r, "met": r not in bad, "problem": prob[r] if r in bad else "", "shows": ""} for r in ("short", "titled")], "problems": [prob[r] for r in bad]}  # noqa: E731
+    status, steps, items, prompts = await scripted(revise_loop, [r2("short", "titled"), r2("titled"), r2("titled"), {"approved": True}])
     revises = [q for q in await pg.evaluate("window.__textPrompts") if q.startswith("Revise the draft")]
     check(status.startswith("done") and len(revises) == 2 and "Don't bring them back" not in revises[0]
           and "Don't bring them back:\n- too long\n\nDraft:" in revises[1], "revise is told which problems earlier rounds fixed, so it doesn't bring them back")
@@ -502,8 +510,8 @@ async def new_feature_page_tests(pg):
     checked = [(p_, t) for s_, p_, t in steps if s_ == "Check: short; friendly"]
     rprompt = [q for q in await pg.evaluate("window.__jsonPrompts") if "Judge the text ONLY" in q]
     r1 = step_of(steps, 1, 6, "review_text")
-    check(status.startswith("done") and checked and checked[0][0] in ("passes", "needs work") and rprompt and "short; friendly" in rprompt[0]
-          and "Text:\nHello there" in rprompt[0] and ("Passes every criterion." in r1 or "Doesn't pass yet. Problems: - " in r1),
+    check(status.startswith("done") and checked and checked[0][0] in ("passes", "needs work") and rprompt and "1. short\n2. friendly" in rprompt[0]
+          and "Text:\nHello there" in rprompt[0] and ("Passes every criterion." in r1 or "Doesn't pass yet. Problems:" in r1),
           "review_text has a separate reviewer check the text, and the agent gets the verdict and problems")
     status, steps, items = await agent_run(pg, ["web"], [tcall("read_page", url="http://localhost:8123/"), tcall("read_page", url="ftp://example.com/x"), fin("ok")],
                                            export="t_ag_page")

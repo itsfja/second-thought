@@ -16,6 +16,9 @@
       el, body,
       text(t){ body.textContent = t; },
       list(items){ body.innerHTML = ""; const ul = document.createElement("ul"); items.forEach(i => { const li = document.createElement("li"); li.textContent = i; ul.appendChild(li); }); body.appendChild(ul); },
+      table(rows){ body.innerHTML = ""; const t = document.createElement("table"); t.className = "rules-table";
+        rows.forEach((r, i) => { const tr = document.createElement("tr"); r.forEach(c => { const td = document.createElement(i ? "td" : "th"); td.textContent = c; tr.appendChild(td); }); t.appendChild(tr); });
+        body.appendChild(t); },
       done(label, kind){ pill.dataset.state = label; pill.textContent = tr(label); pill.className = "pill" + (kind ? " " + kind : ""); el.dataset.ms = String(Date.now() - Number(el.dataset.t0)); },
       call(c){ (el._calls = el._calls || []).push(c); renderCalls(el); }
     };

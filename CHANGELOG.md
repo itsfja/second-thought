@@ -44,6 +44,9 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 ### Fixed
 - **Listeners that stopped by themselves.** A program that listens (for Home Assistant events, MQTT, web requests, Telegram and the rest) or watches Home Assistant could lose a listener part-way through a run, with nothing said: Python was free to tidy the waiting task away, and on some versions it did. The runtime now keeps hold of them.
 
+### Changed
+- **The review loop judges rule by rule** (#424): the criteria of *review … up to N rounds* and the agent's `review_text` tool are now split into separate rules (on semicolons or lines), and the reviewer replies with a verdict for each rule. The run log shows a rules-by-round table; when the rounds run out, the draft kept is the one that met the most rules; and the loop stops early when the same rule fails in two rounds running, saying that revising can't fix it. Programs exported before this keep the old review until they are exported again.
+
 ## 3.13.0 - 2026-11-08
 
 ### Added

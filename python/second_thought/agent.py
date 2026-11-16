@@ -8,8 +8,8 @@ import json
 import os
 import re
 import sys
-from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive, seen_addresses,
-    num, round_js, time_plus_text, to_str)
+from .core import (SAFETY, BadJSON, Finish, RunError, SCHEMAS, Shape, _num_like, _short, calc_text, current_time_text, ha_sensitive, parse_rules,
+    num, review_verdicts, round_js, seen_addresses, time_plus_text, to_str)
 from .connectors import fetch_page
 from .mcp import mcp_destructive, mcp_env_name, mcp_is_fr24, mcp_is_twak, mcp_is_vaillant, mcp_money
 from .settings import tr  # noqa: F401
@@ -415,13 +415,17 @@ class AgentTools:
                 raise RunError(tr("review_text needs some text to check."))
             if not a("criteria"):
                 raise RunError(tr("review_text needs criteria to check against."))
-            v = await self._call("You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + a("criteria") +
-                                 "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. '
-                                 "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS["review"])
-            problems = [to_str(x) for x in (v.get("problems") or []) if to_str(x).strip()]
-            out = "Passes every criterion." if v["approved"] is True else "Doesn't pass yet. Problems:\n" + "\n".join(
+            rules = parse_rules(a("criteria"))
+            rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or a("criteria")
+            v = await self._call("You are a strict reviewer. Judge the text ONLY against these rules, one per line:\n" + rule_list +
+                                 "\n\nText:\n" + a("text") + '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
+                                 '"problem": "specific fixable problem", "shows": "the words in the text that show it"}], "problems": ["specific fixable problem"]}. '
+                                 "approved is true only if every rule is met; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            res = review_verdicts(rules, v)
+            problems = [to_str(x) for x in res["problems"] if to_str(x).strip()]
+            out = "Passes every criterion." if res["approved"] else "Doesn't pass yet. Problems:\n" + "\n".join(
                 "- " + x for x in (problems or ["It doesn't yet meet the criteria."]))
-            self.log(tr("Check: {x}", x=_short(a("criteria"), 55)), out, tr("passes") if v["approved"] is True else tr("needs work"))
+            self.log(tr("Check: {x}", x=_short(a("criteria"), 55)), out, tr("passes") if res["approved"] else tr("needs work"))
             return out
         approved = getattr(self, "_agent_approved", False)
         if kind == "read_feed":

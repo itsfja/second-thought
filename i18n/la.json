@@ -1583,7 +1583,6 @@
   "Using {model}": "Utitur {model}",
   "Using {model} for the blocks inside": "Utitur {model} pro lateribus intus",
   "Waiting for you to confirm the download…": "Exspectatur dum depositionem confirmes…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Ad adumbrationem circuitus {round} rediit: paucissima vitia habuit ({n}). Circuitus post eum eam non emendaverunt.",
   "Which Homey device? Give its name, like Kitchen light.": "Quis apparatus Homey? Nomen eius da, ut Lux culinae.",
   "Why: {why}": "Cur: {why}",
   "Woke {n} waiting script.": "{n} scriptum exspectans excitatum.",
@@ -1755,7 +1754,6 @@
   "Text changed in {n} blocks.": "Textus in {n} lateribus mutatus.",
   "Review stuck": "Recognitio haesit",
   "stuck": "haeret",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
   "Using the web": "Ope interretis",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Haec pagina interrete uti non potest, itaque adumbratio supra sine eo scripta est. Programma exportatum interrete utitur.",
   "Web address in the task": "Inscriptio interretialis in penso",
@@ -1900,7 +1898,15 @@
   "Plex new items": "Plex nova",
   "Tautulli history": "Tautulli acta",
   "Tautulli watch time": "Tautulli tempus videnti",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Haec pagina in ratione claude.ai tua currit, igitur impensa cuiusque ministerii non numerat. In Pythonum expone, clavibus in second-thought.ini positis, et hoc instrumentum dicet quod cuiusque ministerii impenderit, rationem et summam eius, et omnem excessum, in illo computatro numeratum."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Haec pagina in ratione claude.ai tua currit, igitur impensa cuiusque ministerii non numerat. In Pythonum expone, clavibus in second-thought.ini positis, et hoc instrumentum dicet quod cuiusque ministerii impenderit, rationem et summam eius, et omnem excessum, in illo computatro numeratum.",
+  "Rule": "Regula",
+  "Round {n}": "circuitus {n}",
+  "Rules by round": "Regulae per circuitum",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Eadem regula duobus circuitibus insequentibus non servata est, itaque emendatio eam corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Ad adumbrationem circuitus {round} plurimas regulas servavit ({n} ex {total}). Circuitus post eum eam non emendaverunt.",
+  "met": "servata",
+  "not met": "non servata",
+  "met {n} of {total}": "{n} ex {total} servatae"
  },
  "examples": {
   "review": {
@@ -3117,7 +3123,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "Petitiones interretiales, {x}: adhuc non auscultantur. Ut eas accendas, {note}",
   "Web requests: {note}": "Petitiones interretiales: {note}",
   "Web search: {q}": "Quaestio interretialis: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Ad adumbrationem circuitus {round} rediit: paucissima vitia habuit ({n}). Circuitus post eum eam non emendaverunt.",
   "Which Homey device? Give its name, like Kitchen light.": "Quis apparatus Homey? Nomen eius da, ut Lux culinae.",
   "Why: {why}": "Cur: {why}",
   "Write a first draft": "Primam adumbrationem scribe",
@@ -3452,7 +3457,6 @@
   "{n} of them can change things": "{n} ex eis res mutare possunt",
   "Review stuck": "Recognitio haesit",
   "stuck": "haeret",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Recognitio post duas emendationes eadem vitia rettulit, itaque emendatio ea corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
   "Web address in the task": "Inscriptio interretialis in penso",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Pensum inscriptionem interretialem nominat, sed hic gradus eam aperire non potest. Nota 'ope interretis' in latere, aut verba paginae in pensum pone.",
   "Sources not read": "Fontes non lecti",
@@ -3677,7 +3681,15 @@
   "this week": "hac hebdomade",
   "today": "hodie",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% summae menstruae {cap} rationis {plan} ({spent} impensum, revertitur {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Regula",
+  "Round {n}": "circuitus {n}",
+  "Rules by round": "Regulae per circuitum",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Eadem regula duobus circuitibus insequentibus non servata est, itaque emendatio eam corrigere non potest. Programmati fortasse deest aliquid quod non accepit, ut pagina interretialis, fasciculus vel res: id ei da (in pensō, verbi gratia, vel per agentem qui paginas interretiales legere potest), deinde iterum curre.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Ad adumbrationem circuitus {round} plurimas regulas servavit ({n} ex {total}). Circuitus post eum eam non emendaverunt.",
+  "met": "servata",
+  "not met": "non servata",
+  "table": "tabula"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

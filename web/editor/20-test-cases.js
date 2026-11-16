@@ -46,12 +46,16 @@
         const ending = run.ending;
         run.ending = false;  // the program has finished; the check is one more call
         try {
-          const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these criteria (separated by semicolons):\n" + t.criteria +
-            "\n\nText:\n" + (finalText() || "(no result)") + '\n\nReply with only JSON like {"approved": false, "problems": ["specific fixable problem"]}. ' +
-            "approved is true only if every criterion is met; problems is empty when approved.", SCHEMAS.review);
-          const ok = v.approved === true;
-          let probs = ok ? [] : (Array.isArray(v.problems) ? v.problems.map(str).filter(x => x.trim()) : []);
-          if (!ok && !probs.length) probs = [tr("It doesn't yet meet the criteria.")];
+          const rules = parseRules(t.criteria);
+          const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || String(t.criteria || "");
+          const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the text ONLY against these rules, one per line:\n" + ruleList +
+            "\n\nText:\n" + (finalText() || "(no result)") + '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the text that show it"}], "problems": ["specific fixable problem"]}. ' +
+            "approved is true only if every rule is met; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+          const res = reviewVerdicts(rules, v);
+          const ok = res.approved;
+          // name the rule that failed (#424)
+          let probs = ok ? [] : res.verdicts.filter(x => !x.met).map(x => x.rule + ": " + (x.problem || tr("not met")));
+          if (!ok && !probs.length) probs = res.problems.filter(x => x.trim()) || [tr("It doesn't yet meet the criteria.")];
           s.text(ok ? tr("Meets every criterion.") : probs.map(x => "- " + x).join("\n")); s.done(ok ? tr("passed") : tr("failed"), ok ? "ok" : "bad");
           verdict = [ok, probs];
         } catch(e) { s.text(errText(e)); s.done("error", "bad"); verdict = [false, [errText(e)]]; }

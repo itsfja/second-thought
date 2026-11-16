@@ -1483,7 +1483,6 @@
   "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "جواب بكلنن شكلده دكلدی: {problem}.\nدوزلتیلمش بر جواب ایچون بر دفعه داها صورولیور.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "جواب اوزونلق حدینه واردی، بو سببله مودلدن دوردیغی یردن دوام ایتمه‌سی ایسته‌ندی.",
   "The reply wasn't readable JSON, so this step was wasted.": "جواب اوقونور بر JSON دكلدی، بو سببله بو آدیم بوشه گیتدی.",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "تدقیق ایكی تصحیحدن صوڭرا عینی قصورلری اورتایه قویدی، بو سببله تصحیح اونلری دوزلته‌مز. پروغرامڭ كندیسنه ویریلمه‌ین بر شیه، بر شبكه صحیفه‌سی، بر دوسیه یاخود بر معلومات كبی، احتیاجی اولابیلیر: اونی ویر (وظیفه‌ده، مثلا، یاخود شبكه صحیفه‌لرینی اوقویه‌بیلن بر وكیل واسطه‌سیله)، صوڭرا ینه اجرا ایت.",
   "The run stopped.": "اجرا دوردی.",
   "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "نمونه خانه‌ده «{id}» اسملی قامره یوق. camera.front_door، camera.driveway، camera.garden، camera.garage یاخود camera.pet ی دنه.",
   "The sample house has no entity called “{id}”. Open the Home Assistant panel to see the ones it has.": "نمونه خانه‌ده «{id}» اسملی شی یوق. هانكی شیلری اولدیغنی كورمك ایچون Home Assistant پانوسنی آچ.",
@@ -1560,7 +1559,6 @@
   "Waiting {time}": "{time} بكلنیور",
   "Watch values": "قیمتلری گوزله",
   "Web address in the task": "وظیفه‌ده‌كی شبكه آدرسی",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "{round} نجی دوره‌نڭ مسوده‌سنه گری دونولدی: اڭ آز قصوری ({n}) اونڭ ایدی. اوندن صوڭره‌كی دوره‌لر اونی اصلاح ایتمدی.",
   "What the result must do": "نتیجه‌نڭ نه یاپمسی لازم",
   "What the result must do, separated by semicolons, like: under 200 words; names the date": "نتیجه‌نڭ نه یاپمسی لازم، نقطه‌لی ویرگوللرله آیریلمش، مثلا: ٢٠٠ كلمه‌دن آز؛ تاریخی آڭار",
   "When {entity} changes": "{entity} دڭیشدیكنده",
@@ -1891,7 +1889,15 @@
   "Plex new items": "Plex yeni ogeler",
   "Tautulli history": "Tautulli gecmisi",
   "Tautulli watch time": "Tautulli izleme suresi",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "بو صفحه حساب claude.ai‌نینده فعال‌یت ادر، هر خدمتین مصرفی‌نی سایماز. Python‌یه ایخراج ایده‌رک، second-thought.ini‌ده آچارلر قویوب، بو آلت هر خدمتین مصرفی، پلانی و حدی و مازادینی، آن ماکینه‌ده سایاراق بیلدیرور."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "بو صفحه حساب claude.ai‌نینده فعال‌یت ادر، هر خدمتین مصرفی‌نی سایماز. Python‌یه ایخراج ایده‌رک، second-thought.ini‌ده آچارلر قویوب، بو آلت هر خدمتین مصرفی، پلانی و حدی و مازادینی، آن ماکینه‌ده سایاراق بیلدیرور.",
+  "Rule": "Kural",
+  "Round {n}": "{n} ncî döngü",
+  "Rules by round": "Döngüye göre kurallar",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Aynı kural ard arda iki döngüde riayet olunmadı, bu yüzden düzeltme onu halledemez. پروغرامڭ كندیسنه ویریلمه‌ین بر شیه، بر شبكه صحیفه‌سی، بر دوسیه یاخود بر معلومات كبی، احتیاجی اولابیلیر: اونی ویر (وظیفه‌ده، مثلا، یاخود شبكه صحیفه‌لرینی اوقویه‌بیلن بر وكیل واسطه‌سیله)، صوڭرا ینه اجرا ایت.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} en çok kurala riayet ediyordu ({total} taneden {n} tanesi). اوندن صوڭره‌كی دوره‌لر اونی اصلاح ایتمدی.",
+  "met": "riayet olundu",
+  "not met": "riayet olunmadı",
+  "met {n} of {total}": "{total} kuraldan {n} tanesi riayet olundu"
  },
  "examples": {
   "review": {
@@ -3133,7 +3139,6 @@
   "The reply didn't have the expected shape: {bad}.": "جواب بكلنن شكلده دكلدی: {bad}.",
   "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "جواب اوزونلق حدینه واردی، بو سببله مودلدن دوردیغی یردن دوام ایتمه‌سی ایسته‌ندی.",
   "The reply wasn't readable JSON, so this step was wasted.": "جواب اوقونور بر JSON دكلدی، بو سببله بو آدیم بوشه گیتدی.",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "تدقیق ایكی تصحیحدن صوڭرا عینی قصورلری اورتایه قویدی، بو سببله تصحیح اونلری دوزلته‌مز. پروغرامڭ كندیسنه ویریلمه‌ین بر شیه، بر شبكه صحیفه‌سی، بر دوسیه یاخود بر معلومات كبی، احتیاجی اولابیلیر: اونی ویر (وظیفه‌ده، مثلا، یاخود شبكه صحیفه‌لرینی اوقویه‌بیلن بر وكیل واسطه‌سیله)، صوڭرا ینه اجرا ایت.",
   "The run stopped.": "اجرا دوردی.",
   "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "اجرا {x} ثانیه‌دن اوزون سوردی (second-thought.ini ده max_seconds)، بو سببله دوردی.",
   "The task is empty. Type what you want into 'set task to'.": "وظیفه بوشدر. ایسته‌دیگڭی «وظیفه‌یی … یاپ» ه یاز.",
@@ -3201,7 +3206,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "شبكه طلبلری، {x}: هنوز دیڭلنمیور. آچمق ایچون، {note}",
   "Web requests: {note}": "شبكه طلبلری: {note}",
   "Web search: {q}": "شبكه آرامه‌سی: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "{round} نجی دوره‌نڭ مسوده‌سنه گری دونولدی: اڭ آز قصوری ({n}) اونڭ ایدی. اوندن صوڭره‌كی دوره‌لر اونی اصلاح ایتمدی.",
   "What changed: {url}": "نه دڭیشدی: {url}",
   "What it can do is the same as before.": "یاپه‌بیلدیكی شیلر اوّلكی كبیدر.",
   "What was wrong": "نه یاڭلش ایدی",
@@ -3668,7 +3672,15 @@
   "this week": "بو حفته‌ده",
   "today": "بوگون",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{plan} پلانی‌نین {cap} آی‌لیق حدی‌نین %{pct}‌ای ({spent} صرف اولموش، {when}‌ده یئنی‌دن باشلار)",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Kural",
+  "Round {n}": "{n} ncî döngü",
+  "Rules by round": "Döngüye göre kurallar",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Aynı kural ard arda iki döngüde riayet olunmadı, bu yüzden düzeltme onu halledemez. پروغرامڭ كندیسنه ویریلمه‌ین بر شیه، بر شبكه صحیفه‌سی، بر دوسیه یاخود بر معلومات كبی، احتیاجی اولابیلیر: اونی ویر (وظیفه‌ده، مثلا، یاخود شبكه صحیفه‌لرینی اوقویه‌بیلن بر وكیل واسطه‌سیله)، صوڭرا ینه اجرا ایت.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} en çok kurala riayet ediyordu ({total} taneden {n} tanesi). اوندن صوڭره‌كی دوره‌لر اونی اصلاح ایتمدی.",
+  "met": "riayet olundu",
+  "not met": "riayet olunmadı",
+  "table": "levha"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

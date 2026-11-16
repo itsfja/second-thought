@@ -1584,7 +1584,6 @@
   "Using {model}": "{model} प्रयुङ्क्ते",
   "Using {model} for the blocks inside": "अन्तःस्थखण्डानां कृते {model} प्रयुङ्क्ते",
   "Waiting for you to confirm the download…": "त्वया अवारोपणस्य पुष्टिः प्रतीक्ष्यते…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "{round} आवर्तनस्य प्रारूपं प्रति प्रत्यागतम्: तस्मिन् अल्पतमाः दोषाः ({n}) आसन्। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
   "Which Homey device? Give its name, like Kitchen light.": "कतमत् Homey-यन्त्रम्? तस्य नाम देहि, यथा Kitchen light।",
   "Why: {why}": "कारणम्: {why}",
   "Woke {n} waiting script.": "{n} प्रतीक्षमाणः प्रक्रमः प्रबोधितः।",
@@ -1756,7 +1755,6 @@
   "Text changed in {n} blocks.": "{n} खण्डेषु पाठः परिवर्तितः।",
   "Review stuck": "समीक्षा स्तब्धा",
   "stuck": "स्तब्धम्",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
   "Using the web": "जालस्य साहाय्येन",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "इदं पृष्ठं जालं उपयोक्तुं न शक्नोति, अतः उपरितनं प्रारूपं तेन विना लिखितम्। निर्यातितः कार्यक्रमः जालं उपयुङ्क्ते।",
   "Web address in the task": "कार्ये जालसङ्केतः",
@@ -1901,7 +1899,15 @@
   "Plex new items": "Plex nava",
   "Tautulli history": "Tautulli itihasah",
   "Tautulli watch time": "Tautulli drishti-kalah",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "इयं पृष्ठः तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययः न गणयति। Python-म् प्रति निर्यास्य, second-thought.ini-मध्ये कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च, तस्मिन् सङ्गणके गणयित्वा निवेदयति।"
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "इयं पृष्ठः तव claude.ai-लेखायां चलति, अतः प्रत्येकसेवायाः व्ययः न गणयति। Python-म् प्रति निर्यास्य, second-thought.ini-मध्ये कुञ्चिकाः स्थापय, एतत् साधनं प्रत्येकसेवायाः व्ययं, तस्याः योजनां सीमां च, अधिकव्ययं च, तस्मिन् सङ्गणके गणयित्वा निवेदयति।",
+  "Rule": "नियमः",
+  "Round {n}": "{n} आवर्तः",
+  "Rules by round": "आवर्तः नियम",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "नियमः दो आवर्तः असिद्ध। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मिं {total})। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
+  "met": "सिद्धः",
+  "not met": "असिद्ध",
+  "met {n} of {total}": "{n} मिं {total}"
  },
  "examples": {
   "review": {
@@ -3118,7 +3124,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "जालयाचनाः, {x}: अद्यापि न श्रूयन्ते। ताः सक्रियीकर्तुं, {note}",
   "Web requests: {note}": "जालयाचनाः: {note}",
   "Web search: {q}": "जालान्वेषणम्: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "{round} आवर्तनस्य प्रारूपं प्रति प्रत्यागतम्: तस्मिन् अल्पतमाः दोषाः ({n}) आसन्। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
   "Which Homey device? Give its name, like Kitchen light.": "कतमत् Homey-यन्त्रम्? तस्य नाम देहि, यथा Kitchen light।",
   "Why: {why}": "कारणम्: {why}",
   "Write a first draft": "प्रथमप्रारूपलेखनम्",
@@ -3453,7 +3458,6 @@
   "{n} of them can change things": "तेषु {n} वस्तूनि परिवर्तयितुं शक्नुवन्ति",
   "Review stuck": "समीक्षा स्तब्धा",
   "stuck": "स्तब्धम्",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "द्वयोः संशोधनयोः अनन्तरम् अपि समीक्षा तान् एव दोषान् अवदत्, अतः संशोधनं तान् न शोधयितुं शक्नोति। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
   "Web address in the task": "कार्ये जालसङ्केतः",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "कार्ये जालसङ्केतः उक्तः, किन्तु अयं सोपानः तं उद्घाटयितुं न शक्नोति। खण्डे 'जालस्य साहाय्येन' चिह्नय, अथवा पृष्ठस्य शब्दान् कार्ये स्थापय।",
   "Sources not read": "अपठिताः स्रोतांसि",
@@ -3678,7 +3682,15 @@
   "this week": "अस्मिन् सप्ताहे",
   "today": "अद्य",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "योजनायाः {plan} मासिक्याः सीमायाः {cap} इति {pct}% ({spent} व्ययितम्, {when} पुनः प्रवर्तते)",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "नियमः",
+  "Round {n}": "{n} आवर्तः",
+  "Rules by round": "आवर्तः नियम",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "नियमः दो आवर्तः असिद्ध। कार्यक्रमस्य कदाचित् किमपि अपेक्षितं यत् तस्मै न दत्तम्, यथा जालपृष्ठं, सञ्चिका, तथ्यं वा: तत् तस्मै देहि (कार्ये, यथा, अथवा जालपृष्ठानि पठितुं समर्थेन प्रतिनिधिना), ततः पुनः चालय।",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "{round} अधिक नियम ({n} मिं {total})। अनन्तराणि आवर्तनानि तत् न अशोधयन्।",
+  "met": "सिद्धः",
+  "not met": "असिद्ध",
+  "table": "पत्र"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

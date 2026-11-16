@@ -1583,7 +1583,6 @@
   "Using {model}": "Brucende {model}",
   "Using {model} for the blocks inside": "Brucende {model} for þam stoccum þærinne",
   "Waiting for you to confirm the download…": "Abidende þæt þu þa niþerhlæstinge fæstnige…",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Eode eft to þam frumgewrite of ymbgange {round}: hit hæfde fewest leahtra ({n}). Þa ymbgangas æfter him ne betton hit.",
   "Which Homey device? Give its name, like Kitchen light.": "Hwilc Homey searu? Sele his naman, swa Cycene leoht.",
   "Why: {why}": "Forhwi: {why}",
   "Woke {n} waiting script.": "Awehte {n} abidende endebyrdnesse.",
@@ -1755,7 +1754,6 @@
   "Text changed in {n} blocks.": "Se gewrit on {n} stānum awended.",
   "Review stuck": "Sceawung ætstod",
   "stuck": "ætstod",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
   "Using the web": "Þurh þæt webb",
   "This page can't use the web, so the draft above was written without it. The exported program uses the web.": "Þēos sīde ne mæg þæt webb brūcan, swā þæt frumgewrit ufan wæs būtan him gewriten. Þæt ūtgelǣdde ġecræft brȳcþ þæs webbes.",
   "Web address in the task": "Webbnama on þǣm weorce",
@@ -1900,7 +1898,15 @@
   "Plex new items": "Plex niwe",
   "Tautulli history": "Tautulli stear",
   "Tautulli watch time": "Tautulli sight-tima",
-  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Þis page renneþ on þi claude.ai compt, and telleþ nouȝt of ech servys spending. Bere it out to Pyþeon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend, acounted on þat rimcræfte."
+  "The page runs on your claude.ai account, so it doesn't count each service's spending. Export to Python, with keys in second-thought.ini, and this tool reports what each service has spent, its plan and cap, and any overspend, counted on that computer.": "Þis page renneþ on þi claude.ai compt, and telleþ nouȝt of ech servys spending. Bere it out to Pyþeon, wiþ keies in second-thought.ini, and þis tol seiþ what ech servys haþ spent, his plan and his bound, and ani ouerspend, acounted on þat rimcræfte.",
+  "Rule": "Ǣ",
+  "Round {n}": "ymbgang {n}",
+  "Rules by round": "Ǣre ymbygangum",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Sēo ilce ǣ is on twam ymbgangum on rǣd ne heold, swā þæt edwyrcunge hire ne mæg gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Eode eft to þam frumgewrite of ymbgange {round}:hit hēold þā mǣstan ǣ ({n} of {total}). Þa ymbgangas æfter him ne betton hit.",
+  "met": "heold",
+  "not met": "ne heold",
+  "met {n} of {total}": "{n} of {total} heldon"
  },
  "examples": {
   "review": {
@@ -3117,7 +3123,6 @@
   "Web requests, {x}: still not listening. To turn them on, {note}": "Webbbena, {x}: git ne hlystende. To ontendenne hie, {note}",
   "Web requests: {note}": "Webbbena: {note}",
   "Web search: {q}": "Webbsecung: {q}",
-  "Went back to the draft from round {round}: it had the fewest problems ({n}). The rounds after it didn't improve on it.": "Eode eft to þam frumgewrite of ymbgange {round}: hit hæfde fewest leahtra ({n}). Þa ymbgangas æfter him ne betton hit.",
   "Which Homey device? Give its name, like Kitchen light.": "Hwilc Homey searu? Sele his naman, swa Cycene leoht.",
   "Why: {why}": "Forhwi: {why}",
   "Write a first draft": "Writ forme frumgewrit",
@@ -3452,7 +3457,6 @@
   "{n} of them can change things": "{n} of him magon þing awendan",
   "Review stuck": "Sceawung ætstod",
   "stuck": "ætstod",
-  "The review raised the same problems after two revisions, so revising can't fix them. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Seo sceawung fand þa ilcan gedwolan æfter twam bētum, swa bētung ne mæg hie gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
   "Web address in the task": "Webbnama on þǣm weorce",
   "The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.": "Þæt weorc nemneþ webbnaman, ac þes stæpe ne mæg hine openian. Mearca 'þurh þæt webb' on þǣm stāne, oþþe sete þǣre sīdan word on þæt weorc.",
   "Sources not read": "Æspryngas ungerǣdde",
@@ -3677,7 +3681,15 @@
   "this week": "þisse wucan",
   "today": "tō dæg",
   "{pct}% of the {plan} plan's monthly cap of {cap} ({spent} spent, resets {when})": "{pct}% of þæs {plan} planes mōnþgemǣre {cap} ({spent} abbened, ongynþ eft {when})",
-  "{window} {x}": "{window} {x}"
+  "{window} {x}": "{window} {x}",
+  "Rule": "Ǣ",
+  "Round {n}": "ymbgang {n}",
+  "Rules by round": "Ǣre ymbygangum",
+  "The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.": "Sēo ilce ǣ is on twam ymbgangum on rǣd ne heold, swā þæt edwyrcunge hire ne mæg gerihtan. Þam crafte wana wenunga sum þing þe him ne wæs gegifen, swa swa webbsīde, ġewrit oþþe soþ: sele him þæt (on þam weorce, to bisene, oþþe þurh ǣrendracan þe webbsīdan rǣdan mæg), and yrn eft.",
+  "Went back to the draft from round {round}: it met the most rules ({n} of {total}). The rounds after it didn't improve on it.": "Eode eft to þam frumgewrite of ymbgange {round}:hit hēold þā mǣstan ǣ ({n} of {total}). Þa ymbgangas æfter him ne betton hit.",
+  "met": "heold",
+  "not met": "ne heold",
+  "table": "tæfl"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

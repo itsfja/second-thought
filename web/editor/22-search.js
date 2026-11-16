@@ -86,7 +86,7 @@
       div.textContent = reason + " \u00b7 " + hhmm(new Date());
       stepsEl.appendChild(div);
     }
-    run = { task:"", draft:"", problems:[], approved:undefined, answer:"", result:[], vars:new Map(),
+    run = { task:"", draft:"", problems:[], approved:undefined, verdicts:[], answer:"", result:[], vars:new Map(),
             tier:$("tier").value, primary:$("tier").value, backups:backupTiers(), calls:0, steps:0, depth:0, stopped:false, ending:false, finished:false, error:null,
             ctls:new Set(), stoppers:new Set(), threads:new Set(), started:0, broadcasts:0, sample:null,
             active:true, ready:false, pending:hats.slice(), timerStart:Date.now(),
