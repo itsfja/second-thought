@@ -34,16 +34,10 @@ def walk(o):
 
 
 def editor_block_types():
-    """Every block type the editor defines or puts in the palette, read from web/editor/*.js: the S(...) and V(...)
-    block definitions, the palette's B(...) entries (Blockly's own blocks included) and the type:"..." literals.
-    The 202 rb_ blocks a search finds today, and the browser agrees. The page's e2e tests check the same against
-    Blockly itself; this one catches an unknown block in seconds, without a browser (#418)."""
-    types = set()
-    for path in sorted((support.ROOT / "web" / "editor").glob("*.js")):
-        src = path.read_text(encoding="utf-8")
-        for pattern in (r'\bS\("([^"]+)"', r'\bV\("([^"]+)"', r'\bB\("([^"]+)"', r'type:"([^"]+)"'):
-            types.update(re.findall(pattern, src))
-    return types
+    """Every block type the editor defines: the generated list tools/sync.py writes from the definitions
+    (tools/blocks.json, #421), which replaces 0.3's search of the sources (#418). The page's e2e tests check the
+    same against Blockly itself; this one catches an unknown block in seconds, without a browser."""
+    return {b["type"] for b in json.loads((support.ROOT / "tools" / "blocks.json").read_text(encoding="utf-8"))}
 
 
 class Entries(unittest.TestCase):
@@ -91,13 +85,15 @@ class Entries(unittest.TestCase):
                     self.assertFalse({"can", "capabilities", "CAN"} & set(part), "don't list what it can do; the page works that out")
 
     def test_block_types_exist_in_the_editor(self):
-        # #414's unknown block (rb_telegram_send) was only caught by the end-to-end jobs. This catches it here.
+        # #414's unknown block (rb_telegram_send) was only caught by the end-to-end jobs. This catches it here,
+        # against the generated block list (#421). Blockly's own blocks (controls_if, text, …) come with Blockly.
         editor = editor_block_types()
         for path in FILES:
             with self.subTest(file=path.name):
                 types = {o["type"] for o in walk(json.loads(path.read_text(encoding="utf-8"))["program"]) if isinstance(o.get("type"), str)}
                 for t in sorted(types):
-                    self.assertIn(t, editor, f"{path.name} uses block type {t!r}, which web/editor/*.js doesn't define")
+                    if t.startswith("rb_"):
+                        self.assertIn(t, editor, f"{path.name} uses block type {t!r}, which the editor doesn't define")
 
     def test_stands_alone(self):
         # Running another saved program needs that program, which the person loading this one won't have.
