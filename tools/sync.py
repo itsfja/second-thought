@@ -66,6 +66,10 @@ VENDOR = ROOT / "tests" / "vendor"   # tests/setup.sh unpacks the same packages 
 # Written by this tool from web/editor/*.js (#421); the tests check the gallery, the examples, the conversion guide,
 # every language and the capability table against it.
 BLOCKS_FILE = ROOT / "tools" / "blocks.json"
+# The code-conversion prompt, with the block catalogue between these markers regenerated from the list (#422).
+GUIDE = ROOT / "prompts" / "convert-guide.txt"
+GUIDE_BEGIN = "<!-- sync:blocks-begin -->"
+GUIDE_END = "<!-- sync:blocks-end -->"
 
 
 def editor_js() -> str:
@@ -91,7 +95,7 @@ PARTS = [
     ('<script type="application/json" id="i18n">\n', I18N),
     ('<script type="application/json" id="sri">\n', SRI),
     ('<script type="application/json" id="community-gallery">\n', GALLERY),
-    ('<script type="text/plain" id="convert-guide">\n', ROOT / "prompts" / "convert-guide.txt"),
+    ('<script type="text/plain" id="convert-guide">\n', GUIDE),
     ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
     # The editor itself: its styles and its code. Edit these files, not the copies in the page.
@@ -578,6 +582,39 @@ def blocks_json() -> str:
     return json.dumps(entries, ensure_ascii=False, indent=1) + "\n"
 
 
+def guide_catalogue() -> str:
+    """The block catalogue for prompts/convert-guide.txt, generated from the block list: every block, grouped by its
+    palette category, as `type (slots): words — tooltip [capability]` (#422)."""
+    blocks = json.loads(blocks_json())
+    squash = lambda s: " ".join(str(s).split())
+    by_cat = {}
+    for b in blocks:
+        by_cat.setdefault(b["category"] or "Other", []).append(b)
+    lines = ["Every block the editor has, grouped by its palette category — `type (slots): words — tooltip`, with the "
+             "capability in brackets when the block lets a program do something. Hats go at the top of a script.", ""]
+    for cat in sorted(by_cat):
+        lines.append(f"{cat}:")
+        for b in by_cat[cat]:
+            line = f"  {b['type']}" + (f" ({', '.join(b['slots'])})" if b["slots"] else "") + f": {squash(b['words'])}"
+            if b["tooltip"]:
+                line += f" — {squash(b['tooltip'])}"
+            if b["capability"]:
+                line += f"  [{b['capability']}]"
+            lines.append(line)
+        lines.append("")
+    return "\n".join(lines).rstrip("\n")
+
+
+def guide_text() -> str:
+    """prompts/convert-guide.txt with the catalogue between the sync markers regenerated from tools/blocks.json."""
+    raw = GUIDE.read_text(encoding="utf-8")
+    if GUIDE_BEGIN not in raw or GUIDE_END not in raw or raw.index(GUIDE_BEGIN) > raw.index(GUIDE_END):
+        sys.exit(f"{GUIDE.relative_to(ROOT)} needs the {GUIDE_BEGIN} and {GUIDE_END} markers, in that order, around the catalogue")
+    head, rest = raw.split(GUIDE_BEGIN, 1)
+    _, tail = rest.split(GUIDE_END, 1)
+    return head + GUIDE_BEGIN + "\n" + guide_catalogue() + "\n" + GUIDE_END + tail
+
+
 def build(page: str, runtime: str = None) -> str:
     for opener, path in PARTS:
         if path == SERVICES:
@@ -594,6 +631,8 @@ def build(page: str, runtime: str = None) -> str:
             body = i18n_json()
         elif path == GALLERY:
             body = gallery_json()
+        elif path == GUIDE:
+            body = guide_text()
         elif path == EDITOR:
             body = editor_js()
         else:
@@ -622,6 +661,8 @@ def main() -> int:
     langs = lang_files()
     blocks = blocks_json()
     blocks_current = BLOCKS_FILE.read_text(encoding="utf-8") if BLOCKS_FILE.is_file() else None
+    guide = guide_text()
+    guide_current = GUIDE.read_text(encoding="utf-8")
     stale = sorted(set(LANG.glob("*.js")) - set(langs))
     old_langs = sorted(path for path, text in langs.items() if not path.is_file() or path.read_text(encoding="utf-8") != text)
     if "--check" in sys.argv:
@@ -634,10 +675,12 @@ def main() -> int:
             bad.append("lang/ is out of date (" + ", ".join(p.name for p in old_langs + stale) + ")")
         if blocks_current != blocks:
             bad.append("tools/blocks.json is out of date (a block definition changed)")
+        if guide_current != guide:
+            bad.append("prompts/convert-guide.txt is out of date (the block list changed)")
         if bad:
             print("; ".join(bad) + ". Run: python tools/sync.py")
             return 1
-        print("python/runtime.py, lang/, second-thought.html and tools/blocks.json are in sync.")
+        print("python/runtime.py, lang/, second-thought.html, tools/blocks.json and prompts/convert-guide.txt are in sync.")
         return 0
     changed = []
     if runtime != current_rt:
@@ -657,6 +700,9 @@ def main() -> int:
     if blocks_current != blocks:
         BLOCKS_FILE.write_text(blocks, encoding="utf-8")
         changed.append("tools/blocks.json")
+    if guide_current != guide:
+        GUIDE.write_text(guide, encoding="utf-8")
+        changed.append("prompts/convert-guide.txt")
     print("Updated " + " and ".join(changed) + "." if changed else "Already in sync.")
     return 0
 
