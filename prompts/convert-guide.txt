@@ -381,8 +381,8 @@ Review:
   rb_chk_no_mention (TEXT): doesn't mention %1 — Fails the review if the draft contains these words (case doesn't matter).
   rb_passed: draft passed review
   rb_problems: review problems
-  rb_reflect (CRITERIA): review the draft against %1 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model.
-  rb_review (CRITERIA): review the draft against %1 — One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer.
+  rb_reflect (CRITERIA, REVIEWER): review the draft against %1, checked by %2 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked.
+  rb_review (CRITERIA, REVIEWER): review the draft against %1, checked by %2 — One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked.
   rb_score (TEXT, CRITERIA): score %1 out of 10 for %2
 
 SABnzbd:

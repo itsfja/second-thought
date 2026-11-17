@@ -402,6 +402,34 @@ def maker_of(tier):
     return next((m for start, m in (s.get("makers") or {}).items() if model.startswith(start)), s.get("maker", ""))
 
 
+def key_set(s):
+    """Whether a service has a key set (in the environment, second-thought.ini or the keychain — all three land in
+    os.environ by the time a run starts). Llama on this computer needs no key."""
+    if any(os.environ.get(k) for k in s.get("keys", [])):
+        return True
+    return s.get("name") == "Llama" and bool(re.match(r"https?://(localhost|127\\.0\\.0\\.1|\\[::1\\])(:|/|$)",
+                                                      os.environ.get(s["base_env"]) or s.get("base") or ""))
+
+
+def other_maker_tiers(tier):
+    """Another maker's tiers that have a key set, for a review's second opinion (#426): one per service, in SERVICES
+    order, the default size first. The first is the one 'another maker's model' picks."""
+    maker = maker_of(tier)
+    out = []
+    for s in SERVICES:
+        if not key_set(s):
+            continue
+        sizes = [k for k in TIER_NAMES if k in s.get("tiers", {})]
+        sizes.sort(key=lambda k: k != "default")
+        for k in sizes:
+            t = _tier(s, k)
+            m = maker_of(t)
+            if m and m != maker:
+                out.append(t)
+                break
+    return out
+
+
 def model_byline(tier):
     """'Gemma 4, by Google, through Hugging Face' for a router's model (a service with makers), 'Llama 4, by Meta, on
     this computer' for one run here; otherwise the model's name, since the service is its maker's own."""

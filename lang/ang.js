@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"niwe gemearc"},
 "rb_rec_set":{"message0":"sete %1 of %2 to %3","tooltip":"Wendeþ an feld gemearces (oftost gemearces wendling)."},
 "rb_receive":{"message0":"þonne ic onfo %1","tooltip":"Fremeþ þa stoccas beneoþan swa oft swa þis ærendgewrit biþ geboden. Manega endebyrdnessa magon hlystan þam ylcan ærendgewrite."},
-"rb_reflect":{"message0":"sceawa þæt frumgewrit be %1","message1":"oþ %1 ymbgangas; gif hit mistimþ, do","message2":"%1","tooltip":"Claude demeþ þæt frumgewrit. Gif hit mistimþ, þa stoccas þærinne yrnaþ, and he hit eft demeþ. Ælce ymbgange se sceawere eac locaþ þæt ærran leahtras eft ne comon. Gif þa ymbgangas ateoriaþ, þæt frumgewrit mid fewestum leahtrum biþ gehealden, na ana þæt ytemeste.","message3":"and besceawa %1"},
+"rb_reflect":{"message0":"sceawa þæt frumgewrit be %1, gesceawod be %2","message1":"oþ %1 ymbgangas; gif hit mistimþ, do","message2":"%1","tooltip":"Claude demeþ þæt frumgewrit. Gif hit mistimþ, þa stoccas þærinne yrnaþ, and he hit eft demeþ. Ælce ymbgange se sceawere eac locaþ þæt ærran leahtras eft ne comon. Gif þa ymbgangas ateoriaþ, þæt frumgewrit mid fewestum leahtrum biþ gehealden, na ana þæt ytemeste.","message3":"and besceawa %1"},
 "rb_reset_timer":{"message0":"edniwa tidmetend"},
 "rb_result":{"message0":"geendige and ætyw þone wæstm","tooltip":"Geendaþ þa fremminge. Ætywþ þæt þu to þam wæstme ihtest, oþþe þæt frumgewrit gif þu naht ne ihtest."},
 "rb_result_text":{"message0":"se wæstm oþ þis","tooltip":"Eall þæt to þam wæstme geiht wæs, swa gewrit."},
 "rb_retry":{"message0":"fanda eft oþ %1 siþum","message1":"%1","tooltip":"Gif hwæt þærinne mistimþ on wisan þe oþer fandung mihte gebetan (forloren gebind, gemenged andswaru), hit abit hwon and fremeþ hit eft."},
-"rb_review":{"message0":"sceawa þæt frumgewrit be %1","tooltip":"An sceawung. Bruc “frumgewrit oferferde sceawunge” and “sceawunge leahtras” æfterweard.","message1":"and besceawa %1"},
+"rb_review":{"message0":"sceawa þæt frumgewrit be %1, gesceawod be %2","tooltip":"An sceawung. Bruc “frumgewrit oferferde sceawunge” and “sceawunge leahtras” æfterweard.","message1":"and besceawa %1"},
 "rb_revise":{"message0":"edwyrc to betanne þære sceawunge leahtras %1 þurh þæt webb","tooltip":"Claude beteþ þa leahtras þe seo ytemeste sceawung funde."},
 "rb_rework":{"message0":"edwyrc þæt frumgewrit: %1","tooltip":"Claude writ þæt frumgewrit eft æfter þinre lare."},
 "rb_rewrite":{"message0":"edwrit %1 to %2","tooltip":"Swa: edwrit (frumgewrit) to (awend on Frencisc)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"sceawendlic setedness","same":"þæt ilce tacn","another":"oðres cynnes tacn"},
+"rb_reflect.REVIEWER":{"":"sceawendlic setedness","same":"þæt ilce tacn","another":"oðres cynnes tacn"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -1222,7 +1224,10 @@
 "All":"Alle",
 "Built in":"Inboren",
 "Shared":"Gemearc",
-"{n} of {m} examples":"{n} of {m} ensamples"
+"{n} of {m} examples":"{n} of {m} ensamples",
+"Reviewer":"sceawa",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"nan oðres cynnes tacn næfþ her nype, swa þæt ilce tacn sceawaþ þæt frumgewrit.",
+"Written by {writer}; checked by {checker}.":"gewriten be {writer}; gesceawod be {checker}."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Nā receits yet: náþing þæt þis program hæbbeþ don to þǣm worulde is notod.",
 "The chain is broken: a line is missing or was edited.":"The chain is broken: a line is missing oþþe was corrected.",
 "The chain is intact: every line carries the fingerprint of the one before.":"The chain is heal: ælc line berþ the fingermarc of þe oþer.",
-"Couldn't read {path} ({err}).":"ne meahte rǣdan {path} ({err})."
+"Couldn't read {path} ({err}).":"ne meahte rǣdan {path} ({err}).",
+"Reviewer":"sceawa",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"nan oðres cynnes tacn næfþ nype, swa þæt ilce tacn sceawaþ þæt frumgewrit.",
+"Written by {writer}; checked by {checker}.":"gewriten be {writer}; gesceawod be {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

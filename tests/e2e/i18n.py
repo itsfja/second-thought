@@ -3,7 +3,7 @@ from e2e.common import *  # noqa: F401,F403
 from e2e.sources import PY_MARK  # noqa: E402
 
 
-UNTRANSLATED = {"rb_use_model.TIER", "rb_with_model.TIER"}  # model names stay as they are
+UNTRANSLATED = {"rb_use_model.TIER", "rb_with_model.TIER", "rb_review.REVIEWER", "rb_reflect.REVIEWER"}  # model names stay as they are; the reviewer dropdown's own choices are translated
 
 
 # Blockly's own words that the palette shows: its built-in blocks (if, repeat, maths, logic, text, lists, variables,

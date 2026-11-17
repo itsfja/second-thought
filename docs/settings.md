@@ -83,6 +83,7 @@ Some notes:
 - **DeepSeek** is very cheap. It runs on DeepSeek's own servers in China, so keep it for things that aren't private.
 - **Perplexity** searches the web for every question and lists the pages it read at the end of its answer. That makes it good for things that change, like prices and opening times. It can't look at photos.
 - **Hugging Face** hosts a huge library of open models. Second Thought starts you on Google's Gemma, but you can choose almost any model in the library.
+- **A second opinion:** the review blocks have a *checked by* choice — the same model, another maker's model when a key for one is set, or a named one — and `reviewer` in `second-thought.ini` sets the default for review blocks that don't choose: `reviewer = same`, `reviewer = another`, or `reviewer = openai-default`. The run log says who wrote and who checked, like *Written by Claude, balanced; checked by Gemini Flash*. With no other maker's key, the same model checks and the log says so, rather than the run failing.
 - **Groq** (with a q, not to be confused with Grok) is very fast, and good for jobs with lots of small steps.
 - **OpenRouter** reaches hundreds of models from many companies with one key. Choose **OpenRouter, auto-pick** and it chooses a model for each job, or use **with OpenRouter model** and type the name of any model from openrouter.ai/models.
 

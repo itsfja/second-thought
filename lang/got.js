@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"𐍆𐍂𐌰𐌹𐌷𐌽 Claude 𐌿𐍆𐌰𐍂𐌼𐌴𐌻𐌴𐌹𐌽𐌰𐌹𐍃: %1","tooltip":"Claude 𐌿𐍆𐌰𐍂𐌼𐌴𐌻𐌹 𐌰𐌽𐌳𐌷𐌰𐍆𐌾𐌹𐌸, 𐌸𐌰𐍄𐌴𐌹 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐍄𐌰𐌿𐌾𐌰𐌽 𐌼𐌰𐌷𐍄."},
 "rb_rewrite":{"message0":"%1 𐌳𐌿 %2 𐌰𐍆𐍄𐍂𐌰 𐌼𐌴𐌻𐌴𐌹","tooltip":"𐍃𐍅𐌴: (𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹) 𐌳𐌿 (𐍂𐌰𐌶𐌳𐌰𐌹 Frankiska) 𐌰𐍆𐍄𐍂𐌰 𐌼𐌴𐌻𐌴𐌹."},
 "rb_extract":{"message0":"%1 𐌿𐍃 %2 𐌿𐍃𐍄𐌹𐌿𐌷"},
-"rb_reflect":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌱𐌹 %1 𐍃𐌰𐌹𐍈","message1":"%1 𐌲𐌰𐍃𐌰𐌹𐍈; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍄𐌰𐍅𐌴𐌹","message2":"%1","tooltip":"Claude 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍃𐍄𐌰𐌹𐌽𐍉𐍃 𐌹𐌽𐌽𐌰𐌽𐌰 𐍄𐌰𐌿𐌾𐌰𐌽𐌳, 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐍃𐌰𐌹𐍈𐌹𐌸. 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍄𐌰𐍅𐌹 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐍆𐌰𐌹𐍂𐌽𐌾𐍉𐍃 𐌽𐌹 𐌰𐍆𐍄𐍂𐌰 𐌵𐌴𐌼𐌰𐌽 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐍄𐌰𐍅𐌹 𐌿𐍃𐍄𐌹𐌿𐌷𐌹𐌸, 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌻𐌴𐌹𐍄𐌹𐌻𐌹𐍃𐍄𐍉𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌷𐌰𐌱𐌰𐌹𐌸, 𐌽𐌹 𐍃𐍀𐌴𐌳𐌹𐍃𐍄𐍉𐍃.","message3":"𐌾𐌰𐌷 𐍃𐌰𐌺𐌰𐌽 %1"},
-"rb_review":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌱𐌹 %1 𐍃𐌰𐌹𐍈","tooltip":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐌽𐍃. 𐌰𐍆𐌰𐍂 𐌸𐌰𐌼𐌼𐌰 “𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌲𐍉𐌸” 𐌾𐌰𐌷 “𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐌰𐌹𐍃” 𐌱𐍂𐌿𐌺𐌴𐌹.","message1":"𐌾𐌰𐌷 𐍃𐌰𐌺𐌰𐌽 %1"},
+"rb_reflect":{"message0":"𐍃𐍉𐌺𐌾𐌰 𐌳𐍂𐌰𐌿𐍃 %1, 𐍃𐍉 %2 𐍃𐍉𐌺𐌾𐌰","message1":"%1 𐌲𐌰𐍃𐌰𐌹𐍈; 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍄𐌰𐍅𐌴𐌹","message2":"%1","tooltip":"Claude 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐌽𐌹 𐌲𐌰𐌸𐌴𐌹𐌷𐌹𐌸, 𐍃𐍄𐌰𐌹𐌽𐍉𐍃 𐌹𐌽𐌽𐌰𐌽𐌰 𐍄𐌰𐌿𐌾𐌰𐌽𐌳, 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐍃𐌰𐌹𐍈𐌹𐌸. 𐍈𐌰𐍂𐌾𐌰𐍄𐍉𐌷 𐍄𐌰𐍅𐌹 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐍆𐌰𐌹𐍂𐌽𐌾𐍉𐍃 𐌽𐌹 𐌰𐍆𐍄𐍂𐌰 𐌵𐌴𐌼𐌰𐌽 𐍃𐌰𐌹𐍈𐌹𐌸. 𐌾𐌰𐌱𐌰𐌹 𐍄𐌰𐍅𐌹 𐌿𐍃𐍄𐌹𐌿𐌷𐌹𐌸, 𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌻𐌴𐌹𐍄𐌹𐌻𐌹𐍃𐍄𐍉𐍃 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌷𐌰𐌱𐌰𐌹𐌸, 𐌽𐌹 𐍃𐍀𐌴𐌳𐌹𐍃𐍄𐍉𐍃.","message3":"𐌾𐌰𐌷 𐍃𐌰𐌺𐌰𐌽 %1"},
+"rb_review":{"message0":"𐍃𐍉𐌺𐌾𐌰 𐌳𐍂𐌰𐌿𐍃 %1, 𐍃𐍉 %2 𐍃𐍉𐌺𐌾𐌰","tooltip":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐌹𐌽𐍃. 𐌰𐍆𐌰𐍂 𐌸𐌰𐌼𐌼𐌰 “𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌲𐍉𐌸” 𐌾𐌰𐌷 “𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐌰𐌹𐍃” 𐌱𐍂𐌿𐌺𐌴𐌹.","message1":"𐌾𐌰𐌷 𐍃𐌰𐌺𐌰𐌽 %1"},
 "rb_passed":{"message0":"𐍆𐍂𐌿𐌼𐌰𐌲𐌰𐌼𐌴𐌻𐌹 𐌲𐍉𐌸"},
 "rb_problems":{"message0":"𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐌰𐌹𐍃"},
 "rb_score":{"message0":"%1 𐌿𐍃 10 𐌱𐌹 %2 𐌲𐌰𐍂𐌰𐌸"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 𐍃𐌴𐍄","same":"𐍃𐌰𐌼𐌰 tákne","another":"𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne"},
+"rb_reflect.REVIEWER":{"":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 𐍃𐌴𐍄","same":"𐍃𐌰𐌼𐌰 tákne","another":"𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne"}
 },
 "categories":{
 "Agent":"𐌰𐌹𐍂𐌿𐍃",
@@ -1222,7 +1224,10 @@
 "All":"𐌰𐌻𐌻",
 "Built in":"𐌱𐌿𐌹𐌻𐍄 𐌹𐌽",
 "Shared":"𐍃𐌷𐌰𐍂𐌴𐌳",
-"{n} of {m} examples":"{n} 𐍉𐍆 {m} 𐌴𐍇𐌰𐌼𐍀𐌻𐌴𐍃"
+"{n} of {m} examples":"{n} 𐍉𐍆 {m} 𐌴𐍇𐌰𐌼𐍀𐌻𐌴𐍃",
+"Reviewer":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"𐌽𐌹 𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne 𐌰𐌹𐌷 key, 𐍃𐍉𐌺 𐍃𐌰𐌼𐌰 tákne 𐌳𐍂𐌰𐌿𐍃.",
+"Written by {writer}; checked by {checker}.":"𐍅𐍂𐌹𐍄𐌰𐌽𐍃 {writer}; 𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 {checker}."
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"ni innsigl satjan: ni waiht þize program þiuþ þize aiw.",
 "The chain is broken: a line is missing or was edited.":"raid broken: a line missing.",
 "The chain is intact: every line carries the fingerprint of the one before.":"raid whole: aiw line bairþ fingramark þize aiwrum.",
-"Couldn't read {path} ({err}).":"ni maht {path} lesan ({err})."
+"Couldn't read {path} ({err}).":"ni maht {path} lesan ({err}).",
+"Reviewer":"sokjands",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ni anþarands tákne aih key, sok sama tákne draus.",
+"Written by {writer}; checked by {checker}.":"writans {writer}; sokjands {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

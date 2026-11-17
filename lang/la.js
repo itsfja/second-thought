@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nova scheda"},
 "rb_rec_set":{"message0":"statue %1 ex %2 ad %3","tooltip":"Unum campum schedae mutat (plerumque variabilis schedae)."},
 "rb_receive":{"message0":"cum accipio %1","tooltip":"Lateres infra exsequitur quotiens hic nuntius praedicatur. Plura scripta eundem nuntium auscultare possunt."},
-"rb_reflect":{"message0":"recognosce adumbrationem secundum %1","message1":"usque ad %1 circuitus; si deficit, fac","message2":"%1","tooltip":"Claude adumbrationem censet. Si deficit, lateres intus currunt, deinde iterum censet. Quoque circuitu recognitor etiam inspicit ne vitia priora redierint. Si circuitus deficiunt, adumbratio cum paucissimis vitiis servatur, non solum ultima.","message3":"et proba %1"},
+"rb_reflect":{"message0":"recognosce adumbrationem secundum %1, recognita a %2","message1":"usque ad %1 circuitus; si deficit, fac","message2":"%1","tooltip":"Claude adumbrationem censet. Si deficit, lateres intus currunt, deinde iterum censet. Quoque circuitu recognitor etiam inspicit ne vitia priora redierint. Si circuitus deficiunt, adumbratio cum paucissimis vitiis servatur, non solum ultima.","message3":"et proba %1"},
 "rb_reset_timer":{"message0":"renova horologium"},
 "rb_result":{"message0":"fini et ostende effectum","tooltip":"Exsecutionem finit. Ostendit quae ad effectum addidisti, aut adumbrationem si nihil addidisti."},
 "rb_result_text":{"message0":"effectus adhuc","tooltip":"Omnia ad effectum addita, ut textus."},
 "rb_retry":{"message0":"itera usque ad %1 vices","message1":"%1","tooltip":"Si quid intus deficit modo quem secundus conatus sanare possit (conexio amissa, responsum confusum), paulum exspectat et iterum exsequitur."},
-"rb_review":{"message0":"recognosce adumbrationem secundum %1","tooltip":"Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis».","message1":"et proba %1"},
+"rb_review":{"message0":"recognosce adumbrationem secundum %1, recognita a %2","tooltip":"Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis».","message1":"et proba %1"},
 "rb_revise":{"message0":"retracta ut vitia recognitionis corrigas %1 ope interretis","tooltip":"Claude vitia corrigit quae ultima recognitio invenit."},
 "rb_rework":{"message0":"retracta adumbrationem: %1","tooltip":"Claude adumbrationem rescribit secundum praeceptum tuum."},
 "rb_rewrite":{"message0":"rescribe %1 ut %2","tooltip":"Exempli gratia: rescribe (adumbrationem) ut (in Gallicum verte)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"ratio examinatoris","same":"idem exemplar","another":"alterius opificis exemplar"},
+"rb_reflect.REVIEWER":{"":"ratio examinatoris","same":"idem exemplar","another":"alterius opificis exemplar"}
 },
 "categories":{
 "Events":"Eventus",
@@ -1222,7 +1224,10 @@
 "All":"Omnia",
 "Built in":"Intrinseca",
 "Shared":"Communia",
-"{n} of {m} examples":"{n} ex {m} exemplis"
+"{n} of {m} examples":"{n} ex {m} exemplis",
+"Reviewer":"examinator",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"nulli alterius opificis exemplari clavis est in hac pagina, ergo idem exemplar adumbrationem examinat.",
+"Written by {writer}; checked by {checker}.":"scriptum a {writer}; examinatum a {checker}."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Nondum tesserae: nihil quod hoc programa mundo fecit relatum est.",
 "The chain is broken: a line is missing or was edited.":"Catena fracta est: linea deest vel mutata est.",
 "The chain is intact: every line carries the fingerprint of the one before.":"Catena integra est: quaque linea signum prioris fert.",
-"Couldn't read {path} ({err}).":"{path} legere non potui ({err})."
+"Couldn't read {path} ({err}).":"{path} legere non potui ({err}).",
+"Reviewer":"examinator",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"nulli alterius opificis exemplari clavis est, ergo idem exemplar adumbrationem examinat.",
+"Written by {writer}; checked by {checker}.":"scriptum a {writer}; examinatum a {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

@@ -392,7 +392,7 @@
    "tooltip": "Fremeþ þa stoccas beneoþan swa oft swa þis ærendgewrit biþ geboden. Manega endebyrdnessa magon hlystan þam ylcan ærendgewrite."
   },
   "rb_reflect": {
-   "message0": "sceawa þæt frumgewrit be %1",
+   "message0": "sceawa þæt frumgewrit be %1, gesceawod be %2",
    "message1": "oþ %1 ymbgangas; gif hit mistimþ, do",
    "message2": "%1",
    "tooltip": "Claude demeþ þæt frumgewrit. Gif hit mistimþ, þa stoccas þærinne yrnaþ, and he hit eft demeþ. Ælce ymbgange se sceawere eac locaþ þæt ærran leahtras eft ne comon. Gif þa ymbgangas ateoriaþ, þæt frumgewrit mid fewestum leahtrum biþ gehealden, na ana þæt ytemeste.",
@@ -415,7 +415,7 @@
    "tooltip": "Gif hwæt þærinne mistimþ on wisan þe oþer fandung mihte gebetan (forloren gebind, gemenged andswaru), hit abit hwon and fremeþ hit eft."
   },
   "rb_review": {
-   "message0": "sceawa þæt frumgewrit be %1",
+   "message0": "sceawa þæt frumgewrit be %1, gesceawod be %2",
    "tooltip": "An sceawung. Bruc “frumgewrit oferferde sceawunge” and “sceawunge leahtras” æfterweard.",
    "message1": "and besceawa %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "sceawendlic setedness",
+   "same": "þæt ilce tacn",
+   "another": "oðres cynnes tacn"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "sceawendlic setedness",
+   "same": "þæt ilce tacn",
+   "another": "oðres cynnes tacn"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "Alle",
   "Built in": "Inboren",
   "Shared": "Gemearc",
-  "{n} of {m} examples": "{n} of {m} ensamples"
+  "{n} of {m} examples": "{n} of {m} ensamples",
+  "Reviewer": "sceawa",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "nan oðres cynnes tacn næfþ her nype, swa þæt ilce tacn sceawaþ þæt frumgewrit.",
+  "Written by {writer}; checked by {checker}.": "gewriten be {writer}; gesceawod be {checker}."
  },
  "examples": {
   "review": {
@@ -3765,7 +3778,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Nā receits yet: náþing þæt þis program hæbbeþ don to þǣm worulde is notod.",
   "The chain is broken: a line is missing or was edited.": "The chain is broken: a line is missing oþþe was corrected.",
   "The chain is intact: every line carries the fingerprint of the one before.": "The chain is heal: ælc line berþ the fingermarc of þe oþer.",
-  "Couldn't read {path} ({err}).": "ne meahte rǣdan {path} ({err})."
+  "Couldn't read {path} ({err}).": "ne meahte rǣdan {path} ({err}).",
+  "Reviewer": "sceawa",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "nan oðres cynnes tacn næfþ nype, swa þæt ilce tacn sceawaþ þæt frumgewrit.",
+  "Written by {writer}; checked by {checker}.": "gewriten be {writer}; gesceawod be {checker}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

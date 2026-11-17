@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"newe recorde"},
 "rb_rec_set":{"message0":"sette %1 of %2 to %3","tooltip":"Chaungeth oon feeld of a recorde (moost ofte a variable of recorde)."},
 "rb_receive":{"message0":"whan I receyve %1","tooltip":"Renneth the blokkes bynethe as ofte as this message is cryed. Many processes may herkne for the same message."},
-"rb_reflect":{"message0":"examyne the draughte agayns %1","message1":"up to %1 roundes; whan it failleth, do","message2":"%1","tooltip":"Claude demeth the draughte. If it failleth, the blokkes withinne rennen, and than he demeth it eft. Every rounde the examinour loketh eek that olde defautes ben nat comen agayn. If the roundes ben spent, the draughte with fewest defautes is kept, nat oonly the laste.","message3":"and checke %1"},
+"rb_reflect":{"message0":"examyne the draughte agayns %1, examyned by %2","message1":"up to %1 roundes; whan it failleth, do","message2":"%1","tooltip":"Claude demeth the draughte. If it failleth, the blokkes withinne rennen, and than he demeth it eft. Every rounde the examinour loketh eek that olde defautes ben nat comen agayn. If the roundes ben spent, the draughte with fewest defautes is kept, nat oonly the laste.","message3":"and checke %1"},
 "rb_reset_timer":{"message0":"sette the orloge agayn"},
 "rb_result":{"message0":"make an ende and shewe the effect","tooltip":"Endeth the rennyng. Sheweth that thou haddest added to the effect, or the draughte if thou haddest added nothyng."},
 "rb_result_text":{"message0":"the effect as yet","tooltip":"Al that was added to the effect, as text."},
 "rb_retry":{"message0":"assaye agayn up to %1 tymes","message1":"%1","tooltip":"If somwhat withinne failleth in a manere that a seconde assay myghte amende (a broken knotte, a garbled answere), it abideth a litel and renneth it agayn."},
-"rb_review":{"message0":"examyne the draughte agayns %1","tooltip":"Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward.","message1":"and checke %1"},
+"rb_review":{"message0":"examyne the draughte agayns %1, examyned by %2","tooltip":"Oon examinacioun. Use “draughte passed examinacioun” and “defautes of the examinacioun” afterward.","message1":"and checke %1"},
 "rb_revise":{"message0":"amende to correcte the examinacioun defautes %1 by the webbe","tooltip":"Claude correcteth the defautes that the laste examinacioun foond."},
 "rb_rework":{"message0":"werke the draughte newe: %1","tooltip":"Claude writeth the draughte agayn after thyn instruccioun."},
 "rb_rewrite":{"message0":"write %1 agayn to %2","tooltip":"As thus: write (draughte) agayn to (translate into Frenssh)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"the examynoures setting","same":"the same modelle","another":"a nother makeres modelle"},
+"rb_reflect.REVIEWER":{"":"the examynoures setting","same":"the same modelle","another":"a nother makeres modelle"}
 },
 "categories":{
 "Events":"Events",
@@ -1222,7 +1224,10 @@
 "All":"Alle",
 "Built in":"Inborn",
 "Shared":"Delid",
-"{n} of {m} examples":"{n} of {m} ensamples"
+"{n} of {m} examples":"{n} of {m} ensamples",
+"Reviewer":"examyneour",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"no modelle of a nother makere hath a key on this page, so the same modelle examyneth the draughte.",
+"Written by {writer}; checked by {checker}.":"written by {writer}; examyned by {checker}."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"No receipts yet: no thing this program hath done to the world is recordid.",
 "The chain is broken: a line is missing or was edited.":"The chaine is broken: a line is missing or was chaunged.",
 "The chain is intact: every line carries the fingerprint of the one before.":"The chaine is heal: eche line bereth the fingermarc of the oþer.",
-"Couldn't read {path} ({err}).":"ne mihte readan {path} ({err})."
+"Couldn't read {path} ({err}).":"ne mihte readan {path} ({err}).",
+"Reviewer":"examyneour",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"no modelle of a nother makere hath a key, so the same modelle examyneth the draughte.",
+"Written by {writer}; checked by {checker}.":"written by {writer}; examyned by {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

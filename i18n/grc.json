@@ -392,7 +392,7 @@
    "tooltip": "Τρέχει τὰς πλίνθους τὰς κάτω ὁσάκις αὕτη ἡ ἀγγελία κηρύσσεται. Πολλαὶ σειραὶ δύνανται τῆς αὐτῆς ἀγγελίας ἀκούειν."
   },
   "rb_reflect": {
-   "message0": "ἐξέτασον τὸ σχέδιον κατὰ %1",
+   "message0": "ἐξέτασον τὸ προσχέδιον κατὰ %1, ἐξετασθὲν ὑπὸ %2",
    "message1": "ἕως %1 κύκλων· ὅταν ἀποτύχῃ, ποίει",
    "message2": "%1",
    "tooltip": "Ὁ Claude κρίνει τὸ σχέδιον. Ἐὰν ἀποτύχῃ, αἱ πλίνθοι ἔσω τρέχουσι, εἶτα πάλιν κρίνει. Ἐν ἑκάστῳ κύκλῳ ὁ ἐξεταστὴς καὶ σκοπεῖ μὴ τὰ πρότερα σφάλματα ἐπανέλθῃ. Ἐὰν οἱ κύκλοι παύσωνται, τὸ σχέδιον τὸ ἐλάχιστα σφάλματα ἔχον φυλάσσεται, οὐ μόνον τὸ ἔσχατον.",
@@ -415,7 +415,7 @@
    "tooltip": "Ἐάν τι ἔσω ἀποτύχῃ τρόπῳ ὃν δευτέρα πεῖρα ἰάσαιτο (δεσμὸς λυθείς, ἀπόκρισις τεταραγμένη), μικρὸν μένει καὶ πάλιν τρέχει."
   },
   "rb_review": {
-   "message0": "ἐξέτασον τὸ σχέδιον κατὰ %1",
+   "message0": "ἐξέτασον τὸ προσχέδιον κατὰ %1, ἐξετασθὲν ὑπὸ %2",
    "tooltip": "Μία ἐξέτασις. Χρῶ ὕστερον τῷ «τὸ σχέδιον τὴν ἐξέτασιν παρῆλθεν» καὶ τῷ «τὰ σφάλματα τῆς ἐξετάσεως».",
    "message1": "καὶ σκόπει %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "ἡ τοῦ ἐξεταστοῦ ῥύθμισις",
+   "same": "τὸ αὐτὸ πρότυπον",
+   "another": "ἄλλου δημιουργοῦ πρότυπον"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "ἡ τοῦ ἐξεταστοῦ ῥύθμισις",
+   "same": "τὸ αὐτὸ πρότυπον",
+   "another": "ἄλλου δημιουργοῦ πρότυπον"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "Ἅπαντα",
   "Built in": "Ἐγγενῆ",
   "Shared": "Κοινόχρηστα",
-  "{n} of {m} examples": "{n} ἐκ {m} παραδειγμάτων"
+  "{n} of {m} examples": "{n} ἐκ {m} παραδειγμάτων",
+  "Reviewer": "ἐξεταστής",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "οὐδεὶς ἄλλου δημιουργοῦ πρότυπον κλεῖδα ἔχει ἐνθάδε, διὸ τὸ αὐτὸ πρότυπον ἐξετάζει τὸ προσχέδιον.",
+  "Written by {writer}; checked by {checker}.": "γεγραμμένον ὑπὸ {writer}· ἐξετασθὲν ὑπὸ {checker}."
  },
  "examples": {
   "review": {
@@ -3765,7 +3778,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Οὐδέπω ἀποδείξεις: οὐδὲν ὧν τὸ πρόγραμμα τῷ κόσμῳ πεποίηκεν ἀναγέγραπται.",
   "The chain is broken: a line is missing or was edited.": "Ἡ ἁλυσίς τέθραυσται: γραμμή τις λείπει ἢ ἠλλάχθη.",
   "The chain is intact: every line carries the fingerprint of the one before.": "Ἡ ἁλυσίς ἀκέραιά ἐστιν: ἑκάστη γραμμὴ φέρει τὸ ἀποτύπωμα τῆς πρὸ αὐτῆς.",
-  "Couldn't read {path} ({err}).": "οὐκ ἠδυνήθην {path} ἀναγνῶναι ({err})."
+  "Couldn't read {path} ({err}).": "οὐκ ἠδυνήθην {path} ἀναγνῶναι ({err}).",
+  "Reviewer": "ἐξεταστής",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "οὐδεὶς ἄλλου δημιουργοῦ πρότυπον κλεῖδα ἔχει, διὸ τὸ αὐτὸ πρότυπον ἐξετάζει τὸ προσχέδιον.",
+  "Written by {writer}; checked by {checker}.": "γεγραμμένον ὑπὸ {writer}· ἐξετασθὲν ὑπὸ {checker}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

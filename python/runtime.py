@@ -39,7 +39,7 @@ for _stream in (sys.stdout, sys.stderr):
 # Python looks for it next to the program, then in the current folder, then in your home folder;
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
-SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS", "reviewer": "RB_REVIEWER",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "budget_money": "RB_BUDGET_MONEY",
                  "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "rates_url": "RB_RATES_URL", "quota_hourly": "RB_QUOTA_HOURLY",
@@ -52,7 +52,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
 
 # Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
 # "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
-ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
+ONE_WORD_SETTINGS = {"primary", "model", "reviewer", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
                      "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse"}
 
@@ -595,6 +595,34 @@ def maker_of(tier):
         return ""
     model = MODELS.get(tier) or to_str(tier).split(":", 1)[-1]
     return next((m for start, m in (s.get("makers") or {}).items() if model.startswith(start)), s.get("maker", ""))
+
+
+def key_set(s):
+    """Whether a service has a key set (in the environment, second-thought.ini or the keychain — all three land in
+    os.environ by the time a run starts). Llama on this computer needs no key."""
+    if any(os.environ.get(k) for k in s.get("keys", [])):
+        return True
+    return s.get("name") == "Llama" and bool(re.match(r"https?://(localhost|127\\.0\\.0\\.1|\\[::1\\])(:|/|$)",
+                                                      os.environ.get(s["base_env"]) or s.get("base") or ""))
+
+
+def other_maker_tiers(tier):
+    """Another maker's tiers that have a key set, for a review's second opinion (#426): one per service, in SERVICES
+    order, the default size first. The first is the one 'another maker's model' picks."""
+    maker = maker_of(tier)
+    out = []
+    for s in SERVICES:
+        if not key_set(s):
+            continue
+        sizes = [k for k in TIER_NAMES if k in s.get("tiers", {})]
+        sizes.sort(key=lambda k: k != "default")
+        for k in sizes:
+            t = _tier(s, k)
+            m = maker_of(t)
+            if m and m != maker:
+                out.append(t)
+                break
+    return out
 
 
 def model_byline(tier):
@@ -8562,6 +8590,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.vars.clear()
         self.task = ""
         self.draft = ""
+        self.draft_tier = None      # the model that wrote the current draft, for the run log's "who checked" (#426)
         self._last_how = ""        # how the last approval was given, for the receipt's "allowed:" (#431)
         self._receipt_where = ""   # which block or agent step the action belongs to (#431)
         self.problems = []
@@ -8597,6 +8626,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.journal, self.replay, self.replay_pos = getattr(self, "journal", None), None, 0
         self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
         self.primary = self.tier
+        # The default reviewer for review blocks: same, another (another maker's model with a key) or a named
+        # tier. A review block's own "checked by" choice wins over this (#426).
+        self.reviewer = os.environ.get("RB_REVIEWER", "")
         self.backup_used = 0
         # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
         backups = os.environ.get("RB_BACKUPS")
@@ -9597,6 +9629,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._need_task()
         self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task,
                                       web=bool(web))
+        self.draft_tier = self.current_tier  # who wrote the draft, for the review's "who checked" (#426)
         self.problems, self.approved = [], None
         self.log(tr("Write a first draft"), self.draft, tr("done"))
         if not web and self._WEB_ADDRESS.search(self.task or ""):
@@ -9611,6 +9644,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.draft = await self._call("Rewrite the draft below following this instruction: " + instr +
                                       "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" +
                                       (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
+        self.draft_tier = self.current_tier
         self.log(tr("Rework: {instr}", instr=_short(instr, 60)), self.draft, tr("done"))
 
     async def revise(self, web=False):
@@ -9624,10 +9658,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
                                       "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft,
                                       web=bool(web))
+        self.draft_tier = self.current_tier
         self.log(tr("Revise to fix the problems"), self.draft, tr("revised"))
 
     def set_draft(self, t):
         self.draft = to_str(t)
+        self.draft_tier = self.current_tier
 
     @contextlib.contextmanager
     def reviewing(self):
@@ -9660,8 +9696,25 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             lines.append("| " + cell(rule) + " | " + " | ".join(cells) + " |")
         return "\n".join(lines)
 
-    async def review(self, criteria, label="Review", in_loop=False, checks=None):
+    def reviewer_tier(self, choice=None):
+        """The model that checks the draft in a review (#426): the block's 'checked by' choice, else the reviewer
+        setting, else the same model. 'another' picks another maker's tier that has a key. Gives back (tier, note);
+        note says when no other maker has a key, so the same model checks instead of the run failing."""
+        c = to_str(choice if choice not in (None, "") else self.reviewer).strip()
+        if c.lower() in ("", "same"):
+            return self.current_tier, None
+        if c.lower() == "another":
+            others = other_maker_tiers(self.current_tier)
+            if others:
+                return others[0], None
+            return (self.current_tier, tr("No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice."))
+        return c, None
+
+    async def review(self, criteria, label="Review", in_loop=False, checks=None, reviewer=None):
         self._need_draft()
+        rtier, rnote = self.reviewer_tier(reviewer)
+        if rnote:
+            self.log(tr("Reviewer"), rnote, tr("note"), calls=False)
         rules = parse_rules(criteria)
         cv = exact_checks(self.draft, checks)  # the exact checks, worked out by code, no model call (#425)
         loop = self.reflect if in_loop else None
@@ -9669,12 +9722,16 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                    "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         if rules:  # written rules are judged by the model; with only exact checks there is no model call (#425)
             rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
-            v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
-                                 "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
-                                 '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
-                                 '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
-                                 "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
-                                 "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            token = MODEL_OVERRIDE.set(rtier)  # the reviewer checks the draft, not the model that wrote it (#426)
+            try:
+                v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
+                                     "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
+                                     '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
+                                     '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
+                                     "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
+                                     "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            finally:
+                MODEL_OVERRIDE.reset(token)
             res = review_verdicts(rules, v)
             res["verdicts"] = cv + res["verdicts"]
             res["approved"] = all(x["met"] for x in res["verdicts"]) and res["approved"]
@@ -9704,12 +9761,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             loop["same"] = loop["same"] + 1 if same else 0
             loop["last_unmet"] = list(res["unmet"])
             loop["rounds"].append({"round": loop["round"], "verdicts": res["verdicts"]})
+        who = tr("Written by {writer}; checked by {checker}.", writer=model_label(self.draft_tier or self.primary), checker=model_label(rtier))
         if approved:
             if loop is not None and loop.get("rounds"):
                 self.log(tr("Rules by round"), self.review_table(), tr("table"))
-            self.log(label, tr("Meets every criterion."), tr("approved"))
+            self.log(label, tr("Meets every criterion.") + "\n" + who, tr("approved"))
         else:
-            self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
+            self.log(label, "\n".join("- " + p for p in self.problems) + "\n" + who, tr("needs work"))
         return approved
 
     def stuck(self):

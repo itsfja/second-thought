@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude सूचिं याच: %1","tooltip":"Claude सूचिया पटिवदति, यं त्वं अनुपरिवत्तेतुं सक्कोसि।"},
 "rb_rewrite":{"message0":"%1 %2 इति पुन लिख","tooltip":"निदस्सनं: (आलेखं) (फरासिभासाय परिवत्तेहि) इति पुन लिख।"},
 "rb_extract":{"message0":"%2 इतो %1 उद्धर"},
-"rb_reflect":{"message0":"आलेखं %1 अनुसारेन समेक्ख","message1":"याव %1 वारा; असम्पन्ने, करोहि","message2":"%1","tooltip":"Claude आलेखं वीमंसति। असम्पन्ने अन्तोखण्डा चालियन्ति, ततो पुन वीमंसति। पच्चेकं वारे समेक्खको पुब्बदोसा न पच्चागता ति पि पस्सति। वारेसु खीणेसु, न पच्छिमो एव, अप्पतरदोसो आलेखो रक्खीयति।","message3":"और जांच %1"},
-"rb_review":{"message0":"आलेखं %1 अनुसारेन समेक्ख","tooltip":"एका समेक्खा। पच्छा “आलेखो समेक्खं उत्तिण्णो” “समेक्खादोसा” च उपयुञ्ज।","message1":"और जांच %1"},
+"rb_reflect":{"message0":"%1 anussārena lekhaṃ parīkṣa, parīkṣako %2","message1":"याव %1 वारा; असम्पन्ने, करोहि","message2":"%1","tooltip":"Claude आलेखं वीमंसति। असम्पन्ने अन्तोखण्डा चालियन्ति, ततो पुन वीमंसति। पच्चेकं वारे समेक्खको पुब्बदोसा न पच्चागता ति पि पस्सति। वारेसु खीणेसु, न पच्छिमो एव, अप्पतरदोसो आलेखो रक्खीयति।","message3":"और जांच %1"},
+"rb_review":{"message0":"%1 anussārena lekhaṃ parīkṣa, parīkṣako %2","tooltip":"एका समेक्खा। पच्छा “आलेखो समेक्खं उत्तिण्णो” “समेक्खादोसा” च उपयुञ्ज।","message1":"और जांच %1"},
 "rb_passed":{"message0":"आलेखो समेक्खं उत्तिण्णो"},
 "rb_problems":{"message0":"समेक्खादोसा"},
 "rb_score":{"message0":"%2 अत्थाय %1 दससु अङ्केहि गणेहि"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"parīkṣakassa vyavasthā","same":"tad eva mānaṃ","another":"aññassa kārakassa mānaṃ"},
+"rb_reflect.REVIEWER":{"":"parīkṣakassa vyavasthā","same":"tad eva mānaṃ","another":"aññassa kārakassa mānaṃ"}
 },
 "categories":{
 "Agent":"पटिनिधि",
@@ -1222,7 +1224,10 @@
 "All":"सब्बं",
 "Built in":"अन्तोगधं",
 "Shared":"संविभत्तं",
-"{n} of {m} examples":"{n} ओf {m} उदाहरणानि"
+"{n} of {m} examples":"{n} ओf {m} उदाहरणानि",
+"Reviewer":"parīkṣako",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"aññassa kārakassa mānassa kuñcikā atra nāsti, ataḥ tad eva mānaṃ lekhaṃ parīkṣati.",
+"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer}ena; parīkṣitaṃ {checker}ena."
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"अदानि पि प्रापयं नत्थि: यं किञ्जि इदं प्रोग्रम्में लोकस्स अकासि, तं न लिखितं",
 "The chain is broken: a line is missing or was edited.":"सङ्गटं चिन्नं: एका पङ्क्ति गता वा परिवत्तिता",
 "The chain is intact: every line carries the fingerprint of the one before.":"सङ्गटं अज्चिन्नं: प्रत्येका पङ्क्ति पुब्बाय अङ्गुलीमुद्दं वहति",
-"Couldn't read {path} ({err}).":"न सक्का {path} पठितुं ({err})."
+"Couldn't read {path} ({err}).":"न सक्का {path} पठितुं ({err}).",
+"Reviewer":"parīkṣako",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"aññassa kārakassa mānassa kuñcikā nāsti, ataḥ tad eva mānaṃ lekhaṃ parīkṣati.",
+"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer}ena; parīkṣitaṃ {checker}ena."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

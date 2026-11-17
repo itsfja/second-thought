@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"ጦማር ሐዲስ"},
 "rb_rec_set":{"message0":"አንብር %1 ዘ %2 ከመ %3","tooltip":"ይዌልጥ አሐደ ክፍለ ጦማር (መብዝኅቶ ተወላጤ ጦማር)።"},
 "rb_receive":{"message0":"ሶበ እትሜጦ %1","tooltip":"ይረውጽ ግንፋላተ ዘታሕቴሁ ኵሎ ጊዜ ሶበ ትሰበክ ዛቲ መልእክት። ብዙኅ ፍኖታት ይክሉ ይስምዑ አሐተ መልእክተ።"},
-"rb_reflect":{"message0":"ሕትት ቅድመ ጽሑፈ በከመ %1","message1":"እስከ %1 ዙረታት፤ ሶበ ይወድቅ፣ ግበር","message2":"%1","tooltip":"Claude ይሔትት ቅድመ ጽሑፈ። እመ ወድቀ፣ ይረውጹ ግንፋላት ዘውስጡ፣ ወእምዝ ይሔትት ዳግመ። በበ ዙረት ሐታቲ ይሔትት ከመ ኢተመይጡ ጌጋያት ቀደምት። እመ ኀልቁ ዙረታት፣ ይትዐቀብ ቅድመ ጽሑፍ ዘውሑድ ጌጋያቲሁ፣ አኮ ደኃሪ ባሕቲቱ።","message3":"ወልባልእ %1"},
+"rb_reflect":{"message0":"le%1 ሜሰሌ ሜስወድ ዪሜሪሚር, ዬሜሪምሩ %2","message1":"እስከ %1 ዙረታት፤ ሶበ ይወድቅ፣ ግበር","message2":"%1","tooltip":"Claude ይሔትት ቅድመ ጽሑፈ። እመ ወድቀ፣ ይረውጹ ግንፋላት ዘውስጡ፣ ወእምዝ ይሔትት ዳግመ። በበ ዙረት ሐታቲ ይሔትት ከመ ኢተመይጡ ጌጋያት ቀደምት። እመ ኀልቁ ዙረታት፣ ይትዐቀብ ቅድመ ጽሑፍ ዘውሑድ ጌጋያቲሁ፣ አኮ ደኃሪ ባሕቲቱ።","message3":"ወልባልእ %1"},
 "rb_reset_timer":{"message0":"አሐድስ ኈላቌ ጊዜ"},
 "rb_result":{"message0":"ፈጽም ወአርኢ ፍሬ","tooltip":"ይፌጽም ሩጸተ። ያርኢ ዘወሰከ ለፍሬ፣ አው ቅድመ ጽሑፈ እመ አልቦ ዘወሰከ።"},
 "rb_result_text":{"message0":"ፍሬ እስከ ይእዜ","tooltip":"ኵሉ ዘተወስከ ለፍሬ፣ ከመ ጽሑፍ።"},
 "rb_retry":{"message0":"ፈትን ዳግመ እስከ %1 ጊዜያተ","message1":"%1","tooltip":"እመ ወድቀ ነገር በውስጡ በዘይክል ፈተና ካልእ ያስተራትዖ (ተራክቦ ዘተበትከ፣ ተሰጥዎ ዘተሐውከ)፣ ይጸንሕ ንስቲተ ወይረውጾ ዳግመ።"},
-"rb_review":{"message0":"ሕትት ቅድመ ጽሑፈ በከመ %1","tooltip":"አሐቲ ሐተታ። ተበቋዕ በ'ቅድመ ጽሑፍ ኀለፈ ሐተታ' ወ'ጌጋያተ ሐተታ' እምድኅሬሁ።","message1":"ወልባልእ %1"},
+"rb_review":{"message0":"le%1 ሜሰሌ ሜስወድ ዪሜሪሚር, ዬሜሪምሩ %2","tooltip":"አሐቲ ሐተታ። ተበቋዕ በ'ቅድመ ጽሑፍ ኀለፈ ሐተታ' ወ'ጌጋያተ ሐተታ' እምድኅሬሁ።","message1":"ወልባልእ %1"},
 "rb_revise":{"message0":"አስተራትዕ ጌጋያተ ሐተታ %1 በመርበብ","tooltip":"Claude ያስተራትዕ ጌጋያተ ዘረከበት ሐተታ ደኃሪት።"},
 "rb_rework":{"message0":"ግበር ዳግመ ቅድመ ጽሑፈ፡ %1","tooltip":"Claude ይጽሕፍ ዳግመ ቅድመ ጽሑፈ በከመ ትእዛዝከ።"},
 "rb_rewrite":{"message0":"ጸሐፍ ዳግመ %1 ከመ %2","tooltip":"በአርአያ፡ ጸሐፍ ዳግመ (ቅድመ ጽሑፍ) ከመ (ተርጕም ኀበ ልሳነ ፈረንሳይ)።"},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"ዬሜሪምሩ ስረተ","same":"ዬም aደgiው ሜስወድ","another":"ሌለ ዬሜሪምሩ ሜስወድ"},
+"rb_reflect.REVIEWER":{"":"ዬሜሪምሩ ስረተ","same":"ዬም aደgiው ሜስወድ","another":"ሌለ ዬሜሪምሩ ሜስወድ"}
 },
 "categories":{
 "Events":"ኵነታት",
@@ -1223,7 +1225,10 @@
 "All":"ኩለ",
 "Built in":"ሴሬታ",
 "Shared":"ኬፌለ",
-"{n} of {m} examples":"{n} {m}"
+"{n} of {m} examples":"{n} {m}",
+"Reviewer":"ዬሜሪምሩ",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"ሌለ ዬሜሪምሩ ሜስወድ ኬይ በ ትሂስ page aለ, ዬ aደgiው ሜስወድ ዪሜሪሚር",
+"Written by {writer}; checked by {checker}.":"ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}."
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"እንተዝ ንታየእ",
 "The chain is broken: a line is missing or was edited.":"እንተ የንታየዝ እታለ",
 "The chain is intact: every line carries the fingerprint of the one before.":"በንታየእ እንተዝ",
-"Couldn't read {path} ({err}).":"እንተ {path} በንታየ ({err})."
+"Couldn't read {path} ({err}).":"እንተ {path} በንታየ ({err}).",
+"Reviewer":"ዬሜሪምሩ",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ሌለ ዬሜሪምሩ ሜስወድ ኬይ aለ, ዬ aደgiው ሜስወድ ዪሜሪሚር",
+"Written by {writer}; checked by {checker}.":"ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ወስክ ትርጓሜ",

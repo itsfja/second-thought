@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"שטרא חדתא"},
 "rb_rec_set":{"message0":"שוי %1 ד-%2 ל-%3","tooltip":"משני חקלא חד בשטרא (בדרך כלל משתניא דשטרא)."},
 "rb_receive":{"message0":"כד אנא מקבל %1","tooltip":"מרהט לבנין דלתחתא כל אימת דאגרתא הדא מתכרזא. סדרין סגיאין יכלין למשמע לאגרתא חדא."},
-"rb_reflect":{"message0":"בדוק טופסא כלקבל %1","message1":"עד %1 סבובין; כד נפיל, עביד","message2":"%1","tooltip":"Claude בדיק טופסא. אי נפיל, לבנין דבגוה רהטין, ובתר כן בדיק תוב. בכל סבובא בודקא בדיק נמי דפגמין קדמאין לא תבו. אי סבוביא שלמו, טופסא דאית ביה פגמין זעירין נטיר, לא בתראה לחוד.","message3":"ܡܦܕܐ %1"},
+"rb_reflect":{"message0":"בדוק את הטיוטא לפי %1, הבודק: %2","message1":"עד %1 סבובין; כד נפיל, עביד","message2":"%1","tooltip":"Claude בדיק טופסא. אי נפיל, לבנין דבגוה רהטין, ובתר כן בדיק תוב. בכל סבובא בודקא בדיק נמי דפגמין קדמאין לא תבו. אי סבוביא שלמו, טופסא דאית ביה פגמין זעירין נטיר, לא בתראה לחוד.","message3":"ܡܦܕܐ %1"},
 "rb_reset_timer":{"message0":"אתקין שעונא"},
 "rb_result":{"message0":"שלים ואחוי פירא","tooltip":"משלים הלוכא. מחוי מה דאוספת לפירא, או טופסא אי לא אוספת מדעם."},
 "rb_result_text":{"message0":"פירא עד כען","tooltip":"כל מה דאתוסף לפירא, ככתבא."},
 "rb_retry":{"message0":"נסי תוב עד %1 זמנין","message1":"%1","tooltip":"אי מדעם בגוה נפיל באורחא דנסיונא תניינא יכיל לתקנא (קשרא דאתפסק, פתגמא משבשא), מתין קליל ומרהט תוב."},
-"rb_review":{"message0":"בדוק טופסא כלקבל %1","tooltip":"בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\".","message1":"ܡܦܕܐ %1"},
+"rb_review":{"message0":"בדוק את הטיוטא לפי %1, הבודק: %2","tooltip":"בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\".","message1":"ܡܦܕܐ %1"},
 "rb_revise":{"message0":"תקן פגמי בדיקתא %1 בסיוע רשתא","tooltip":"Claude מתקן פגמיא דבדיקתא בתרייתא אשכחת."},
 "rb_rework":{"message0":"עביד טופסא מן חדת: %1","tooltip":"Claude כתב טופסא מן חדת כפקודתך."},
 "rb_rewrite":{"message0":"כתוב %1 מן חדת: %2","tooltip":"כגון: כתוב (טופסא) מן חדת: (תרגם ללשן צרפתאה)."},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"},
+"rb_reflect.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -1223,7 +1225,10 @@
 "All":"ܟܠ",
 "Built in":"ܒܢܝܬܐ",
 "Shared":"ܡܫܘܬܦܐ",
-"{n} of {m} examples":"{n} ܡܢ {m} ܡܬܠ̈ܐ"
+"{n} of {m} examples":"{n} ܡܢ {m} ܡܬܠ̈ܐ",
+"Reviewer":"בדוק",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"אין מודל של יצרן אחר עם מפתח בדף זה — אותו מודל בדוק את הטיוטה. הוסף מפתח דרך «Add another key», או בחר מודל לפי שם «בדוק».",
+"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"lā qabūlāt baʿd: lā šayʾ mimma faʿala hādhā al-barnāmaj lil-ʿālam sajjala.",
 "The chain is broken: a line is missing or was edited.":"al-silsila makinšara: saṭr wāḥid mafqūd aw mubaddal.",
 "The chain is intact: every line carries the fingerprint of the one before.":"al-silsila salīma: kull saṭr yaḥmil baṣmat al-sābiq.",
-"Couldn't read {path} ({err}).":"lā neškur {path} ({err})."
+"Couldn't read {path} ({err}).":"lā neškur {path} ({err}).",
+"Reviewer":"בדוק",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"אין מודל של יצרן אחר עם מפתח — אותו מודל בדוק את הטיוטה. הוסף מפתח של שירות אחר, או ציין מודל ב«בדוק» של גוש הביקורת.",
+"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

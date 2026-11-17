@@ -25,3 +25,20 @@ test("stuckRule gives the runtime's answers", () => {
   for (const [prev, unmet, want] of parity("review.json").stuck_rule.answers)
     assert.equal(units.stuckRule(prev, unmet), want, JSON.stringify([prev, unmet]));
 });
+
+// The reviewer's choice on the review blocks (#426): who checks the draft.
+test("reviewerTier picks the same model, another maker's, or a named one", () => {
+  assert.equal(JSON.stringify(units.reviewerTier("same", "default")), JSON.stringify({ tier: "default", note: null }));
+  assert.equal(JSON.stringify(units.reviewerTier("", "default")), JSON.stringify({ tier: "default", note: null }));
+  assert.equal(JSON.stringify(units.reviewerTier("gemini-default", "default")), JSON.stringify({ tier: "gemini-default", note: null }));
+  const hasGemini = s => s.name === "Gemini";
+  assert.equal(units.otherMakerTiers("default", hasGemini)[0], "gemini-default");
+  assert.equal(JSON.stringify(units.reviewerTier("another", "default", hasGemini)), JSON.stringify({ tier: "gemini-default", note: null }));
+  const r = units.reviewerTier("another", "default", () => false);
+  assert.equal(r.tier, "default");
+  assert.match(r.note, /No other maker's model has a key on this page/);
+  // the same maker is not "another maker"
+  assert.equal(JSON.stringify(units.otherMakerTiers("gemini-default", s => s.name === "Gemini")), "[]");
+  assert.equal(units.makerOfTier("default"), "Anthropic");
+  assert.equal(units.makerOfTier("gemini-default"), "Google");
+});

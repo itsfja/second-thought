@@ -103,6 +103,9 @@
   // A service's tiers in the menus. A quick or complex tier whose model is the default's is left out: it's the same choice.
   const menuSizes = s => SIZES.filter(k => s.tiers[k] && (k === "default" || s.tiers[k][0] !== s.tiers.default[0]));
   const TIERS = SERVICES.flatMap(s => menuSizes(s).map(k => [s.tiers[k][1], s.prefix + k]));
+  // Who checks the draft in a review block (#426): the reviewer setting (in an exported program's second-thought.ini),
+  // the same model, another maker's model, or a named one. Values go into the exported Python, so they stay English.
+  const REVIEWER_OPTIONS = [["the reviewer setting", ""], ["the same model", "same"], ["another maker's model", "another"]].concat(TIERS);
   // The service a tier belongs to, or null for Claude (its tiers are plain quick, default and complex).
   const serviceOf = t => { t = String(t || ""); return SERVICES.find(s => s.prefix && (t.startsWith(s.prefix) || (s.any_model && t.startsWith(s.any_model)))) || null; };
   const serviceNamed = name => SERVICES.find(s => s.name === name);
@@ -312,17 +315,17 @@
     V("rb_extract", "extract %1 from %2", [val("WHAT"), val("TEXT")], "String", { style:"claude", inputsInline:true }),
     /* Review */
     { type:"rb_reflect",
-      message0:"review the draft against %1", args0:[val("CRITERIA")],
+      message0:"review the draft against %1, checked by %2", args0:[val("CRITERIA"), { type:"field_dropdown", name:"REVIEWER", options:REVIEWER_OPTIONS }],
       message1:"up to %1 rounds; when it fails, do", args1:[val("ROUNDS")],
       message2:"%1", args2:[{ type:"input_statement", name:"FIX" }],
       message3:"and check %1", args3:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model." },
+      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked." },
     { type:"rb_review",
-      message0:"review the draft against %1", args0:[val("CRITERIA")],
+      message0:"review the draft against %1, checked by %2", args0:[val("CRITERIA"), { type:"field_dropdown", name:"REVIEWER", options:REVIEWER_OPTIONS }],
       message1:"and check %1", args1:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer." },
+      tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked." },
     V("rb_passed", "draft passed review", [], "Boolean", { style:"review" }),
     V("rb_problems", "review problems", [], "Array", { style:"review" }),
     V("rb_score", "score %1 out of 10 for %2", [val("TEXT"), val("CRITERIA")], "Number", { style:"review", inputsInline:true }),

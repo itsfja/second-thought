@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude 𒂠 𒀠 𒅗: %1","tooltip":"Claude 𒂠𒁕 𒅗 𒄄, 𒃻 𒃻 𒋗𒍪𒂠 𒁺."},
 "rb_rewrite":{"message0":"%1 %2-𒁶 𒉋 𒊬","tooltip":"𒅆𒁺: (𒁾𒊕) (𒅴 Faransa-𒂠 𒉽)-𒁶 𒉋 𒊬."},
 "rb_extract":{"message0":"%2-𒋫 %1 𒌓𒁺"},
-"rb_reflect":{"message0":"𒁾𒊕 %1 𒅆𒂃","message1":"𒂗𒈾 %1 𒀀𒁺; 𒉡𒋛𒁲𒀀 𒀝","message2":"%1","tooltip":"Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀.","message3":"𒊩𒌨𒁺 %1"},
-"rb_review":{"message0":"𒁾𒊕 %1 𒅆𒂃","tooltip":"𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷.","message1":"𒊩𒌨𒁺 %1"},
+"rb_reflect":{"message0":"šumma %1 𒇻, 𒇻 %2","message1":"𒂗𒈾 %1 𒀀𒁺; 𒉡𒋛𒁲𒀀 𒀝","message2":"%1","tooltip":"Claude 𒁾𒊕 𒅆 𒂃. 𒉡𒋛𒁲𒀀, 𒋞 𒊮𒂵 𒀝, 𒂕𒁉𒀀 𒅆 𒂃. 𒀀𒁺 𒀸𒀸𒀀 𒅆𒂃𒂊 𒉡𒋛𒁲 𒅆𒂠 𒉡𒄄𒀀 𒅆 𒁇. 𒀀𒁺 𒌀𒆷𒀀, 𒁾𒊕 𒉡𒋛𒁲 𒌉𒊏 𒃻, 𒂕𒊏 𒉡𒈨𒀀.","message3":"𒊩𒌨𒁺 %1"},
+"rb_review":{"message0":"šumma %1 𒇻, 𒇻 %2","tooltip":"𒅆𒂃𒀀 1. 𒂕𒁉𒀀 “𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺” 𒅇 “𒉡𒋛𒁲 𒅆𒂃𒀀” 𒂷𒂷.","message1":"𒊩𒌨𒁺 %1"},
 "rb_passed":{"message0":"𒁾𒊕 𒅆𒂃𒀀 𒌓𒁺"},
 "rb_problems":{"message0":"𒉡𒋛𒁲 𒅆𒂃𒀀"},
 "rb_score":{"message0":"%1 10-𒀀 %2-𒂠 𒋃"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"šumma 𒇻 set","same":"šumma 𒇻 𒍣","another":"šumma 𒇻 o-𒍣"},
+"rb_reflect.REVIEWER":{"":"šumma 𒇻 set","same":"šumma 𒇻 𒍣","another":"šumma 𒇻 o-𒍣"}
 },
 "categories":{
 "Agent":"𒆥𒄄𒀀",
@@ -1222,7 +1224,10 @@
 "All":"𒅗𒈾",
 "Built in":"𒅗𒈾",
 "Shared":"𒅗𒈾",
-"{n} of {m} examples":"{n} 𒅗 {m}"
+"{n} of {m} examples":"{n} 𒅗 {m}",
+"Reviewer":"šumma 𒇻",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"o-𒍣 𒇻 𒈾, šumma 𒇻 𒍣 𒇻",
+"Written by {writer}; checked by {checker}.":"𒇻 {writer}; 𒇻 {checker}."
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"kišib nu-ak: nu-kur2.",
 "The chain is broken: a line is missing or was edited.":"kišib nu-kur2: inim nu-ak.",
 "The chain is intact: every line carries the fingerprint of the one before.":"kišib ša3: inim kur2.",
-"Couldn't read {path} ({err}).":"nu-ak {path} ({err})."
+"Couldn't read {path} ({err}).":"nu-ak {path} ({err}).",
+"Reviewer":"šumma lu",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"o-ze lu na, šumma lu ze lu",
+"Written by {writer}; checked by {checker}.":"lu {writer}; lu {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

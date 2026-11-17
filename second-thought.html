@@ -524,7 +524,7 @@ for _stream in (sys.stdout, sys.stderr):
 # Python looks for it next to the program, then in the current folder, then in your home folder;
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
-SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS", "reviewer": "RB_REVIEWER",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "budget_money": "RB_BUDGET_MONEY",
                  "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "rates_url": "RB_RATES_URL", "quota_hourly": "RB_QUOTA_HOURLY",
@@ -537,7 +537,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
 
 # Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
 # "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
-ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
+ONE_WORD_SETTINGS = {"primary", "model", "reviewer", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
                      "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse"}
 
@@ -1080,6 +1080,34 @@ def maker_of(tier):
         return ""
     model = MODELS.get(tier) or to_str(tier).split(":", 1)[-1]
     return next((m for start, m in (s.get("makers") or {}).items() if model.startswith(start)), s.get("maker", ""))
+
+
+def key_set(s):
+    """Whether a service has a key set (in the environment, second-thought.ini or the keychain — all three land in
+    os.environ by the time a run starts). Llama on this computer needs no key."""
+    if any(os.environ.get(k) for k in s.get("keys", [])):
+        return True
+    return s.get("name") == "Llama" and bool(re.match(r"https?://(localhost|127\\.0\\.0\\.1|\\[::1\\])(:|/|$)",
+                                                      os.environ.get(s["base_env"]) or s.get("base") or ""))
+
+
+def other_maker_tiers(tier):
+    """Another maker's tiers that have a key set, for a review's second opinion (#426): one per service, in SERVICES
+    order, the default size first. The first is the one 'another maker's model' picks."""
+    maker = maker_of(tier)
+    out = []
+    for s in SERVICES:
+        if not key_set(s):
+            continue
+        sizes = [k for k in TIER_NAMES if k in s.get("tiers", {})]
+        sizes.sort(key=lambda k: k != "default")
+        for k in sizes:
+            t = _tier(s, k)
+            m = maker_of(t)
+            if m and m != maker:
+                out.append(t)
+                break
+    return out
 
 
 def model_byline(tier):
@@ -9047,6 +9075,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.vars.clear()
         self.task = ""
         self.draft = ""
+        self.draft_tier = None      # the model that wrote the current draft, for the run log's "who checked" (#426)
         self._last_how = ""        # how the last approval was given, for the receipt's "allowed:" (#431)
         self._receipt_where = ""   # which block or agent step the action belongs to (#431)
         self.problems = []
@@ -9082,6 +9111,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.journal, self.replay, self.replay_pos = getattr(self, "journal", None), None, 0
         self.tier = os.environ.get("RB_MODEL_TIER", globals().get("DEFAULT_TIER", "default"))
         self.primary = self.tier
+        # The default reviewer for review blocks: same, another (another maker's model with a key) or a named
+        # tier. A review block's own "checked by" choice wins over this (#426).
+        self.reviewer = os.environ.get("RB_REVIEWER", "")
         self.backup_used = 0
         # Backup models, tried in order when the primary fails on a step. RB_BACKUPS="openai-default,default" overrides.
         backups = os.environ.get("RB_BACKUPS")
@@ -10082,6 +10114,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._need_task()
         self.draft = await self._call("Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + self.task,
                                       web=bool(web))
+        self.draft_tier = self.current_tier  # who wrote the draft, for the review's "who checked" (#426)
         self.problems, self.approved = [], None
         self.log(tr("Write a first draft"), self.draft, tr("done"))
         if not web and self._WEB_ADDRESS.search(self.task or ""):
@@ -10096,6 +10129,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.draft = await self._call("Rewrite the draft below following this instruction: " + instr +
                                       "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" +
                                       (self.task or "(none given)") + "\n\nDraft:\n" + self.draft)
+        self.draft_tier = self.current_tier
         self.log(tr("Rework: {instr}", instr=_short(instr, 60)), self.draft, tr("done"))
 
     async def revise(self, web=False):
@@ -10109,10 +10143,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                                       "Reply with only the improved piece.\n\nTask:\n" + (self.task or "(none given)") +
                                       "\n\nProblems:\n" + "\n".join("- " + p for p in self.problems) + keep + "\n\nDraft:\n" + self.draft,
                                       web=bool(web))
+        self.draft_tier = self.current_tier
         self.log(tr("Revise to fix the problems"), self.draft, tr("revised"))
 
     def set_draft(self, t):
         self.draft = to_str(t)
+        self.draft_tier = self.current_tier
 
     @contextlib.contextmanager
     def reviewing(self):
@@ -10145,8 +10181,25 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             lines.append("| " + cell(rule) + " | " + " | ".join(cells) + " |")
         return "\n".join(lines)
 
-    async def review(self, criteria, label="Review", in_loop=False, checks=None):
+    def reviewer_tier(self, choice=None):
+        """The model that checks the draft in a review (#426): the block's 'checked by' choice, else the reviewer
+        setting, else the same model. 'another' picks another maker's tier that has a key. Gives back (tier, note);
+        note says when no other maker has a key, so the same model checks instead of the run failing."""
+        c = to_str(choice if choice not in (None, "") else self.reviewer).strip()
+        if c.lower() in ("", "same"):
+            return self.current_tier, None
+        if c.lower() == "another":
+            others = other_maker_tiers(self.current_tier)
+            if others:
+                return others[0], None
+            return (self.current_tier, tr("No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice."))
+        return c, None
+
+    async def review(self, criteria, label="Review", in_loop=False, checks=None, reviewer=None):
         self._need_draft()
+        rtier, rnote = self.reviewer_tier(reviewer)
+        if rnote:
+            self.log(tr("Reviewer"), rnote, tr("note"), calls=False)
         rules = parse_rules(criteria)
         cv = exact_checks(self.draft, checks)  # the exact checks, worked out by code, no model call (#425)
         loop = self.reflect if in_loop else None
@@ -10154,12 +10207,16 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                    "and list it again, in the same words, if it has come back:\n" + "\n".join("- " + e for e in loop["earlier"])) if loop and loop["earlier"] else ""
         if rules:  # written rules are judged by the model; with only exact checks there is no model call (#425)
             rule_list = "\n".join(f"{i}. {r}" for i, r in enumerate(rules, 1)) or to_str(criteria)
-            v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
-                                 "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
-                                 '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
-                                 '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
-                                 "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
-                                 "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            token = MODEL_OVERRIDE.set(rtier)  # the reviewer checks the draft, not the model that wrote it (#426)
+            try:
+                v = await self._call("You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + rule_list +
+                                     "\n\nTask:\n" + (self.task or "(none given)") + "\n\nDraft:\n" + self.draft + earlier +
+                                     '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, '
+                                     '"problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. '
+                                     "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in "
+                                     "the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS["review"])
+            finally:
+                MODEL_OVERRIDE.reset(token)
             res = review_verdicts(rules, v)
             res["verdicts"] = cv + res["verdicts"]
             res["approved"] = all(x["met"] for x in res["verdicts"]) and res["approved"]
@@ -10189,12 +10246,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             loop["same"] = loop["same"] + 1 if same else 0
             loop["last_unmet"] = list(res["unmet"])
             loop["rounds"].append({"round": loop["round"], "verdicts": res["verdicts"]})
+        who = tr("Written by {writer}; checked by {checker}.", writer=model_label(self.draft_tier or self.primary), checker=model_label(rtier))
         if approved:
             if loop is not None and loop.get("rounds"):
                 self.log(tr("Rules by round"), self.review_table(), tr("table"))
-            self.log(label, tr("Meets every criterion."), tr("approved"))
+            self.log(label, tr("Meets every criterion.") + "\n" + who, tr("approved"))
         else:
-            self.log(label, "\n".join("- " + p for p in self.problems), tr("needs work"))
+            self.log(label, "\n".join("- " + p for p in self.problems) + "\n" + who, tr("needs work"))
         return approved
 
     def stuck(self):
@@ -16473,8 +16531,8 @@ Review:
   rb_chk_no_mention (TEXT): doesn't mention %1 — Fails the review if the draft contains these words (case doesn't matter).
   rb_passed: draft passed review
   rb_problems: review problems
-  rb_reflect (CRITERIA): review the draft against %1 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model.
-  rb_review (CRITERIA): review the draft against %1 — One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer.
+  rb_reflect (CRITERIA, REVIEWER): review the draft against %1, checked by %2 — Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked.
+  rb_review (CRITERIA, REVIEWER): review the draft against %1, checked by %2 — One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked.
   rb_score (TEXT, CRITERIA): score %1 out of 10 for %2
 
 SABnzbd:
@@ -16825,6 +16883,9 @@ HOW TO MAP CODE
   // A service's tiers in the menus. A quick or complex tier whose model is the default's is left out: it's the same choice.
   const menuSizes = s => SIZES.filter(k => s.tiers[k] && (k === "default" || s.tiers[k][0] !== s.tiers.default[0]));
   const TIERS = SERVICES.flatMap(s => menuSizes(s).map(k => [s.tiers[k][1], s.prefix + k]));
+  // Who checks the draft in a review block (#426): the reviewer setting (in an exported program's second-thought.ini),
+  // the same model, another maker's model, or a named one. Values go into the exported Python, so they stay English.
+  const REVIEWER_OPTIONS = [["the reviewer setting", ""], ["the same model", "same"], ["another maker's model", "another"]].concat(TIERS);
   // The service a tier belongs to, or null for Claude (its tiers are plain quick, default and complex).
   const serviceOf = t => { t = String(t || ""); return SERVICES.find(s => s.prefix && (t.startsWith(s.prefix) || (s.any_model && t.startsWith(s.any_model)))) || null; };
   const serviceNamed = name => SERVICES.find(s => s.name === name);
@@ -17034,17 +17095,17 @@ HOW TO MAP CODE
     V("rb_extract", "extract %1 from %2", [val("WHAT"), val("TEXT")], "String", { style:"claude", inputsInline:true }),
     /* Review */
     { type:"rb_reflect",
-      message0:"review the draft against %1", args0:[val("CRITERIA")],
+      message0:"review the draft against %1, checked by %2", args0:[val("CRITERIA"), { type:"field_dropdown", name:"REVIEWER", options:REVIEWER_OPTIONS }],
       message1:"up to %1 rounds; when it fails, do", args1:[val("ROUNDS")],
       message2:"%1", args2:[{ type:"input_statement", name:"FIX" }],
       message3:"and check %1", args3:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model." },
+      tooltip:"Claude critiques the draft. If it fails, the blocks inside run, then it critiques again. Each round the reviewer also checks that earlier problems haven't come back. If the rounds run out, the draft that met the most rules is kept, not just the last one. The blocks inside 'and check' are worked out by code, not by the model. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked." },
     { type:"rb_review",
-      message0:"review the draft against %1", args0:[val("CRITERIA")],
+      message0:"review the draft against %1, checked by %2", args0:[val("CRITERIA"), { type:"field_dropdown", name:"REVIEWER", options:REVIEWER_OPTIONS }],
       message1:"and check %1", args1:[{ type:"input_statement", name:"CHECKS", check:"Check" }],
       previousStatement:null, nextStatement:null, style:"review",
-      tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer." },
+      tooltip:"One review. Use 'draft passed review' and 'review problems' afterwards. The blocks inside 'and check' are worked out by code, not by the model: they cost nothing and always give the same answer. 'Checked by' chooses who reviews: the same model, another maker's model when a key for one is set, or a named one; the run log says who wrote and who checked." },
     V("rb_passed", "draft passed review", [], "Boolean", { style:"review" }),
     V("rb_problems", "review problems", [], "Array", { style:"review" }),
     V("rb_score", "score %1 out of 10 for %2", [val("TEXT"), val("CRITERIA")], "Number", { style:"review", inputsInline:true }),
@@ -20663,6 +20724,8 @@ HOW TO MAP CODE
       }
       return "[" + parts.join(", ") + "]";
     };
+    // A review block's 'checked by' choice, as reviewer="..." for R.review(...) (#426); empty means the reviewer setting.
+    const pyReviewer = bb => { const v = bb.getFieldValue("REVIEWER"); return v ? ", reviewer=" + pyStr(v) : ""; };
 
     function inp(b, name, dflt){ const t = b.getInputTargetBlock(name); return t ? expr(t) : dflt; }
     function expr(b){
@@ -20875,7 +20938,7 @@ HOW TO MAP CODE
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
           case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
-          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ", checks=" + pyChecks(b) + ")"); break;
+          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ", checks=" + pyChecks(b) + pyReviewer(b) + ")"); break;
           case "rb_reflect": {
             const crit = tmp("criteria"), chk = tmp("checks"), max = tmp("max_rounds"), rnd = tmp("round");
             E(crit + " = " + I("CRITERIA", '""'));
@@ -20884,7 +20947,7 @@ HOW TO MAP CODE
             E("with R.reviewing():");
             out.push(pad + "    for " + rnd + " in range(1, " + max + " + 2):");
             out.push(pad + "        R.tick()");
-            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True, checks=" + chk + "):");
+            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True, checks=" + chk + pyReviewer(b) + "):");
             out.push(pad + "            break");
             out.push(pad + "        if " + rnd + " > " + max + ":");
             out.push(pad + "            R.out_of_rounds()");
@@ -24700,9 +24763,52 @@ HOW TO MAP CODE
       addStep("Web address in the task", { text:tr("The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.") }).done("note", "warn");
   }
 
-  async function reviewOnce(criteria, checks, label, inLoop){
+  // Who makes a tier's model, as maker_of in exported programs (#426).
+  function makerOfTier(t){
+    t = String(t || "");
+    for (const s of SERVICES) {
+      for (const [k, v] of Object.entries(s.tiers || {})) {
+        if ((s.prefix || "") + k === t) {
+          const hit = Object.entries(s.makers || {}).find(([start]) => String(v[0]).startsWith(start));
+          return (hit || [null, s.maker || ""])[1];
+        }
+      }
+      if (s.any_model && t.startsWith(s.any_model)) return (s.makers && Object.values(s.makers)[0]) || s.maker || "";
+    }
+    return "";
+  }
+  // Another maker's tiers that have a key on this page, for 'checked by: another maker's model' (#426).
+  function otherMakerTiers(t, hasKey){
+    hasKey = hasKey || (s => !!pageKeyFor(s));
+    const maker = makerOfTier(t), out = [];
+    for (const s of SERVICES) {
+      if (!hasKey(s)) continue;
+      for (const k of Object.keys(s.tiers || {}).sort((a, b) => (a !== "default") - (b !== "default"))) {
+        const tier = (s.prefix || "") + k, m = makerOfTier(tier);
+        if (m && m !== maker) { out.push(tier); break; }
+      }
+    }
+    return out;
+  }
+  // The model that checks the draft: the block's 'checked by' choice, else the same model (#426). Says so when no
+  // other maker has a key here, instead of failing.
+  function reviewerTier(choice, tier, hasKey){
+    const c = String(choice || "").trim();
+    tier = tier || run.tier;
+    if (!c || c.toLowerCase() === "same") return { tier, note: null };
+    if (c.toLowerCase() === "another") {
+      const others = otherMakerTiers(tier, hasKey);
+      if (others.length) return { tier: others[0], note: null };
+      return { tier, note: tr("No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.") };
+    }
+    return { tier: c, note: null };
+  }
+
+  async function reviewOnce(criteria, checks, label, inLoop, reviewer){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
+    const { tier: rtier, note } = reviewerTier(reviewer);
+    if (note) addStep(tr("Reviewer"), { text: note }).done("note", "warn");
     const rules = parseRules(criteria);
     const cv = exactChecks(run.draft, checks);  // the exact checks, worked out by code, no model call (#425)
     const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
@@ -24710,10 +24816,14 @@ HOW TO MAP CODE
     let res;
     if (rules.length) {  // written rules are judged by the model; with only exact checks there is no model call (#425)
       const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
-      const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
-        "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
-        '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
-        "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+      const before = run.tier; run.tier = rtier;  // the reviewer checks the draft, not the model that wrote it (#426)
+      let v;
+      try {
+        v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
+          "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
+          '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
+          "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+      } finally { run.tier = before; }
       res = reviewVerdicts(rules, v);
       res.verdicts = cv.concat(res.verdicts);
       res.approved = res.verdicts.every(x => x.met) && res.approved;
@@ -24741,8 +24851,9 @@ HOW TO MAP CODE
       loop.lastUnmet = res.unmet.slice();
       (loop.rounds = loop.rounds || []).push({ round:loop.round, verdicts:res.verdicts });
     }
-    if (approved) { s.text(tr("Meets every criterion.")); s.done("approved", "ok"); }
-    else { s.list(run.problems); s.done("needs work", "warn"); }
+    const who = tr("Written by {writer}; checked by {checker}.", { writer:tierLabel(run.draftTier || run.primary), checker:tierLabel(rtier) });
+    if (approved) { s.text(who + "\n" + tr("Meets every criterion.")); s.done("approved", "ok"); }
+    else { s.list(run.problems); const d = document.createElement("div"); d.textContent = who; s.body.appendChild(d); s.done("needs work", "warn"); }
     return { approved, step:s };
   }
 
@@ -24945,6 +25056,7 @@ HOW TO MAP CODE
       case "rb_generate": {
         needTask();
         run.draft = await askStep("Write a first draft", "Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + run.task);
+        run.draftTier = run.tier;  // who wrote the draft, for the review's "who checked" (#426)
         run.problems = []; run.approved = undefined;
         webNote(b, run.task);
         break;
@@ -24955,6 +25067,7 @@ HOW TO MAP CODE
         if (!instr) fail(tr("The 'rework the draft' block has no instruction."));
         run.draft = await askStep(tr("Rework: {how}", { how:short(instr, 60) }), "Rewrite the draft below following this instruction: " + instr +
           "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft);
+        run.draftTier = run.tier;
         break;
       }
       case "rb_revise": {
@@ -24965,11 +25078,12 @@ HOW TO MAP CODE
         const keep = fixed.length ? "\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + fixed.map(e => "- " + e).join("\n") : "";
         run.draft = await ask("Revise the draft so it fixes every problem listed. Change nothing else that works. Reply with only the improved piece.\n\nTask:\n" +
           (run.task || "(none given)") + "\n\nProblems:\n" + run.problems.map(p => "- " + p).join("\n") + keep + "\n\nDraft:\n" + run.draft, s);
+        run.draftTier = run.tier;
         s.done("revised", "ok");
         webNote(b, "");
         break;
       }
-      case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); break;
+      case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); run.draftTier = run.tier; break;
       case "rb_checkpoint_save": {
         const name = String(b.getFieldValue("NAME") || "").trim();
         if (!name) fail(tr("The 'save checkpoint' block needs a name."));
@@ -24985,10 +25099,11 @@ HOW TO MAP CODE
         addStep(tr("Back to checkpoint \u201c{name}\u201d", { name }), { text:run.draft ? tr("Restored the task, draft, review, result and variables. Draft: {draft}", { draft:short(run.draft, 80) }) : tr("Restored the task, draft, review, result and variables.") }).done("restored", "ok");
         break;
       }
-      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), await collectChecks(b, tc), tr("Review")); break; }
+      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), await collectChecks(b, tc), tr("Review"), false, b.getFieldValue("REVIEWER")); break; }
       case "rb_reflect": {
         needDraft();
         const criteria = str(await input(b, tc, "CRITERIA"));
+        const reviewer = b.getFieldValue("REVIEWER");
         const checks = await collectChecks(b, tc);
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
@@ -24996,7 +25111,7 @@ HOW TO MAP CODE
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
-            const { approved, step } = await reviewOnce(criteria, checks, tr("Review, round {n}", { n:round }), true);
+            const { approved, step } = await reviewOnce(criteria, checks, tr("Review, round {n}", { n:round }), true, reviewer);
             // the rules by round, shown in the log as the rounds happen (#424)
             if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
             run.reflect.table.table(rulesTableRows(run.reflect));
@@ -25654,6 +25769,7 @@ HOW TO MAP CODE
   updateSchedChip();
   // For tests/editor, which runs these in Node without a browser: the editor's functions that need no page.
   window.__editorUnits = { calcText, calcValue, timePlusText, nextDueFor, actionsCrons, migrateProgram, unknownTypes, tr, codeHash, readExported,
-    localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows, exactChecks };
+    localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows, exactChecks,
+    makerOfTier, otherMakerTiers, reviewerTier };
 })();
 </script>

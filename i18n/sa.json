@@ -393,7 +393,7 @@
    "tooltip": "यदा यदा अयं सन्देशः उद्घोष्यते तदा तदा अधःस्थान् खण्डान् चालयति। बहवः प्रक्रमाः एकमेव सन्देशं शृण्वन्ति।"
   },
   "rb_reflect": {
-   "message0": "प्रारूपं %1 अनुसृत्य समीक्षस्व",
+   "message0": "%1 anusārena lekhyaṃ parīkṣaya, parīkṣakaḥ %2",
    "message1": "%1 आवर्तनानि यावत्; यदा विफलं, कुरु",
    "message2": "%1",
    "tooltip": "Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।",
@@ -416,7 +416,7 @@
    "tooltip": "यदि अन्तः किमपि तथा विफलं यथा द्वितीयः प्रयत्नः तत् समादध्यात् (त्रुटितः सम्बन्धः, विकृतम् उत्तरम्), किञ्चित् प्रतीक्ष्य पुनः चालयति।"
   },
   "rb_review": {
-   "message0": "प्रारूपं %1 अनुसृत्य समीक्षस्व",
+   "message0": "%1 anusārena lekhyaṃ parīkṣaya, parīkṣakaḥ %2",
    "tooltip": "एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।",
    "message1": "और जांच %1"
   },
@@ -974,6 +974,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "parīkṣakasya vyavasthā",
+   "same": "tad eva mānam",
+   "another": "anyasya kārayituḥ mānam"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "parīkṣakasya vyavasthā",
+   "same": "tad eva mānam",
+   "another": "anyasya kārayituḥ mānam"
   }
  },
  "categories": {
@@ -1958,7 +1968,10 @@
   "All": "सर्वम्",
   "Built in": "अन्तर्गतं",
   "Shared": "संविभक्तं",
-  "{n} of {m} examples": "{n} ओf {m} उदाहरणानि"
+  "{n} of {m} examples": "{n} ओf {m} उदाहरणानि",
+  "Reviewer": "parīkṣakaḥ",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "anyasya kārayituḥ mānasya kuñcikā atra nāsti, ataḥ tad eva mānaṃ lekhyaṃ parīkṣati.",
+  "Written by {writer}; checked by {checker}.": "liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā."
  },
  "examples": {
   "review": {
@@ -3766,7 +3779,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "अद्य अपि प्रापयः नास्ति: यत् किञ्जित् इदं प्रोग्रमं जगते अकरोत्, तत् न लिखितम्",
   "The chain is broken: a line is missing or was edited.": "श्ṛङ्खला विज्चिन्ना: एकः पङ्क्तिः गतः वा परिवर्तिता",
   "The chain is intact: every line carries the fingerprint of the one before.": "श्ṛङ्खला अखण्डा: प्रत्येका पङ्क्तिः पूर्वस्याः अङ्गुलीमुद्रां वहति",
-  "Couldn't read {path} ({err}).": "न शक्नोति {path} पठितुं ({err})."
+  "Couldn't read {path} ({err}).": "न शक्नोति {path} पठितुं ({err}).",
+  "Reviewer": "parīkṣakaḥ",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "anyasya kārayituḥ mānasya kuñcikā nāsti, ataḥ tad eva mānaṃ lekhyaṃ parīkṣati.",
+  "Written by {writer}; checked by {checker}.": "liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"neuer Datensatz"},
 "rb_rec_set":{"message0":"%1 von %2 auf %3 setzen","tooltip":"Ändert ein Feld eines Datensatzes (meist einer Datensatz-Variablen)."},
 "rb_receive":{"message0":"wenn ich %1 empfange","tooltip":"Führt die Blöcke darunter aus, sobald diese Nachricht gesendet wird. Mehrere Skripte können auf dieselbe Nachricht hören."},
-"rb_reflect":{"message0":"den Entwurf prüfen anhand von %1","message1":"bis zu %1 Runden; wenn er durchfällt, tue","message2":"%1","tooltip":"Claude kritisiert den Entwurf. Fällt er durch, laufen die Blöcke darin, dann kritisiert er erneut. In jeder Runde prüft der Prüfer auch, dass frühere Probleme nicht zurückgekehrt sind. Sind die Runden aufgebraucht, wird der Entwurf mit den wenigsten Problemen behalten, nicht einfach der letzte.","message3":"und prüfen %1"},
+"rb_reflect":{"message0":"den Entwurf anhand von %1 prüfen, geprüft von %2","message1":"bis zu %1 Runden; wenn er durchfällt, tue","message2":"%1","tooltip":"Claude kritisiert den Entwurf. Fällt er durch, laufen die Blöcke darin, dann kritisiert er erneut. In jeder Runde prüft der Prüfer auch, dass frühere Probleme nicht zurückgekehrt sind. Sind die Runden aufgebraucht, wird der Entwurf mit den wenigsten Problemen behalten, nicht einfach der letzte.","message3":"und prüfen %1"},
 "rb_reset_timer":{"message0":"Stoppuhr zurücksetzen"},
 "rb_result":{"message0":"beenden und das Ergebnis zeigen","tooltip":"Beendet den Lauf. Zeigt, was Sie zum Ergebnis hinzugefügt haben, oder den Entwurf, wenn Sie nichts hinzugefügt haben."},
 "rb_result_text":{"message0":"das bisherige Ergebnis","tooltip":"Alles, was zum Ergebnis hinzugefügt wurde, als Text."},
 "rb_retry":{"message0":"bis zu %1 Mal wiederholen","message1":"%1","tooltip":"Schlägt etwas darin auf eine Weise fehl, die ein zweiter Versuch beheben könnte (eine abgebrochene Verbindung, eine verstümmelte Antwort), wartet es kurz und führt es erneut aus."},
-"rb_review":{"message0":"den Entwurf prüfen anhand von %1","tooltip":"Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“.","message1":"und prüfen %1"},
+"rb_review":{"message0":"den Entwurf anhand von %1 prüfen, geprüft von %2","tooltip":"Eine Prüfung. Verwenden Sie danach „Entwurf hat die Prüfung bestanden“ und „Probleme der Prüfung“.","message1":"und prüfen %1"},
 "rb_revise":{"message0":"überarbeiten, um die Probleme der Prüfung zu beheben %1 mit dem Web","tooltip":"Claude behebt die Probleme, die die letzte Prüfung gefunden hat."},
 "rb_rework":{"message0":"den Entwurf überarbeiten: %1","tooltip":"Claude schreibt den Entwurf nach Ihrer Anweisung neu."},
 "rb_rewrite":{"message0":"%1 umschreiben: %2","tooltip":"Zum Beispiel: (Entwurf) umschreiben: (ins Französische übersetzen)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"die Prüfer-Einstellung","same":"dasselbe Modell","another":"ein Modell eines anderen Herstellers"},
+"rb_reflect.REVIEWER":{"":"die Prüfer-Einstellung","same":"dasselbe Modell","another":"ein Modell eines anderen Herstellers"}
 },
 "categories":{
 "Events":"Ereignisse",
@@ -1222,7 +1224,10 @@
 "All":"Alle",
 "Built in":"Eingebaut",
 "Shared":"Geteilt",
-"{n} of {m} examples":"{n} von {m} Beispielen"
+"{n} of {m} examples":"{n} von {m} Beispielen",
+"Reviewer":"Prüfer",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Kein Modell eines anderen Herstellers hat auf dieser Seite einen Schlüssel, also prüft dasselbe Modell den Entwurf. Füge über „Add another key“ einen Schlüssel hinzu oder wähle unter „geprüft von“ ein bestimmtes Modell.",
+"Written by {writer}; checked by {checker}.":"Geschrieben von {writer}; geprüft von {checker}."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2398,6 +2403,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Noch keine Quittungen: Was dieses Programm der Welt angetan hat, ist nirgends aufgezeichnet.",
 "The chain is broken: a line is missing or was edited.":"Die Kette ist gebrochen: eine Zeile fehlt oder wurde bearbeitet.",
 "The chain is intact: every line carries the fingerprint of the one before.":"Die Kette ist intakt: jede Zeile trägt den Fingerabdruck der vorherigen.",
-"Couldn't read {path} ({err}).":"Konnte {path} nicht lesen ({err})."
+"Couldn't read {path} ({err}).":"Konnte {path} nicht lesen ({err}).",
+"Reviewer":"Prüfer",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Kein Modell eines anderen Herstellers hat einen Schlüssel, also prüft dasselbe Modell den Entwurf. Füge einen Schlüssel für einen anderen Dienst hinzu oder nenne im Review-Block unter „geprüft von“ ein Modell.",
+"Written by {writer}; checked by {checker}.":"Geschrieben von {writer}; geprüft von {checker}."
 }
 };

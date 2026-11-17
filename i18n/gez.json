@@ -393,7 +393,7 @@
    "tooltip": "ይረውጽ ግንፋላተ ዘታሕቴሁ ኵሎ ጊዜ ሶበ ትሰበክ ዛቲ መልእክት። ብዙኅ ፍኖታት ይክሉ ይስምዑ አሐተ መልእክተ።"
   },
   "rb_reflect": {
-   "message0": "ሕትት ቅድመ ጽሑፈ በከመ %1",
+   "message0": "le%1 ሜሰሌ ሜስወድ ዪሜሪሚር, ዬሜሪምሩ %2",
    "message1": "እስከ %1 ዙረታት፤ ሶበ ይወድቅ፣ ግበር",
    "message2": "%1",
    "tooltip": "Claude ይሔትት ቅድመ ጽሑፈ። እመ ወድቀ፣ ይረውጹ ግንፋላት ዘውስጡ፣ ወእምዝ ይሔትት ዳግመ። በበ ዙረት ሐታቲ ይሔትት ከመ ኢተመይጡ ጌጋያት ቀደምት። እመ ኀልቁ ዙረታት፣ ይትዐቀብ ቅድመ ጽሑፍ ዘውሑድ ጌጋያቲሁ፣ አኮ ደኃሪ ባሕቲቱ።",
@@ -416,7 +416,7 @@
    "tooltip": "እመ ወድቀ ነገር በውስጡ በዘይክል ፈተና ካልእ ያስተራትዖ (ተራክቦ ዘተበትከ፣ ተሰጥዎ ዘተሐውከ)፣ ይጸንሕ ንስቲተ ወይረውጾ ዳግመ።"
   },
   "rb_review": {
-   "message0": "ሕትት ቅድመ ጽሑፈ በከመ %1",
+   "message0": "le%1 ሜሰሌ ሜስወድ ዪሜሪሚር, ዬሜሪምሩ %2",
    "tooltip": "አሐቲ ሐተታ። ተበቋዕ በ'ቅድመ ጽሑፍ ኀለፈ ሐተታ' ወ'ጌጋያተ ሐተታ' እምድኅሬሁ።",
    "message1": "ወልባልእ %1"
   },
@@ -974,6 +974,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "ዬሜሪምሩ ስረተ",
+   "same": "ዬም aደgiው ሜስወድ",
+   "another": "ሌለ ዬሜሪምሩ ሜስወድ"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "ዬሜሪምሩ ስረተ",
+   "same": "ዬም aደgiው ሜስወድ",
+   "another": "ሌለ ዬሜሪምሩ ሜስወድ"
   }
  },
  "categories": {
@@ -1958,7 +1968,10 @@
   "All": "ኩለ",
   "Built in": "ሴሬታ",
   "Shared": "ኬፌለ",
-  "{n} of {m} examples": "{n} {m}"
+  "{n} of {m} examples": "{n} {m}",
+  "Reviewer": "ዬሜሪምሩ",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "ሌለ ዬሜሪምሩ ሜስወድ ኬይ በ ትሂስ page aለ, ዬ aደgiው ሜስወድ ዪሜሪሚር",
+  "Written by {writer}; checked by {checker}.": "ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}."
  },
  "examples": {
   "review": {
@@ -3766,7 +3779,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "እንተዝ ንታየእ",
   "The chain is broken: a line is missing or was edited.": "እንተ የንታየዝ እታለ",
   "The chain is intact: every line carries the fingerprint of the one before.": "በንታየእ እንተዝ",
-  "Couldn't read {path} ({err}).": "እንተ {path} በንታየ ({err})."
+  "Couldn't read {path} ({err}).": "እንተ {path} በንታየ ({err}).",
+  "Reviewer": "ዬሜሪምሩ",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "ሌለ ዬሜሪምሩ ሜስወድ ኬይ aለ, ዬ aደgiው ሜስወድ ዪሜሪሚር",
+  "Written by {writer}; checked by {checker}.": "ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

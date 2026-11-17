@@ -392,7 +392,7 @@
    "tooltip": "Exécute les blocs en dessous chaque fois que ce message est diffusé. Plusieurs scripts peuvent écouter le même message."
   },
   "rb_reflect": {
-   "message0": "relire le brouillon selon %1",
+   "message0": "relire le brouillon selon %1, relu par %2",
    "message1": "jusqu'à %1 tours ; s'il échoue, faire",
    "message2": "%1",
    "tooltip": "Claude critique le brouillon. S'il échoue, les blocs à l'intérieur s'exécutent, puis il le critique à nouveau. À chaque tour, le relecteur vérifie aussi que les problèmes précédents ne sont pas revenus. Si les tours s'épuisent, c'est le brouillon avec le moins de problèmes qui est gardé, pas seulement le dernier.",
@@ -415,7 +415,7 @@
    "tooltip": "Si quelque chose à l'intérieur échoue d'une façon qu'un nouvel essai pourrait régler (une connexion coupée, une réponse illisible), attend un peu et le relance."
   },
   "rb_review": {
-   "message0": "relire le brouillon selon %1",
+   "message0": "relire le brouillon selon %1, relu par %2",
    "tooltip": "Une relecture. Utilisez ensuite « le brouillon a passé la relecture » et « problèmes de la relecture ».",
    "message1": "et vérifier %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "le paramètre du relecteur",
+   "same": "le même modèle",
+   "another": "un modèle d'un autre fabricant"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "le paramètre du relecteur",
+   "same": "le même modèle",
+   "another": "un modèle d'un autre fabricant"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "Tous",
   "Built in": "Intégrés",
   "Shared": "Partagés",
-  "{n} of {m} examples": "{n} sur {m} exemples"
+  "{n} of {m} examples": "{n} sur {m} exemples",
+  "Reviewer": "Relecteur",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "Aucun modèle d'un autre fabricant n'a de clé sur cette page, donc c'est le même modèle qui relit le brouillon. Ajoutez une clé avec « Add another key », ou choisissez un modèle nommé dans « relu par ».",
+  "Written by {writer}; checked by {checker}.": "Écrit par {writer} ; relu par {checker}."
  },
  "examples": {
   "review": {
@@ -3765,6 +3778,9 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Pas encore de reçus : rien de ce que ce programme a fait au monde n'est enregistré.",
   "The chain is broken: a line is missing or was edited.": "La chaîne est rompue : une ligne manque ou a été modifiée.",
   "The chain is intact: every line carries the fingerprint of the one before.": "La chaîne est intacte : chaque ligne porte l'empreinte de la précédente.",
-  "Couldn't read {path} ({err}).": "Impossible de lire {path} ({err})."
+  "Couldn't read {path} ({err}).": "Impossible de lire {path} ({err}).",
+  "Reviewer": "Relecteur",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "Aucun modèle d'un autre fabricant n'a de clé, donc c'est le même modèle qui relit le brouillon. Ajoutez une clé pour un autre service, ou nommez un modèle dans le choix « relu par » du bloc de relecture.",
+  "Written by {writer}; checked by {checker}.": "Écrit par {writer} ; relu par {checker}."
  }
 }

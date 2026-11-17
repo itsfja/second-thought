@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"ϣⲓⲛⲉ nClaude ⲉⲧⲃⲉ ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ: %1","tooltip":"Claude ϣⲁϥⲟⲩⲱϣⲃ ϩⲛ ⲟⲩⲕⲁⲧⲁⲗⲟⲅⲟⲥ ⲉⲕⲕⲱⲧⲉ ⲉⲣⲟϥ."},
 "rb_rewrite":{"message0":"ⲥϩⲁⲓ %1 ⲛⲕⲉⲥⲟⲡ ⲉ %2","tooltip":"ϩⲱⲥ: ⲥϩⲁⲓ (ⲡⲥϩⲁⲓ) ⲛⲕⲉⲥⲟⲡ ⲉ (ϩⲉⲣⲙⲉⲛⲉⲩⲉ ⲛⲧⲁⲥⲡⲉ ⲛϥⲣⲁⲛⲅⲟⲥ)."},
 "rb_extract":{"message0":"ϫⲓ %1 ⲉⲃⲟⲗ ϩⲛ %2"},
-"rb_reflect":{"message0":"ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ ⲕⲁⲧⲁ %1","message1":"ϣⲁⲟⲩⲱϣ %1 ⲛⲥⲟⲡ; ⲉϣϫⲉ ⲁϥϩⲉ, ⲁⲣⲓ","message2":"%1","tooltip":"Claude ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ. ⲉϣϫⲉ ⲁϥϩⲉ, ⲛⲱⲛⲉ ⲉⲧϩⲛ ϣⲁⲩⲁⲁⲩ, ⲁⲩⲱ ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲛⲕⲉⲥⲟⲡ. ⲕⲁⲧⲁ ⲥⲟⲡ ⲛⲓⲙ ⲡⲉⲣⲉⲥⲇⲟⲕⲓⲙⲁⲍⲉ ϣⲁϥⲛⲁⲩ ϫⲉ ⲛϩⲓⲥⲉ ⲛⲧϣⲟⲣⲡ ⲛⲥⲉⲉⲓⲛⲉ ⲁⲛ ⲟⲛ. ⲉϣϫⲉ ⲛⲥⲟⲡ ϫⲱⲕ ⲉⲃⲟⲗ, ⲡⲥϩⲁⲓ ⲉⲧⲉⲣⲉ ⲛϩⲓⲥⲉ ⲙⲙⲟϥ ⲕⲟⲩⲓ ϣⲁϥϩⲁⲣⲉϩ ⲉⲣⲟϥ, ⲟⲩⲕ ⲡⲉϩⲁⲉ ⲟⲩⲁⲁϥ ⲁⲛ.","message3":"a-šop %1"},
-"rb_review":{"message0":"ⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ ⲕⲁⲧⲁ %1","tooltip":"ⲟⲩⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲛⲟⲩⲱⲧ. ⲁⲣⲓ 'ⲡⲥϩⲁⲓ ⲁϥⲉⲓ ⲉⲃⲟⲗ' ⲙⲛ 'ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ' ⲙⲛⲛⲥⲱⲥ.","message1":"a-šop %1"},
+"rb_reflect":{"message0":"ⲧⲁⲙⲟ %1, ⲡⲓ %2 ⲧⲁⲙⲟ","message1":"ϣⲁⲟⲩⲱϣ %1 ⲛⲥⲟⲡ; ⲉϣϫⲉ ⲁϥϩⲉ, ⲁⲣⲓ","message2":"%1","tooltip":"Claude ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲡⲥϩⲁⲓ. ⲉϣϫⲉ ⲁϥϩⲉ, ⲛⲱⲛⲉ ⲉⲧϩⲛ ϣⲁⲩⲁⲁⲩ, ⲁⲩⲱ ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲛⲕⲉⲥⲟⲡ. ⲕⲁⲧⲁ ⲥⲟⲡ ⲛⲓⲙ ⲡⲉⲣⲉⲥⲇⲟⲕⲓⲙⲁⲍⲉ ϣⲁϥⲛⲁⲩ ϫⲉ ⲛϩⲓⲥⲉ ⲛⲧϣⲟⲣⲡ ⲛⲥⲉⲉⲓⲛⲉ ⲁⲛ ⲟⲛ. ⲉϣϫⲉ ⲛⲥⲟⲡ ϫⲱⲕ ⲉⲃⲟⲗ, ⲡⲥϩⲁⲓ ⲉⲧⲉⲣⲉ ⲛϩⲓⲥⲉ ⲙⲙⲟϥ ⲕⲟⲩⲓ ϣⲁϥϩⲁⲣⲉϩ ⲉⲣⲟϥ, ⲟⲩⲕ ⲡⲉϩⲁⲉ ⲟⲩⲁⲁϥ ⲁⲛ.","message3":"a-šop %1"},
+"rb_review":{"message0":"ⲧⲁⲙⲟ %1, ⲡⲓ %2 ⲧⲁⲙⲟ","tooltip":"ⲟⲩⲇⲟⲕⲓⲙⲁⲥⲓⲁ ⲛⲟⲩⲱⲧ. ⲁⲣⲓ 'ⲡⲥϩⲁⲓ ⲁϥⲉⲓ ⲉⲃⲟⲗ' ⲙⲛ 'ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ' ⲙⲛⲛⲥⲱⲥ.","message1":"a-šop %1"},
 "rb_passed":{"message0":"ⲡⲥϩⲁⲓ ⲁϥⲉⲓ ⲉⲃⲟⲗ ϩⲛ ⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ"},
 "rb_problems":{"message0":"ⲛϩⲓⲥⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ"},
 "rb_score":{"message0":"ⲱⲡ %1 ϩⲛ 10 ⲉⲧⲃⲉ %2"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"ⲧⲁⲙⲟ ⲥⲉⲧ","same":"ⲧⲁⲙⲟ ⲡⲓ ⲍⲉ","another":"ⲧⲁⲙⲟ ⲡⲓ o-ze"},
+"rb_reflect.REVIEWER":{"":"ⲧⲁⲙⲟ ⲥⲉⲧ","same":"ⲧⲁⲙⲟ ⲡⲓ ⲍⲉ","another":"ⲧⲁⲙⲟ ⲡⲓ o-ze"}
 },
 "categories":{
 "Agent":"ⲁⲡⲟⲥⲧⲟⲗⲟⲥ",
@@ -1222,7 +1224,10 @@
 "All":"όλα",
 "Built in":"ενσωματωμένα",
 "Shared":"κοινόχρηστα",
-"{n} of {m} examples":"{n} από {m} παραδείγματα"
+"{n} of {m} examples":"{n} από {m} παραδείγματα",
+"Reviewer":"ⲧⲁⲙⲟ ⲡⲓ",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"o-ze ⲡⲓ ⲛⲁ, ⲧⲁⲙⲟ ⲡⲓ ⲍⲉ ⲧⲁⲙⲟ",
+"Written by {writer}; checked by {checker}.":"ⲧⲁⲙⲟ {writer}; ⲧⲁⲙⲟ {checker}."
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"no receipts yet: nn record.",
 "The chain is broken: a line is missing or was edited.":"chain broken: line missing.",
 "The chain is intact: every line carries the fingerprint of the one before.":"chain intact.",
-"Couldn't read {path} ({err}).":"ne akau {path} ({err})."
+"Couldn't read {path} ({err}).":"ne akau {path} ({err}).",
+"Reviewer":"tamo pi",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"o-ze pi na, tamo pi ze tamo",
+"Written by {writer}; checked by {checker}.":"tamo {writer}; tamo {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

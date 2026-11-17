@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"ᚾᚢ ᛋᚴᚱᛅ"},
 "rb_rec_set":{"message0":"ᛋᛁᛏ %1 ᛅᚠ %2 ᛁ %3","tooltip":"ᛒᚱᛅᚢᛏᛁᛦ ᛅᛁᚾᚢᛘ ᚱᛅᛁᛏ ᛋᚴᚱᛅᚱ (ᚢᚠᛏᛅᛋᛏ ᛋᚴᚱᛅᚱ-ᛒᚱᛅᚢᛏᚢ)."},
 "rb_receive":{"message0":"ᚦᛅ ᛁᚱ ᛁᚴ ᚠᛅ %1","tooltip":"ᚴᛅᚢᚱᛁᛦ ᚴᚢᛒᛅᚾᛅ ᚼᛁᚱ ᚠᚢᚱᛁᛦ ᚾᛁᚦᛅᚾ ᚼᚢᛁᚱᛏ ᛋᛁᚾ ᛁᚱ ᚦᛁᛋᛁ ᛒᚢᚦ ᛁᚱᚢ ᚴᛅᚢᛚᚢᚦ. ᛘᛅᚢᚱᚴ ᚠᛁᚱᛚᛁ ᛘᛁᚴᛅ ᚼᛚᚢᚦᛅ ᚬ ᛋᛅᚢᛘᚢ ᛒᚢᚦ."},
-"rb_reflect":{"message0":"ᛏᚢᛘ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᛒᛏᛁᛦ %1","message1":"ᛅᛚᛏ ᛅᛏ %1 ᚢᛘᚠᛁᚱᚦᚢᛘ; ᚦᛅ ᛁᚱ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛁᚱ","message2":"%1","tooltip":"Claude ᛏᚢᛘᛁᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ. ᛁᚠ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛅᚢᚱᛅ ᚴᚢᛒᛅᚱᚾᛁᛦ ᚼᛁᚱ ᛁᚾᛁ, ᚢᚴ ᚦᛅ ᛏᚢᛘᛁᛦ ᚼᛅᚾ ᛅᛒᛏᚱ. ᚼᚢᛁᚱᛁᛅ ᚢᛘᚠᛁᚱᚦ ᛋᚴᚢᚦᛅᛦ ᛏᚢᛘᛅᚱᛁᚾ ᚢᚴ ᛅᛏ ᚠᚢᚱᛁ ᛒᚱᛁᛋᛏᛁᛦ ᚼᛅᚠᛁ ᛅᛁᚴᛁ ᛅᛒᛏᚱ ᚴᚢᛘᛁᛏ. ᛁᚠ ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᚦᚱᛁᚢᛏᛅ, ᛁᚱ ᚼᛅᛚᛏᛁᛏ ᚦᚢᛁ ᚠᚱᚢᛘᚱᛁᛏᛁ ᛁᚱ ᚠᛅᛋᛏᛅ ᛒᚱᛁᛋᛏᛁ ᚼᛁᚠᛁᛦ, ᛅᛁᚴᛁ ᛅᛁᚾᚢᚴᛁᛋ ᚼᛁᚾᚢ ᛋᛁᚦᛅᛋᛏᛅ.","message3":"ᚢᚴ ᛅᚦᚢᚴᛅ %1"},
+"rb_reflect":{"message0":"ᛋᚴᚢᚦᛅ ᛏᚱᛅᚢᚴᛁᚾᛅ ᛘᛁᚦ %1, ᛋᚴᚢᚦᛅᚦ ᛅᚠ %2","message1":"ᛅᛚᛏ ᛅᛏ %1 ᚢᛘᚠᛁᚱᚦᚢᛘ; ᚦᛅ ᛁᚱ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛁᚱ","message2":"%1","tooltip":"Claude ᛏᚢᛘᛁᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ. ᛁᚠ ᚦᛅᛏ ᛒᚱᛁᚴᛋᚴ, ᚴᛅᚢᚱᛅ ᚴᚢᛒᛅᚱᚾᛁᛦ ᚼᛁᚱ ᛁᚾᛁ, ᚢᚴ ᚦᛅ ᛏᚢᛘᛁᛦ ᚼᛅᚾ ᛅᛒᛏᚱ. ᚼᚢᛁᚱᛁᛅ ᚢᛘᚠᛁᚱᚦ ᛋᚴᚢᚦᛅᛦ ᛏᚢᛘᛅᚱᛁᚾ ᚢᚴ ᛅᛏ ᚠᚢᚱᛁ ᛒᚱᛁᛋᛏᛁᛦ ᚼᛅᚠᛁ ᛅᛁᚴᛁ ᛅᛒᛏᚱ ᚴᚢᛘᛁᛏ. ᛁᚠ ᚢᛘᚠᛁᚱᚦᛁᚱᚾᛅᛦ ᚦᚱᛁᚢᛏᛅ, ᛁᚱ ᚼᛅᛚᛏᛁᛏ ᚦᚢᛁ ᚠᚱᚢᛘᚱᛁᛏᛁ ᛁᚱ ᚠᛅᛋᛏᛅ ᛒᚱᛁᛋᛏᛁ ᚼᛁᚠᛁᛦ, ᛅᛁᚴᛁ ᛅᛁᚾᚢᚴᛁᛋ ᚼᛁᚾᚢ ᛋᛁᚦᛅᛋᛏᛅ.","message3":"ᚢᚴ ᛅᚦᚢᚴᛅ %1"},
 "rb_reset_timer":{"message0":"ᛁᚾᛏᚱᛋᛁᛏ ᛋᛏᚢᚾᛏᛅᛘᛅᛚᛁ"},
 "rb_result":{"message0":"ᛚᚢᚴ ᚢᚴ ᛋᚢᚾ ᚢᚱᛋᛚᛁᛏᛁᚾ","tooltip":"ᛚᚢᚴᛦ ᚠᛁᚱᚦᛁᚾᛁ. ᛋᚢᚾᛁᛦ ᚼᚢᛅᛏ ᚦᚢ ᛒᛅᛏᛁᛦ ᚢᛁᚦ ᚢᚱᛋᛚᛁᛏᛁᚾ, ᛁᚦᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᚠ ᚦᚢ ᛒᛅᛏᛁᛦ ᛁᚴᚢ ᚢᛁᚦ."},
 "rb_result_text":{"message0":"ᚢᚱᛋᛚᛁᛏᛁᚾ ᚼᛁᚴᛅᛏ ᛏᛁᛚ","tooltip":"ᛅᛚᛏ ᛁᚱ ᛒᛅᛏ ᚢᛅᚱ ᚢᛁᚦ ᚢᚱᛋᛚᛁᛏᛁᚾ, ᛋᛁᛘ ᚱᛁᛏ."},
 "rb_retry":{"message0":"ᚱᛅᚢᚾ ᛅᛒᛏᚱ ᛅᛚᛏ ᛅᛏ %1 ᛋᛁᚾᚢᛘ","message1":"%1","tooltip":"ᛁᚠ ᚾᛅᚴᚢᛅᛏ ᚼᛁᚱ ᛁᚾᛁ ᛒᚱᛁᚴᛋᚴ ᛋᚢᛅ ᛅᛏ ᛅᚢᚾᚢᛦ ᛏᛁᛚᚱᛅᚢᚾ ᛘᛅᛏᛁ ᛒᚢᛏᛅ (ᛋᛚᛁᛏᛁᛏ ᛋᛅᛘᛒᛅᚾᛏ, ᚱᚢᚴᛚᛅᛏ ᛋᚢᛅᚱ), ᛒᛁᚦᚱ ᚦᛅᛏ ᛚᛁᛏ ᚢᚴ ᚴᛅᚢᚱᛁᛦ ᚦᛅᛏ ᛅᛒᛏᚱ."},
-"rb_review":{"message0":"ᛏᚢᛘ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛁᛒᛏᛁᛦ %1","tooltip":"ᛅᛁᚾ ᛏᚢᛘᛦ. ᚾᚢᛏᛅ „ᚠᚱᚢᛘᚱᛁᛏ ᛋᛏᚢᚦᛋᚴ ᛏᚢᛘ“ ᚢᚴ „ᛒᚱᛁᛋᛏᛁᛦ ᛏᚢᛘᛋᛁᚾᛋ“ ᛁᛒᛏᛁᛦ ᚬ.","message1":"ᚢᚴ ᛅᚦᚢᚴᛅ %1"},
+"rb_review":{"message0":"ᛋᚴᚢᚦᛅ ᛏᚱᛅᚢᚴᛁᚾᛅ ᛘᛁᚦ %1, ᛋᚴᚢᚦᛅᚦ ᛅᚠ %2","tooltip":"ᛅᛁᚾ ᛏᚢᛘᛦ. ᚾᚢᛏᛅ „ᚠᚱᚢᛘᚱᛁᛏ ᛋᛏᚢᚦᛋᚴ ᛏᚢᛘ“ ᚢᚴ „ᛒᚱᛁᛋᛏᛁᛦ ᛏᚢᛘᛋᛁᚾᛋ“ ᛁᛒᛏᛁᛦ ᚬ.","message1":"ᚢᚴ ᛅᚦᚢᚴᛅ %1"},
 "rb_revise":{"message0":"ᛁᚾᛏᚱᛒᚢᛏ ᛅᛏ ᛚᛅᚴᛅ ᛒᚱᛁᛋᛏᛁ ᛏᚢᛘᛋᛁᚾᛋ %1 ᛘᛁᚦ ᚢᛁᚠᚾᚢᛘ","tooltip":"Claude ᛚᛅᚴᛅᛦ ᚦᛅ ᛒᚱᛁᛋᛏᛁ ᛁᚱ ᚼᛁᚾ ᛋᛁᚦᛅᛋᛏᛁ ᛏᚢᛘᛦ ᚠᛅᚾ."},
 "rb_rework":{"message0":"ᛁᚾᛏᚱᚴᛁᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ: %1","tooltip":"Claude ᚱᛁᛏᛅᛦ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ ᛅᛒᛏᚱ ᛁᛒᛏᛁᛦ ᚠᚢᚱᛁᚱᛘᛅᛚᚢᛘ ᚦᛁᚾᚢᛘ."},
 "rb_rewrite":{"message0":"ᚱᛁᛏᛅ %1 ᛅᛒᛏᚱ ᛏᛁᛚ %2","tooltip":"ᛋᚢᛅ ᛋᛁᛘ: ᚱᛁᛏᛅ (ᚠᚱᚢᛘᚱᛁᛏ) ᛅᛒᛏᚱ ᛏᛁᛚ (ᛋᚾᚢ ᚬ ᚠᚱᛅᚴᚾᛁᛋᚴᛅ ᛏᚢᚴᚢ)."},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"ᛋᛏᛁᛚᛁᚴ ᛋᚴᚢᛅᚦᛅᚱᛅ","same":"ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ","another":"ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ"},
+"rb_reflect.REVIEWER":{"":"ᛋᛏᛁᛚᛁᚴ ᛋᚴᚢᛅᚦᛅᚱᛅ","same":"ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ","another":"ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ"}
 },
 "categories":{
 "Events":"ᛅᛏᛒᚢᚱᚦᛁᛦ",
@@ -1223,7 +1225,10 @@
 "All":"ᛅᛚᛁ",
 "Built in":"ᛁᚾᛁᛒᚢᚴᛏ",
 "Shared":"ᛏᛁᛚᛏ",
-"{n} of {m} examples":"{n} ᛅᚢ {m} ᛁᚴᛋᛁᛘᛒᛚᛁᛦ"
+"{n} of {m} examples":"{n} ᛅᚢ {m} ᛁᚴᛋᛁᛘᛒᛚᛁᛦ",
+"Reviewer":"ᛋᚴᚢᚦᛅᚱᛁ",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"ᛁᚴᛁᚾ ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ ᚬ ᛅᛁᚴᚢᛚᚢᚴᛁᛚ ᚬ ᚦᛁᛋᛅᚱᛁ ᛋᛁᚦᚢ, ᛋᚢ ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ ᛋᚴᚢᚦᛅᛦ ᛏᚱᛅᚢᚴᛁᚾᛅ.",
+"Written by {writer}; checked by {checker}.":"ᚱᛁᛏᛅᛏ ᛅᚠ {writer}; ᛋᚴᚢᚦᛅᚦ ᛅᚠ {checker}."
 },
 "examples":{
 "review":{"title":"ᚼᚱᛁᚴᛦ ᛏᚢᛘᛋ","desc":"Claude ᚱᛁᛏᛅᛦ ᚢᛘ autolyse, ᛒᚱᚢᚠᛅᛦ ᚦᛅᛏ ᛁᛒᛏᛁᛦ ᚱᛁᚴᛚᚢᛘ ᚦᛁᚾᚢᛘ, ᚢᚴ ᛚᛅᚴᛅᛦ ᚼᚢᛅᛏᚴᛁ ᛁᚱ ᛒᚱᛁᚴᛋᚴ, ᛅᛚᛏ ᛅᛏ 3 ᚢᛘᚠᛁᚱᚦᚢᛘ.","tip":"ᛒᚱᛅᚢᛏ ᚢᛁᚱᚴᛁᚾᚢ ᛁ ᛒᛚᛅ ᚴᚢᛒᛁᚾᚢᛘ ᚢᚴ ᚱᛁᚴᛚᚢᚾᚢᛘ ᛁ ᚼᛁᚾᚢᛘ ᛒᚢᚱᛒᚢᚱᛅᛚᛁᛏᛅ."},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Ingen kvitteringer ennå: ingenting dette programmet har gjort mot verden er registrert.",
 "The chain is broken: a line is missing or was edited.":"Kjeden er brutt: en linje mangler eller er endret.",
 "The chain is intact: every line carries the fingerprint of the one before.":"Kjeden er hel: hver linje bærer fingeravtrykket av den forrige.",
-"Couldn't read {path} ({err}).":"Kunne ikke lese {path} ({err})."
+"Couldn't read {path} ({err}).":"Kunne ikke lese {path} ({err}).",
+"Reviewer":"skoðari",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"engin tákn annars smiðs á einkulykil, svo sama táknið skoðar drögina.",
+"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",
