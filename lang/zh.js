@@ -2365,6 +2365,18 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"尚未设置签名密钥，因此 --update-runtime 只校验版本的 SHA-256",
 "Rehearsal":"彩排",
 "Not done, because this is a rehearsal: {what}":"未执行，因为这是一次彩排: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"彩排: 程序真实运行，但不发送、不切换、不保存、不花费任何内容。"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"彩排: 程序真实运行，但不发送、不切换、不保存、不花费任何内容。",
+"no asking":"未询问",
+"no asking, approved at the first run":"未询问，首次运行时已批准",
+"yes at the keyboard":"键盘上回复“是”",
+"yes {code} on Telegram, by {who}":"Telegram 上 {who} 回复“是 {code}”",
+"agent, step {n}":"代理，第 {n} 步",
+"{when}  {what}  allowed: {how}":"{when}  {what}  允许: {how}",
+"Receipts from the last week ({n} lines):":"最近一周的收据 ({n} 行):",
+"({n} older lines are not shown.)":"（更早的 {n} 行未显示。）",
+"No receipts yet: nothing this program has done to the world is recorded.":"还没有收据: 此程序对世界做的任何事都没有记录。",
+"The chain is broken: a line is missing or was edited.":"链已断裂: 某行缺失或被修改。",
+"The chain is intact: every line carries the fingerprint of the one before.":"链完好: 每行都带有前一行的指纹。",
+"Couldn't read {path} ({err}).":"无法读取 {path}（{err}）。"
 }
 };

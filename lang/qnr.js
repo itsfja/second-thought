@@ -2366,7 +2366,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ingen signeringsnøkkel er sett ennå, så --update-runtime sjekkar berre SHA-256-en til utgjevinga",
 "Rehearsal":"Prøvekøyring",
 "Not done, because this is a rehearsal: {what}":"Ikkje gjort, fordi dette er ein prøvekøyring: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Prøvekøyring: programmet køyrer verkeleg, men ingenting blir sendt, slått av eller på, lagra eller brukt."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Prøvekøyring: programmet køyrer verkeleg, men ingenting blir sendt, slått av eller på, lagra eller brukt.",
+"no asking":"uten å spørre",
+"no asking, approved at the first run":"uten å spørre, godkjent ved første kjøring",
+"yes at the keyboard":"ja på tastaturet",
+"yes {code} on Telegram, by {who}":"ja, {code} på Telegram, av {who}",
+"agent, step {n}":"agent, steg {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  tillatt: {how}",
+"Receipts from the last week ({n} lines):":"Kvitteringer fra siste uke ({n} linjer):",
+"({n} older lines are not shown.)":"({n} eldre linjer vises ikke.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Ingen kvitteringer ennå: ingenting dette programmet har gjort mot verden er registrert.",
+"The chain is broken: a line is missing or was edited.":"Kjeden er brutt: en linje mangler eller er endret.",
+"The chain is intact: every line carries the fingerprint of the one before.":"Kjeden er hel: hver linje bærer fingeravtrykket av den forrige.",
+"Couldn't read {path} ({err}).":"Kunne ikke lese {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

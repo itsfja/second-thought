@@ -237,8 +237,12 @@ class AgentTools:
             self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
             return False
         if unattended:
-            return await self._approve_telegram(tr("it could move real money: {what}", what=what))
+            ok = await self._approve_telegram(tr("it could move real money: {what}", what=what))
+            if ok:
+                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+            return ok
         if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
+            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""))
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -251,8 +255,12 @@ class AgentTools:
             self.log(tr("Not done"), tr("{what} only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
             return False
         if unattended:
-            return await self._approve_telegram(what)
+            ok = await self._approve_telegram(what)
+            if ok:
+                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+            return ok
         if await self._approve_live(tr("Allow this? {what}", what=what)):
+            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""))
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -627,6 +635,7 @@ class AgentTools:
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
             refused = False
+            self._receipt_where = tr("agent, step {n}", n=i)  # for the receipt's "(agent, step N)" (#431)
             if self.dry_run() and (ask or (kind == "mcp" and not spec.get("read_only"))):
                 result, refused = ("This is a test run, so tools that change things don't run. Carry on as if it had worked." if getattr(self, "testing", False) else
                                    "This is a rehearsal, so tools that change things don't run. Carry on as if it had worked."), True
@@ -646,6 +655,9 @@ class AgentTools:
                 except Exception as e:  # noqa: BLE001 - the agent sees the error and carries on
                     result = "Error: " + self._describe(e)
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
+            if not refused and not ask and not spec.get("money") and not text.startswith("Error: "):
+                # a tool that ran without asking still gets its receipt (#431); asked ones got theirs in confirm/confirm_money
+                self._receipt(f"{name} {_short(shown, 200)}", tr("no asking"), self._receipt_where)
             last = text
             seen = (seen + "\n" + text)[-500_000:]
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")

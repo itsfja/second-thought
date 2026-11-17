@@ -3722,7 +3722,19 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ayamo tlapatilli tlachializtli mochipa, ic --update-runtime san quinmomaquilia in SHA-256 in tlanelhuiliztli",
   "Rehearsal": "Machililiztli",
   "Not done, because this is a rehearsal: {what}": "Amo mochipa, ipampa inin machililiztli: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Machililiztli: inin program quipiya ipan melahuac, pero ahtlen quipiya, quixpoloa, quipiya o quitequilia."
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Machililiztli: inin program quipiya ipan melahuac, pero ahtlen quipiya, quixpoloa, quipiya o quitequilia.",
+  "no asking": "ahtlen quittahtoa",
+  "no asking, approved at the first run": "ahtlen quittahtoa, ipan achtopa cualli oquix",
+  "yes at the keyboard": "cualli ipan teclado",
+  "yes {code} on Telegram, by {who}": "cualli, {code} ipan Telegram, tlen {who}",
+  "agent, step {n}": "agente, tlahcuilolli {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  quitequilia: {how}",
+  "Receipts from the last week ({n} lines):": "Ipan chicome tonalli in tlachipahualiztli ({n} linea):",
+  "({n} older lines are not shown.)": "({n} huehue linea ahtlen mo nextia.)",
+  "No receipts yet: nothing this program has done to the world is recorded.": "Amo yetl tlachipahualiztli: ahtlen tlen inin programa quichih ipan tlalticpac amo momati.",
+  "The chain is broken: a line is missing or was edited.": "In cadena quipoloa: ce linea falta o mo patlac.",
+  "The chain is intact: every line carries the fingerprint of the one before.": "In cadena cualli: cada linea quipiya in huella tlen achto.",
+  "Couldn't read {path} ({err}).": "Amo oquix in {path} ({err})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

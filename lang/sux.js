@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"kišib nu-ak; --update-runtime SHA-256 nu-kur2",
 "Rehearsal":"šeš-gal",
 "Not done, because this is a rehearsal: {what}":"nu-šeš-gal, šeš-gal še: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šeš-gal: runtime še ša3, nu-šeš-gal nu-kur2"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šeš-gal: runtime še ša3, nu-šeš-gal nu-kur2",
+"no asking":"nu-šeš-gal",
+"no asking, approved at the first run":"nu-šeš-gal, im-ak",
+"yes at the keyboard":"šeš-gal keyboard",
+"yes {code} on Telegram, by {who}":"šeš {code} Telegram {who}",
+"agent, step {n}":"agent še {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  im-ak: {how}",
+"Receipts from the last week ({n} lines):":"kišib še {n} inim:",
+"({n} older lines are not shown.)":"({n} inim nu-ak.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"kišib nu-ak: nu-kur2.",
+"The chain is broken: a line is missing or was edited.":"kišib nu-kur2: inim nu-ak.",
+"The chain is intact: every line carries the fingerprint of the one before.":"kišib ša3: inim kur2.",
+"Couldn't read {path} ({err}).":"nu-ak {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

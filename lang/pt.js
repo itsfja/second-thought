@@ -2365,6 +2365,18 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ainda não há chave de assinatura, por isso o --update-runtime verifica apenas o SHA-256 do release",
 "Rehearsal":"Ensaio",
 "Not done, because this is a rehearsal: {what}":"Não feito, porque é um ensaio: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Ensaio: o programa corre de verdade, mas nada é enviado, alterado, guardado ou gasto."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Ensaio: o programa corre de verdade, mas nada é enviado, alterado, guardado ou gasto.",
+"no asking":"sem perguntar",
+"no asking, approved at the first run":"sem perguntar, aprovado na primeira execução",
+"yes at the keyboard":"sim no teclado",
+"yes {code} on Telegram, by {who}":"sim, {code} no Telegram, por {who}",
+"agent, step {n}":"agente, passo {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  permitido: {how}",
+"Receipts from the last week ({n} lines):":"Recibos da última semana ({n} linhas):",
+"({n} older lines are not shown.)":"({n} linhas mais antigas não mostradas.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Ainda não há recibos: nada do que este programa fez ao mundo ficou registado.",
+"The chain is broken: a line is missing or was edited.":"A corrente está partida: falta uma linha ou foi editada.",
+"The chain is intact: every line carries the fingerprint of the one before.":"A corrente está intacta: cada linha traz a impressão digital da anterior.",
+"Couldn't read {path} ({err}).":"Não foi possível ler {path} ({err})."
 }
 };

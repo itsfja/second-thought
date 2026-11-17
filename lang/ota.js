@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"henüz imzalama anahtarı ayarlanmadı, bu yüzden --update-runtime yalnızca sürümün SHA-256 değerini kontrol eder",
 "Rehearsal":"Prova",
 "Not done, because this is a rehearsal: {what}":"Bu bir prova olduğu için yapılmadı: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Prova: program gerçekten çalışır, ama hiçbir şey gönderilmez, değiştirilmez, kaydedilmez veya harcanmaz."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Prova: program gerçekten çalışır, ama hiçbir şey gönderilmez, değiştirilmez, kaydedilmez veya harcanmaz.",
+"no asking":"sormadan",
+"no asking, approved at the first run":"sormadan, ilk çalıştırmada onaylandı",
+"yes at the keyboard":"klavyede evet",
+"yes {code} on Telegram, by {who}":"Telegram'da {who}, {code} ile evet dedi",
+"agent, step {n}":"ajan, adım {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  izin: {how}",
+"Receipts from the last week ({n} lines):":"Geçen haftanın dekontları ({n} satır):",
+"({n} older lines are not shown.)":"({n} eski satır gösterilmiyor.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Henüz dekont yok: bu programın dünyaya yaptığı hiçbir şey kayıtlı değil.",
+"The chain is broken: a line is missing or was edited.":"Zincir kırık: bir satır eksik veya değiştirilmiş.",
+"The chain is intact: every line carries the fingerprint of the one before.":"Zincir sağlam: her satır öncekinin parmak izini taşıyor.",
+"Couldn't read {path} ({err}).":"{path} okunamadı ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

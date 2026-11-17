@@ -2365,6 +2365,18 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"er is nog geen ondertekeningssleutel ingesteld, dus --update-runtime controleert alleen de SHA-256 van de release",
 "Rehearsal":"Proefrit",
 "Not done, because this is a rehearsal: {what}":"Niet gedaan, omdat dit een proefrit is: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Proefrit: het programma draait echt, maar er wordt niets verzonden, geschakeld, opgeslagen of uitgegeven."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Proefrit: het programma draait echt, maar er wordt niets verzonden, geschakeld, opgeslagen of uitgegeven.",
+"no asking":"zonder te vragen",
+"no asking, approved at the first run":"zonder te vragen, goedgekeurd bij de eerste keer",
+"yes at the keyboard":"ja op het toetsenbord",
+"yes {code} on Telegram, by {who}":"ja, {code} via Telegram, door {who}",
+"agent, step {n}":"agent, stap {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  toegestaan: {how}",
+"Receipts from the last week ({n} lines):":"Ontvangstbewijzen van de afgelopen week ({n} regels):",
+"({n} older lines are not shown.)":"({n} oudere regels niet getoond.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Nog geen ontvangstbewijzen: niets van wat dit programma de wereld heeft aangedaan is opgenomen.",
+"The chain is broken: a line is missing or was edited.":"De keten is gebroken: een regel ontbreekt of is bewerkt.",
+"The chain is intact: every line carries the fingerprint of the one before.":"De keten is intact: elke regel draagt de vingerafdruk van de vorige.",
+"Couldn't read {path} ({err}).":"Kon {path} niet lezen ({err})."
 }
 };

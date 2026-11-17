@@ -3723,7 +3723,19 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ni innsigl satjan ist; --update-runtime skawoþ ainana SHA-256 þize release",
   "Rehearsal": "aftraskawjan",
   "Not done, because this is a rehearsal: {what}": "ni sakands, þata aftraskawjan: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "aftraskawjan: runtime þata mareiþ, ni waiht briggidai, ni innsigl satjan"
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "aftraskawjan: runtime þata mareiþ, ni waiht briggidai, ni innsigl satjan",
+  "no asking": "ni Luihvus",
+  "no asking, approved at the first run": "ni Luihvus, þiuþana run",
+  "yes at the keyboard": "jaihvus at klaviature",
+  "yes {code} on Telegram, by {who}": "jaihvus {code} Telegram þiudans {who}",
+  "agent, step {n}": "agent skawoþ {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  þiuþ: {how}",
+  "Receipts from the last week ({n} lines):": "innsigla þize wikon ({n} linjos):",
+  "({n} older lines are not shown.)": "({n} aihra linjos ni skawoþ.)",
+  "No receipts yet: nothing this program has done to the world is recorded.": "ni innsigl satjan: ni waiht þize program þiuþ þize aiw.",
+  "The chain is broken: a line is missing or was edited.": "raid broken: a line missing.",
+  "The chain is intact: every line carries the fingerprint of the one before.": "raid whole: aiw line bairþ fingramark þize aiwrum.",
+  "Couldn't read {path} ({err}).": "ni maht {path} lesan ({err})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

@@ -3732,6 +3732,18 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "署名鍵はまだ設定されていないため、--update-runtime はリリースの SHA-256 のみを検証します",
   "Rehearsal": "リハーサル",
   "Not done, because this is a rehearsal: {what}": "リハーサルなので実行されませんでした: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "リハーサル: プログラムは実際に動きますが、送信・切替・保存・支出は何も行われません。"
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "リハーサル: プログラムは実際に動きますが、送信・切替・保存・支出は何も行われません。",
+  "no asking": "聞かずに",
+  "no asking, approved at the first run": "聞かずに、初回実行時に承認済み",
+  "yes at the keyboard": "キーボードで「はい」",
+  "yes {code} on Telegram, by {who}": "Telegram で {who} が「はい {code}」",
+  "agent, step {n}": "エージェント、ステップ {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  許可: {how}",
+  "Receipts from the last week ({n} lines):": "直近1週間のレシート ({n} 行):",
+  "({n} older lines are not shown.)": "（それより前の {n} 行は表示しません。）",
+  "No receipts yet: nothing this program has done to the world is recorded.": "まだレシートがありません: このプログラムが世界に対して行ったことは記録されていません。",
+  "The chain is broken: a line is missing or was edited.": "チェーンが壊れています: 行が欠落または編集されています。",
+  "The chain is intact: every line carries the fingerprint of the one before.": "チェーンは無傷です: 各行が前の行のフィンガープリントを持っています。",
+  "Couldn't read {path} ({err}).": "{path} を読めませんでした ({err})。"
  }
 }

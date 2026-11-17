@@ -2366,7 +2366,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"lā ꜥadmeḥ mappteḥā d-ḥetmā mtzā; --update-runtime naḥeš balḥod SHA-256 d-šaršerā",
 "Rehearsal":"trayānā",
 "Not done, because this is a rehearsal: {what}":"lā ꜣetꜥbed, ꜥal trayānā: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"trayānā: runtime mšḥarā, w-lā šdr, w-lā mšḫlqf, w-lā mḥṣn"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"trayānā: runtime mšḥarā, w-lā šdr, w-lā mšḫlqf, w-lā mḥṣn",
+"no asking":"lā sawwul",
+"no asking, approved at the first run":"lā sawwul, aqbel fī trayānā awalnā",
+"yes at the keyboard":"naꜥam ꜥal klāwī",
+"yes {code} on Telegram, by {who}":"naꜥam, {code} ꜥal Telegram, min {who}",
+"agent, step {n}":"wakīl, khaṭwa {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  ubbiḥ: {how}",
+"Receipts from the last week ({n} lines):":"qabūlāt usbuꜥ al-māḍī ({n} suṭar):",
+"({n} older lines are not shown.)":"({n} suṭar aqdam lā tẓhar.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"lā qabūlāt baꜥd: lā šayꜣ mimma faꜥala hādhā al-barnāmaj lil-ꜥālam sajjala.",
+"The chain is broken: a line is missing or was edited.":"al-silsila makinšara: saṭr wāḥid mafqūd aw mubaddal.",
+"The chain is intact: every line carries the fingerprint of the one before.":"al-silsila salīma: kull saṭr yaḥmil baṣmat al-sābiq.",
+"Couldn't read {path} ({err}).":"lā neškur {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

@@ -3732,6 +3732,18 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "es ist noch kein Signaturschlüssel gesetzt, also prüft --update-runtime nur die SHA-256 des Releases",
   "Rehearsal": "Probe",
   "Not done, because this is a rehearsal: {what}": "Nicht gemacht, weil dies eine Probe ist: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Probe: Das Programm läuft wirklich, aber es wird nichts gesendet, geschaltet, gespeichert oder ausgegeben."
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Probe: Das Programm läuft wirklich, aber es wird nichts gesendet, geschaltet, gespeichert oder ausgegeben.",
+  "no asking": "ohne Nachfrage",
+  "no asking, approved at the first run": "ohne Nachfrage, bei der ersten Ausführung genehmigt",
+  "yes at the keyboard": "ja am Terminal",
+  "yes {code} on Telegram, by {who}": "ja, {code} per Telegram, von {who}",
+  "agent, step {n}": "Agent, Schritt {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  erlaubt: {how}",
+  "Receipts from the last week ({n} lines):": "Quittungen der letzten Woche ({n} Zeilen):",
+  "({n} older lines are not shown.)": "({n} ältere Zeilen werden nicht angezeigt.)",
+  "No receipts yet: nothing this program has done to the world is recorded.": "Noch keine Quittungen: Was dieses Programm der Welt angetan hat, ist nirgends aufgezeichnet.",
+  "The chain is broken: a line is missing or was edited.": "Die Kette ist gebrochen: eine Zeile fehlt oder wurde bearbeitet.",
+  "The chain is intact: every line carries the fingerprint of the one before.": "Die Kette ist intakt: jede Zeile trägt den Fingerabdruck der vorherigen.",
+  "Couldn't read {path} ({err}).": "Konnte {path} nicht lesen ({err})."
  }
 }

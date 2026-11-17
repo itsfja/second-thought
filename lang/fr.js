@@ -2365,6 +2365,18 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"aucune clé de signature n'est encore définie, donc --update-runtime ne vérifie que le SHA-256 de la release",
 "Rehearsal":"Répétition",
 "Not done, because this is a rehearsal: {what}":"Non fait, car c'est une répétition : {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Répétition : le programme s'exécute vraiment, mais rien n'est envoyé, modifié, enregistré ni dépensé."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Répétition : le programme s'exécute vraiment, mais rien n'est envoyé, modifié, enregistré ni dépensé.",
+"no asking":"sans demander",
+"no asking, approved at the first run":"sans demander, approuvé à la première exécution",
+"yes at the keyboard":"oui au clavier",
+"yes {code} on Telegram, by {who}":"oui, {code} sur Telegram, par {who}",
+"agent, step {n}":"agent, étape {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  autorisé : {how}",
+"Receipts from the last week ({n} lines):":"Reçus de la semaine dernière ({n} lignes) :",
+"({n} older lines are not shown.)":"({n} lignes plus anciennes non affichées.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Pas encore de reçus : rien de ce que ce programme a fait au monde n'est enregistré.",
+"The chain is broken: a line is missing or was edited.":"La chaîne est rompue : une ligne manque ou a été modifiée.",
+"The chain is intact: every line carries the fingerprint of the one before.":"La chaîne est intacte : chaque ligne porte l'empreinte de la précédente.",
+"Couldn't read {path} ({err}).":"Impossible de lire {path} ({err})."
 }
 };

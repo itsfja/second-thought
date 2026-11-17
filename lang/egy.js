@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ḫtm.w ꜥnḫ m jrt pn; --update-runtime šꜣꜥ SHA-256 n release pn",
 "Rehearsal":"šꜣꜥ",
 "Not done, because this is a rehearsal: {what}":"nn ir=f, šꜣꜥ pw: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šꜣꜥ: runtime pn ḥꜣḥ m jrt pn, nn wꜥḥ, nn ḫtm, nn jꜣꜥ"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šꜣꜥ: runtime pn ḥꜣḥ m jrt pn, nn wꜥḥ, nn ḫtm, nn jꜣꜥ",
+"no asking":"nn ḥsb",
+"no asking, approved at the first run":"nn ḥsb, m jrt pn",
+"yes at the keyboard":"ꜥn ḥꜣb",
+"yes {code} on Telegram, by {who}":"ꜥn {code} Telegram {who}",
+"agent, step {n}":"agent tp {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  m jrt: {how}",
+"Receipts from the last week ({n} lines):":"šꜣꜥ 7 ꜥnꜥ... {n} ꜥꜣw:",
+"({n} older lines are not shown.)":"({n} ꜥꜣw ꜥnḫ nn ꜥꜣḥ.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"nn šꜣꜥ ꜥnḫ: nn ꜥꜣḥ n jrt pn.",
+"The chain is broken: a line is missing or was edited.":"šꜣꜥ ꜥꜣḫ: ꜥꜣw ꜥnḫ vꜣ ḫtm.",
+"The chain is intact: every line carries the fingerprint of the one before.":"šꜣꜥ m jrt: ꜥꜣw ꜥnḫ ḥꜣb n pr.",
+"Couldn't read {path} ({err}).":"nn ḥꜣḥ {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

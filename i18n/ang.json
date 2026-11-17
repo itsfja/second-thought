@@ -3732,7 +3732,19 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ná is nænig cíe to underteynenne setet yet, swa --update-runtime sceawaþ ān þæt SHA-256 þære forþgesceaftes",
   "Rehearsal": "Tryging",
   "Not done, because this is a rehearsal: {what}": "náht gedon, forþon þe þis is tryging: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Tryging: seo forþgesceaft rennþ for riht, ac náþing is sent, awended, saved oþþe spent."
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Tryging: seo forþgesceaft rennþ for riht, ac náþing is sent, awended, saved oþþe spent.",
+  "no asking": "būtan askienne",
+  "no asking, approved at the first run": "būtan askienne, on fyrstum ende geþafod",
+  "yes at the keyboard": "ge siþ on þǣm cīe",
+  "yes {code} on Telegram, by {who}": "ge, {code} on Telegram, be {who}",
+  "agent, step {n}": "agent, stepp {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  geþafod: {how}",
+  "Receipts from the last week ({n} lines):": "Receipts of þǣre lǣstan wucan ({n} lǣne):",
+  "({n} older lines are not shown.)": "({n} ealdre lǣne ne sind gesyne.)",
+  "No receipts yet: nothing this program has done to the world is recorded.": "Nā receits yet: náþing þæt þis program hæbbeþ don to þǣm worulde is notod.",
+  "The chain is broken: a line is missing or was edited.": "The chain is broken: a line is missing oþþe was corrected.",
+  "The chain is intact: every line carries the fingerprint of the one before.": "The chain is heal: ælc line berþ the fingermarc of þe oþer.",
+  "Couldn't read {path} ({err}).": "ne meahte rǣdan {path} ({err})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",
