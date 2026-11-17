@@ -148,6 +148,10 @@ A program that checks its own work deserves a check of its own, especially after
 
 Test cases travel with the program: in block files, saved programs, exported Python, and in the zip as `my-program.tests.json`. There, `python my-program.py --test` runs them. Nothing acts in a test: messages aren't sent, devices aren't switched and files aren't saved (the log says what would have been done), and memory is a copy, so tests can be run as often as you like. It prints PASS or FAIL for each, and exits with 1 if any failed, for scripts. Pictures aren't kept, so a test can't choose one.
 
+### Rehearsals
+
+`python my-program.py --rehearse` (or `rehearse = yes` in `second-thought.ini`) runs the program for real — models and reading included — but nothing is sent, switched, saved or spent: the log says what would have happened, and memory is a copy, as in a test. That's how to try a new schedule for a week before trusting it: add `--rehearse` to the scheduled command (run-on-schedule.sh passes its arguments on) to rehearse every run.
+
 ## Memory and shared files
 
 Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`): they take turns to save, so neither loses the other's changes, and a save is never left half-written if a program stops part-way. Two programs using the same Telegram bot share `telegram-messages.json` the same way, and a message is only handled once.

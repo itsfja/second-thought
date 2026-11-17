@@ -237,11 +237,25 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.ask_first |= kinds
         self.log(tr("Ask first"), tr("From now on, the program asks you before {x}.", x=self.ASK_FIRST.get(kind, kind)), tr("set"))
 
-    async def _allowed(self, kinds, what):
-        """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test),
-        nothing acts: it says what it would have done."""
+    def dry_run(self):
+        """True in a test (--test) or a rehearsal (--rehearse, or rehearse = yes): a rehearsal runs for real, models
+        and reading included, but nothing is sent, switched, saved or spent (#430)."""
+        return getattr(self, "testing", False) or getattr(self, "rehearsing", False)
+
+    def _skip_action(self, what):
+        """True when an action must not happen (a test or a rehearsal): the log says what would have happened."""
         if getattr(self, "testing", False):
             self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+            return True
+        if getattr(self, "rehearsing", False):
+            self.log(tr("Rehearsal"), tr("Not done, because this is a rehearsal: {what}", what=what), tr("skipped"))
+            return True
+        return False
+
+    async def _allowed(self, kinds, what):
+        """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test)
+        or a rehearsal (--rehearse), nothing acts: it says what it would have done."""
+        if self._skip_action(what):
             return False
         if not (self.ask_first & set(kinds)):
             return True
@@ -254,7 +268,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     async def confirm(self, what):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no, unless
         approve_by = telegram is set: then the question goes to your phone (#305)."""
-        if getattr(self, "testing", False):  # in a test the action itself is skipped (see _allowed), so nobody needs asking
+        if self.dry_run():  # in a test or a rehearsal the action itself is skipped (see _allowed), so nobody needs asking
             return True
         if self.nobody_here():
             if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
@@ -864,7 +878,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                    "No scripts, no external images or fonts, no animation. Only add text if the description asks for it.")
 
     def _save_file(self, pic, data=None, ext=None):
-        os.makedirs(OUTPUT_DIR, exist_ok=True)
         ext = ext or _EXT.get(pic.media_type, ".png")
         base = re.sub(r"[^\w\-]+", "-", pic.name).strip("-") or "picture"
         path = os.path.join(OUTPUT_DIR, base + ext)
@@ -872,6 +885,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         while os.path.exists(path):
             path = os.path.join(OUTPUT_DIR, f"{base}-{i}{ext}")
             i += 1
+        if self._skip_action(f"save {os.path.basename(path)} to {OUTPUT_DIR}"):  # a test or rehearsal saves nothing (#430)
+            return path
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         with open(path, "wb") as f:
             f.write(data if data is not None else pic.data)
         return path
@@ -1456,7 +1472,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         print(f"\n=== {label} · {datetime.datetime.now():%H:%M} ===", flush=True)
         finished = False
         try:
-            if not self.schedule_mode and not getattr(self, "mcp_mode", False) and not getattr(self, "testing", False):
+            if not self.schedule_mode and not getattr(self, "mcp_mode", False) and not self.dry_run():
                 await self._journal_start()
             code = await self._run(scripts)
             finished = code == 0
@@ -1897,6 +1913,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     def approve_program(self, can, unattended=False):
         """True if the program may run. One that can act on the world lists what it can do and asks once; the yes is
         kept in .<program>.approved until the program file changes. approve = no in second-thought.ini skips this."""
+        if getattr(self, "rehearsing", False):  # a rehearsal acts on nothing, so there's nothing to allow, and nothing is saved (#430)
+            return True
         if not self.can_acts(can) or os.environ.get("RB_APPROVE", "").strip().lower() in ("no", "0", "false", "off"):
             return True
         path, digest = self._approval_path()
@@ -1958,6 +1976,16 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
         self._can = can
+        self.rehearsing = "--rehearse" in sys.argv or os.environ.get("RB_REHEARSE", "").strip().lower() in ("1", "yes", "true", "on")
+        if self.rehearsing:
+            import shutil
+            import tempfile
+            # a rehearsal reads your real notes but can't change them: memory is a copy, as in tests (#430)
+            self._rehearsal_tmp = tempfile.TemporaryDirectory()
+            mem = os.path.join(self._rehearsal_tmp.name, "memory.json")
+            if os.path.isfile(MEMORY_FILE):
+                shutil.copy(MEMORY_FILE, mem)
+            globals()["MEMORY_FILE"] = mem
         any_allowance()  # so does a mistyped quota_daily (or another allowance)
         check_plans()  # and a PLAN_ setting naming a plan its service doesn't have
         fixed_rate()  # a mistyped exchange_rate stops the program now, saying so, not part-way through a run. Not when the
@@ -1974,6 +2002,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if "--run-schedule" in sys.argv:
             sys.exit(self.run_one_schedule(schedules, can))
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)
+        if self.rehearsing:
+            print(tr("Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent."), flush=True)
         if not self.approve_program(can, unattended=bool(use_schedule) and not sys.stdin.isatty()):
             sys.exit(1)
         try:

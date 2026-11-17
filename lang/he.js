@@ -2363,6 +2363,9 @@
 "not valid JSON":"לא JSON תקין",
 "no link in it":"אין קישור בפנים",
 "this runtime holds {n} signing keys and checks each release's signature against them":"ה-runtime מחזיק {n} מפתחות חתימה ובודק את החתימה של כל גרסה",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"עדיין לא נקבע מפתח חתימה, לכן --update-runtime בודק רק את SHA-256 של הגרסה"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"עדיין לא נקבע מפתח חתימה, לכן --update-runtime בודק רק את SHA-256 של הגרסה",
+"Rehearsal":"חזרה",
+"Not done, because this is a rehearsal: {what}":"לאבוצע, כו חזרה: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"חזרה: התוכנית רצה באמת, אבל שום לא נשלח, לאא השתנה, לאנשמר ולא יוצא"
 }
 };

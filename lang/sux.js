@@ -2362,7 +2362,10 @@
 "not valid JSON":"JSON nu-zid",
 "no link in it":"sar nu-tuku",
 "this runtime holds {n} signing keys and checks each release's signature against them":"runtime še {n} kišib3-a im-ak, kišib ninda nu-kur2",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"kišib nu-ak; --update-runtime SHA-256 nu-kur2"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"kišib nu-ak; --update-runtime SHA-256 nu-kur2",
+"Rehearsal":"šeš-gal",
+"Not done, because this is a rehearsal: {what}":"nu-šeš-gal, šeš-gal še: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šeš-gal: runtime še ša3, nu-šeš-gal nu-kur2"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒅗 𒃻",

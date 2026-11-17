@@ -2362,7 +2362,10 @@
 "not valid JSON":"न वाली JSON",
 "no link in it":"न लिंक",
 "this runtime holds {n} signing keys and checks each release's signature against them":"अयं runtime {n} हत्थक्खित-केयानि धारेति, पज्जेकं विमोजनं ज तेसु परीक्खति",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"अदानि पि हत्थक्खित-केयम् न नियतं, तस्मा --update-runtime केवलं विमोजनस्स SHA-256 परीक्खति"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"अदानि पि हत्थक्खित-केयम् न नियतं, तस्मा --update-runtime केवलं विमोजनस्स SHA-256 परीक्खति",
+"Rehearsal":"पुनाभ्यासः",
+"Not done, because this is a rehearsal: {what}":"न कतं यस्मा पुनाभ्यासो: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"पुनाभ्यासः: programaṃ सज्जं जलति, किञ्जि पन न पेसेति, परिवत्तेति, संरक्खति वा धनेन"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

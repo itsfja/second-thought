@@ -180,6 +180,15 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and table and "at most 2 words" in table[-1] and "3 words; the limit is 2" in table[-1],
           f"an exact check shows as a rule in the round table ({(table[-1][:110] if table else '')!r})")
 
+    print("Rehearsing a run (#430)")
+    reh_prog = script(blk("rb_ha_call", inputs={"SERVICE": tx("light.turn_off"), "ENTITY": tx("light.kitchen"), "DATA": tx("")}),
+                      blk("rb_tg_send", inputs={"TEXT": tx("hello from the rehearsal")}),
+                      blk("rb_mem_add", inputs={"VALUE": tx("rehearsed"), "NAME": tx("runs")}, fields={"KIND": "permanent"}),
+                      add(val(blk("rb_ha_state", inputs={"ENTITY": tx("light.kitchen")}))),
+                      blk("rb_result"))
+    await load_state(pg, reh_prog)
+    EXTRA["t_rehearse"] = await export_python(pg, "t_rehearse")
+
     status, steps, items, prompts = await scripted(checkpoint_prog(), [])
     check(status.startswith("done") and items == ["r1", "good 1"] and [n for n, *_ in steps].count("Back to checkpoint \u201ccp\u201d") == 1,
           f"go back to checkpoint restores the draft, result and variables, and works more than once ({items})")

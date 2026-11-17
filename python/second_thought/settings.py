@@ -49,7 +49,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "quota_daily": "RB_QUOTA_DAILY", "quota_weekly": "RB_QUOTA_WEEKLY", "quota_monthly": "RB_QUOTA_MONTHLY", "save_log": "RB_SAVE_LOG", "stream": "RB_STREAM", "resume": "RB_RESUME",
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "approve_by": "RB_APPROVE_BY", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
-                 "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK",
+                 "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK", "rehearse": "RB_REHEARSE",
                  "releases_url": "RB_RELEASES_URL"}
 
 
@@ -57,7 +57,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
 # "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
 ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
-                     "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check"}
+                     "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse"}
 
 
 def _settings_value(name, value):

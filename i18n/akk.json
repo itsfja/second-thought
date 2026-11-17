@@ -3730,7 +3730,10 @@
   "not valid JSON": "ul šaknu JSON",
   "no link in it": "šarābum lā šaknu",
   "this runtime holds {n} signing keys and checks each release's signature against them": "runtime šuātu {n} kanākū ša ḫatamē dārī imḫur, u ḫatam ša release ilqe",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "lā kanākum ša ḫatamē lā šaknu; --update-runtime lā ša SHA-256 ša release ilqe"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "lā kanākum ša ḫatamē lā šaknu; --update-runtime lā ša SHA-256 ša release ilqe",
+  "Rehearsal": "šanû kanākum",
+  "Not done, because this is a rehearsal: {what}": "lā šaknu, šanâ kanākē: {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "šanû kanākum: runtime šuātu šaknum dārī, lā šumma šarrāni, lā kīma, lā šaklu"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

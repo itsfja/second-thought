@@ -3729,7 +3729,10 @@
   "not valid JSON": "οὐκ ἔγκυρον JSON",
   "no link in it": "οὐδὲν σύνδεσμον",
   "this runtime holds {n} signing keys and checks each release's signature against them": "τούτῳ τῷ runtime {n} κλειδία ὑπογραφῆς ἔνεστι, καὶ τὴν ὑπογραφὴν ἑκάστης ἐκδόσεως τούτοις ἐλέγχει",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "οὐδέπω κλείς ὑπογραφῆς τέθειται, διὸ τὸ --update-runtime μόνον τὸ SHA-256 τῆς ἐκδόσεως ἐλέγχει"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "οὐδέπω κλείς ὑπογραφῆς τέθειται, διὸ τὸ --update-runtime μόνον τὸ SHA-256 τῆς ἐκδόσεως ἐλέγχει",
+  "Rehearsal": "Δοκιμασία",
+  "Not done, because this is a rehearsal: {what}": "οὐκ ἐπράχθη, ὅτι δοκιμασία ἐστίν: {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "δοκιμασία: τὸ πρόγραμμα ἀληθῶς τρέχει, ἀλλ' οὐδὲν ἀποστέλλεται, μεταβάλλεται, φυλάσσεται ἢ δαπανᾶται."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

@@ -554,6 +554,26 @@ def python_tests(codes, share=None):
             out = out.replace("\r\n", "\n")
             check(code_ == 0 and "6 words; the limit is 5" in out and "RESULT" in out,
                   "t_checks.py works the review's exact checks out in Python, with no model call (#425)" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            print("Rehearsing a run (#430)")
+            (pathlib.Path(tmp) / "t_rehearse.py").write_text(EXTRA["t_rehearse"], encoding="utf-8")
+            (pathlib.Path(tmp) / "memory.json").write_text(json.dumps({"runs": {"name": "runs", "value": ["real"]}}), encoding="utf-8")
+            before = len(ha_calls)
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_rehearse.py"), "--rehearse"],
+                                    dict(env, TELEGRAM_BOT_TOKEN="123:test", TELEGRAM_CHAT_ID="1",
+                                         TELEGRAM_API_URL="http://127.0.0.1:9/never"), tmp)
+            out = out.replace("\r\n", "\n")
+            mem_after = json.loads((pathlib.Path(tmp) / "memory.json").read_text(encoding="utf-8"))
+            read_back = bool(re.search(r"RESULT\n=+\n(on|off)\n", out))  # the light's state came back from the read
+            ok_ = (code_ == 0 and "Rehearsal: the program runs for real" in out
+                   and "Not done, because this is a rehearsal: light.turn_off on light.kitchen" in out
+                   and "Not done, because this is a rehearsal: send a Telegram message" in out
+                   and read_back and not ha_calls[before:] and mem_after == {"runs": {"name": "runs", "value": ["real"]}})
+            check(ok_, "a rehearsed run reads both and sends, switches and saves neither, saying so (#430)"
+                  + ("" if ok_ else f": rc={code_} banner={'Rehearsal: the program runs for real' in out} "
+                  + f"ha_skip={'Not done, because this is a rehearsal: light.turn_off on light.kitchen' in out} "
+                  + f"tg_skip={'Not done, because this is a rehearsal: send a Telegram message' in out} "
+                  + f"read={read_back} ha_calls={ha_calls[before:]} mem={mem_after} tail={(err or out)[-200:]!r}"))
+            (pathlib.Path(tmp) / "memory.json").unlink(missing_ok=True)
             print("Cut-off replies and streaming in Python")
             (pathlib.Path(tmp) / "t_long.py").write_text(EXTRA["t_long"], encoding="utf-8")
             def long_py(**e):

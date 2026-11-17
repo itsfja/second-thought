@@ -2362,7 +2362,10 @@
 "not valid JSON":"UL šar-ri JSON",
 "no link in it":"UL ar-ḫa linkaš",
 "this runtime holds {n} signing keys and checks each release's signature against them":"runtime annā {n} memai šarḫi, memai ŠA release parku",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"UL memai šarḫi; --update-runtime ŠA SHA-256 ŠA release parku"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"UL memai šarḫi; --update-runtime ŠA SHA-256 ŠA release parku",
+"Rehearsal":"parkunu",
+"Not done, because this is a rehearsal: {what}":"UL memai, parku annā: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"parku annā: runtime annā arḫa memai, UL memai ŠA imḫu"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",
