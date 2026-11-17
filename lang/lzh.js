@@ -1208,7 +1208,20 @@
 "Theme":"外觀",
 "System":"系統",
 "Light":"明",
-"Dark":"暗"
+"Dark":"暗",
+"Search examples…":"尋例…",
+"Only uses models":"僅用模型",
+"Reads":"讀",
+"Sends":"發",
+"Controls":"馭",
+"Money":"財",
+"Needs":"須",
+"All services":"凡諸服務",
+"Show":"示",
+"All":"悉",
+"Built in":"內建",
+"Shared":"分授",
+"{n} of {m} examples":"{m} 例之中 {n} 例"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},

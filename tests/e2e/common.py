@@ -141,31 +141,49 @@ failures = []
 
 TIMES = []  # (what, seconds), printed at the end of a run so the slow parts are plain (#372)
 
-# The header's menus are <details> dropdowns (#444): a control inside a closed menu isn't visible, so before
-# Playwright acts on a selector, open any menu around it — as a keyboard user would with Enter on the summary.
-_MENU_OPEN = """sel => { const el = document.querySelector(sel); if (!el) return;
-  for (let d = el.closest('details.menu'); d; d = d.parentElement && d.parentElement.closest('details.menu')) d.open = true; }"""
+# The header's menus are <details> dropdowns (#444) and the panels are drawers over the canvas (#445): a control
+# inside a closed menu isn't visible, and a drawer is modal, so before Playwright acts on something, open any menu
+# around it and close any open drawer it isn't in — as a keyboard user would (Enter on the summary, Esc to close).
+_GUARD = """el => { if (!el) return;
+  for (let d = el.closest('details.menu'); d; d = d.parentElement && d.parentElement.closest('details.menu')) d.open = true;
+  document.querySelectorAll('details.menu[open]').forEach(m => { if (!m.contains(el)) m.open = false; });  // one menu at a time
+  const ac = el.getAttribute && el.getAttribute('aria-controls');
+  if (ac && !document.getElementById(ac).hidden) return;  // the drawer's own toggle: let it toggle
+  if (el.closest('main.main')  // the target is behind an open drawer: close it first, as Esc would
+      && document.querySelector('#gallery:not([hidden]),#lib:not([hidden]),#ha:not([hidden]),#mem:not([hidden]),#bk:not([hidden]),#keys:not([hidden]),#io:not([hidden])'))
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })); }"""
 
 
 def _patch_playwright_menus():
-    from playwright.async_api import Page
-    for name in ("click", "dblclick", "hover", "select_option", "fill", "check", "uncheck", "press", "type"):
-        orig = getattr(Page, name, None)
-        if orig is None:
-            continue
+    from playwright.async_api import ElementHandle, Page
+    for cls in (Page, ElementHandle):
+        for name in ("click", "dblclick", "hover", "select_option", "fill", "check", "uncheck", "press", "type"):
+            orig = getattr(cls, name, None)
+            if orig is None:
+                continue
 
-        def make(orig, name):
-            async def wrapper(self, selector, *args, **kwargs):
-                if isinstance(selector, str):
-                    try:
-                        await self.evaluate(_MENU_OPEN, selector)
-                    except Exception:
-                        pass
-                    if name in ("click", "dblclick", "hover"):
-                        kwargs.setdefault("force", True)  # the open menu can sit over the canvas; the click is still meant
-                return await orig(self, selector, *args, **kwargs)
-            return wrapper
-        setattr(Page, name, make(orig, name))
+            def make(orig, name, is_page):
+                if is_page:
+                    async def wrapper(self, selector, *args, **kwargs):
+                        try:
+                            if isinstance(selector, str):
+                                await self.evaluate(f"s => ({_GUARD})(document.querySelector(s))", selector)
+                                if name in ("click", "dblclick", "hover"):
+                                    kwargs.setdefault("force", True)  # the open menu can sit over the canvas; the click is still meant
+                        except Exception:
+                            pass
+                        return await orig(self, selector, *args, **kwargs)
+                else:
+                    async def wrapper(self, *args, **kwargs):
+                        try:
+                            await self.evaluate(_GUARD)
+                            if name in ("click", "dblclick", "hover"):
+                                kwargs.setdefault("force", True)
+                        except Exception:
+                            pass
+                        return await orig(self, *args, **kwargs)
+                return wrapper
+            setattr(cls, name, make(orig, name, cls is Page))
 
 
 _patch_playwright_menus()

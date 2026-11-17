@@ -1944,7 +1944,20 @@
   "Theme": "Litur",
   "System": "Kerfi",
   "Light": "Ljós",
-  "Dark": "Myrkur"
+  "Dark": "Myrkur",
+  "Search examples…": "Finn eksempler…",
+  "Only uses models": "Bare modeller",
+  "Reads": "Les",
+  "Sends": "Sender",
+  "Controls": "Styrer",
+  "Money": "Penger",
+  "Needs": "Trenger",
+  "All services": "Alle tjenester",
+  "Show": "Vis",
+  "All": "Alle",
+  "Built in": "Innebygd",
+  "Shared": "Delt",
+  "{n} of {m} examples": "{n} av {m} eksempler"
  },
  "examples": {
   "review": {

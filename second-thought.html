@@ -25,7 +25,7 @@
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:8px 12px;box-sizing:border-box}
 *{box-sizing:border-box}
-.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:2px 8px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:2px 8px;position:relative;z-index:10002;background:var(--bg)}
 .brand{display:flex;flex-direction:column;min-width:0;max-width:320px;overflow:hidden}
 h1{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.15;letter-spacing:-.01em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sub{color:var(--muted);font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -54,7 +54,7 @@ details.menu[open]>summary{border-color:var(--accent)}
 .menu-body button{text-align:start}
 .describe-inline{display:flex;gap:6px;align-items:center;flex:1 1 150px;min-width:120px}
 .describe-inline textarea{flex:1;min-width:0;min-height:34px;resize:vertical;line-height:1.4}
-.subbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;margin:-2px 0 8px}
+.subbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;margin:-2px 0 8px;position:relative;z-index:10002;background:var(--bg)}
 .main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px;height:calc(100% - 100px);min-height:600px}
 .describe-out{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--panel);margin:0 0 12px}
 .describe-out .msg{margin:0 0 6px}
@@ -112,6 +112,14 @@ details.menu[open]>summary{border-color:var(--accent)}
 .log-tools button{padding:2px 10px;font-size:12px}
 .bk-sel{max-width:420px}
 .io{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
+/* Panels are drawers over the canvas (#445): they never move the page, so the program stays where it was. */
+#gallery,#lib,#ha,#mem,#bk,#keys,#io{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
+.gal-tools{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.gal-tools input[type=search]{width:100%}
+.gal-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{border-radius:999px;padding:3px 12px;font-size:13px}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+#gal-count{margin:0}
 .io-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .io h2{font-family:var(--font-display);font-weight:500;font-size:16px;margin:0}
 .io h3{font-size:13px;font-weight:700;margin:4px 0 0;color:var(--muted);letter-spacing:.02em}
@@ -290,16 +298,33 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
 </div>
 </div>
-<section id="gallery" class="gallery" hidden aria-label="Example programs">
+<section id="gallery" class="gallery" hidden role="dialog" aria-modal="true" aria-label="Example programs">
   <div class="gal-head">
-    <h2>Example programs</h2>
+    <h2 tabindex="-1">Example programs</h2>
     <p class="hint">Each one is a complete program. Load it, press Run, then change the words on the blocks to make it yours. Your current program is replaced, so save it first in Programs if you want to keep it.</p>
+    <div class="gal-tools">
+      <input type="search" id="gal-search" placeholder="Search examples…" autocomplete="off" aria-label="Search examples…">
+      <div class="gal-filters">
+        <button type="button" class="chip" id="gf-models" aria-pressed="false">Only uses models</button>
+        <button type="button" class="chip" id="gf-reads" aria-pressed="false">Reads</button>
+        <button type="button" class="chip" id="gf-sends" aria-pressed="false">Sends</button>
+        <button type="button" class="chip" id="gf-controls" aria-pressed="false">Controls</button>
+        <button type="button" class="chip" id="gf-money" aria-pressed="false">Money</button>
+        <label class="lab" for="gf-service">Needs
+          <select id="gf-service"><option value=""></option></select>
+        </label>
+        <label class="lab" for="gf-which">Show
+          <select id="gf-which"><option value=""></option><option value="builtin"></option><option value="shared"></option></select>
+        </label>
+      </div>
+      <p class="hint" id="gal-count"></p>
+    </div>
   </div>
   <div id="gal-body"></div>
 </section>
-<section id="lib" class="io" hidden aria-label="Saved programs and prompts">
+<section id="lib" class="io" hidden role="dialog" aria-modal="true" aria-label="Saved programs and prompts">
   <div class="io-col">
-    <h2>My programs</h2>
+    <h2 tabindex="-1">My programs</h2>
     <p class="hint" id="lib-where">Checking where things can be saved…</p>
     <div class="row">
       <label class="sr" for="lib-name">Program name</label>
@@ -319,20 +344,20 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
   <p class="msg" id="lib-msg" role="status"></p>
 </section>
-<section id="ha" class="memp" hidden aria-label="Home Assistant">
+<section id="ha" class="memp" hidden role="dialog" aria-modal="true" aria-label="Home Assistant">
   <div class="mem-head">
     <div>
-      <h2>Home Assistant</h2>
+      <h2 tabindex="-1">Home Assistant</h2>
       <p class="hint">In this page, the Home Assistant blocks use a <b>sample house</b>, so you can build and test safely. Change a state below (press Enter) to try your 'when … changes' scripts. Exported Python connects to your real Home Assistant: set HA_URL and HA_TOKEN (a long-lived access token from your Home Assistant profile, under Security).</p>
     </div>
     <div class="row"><label class="sr" for="ha-filter">Filter entities</label><input type="search" id="ha-filter" placeholder="Filter, e.g. light or kitchen" autocomplete="off"></div>
   </div>
   <div id="ha-list" class="mem-list ha-list"></div>
 </section>
-<section id="mem" class="memp" hidden aria-label="Memory">
+<section id="mem" class="memp" hidden role="dialog" aria-modal="true" aria-label="Memory">
   <div class="mem-head">
     <div>
-      <h2>Memory</h2>
+      <h2 tabindex="-1">Memory</h2>
       <p class="hint" id="mem-where">Checking where memory can be saved…</p>
     </div>
     <div class="row" id="mem-actions">
@@ -346,9 +371,9 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
   <div id="mem-list" class="mem-list"></div>
 </section>
-<section id="bk" class="io" hidden aria-label="Backup models">
+<section id="bk" class="io" hidden role="dialog" aria-modal="true" aria-label="Backup models">
   <div class="io-col">
-    <h2>Backup models</h2>
+    <h2 tabindex="-1">Backup models</h2>
     <p class="hint">The <b>Model</b> menu is your primary model: it does every step. If it fails on a step (no key, out of credit, service down or unreachable), the first backup answers that step instead, then the second, then the third. The run log says each time a backup steps in.</p>
     <p class="hint">Blocks that name their own model, such as <b>with model</b>, keep that model, so a panel of judges stays a panel of different judges.</p>
     <label class="field" for="bk-1">First backup <select id="bk-1" class="bk-sel"></select></label>
@@ -357,7 +382,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <p class="msg" id="bk-msg" role="status"></p>
   </div>
 </section>
-<section id="keys" class="io" hidden aria-label="Keyboard">
+<section id="keys" class="io" hidden role="dialog" aria-modal="true" aria-label="Keyboard">
   <div class="io-col">
     <h2 id="keys-title" tabindex="-1">Keyboard</h2>
     <p class="hint">You can build programs with the keyboard alone. Press <b>Tab</b> until you reach the block editor, then:</p>
@@ -370,9 +395,9 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <p class="hint">A screen reader reads out each block, field and category as you reach it, and <b>Alt+Shift+A</b> adds sound cues as you go in and out of blocks. Everywhere else, <b>Tab</b> moves between buttons. When a program asks you something, the answer box gets the focus, and <b>Ctrl+Enter</b> sends a typed answer.</p>
   </div>
 </section>
-<section id="io" class="io" hidden aria-label="Import and export">
+<section id="io" class="io" hidden role="dialog" aria-modal="true" aria-label="Import and export">
   <div class="io-col">
-    <h2>Export this program</h2>
+    <h2 tabindex="-1">Export this program</h2>
     <h3>As a block file</h3>
     <label class="field" for="io-name">File name
       <input type="text" id="io-name" value="my-program" autocomplete="off">
@@ -16597,6 +16622,56 @@ HOW TO MAP CODE
   const STORE_KEY = "reflection-blocks-program-v3";
   const MAX_AI_CALLS = 60, MAX_STEPS = 20000, MAX_DEPTH = 60, MAX_SCRIPTS = 100, MAX_LIVE = 30;
 
+  /* Panels are drawers over the canvas (#445): opening one never moves the page, so the program stays where it
+     was. While one is open, Tab is kept inside it, Esc closes it, and focus returns to what opened it. */
+  const drawers = {};
+  let openDrawerEl = null, drawerReturn = null;
+  function registerDrawer(id, btnIds, onopen){ drawers[id] = { btns: btnIds || [], onopen: onopen || null }; }
+  function drawerFocusables(el){
+    return [...el.querySelectorAll("button,select,input,textarea,summary,a[href],[tabindex]")].filter(e => !e.disabled && e.offsetParent !== null);
+  }
+  function setDrawer(el, open){
+    if (open !== el.hidden) return !el.hidden;
+    const d = drawers[el.id] || { btns: [], onopen: null };
+    if (open) {
+      const ret = document.activeElement;
+      for (const id in drawers) {
+        const o = $(id);
+        if (o && o !== el && !o.hidden) setDrawer(o, false);
+      }
+      drawerReturn = ret;
+      el.hidden = false;
+      d.btns.forEach(id => $(id) && $(id).setAttribute("aria-expanded", "true"));
+      if (d.onopen) d.onopen();
+      if (!el.contains(document.activeElement)) {
+        const f = drawerFocusables(el);
+        (f[0] || el.querySelector("h2") || el).focus();
+      }
+      openDrawerEl = el;
+    } else {
+      el.hidden = true;
+      d.btns.forEach(id => $(id) && $(id).setAttribute("aria-expanded", "false"));
+      if (openDrawerEl === el) openDrawerEl = null;
+      if (drawerReturn && drawerReturn.offsetParent && drawerReturn.focus) drawerReturn.focus();
+      drawerReturn = null;
+    }
+    setTimeout(() => { try { Blockly.svgResize(ws); } catch(e) {} }, 0);
+    return !el.hidden;
+  }
+  function toggleDrawer(id, open){ const el = $(id); return setDrawer(el, open === undefined ? el.hidden : open); }
+  window.__openDrawer = () => openDrawerEl && openDrawerEl.id;
+  document.addEventListener("keydown", e => {
+    if (!openDrawerEl) return;
+    if (e.key === "Escape") { setDrawer(openDrawerEl, false); e.preventDefault(); e.stopPropagation(); return; }
+    if (e.key === "Tab") {
+      const f = drawerFocusables(openDrawerEl);
+      if (!f.length) { e.preventDefault(); return; }
+      const first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (e.shiftKey && (a === first || !openDrawerEl.contains(a))) { last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && (a === last || !openDrawerEl.contains(a))) { first.focus(); e.preventDefault(); }
+    }
+  });
+
   // 01-theme.js: Colours and Blockly's theme.
   /* ---------- Colours and theme ---------- */
   const HUES = {
@@ -17868,12 +17943,8 @@ HOW TO MAP CODE
       row.append(n, id, inp); list.appendChild(row);
     });
   }
-  function toggleHaPanel(){
-    const el = document.getElementById("ha"), open = el.hidden;
-    el.hidden = !open; document.getElementById("ha-toggle").setAttribute("aria-expanded", String(open));
-    if (open) renderHaPanel();
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  }
+  function toggleHaPanel(){ return toggleDrawer("ha"); }
+  registerDrawer("ha", ["ha-toggle"], () => renderHaPanel());
 
   // 06-example-library.js: The example library, Home Assistant examples included.
   /* ---------- Example library ---------- */
@@ -19509,6 +19580,79 @@ HOW TO MAP CODE
       });
       sec.appendChild(grid); body.appendChild(sec);
     });
+    wireGalleryFilters(); applyGalleryFilters();
+  }
+  /* Search and filters for the examples (#445): by words, and by what each program can do, worked out here from
+     its blocks — never taken from its entry. */
+  const exampleCaps = {};
+  const CAP_ACT = Object.fromEntries(CAPABILITIES.map(c => [c[0], !!c[2]]));
+  const SEND_CAPS = new Set(["email_send", "telegram_send", "discord_send", "slack_send", "mqtt_publish", "github_comment", "webhook"]);
+  const MONEY_CAPS = new Set(["kraken_trade", "coinbase_trade"]);
+  function capsForExample(e){
+    if (!(e.key in exampleCaps)) {
+      try {
+        const st = e.build(), got = new Set();
+        const walk = b => {
+          if (!b) return;
+          const c = blockCapability({ type: b.type, getFieldValue: n => (b.fields || {})[n] });
+          if (c) got.add(c);
+          Object.values(b.inputs || {}).forEach(i => { walk(i.block); walk(i.shadow); });
+          walk(b.next && b.next.block);
+        };
+        ((st.blocks && st.blocks.blocks) || []).forEach(walk);
+        exampleCaps[e.key] = [...got];
+      } catch (err) { exampleCaps[e.key] = []; }
+    }
+    return exampleCaps[e.key];
+  }
+  let galleryFiltersWired = false;
+  function wireGalleryFilters(){
+    if (galleryFiltersWired) return;
+    galleryFiltersWired = true;
+    const used = new Set();
+    EXAMPLE_LIST.forEach(e => capsForExample(e).forEach(id => used.add(id)));
+    const sel = $("gf-service");
+    const allOpt = document.createElement("option"); allOpt.value = ""; allOpt.textContent = tr("All services"); sel.appendChild(allOpt);
+    CAPABILITIES.filter(c => used.has(c[0])).sort((a, b) => tr(a[1]).localeCompare(tr(b[1]))).forEach(c => {
+      const o = document.createElement("option"); o.value = c[0]; o.textContent = tr(c[1]); sel.appendChild(o);
+    });
+    const which = $("gf-which");
+    [["", tr("All")], ["builtin", tr("Built in")], ["shared", tr("Shared")]].forEach(([v, label], i) => {
+      const o = which.children[i]; o.value = v; o.textContent = label;
+    });
+    ["gf-models", "gf-reads", "gf-sends", "gf-controls", "gf-money"].forEach(id => $(id).addEventListener("click", () => {
+      const b = $(id); b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")); applyGalleryFilters();
+    }));
+    $("gal-search").addEventListener("input", applyGalleryFilters);
+    $("gf-service").addEventListener("change", applyGalleryFilters);
+    $("gf-which").addEventListener("change", applyGalleryFilters);
+  }
+  function applyGalleryFilters(){
+    if (!galleryFilled) return;
+    const q = ($("gal-search").value || "").trim().toLowerCase();
+    const kinds = new Set(["models", "reads", "sends", "controls", "money"].filter(k => $("gf-" + k).getAttribute("aria-pressed") === "true"));
+    const service = $("gf-service").value, which = $("gf-which").value;
+    let shown = 0;
+    EXAMPLE_LIST.forEach(e => {
+      const caps = capsForExample(e);
+      let ok = true;
+      if (q) ok = (e.title + " " + e.desc + " " + e.tip + " " + (e.author || "") + " " + e.key).toLowerCase().includes(q);
+      if (ok && kinds.has("models") && caps.length) ok = false;
+      if (ok && kinds.has("reads") && !caps.some(id => !CAP_ACT[id])) ok = false;
+      if (ok && kinds.has("sends") && !caps.some(id => SEND_CAPS.has(id))) ok = false;
+      if (ok && kinds.has("controls") && !caps.some(id => CAP_ACT[id] && !SEND_CAPS.has(id) && !MONEY_CAPS.has(id))) ok = false;
+      if (ok && kinds.has("money") && !caps.some(id => MONEY_CAPS.has(id))) ok = false;
+      if (ok && service && !caps.includes(service)) ok = false;
+      if (ok && which === "builtin" && e.community) ok = false;
+      if (ok && which === "shared" && !e.community) ok = false;
+      const card = document.querySelector('.gal-card[data-key="' + e.key + '"]');
+      if (card) card.style.display = ok ? "" : "none";
+      if (ok) shown++;
+    });
+    document.querySelectorAll("#gal-body .gal-cat").forEach(sec => {
+      sec.style.display = [...sec.querySelectorAll(".gal-card")].some(c => c.style.display !== "none") ? "" : "none";
+    });
+    $("gal-count").textContent = tr("{n} of {m} examples", { n: shown, m: EXAMPLE_LIST.length });
   }
   function describeExample(key){
     const e = exampleByKey(key), el = $("ex-desc");
@@ -19529,12 +19673,8 @@ HOW TO MAP CODE
       $("status").textContent = tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:e && e.message ? e.message : tr("unknown error") });
     }
   }
-  function toggleGallery(open){
-    const g = $("gallery"); if (open === undefined) open = g.hidden;
-    if (open) fillGallery();  // the cards are built on the panel's first open, not at start-up
-    g.hidden = !open; $("ex-toggle").setAttribute("aria-expanded", String(open));
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  }
+  function toggleGallery(open){ return toggleDrawer("gallery", open); }
+  registerDrawer("gallery", ["ex-toggle"], () => fillGallery());  // the cards are built on the panel's first open, not at start-up
   $("ex-toggle").onclick = () => toggleGallery();
   $("ha-toggle").onclick = () => toggleHaPanel();
   $("ha-filter").addEventListener("input", renderHaPanel);
@@ -19583,12 +19723,8 @@ HOW TO MAP CODE
   const editorEl = ws.getInjectionDiv();
   editorEl.tabIndex = 0; editorEl.setAttribute("role", "application");
   editorEl.setAttribute("aria-label", tr("Block editor")); editorEl.setAttribute("aria-describedby", "keys-where");
-  $("keys-toggle").onclick = () => {
-    const el = $("keys"), open = el.hidden;
-    el.hidden = !open; $("keys-toggle").setAttribute("aria-expanded", String(open));
-    if (open) $("keys-title").focus();
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  registerDrawer("keys", ["keys-toggle"], () => $("keys-title").focus());
+  $("keys-toggle").onclick = () => toggleDrawer("keys");
 
   /* What the page kept from last time loads once every button above is set, so a saved program that won't load
      can't stop the page starting (#417). */
@@ -19625,23 +19761,16 @@ HOW TO MAP CODE
       sel.onchange = () => { try { localStorage.setItem(BK_LS, JSON.stringify(["bk-1", "bk-2", "bk-3"].map(x => $(x).value))); } catch(e) {} showBackups(); };
     });
     $("tier").addEventListener("change", showBackups);
-    $("bk-toggle").onclick = () => {
-      const bk = $("bk"), open = bk.hidden;
-      bk.hidden = !open; $("bk-toggle").setAttribute("aria-expanded", String(open));
-      setTimeout(() => Blockly.svgResize(ws), 0);
-    };
+    registerDrawer("bk", ["bk-toggle"]);
+    $("bk-toggle").onclick = () => toggleDrawer("bk");
     showBackups();
   })();
 
   const FORMAT = "reflection-blocks";
   const ioMsg = (id, text, kind) => { const m = $(id); m.textContent = tr(text); m.className = "msg" + (kind ? " " + kind : ""); };
   const ioToggles = ["io-import", "io-export", "share-prog"];
-  function toggleIo(open){
-    const io = $("io"); if (open === undefined) open = io.hidden;
-    io.hidden = !open; ioToggles.forEach(id => $(id).setAttribute("aria-expanded", String(open)));
-    if (open) { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; }
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  }
+  registerDrawer("io", ioToggles, () => { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; });
+  function toggleIo(open){ return toggleDrawer("io", open); }
   $("io-import").onclick = () => { toggleIo(true); $("io-paste").focus(); };
   $("io-export").onclick = () => { toggleIo(true); $("io-copy").focus(); };
   $("share-prog").onclick = () => { toggleIo(true); $("io-copy").click(); };
@@ -21920,13 +22049,8 @@ HOW TO MAP CODE
     });
     $("mem-clear").disabled = !rows.length;
   }
-  $("mem-toggle").onclick = () => {
-    const el = $("mem"), open = el.hidden;
-    el.hidden = !open; $("mem-toggle").setAttribute("aria-expanded", String(open));
-    $("mem-confirm").hidden = true;
-    if (open) { memInit(); renderMemory(); }
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  registerDrawer("mem", ["mem-toggle"], () => { $("mem-confirm").hidden = true; memInit(); renderMemory(); });
+  $("mem-toggle").onclick = () => toggleDrawer("mem");
   $("mem-clear").onclick = () => { $("mem-confirm").hidden = false; $("mem-clear-no").focus(); };
   $("mem-clear-no").onclick = () => { $("mem-confirm").hidden = true; };
   $("mem-clear-yes").onclick = async () => {
@@ -21998,12 +22122,8 @@ HOW TO MAP CODE
       $("prompt-name").value = e.name; $("prompt-text").value = e.text; $("prompt-text").focus();
     });
   }
-  $("lib-toggle").onclick = () => {
-    const el = $("lib"), open = el.hidden;
-    el.hidden = !open; $("lib-toggle").setAttribute("aria-expanded", String(open));
-    if (open) { memInit(); renderLibrary(); if (!$("lib-name").value) $("lib-name").value = $("io-name").value || ""; }
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  registerDrawer("lib", ["lib-toggle"], () => { memInit(); renderLibrary(); if (!$("lib-name").value) $("lib-name").value = $("io-name").value || ""; });
+  $("lib-toggle").onclick = () => toggleDrawer("lib");
   $("lib-save").onclick = async () => {
     const name = $("lib-name").value.trim();
     if (!name) { libMsg("Type a name for this program first.", "bad"); $("lib-name").focus(); return; }

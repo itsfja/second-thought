@@ -20,7 +20,7 @@
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:8px 12px;box-sizing:border-box}
 *{box-sizing:border-box}
-.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:2px 8px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-block:2px 8px;position:relative;z-index:10002;background:var(--bg)}
 .brand{display:flex;flex-direction:column;min-width:0;max-width:320px;overflow:hidden}
 h1{font-family:var(--font-display);font-weight:700;font-size:20px;line-height:1.15;letter-spacing:-.01em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sub{color:var(--muted);font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -49,7 +49,7 @@ details.menu[open]>summary{border-color:var(--accent)}
 .menu-body button{text-align:start}
 .describe-inline{display:flex;gap:6px;align-items:center;flex:1 1 150px;min-width:120px}
 .describe-inline textarea{flex:1;min-width:0;min-height:34px;resize:vertical;line-height:1.4}
-.subbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;margin:-2px 0 8px}
+.subbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;margin:-2px 0 8px;position:relative;z-index:10002;background:var(--bg)}
 .main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px;height:calc(100% - 100px);min-height:600px}
 .describe-out{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--panel);margin:0 0 12px}
 .describe-out .msg{margin:0 0 6px}
@@ -107,6 +107,14 @@ details.menu[open]>summary{border-color:var(--accent)}
 .log-tools button{padding:2px 10px;font-size:12px}
 .bk-sel{max-width:420px}
 .io{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
+/* Panels are drawers over the canvas (#445): they never move the page, so the program stays where it was. */
+#gallery,#lib,#ha,#mem,#bk,#keys,#io{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
+.gal-tools{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.gal-tools input[type=search]{width:100%}
+.gal-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{border-radius:999px;padding:3px 12px;font-size:13px}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+#gal-count{margin:0}
 .io-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .io h2{font-family:var(--font-display);font-weight:500;font-size:16px;margin:0}
 .io h3{font-size:13px;font-weight:700;margin:4px 0 0;color:var(--muted);letter-spacing:.02em}

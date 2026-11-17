@@ -1209,7 +1209,20 @@
 "Theme":"Tema",
 "System":"Sistema",
 "Light":"Chiaro",
-"Dark":"Scuro"
+"Dark":"Scuro",
+"Search examples…":"Cerca esempi…",
+"Only uses models":"Usa solo i modelli",
+"Reads":"Legge",
+"Sends":"Invia",
+"Controls":"Controlla",
+"Money":"Soldi",
+"Needs":"Serve",
+"All services":"Tutti i servizi",
+"Show":"Mostra",
+"All":"Tutti",
+"Built in":"Integrati",
+"Shared":"Condivisi",
+"{n} of {m} examples":"{n} di {m} esempi"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

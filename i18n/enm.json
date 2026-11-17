@@ -1944,7 +1944,20 @@
   "Theme": "Hwe",
   "System": "Sette",
   "Light": "Liht",
-  "Dark": "Derk"
+  "Dark": "Derk",
+  "Search examples…": "Fynde ensamples…",
+  "Only uses models": "Onli maquettes",
+  "Reads": "Redeth",
+  "Sends": "Sendeth",
+  "Controls": "Governeth",
+  "Money": "Penyes",
+  "Needs": "Nedeth",
+  "All services": "Alle servitches",
+  "Show": "Schewe",
+  "All": "Alle",
+  "Built in": "Inborn",
+  "Shared": "Delid",
+  "{n} of {m} examples": "{n} of {m} ensamples"
  },
  "examples": {
   "review": {

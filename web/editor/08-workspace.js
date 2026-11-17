@@ -111,6 +111,79 @@
       });
       sec.appendChild(grid); body.appendChild(sec);
     });
+    wireGalleryFilters(); applyGalleryFilters();
+  }
+  /* Search and filters for the examples (#445): by words, and by what each program can do, worked out here from
+     its blocks — never taken from its entry. */
+  const exampleCaps = {};
+  const CAP_ACT = Object.fromEntries(CAPABILITIES.map(c => [c[0], !!c[2]]));
+  const SEND_CAPS = new Set(["email_send", "telegram_send", "discord_send", "slack_send", "mqtt_publish", "github_comment", "webhook"]);
+  const MONEY_CAPS = new Set(["kraken_trade", "coinbase_trade"]);
+  function capsForExample(e){
+    if (!(e.key in exampleCaps)) {
+      try {
+        const st = e.build(), got = new Set();
+        const walk = b => {
+          if (!b) return;
+          const c = blockCapability({ type: b.type, getFieldValue: n => (b.fields || {})[n] });
+          if (c) got.add(c);
+          Object.values(b.inputs || {}).forEach(i => { walk(i.block); walk(i.shadow); });
+          walk(b.next && b.next.block);
+        };
+        ((st.blocks && st.blocks.blocks) || []).forEach(walk);
+        exampleCaps[e.key] = [...got];
+      } catch (err) { exampleCaps[e.key] = []; }
+    }
+    return exampleCaps[e.key];
+  }
+  let galleryFiltersWired = false;
+  function wireGalleryFilters(){
+    if (galleryFiltersWired) return;
+    galleryFiltersWired = true;
+    const used = new Set();
+    EXAMPLE_LIST.forEach(e => capsForExample(e).forEach(id => used.add(id)));
+    const sel = $("gf-service");
+    const allOpt = document.createElement("option"); allOpt.value = ""; allOpt.textContent = tr("All services"); sel.appendChild(allOpt);
+    CAPABILITIES.filter(c => used.has(c[0])).sort((a, b) => tr(a[1]).localeCompare(tr(b[1]))).forEach(c => {
+      const o = document.createElement("option"); o.value = c[0]; o.textContent = tr(c[1]); sel.appendChild(o);
+    });
+    const which = $("gf-which");
+    [["", tr("All")], ["builtin", tr("Built in")], ["shared", tr("Shared")]].forEach(([v, label], i) => {
+      const o = which.children[i]; o.value = v; o.textContent = label;
+    });
+    ["gf-models", "gf-reads", "gf-sends", "gf-controls", "gf-money"].forEach(id => $(id).addEventListener("click", () => {
+      const b = $(id); b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")); applyGalleryFilters();
+    }));
+    $("gal-search").addEventListener("input", applyGalleryFilters);
+    $("gf-service").addEventListener("change", applyGalleryFilters);
+    $("gf-which").addEventListener("change", applyGalleryFilters);
+  }
+  function applyGalleryFilters(){
+    if (!galleryFilled) return;
+    const q = ($("gal-search").value || "").trim().toLowerCase();
+    const kinds = new Set(["models", "reads", "sends", "controls", "money"].filter(k => $("gf-" + k).getAttribute("aria-pressed") === "true"));
+    const service = $("gf-service").value, which = $("gf-which").value;
+    let shown = 0;
+    EXAMPLE_LIST.forEach(e => {
+      const caps = capsForExample(e);
+      let ok = true;
+      if (q) ok = (e.title + " " + e.desc + " " + e.tip + " " + (e.author || "") + " " + e.key).toLowerCase().includes(q);
+      if (ok && kinds.has("models") && caps.length) ok = false;
+      if (ok && kinds.has("reads") && !caps.some(id => !CAP_ACT[id])) ok = false;
+      if (ok && kinds.has("sends") && !caps.some(id => SEND_CAPS.has(id))) ok = false;
+      if (ok && kinds.has("controls") && !caps.some(id => CAP_ACT[id] && !SEND_CAPS.has(id) && !MONEY_CAPS.has(id))) ok = false;
+      if (ok && kinds.has("money") && !caps.some(id => MONEY_CAPS.has(id))) ok = false;
+      if (ok && service && !caps.includes(service)) ok = false;
+      if (ok && which === "builtin" && e.community) ok = false;
+      if (ok && which === "shared" && !e.community) ok = false;
+      const card = document.querySelector('.gal-card[data-key="' + e.key + '"]');
+      if (card) card.style.display = ok ? "" : "none";
+      if (ok) shown++;
+    });
+    document.querySelectorAll("#gal-body .gal-cat").forEach(sec => {
+      sec.style.display = [...sec.querySelectorAll(".gal-card")].some(c => c.style.display !== "none") ? "" : "none";
+    });
+    $("gal-count").textContent = tr("{n} of {m} examples", { n: shown, m: EXAMPLE_LIST.length });
   }
   function describeExample(key){
     const e = exampleByKey(key), el = $("ex-desc");
@@ -131,12 +204,8 @@
       $("status").textContent = tr("The program couldn't be loaded, so your canvas was left as it was. ({problem})", { problem:e && e.message ? e.message : tr("unknown error") });
     }
   }
-  function toggleGallery(open){
-    const g = $("gallery"); if (open === undefined) open = g.hidden;
-    if (open) fillGallery();  // the cards are built on the panel's first open, not at start-up
-    g.hidden = !open; $("ex-toggle").setAttribute("aria-expanded", String(open));
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  }
+  function toggleGallery(open){ return toggleDrawer("gallery", open); }
+  registerDrawer("gallery", ["ex-toggle"], () => fillGallery());  // the cards are built on the panel's first open, not at start-up
   $("ex-toggle").onclick = () => toggleGallery();
   $("ha-toggle").onclick = () => toggleHaPanel();
   $("ha-filter").addEventListener("input", renderHaPanel);
@@ -185,12 +254,8 @@
   const editorEl = ws.getInjectionDiv();
   editorEl.tabIndex = 0; editorEl.setAttribute("role", "application");
   editorEl.setAttribute("aria-label", tr("Block editor")); editorEl.setAttribute("aria-describedby", "keys-where");
-  $("keys-toggle").onclick = () => {
-    const el = $("keys"), open = el.hidden;
-    el.hidden = !open; $("keys-toggle").setAttribute("aria-expanded", String(open));
-    if (open) $("keys-title").focus();
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  registerDrawer("keys", ["keys-toggle"], () => $("keys-title").focus());
+  $("keys-toggle").onclick = () => toggleDrawer("keys");
 
   /* What the page kept from last time loads once every button above is set, so a saved program that won't load
      can't stop the page starting (#417). */

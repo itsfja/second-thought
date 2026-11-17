@@ -60,12 +60,8 @@
       $("prompt-name").value = e.name; $("prompt-text").value = e.text; $("prompt-text").focus();
     });
   }
-  $("lib-toggle").onclick = () => {
-    const el = $("lib"), open = el.hidden;
-    el.hidden = !open; $("lib-toggle").setAttribute("aria-expanded", String(open));
-    if (open) { memInit(); renderLibrary(); if (!$("lib-name").value) $("lib-name").value = $("io-name").value || ""; }
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  registerDrawer("lib", ["lib-toggle"], () => { memInit(); renderLibrary(); if (!$("lib-name").value) $("lib-name").value = $("io-name").value || ""; });
+  $("lib-toggle").onclick = () => toggleDrawer("lib");
   $("lib-save").onclick = async () => {
     const name = $("lib-name").value.trim();
     if (!name) { libMsg("Type a name for this program first.", "bad"); $("lib-name").focus(); return; }

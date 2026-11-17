@@ -1209,7 +1209,20 @@
 "Theme":"Hīw",
 "System":"Ender",
 "Light":"Līht",
-"Dark":"Deorc"
+"Dark":"Deorc",
+"Search examples…":"Find ensamples…",
+"Only uses models":"Onli wyrhta",
+"Reads":"Rīeth",
+"Sends":"Sendeþ",
+"Controls":"Stiereþ",
+"Money":"Peningas",
+"Needs":"Nēad",
+"All services":"Alle craftas",
+"Show":"Sċeaw",
+"All":"Alle",
+"Built in":"Inboren",
+"Shared":"Gemearc",
+"{n} of {m} examples":"{n} of {m} ensamples"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

@@ -1208,7 +1208,20 @@
 "Theme":"Tlahcuilōlli",
 "System":"Tēmachtīlli",
 "Light":"Tlahuīlli",
-"Dark":"Tzintli"
+"Dark":"Tzintli",
+"Search examples…":"Xiquintemo in machehualtin…",
+"Only uses models":"Zan tlamachtiliztli",
+"Reads":"Quixitta",
+"Sends":"Qu Titlan",
+"Controls":"Quipohual",
+"Money":"Tomin",
+"Needs":"Quipiya",
+"All services":"Mochi tlatequitilli",
+"Show":"Xiquitta",
+"All":"Mochi",
+"Built in":"Oquixtic",
+"Shared":"Tlahtoltecpa",
+"{n} of {m} examples":"{n} pan {m} machehualtin"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

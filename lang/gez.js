@@ -1210,7 +1210,20 @@
 "Theme":"ጤሜ",
 "System":"ሲሰቲማ",
 "Light":"ኑራ",
-"Dark":"ዳረካ"
+"Dark":"ዳረካ",
+"Search examples…":"ሲጌታ",
+"Only uses models":"ሚሰታ",
+"Reads":"ኯራ",
+"Sends":"ሴዴ",
+"Controls":"ሴገና",
+"Money":"ጌነዜበ",
+"Needs":"ሴሬታ",
+"All services":"ኩለ",
+"Show":"ሴሬያ",
+"All":"ኩለ",
+"Built in":"ሴሬታ",
+"Shared":"ኬፌለ",
+"{n} of {m} examples":"{n} {m}"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},

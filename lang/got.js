@@ -1209,7 +1209,20 @@
 "Theme":"𐍄𐌷𐌴𐌼𐌴",
 "System":"system",
 "Light":"𐌻𐌹𐌲𐌷𐍄",
-"Dark":"𐌳𐌰𐍂𐌺"
+"Dark":"𐌳𐌰𐍂𐌺",
+"Search examples…":"search 𐌴𐍇𐌰𐌼𐍀𐌻𐌴𐍃…",
+"Only uses models":"only 𐌿𐍃𐌴𐍃 𐌼𐍉𐌳𐌴𐌻𐍃",
+"Reads":"𐍂𐌴𐌰𐌳𐍃",
+"Sends":"𐍃𐌴𐌽𐌳𐍃",
+"Controls":"controls",
+"Money":"money",
+"Needs":"𐌽𐌴𐌴𐌳𐍃",
+"All services":"𐌰𐌻𐌻 services",
+"Show":"𐍃𐌷𐍉𐍅",
+"All":"𐌰𐌻𐌻",
+"Built in":"𐌱𐌿𐌹𐌻𐍄 𐌹𐌽",
+"Shared":"𐍃𐌷𐌰𐍂𐌴𐌳",
+"{n} of {m} examples":"{n} 𐍉𐍆 {m} 𐌴𐍇𐌰𐌼𐍀𐌻𐌴𐍃"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},

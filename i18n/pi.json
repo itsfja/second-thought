@@ -1935,7 +1935,20 @@
   "Theme": "वण्ण",
   "System": "विधि",
   "Light": "ओभास",
-  "Dark": "अन्धकार"
+  "Dark": "अन्धकार",
+  "Search examples…": "उदाहरणानि पुज्चति",
+  "Only uses models": "केवलं यन्तके",
+  "Reads": "पठेति",
+  "Sends": "पहिणाति",
+  "Controls": "नियन्तेति",
+  "Money": "धनं",
+  "Needs": "आवश्यकं",
+  "All services": "सब्बं सेवा",
+  "Show": "दस्सेति",
+  "All": "सब्बं",
+  "Built in": "अन्तोगधं",
+  "Shared": "संविभत्तं",
+  "{n} of {m} examples": "{n} ओf {m} उदाहरणानि"
  },
  "examples": {
   "review": {

@@ -1209,7 +1209,20 @@
 "Theme":"Tema",
 "System":"Sistema",
 "Light":"Claro",
-"Dark":"Escuro"
+"Dark":"Escuro",
+"Search examples…":"Procurar exemplos…",
+"Only uses models":"Usa só modelos",
+"Reads":"Lê",
+"Sends":"Envia",
+"Controls":"Controla",
+"Money":"Dinheiro",
+"Needs":"Precisa",
+"All services":"Todos os serviços",
+"Show":"Mostrar",
+"All":"Todos",
+"Built in":"Integrados",
+"Shared":"Partilhados",
+"{n} of {m} examples":"{n} de {m} exemplos"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},

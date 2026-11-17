@@ -1210,7 +1210,20 @@
 "Theme":"ܚܙܘܬ",
 "System":"ܬܟܣ",
 "Light":"ܢܘܪ",
-"Dark":"ܚܫܘܟ"
+"Dark":"ܚܫܘܟ",
+"Search examples…":"ܒܚܬܗ l-mthlyn…",
+"Only uses models":"b-mdl ܘܬܚܕ",
+"Reads":"ܩܪܐ",
+"Sends":"ܫܕܪ",
+"Controls":"ܡܣܒܪ",
+"Money":"ܟܣܦܐ",
+"Needs":"ܚܘǝ",
+"All services":"ܟܠ ܫܪܘܝ",
+"Show":"ܚܙܘܝ",
+"All":"ܟܠ",
+"Built in":"ܒܢܝܬ",
+"Shared":"ܡܫܬܘܬ",
+"{n} of {m} examples":"{n} ܡܢ {m}"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
