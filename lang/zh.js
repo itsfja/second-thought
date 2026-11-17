@@ -1209,7 +1209,20 @@
 "Theme":"主题",
 "System":"系统",
 "Light":"浅色",
-"Dark":"深色"
+"Dark":"深色",
+"Search examples…":"搜索示例…",
+"Only uses models":"仅使用模型",
+"Reads":"读取",
+"Sends":"发送",
+"Controls":"控制",
+"Money":"资金",
+"Needs":"需要",
+"All services":"所有服务",
+"Show":"显示",
+"All":"全部",
+"Built in":"内置",
+"Shared":"社区分享",
+"{n} of {m} examples":"{m} 个中的 {n} 个"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

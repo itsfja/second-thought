@@ -1209,7 +1209,20 @@
 "Theme":"テーマ",
 "System":"システム",
 "Light":"ライト",
-"Dark":"ダーク"
+"Dark":"ダーク",
+"Search examples…":"例を検索…",
+"Only uses models":"モデルのみ使用",
+"Reads":"読み取り",
+"Sends":"送信",
+"Controls":"操作",
+"Money":"お金",
+"Needs":"必要なもの",
+"All services":"すべてのサービス",
+"Show":"表示",
+"All":"すべて",
+"Built in":"組み込み",
+"Shared":"共有",
+"{n} of {m} examples":"{m} 件中 {n} 件"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

@@ -1936,7 +1936,20 @@
   "Theme": "ܚܙܘܬ",
   "System": "ܬܟܣ",
   "Light": "ܢܘܪ",
-  "Dark": "ܚܫܘܟ"
+  "Dark": "ܚܫܘܟ",
+  "Search examples…": "ܒܚܬܗ l-mthlyn…",
+  "Only uses models": "b-mdl ܘܬܚܕ",
+  "Reads": "ܩܪܐ",
+  "Sends": "ܫܕܪ",
+  "Controls": "ܡܣܒܪ",
+  "Money": "ܟܣܦܐ",
+  "Needs": "ܚܘǝ",
+  "All services": "ܟܠ ܫܪܘܝ",
+  "Show": "ܚܙܘܝ",
+  "All": "ܟܠ",
+  "Built in": "ܒܢܝܬ",
+  "Shared": "ܡܫܬܘܬ",
+  "{n} of {m} examples": "{n} ܡܢ {m}"
  },
  "examples": {
   "review": {

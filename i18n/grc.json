@@ -1944,7 +1944,20 @@
   "Theme": "Θέμα",
   "System": "Σύστημα",
   "Light": "Φῶς",
-  "Dark": "Σκότος"
+  "Dark": "Σκότος",
+  "Search examples…": "Εὕρεση παραδειγμάτων…",
+  "Only uses models": "Μόνον προτυπῶν",
+  "Reads": "Ἀναγινώσκει",
+  "Sends": "Πέμπει",
+  "Controls": "Ἄρχει",
+  "Money": "Χρήματα",
+  "Needs": "Χρῄζει",
+  "All services": "Πᾶσαι αἱ ὑπηρεσίαι",
+  "Show": "Δεῖξον",
+  "All": "Ἅπαντα",
+  "Built in": "Ἐγγενῆ",
+  "Shared": "Κοινόχρηστα",
+  "{n} of {m} examples": "{n} ἐκ {m} παραδειγμάτων"
  },
  "examples": {
   "review": {

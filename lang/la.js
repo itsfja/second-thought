@@ -1209,7 +1209,20 @@
 "Theme":"Thema",
 "System":"Systema",
 "Light":"Lux",
-"Dark":"Tenebrae"
+"Dark":"Tenebrae",
+"Search examples…":"Quaere exempla…",
+"Only uses models":"Modellis tantum",
+"Reads":"Legit",
+"Sends":"Mittit",
+"Controls":"Gubernat",
+"Money":"Pecunia",
+"Needs":"Requirit",
+"All services":"Omnia servitia",
+"Show":"Ostende",
+"All":"Omnia",
+"Built in":"Intrinseca",
+"Shared":"Communia",
+"{n} of {m} examples":"{n} ex {m} exemplis"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

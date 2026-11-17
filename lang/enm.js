@@ -1209,7 +1209,20 @@
 "Theme":"Hwe",
 "System":"Sette",
 "Light":"Liht",
-"Dark":"Derk"
+"Dark":"Derk",
+"Search examples…":"Fynde ensamples…",
+"Only uses models":"Onli maquettes",
+"Reads":"Redeth",
+"Sends":"Sendeth",
+"Controls":"Governeth",
+"Money":"Penyes",
+"Needs":"Nedeth",
+"All services":"Alle servitches",
+"Show":"Schewe",
+"All":"Alle",
+"Built in":"Inborn",
+"Shared":"Delid",
+"{n} of {m} examples":"{n} of {m} ensamples"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

@@ -1945,7 +1945,20 @@
   "Theme": "ᛚᛁᛏᚢᛦ",
   "System": "ᚴᛁᚱᚠᛁ",
   "Light": "ᛚᛁᚢᛋ",
-  "Dark": "ᛘᚢᚱᚴᚢᛦ"
+  "Dark": "ᛘᚢᚱᚴᚢᛦ",
+  "Search examples…": "ᚠᛁᚾ ᛁᚴᛋᛁᛘᛒᛚᛁᛦ…",
+  "Only uses models": "ᛒᛅᚱᛁ ᛘᚢᛏᛁᛚᛁᛦ",
+  "Reads": "ᛚᛁᛋ",
+  "Sends": "Sender",
+  "Controls": "ᛋᛏᚢᚱᛁᛦ",
+  "Money": "ᛒᛁᚴᛁᛦ",
+  "Needs": "ᛏᚱᛁᚴᛁᛦ",
+  "All services": "ᛅᛚᛁ ᛏᛁᚾᛁᛋᛏᛁᛦ",
+  "Show": "ᚢᛁᛋ",
+  "All": "ᛅᛚᛁ",
+  "Built in": "ᛁᚾᛁᛒᚢᚴᛏ",
+  "Shared": "ᛏᛁᛚᛏ",
+  "{n} of {m} examples": "{n} ᛅᚢ {m} ᛁᚴᛋᛁᛘᛒᛚᛁᛦ"
  },
  "examples": {
   "review": {

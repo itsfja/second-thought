@@ -1209,7 +1209,20 @@
 "Theme":"𓏏𓉔𓅓",
 "System":"𓋴𓋴𓏏𓅓",
 "Light":"𓈖𓎛𓂋",
-"Dark":"qṭm"
+"Dark":"qṭm",
+"Search examples…":"𓋴𓂋𓎛 𓈖𓆑𓂋𓅱",
+"Only uses models":"𓅓𓈖𓅱 𓎛𓄿𓅱𓏏",
+"Reads":"𓈎 𓂋𓄿",
+"Sends":"𓈙 𓂧 𓂋",
+"Controls":"𓎛 𓎡 𓅓",
+"Money":"𓐍𓄿𓏭𓏏",
+"Needs":"𓎛𓅱𓄿",
+"All services":"𓊪 𓋴 𓅱",
+"Show":"𓂧𓈙𓂋",
+"All":"kl",
+"Built in":"𓅓𓎛𓂧",
+"Shared":"𓅓𓈙𓏏𓂋𓎡",
+"{n} of {m} examples":"{n} 𓅓 {m}"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},

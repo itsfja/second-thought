@@ -1209,7 +1209,20 @@
 "Theme":"Erscheinungsbild",
 "System":"System",
 "Light":"Hell",
-"Dark":"Dunkel"
+"Dark":"Dunkel",
+"Search examples…":"Beispiele suchen…",
+"Only uses models":"Nutzt nur Modelle",
+"Reads":"Liest",
+"Sends":"Sendet",
+"Controls":"Steuert",
+"Money":"Geld",
+"Needs":"Braucht",
+"All services":"Alle Dienste",
+"Show":"Zeige",
+"All":"Alle",
+"Built in":"Eingebaut",
+"Shared":"Geteilt",
+"{n} of {m} examples":"{n} von {m} Beispielen"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

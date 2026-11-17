@@ -1209,7 +1209,20 @@
 "Theme":"Litur",
 "System":"Kerfi",
 "Light":"Ljós",
-"Dark":"Myrkur"
+"Dark":"Myrkur",
+"Search examples…":"Finn eksempler…",
+"Only uses models":"Bare modeller",
+"Reads":"Les",
+"Sends":"Sender",
+"Controls":"Styrer",
+"Money":"Penger",
+"Needs":"Trenger",
+"All services":"Alle tjenester",
+"Show":"Vis",
+"All":"Alle",
+"Built in":"Innebygd",
+"Shared":"Delt",
+"{n} of {m} examples":"{n} av {m} eksempler"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

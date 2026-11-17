@@ -1945,7 +1945,20 @@
   "Theme": "ܚܙܘܬܐ",
   "System": "ܛܟܣܐ",
   "Light": "ܢܘܗܪܐ",
-  "Dark": "ܚܫܘܟܐ"
+  "Dark": "ܚܫܘܟܐ",
+  "Search examples…": "ܒܥܐ ܒܡܬܠ̈ܐ…",
+  "Only uses models": "ܒܡܕܠܐ ܒܠܚܘܕ",
+  "Reads": "ܩܪܐ",
+  "Sends": "ܫܕܪ",
+  "Controls": "ܦܠܚ",
+  "Money": "ܟܣܦܐ",
+  "Needs": "ܚܘܫ",
+  "All services": "ܟܠ ܫܪܘܝܐ",
+  "Show": "ܚܘܝ",
+  "All": "ܟܠ",
+  "Built in": "ܒܢܝܬܐ",
+  "Shared": "ܡܫܘܬܦܐ",
+  "{n} of {m} examples": "{n} ܡܢ {m} ܡܬܠ̈ܐ"
  },
  "examples": {
   "review": {

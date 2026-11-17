@@ -215,10 +215,6 @@
       row.append(n, id, inp); list.appendChild(row);
     });
   }
-  function toggleHaPanel(){
-    const el = document.getElementById("ha"), open = el.hidden;
-    el.hidden = !open; document.getElementById("ha-toggle").setAttribute("aria-expanded", String(open));
-    if (open) renderHaPanel();
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  }
+  function toggleHaPanel(){ return toggleDrawer("ha"); }
+  registerDrawer("ha", ["ha-toggle"], () => renderHaPanel());
 

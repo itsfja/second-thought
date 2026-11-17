@@ -1934,7 +1934,20 @@
   "Theme": "Оформлєниѥ",
   "System": "Система",
   "Light": "Свѣтъ",
-  "Dark": "Тьма"
+  "Dark": "Тьма",
+  "Search examples…": "Исканїе примѣровъ…",
+  "Only uses models": "Токмо модели",
+  "Reads": "Чтетъ",
+  "Sends": "Посылаетъ",
+  "Controls": "Правитъ",
+  "Money": "Пѣнѧии",
+  "Needs": "Трѣбꙋетъ",
+  "All services": "Вьси слꙋжьбы",
+  "Show": "Покажи",
+  "All": "Вьсь",
+  "Built in": "Въстроѥны",
+  "Shared": "Дѣлимы",
+  "{n} of {m} examples": "{n} ꙗꙁ {m} примѣровъ"
  },
  "examples": {
   "review": {

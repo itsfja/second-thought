@@ -1945,7 +1945,20 @@
   "Theme": "रूप",
   "System": "तन्त्र",
   "Light": "प्रकाश",
-  "Dark": "तमः"
+  "Dark": "तमः",
+  "Search examples…": "उदाहरणानि विजिन्वन्ति",
+  "Only uses models": "केवलं यन्त्रकाः",
+  "Reads": "पठति",
+  "Sends": "प्रेषयति",
+  "Controls": "नियन्त्रयति",
+  "Money": "धनं",
+  "Needs": "आवश्यकं",
+  "All services": "सर्वाः सेवाः",
+  "Show": "दर्शय",
+  "All": "सर्वम्",
+  "Built in": "अन्तर्गतं",
+  "Shared": "संविभक्तं",
+  "{n} of {m} examples": "{n} ओf {m} उदाहरणानि"
  },
  "examples": {
   "review": {

@@ -1935,7 +1935,20 @@
   "Theme": "θέμα",
   "System": "σύστημα",
   "Light": "φως",
-  "Dark": "σκότος"
+  "Dark": "σκότος",
+  "Search examples…": "αναζήτηση παραδειγμάτων…",
+  "Only uses models": "μόνο μοντέλα",
+  "Reads": "διαβάζει",
+  "Sends": "στέλνει",
+  "Controls": "ελέγχει",
+  "Money": "χρήματα",
+  "Needs": "χρειάζεται",
+  "All services": "όλες οι υπηρεσίες",
+  "Show": "εμφάνιση",
+  "All": "όλα",
+  "Built in": "ενσωματωμένα",
+  "Shared": "κοινόχρηστα",
+  "{n} of {m} examples": "{n} από {m} παραδείγματα"
  },
  "examples": {
   "review": {

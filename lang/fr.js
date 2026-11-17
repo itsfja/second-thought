@@ -1209,7 +1209,20 @@
 "Theme":"Thème",
 "System":"Système",
 "Light":"Clair",
-"Dark":"Sombre"
+"Dark":"Sombre",
+"Search examples…":"Rechercher des exemples…",
+"Only uses models":"Modèles uniquement",
+"Reads":"Lit",
+"Sends":"Envoie",
+"Controls":"Contrôle",
+"Money":"Argent",
+"Needs":"Besoin de",
+"All services":"Tous les services",
+"Show":"Afficher",
+"All":"Tous",
+"Built in":"Intégrés",
+"Shared":"Partagés",
+"{n} of {m} examples":"{n} sur {m} exemples"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

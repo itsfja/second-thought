@@ -1935,7 +1935,20 @@
   "Theme": "𓏏𓉔𓅓",
   "System": "𓋴𓋴𓏏𓅓",
   "Light": "𓈖𓎛𓂋",
-  "Dark": "qṭm"
+  "Dark": "qṭm",
+  "Search examples…": "𓋴𓂋𓎛 𓈖𓆑𓂋𓅱",
+  "Only uses models": "𓅓𓈖𓅱 𓎛𓄿𓅱𓏏",
+  "Reads": "𓈎 𓂋𓄿",
+  "Sends": "𓈙 𓂧 𓂋",
+  "Controls": "𓎛 𓎡 𓅓",
+  "Money": "𓐍𓄿𓏭𓏏",
+  "Needs": "𓎛𓅱𓄿",
+  "All services": "𓊪 𓋴 𓅱",
+  "Show": "𓂧𓈙𓂋",
+  "All": "kl",
+  "Built in": "𓅓𓎛𓂧",
+  "Shared": "𓅓𓈙𓏏𓂋𓎡",
+  "{n} of {m} examples": "{n} 𓅓 {m}"
  },
  "examples": {
   "review": {

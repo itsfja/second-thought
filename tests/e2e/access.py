@@ -42,11 +42,26 @@ async def access_tests():
         check(lang.split("-")[0] == "en", f"the page says what language it's in ({lang})")
         for toggle in ("ex-toggle", "io-export", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
             await pg.click("#" + toggle)
+            await pg.wait_for_timeout(200)
+            problems = await axe_problems(pg)
+            check(not problems, f"or with the {toggle} drawer open {problems or ''}")
+            await pg.keyboard.press("Escape")
+            await pg.wait_for_timeout(100)
+
+        # A drawer (#445): opening it puts the focus inside, Tab stays inside, Esc closes it.
+        await pg.click("#ex-toggle")
         await pg.wait_for_timeout(300)
+        check(await pg.evaluate("document.getElementById('gallery').contains(document.activeElement)"),
+              "opening the examples puts the focus inside the drawer")
+        for _ in range(30):
+            await pg.keyboard.press("Tab")
+        check(await pg.evaluate("document.getElementById('gallery').contains(document.activeElement)"),
+              "Tab cycles inside the drawer, never out to the page behind")
         problems = await axe_problems(pg)
-        check(not problems, f"or with every panel open {problems or ''}")
-        for toggle in ("ex-toggle", "io-export", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
-            await pg.click("#" + toggle)
+        check(not problems, f"axe-core finds no serious problems with a drawer open {problems or ''}")
+        await pg.keyboard.press("Escape")
+        await pg.wait_for_timeout(200)
+        check(await pg.evaluate("document.getElementById('gallery').hidden"), "Esc closes the drawer")
 
         # A run, from the keyboard alone: Tab to Run, Enter, and the question takes the focus.
         await load_state(pg, script(blk("rb_ask_me", inputs={"TEXT": tx("Which bread should I bake?")}),

@@ -114,6 +114,7 @@ async def page_tests():
         check('BACKUPS = ["quick"]' in code, "exported Python lists the backup")
         await pg.click("#io-py-show")
         await pg.click("#io-export")
+        await pg.click("#bk-toggle")
         await pg.select_option("#bk-1", "")
         await pg.evaluate("window.__failTier = 'complex'")
         await pg.select_option("#example", "review")
@@ -272,6 +273,23 @@ async def page_tests():
         back = await pg3.evaluate("document.documentElement.getAttribute('data-theme')")
         check(dark == "dark" and back is None, "the Settings menu's theme choice applies, and System clears it")
         await pg3.close()
+
+        # Panels are drawers over the canvas (#445): opening one never moves the page, and Esc closes it.
+        print("Drawers over the canvas (#445)")
+        base = await pg.evaluate("JSON.stringify(document.querySelector('.canvas').getBoundingClientRect())")
+        for btn, panel in [("#ex-toggle", "#gallery"), ("#io-export", "#io"), ("#lib-toggle", "#lib"), ("#mem-toggle", "#mem"),
+                           ("#ha-toggle", "#ha"), ("#bk-toggle", "#bk"), ("#keys-toggle", "#keys")]:
+            await pg.click(btn)
+            await pg.wait_for_timeout(250)
+            r = await pg.evaluate("""([panel, base]) => ({ same: JSON.stringify(document.querySelector('.canvas').getBoundingClientRect()) === base,
+                   open: !document.querySelector(panel).hidden, fixed: getComputedStyle(document.querySelector(panel)).position,
+                   focusIn: document.querySelector(panel).contains(document.activeElement) })""", [panel, base])
+            check(r["same"] and r["open"] and r["fixed"] == "fixed" and r["focusIn"],
+                  f"{btn} opens {panel} as a drawer over the canvas: the canvas doesn't move, focus is inside ({r})")
+            await pg.keyboard.press("Escape")
+            await pg.wait_for_timeout(150)
+            check(await pg.evaluate("p => document.querySelector(p).hidden", panel),
+                  f"Esc closes {panel} (open drawer now: {await pg.evaluate('window.__openDrawer()')})")
 
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()

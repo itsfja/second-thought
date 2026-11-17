@@ -1210,7 +1210,20 @@
 "Theme":"𒋗𒊌𒇻",
 "System":"𒉺𒊏𒀝𒆪",
 "Light":"𒉡𒊒",
-"Dark":"𒊭𒆷𒈬"
+"Dark":"𒊭𒆷𒈬",
+"Search examples…":"𒋫𒀊𒁍 𒊭𒊏𒆪",
+"Only uses models":"𒆷 𒊭𒅈𒊒𒌅",
+"Reads":"𒆠𒊒",
+"Sends":"𒊭𒉺𒊒",
+"Controls":"𒊭𒅈𒊏𒉡",
+"Money":"𒅗𒊍𒁍",
+"Needs":"𒅁𒁀",
+"All services":"𒆪𒌌𒇷𒅖",
+"Show":"𒋗𒇻𒈠",
+"All":"𒆪𒌌𒇷𒅖",
+"Built in":"𒁉𒌅𒌝",
+"Shared":"𒈬𒌓𒋫𒊍𒋛𒊒𒌝",
+"{n} of {m} examples":"{n} 𒅖 {m}"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},

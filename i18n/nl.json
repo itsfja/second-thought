@@ -1944,7 +1944,20 @@
   "Theme": "Thema",
   "System": "Systeem",
   "Light": "Licht",
-  "Dark": "Donker"
+  "Dark": "Donker",
+  "Search examples…": "Voorbeelden zoeken…",
+  "Only uses models": "Gebruikt alleen modellen",
+  "Reads": "Leest",
+  "Sends": "Verstuurt",
+  "Controls": "Bedient",
+  "Money": "Geld",
+  "Needs": "Vereist",
+  "All services": "Alle diensten",
+  "Show": "Toon",
+  "All": "Alle",
+  "Built in": "Ingebouwd",
+  "Shared": "Gedeeld",
+  "{n} of {m} examples": "{n} van {m} voorbeelden"
  },
  "examples": {
   "review": {

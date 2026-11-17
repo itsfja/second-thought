@@ -1209,7 +1209,20 @@
 "Theme":"Tema",
 "System":"Sistema",
 "Light":"Claro",
-"Dark":"Oscuro"
+"Dark":"Oscuro",
+"Search examples…":"Buscar ejemplos…",
+"Only uses models":"Solo usa modelos",
+"Reads":"Lee",
+"Sends":"Envía",
+"Controls":"Controla",
+"Money":"Dinero",
+"Needs":"Necesita",
+"All services":"Todos los servicios",
+"Show":"Mostrar",
+"All":"Todos",
+"Built in":"Integrados",
+"Shared":"Compartidos",
+"{n} of {m} examples":"{n} de {m} ejemplos"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

@@ -179,13 +179,8 @@
     });
     $("mem-clear").disabled = !rows.length;
   }
-  $("mem-toggle").onclick = () => {
-    const el = $("mem"), open = el.hidden;
-    el.hidden = !open; $("mem-toggle").setAttribute("aria-expanded", String(open));
-    $("mem-confirm").hidden = true;
-    if (open) { memInit(); renderMemory(); }
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  registerDrawer("mem", ["mem-toggle"], () => { $("mem-confirm").hidden = true; memInit(); renderMemory(); });
+  $("mem-toggle").onclick = () => toggleDrawer("mem");
   $("mem-clear").onclick = () => { $("mem-confirm").hidden = false; $("mem-clear-no").focus(); };
   $("mem-clear-no").onclick = () => { $("mem-confirm").hidden = true; };
   $("mem-clear-yes").onclick = async () => {

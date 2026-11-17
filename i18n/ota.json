@@ -1935,7 +1935,20 @@
   "Theme": "السمة",
   "System": "النظام",
   "Light": "فاتح",
-  "Dark": "داكن"
+  "Dark": "داكن",
+  "Search examples…": "ابحث في الأمثلة…",
+  "Only uses models": "يستخدم النماذج فقط",
+  "Reads": "يقرأ",
+  "Sends": "يرسل",
+  "Controls": "يتحكم",
+  "Money": "مال",
+  "Needs": "يحتاج",
+  "All services": "كل الخدمات",
+  "Show": "عرض",
+  "All": "الكل",
+  "Built in": "مدمج",
+  "Shared": "مشارك",
+  "{n} of {m} examples": "{n} من {m} أمثلة"
  },
  "examples": {
   "review": {

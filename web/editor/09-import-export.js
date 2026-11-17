@@ -23,23 +23,16 @@
       sel.onchange = () => { try { localStorage.setItem(BK_LS, JSON.stringify(["bk-1", "bk-2", "bk-3"].map(x => $(x).value))); } catch(e) {} showBackups(); };
     });
     $("tier").addEventListener("change", showBackups);
-    $("bk-toggle").onclick = () => {
-      const bk = $("bk"), open = bk.hidden;
-      bk.hidden = !open; $("bk-toggle").setAttribute("aria-expanded", String(open));
-      setTimeout(() => Blockly.svgResize(ws), 0);
-    };
+    registerDrawer("bk", ["bk-toggle"]);
+    $("bk-toggle").onclick = () => toggleDrawer("bk");
     showBackups();
   })();
 
   const FORMAT = "reflection-blocks";
   const ioMsg = (id, text, kind) => { const m = $(id); m.textContent = tr(text); m.className = "msg" + (kind ? " " + kind : ""); };
   const ioToggles = ["io-import", "io-export", "share-prog"];
-  function toggleIo(open){
-    const io = $("io"); if (open === undefined) open = io.hidden;
-    io.hidden = !open; ioToggles.forEach(id => $(id).setAttribute("aria-expanded", String(open)));
-    if (open) { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; }
-    setTimeout(() => Blockly.svgResize(ws), 0);
-  }
+  registerDrawer("io", ioToggles, () => { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; });
+  function toggleIo(open){ return toggleDrawer("io", open); }
   $("io-import").onclick = () => { toggleIo(true); $("io-paste").focus(); };
   $("io-export").onclick = () => { toggleIo(true); $("io-copy").focus(); };
   $("share-prog").onclick = () => { toggleIo(true); $("io-copy").click(); };
