@@ -87,10 +87,10 @@ async def export_all(names):
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
         for name in names:
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await paste(pg, (ROOT / "gallery" / f"{name}.json").read_text(encoding="utf-8"))
             await pg.click("#io-load-paste")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             codes[name] = await export_python(pg, name)
         await browser.close()
     return codes

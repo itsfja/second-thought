@@ -40,12 +40,12 @@ async def access_tests():
         check(not problems, f"axe-core finds no serious problems on the page as it opens {problems or ''}")
         lang = await pg.evaluate("document.documentElement.lang")
         check(lang.split("-")[0] == "en", f"the page says what language it's in ({lang})")
-        for toggle in ("ex-toggle", "io-toggle", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
+        for toggle in ("ex-toggle", "io-export", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
             await pg.click("#" + toggle)
         await pg.wait_for_timeout(300)
         problems = await axe_problems(pg)
         check(not problems, f"or with every panel open {problems or ''}")
-        for toggle in ("ex-toggle", "io-toggle", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
+        for toggle in ("ex-toggle", "io-export", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
             await pg.click("#" + toggle)
 
         # A run, from the keyboard alone: Tab to Run, Enter, and the question takes the focus.
@@ -78,7 +78,9 @@ async def access_tests():
         # Building a program with the keyboard (Blockly 13's own, #242): the ? button says how, then Tab to the
         # block editor, T for the blocks, the arrows to a block, Enter to add it and Enter again to place it.
         await pg.evaluate("document.activeElement && document.activeElement.blur()")
-        check(await tab_to(pg, "#keys-toggle"), "Tab reaches the keyboard help (?)")
+        check(await tab_to(pg, "#menu-settings summary"), "Tab reaches the Settings menu")
+        await pg.keyboard.press("Enter")  # opens the menu, as a disclosure
+        check(await tab_to(pg, "#keys-toggle"), "then Tab reaches the keyboard help in it")
         await pg.keyboard.press("Enter")
         help_text = await pg.inner_text("#keys") if await pg.is_visible("#keys") else ""
         check(await pg.evaluate("document.activeElement.id") == "keys-title" and "T opens the blocks" in help_text and "Ctrl+Shift+K" not in help_text,

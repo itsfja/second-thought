@@ -1226,7 +1226,6 @@
   "Homey devices": "𒌑𒉡𒉿𒀸𒄩 Homey",
   "Homey flow started": "𒀀𒅈𒋗𒉿𒅈 Homey 𒋾𒉿𒀜",
   "Homey variable {name}": "𒆷𒄠𒈠𒀭 Homey {name}",
-  "Import / export": "𒌑𒁕 / 𒉺𒊏𒀀 𒁉𒂊𒁕",
   "Import a program": "𒄑𒄯 𒌑𒁕",
   "Import and export": "𒌑𒁕 𒅇 𒉺𒊏𒀀 𒁉𒂊𒁕",
   "Import undone. Your previous program is back.": "𒌑𒁕𒌋𒉿𒅈 𒂕𒉺. 𒄑𒄯 𒄩𒀭𒋼𒄑𒍣𒅗 𒂕𒉺 𒌑𒀉.",
@@ -1322,10 +1321,8 @@
   "Pick the better one": "𒅆𒂟 𒄩𒀭𒁕𒀀𒄿",
   "Picture": "𒂊𒌍𒊑",
   "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "𒂊𒌍𒊑 “𒆪𒀉𒈠𒀭 𒅎𒁍𒁕 𒃶𒌍𒊭𒀭”𒁁 𒅖𒋫𒀭𒍣 𒄯𒍣. 𒂊𒌍𒊑 𒁾 𒈠𒄴𒄩𒀭 𒄯𒀝 𒄯𒆪𒉿𒀭𒍣.",
-  "Press the question mark button for keyboard help.": "𒁖𒆪𒉿𒌋𒉿𒅈 𒁍𒉡𒍑𒋗𒉿𒀸 𒁖𒆪𒉿𒄴 𒄑 𒁖𒆪𒉿𒌋𒉿𒀸 𒄩𒀭𒁕𒀭𒉌.",
   "Program name": "𒋳 𒄑𒄯",
   "Program: {name}": "𒄑𒄯: {name}",
-  "Programs": "𒄑𒄯",
   "Programs inside programs went more than 10 deep, so the run stopped.": "𒄑𒄯 𒄿𒈾 𒄑𒄯 10-𒋫 𒃲 𒉺𒀉, 𒄿𒉿𒌋𒉿𒅈 𒋼𒀀𒀸𒋫.",
   "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "𒄑𒄯 𒀭𒌅𒄴𒊭𒀸 𒋫𒈠𒄿𒂊𒌍 𒁉𒉿𒀭. 𒆪𒅖𒊭 𒀭𒁕 𒁕𒀀𒌋𒉿𒅈 𒄩𒀭𒋼𒄑𒍣 𒀀𒍑𒊭𒀭, 𒅇 𒆪𒀉 𒄿𒉿𒍣 𒅖𒌅 𒋞𒄭𒀀 𒈨𒈠𒄿. 𒄑𒄯𒅗 𒁉𒉿𒌋𒉿𒀭𒍣, gallery/README.md 𒄿𒈾 𒄑𒂷 Second Thought 𒀀𒍑.",
   "Programs run with your own keys: {keys}. Each is charged to its own account.": "𒄑𒄯 𒋡𒁺 𒄑𒊕𒆰𒅗 𒄿𒉿𒍣: {keys}. 𒆪𒅖𒊭 𒄿𒈾 𒁾𒋗 𒋃𒍣.",
@@ -1927,7 +1924,18 @@
   "has a link": "linkaš 𒅈𒄩",
   "{n} words; the limit is {limit}": "{n} 𒆪𒅖 𒆪𒅖𒀭𒍝; 𒅈𒄩 {limit}",
   "not valid JSON": "𒌌 𒊬𒊑 JSON",
-  "no link in it": "𒌌 𒅈𒄩 linkaš"
+  "no link in it": "𒌌 𒅈𒄩 linkaš",
+  "Program": "𒆷𒂵𒈠",
+  "Data": "𒅗𒈾",
+  "Settings": "𒉺𒊏𒋢",
+  "New": "𒉿𒈾",
+  "Import": "𒅗𒇻",
+  "Export": "𒅗𒊒",
+  "Share": "𒋗𒈠",
+  "Theme": "𒈠𒈾",
+  "System": "𒋫𒈾",
+  "Light": "𒍣𒈾",
+  "Dark": "𒄖𒈾"
  },
  "examples": {
   "review": {

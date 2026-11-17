@@ -106,21 +106,21 @@ async def actions_tests():
             r = await pg.evaluate("window.__actionsFiles()")
             check(isinstance(r, dict) and "asks you questions" in r.get("error", ""),
                   "a scheduled script that asks a question, even in the script it starts, is refused")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await pg.click("#io-gha-save")
             msg = await pg.text_content("#io-export-msg")
             check("can't run on GitHub Actions: it asks you questions" in msg, f"the page says why, instead of saving ({msg})")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
 
             # Test cases (#246): a test job, run on push and from Run workflow, never on the schedule.
             with_tests = {"format": "reflection-blocks", "version": 1, "name": "tested", "program": program(when_time(9, 0, "every", add(tx("x")))),
                           "tests": [{"name": "Says x", "value": "", "inputs": {}, "criteria": "It says x."}]}
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await pg.fill("#io-paste", json.dumps(with_tests))
             await pg.click("#io-load-paste")
             await pg.wait_for_timeout(300)
             await pg.fill("#io-name", "tested")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             files = await pg.evaluate("window.__actionsFiles()")
             names = [f["name"] for f in files]
             wf, data, on = workflow(files)
@@ -137,23 +137,23 @@ async def actions_tests():
                   "Run workflow offers the tests too, and they get the model keys")
             check("## Test cases" in setup and "never run on the schedule" in setup, "SETUP.md says when they run and what they cost")
 
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await pg.fill("#io-paste", json.dumps({"format": "reflection-blocks", "version": 1, "name": "sched", "program": sched}))
             await pg.click("#io-load-paste")  # a block file with no test cases clears them, as it does for a person
             await pg.wait_for_timeout(300)
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             files = await pg.evaluate("window.__actionsFiles()")
             _, data, on = workflow(files)
             check("push" not in on and "test" not in data["jobs"] and "if" not in data["jobs"]["run"],
                   "a program without test cases gets the workflow as before")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await pg.fill("#io-name", "my-program")
             files = await pg.evaluate("window.__actionsFiles()")
             await pg.click("#io-gha-save")
             msg = await pg.text_content("#io-export-msg")
             saved = await pg.evaluate("window.__saved")
             check(saved[-1:] == ["my-program-actions.zip"] and "SETUP.md" in msg, f"Save as GitHub Actions saves a zip, and says what to do next ({msg})")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
             await ctx.close()
         await browser.close()
@@ -177,7 +177,7 @@ async def actions_tests():
 
 
 async def paste_gallery(pg, name):
-    await pg.click("#io-toggle")
+    await pg.click("#io-export")
     await paste(pg, (ROOT / "gallery" / f"{name}.json").read_text(encoding="utf-8"))
     await pg.click("#io-load-paste")
-    await pg.click("#io-toggle")
+    await pg.click("#io-export")

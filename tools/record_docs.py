@@ -181,7 +181,7 @@ async def page_shots():
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
-        for name, toggle in (("examples", "#ex-toggle"), ("export", "#io-toggle"), ("home-assistant", "#ha-toggle")):
+        for name, toggle in (("examples", "#ex-toggle"), ("export", "#io-export"), ("home-assistant", "#ha-toggle")):
             await pg.click(toggle)
             await pg.wait_for_timeout(700)
             panel = await pg.evaluate_handle(f"""() => {{ const b = document.querySelector('{toggle}');

@@ -12,7 +12,7 @@
 
 An exported program runs on any computer by itself, with the page closed. It talks to the model services directly, so it needs an API key, and calls are billed by the service, separately from claude.ai.
 
-Press **Import / export**, then **Save Python (.zip)**, and unzip it into a folder of its own:
+Press **Program → Export**, then **Save Python (.zip)**, and unzip it into a folder of its own:
 
 | File | What it is |
 |---|---|
@@ -107,7 +107,7 @@ Unregister-ScheduledTask -TaskName 'Second Thought: my-program'
 
 ### Running on GitHub Actions
 
-A program whose scripts start at set times ('when it's …' and 'every …') can run on GitHub's computers instead, so yours doesn't need to be on. In Import / export, choose **Save as GitHub Actions (.zip)**. The zip has the program, a workflow in `.github/workflows/`, and `SETUP.md`, which lists the repository secrets to add (your keys). Put the files in a **private** repository, add the secrets, and the scripts run at their times. The **Run workflow** button on the Actions tab runs one now.
+A program whose scripts start at set times ('when it's …' and 'every …') can run on GitHub's computers instead, so yours doesn't need to be on. In **Program → Export**, choose **Save as GitHub Actions (.zip)**. The zip has the program, a workflow in `.github/workflows/`, and `SETUP.md`, which lists the repository secrets to add (your keys). Put the files in a **private** repository, add the secrets, and the scripts run at their times. The **Run workflow** button on the Actions tab runs one now.
 
 If the program has test cases (**Save as test case** after a good run), the workflow runs them too: whenever you push a change to the program, its tests or the workflow, and from **Run workflow**. They never run on the schedule, since they call the real models. A failed case shows on the run's page, and the run's summary has a table of every case and what the tests cost. `SETUP.md` shows how to make the scheduled runs wait while the last test run has failed.
 

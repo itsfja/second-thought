@@ -36,7 +36,7 @@ async def format_tests():
           return { lost:out, n:window.__exampleStates().length }; }""")
         check(not lost["lost"] and lost["n"] > 100, f"every one of the {lost['n']} examples and gallery programs loads and saves with no block lost {lost['lost'][:5]}")
 
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
         await pg.click("#io-copy")
         text = await pg.input_value("#io-export-text")
         check('"version": 1' in text, "a saved block file says which block format it has")
@@ -67,6 +67,6 @@ async def format_tests():
         msg = await pg.text_content("#io-import-msg")
         check("brought up to date (block format 2 to 3)" in msg, f"exported Python carries its format too, and is upgraded when imported ({msg})")
         await pg.evaluate("() => window.__setFormat(1, {})")
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
         check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
         await browser.close()

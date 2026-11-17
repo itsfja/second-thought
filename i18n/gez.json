@@ -1028,8 +1028,6 @@
   "Example": "አርአያ",
   "Load": "አርኅው",
   "Browse examples": "ነጽር አርአያተ",
-  "Import / export": "አብእ / አውፅእ",
-  "Programs": "ሥርዐታት",
   "Memory": "ዝክር",
   "Home Assistant": "Home Assistant",
   "Model": "አምሳል",
@@ -1726,7 +1724,6 @@
   "{passed} of {n} passed.": "{passed} እም {n} ኀለፉ።",
   "Block editor": "ሐናጼ ግንፋላት",
   "Keyboard": "መጥቅዕ ፊደላት",
-  "Press the question mark button for keyboard help.": "ጥቅዕ መጥቅዐ ምልክተ ጥያቄ ለረድኤተ መጥቅዕ ፊደላት።",
   "Keyboard help": "ረድኤተ መጥቅዕ ፊደላት",
   "about {cost}": "ከመ {cost}",
   "under {cost}": "ዘይንእስ እም {cost}",
@@ -1937,7 +1934,18 @@
   "has a link": "ተንንንይግእ አብርታየ",
   "{n} words; the limit is {limit}": "{n} ኍልቈ ቃላት ዘ; መድመሣእ {limit}",
   "not valid JSON": "አላአ አብርታየ JSON",
-  "no link in it": "አላአ ተንንንይግእ"
+  "no link in it": "አላአ ተንንንይግእ",
+  "Program": "ፐሮገራማ",
+  "Data": "ዳታ",
+  "Settings": "ሴቲነጌ",
+  "New": "ኔወ",
+  "Import": "ሴሜነ",
+  "Export": "ቴሴጋ",
+  "Share": "ሻሬ",
+  "Theme": "ጤሜ",
+  "System": "ሲሰቲማ",
+  "Light": "ኑራ",
+  "Dark": "ዳረካ"
  },
  "examples": {
   "review": {

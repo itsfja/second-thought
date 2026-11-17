@@ -1027,8 +1027,6 @@
   "Example": "Beispiel",
   "Load": "Laden",
   "Browse examples": "Beispiele durchsuchen",
-  "Import / export": "Import / Export",
-  "Programs": "Programme",
   "Memory": "Gedächtnis",
   "Home Assistant": "Home Assistant",
   "Model": "Modell",
@@ -1725,7 +1723,6 @@
   "{passed} of {n} passed.": "{passed} von {n} bestanden.",
   "Block editor": "Block-Editor",
   "Keyboard": "Tastatur",
-  "Press the question mark button for keyboard help.": "Drücken Sie die Fragezeichen-Schaltfläche für Hilfe zur Tastatur.",
   "Keyboard help": "Hilfe zur Tastatur",
   "about {cost}": "etwa {cost}",
   "under {cost}": "unter {cost}",
@@ -1936,7 +1933,18 @@
   "has a link": "hat einen Link",
   "{n} words; the limit is {limit}": "{n} Wörter; das Limit ist {limit}",
   "not valid JSON": "kein gültiges JSON",
-  "no link in it": "kein Link darin"
+  "no link in it": "kein Link darin",
+  "Program": "Programm",
+  "Data": "Daten",
+  "Settings": "Einstellungen",
+  "New": "Neu",
+  "Import": "Importieren",
+  "Export": "Exportieren",
+  "Share": "Teilen",
+  "Theme": "Erscheinungsbild",
+  "System": "System",
+  "Light": "Hell",
+  "Dark": "Dunkel"
  },
  "examples": {
   "review": {

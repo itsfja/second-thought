@@ -1225,7 +1225,6 @@
   "Homey devices": "Homey 之器",
   "Homey flow started": "Homey 之流已啓",
   "Homey variable {name}": "Homey 變數 {name}",
-  "Import / export": "入 / 出",
   "Import a program": "入一程",
   "Import and export": "入與出",
   "Import undone. Your previous program is back.": "已撤其入。汝前之程復矣。",
@@ -1321,10 +1320,8 @@
   "Pick the better one": "擇其優者",
   "Picture": "圖",
   "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "圖唯可記於「此頁開時」。存圖為卷以留之。",
-  "Press the question mark button for keyboard help.": "按問號之鈕以得鍵盤之助。",
   "Program name": "程名",
   "Program: {name}": "程：{name}",
-  "Programs": "諸程",
   "Programs inside programs went more than 10 deep, so the run stopped.": "程中之程深逾十層，故止其行。",
   "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "他人所分之程。每加之前皆察之，並依其塊言其所能。欲分汝之程，見 Second Thought 匣中 gallery/README.md。",
   "Programs run with your own keys: {keys}. Each is charged to its own account.": "程以汝自有之鑰行之：{keys}。各計於其帳。",
@@ -1926,7 +1923,18 @@
   "has a link": "有聯",
   "{n} words; the limit is {limit}": "{n} 字；限 {limit}",
   "not valid JSON": "非合JSON",
-  "no link in it": "內無聯"
+  "no link in it": "內無聯",
+  "Program": "程式",
+  "Data": "資料",
+  "Settings": "設定",
+  "New": "新製",
+  "Import": "匯入",
+  "Export": "匯出",
+  "Share": "分享",
+  "Theme": "外觀",
+  "System": "系統",
+  "Light": "明",
+  "Dark": "暗"
  },
  "examples": {
   "review": {

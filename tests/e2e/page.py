@@ -108,12 +108,12 @@ async def page_tests():
               f"when the primary fails, the backup answers ({status})")
         label = await pg.text_content("#bk-toggle")
         check(label == "Backups (1)", f"the Backups button shows how many are set ({label})")
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
         await pg.click("#io-py-show")
         code = await pg.input_value("#io-export-text")
         check('BACKUPS = ["quick"]' in code, "exported Python lists the backup")
         await pg.click("#io-py-show")
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
         await pg.select_option("#bk-1", "")
         await pg.evaluate("window.__failTier = 'complex'")
         await pg.select_option("#example", "review")
@@ -125,7 +125,7 @@ async def page_tests():
         await pg.click("#bk-toggle")
 
         print("Python export and import")
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
         codes = {}
         for ex in EXAMPLES:
             await pg.select_option("#example", ex)
@@ -236,6 +236,42 @@ async def page_tests():
         check(got == "Second Thought couldn't load its blocks library. Check your connection and reload to try again.",
               f"a blocks library that doesn't match the page's fingerprint doesn't run, and the page says so ({got!r})")
         await pg2.close()
+
+        # One row of controls (#444): at 1280×720 the canvas starts within 120 px of the top and Run is on the
+        # first row — in the language with the longest words for these controls, and with the off-claude.ai
+        # banner showing, as on GitHub Pages.
+        print("One row of controls (#444)")
+        langs = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "i18n").glob("*.json"))}
+        row_keys = ["Program", "Data", "Settings", "New", "Import", "Export", "Share", "Theme", "System", "Light", "Dark",
+                    "Run", "Stop", "Step: off", "Schedules: off", "Browse examples", "My programs", "Memory", "Home Assistant",
+                    "Backups", "Model", "Currency", "Blocks", "Example", "Load", "Build it", "Change this program", "Keyboard help",
+                    "Describe a program", "Second Thought"]
+        longest = max(langs, key=lambda c: sum(len((langs[c].get("page") or {}).get(k, k)) for k in row_keys))
+        pg3 = await browser.new_page(viewport={"width": 1280, "height": 720})
+        pg3.on("pageerror", lambda e: errors.append(str(e)))
+        await pg3.route("**/*", route)
+        await pg3.add_init_script(MOCK + f";try{{if(!sessionStorage.getItem('lang-set')){{localStorage.setItem('second-thought-language','{longest}');"
+                                        "sessionStorage.setItem('lang-set','1')}}catch(e){{}}")
+        await pg3.goto("http://test/")
+        await pg3.wait_for_timeout(1800)
+        m = await pg3.evaluate("""() => { const r = s => document.querySelector(s).getBoundingClientRect();
+          return { canvas: Math.round(r('.canvas').top), run: Math.round(r('#run').top), prog: Math.round(r('#menu-program summary').top),
+                   settings: Math.round(r('#menu-settings summary').top), lang: document.documentElement.lang }; }""")
+        await pg3.evaluate("document.getElementById('offsite').hidden = false")
+        await pg3.wait_for_timeout(100)
+        m_banner = await pg3.evaluate("() => Math.round(document.querySelector('.canvas').getBoundingClientRect().top)")
+        check(m["canvas"] <= 120 and m_banner <= 120 and abs(m["run"] - m["prog"]) < 6 and abs(m["run"] - m["settings"]) < 6
+              and m["lang"] == longest,
+              f"in {longest} (longest words) at 1280×720 the canvas starts at {m['canvas']} px, {m_banner} px with the banner, "
+              f"and Run is on the first row (run {m['run']}, menus {m['prog']}/{m['settings']})")
+        await pg3.evaluate("document.getElementById('menu-settings').open = true")
+        await pg3.select_option("#theme", "dark")
+        await pg3.wait_for_timeout(200)
+        dark = await pg3.evaluate("document.documentElement.getAttribute('data-theme')")
+        await pg3.select_option("#theme", "")
+        back = await pg3.evaluate("document.documentElement.getAttribute('data-theme')")
+        check(dark == "dark" and back is None, "the Settings menu's theme choice applies, and System clears it")
+        await pg3.close()
 
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()

@@ -44,7 +44,7 @@ When the agent finishes, the run log shows an **Agent summary**: one row per ste
 
 On the page, the feeds, GitHub, email, Telegram and the calendar use **sample** data, so you can try everything safely; nothing real is read or sent. Exported programs use your real accounts: see [Connections](connections.md#connections) for the settings.
 
-There are 19 agent examples under **Agents** in **Browse examples**:
+There are 19 agent examples under **Agents** in **Program → Browse examples**:
 
 - **Agent: plan my bake** asks and remembers.
 - **Agent with your own tool** uses a My Block.

@@ -1027,8 +1027,6 @@
   "Example": "示例",
   "Load": "载入",
   "Browse examples": "浏览示例",
-  "Import / export": "导入 / 导出",
-  "Programs": "程序",
   "Memory": "记忆",
   "Home Assistant": "Home Assistant",
   "Model": "模型",
@@ -1725,7 +1723,6 @@
   "{passed} of {n} passed.": "{n} 个中通过 {passed} 个。",
   "Block editor": "积木编辑器",
   "Keyboard": "键盘",
-  "Press the question mark button for keyboard help.": "按问号按钮查看键盘帮助。",
   "Keyboard help": "键盘帮助",
   "about {cost}": "约 {cost}",
   "under {cost}": "不到 {cost}",
@@ -1936,7 +1933,18 @@
   "has a link": "包含链接",
   "{n} words; the limit is {limit}": "{n} 个字；上限是 {limit}",
   "not valid JSON": "不是有效的JSON",
-  "no link in it": "里面没有链接"
+  "no link in it": "里面没有链接",
+  "Program": "程序",
+  "Data": "数据",
+  "Settings": "设置",
+  "New": "新建",
+  "Import": "导入",
+  "Export": "导出",
+  "Share": "分享",
+  "Theme": "主题",
+  "System": "系统",
+  "Light": "浅色",
+  "Dark": "深色"
  },
  "examples": {
   "review": {

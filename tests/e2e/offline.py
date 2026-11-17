@@ -38,12 +38,12 @@ async def offline_tests():
             check(blocks > 0 and await pg.is_visible("#offsite"), f"it opens from disk with no network, blocks on the canvas, saying runs need a key ({blocks} blocks)")
 
             await load_state(pg, script(add(val(blk("rb_ask", inputs={"TEXT": tx("What rhymes with rye?")})))))
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await pg.fill("#io-name", "offline-test")
             async with pg.expect_download() as got:
                 await pg.click("#io-py-save")
             zipped = pathlib.Path(await (await got.value).path()).read_bytes()
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             check(zipped[:2] == b"PK" and b"What rhymes with rye?" in zipped, "it exports a program to Python with no network")
 
             await pg.select_option("#lang", "de")

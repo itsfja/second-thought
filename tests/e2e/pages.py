@@ -108,7 +108,7 @@ async def pages_tests():
             check("can't run them with Claude" in text and href == "https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN",
                   f"with no Claude, it says what it can do here, and links to the page on claude.ai ({text[:90]})")
 
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await pg.fill("#io-name", "pages-test")
             async with pg.expect_download() as got:
                 await pg.click("#io-save")
@@ -119,7 +119,7 @@ async def pages_tests():
             async with pg.expect_download() as got:
                 await pg.click("#io-py-save")
             check((await got.value).suggested_filename == "pages-test.zip", "and Save Python gives the zip")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
 
             await pg.click("#run")
             await pg.wait_for_timeout(800)
@@ -172,14 +172,14 @@ async def pages_tests():
                   f"Build it works with the key too, asking for JSON ({msg[:80]})")
             api["reply"] = None
 
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             async with pg.expect_download() as got:
                 await pg.click("#io-py-save")
             zipped = pathlib.Path(await (await got.value).path()).read_bytes()
             async with pg.expect_download() as got:
                 await pg.click("#io-save")
             saved = pathlib.Path(await (await got.value).path()).read_text(encoding="utf-8")
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             local = await pg.evaluate("JSON.stringify(Object.entries(localStorage))")
             check(KEY.encode() not in zipped and "WXYZ" not in saved and KEY not in local,
                   "the key isn't in the exported Python, the saved block file or what the page keeps in the browser")
@@ -213,11 +213,11 @@ async def pages_tests():
             said = (await pg.text_content("#banner") or "") + json.dumps(await step_texts(pg))
             check("Mistral refused your API key" in said, f"a refused key says which service refused it ({said[:160]})")
             svc["status"] = 200
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             async with pg.expect_download() as got:
                 await pg.click("#io-py-save")
             zipped = pathlib.Path(await (await got.value).path()).read_bytes()
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             local = await pg.evaluate("JSON.stringify(Object.entries(localStorage))")
             check(MKEY.encode() not in zipped and MKEY not in local, "the Mistral key isn't in the export or what the page keeps (it's for this tab only)")
 

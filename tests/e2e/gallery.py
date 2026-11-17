@@ -56,7 +56,7 @@ async def gallery_tests():
         check(bool(acts), "at least one gallery entry acts, so the trust wording is tested")
         if acts:
             text = json.dumps(files[acts[0]["file"]])
-            await pg.click("#io-toggle")
+            await pg.click("#io-export")
             await paste(pg, text)
             await pg.click("#io-load-paste")
             msg = await pg.text_content("#io-import-msg")
@@ -110,7 +110,7 @@ async def broken_gallery_tests():
         await pg.click("#load")
         status = await run_program(pg)
         check(status.startswith("done"), f"Run runs with the broken gallery entry there ({status})")
-        for toggle in ("io-toggle", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
+        for toggle in ("io-export", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
             await pg.click("#" + toggle)
         opened = await pg.evaluate("() => ['io', 'lib', 'mem', 'ha', 'bk', 'keys'].every(id => !document.getElementById(id).hidden)")
         check(opened, "every panel opens")

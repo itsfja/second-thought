@@ -1027,8 +1027,6 @@
   "Example": "Ensample",
   "Load": "Lade",
   "Browse examples": "Loke thurgh ensamples",
-  "Import / export": "Brynge in / sende out",
-  "Programs": "Devyses",
   "Memory": "Memorie",
   "Home Assistant": "Home Assistant",
   "Model": "Patron",
@@ -1725,7 +1723,6 @@
   "{passed} of {n} passed.": "{passed} of {n} passed.",
   "Block editor": "Blok werkhous",
   "Keyboard": "Keybord",
-  "Press the question mark button for keyboard help.": "Presse the botoun of the questioun mark for keybord helpe.",
   "Keyboard help": "Keybord helpe",
   "about {cost}": "aboute {cost}",
   "under {cost}": "lasse than {cost}",
@@ -1936,7 +1933,18 @@
   "has a link": "hath a link",
   "{n} words; the limit is {limit}": "{n} wordes; the lemit is {limit}",
   "not valid JSON": "nat trewe JSON",
-  "no link in it": "no link in it"
+  "no link in it": "no link in it",
+  "Program": "Writable",
+  "Data": "Lore",
+  "Settings": "Setlinges",
+  "New": "Nwe",
+  "Import": "Inbere",
+  "Export": "Outbere",
+  "Share": "Delyng",
+  "Theme": "Hwe",
+  "System": "Sette",
+  "Light": "Liht",
+  "Dark": "Derk"
  },
  "examples": {
   "review": {
