@@ -574,6 +574,25 @@ def python_tests(codes, share=None):
                   + f"tg_skip={'Not done, because this is a rehearsal: send a Telegram message' in out} "
                   + f"read={read_back} ha_calls={ha_calls[before:]} mem={mem_after} tail={(err or out)[-200:]!r}"))
             (pathlib.Path(tmp) / "memory.json").unlink(missing_ok=True)
+            print("Receipts (#431)")
+            (pathlib.Path(tmp) / "t_receipts.py").write_text(EXTRA["t_receipts"], encoding="utf-8")
+            before = len(ha_calls)
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_receipts.py")], env, tmp)
+            code_r, _, _ = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_receipts.py")], env, tmp)
+            rec = pathlib.Path(tmp) / ".t_receipts.receipts.jsonl"
+            code2, out2, _ = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_receipts.py"), "--receipts"], env, tmp)
+            check(code_ == 0 and code_r == 0 and len(ha_calls[before:]) == 2 and rec.is_file() and code2 == 0
+                  and out2.count("light.turn_off on light.kitchen") == 2 and "allowed: no asking" in out2 and "intact" in out2,
+                  "a run that switches a light writes a receipt, and --receipts shows it with an intact chain (#431)"
+                  + ("" if code_ == 0 and code2 == 0 else f": rc={code_}/{code_r}/{code2} {(err or out)[-200:]!r} {out2[-200:]!r}"))
+            lines = [l for l in rec.read_bytes().split(b"\n") if l.strip()]
+            check(len(lines) == 2, f"two runs leave two chained receipt lines (#431) ({len(lines)})")
+            tampered = json.loads(lines[0])
+            tampered["what"] = "edited"
+            lines[0] = json.dumps(tampered, ensure_ascii=False, sort_keys=True).encode()
+            rec.write_bytes(b"\n".join(lines) + b"\n")
+            code3, out3, _ = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_receipts.py"), "--receipts"], env, tmp)
+            check(code3 == 1 and "broken" in out3, f"--receipts detects an edited line (#431) ({out3[-200:]!r})")
             print("Cut-off replies and streaming in Python")
             (pathlib.Path(tmp) / "t_long.py").write_text(EXTRA["t_long"], encoding="utf-8")
             def long_py(**e):

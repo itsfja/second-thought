@@ -3722,7 +3722,19 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "尚未置簽署鑰，故 --update-runtime 僅驗發佈之 SHA-256",
   "Rehearsal": "試演",
   "Not done, because this is a rehearsal: {what}": "未行，以其為試演故：{what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "試演：程式實行，然無所發、無所變、無所存、無所費。"
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "試演：程式實行，然無所發、無所變、無所存、無所費。",
+  "no asking": "未問",
+  "no asking, approved at the first run": "未問，初行時已准",
+  "yes at the keyboard": "鍵盤答曰",
+  "yes {code} on Telegram, by {who}": "Telegram 上 {who} 答曰 {code}",
+  "agent, step {n}": "代理，第 {n} 步",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  准：{how}",
+  "Receipts from the last week ({n} lines):": "近七日之憑 ({n} 行)：",
+  "({n} older lines are not shown.)": "（更早之 {n} 行不示。）",
+  "No receipts yet: nothing this program has done to the world is recorded.": "尚無憑：此程式之所為於世者，未之有記。",
+  "The chain is broken: a line is missing or was edited.": "鏈斷矣：有行缺失或見改。",
+  "The chain is intact: every line carries the fingerprint of the one before.": "鏈完好：每行皆載前行之印。",
+  "Couldn't read {path} ({err}).": "不能讀 {path}（{err}）。"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

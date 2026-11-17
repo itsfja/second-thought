@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"οὐδέπω κλείς ὑπογραφῆς τέθειται, διὸ τὸ --update-runtime μόνον τὸ SHA-256 τῆς ἐκδόσεως ἐλέγχει",
 "Rehearsal":"Δοκιμασία",
 "Not done, because this is a rehearsal: {what}":"οὐκ ἐπράχθη, ὅτι δοκιμασία ἐστίν: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"δοκιμασία: τὸ πρόγραμμα ἀληθῶς τρέχει, ἀλλ' οὐδὲν ἀποστέλλεται, μεταβάλλεται, φυλάσσεται ἢ δαπανᾶται."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"δοκιμασία: τὸ πρόγραμμα ἀληθῶς τρέχει, ἀλλ' οὐδὲν ἀποστέλλεται, μεταβάλλεται, φυλάσσεται ἢ δαπανᾶται.",
+"no asking":"οὐκ ἐρωτήσας",
+"no asking, approved at the first run":"οὐκ ἐρωτήσας, τῇ πρώτῃ ἐκτελέσει κεκριμένον",
+"yes at the keyboard":"ναὶ ἐν τῷ πληκτρολογίῳ",
+"yes {code} on Telegram, by {who}":"ναί, {code} ἐν Telegram, ὑπὸ {who}",
+"agent, step {n}":"πράκτωρ, βῆμα {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  ἐπετράπη: {how}",
+"Receipts from the last week ({n} lines):":"Ἀποδείξεις τῆς παρελθούσης ἑβδομάδος ({n} γραμμαί):",
+"({n} older lines are not shown.)":"({n} παλαιότεραι γραμμαὶ οὐχ ὁρῶνται.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Οὐδέπω ἀποδείξεις: οὐδὲν ὧν τὸ πρόγραμμα τῷ κόσμῳ πεποίηκεν ἀναγέγραπται.",
+"The chain is broken: a line is missing or was edited.":"Ἡ ἁλυσίς τέθραυσται: γραμμή τις λείπει ἢ ἠλλάχθη.",
+"The chain is intact: every line carries the fingerprint of the one before.":"Ἡ ἁλυσίς ἀκέραιά ἐστιν: ἑκάστη γραμμὴ φέρει τὸ ἀποτύπωμα τῆς πρὸ αὐτῆς.",
+"Couldn't read {path} ({err}).":"οὐκ ἠδυνήθην {path} ἀναγνῶναι ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

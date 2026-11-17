@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"अदानि पि हत्थक्खित-केयम् न नियतं, तस्मा --update-runtime केवलं विमोजनस्स SHA-256 परीक्खति",
 "Rehearsal":"पुनाभ्यासः",
 "Not done, because this is a rehearsal: {what}":"न कतं यस्मा पुनाभ्यासो: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"पुनाभ्यासः: programaṃ सज्जं जलति, किञ्जि पन न पेसेति, परिवत्तेति, संरक्खति वा धनेन"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"पुनाभ्यासः: programaṃ सज्जं जलति, किञ्जि पन न पेसेति, परिवत्तेति, संरक्खति वा धनेन",
+"no asking":"नइव पज्जयो",
+"no asking, approved at the first run":"नइव पज्जयो, पठमायं जलनायअनुमतो",
+"yes at the keyboard":"हं, कीबोर्डे",
+"yes {code} on Telegram, by {who}":"हं, Telegram {code}, {who}वेन",
+"agent, step {n}":"पज्जुग्गाहक, पदकं {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  अनुज्ञातं: {how}",
+"Receipts from the last week ({n} lines):":"sattāha... {n} पङ्क्ती",
+"({n} older lines are not shown.)":"({n} पुराणा पङ्क्ती न दस्सीयन्ति.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"अदानि पि प्रापयं नत्थि: यं किञ्जि इदं प्रोग्रम्में लोकस्स अकासि, तं न लिखितं",
+"The chain is broken: a line is missing or was edited.":"सङ्गटं चिन्नं: एका पङ्क्ति गता वा परिवत्तिता",
+"The chain is intact: every line carries the fingerprint of the one before.":"सङ्गटं अज्चिन्नं: प्रत्येका पङ्क्ति पुब्बाय अङ्गुलीमुद्दं वहति",
+"Couldn't read {path} ({err}).":"न सक्का {path} पठितुं ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

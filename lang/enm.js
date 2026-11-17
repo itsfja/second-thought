@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"na sealing key is set yet, so --update-runtime checks anly the SHA-256 of the reles",
 "Rehearsal":"Triing",
 "Not done, because this is a rehearsal: {what}":"Nat done, for this is a triing: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Triing: the program renneth for real, but no thing is sent, switched, saved or spent."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Triing: the program renneth for real, but no thing is sent, switched, saved or spent.",
+"no asking":"withouten asking",
+"no asking, approved at the first run":"withouten asking, allowe at the first renn",
+"yes at the keyboard":"ye at the keybord",
+"yes {code} on Telegram, by {who}":"ye, {code} on Telegram, bi {who}",
+"agent, step {n}":"agent, step {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  allowe: {how}",
+"Receipts from the last week ({n} lines):":"Receipts of the laste weeke ({n} lines):",
+"({n} older lines are not shown.)":"({n} older lines nat shewed.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"No receipts yet: no thing this program hath done to the world is recordid.",
+"The chain is broken: a line is missing or was edited.":"The chaine is broken: a line is missing or was chaunged.",
+"The chain is intact: every line carries the fingerprint of the one before.":"The chaine is heal: eche line bereth the fingermarc of the oþer.",
+"Couldn't read {path} ({err}).":"ne mihte readan {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

@@ -3722,7 +3722,19 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ключ подписи ещё не задан, поэтому --update-runtime проверяет только SHA-256 релиза",
   "Rehearsal": "репетиция",
   "Not done, because this is a rehearsal: {what}": "Не выполнено, потому что это репетиция: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Репетиция: программа выполняется по-настоящему, но ничего не отправляется, не переключается, не сохраняется и не тратится."
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Репетиция: программа выполняется по-настоящему, но ничего не отправляется, не переключается, не сохраняется и не тратится.",
+  "no asking": "без запроса",
+  "no asking, approved at the first run": "без запроса, одобрено при первом запуске",
+  "yes at the keyboard": "да, на клавиатуре",
+  "yes {code} on Telegram, by {who}": "да, {code} в Telegram, от {who}",
+  "agent, step {n}": "агент, шаг {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  разрешено: {how}",
+  "Receipts from the last week ({n} lines):": "Квитанции за последнюю неделю ({n} строк):",
+  "({n} older lines are not shown.)": "({n} более старых строк не показано.)",
+  "No receipts yet: nothing this program has done to the world is recorded.": "Квитанций пока нет: ничего из того, что эта программа сделала миру, не записано.",
+  "The chain is broken: a line is missing or was edited.": "Цепочка нарушена: строка отсутствует или была изменена.",
+  "The chain is intact: every line carries the fingerprint of the one before.": "Цепочка цела: каждая строка несёт отпечаток предыдущей.",
+  "Couldn't read {path} ({err}).": "Не удалось прочитать {path} ({err})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

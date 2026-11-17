@@ -2366,7 +2366,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"እንተ ንታየእ ከልታየዝ; --update-runtime የንታቢ SHA-256 የንታየ",
 "Rehearsal":"የንታየዝ",
 "Not done, because this is a rehearsal: {what}":"እንተ የንታየዝ እታለ: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"የንታየዝ: runtime እንተዝ, እንተ ንታየእ በንታየ የንታእ"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"የንታየዝ: runtime እንተዝ, እንተ ንታየእ በንታየ የንታእ",
+"no asking":"እንተ ንታየእ",
+"no asking, approved at the first run":"እንተ ንታየእ እንተዝ",
+"yes at the keyboard":"እታለ ለልታየዑ",
+"yes {code} on Telegram, by {who}":"እታለ {code} ታእልለ {who}",
+"agent, step {n}":"እታንታየ የንታየ {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  እንተዝ: {how}",
+"Receipts from the last week ({n} lines):":"በንታየእ ንታየእ ({n})",
+"({n} older lines are not shown.)":"(ንታየእ {n})",
+"No receipts yet: nothing this program has done to the world is recorded.":"እንተዝ ንታየእ",
+"The chain is broken: a line is missing or was edited.":"እንተ የንታየዝ እታለ",
+"The chain is intact: every line carries the fingerprint of the one before.":"በንታየእ እንተዝ",
+"Couldn't read {path} ({err}).":"እንተ {path} በንታየ ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ወስክ ትርጓሜ",

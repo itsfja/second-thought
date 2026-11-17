@@ -2366,7 +2366,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"o-u a-ke-ta ka-ra-pe; --update-runtime SHA-256 ta te-ke-te-se",
 "Rehearsal":"a-po-do-ke-me",
 "Not done, because this is a rehearsal: {what}":"o-u e-ke a-po-do-ke-me: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"a-po-do-ke-me: runtime e-te-o, a-pe-me-na-o-u-ke o-u e-ke"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"a-po-do-ke-me: runtime e-te-o, a-pe-me-na-o-u-ke o-u e-ke",
+"no asking":"o-u e-ke-te-se",
+"no asking, approved at the first run":"o-u e-ke-te-se, a-pe e-ke",
+"yes at the keyboard":"e-ke-te-se keyboard",
+"yes {code} on Telegram, by {who}":"e-ke {code} Telegram {who}",
+"agent, step {n}":"agent step {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  a-pe: {how}",
+"Receipts from the last week ({n} lines):":"receipts {n} lines:",
+"({n} older lines are not shown.)":"({n} old not shown.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"no receipts yet.",
+"The chain is broken: a line is missing or was edited.":"chain broken.",
+"The chain is intact: every line carries the fingerprint of the one before.":"chain whole.",
+"Couldn't read {path} ({err}).":"o-u akau {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

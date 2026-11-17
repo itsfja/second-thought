@@ -2365,7 +2365,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"clavis signandi nondum posita est, ita --update-runtime tantum SHA-256 editionis examinat",
 "Rehearsal":"Probatio",
 "Not done, because this is a rehearsal: {what}":"Non factum, quia probatio est: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Probatio: programa vere currit, sed nihil mittitur, mutatur, servatur vel impenditur."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Probatio: programa vere currit, sed nihil mittitur, mutatur, servatur vel impenditur.",
+"no asking":"non rogans",
+"no asking, approved at the first run":"non rogans, prima vice approbatum",
+"yes at the keyboard":"ita in clavario",
+"yes {code} on Telegram, by {who}":"ita, {code} in Telegram, a {who}",
+"agent, step {n}":"agente, passu {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  permissum: {how}",
+"Receipts from the last week ({n} lines):":"Tesserae hebdomadis praeteritae ({n} lineae):",
+"({n} older lines are not shown.)":"({n} lineae antiquiores non ostenduntur.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Nondum tesserae: nihil quod hoc programa mundo fecit relatum est.",
+"The chain is broken: a line is missing or was edited.":"Catena fracta est: linea deest vel mutata est.",
+"The chain is intact: every line carries the fingerprint of the one before.":"Catena integra est: quaque linea signum prioris fert.",
+"Couldn't read {path} ({err}).":"{path} legere non potui ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

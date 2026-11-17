@@ -2366,7 +2366,19 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"lā kanākum ša ḫatamē lā šaknu; --update-runtime lā ša SHA-256 ša release ilqe",
 "Rehearsal":"šanû kanākum",
 "Not done, because this is a rehearsal: {what}":"lā šaknu, šanâ kanākē: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šanû kanākum: runtime šuātu šaknum dārī, lā šumma šarrāni, lā kīma, lā šaklu"
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"šanû kanākum: runtime šuātu šaknum dārī, lā šumma šarrāni, lā kīma, lā šaklu",
+"no asking":"lā šuʾālu",
+"no asking, approved at the first run":"lā šuʾālu, ipras kanākum",
+"yes at the keyboard":"ê u ša kipdi",
+"yes {code} on Telegram, by {who}":"ê {code} Telegram ana {who}",
+"agent, step {n}":"agent ša pēḫi {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  šaknum: {how}",
+"Receipts from the last week ({n} lines):":"kanākū ša šumma {n} amēlū:",
+"({n} older lines are not shown.)":"({n} amēlū lā šaknu.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"lā kanākū lā šaknu: lā šumma ša program ilqe.",
+"The chain is broken: a line is missing or was edited.":"šarrirtum šaknu: amēlum ul wadû.",
+"The chain is intact: every line carries the fingerprint of the one before.":"šarrirtum dārī: šumma amēlū ḫatam ša ilte.",
+"Couldn't read {path} ({err}).":"lā šaknu {path} ({err})."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

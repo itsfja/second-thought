@@ -3723,7 +3723,19 @@
   "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "UL memai šarḫi; --update-runtime ŠA SHA-256 ŠA release parku",
   "Rehearsal": "parkunu",
   "Not done, because this is a rehearsal: {what}": "UL memai, parku annā: {what}",
-  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "parku annā: runtime annā arḫa memai, UL memai ŠA imḫu"
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "parku annā: runtime annā arḫa memai, UL memai ŠA imḫu",
+  "no asking": "UL memai",
+  "no asking, approved at the first run": "UL memai, parku arḫa",
+  "yes at the keyboard": "memai keyboard",
+  "yes {code} on Telegram, by {who}": "memai {code} Telegram {who}",
+  "agent, step {n}": "agent memai {n}",
+  "{when}  {what}  allowed: {how}": "{when}  {what}  arḫa: {how}",
+  "Receipts from the last week ({n} lines):": "memai še {n} arḫa:",
+  "({n} older lines are not shown.)": "({n} arḫa UL arḫa.)",
+  "No receipts yet: nothing this program has done to the world is recorded.": "memai UL arḫa: UL memai.",
+  "The chain is broken: a line is missing or was edited.": "memai parku: UL memai.",
+  "The chain is intact: every line carries the fingerprint of the one before.": "memai parku: arḫa memai.",
+  "Couldn't read {path} ({err}).": "UL memai {path} ({err})."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

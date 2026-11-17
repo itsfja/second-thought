@@ -2960,6 +2960,7 @@ class Connections:
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
                 self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
+            self._receipt(f"{service} on {entity or 'Home Assistant'}", tr("yes at the keyboard"))
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
         self.log(tr("Home Assistant: {service}", service=service), entity + (" " + tr("with {data}", data=to_str(data_text).strip()) if to_str(data_text).strip() else ""), tr("done"))
@@ -6797,8 +6798,12 @@ class AgentTools:
             self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
             return False
         if unattended:
-            return await self._approve_telegram(tr("it could move real money: {what}", what=what))
+            ok = await self._approve_telegram(tr("it could move real money: {what}", what=what))
+            if ok:
+                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+            return ok
         if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
+            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""))
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -6811,8 +6816,12 @@ class AgentTools:
             self.log(tr("Not done"), tr("{what} only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
             return False
         if unattended:
-            return await self._approve_telegram(what)
+            ok = await self._approve_telegram(what)
+            if ok:
+                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+            return ok
         if await self._approve_live(tr("Allow this? {what}", what=what)):
+            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""))
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -7187,6 +7196,7 @@ class AgentTools:
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
             refused = False
+            self._receipt_where = tr("agent, step {n}", n=i)  # for the receipt's "(agent, step N)" (#431)
             if self.dry_run() and (ask or (kind == "mcp" and not spec.get("read_only"))):
                 result, refused = ("This is a test run, so tools that change things don't run. Carry on as if it had worked." if getattr(self, "testing", False) else
                                    "This is a rehearsal, so tools that change things don't run. Carry on as if it had worked."), True
@@ -7206,6 +7216,9 @@ class AgentTools:
                 except Exception as e:  # noqa: BLE001 - the agent sees the error and carries on
                     result = "Error: " + self._describe(e)
             text = to_str(result) if not isinstance(result, (dict, list)) else json.dumps(result, ensure_ascii=False, default=str)
+            if not refused and not ask and not spec.get("money") and not text.startswith("Error: "):
+                # a tool that ran without asking still gets its receipt (#431); asked ones got theirs in confirm/confirm_money
+                self._receipt(f"{name} {_short(shown, 200)}", tr("no asking"), self._receipt_where)
             last = text
             seen = (seen + "\n" + text)[-500_000:]
             history.append(f"Step {i}: you used {name} with {shown}.\nResult: {_short(text, 1500)}")
@@ -8549,6 +8562,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.vars.clear()
         self.task = ""
         self.draft = ""
+        self._last_how = ""        # how the last approval was given, for the receipt's "allowed:" (#431)
+        self._receipt_where = ""   # which block or agent step the action belongs to (#431)
         self.problems = []
         self.approved = None
         self.answer = ""
@@ -8739,10 +8754,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 
     async def _allowed(self, kinds, what):
         """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test)
-        or a rehearsal (--rehearse), nothing acts: it says what it would have done."""
+        or a rehearsal (--rehearse), nothing acts: it says what it would have done. An action that goes ahead gets
+        a receipt (#431)."""
         if self._skip_action(what):
             return False
         if not (self.ask_first & set(kinds)):
+            self._receipt(what, tr("no asking, approved at the first run") if getattr(self, "_first_run_ok", False) else tr("no asking"))
             return True
         return await self.confirm(what)
 
@@ -8752,15 +8769,21 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 
     async def confirm(self, what):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no, unless
-        approve_by = telegram is set: then the question goes to your phone (#305)."""
+        approve_by = telegram is set: then the question goes to your phone (#305). A yes writes the action's
+        receipt (#431)."""
         if self.dry_run():  # in a test or a rehearsal the action itself is skipped (see _allowed), so nobody needs asking
             return True
         if self.nobody_here():
             if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
-                return await self._approve_telegram(what)
+                ok = await self._approve_telegram(what)
+                if ok:
+                    self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+                return ok
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
         if await self.approve("Allow this? " + what):
+            self._last_how = tr("yes at the keyboard")
+            self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -8789,6 +8812,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                     self.log(tr("Not done"), tr("{what} was refused on Telegram by {who}, so nothing happened.", what=what, who=m["sender"] or tr("someone")), tr("refused"))
                     return False
                 self.log(tr("Approved on Telegram"), tr("{who} approved {what} by replying yes {code} on Telegram.", who=m["sender"] or tr("someone"), what=what, code=code), tr("approved"))
+                self._last_how = tr("yes {code} on Telegram, by {who}", code=code, who=m["sender"] or tr("someone"))
                 return True
         self.log(tr("Not done"), tr("{what} wasn't approved on Telegram in time, so nothing happened.", what=what), tr("refused"))
         return False
@@ -8806,6 +8830,78 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             digest = hashlib.sha256(f.read()).hexdigest()[:16]
         base = os.path.splitext(os.path.basename(prog))[0]
         return os.path.join(os.path.dirname(prog), f".{base}.resume.jsonl"), digest
+
+    def _receipts_path(self):
+        """The receipts file next to the program: one private line per action that went ahead (#431)."""
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return None
+        base = os.path.splitext(os.path.basename(prog))[0]
+        return os.path.join(os.path.dirname(prog), f".{base}.receipts.jsonl")
+
+    def _receipt(self, what, how, where=""):
+        """Appends one line to the receipts file (#431): when, what (the approval question's sentence), which block
+        or agent step, how it was allowed, and a fingerprint of the line before, so a missing or altered line shows."""
+        path = self._receipts_path()
+        if not path:
+            return
+        prev = hashlib.sha256(b"").hexdigest()
+        try:
+            with open(path, "rb") as f:
+                for line in f:
+                    if line.strip():
+                        prev = hashlib.sha256(line.rstrip(b"\n")).hexdigest()
+        except OSError:
+            pass
+        rec = {"t": time.time(), "what": to_str(what), "where": to_str(where), "how": to_str(how), "prev": prev}
+        try:
+            with _private_open(path, "a") as f:
+                f.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")
+        except OSError:
+            pass
+
+    def show_receipts(self, days=7):
+        """--receipts: prints the last week's receipts and says whether the chain is broken (#431). Gives the exit code."""
+        path = self._receipts_path()
+        if not path or not os.path.isfile(path):
+            print(tr("No receipts yet: nothing this program has done to the world is recorded."))
+            return 0
+        try:
+            with open(path, "rb") as f:
+                raw_lines = [l for l in f.read().split(b"\n") if l.strip()]
+        except OSError as e:
+            print(tr("Couldn't read {path} ({err}).", path=path, err=_short(to_str(e), 120)))
+            return 1
+        broken = False
+        prev = hashlib.sha256(b"").hexdigest()
+        recs = []
+        for raw in raw_lines:
+            try:
+                rec = json.loads(raw.decode("utf-8"))
+            except ValueError:
+                broken = True
+                continue
+            if not isinstance(rec, dict) or rec.get("prev") != prev:
+                broken = True
+            prev = hashlib.sha256(raw).hexdigest()
+            if isinstance(rec, dict):
+                recs.append(rec)
+        cutoff = time.time() - days * 86400
+        shown = [r for r in recs if isinstance(r.get("t"), (int, float)) and r["t"] >= cutoff]
+        print(tr("Receipts from the last week ({n} lines):", n=len(shown)))
+        for r in shown:
+            when = datetime.datetime.fromtimestamp(r["t"]).strftime("%Y-%m-%d %H:%M")
+            what = to_str(r.get("what"))
+            if r.get("where"):
+                what += f" ({r['where']})"
+            print(tr("{when}  {what}  allowed: {how}", when=when, what=what, how=to_str(r.get("how"))))
+        if len(recs) > len(shown):
+            print(tr("({n} older lines are not shown.)", n=len(recs) - len(shown)))
+        if broken:
+            print(tr("The chain is broken: a line is missing or was edited."))
+            return 1
+        print(tr("The chain is intact: every line carries the fingerprint of the one before."))
+        return 0
 
     async def _journal_start(self):
         """At the start of a run: offer to pick up a run that stopped, then start a fresh journal."""
@@ -10409,6 +10505,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 with open(path, encoding="utf-8") as f:
                     before = json.load(f)
                 if before.get("sha256") == digest:
+                    self._first_run_ok = True  # for the receipts' "approved at the first run" (#431)
                     return True
             except (OSError, ValueError, AttributeError):
                 before = None
@@ -10433,6 +10530,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 print(nobody, flush=True)
                 return False
             if said_yes(a):
+                self._first_run_ok = True  # for the receipts' "approved at the first run" (#431)
                 break
             if said_no(a):
                 print(tr("Not allowed, so it didn't run."))
@@ -10479,6 +10577,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             sys.exit(asyncio.run(self.doctor(can)))
         if "--update-runtime" in sys.argv:
             sys.exit(self.update_runtime(can))
+        if "--receipts" in sys.argv:
+            sys.exit(self.show_receipts())
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))

@@ -2365,6 +2365,18 @@
 "no signing key is set yet, so --update-runtime checks only the release's SHA-256":"δεν έχει οριστεί ακόμα κλειδί υπογραφής, οπότε το --update-runtime ελέγχει μόνο το SHA-256 της έκδοσης",
 "Rehearsal":"Δοκιμή",
 "Not done, because this is a rehearsal: {what}":"Δεν έγινε, επειδή είναι δοκιμή: {what}",
-"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Δοκιμή: το πρόγραμμα εκτελείται κανονικά, αλλά δεν στέλνεται, δεν αλλάζει, δεν αποθηκεύεται και δεν δαπανάται τίποτα."
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Δοκιμή: το πρόγραμμα εκτελείται κανονικά, αλλά δεν στέλνεται, δεν αλλάζει, δεν αποθηκεύεται και δεν δαπανάται τίποτα.",
+"no asking":"χωρίς ερώτηση",
+"no asking, approved at the first run":"χωρίς ερώτηση, εγκρίθηκε στην πρώτη εκτέλεση",
+"yes at the keyboard":"ναι στο πληκτρολόγιο",
+"yes {code} on Telegram, by {who}":"ναι, {code} στο Telegram, από {who}",
+"agent, step {n}":"πράκτορας, βήμα {n}",
+"{when}  {what}  allowed: {how}":"{when}  {what}  επιτράπηκε: {how}",
+"Receipts from the last week ({n} lines):":"Αποδείξεις της τελευταίας εβδομάδας ({n} γραμμές):",
+"({n} older lines are not shown.)":"({n} παλαιότερες γραμμές δεν εμφανίζονται.)",
+"No receipts yet: nothing this program has done to the world is recorded.":"Δεν υπάρχουν ακόμα αποδείξεις: τίποτα από όσα έκανε αυτό το πρόγραμμα στον κόσμο δεν καταγράφηκε.",
+"The chain is broken: a line is missing or was edited.":"Η αλυσίδα είναι σπασμένη: λείπει μια γραμμή ή έχει αλλαχθεί.",
+"The chain is intact: every line carries the fingerprint of the one before.":"Η αλυσίδα είναι άθικτη: κάθε γραμμή φέρει το αποτύπωμα της προηγούμενης.",
+"Couldn't read {path} ({err}).":"Δεν μπόρεσα να διαβάσω {path} ({err})."
 }
 };

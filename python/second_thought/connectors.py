@@ -617,6 +617,7 @@ class Connections:
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
                 self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
+            self._receipt(f"{service} on {entity or 'Home Assistant'}", tr("yes at the keyboard"))
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
         self.log(tr("Home Assistant: {service}", service=service), entity + (" " + tr("with {data}", data=to_str(data_text).strip()) if to_str(data_text).strip() else ""), tr("done"))

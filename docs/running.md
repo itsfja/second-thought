@@ -152,6 +152,10 @@ Test cases travel with the program: in block files, saved programs, exported Pyt
 
 `python my-program.py --rehearse` (or `rehearse = yes` in `second-thought.ini`) runs the program for real — models and reading included — but nothing is sent, switched, saved or spent: the log says what would have happened, and memory is a copy, as in a test. That's how to try a new schedule for a week before trusting it: add `--rehearse` to the scheduled command (run-on-schedule.sh passes its arguments on) to rehearse every run.
 
+## Receipts
+
+Every action a program takes — a message sent, a light switched, a file saved, an agent tool that changes something — appends one line to `.<program>.receipts.jsonl` next to the program, readable only by you: when, what (the same sentence the approval question uses), which agent step if it was one, and how it was allowed (*no asking, approved at the first run*; *yes at the keyboard*; *yes 4821 on Telegram, by Alex*). Each line carries a fingerprint of the line before it, so a missing or edited line shows. `python my-program.py --receipts` prints the last week's receipts and says whether the chain is intact, exiting 1 if it is broken. Tests and rehearsals (`--test`, `--rehearse`) act on nothing, so they write no receipts.
+
 ## Memory and shared files
 
 Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`): they take turns to save, so neither loses the other's changes, and a save is never left half-written if a program stops part-way. Two programs using the same Telegram bot share `telegram-messages.json` the same way, and a message is only handled once.

@@ -188,6 +188,10 @@ async def new_feature_page_tests(pg):
                       blk("rb_result"))
     await load_state(pg, reh_prog)
     EXTRA["t_rehearse"] = await export_python(pg, "t_rehearse")
+    print("Receipts (#431)")
+    await load_state(pg, script(blk("rb_ha_call", inputs={"SERVICE": tx("light.turn_off"), "ENTITY": tx("light.kitchen"), "DATA": tx("")}),
+                               blk("rb_result")))
+    EXTRA["t_receipts"] = await export_python(pg, "t_receipts")
 
     status, steps, items, prompts = await scripted(checkpoint_prog(), [])
     check(status.startswith("done") and items == ["r1", "good 1"] and [n for n, *_ in steps].count("Back to checkpoint \u201ccp\u201d") == 1,
