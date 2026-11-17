@@ -3720,7 +3720,10 @@
   "not valid JSON": "ni gawas JSON",
   "no link in it": "ni bandi in izwis",
   "this runtime holds {n} signing keys and checks each release's signature against them": "þata runtime habaith {n} innsigla jah innsigla aiwrum release skawoþ",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ni innsigl satjan ist; --update-runtime skawoþ ainana SHA-256 þize release"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "ni innsigl satjan ist; --update-runtime skawoþ ainana SHA-256 þize release",
+  "Rehearsal": "aftraskawjan",
+  "Not done, because this is a rehearsal: {what}": "ni sakands, þata aftraskawjan: {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "aftraskawjan: runtime þata mareiþ, ni waiht briggidai, ni innsigl satjan"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

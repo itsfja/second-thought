@@ -627,9 +627,10 @@ class AgentTools:
             why_ask = "" if ask else self._agent_must_ask(kind, inp, seen, private)
             ask = ask or bool(why_ask)
             refused = False
-            if getattr(self, "testing", False) and (ask or (kind == "mcp" and not spec.get("read_only"))):
-                result, refused = "This is a test run, so tools that change things don't run. Carry on as if it had worked.", True
-                self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=f"{name} {_short(shown, 200)}"), tr("skipped"))
+            if self.dry_run() and (ask or (kind == "mcp" and not spec.get("read_only"))):
+                result, refused = ("This is a test run, so tools that change things don't run. Carry on as if it had worked." if getattr(self, "testing", False) else
+                                   "This is a rehearsal, so tools that change things don't run. Carry on as if it had worked."), True
+                self._skip_action(f"{name} {_short(shown, 200)}")
             elif spec.get("money") and not await self.confirm_money(f"let the agent use {name} with {_short(shown, 200)}"):
                 result, refused = "This tool can move real money, and the person didn't allow it, so it didn't run.", True
             elif not spec.get("money") and ask and not await self.confirm(f"let the agent use {name} with {_short(shown, 200)}" + (f" ({why_ask})" if why_ask else "")):

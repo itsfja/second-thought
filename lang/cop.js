@@ -2362,7 +2362,10 @@
 "not valid JSON":"a-anoušop JSON",
 "no link in it":"a-anhype",
 "this runtime holds {n} signing keys and checks each release's signature against them":"pai runtime ounte {n} hmk n htm; htm n release m pai",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"hmk n ounte pai; --update-runtime SHA-256 n release pai rnp"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"hmk n ounte pai; --update-runtime SHA-256 n release pai rnp",
+"Rehearsal":"proba",
+"Not done, because this is a rehearsal: {what}":"ne akau, pai proba: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"proba: runtime akau m pai, walak nn send, nn switch, nn save, nn spend"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

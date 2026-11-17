@@ -2362,7 +2362,10 @@
 "not valid JSON":"JSON invalidum",
 "no link in it":"nullum nexum",
 "this runtime holds {n} signing keys and checks each release's signature against them":"hoc runtime {n} claves signandi habet et signum cuiusque editionis iis examinat",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"clavis signandi nondum posita est, ita --update-runtime tantum SHA-256 editionis examinat"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"clavis signandi nondum posita est, ita --update-runtime tantum SHA-256 editionis examinat",
+"Rehearsal":"Probatio",
+"Not done, because this is a rehearsal: {what}":"Non factum, quia probatio est: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Probatio: programa vere currit, sed nihil mittitur, mutatur, servatur vel impenditur."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

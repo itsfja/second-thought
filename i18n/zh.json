@@ -3729,6 +3729,9 @@
   "not valid JSON": "不是有效的JSON",
   "no link in it": "里面没有链接",
   "this runtime holds {n} signing keys and checks each release's signature against them": "此运行时持有 {n} 个签名密钥，并用它们校验每个版本的签名",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "尚未设置签名密钥，因此 --update-runtime 只校验版本的 SHA-256"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "尚未设置签名密钥，因此 --update-runtime 只校验版本的 SHA-256",
+  "Rehearsal": "彩排",
+  "Not done, because this is a rehearsal: {what}": "未执行，因为这是一次彩排: {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "彩排: 程序真实运行，但不发送、不切换、不保存、不花费任何内容。"
  }
 }

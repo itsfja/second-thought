@@ -3729,6 +3729,9 @@
   "not valid JSON": "μη έγκυρο JSON",
   "no link in it": "χωρίς σύνδεσμο",
   "this runtime holds {n} signing keys and checks each release's signature against them": "αυτό το runtime κατέχει {n} κλειδιά υπογραφής και ελέγχει την υπογραφή κάθε έκδοσης με αυτά",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "δεν έχει οριστεί ακόμα κλειδί υπογραφής, οπότε το --update-runtime ελέγχει μόνο το SHA-256 της έκδοσης"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "δεν έχει οριστεί ακόμα κλειδί υπογραφής, οπότε το --update-runtime ελέγχει μόνο το SHA-256 της έκδοσης",
+  "Rehearsal": "Δοκιμή",
+  "Not done, because this is a rehearsal: {what}": "Δεν έγινε, επειδή είναι δοκιμή: {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Δοκιμή: το πρόγραμμα εκτελείται κανονικά, αλλά δεν στέλνεται, δεν αλλάζει, δεν αποθηκεύεται και δεν δαπανάται τίποτα."
  }
 }

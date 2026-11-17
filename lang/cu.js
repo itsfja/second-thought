@@ -2361,7 +2361,10 @@
 "not valid JSON":"не истиньно JSON",
 "no link in it":"ни єдинꙛ ꙁвена нѣстъ",
 "this runtime holds {n} signing keys and checks each release's signature against them":"этот runtime держит {n} ключей подписи и проверяет подпись каждого релиза ими",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ключ подписи ещё не задан, поэтому --update-runtime проверяет только SHA-256 релиза"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ключ подписи ещё не задан, поэтому --update-runtime проверяет только SHA-256 релиза",
+"Rehearsal":"репетиция",
+"Not done, because this is a rehearsal: {what}":"Не выполнено, потому что это репетиция: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Репетиция: программа выполняется по-настоящему, но ничего не отправляется, не переключается, не сохраняется и не тратится."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

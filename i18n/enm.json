@@ -3729,7 +3729,10 @@
   "not valid JSON": "nat trewe JSON",
   "no link in it": "no link in it",
   "this runtime holds {n} signing keys and checks each release's signature against them": "this runtime holdeth {n} sealing keyes and checks the seal of eche reles with hem",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "na sealing key is set yet, so --update-runtime checks anly the SHA-256 of the reles"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "na sealing key is set yet, so --update-runtime checks anly the SHA-256 of the reles",
+  "Rehearsal": "Triing",
+  "Not done, because this is a rehearsal: {what}": "Nat done, for this is a triing: {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Triing: the program renneth for real, but no thing is sent, switched, saved or spent."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

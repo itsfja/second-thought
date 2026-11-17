@@ -608,7 +608,7 @@ class Connections:
         if entity:
             body["entity_id"] = entity
         sensitive = ha_sensitive(service, entity, body)
-        if (not sensitive or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
+        if (not sensitive or self.dry_run()) and not await self._allowed(["ha"], f"{service} on {entity or 'Home Assistant'}"):
             return False
         if sensitive:
             if self.nobody_here():
@@ -902,7 +902,7 @@ class Connections:
         repo, title, body = self._gh_repo(repo), to_str(title).strip(), to_str(body).strip()
         if not title:
             return "Not opened: an issue needs a title."
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"open an issue in {repo}: {_short(title, 120)}"):
             return "Not opened: the person said no, or nobody was there to ask."
         made = await self._gh(f"/repos/{repo}/issues", "POST", {"title": title, "body": body})
         self.log(tr("GitHub issue opened in {repo}: #{n}", repo=repo, n=made.get("number")), title + ("\n\n" + body if body else ""), tr("sent"))
@@ -920,7 +920,7 @@ class Connections:
             return (f"Not labelled: {repo} has no label {', '.join(unknown)}. Use only its own labels: "
                     + (", ".join(sorted(have.values())) or "(it has none)") + ".")
         names = [have[x.lower()] for x in want]
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"label {repo} #{n}: {', '.join(names)}"):
             return "Not labelled: the person said no, or nobody was there to ask."
         await self._gh(f"/repos/{repo}/issues/{n}/labels", "POST", {"labels": names})
         self.log(tr("GitHub labels on {repo} #{n}", repo=repo, n=n), ", ".join(names), tr("sent"))
@@ -930,7 +930,7 @@ class Connections:
         repo, n, text = self._gh_repo(repo), round_js(num(number)), to_str(text).strip()
         if not text:
             raise RunError(tr("A comment needs some text."))
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"comment on {repo} #{n}: {_short(text, 120)}"):
             return False
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
         self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
@@ -1025,7 +1025,7 @@ class Connections:
         chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
         if not chat:
             raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), 4000):
             part = text[i:i + 4000]
@@ -1158,7 +1158,7 @@ class Connections:
         channel = to_str(channel).strip() or (trig.get("channel") if isinstance(trig, dict) and trig.get("service") == service else "") or mine[0]
         if channel not in mine:
             raise RunError(tr("{name}: channel {channel} isn't in {channels}, so nothing is sent there.", name=c['name'], channel=channel, channels=c['channels']))
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send a {c['name']} message: {_short(text, 120)}"):
             return False
         for i in range(0, len(text), c["limit"]):
             part = text[i:i + c["limit"]]
@@ -1321,7 +1321,7 @@ class Connections:
         if not addrs or not all(re.fullmatch(r"[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+", a) for a in addrs):
             raise RunError(tr("“{to}” isn't an email address.", to=to))
         c = self._mail()
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send an email to {to}: {subject}"):
             return False
         msg = EmailMessage()
         msg["From"], msg["To"], msg["Subject"] = c["addr"], ", ".join(addrs), subject or "(no subject)"
@@ -1500,10 +1500,10 @@ class Connections:
             raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
         v = self._homey_value_for(d["caps"][cap], value)
         what = f"set {d['name']} {cap} to {self._homey_show(v)}"
-        if (cap, v) in self.HOMEY_SENSITIVE and not getattr(self, "testing", False):  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+        if (cap, v) in self.HOMEY_SENSITIVE and not self.dry_run():  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
             if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
                 return False
-        elif (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], what):
+        elif (not approved or self.dry_run()) and not await self._allowed(["ha"], what):
             return False
         await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
         self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
@@ -1532,7 +1532,7 @@ class Connections:
             (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
         if not f:
             raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+        if (not approved or self.dry_run()) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
             return False
         await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
         self.log(tr("Homey flow started"), f["name"], tr("started"))
@@ -1553,7 +1553,7 @@ class Connections:
         v = await self._homey_var(name)
         old = v.get("value")
         new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
             return False
         await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
         self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
@@ -1784,8 +1784,7 @@ class Connections:
 
     async def _coinbase_ask(self, what):
         """Asks before anything that could move money on Coinbase: always, live, and never with nobody there (#371)."""
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         return await self.confirm_money(what)
 
@@ -1942,8 +1941,7 @@ class Connections:
             return False
         info = await self._docker("GET", f"/containers/{name}/json")
         what = f"{action} the Docker container {name} ({to_str((info.get('Config') or {}).get('Image'))}, now {to_str((info.get('State') or {}).get('Status'))})"
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2025,8 +2023,7 @@ class Connections:
         q = (await self._sabnzbd("queue")).get("queue") or {}
         what = (tr("pause SABnzbd's queue") if action == "pause" else tr("resume SABnzbd's queue")) + \
             (f" ({self._cents(num(q.get('mbleft')))} MB left, {len(q.get('slots') or [])} in the queue)")
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2109,8 +2106,7 @@ class Connections:
         was done."""
         w = self._arr_which(which)
         what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2215,8 +2211,7 @@ class Connections:
             raise RunError(tr("Which one, and start or stop?"))
         who = tr("container") if k == "container" else tr("VM")
         what = tr("{action} the Unraid {who} {name}", action=a, who=who, name=n)
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2230,8 +2225,7 @@ class Connections:
         """Checks the parity disks by reading them (a read-check, no corrections written), after asking you, every
         time. Gives back True if it was started."""
         what = tr("check Unraid's parity")
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2307,8 +2301,7 @@ class Connections:
         if not n:
             raise RunError(tr("Which one? Give a release's id, from the search."))
         what = tr("fetch the NZB for {id} from NZBGeek", id=n)
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2406,8 +2399,7 @@ class Connections:
         if not n or n <= 0:
             raise RunError(tr("For how long? Give the seconds blocking should be off, like 60."))
         what = tr("disable Pi-hole's blocking for {n} seconds", n=n)
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2418,8 +2410,7 @@ class Connections:
     async def pihole_enable(self):
         """Turns blocking back on, after asking you, every time. Gives back True if it was done."""
         what = tr("enable Pi-hole's blocking")
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2434,8 +2425,7 @@ class Connections:
         if w not in ("allow", "deny") or a not in ("add", "remove") or not d:
             raise RunError(tr("Which list (allow or deny), add or remove, and which domain?"))
         what = tr("{action} {domain} on Pi-hole's {which} list", action=a, domain=d, which=w)
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2550,8 +2540,7 @@ class Connections:
         if not key.isdigit():
             raise RunError(tr("Which library? Give its name, from the libraries."))
         what = tr("scan the {library} library on Plex", library=found)
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2628,8 +2617,7 @@ class Connections:
         if not key:
             raise RunError(tr("Which stream? Give a session's id, from the sessions."))
         what = tr("stop the {id} stream on Plex", id=key)
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -2734,8 +2722,7 @@ class Connections:
         if not g or not re.fullmatch(r"[A-Za-z0-9.-]+", to_str(g.get("node"))) or g.get("type") not in ("qemu", "lxc"):
             raise RunError(tr("Proxmox: {why}.", why=tr("not found")))
         what = f"{self.PROXMOX_POWER[action]} the Proxmox guest {vmid} ({to_str(g.get('name'))}, on {to_str(g.get('node'))}, now {to_str(g.get('status'))})"
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -3099,8 +3086,7 @@ class Connections:
         n = max(0, min(100, int(round(num(percent) or 0))))
         op = await self._powerwall("GET", "/api/operation")
         what = tr("set the Powerwall backup reserve to {n}% (now {old}%)", n=n, old=self._pw_num(op.get("backup_reserve_percent")))
-        if getattr(self, "testing", False):
-            self.log(tr("Test run"), tr("Not done, because this is a test: {what}", what=what), tr("skipped"))
+        if self._skip_action(what):
             return False
         if not await self.confirm_live(what):
             return False
@@ -3198,7 +3184,7 @@ class Connections:
 
     async def mqtt_publish(self, topic, text, retain=False, approved=False):
         topic, text = self._mqtt_topic(topic, True), to_str(text)
-        if (not approved or getattr(self, "testing", False)) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+        if (not approved or self.dry_run()) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
             return False
         c = await asyncio.to_thread(self._mqtt_new)
         try:

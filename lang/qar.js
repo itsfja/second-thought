@@ -2363,7 +2363,10 @@
 "not valid JSON":"nis riht JSON",
 "no link in it":"nā hlenc on him",
 "this runtime holds {n} signing keys and checks each release's signature against them":"þis runtime heldeþ {n} cíean to underteynenne, and sceawaþ þa underteynunge ælcere forþgesceaftes mid þǣm",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ná is nænig cíe to underteynenne setet yet, swa --update-runtime sceawaþ ān þæt SHA-256 þære forþgesceaftes"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ná is nænig cíe to underteynenne setet yet, swa --update-runtime sceawaþ ān þæt SHA-256 þære forþgesceaftes",
+"Rehearsal":"Tryging",
+"Not done, because this is a rehearsal: {what}":"náht gedon, forþon þe þis is tryging: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Tryging: seo forþgesceaft rennþ for riht, ac náþing is sent, awended, saved oþþe spent."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

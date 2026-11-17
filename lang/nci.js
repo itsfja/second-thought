@@ -2361,7 +2361,10 @@
 "not valid JSON":"ahmo cualli JSON",
 "no link in it":"ahmo huitztiliztli ipan",
 "this runtime holds {n} signing keys and checks each release's signature against them":"inin runtime quipiya {n} tlatquitilli tlachializtli huan quinmomaquilia in tlachializtli in mochintin tlanelhuiliztin",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ayamo tlapatilli tlachializtli mochipa, ic --update-runtime san quinmomaquilia in SHA-256 in tlanelhuiliztli"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"ayamo tlapatilli tlachializtli mochipa, ic --update-runtime san quinmomaquilia in SHA-256 in tlanelhuiliztli",
+"Rehearsal":"Machililiztli",
+"Not done, because this is a rehearsal: {what}":"Amo mochipa, ipampa inin machililiztli: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"Machililiztli: inin program quipiya ipan melahuac, pero ahtlen quipiya, quixpoloa, quipiya o quitequilia."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

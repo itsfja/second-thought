@@ -2363,7 +2363,10 @@
 "not valid JSON":"አላአ አብርታየ JSON",
 "no link in it":"አላአ ተንንንይግእ",
 "this runtime holds {n} signing keys and checks each release's signature against them":"runtime {n} እንተዝ ከልታየዝ የንታየ, እታሏ በንታየ ከልታየ የንታየ",
-"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"እንተ ንታየእ ከልታየዝ; --update-runtime የንታቢ SHA-256 የንታየ"
+"no signing key is set yet, so --update-runtime checks only the release's SHA-256":"እንተ ንታየእ ከልታየዝ; --update-runtime የንታቢ SHA-256 የንታየ",
+"Rehearsal":"የንታየዝ",
+"Not done, because this is a rehearsal: {what}":"እንተ የንታየዝ እታለ: {what}",
+"Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.":"የንታየዝ: runtime እንተዝ, እንተ ንታየእ በንታየ የንታእ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ወስክ ትርጓሜ",

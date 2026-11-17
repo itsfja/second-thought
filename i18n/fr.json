@@ -3729,6 +3729,9 @@
   "not valid JSON": "n'est pas un JSON valide",
   "no link in it": "n'a aucun lien",
   "this runtime holds {n} signing keys and checks each release's signature against them": "ce runtime détient {n} clés de signature et vérifie la signature de chaque release avec",
-  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "aucune clé de signature n'est encore définie, donc --update-runtime ne vérifie que le SHA-256 de la release"
+  "no signing key is set yet, so --update-runtime checks only the release's SHA-256": "aucune clé de signature n'est encore définie, donc --update-runtime ne vérifie que le SHA-256 de la release",
+  "Rehearsal": "Répétition",
+  "Not done, because this is a rehearsal: {what}": "Non fait, car c'est une répétition : {what}",
+  "Rehearsal: the program runs for real, but nothing is sent, switched, saved or spent.": "Répétition : le programme s'exécute vraiment, mais rien n'est envoyé, modifié, enregistré ni dépensé."
  }
 }
