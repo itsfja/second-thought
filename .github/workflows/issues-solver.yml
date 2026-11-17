@@ -1,0 +1,44 @@
+name: issues-solver
+
+# Bridge that starts a `mistral-issues-solver` execution in Mistral Studio when
+# - an issue is labeled with a `priority: N` label (N = 1..8), or
+# - a PR opened by the solver (head branch issues-solver/*) is merged.
+# Studio webhooks/triggers are not available on the current plan, so this
+# Actions workflow calls the Workflows API directly.
+
+on:
+  issues:
+    types: [labeled]
+  pull_request:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  start-solver:
+    name: Start mistral-issues-solver execution
+    if: >-
+      (github.event_name == 'issues' && startsWith(github.event.label.name, 'priority')) ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'issues-solver/'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start the workflow execution
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL: ${{ github.event.label.name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "issues" ]; then
+            input=$(jq -cn --argjson n "$ISSUE_NUMBER" --arg l "$LABEL" '{event: "issue_labeled", issue_number: $n, label: $l}')
+          else
+            input=$(jq -cn --argjson n "$PR_NUMBER" --arg b "$HEAD_REF" '{event: "pr_merged", pr_number: $n, branch: $b}')
+          fi
+          body=$(jq -cn --argjson i "$input" '{input: $i, deployment_name: "mistral-issues-solver"}')
+          curl -sS -f -X POST "https://api.mistral.ai/v1/workflows/mistral-issues-solver/execute" \
+            -H "Authorization: Bearer $MISTRAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "$body"
