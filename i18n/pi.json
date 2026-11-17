@@ -1226,7 +1226,6 @@
   "Homey devices": "Homey-यन्तानि",
   "Homey flow started": "Homey-पवाहो आरद्धो",
   "Homey variable {name}": "Homey-चलं {name}",
-  "Import / export": "आनयनं / नीहरणं",
   "Import a program": "किच्चक्कमं आनेहि",
   "Import and export": "आनयनं नीहरणञ्च",
   "Import undone. Your previous program is back.": "आनयनं पच्चाहटं। तव पुब्बकिच्चक्कमो पच्चागतो।",
@@ -1322,10 +1321,8 @@
   "Pick the better one": "सेय्यं विचिन",
   "Picture": "चित्तं",
   "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "चित्तानि “इमस्मिं पत्ते विवटे” एव सरितुं सक्का। रक्खितुं चित्तं सञ्चिकं कत्वा रक्ख।",
-  "Press the question mark button for keyboard help.": "अक्खरफलकसहायाय पञ्हलक्खणकुञ्चिकं नुदाहि।",
   "Program name": "किच्चक्कमनामं",
   "Program: {name}": "किच्चक्कमो: {name}",
-  "Programs": "किच्चक्कमा",
   "Programs inside programs went more than 10 deep, so the run stopped.": "किच्चक्कमानं अन्तो किच्चक्कमा दसतो गम्भीरतरं गता, तस्मा चालनं अट्ठासि।",
   "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "अञ्ञेहि संविभत्ता किच्चक्कमा। एकेको पक्खिपनतो पुब्बे परिक्खितो, किं कातुं सक्कोती ति च तस्स खण्डेहि गणितं वदति। तव सकं संविभजितुं Second Thought-पेळायं gallery/README.md पस्स।",
   "Programs run with your own keys: {keys}. Each is charged to its own account.": "किच्चक्कमा तव सककुञ्चिकाहि चालियन्ति: {keys}. एकेको सकखाताय गण्हीयति।",
@@ -1927,7 +1924,18 @@
   "has a link": "लिंक है",
   "{n} words; the limit is {limit}": "{n} शब्द; सीमा {limit}",
   "not valid JSON": "न वाली JSON",
-  "no link in it": "न लिंक"
+  "no link in it": "न लिंक",
+  "Program": "कम्म",
+  "Data": "दान",
+  "Settings": "संविधि",
+  "New": "नव",
+  "Import": "आनय",
+  "Export": "बहि",
+  "Share": "संविभज",
+  "Theme": "वण्ण",
+  "System": "विधि",
+  "Light": "ओभास",
+  "Dark": "अन्धकार"
  },
  "examples": {
   "review": {

@@ -1028,8 +1028,6 @@
   "Example": "ᚠᚩᚱᛖᛒᚣᛋᛖᚾ",
   "Load": "ᚻᛚᚪᛞ",
   "Browse examples": "ᚷᛖᚩᚾᛞᛋᛖᚩᚻ ᚠᚩᚱᛖᛒᚣᛋᛖᚾᚪ",
-  "Import / export": "ᛁᚾᛚᚫᛞ / ᚢᛏᛚᚫᛞ",
-  "Programs": "ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏᚪ",
   "Memory": "ᚷᛖᛗᚣᚾᛞ",
   "Home Assistant": "Home Assistant",
   "Model": "ᛒᚣᛋᛖᚾ",
@@ -1726,7 +1724,6 @@
   "{passed} of {n} passed.": "{passed} ᚩᚠ {n} ᚷᛖᚠᚪᚱᛖᚾ.",
   "Block editor": "ᛋᛏᚩᚳᚳ-ᚹᛖᚩᚱᚳᛋᛏᚩᚹ",
   "Keyboard": "ᚳᚫᚷᛒᚱᛖᛞ",
-  "Press the question mark button for keyboard help.": "ᚦᚣ ᚦᚩᚾᛖ ᚳᚾᚫᛈᛈ ᚦᚫᛋ ᚪᛋᚳᚢᛝᛗᛠᚱᚳᛖᛋ ᚠᚩᚱ ᚳᚫᚷᛒᚱᛖᛞᛖᛋ ᚠᚢᛚᛏᚢᛗᛖ.",
   "Keyboard help": "ᚳᚫᚷᛒᚱᛖᛞᛖᛋ ᚠᚢᛚᛏᚢᛗ",
   "about {cost}": "ᚣᛗᛒᛖ {cost}",
   "under {cost}": "ᛚᚫᛋᛋᛖ ᚦᚩᚾᚾᛖ {cost}",
@@ -1937,7 +1934,18 @@
   "has a link": "ᚻᚫᚠᚦ ᚻᛚᛖᚾᚳ",
   "{n} words; the limit is {limit}": "{n} ᚹᚩᚱᛞ; ᚦᚫᛏ ᛖᚾᛞᛖᛗᚫᛚᛖ ᛁᛋ {limit}",
   "not valid JSON": "ᚾᛁᛋ ᚱᛁᛇᛏ JSON",
-  "no link in it": "ᚾᚪ ᚻᛚᛖᚾᚳ ᚩᚾ ᚻᛁᛗ"
+  "no link in it": "ᚾᚪ ᚻᛚᛖᚾᚳ ᚩᚾ ᚻᛁᛗ",
+  "Program": "ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ",
+  "Data": "ᛚᚪᚱᛖ",
+  "Settings": "ᛋᛖᛏᛖᛞᚾᛖᛋᛋ",
+  "New": "ᚾᛁᚹᛖ",
+  "Import": "ᛁᚾᛒᛖᚱᚪᚾ",
+  "Export": "ᚢᛏᛒᛖᚱᚪᚾ",
+  "Share": "ᛞᚫᛚᚪᚾ",
+  "Theme": "ᚻᛁᚹ",
+  "System": "ᛖᚾᛞᛖᚱ",
+  "Light": "ᛚᛁᛇᛏ",
+  "Dark": "ᛞᛖᚩᚱᚳ"
  },
  "examples": {
   "review": {

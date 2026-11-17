@@ -1027,8 +1027,6 @@
   "Example": "Παράδειγμα",
   "Load": "Φόρτισον",
   "Browse examples": "Ἐπίσκεψαι τὰ παραδείγματα",
-  "Import / export": "Εἰσάγαγε / Ἐξάγαγε",
-  "Programs": "Προγράμματα",
   "Memory": "Μνήμη",
   "Home Assistant": "Home Assistant",
   "Model": "Τύπος",
@@ -1725,7 +1723,6 @@
   "{passed} of {n} passed.": "{passed} ἐκ τῶν {n} ἐπέτυχον.",
   "Block editor": "Ἐργαστήριον πλίνθων",
   "Keyboard": "Πληκτρολόγιον",
-  "Press the question mark button for keyboard help.": "Πίεσον τὸ κομβίον τοῦ ἐρωτηματικοῦ πρὸς βοήθειαν πληκτρολογίου.",
   "Keyboard help": "Βοήθεια πληκτρολογίου",
   "about {cost}": "περὶ {cost}",
   "under {cost}": "ἔλαττον {cost}",
@@ -1936,7 +1933,18 @@
   "has a link": "σύνδεσμον ἔχει",
   "{n} words; the limit is {limit}": "{n} λέξεις· τὸ ὅριον {limit} ἐστί",
   "not valid JSON": "οὐκ ἔγκυρον JSON",
-  "no link in it": "οὐδὲν σύνδεσμον"
+  "no link in it": "οὐδὲν σύνδεσμον",
+  "Program": "Πρόγραμμα",
+  "Data": "Δεδομένα",
+  "Settings": "Ρυθμίσεις",
+  "New": "Νέον",
+  "Import": "Εἰσάγειν",
+  "Export": "Ἐξάγειν",
+  "Share": "Μεταδίδειν",
+  "Theme": "Θέμα",
+  "System": "Σύστημα",
+  "Light": "Φῶς",
+  "Dark": "Σκότος"
  },
  "examples": {
   "review": {

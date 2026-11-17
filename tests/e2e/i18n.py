@@ -339,11 +339,11 @@ async def i18n_tests():
                 bodies = await pg.eval_on_selector_all(".step-body", "e => e.map(x => x.innerText)")
                 check(any(P["Add a 'set task to' block before this step."] in b for b in bodies),
                       f"what the run log says inside a step, such as why a run stopped, is in {t.get('name', code)} ({bodies[-1:]})")
-                await pg.click("#io-toggle")
+                await pg.click("#io-export")
                 await paste(pg, (ROOT / "gallery" / "rye-news-telegram.json").read_text(encoding="utf-8"))
                 await pg.click("#io-load-paste")
                 msg = await pg.text_content("#io-import-msg")
-                await pg.click("#io-toggle")
+                await pg.click("#io-export")
                 await pg.click("#mem-toggle")
                 where = await pg.text_content("#mem-where")
                 await pg.click("#mem-toggle")

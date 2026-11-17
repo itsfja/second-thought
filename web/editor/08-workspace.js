@@ -144,6 +144,33 @@
   fillExampleMenu();
   describeExample($("example").value);
   $("load").onclick = () => loadExample($("example").value);
+  // The header's menus (#444): an item that acts closes its menu; Esc closes the open one; a click anywhere
+  // else closes them. A select inside stays open, so its choices can be read.
+  document.querySelectorAll("details.menu").forEach(d => {
+    d.addEventListener("click", e => { if (e.target.closest(".menu-body button")) d.open = false; });
+    d.addEventListener("keydown", e => { if (e.key === "Escape" && d.open) { d.open = false; e.stopPropagation(); } });
+  });
+  document.addEventListener("click", e => {
+    if (!e.target.closest("details.menu")) document.querySelectorAll("details.menu[open]").forEach(d => { d.open = false; });
+  });
+  $("new-prog").onclick = () => { setTests([]); load({ blocks: { languageVersion: 0, blocks: [blk("rb_start")] } }); };
+  // The theme choice in Settings (#444): System follows the computer; Light and Dark override it, and the
+  // choice is kept. Setting data-theme rethemes the blocks too (the observer below).
+  (function themePicker(){
+    const sel = $("theme");
+    [["", tr("System")], ["light", tr("Light")], ["dark", tr("Dark")]].forEach(([v, label]) => {
+      const o = document.createElement("option"); o.value = v; o.textContent = label; sel.appendChild(o);
+    });
+    let saved = ""; try { saved = localStorage.getItem("second-thought-theme") || ""; } catch(e) {}
+    if (!["", "light", "dark"].includes(saved)) saved = "";
+    sel.value = saved;
+    const apply = () => {
+      if (sel.value) document.documentElement.setAttribute("data-theme", sel.value);
+      else document.documentElement.removeAttribute("data-theme");
+    };
+    apply();
+    sel.addEventListener("change", () => { try { localStorage.setItem("second-thought-theme", sel.value); } catch(e) {} apply(); });
+  })();
   const mq = window.matchMedia("(prefers-color-scheme: dark)");
   const retheme = () => ws.setTheme(makeTheme(isDark()));
   mq.addEventListener && mq.addEventListener("change", retheme);

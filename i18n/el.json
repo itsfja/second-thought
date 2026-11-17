@@ -1027,8 +1027,6 @@
   "Example": "Παράδειγμα",
   "Load": "Φόρτωση",
   "Browse examples": "Περιήγηση παραδειγμάτων",
-  "Import / export": "Εισαγωγή / εξαγωγή",
-  "Programs": "Προγράμματα",
   "Memory": "Μνήμη",
   "Home Assistant": "Home Assistant",
   "Model": "Μοντέλο",
@@ -1725,7 +1723,6 @@
   "{passed} of {n} passed.": "{passed} από {n} πέρασαν.",
   "Block editor": "Επεξεργαστής μπλοκ",
   "Keyboard": "Πληκτρολόγιο",
-  "Press the question mark button for keyboard help.": "Πατήστε το κουμπί με το ερωτηματικό για βοήθεια με το πληκτρολόγιο.",
   "Keyboard help": "Βοήθεια πληκτρολογίου",
   "about {cost}": "περίπου {cost}",
   "under {cost}": "κάτω από {cost}",
@@ -1936,7 +1933,18 @@
   "has a link": "έχει σύνδεσμο",
   "{n} words; the limit is {limit}": "{n} λέξεις· το όριο είναι {limit}",
   "not valid JSON": "μη έγκυρο JSON",
-  "no link in it": "χωρίς σύνδεσμο"
+  "no link in it": "χωρίς σύνδεσμο",
+  "Program": "Πρόγραμμα",
+  "Data": "Δεδομένα",
+  "Settings": "Ρυθμίσεις",
+  "New": "Νέο",
+  "Import": "Εισαγωγή",
+  "Export": "Εξαγωγή",
+  "Share": "Κοινή χρήση",
+  "Theme": "Θέμα",
+  "System": "Σύστημα",
+  "Light": "Φωτεινό",
+  "Dark": "Σκοτεινό"
  },
  "examples": {
   "review": {

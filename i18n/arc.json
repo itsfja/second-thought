@@ -1028,8 +1028,6 @@
   "Example": "דוגמא",
   "Load": "טעון",
   "Browse examples": "עיין בדוגמי",
-  "Import / export": "אעיל / אפיק",
-  "Programs": "סדורין",
   "Memory": "דוכרנא",
   "Home Assistant": "Home Assistant",
   "Model": "חכימא",
@@ -1726,7 +1724,6 @@
   "{passed} of {n} passed.": "{passed} מן {n} עברו.",
   "Block editor": "עבדתא דלבנין",
   "Keyboard": "לוחא דמפתחין",
-  "Press the question mark button for keyboard help.": "דחוק כפתורא דסימן שאלתא לעדרנא דלוחא דמפתחין.",
   "Keyboard help": "עדרנא דלוחא דמפתחין",
   "about {cost}": "בערך {cost}",
   "under {cost}": "פחות מן {cost}",
@@ -1937,7 +1934,18 @@
   "has a link": "ܐܘتܐ ܠܘيܠܐ",
   "{n} words; the limit is {limit}": "{n} ܡܠ̈ܝܪ; ܣܟܡܐ {limit}",
   "not valid JSON": "ܠܐ ܠܘيܠܐ JSON",
-  "no link in it": "ܠܐ ܐܘتܐ"
+  "no link in it": "ܠܐ ܐܘتܐ",
+  "Program": "ܣܕܪ̈ܝܐ",
+  "Data": "ܡܝܕ̈ܥܐ",
+  "Settings": "ܛܘܟ̈ܣܐ",
+  "New": "ܚܕܬܐ",
+  "Import": "ܡܥܠܐ",
+  "Export": "ܡܦܩܐ",
+  "Share": "ܫܘܬܦܐ",
+  "Theme": "ܚܙܘܬܐ",
+  "System": "ܛܟܣܐ",
+  "Light": "ܢܘܗܪܐ",
+  "Dark": "ܚܫܘܟܐ"
  },
  "examples": {
   "review": {

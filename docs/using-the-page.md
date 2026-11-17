@@ -37,7 +37,7 @@ There are more categories down the left side of the screen.
 
 **With the keyboard, or a screen reader.** Every button, menu and panel works with **Tab** and **Enter**. When a run asks you something, the answer box takes the focus and a screen reader reads the question; **Ctrl+Enter** sends a typed answer. New steps in the run log, and the run's status, are read out as they happen. Programs can be built without a mouse too, using Blockly's own keyboard navigation, always on: **Tab** to the block editor, **T** opens the blocks, the arrow keys move, **Enter** adds a block or edits a field, and **M** moves a block. The **?** button by the zoom buttons lists every key. A screen reader reads out each block, field and category as you reach it.
 
-**Backups.** The **Model** menu picks the main model. **Backups**, next to it, lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
+**Backups.** In **Settings**, the **Model** menu picks the main model, and **Backups** lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
 
 ## What a program can do
 
@@ -63,13 +63,13 @@ There are more categories down the left side of the screen.
 
 ![The example browser: cards for Review loop, Interview me then write, Polish an email and more, each with a Load this example button](../screenshots/examples.png)
 
-Choose an example from **Example** and press **Load**, or press **Browse examples** to see them all with a sentence about each and an idea for something to change. There are over 150, grouped into Writing, Research, Design, Learning, Work, Home and baking, Agents, Homey, Code and data, Automation, and ten groups of Home Assistant examples. **Review loop** is a good first one. You can't break anything: if you get in a muddle, load the example again.
+Open **Program**: choose an example from **Example** and press **Load**, or press **Browse examples** to see them all with a sentence about each and an idea for something to change. There are over 150, grouped into Writing, Research, Design, Learning, Work, Home and baking, Agents, Homey, Code and data, Automation, and ten groups of Home Assistant examples. **Review loop** is a good first one. You can't break anything: if you get in a muddle, load the example again.
 
 The **Community** groups, straight after Writing and Research, hold programs other people made and shared, grouped by topic (GitHub, code and data, news, money, calendar and email, home and baking, teaching, odds and ends). Each says who shared it and what it can do: whether it only talks to a model, or can also send messages, keep notes or control things. The page works that out from the blocks, so it's always accurate. To share your own, see [`gallery/README.md`](../gallery/README.md).
 
 ## Saving programs
 
-Press **Programs**, type a name and press **Save**. Open the same panel and press **Open** to get it back. To keep a copy as a file, use **Import / export**.
+Open **Program → My programs**, type a name and press **Save**; open the same panel and press **Open** to get it back. To keep a copy as a file, use **Program → Export**, and to share one, **Program → Share**.
 
 A saved program can be a block, too. Put **run program "my program" with …** inside another program. The saved program runs, then hands back its result. Inside it, **message value** holds whatever you gave it. It has its own draft and its own result, so it can't interfere with yours.
 

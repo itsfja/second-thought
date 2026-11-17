@@ -1027,8 +1027,6 @@
   "Example": "Dœmi",
   "Load": "Hlað",
   "Browse examples": "Skoða dœmi",
-  "Import / export": "Flytja inn / út",
-  "Programs": "Forrit",
   "Memory": "Minni",
   "Home Assistant": "Home Assistant",
   "Model": "Líkan",
@@ -1725,7 +1723,6 @@
   "{passed} of {n} passed.": "{passed} af {n} stóðusk.",
   "Block editor": "Kubbasmiðja",
   "Keyboard": "Lyklaborð",
-  "Press the question mark button for keyboard help.": "Ýt á spurningarmerkis-hnappinn fyrir lyklaborðshjálp.",
   "Keyboard help": "Lyklaborðshjálp",
   "about {cost}": "um {cost}",
   "under {cost}": "minna en {cost}",
@@ -1936,7 +1933,18 @@
   "has a link": "á tengil",
   "{n} words; the limit is {limit}": "{n} orð; hámarkið er {limit}",
   "not valid JSON": "ógilt JSON",
-  "no link in it": "enginn tengill"
+  "no link in it": "enginn tengill",
+  "Program": "Forrit",
+  "Data": "Gögn",
+  "Settings": "Stillingar",
+  "New": "Nýtt",
+  "Import": "Innber",
+  "Export": "Útber",
+  "Share": "Deila",
+  "Theme": "Litur",
+  "System": "Kerfi",
+  "Light": "Ljós",
+  "Dark": "Myrkur"
  },
  "examples": {
   "review": {

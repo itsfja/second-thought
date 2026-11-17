@@ -1226,7 +1226,6 @@
   "Homey devices": "Homey جهازلری",
   "Homey flow started": "Homey آقیشی باشلادی",
   "Homey variable {name}": "Homey متحوّلی {name}",
-  "Import / export": "ادخال / اخراج",
   "Import a program": "بر پروغرام ادخال ایت",
   "Import and export": "ادخال و اخراج",
   "Import undone. Your previous program is back.": "ادخال گری آلیندی. اوّلكی پروغرامڭ گری گلدی.",
@@ -1322,10 +1321,8 @@
   "Pick the better one": "داها ایی‌سنی سچ",
   "Picture": "رسم",
   "Pictures can only be remembered 'while this page is open'. Save the picture as a file to keep it.": "رسملر یالڭز «بو صحیفه آچیق ایكن» خاطرلانه‌بیلیر. صاقلامق ایچون رسمی بر دوسیه اولارق حفظ ایت.",
-  "Press the question mark button for keyboard help.": "كلاویه یاردیمی ایچون صوال ایشارتی دوكمه‌سنه باص.",
   "Program name": "پروغرام اسمی",
   "Program: {name}": "پروغرام: {name}",
-  "Programs": "پروغراملر",
   "Programs inside programs went more than 10 deep, so the run stopped.": "پروغراملر ایچنده‌كی پروغراملر ١٠ قاتدن داها درینه ایندی، بو سببله اجرا دوردی.",
   "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "باشقه‌لرینڭ پایلاشدیغی پروغراملر. هر بری علاوه ایدیلمزدن اوّل یوقلاندی و قطعه‌لرندن چیقاریلان نه یاپه‌بیله‌جگنی سویلر. كندیكنكیلردن برینی پایلاشمق ایچون Second Thought صندوغنده gallery/README.md یه باق.",
   "Programs run with your own keys: {keys}. Each is charged to its own account.": "پروغراملر كندی آناختارلرڭله اجرا اولونور: {keys}. هر بری كندی حسابنه یازیلیر.",
@@ -1927,7 +1924,18 @@
   "has a link": "bir bağlantısı var",
   "{n} words; the limit is {limit}": "{n} kelime; sınır {limit}",
   "not valid JSON": "geçerli JSON değil",
-  "no link in it": "içinde bağlantı yok"
+  "no link in it": "içinde bağlantı yok",
+  "Program": "برنامج",
+  "Data": "بيانات",
+  "Settings": "الإعدادات",
+  "New": "جديد",
+  "Import": "استيراد",
+  "Export": "تصدير",
+  "Share": "مشاركة",
+  "Theme": "السمة",
+  "System": "النظام",
+  "Light": "فاتح",
+  "Dark": "داكن"
  },
  "examples": {
   "review": {

@@ -119,9 +119,9 @@ Next to the **Model** menu is a button called **Backups**. The model you choose 
 
 You do not have to start from nothing.
 
-At the top of the screen there is a box called **Example**. Choose an example, then press **Load**. Now press **Run** and watch what happens.
+In the **Program** menu at the top there is a box called **Example**. Choose an example, then press **Load**. Now press **Run** and watch what happens.
 
-There are over 150 examples, sorted into groups: **Writing, Research, Design, Learning, Work, Home and baking, Code and data, Agents, Home Assistant, Homey,** and **Automation**. Press **Browse examples** to see them all, with a sentence about each one and an idea for something to change.
+There are over 150 examples, sorted into groups: **Writing, Research, Design, Learning, Work, Home and baking, Code and data, Agents, Home Assistant, Homey,** and **Automation**. Open **Program → Browse examples** to see them all, with a sentence about each one and an idea for something to change.
 
 Try the example called **Review loop** first. Claude writes about bread, checks its own work, and makes it better.
 

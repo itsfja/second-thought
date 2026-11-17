@@ -33,12 +33,16 @@
 
   const FORMAT = "reflection-blocks";
   const ioMsg = (id, text, kind) => { const m = $(id); m.textContent = tr(text); m.className = "msg" + (kind ? " " + kind : ""); };
-  $("io-toggle").onclick = () => {
-    const io = $("io"), open = io.hidden;
-    io.hidden = !open; $("io-toggle").setAttribute("aria-expanded", String(open));
+  const ioToggles = ["io-import", "io-export", "share-prog"];
+  function toggleIo(open){
+    const io = $("io"); if (open === undefined) open = io.hidden;
+    io.hidden = !open; ioToggles.forEach(id => $(id).setAttribute("aria-expanded", String(open)));
     if (open) { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; }
     setTimeout(() => Blockly.svgResize(ws), 0);
-  };
+  }
+  $("io-import").onclick = () => { toggleIo(true); $("io-paste").focus(); };
+  $("io-export").onclick = () => { toggleIo(true); $("io-copy").focus(); };
+  $("share-prog").onclick = () => { toggleIo(true); $("io-copy").click(); };
   let downloads = null;
   const showSaves = d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("log-save").hidden = !d; };
   if (window.claude && window.claude.use) {
@@ -469,7 +473,7 @@
   canvasEl.addEventListener("drop", e => {
     if (!e.dataTransfer || !e.dataTransfer.files.length) return;
     e.preventDefault(); canvasEl.classList.remove("dropping");
-    if ($("io").hidden) $("io-toggle").click();
+    if ($("io").hidden) toggleIo(true);
     readFile(e.dataTransfer.files[0]);
   });
 

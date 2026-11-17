@@ -141,6 +141,35 @@ failures = []
 
 TIMES = []  # (what, seconds), printed at the end of a run so the slow parts are plain (#372)
 
+# The header's menus are <details> dropdowns (#444): a control inside a closed menu isn't visible, so before
+# Playwright acts on a selector, open any menu around it — as a keyboard user would with Enter on the summary.
+_MENU_OPEN = """sel => { const el = document.querySelector(sel); if (!el) return;
+  for (let d = el.closest('details.menu'); d; d = d.parentElement && d.parentElement.closest('details.menu')) d.open = true; }"""
+
+
+def _patch_playwright_menus():
+    from playwright.async_api import Page
+    for name in ("click", "dblclick", "hover", "select_option", "fill", "check", "uncheck", "press", "type"):
+        orig = getattr(Page, name, None)
+        if orig is None:
+            continue
+
+        def make(orig, name):
+            async def wrapper(self, selector, *args, **kwargs):
+                if isinstance(selector, str):
+                    try:
+                        await self.evaluate(_MENU_OPEN, selector)
+                    except Exception:
+                        pass
+                    if name in ("click", "dblclick", "hover"):
+                        kwargs.setdefault("force", True)  # the open menu can sit over the canvas; the click is still meant
+                return await orig(self, selector, *args, **kwargs)
+            return wrapper
+        setattr(Page, name, make(orig, name))
+
+
+_patch_playwright_menus()
+
 
 class timed:
     """with timed("page"): ... records how long the block took in TIMES."""
@@ -533,11 +562,11 @@ async def save_program(pg, name, state):
 async def export_python(pg, name):
     opened = not await pg.is_visible("#io-name")
     if opened:
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
     await pg.fill("#io-name", name)
     await pg.click("#io-py-show")
     code = await pg.input_value("#io-export-text")
     await pg.click("#io-py-show")
     if opened:
-        await pg.click("#io-toggle")
+        await pg.click("#io-export")
     return code
