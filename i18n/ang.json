@@ -3827,7 +3827,15 @@
   "{who} answered: {answer}": "{who} andswarode: {answer}",
   "No answer within {mins} min, so the default was used: {answer}": "Na andswaru within {mins} mīnata, swa þǣm default was used: {answer}",
   "answered": "andswarod",
-  "timed out": "tīma þát"
+  "timed out": "tīma þát",
+  "Allowance reached": "Dæl is gefullod",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "Ætstoden fram gewyrhte: þæt {window} dæl of {n} {kind} gewyrhtum is gefullod ({used} gedon on þissum tæle), swa þis rynn readaþ ana. Hit eftsetteþ {when}. {setting} = 0 ateorseð hit.",
+  "Action allowances": "Dælas gewyrhta",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, getelod on þissum tæle",
+  "{used} of {n} {window}": "{used} of {n} {window}",
+  "messages": "ærend",
+  "home actions": "hús gewyrhta",
+  "money moves": "peninga stirunga"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",

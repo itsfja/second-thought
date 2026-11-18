@@ -170,6 +170,15 @@ async def actions_tests():
             await pg.fill("#io-name", "asks")
             afiles = await pg.evaluate("window.__exportFiles()")  # Actions export refuses scheduled scripts that ask; plain Python export doesn't
             check(any(f["name"].endswith(".py") for f in afiles), "the asks program exports for the terminal runs")
+            # A program that sends five Telegram messages and then reads the clock, for the allowance runs below (#432).
+            astart = script(*[blk("rb_tg_send", None, {"TEXT": tx(f"allowance msg {i}")}) for i in range(5)],
+                             add({"block": blk("rb_now", {"PART": "datetime"})}))["blocks"]["blocks"][0]
+            await load_state(pg, program(astart))
+            await pg.click("#io-export")
+            await pg.fill("#io-name", "allowance")
+            alfiles = await pg.evaluate("window.__exportFiles()")
+            alcode = next(f["text"] for f in alfiles if f["name"] == "allowance.py")
+            check("telegram_send" in alcode, "the allowance program exports for the terminal runs")
             await ctx.close()
         await browser.close()
 
@@ -232,6 +241,22 @@ async def actions_tests():
         rc, out, err = drive([sys.executable, "-u", "asks.py", "--run-schedule", "2", "--now"], aenv, tmp)
         check(rc == 0 and "bread" in out and "No answer within 0 min" in out,
               f"the time limit running out takes the block's default (exit {rc}): {(err or out)[-250:]!r}")
+
+    # Action allowances (#432): with allow_messages_daily = 3, a program that sends five messages sends three, says the
+    # allowance is reached once, and carries on reading; the next run on the same computer is stopped at once.
+    with tempfile.TemporaryDirectory() as tmp:
+        (pathlib.Path(tmp) / "allowance.py").write_text(alcode, encoding="utf-8")
+        lenv = dict(no_keys, PYTHONIOENCODING="utf-8", RB_LANGUAGE="en", RB_APPROVE="no",
+                    TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT), TELEGRAM_API_URL=base + "/tg",
+                    RB_ALLOW_MESSAGES_DAILY="3")
+        sent = lambda: [m for m in svc_log["tg_sent"] if "allowance msg" in m["text"]]  # noqa: E731
+        rc, out, err = drive([sys.executable, "-u", "allowance.py"], lenv, tmp)
+        check(rc == 0 and len(sent()) == 3 and out.count("Allowance reached") == 1 and "Added to result" in out,
+              f"a program that sends five messages stops at the allowance of 3, says so once, and carries on reading "
+              f"(exit {rc}; tg={len(sent())}; {(err or out)[-300:]!r})")
+        rc, out, err = drive([sys.executable, "-u", "allowance.py"], lenv, tmp)
+        check(rc == 0 and len(sent()) == 3 and out.count("Allowance reached") == 1 and "Added to result" in out,
+              f"the next run on the same computer sends nothing and is stopped at once (exit {rc}; tg={len(sent())}; {(err or out)[-300:]!r})")
 
 
 async def paste_gallery(pg, name):

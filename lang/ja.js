@@ -2451,6 +2451,14 @@
 "{who} answered: {answer}":"{who} が回答: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"{mins} 分以内に返事がなく、デフォルトを使用: {answer}",
 "answered":"返答あり",
-"timed out":"タイムアウト"
+"timed out":"タイムアウト",
+"Allowance reached":"上限に達しました",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"動作を停止しました: {kind} の動作が {window} の上限 {n} に達しました (このコンピューターで {used} 件実行済み)。この実行は読み取りのみ続行します。{when} にリセットされます。{setting} = 0 で無効になります。",
+"Action allowances":"動作の上限",
+"{kind}: {list}, counted on this computer":"{kind}: {list}、このコンピューターでカウント",
+"{used} of {n} {window}":"{window} {n} のうち {used}",
+"messages":"メッセージ",
+"home actions":"ホームの操作",
+"money moves":"お金の動き"
 }
 };

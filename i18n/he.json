@@ -3828,6 +3828,14 @@
   "{who} answered: {answer}": "{who} ענה: {answer}",
   "No answer within {mins} min, so the default was used: {answer}": "אין תשובה ב-{mins} דקות, כך שימש בבריל אין הבריל: {answer}",
   "answered": "נענה",
-  "timed out": "זמן פגער"
+  "timed out": "זמן פגער",
+  "Allowance reached": "המכסה הושגה",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "הפעולה נעצרה: מכסת {window} של {n} פעולות {kind} הושגה ({used} בוצעו במחשב זה), ולכן ריצה זו ממשיכה לקרוא בלבד. היא מתאפסת ב-{when}. {setting} = 0 מכבה אותה.",
+  "Action allowances": "מכסות הפעולות",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, נספר במחשב זה",
+  "{used} of {n} {window}": "{used} מתוך {n} {window}",
+  "messages": "הודעות",
+  "home actions": "פעולות בית",
+  "money moves": "תנועות כסף"
  }
 }

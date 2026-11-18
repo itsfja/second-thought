@@ -50,7 +50,10 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "approve_by": "RB_APPROVE_BY", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK", "rehearse": "RB_REHEARSE",
-                 "releases_url": "RB_RELEASES_URL", "notify_on_failure": "RB_NOTIFY_ON_FAILURE", "heartbeat_url": "RB_HEARTBEAT_URL"}
+                 "releases_url": "RB_RELEASES_URL", "notify_on_failure": "RB_NOTIFY_ON_FAILURE", "heartbeat_url": "RB_HEARTBEAT_URL",
+                 "allow_messages_hourly": "RB_ALLOW_MESSAGES_HOURLY", "allow_messages_daily": "RB_ALLOW_MESSAGES_DAILY",
+                 "allow_ha_hourly": "RB_ALLOW_HA_HOURLY", "allow_ha_daily": "RB_ALLOW_HA_DAILY",
+                 "allow_money_hourly": "RB_ALLOW_MONEY_HOURLY", "allow_money_daily": "RB_ALLOW_MONEY_DAILY"}
 
 
 # Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
@@ -58,7 +61,9 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
 ONE_WORD_SETTINGS = {"primary", "model", "reviewer", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
                      "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse",
-                     "notify_on_failure", "heartbeat_url"}
+                     "notify_on_failure", "heartbeat_url",
+                     "allow_messages_hourly", "allow_messages_daily", "allow_ha_hourly", "allow_ha_daily",
+                     "allow_money_hourly", "allow_money_daily"}
 
 
 def _settings_value(name, value):
@@ -93,7 +98,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 OTHER_SETTINGS = {
     "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
-    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
+    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance

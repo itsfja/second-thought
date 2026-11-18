@@ -231,7 +231,12 @@ class AgentTools:
     async def confirm_money(self, what):
         """Asks before an MCP tool that can reach real money (#262). Never with nobody there to answer, whatever the
         approve setting says, unless approve_by = telegram is set: then it asks on your phone (#305), never answered
-        from a stopped run's journal: the person says yes, now, each time."""
+        from a stopped run's journal: the person says yes, now, each time. Never past the money allowance either
+        (allow_money_hourly/_daily, on by default): the run says so once and carries on (#432)."""
+        problem = self._action_allowance_problem(["money"])
+        if problem:
+            self._say_allowance_once(problem)
+            return False
         unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
         if unattended and os.environ.get("RB_APPROVE_BY", "").strip().lower() != "telegram":
             self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
@@ -239,10 +244,10 @@ class AgentTools:
         if unattended:
             ok = await self._approve_telegram(tr("it could move real money: {what}", what=what))
             if ok:
-                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""), kinds=["money"])
             return ok
         if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
-            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""))
+            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""), kinds=["money"])
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False

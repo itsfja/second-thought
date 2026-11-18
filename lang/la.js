@@ -2451,7 +2451,15 @@
 "{who} answered: {answer}":"{who} respondit: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Nulla responsione intra {mins} min, ita praepositum usum est: {answer}",
 "answered":"responsum",
-"timed out":"tempus praeteritum"
+"timed out":"tempus praeteritum",
+"Allowance reached":"Modus attigit",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Actio sistita: modus {window} ex {n} actionibus {kind} attigit ({used} in hoc computatro factae), itaque hic cursus legere tantum pergit. Renovatur {when}. {setting} = 0 id abficit.",
+"Action allowances":"Modi actionum",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, in hoc computatro numerata",
+"{used} of {n} {window}":"{used} ex {n} {window}",
+"messages":"nuntii",
+"home actions":"actiones domus",
+"money moves":"motus pecuniae"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

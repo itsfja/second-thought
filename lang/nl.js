@@ -2451,6 +2451,14 @@
 "{who} answered: {answer}":"{who} antwoordde: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Geen antwoord binnen {mins} min, dus de standaardwaarde is gebruikt: {answer}",
 "answered":"beantwoord",
-"timed out":"time-out"
+"timed out":"time-out",
+"Allowance reached":"Limiet bereikt",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Gestopt met doen: de {window}-limiet van {n} {kind}-acties is bereikt ({used} gedaan op deze computer), dus deze run leest alleen nog verder. Hij wordt gereset om {when}. {setting} = 0 schakelt hem uit.",
+"Action allowances":"Actielimieten",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, geteld op deze computer",
+"{used} of {n} {window}":"{used} van {n} {window}",
+"messages":"berichten",
+"home actions":"huisacties",
+"money moves":"geldbewegingen"
 }
 };

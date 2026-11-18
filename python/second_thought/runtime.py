@@ -24,7 +24,7 @@ from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, H
 from .connectors import Connections, get_url, markdown_to_telegram
 from .mcp import MCPTools
 from .agent import AgentTools
-from .spending import Spending, any_allowance, check_plans, reported_lines
+from .spending import ACTION_KINDS, Spending, any_allowance, check_plans, reported_lines
 from .doctor import Doctor
 from .update import Updates
 from .settings import said_no, said_yes, tr  # noqa: F401
@@ -125,6 +125,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.budget_amount, self.budget_unit = (BUDGET_MONEY, CURRENCY) if BUDGET_MONEY else (BUDGET_DOLLARS, "usd")
         self.budget_dollars = self.budget_amount / per_dollar(self.budget_unit) if self.budget_amount else 0
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
+        self._allowance_said = set()  # the kinds whose allowance stop was already said this run (#432)
         self.trace = []              # every log line, for save_log
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
         self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
@@ -300,36 +301,49 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 
     async def _allowed(self, kinds, what):
         """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test)
-        or a rehearsal (--rehearse), nothing acts: it says what it would have done. An action that goes ahead gets
-        a receipt (#431)."""
+        or a rehearsal (--rehearse), nothing acts: it says what it would have done. An action that reaches one of its
+        kind's allowances (allow_<kind>_hourly/_daily, on by default) does not act: the run says so once and carries on
+        reading (#432). An action that goes ahead gets a receipt, and is counted, (#431)."""
         if self._skip_action(what):
             return False
+        problem = self._action_allowance_problem(kinds)
+        if problem:
+            self._say_allowance_once(problem)
+            return False
         if not (self.ask_first & set(kinds)):
-            self._receipt(what, tr("no asking, approved at the first run") if getattr(self, "_first_run_ok", False) else tr("no asking"))
+            self._receipt(what, tr("no asking, approved at the first run") if getattr(self, "_first_run_ok", False) else tr("no asking"), kinds=kinds)
             return True
-        return await self.confirm(what)
+        return await self.confirm(what, kinds=kinds)
+
+    def _say_allowance_once(self, problem):
+        """Says once per run, per kind, that an allowance has stopped this run acting (#432)."""
+        kind, text = problem
+        if kind in self._allowance_said:
+            return
+        self._allowance_said.add(kind)
+        self.log(tr("Allowance reached"), text, tr("stopped"))
 
     def nobody_here(self):
         """True when nobody can answer a question: an unattended scheduled run, or a program serving as an MCP tool."""
         return getattr(self, "mcp_mode", False) or (self.schedule_mode and not sys.stdin.isatty())
 
-    async def confirm(self, what):
+    async def confirm(self, what, kinds=()):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no, unless
         approve_by = telegram is set: then the question goes to your phone (#305). A yes writes the action's
-        receipt (#431)."""
+        receipt and counts it (#431, #432)."""
         if self.dry_run():  # in a test or a rehearsal the action itself is skipped (see _allowed), so nobody needs asking
             return True
         if self.nobody_here():
             if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
                 ok = await self._approve_telegram(what)
                 if ok:
-                    self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+                    self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""), kinds=kinds)
                 return ok
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
         if await self.approve("Allow this? " + what):
             self._last_how = tr("yes at the keyboard")
-            self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+            self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""), kinds=kinds)
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -430,9 +444,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             return None
         return path
 
-    def _receipt(self, what, how, where=""):
+    def _receipt(self, what, how, where="", kinds=()):
         """Appends one line to the receipts file (#431): when, what (the approval question's sentence), which block
-        or agent step, how it was allowed, and a fingerprint of the line before, so a missing or altered line shows."""
+        or agent step, how it was allowed, its kinds (for the action allowances, #432), and a fingerprint of the line
+        before, so a missing or altered line shows. The action is counted on this computer from here (#432)."""
+        self._count_action(kinds)
         path = self._receipts_path()
         if not path:
             return
@@ -444,7 +460,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                         prev = hashlib.sha256(line.rstrip(b"\n")).hexdigest()
         except OSError:
             pass
-        rec = {"t": time.time(), "what": to_str(what), "where": to_str(where), "how": to_str(how), "prev": prev}
+        rec = {"t": time.time(), "what": to_str(what), "where": to_str(where), "how": to_str(how),
+               "kinds": sorted(set(k for k in kinds if k in ACTION_KINDS)), "prev": prev}
         try:
             with _private_open(path, "a") as f:
                 f.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")

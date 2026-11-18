@@ -3828,7 +3828,15 @@
   "{who} answered: {answer}": "{who} ሬስpiንስ a: {answer}",
   "No answer within {mins} min, so the default was used: {answer}": "ቤ {mins} ዴfኪ ሌለ ሬስpiንስ aለየሁ, iነ ዴfauልት ዪመሬስ: {answer}",
   "answered": "ዬቴሴመ",
-  "timed out": "ቲሜ aሁሬ"
+  "timed out": "ቲሜ aሁሬ",
+  "Allowance reached": "ቄደሜ ሜሰf ዬቴዌ",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "ሴርA aስቴበበይ: {window} ሜሰfu {n} {kind} ሴረዎcሁ {used} ቤዚ coምpuቴር ዬቴወሌ, ሌለ giዝE ኪfeል ዪዜረል. ቤ {when} ዪሜሌስተል. {setting} = 0 ዪቴሰል",
+  "Action allowances": "ዬሴረ ሜሰfocህ",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, ቤዚ coምpuቴር ዪት couንተል",
+  "{used} of {n} {window}": "{used} ዬ {n} {window}",
+  "messages": "ሜሰfocህ",
+  "home actions": "ቤተ ሴረው",
+  "money moves": "ሴሌንብሰ ሀረ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

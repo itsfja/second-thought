@@ -3827,7 +3827,15 @@
   "{who} answered: {answer}": "{who} απάντησε: {answer}",
   "No answer within {mins} min, so the default was used: {answer}": "Όχι απάντηση σε {mins} λεπτά, ἡχρησιμοποιηθηκα τη προεπιλήγμενη: {answer}",
   "answered": "απαντημένη",
-  "timed out": "πέρασε ο χρόνος"
+  "timed out": "πέρασε ο χρόνος",
+  "Allowance reached": "Τὸ μέτρον ἐπληρώθη",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "Ἡ πρᾶξις ἐπαύθη: τὸ {window} μέτρον τῶν {n} πραγμάτων {kind} ἐπληρώθη ({used} ἐν τούτῳ τῷ ὑπολογιστῇ), διὸ αὕτη ἡ ἐκτέλεσις ἀναγιγνώσκει μόνον. Ἀποκαθίσταται {when}. {setting} = 0 ἀπενεργοποιεῖ.",
+  "Action allowances": "Τὰ μέτρα τῶν πράξεων",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, ἐν τούτῳ τῷ ὑπολογιστῷ λογιζόμενα",
+  "{used} of {n} {window}": "{used} ἐκ {n} {window}",
+  "messages": "μηνύματα",
+  "home actions": "πράξεις οἴκου",
+  "money moves": "κινήσεις χρήματος"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",
