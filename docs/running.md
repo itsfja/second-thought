@@ -47,6 +47,9 @@ If a program has timed jobs or listeners, the zip also has `run-on-schedule.bat`
 
 **Say when it fails, or goes quiet.** A schedule that breaks at three in the morning only tells the terminal, so `notify_on_failure = telegram` in `second-thought.ini` sends one Telegram message when a scheduled run stops with an error, with the reason (the run is unattended, so the message goes without asking first). And `heartbeat_url` — a [Healthchecks.io](https://healthchecks.io) or Uptime Kuma push address — is fetched after each scheduled run that finishes, so a schedule that goes silent gets noticed too; if that fetch fails, it's only a note in the log, never an error. Both are commented in `second-thought.example.ini`, and `--doctor` checks them. The same happens for runs started with `--run-schedule N`, like the ones a GitHub Actions workflow makes — there, put `RB_NOTIFY_ON_FAILURE` and `RB_HEARTBEAT_URL` in the workflow's `env` (from repository secrets) to get the notices. Tests (`--test`) and rehearsals (`--rehearse`) never send or fetch anything.
 
+
+**The You blocks reach you too.** With `approve_by = telegram`, a scheduled *ask me*, *I approve …*, *let me choose from* or *pause* asks on Telegram instead of the keyboard: each block sets how many minutes to wait and the answer to use when the time runs out (the block's minutes and default fields), the question goes with its choices, and a reply from your chat counts — by number or by the words. A timeout takes the default. The answer is never replayed from a stopped run's journal: you answer now, each time (#434).
+
 To start it automatically:
 
 - **Windows:** double-click `install-startup.bat` once. The program then starts in a small window each time you log in. To undo it, press Windows+R, type `shell:startup`, and delete "Second Thought - my-program".
@@ -115,7 +118,7 @@ If the program has test cases (**Save as test case** after a good run), the work
 
 - **Times:** GitHub's schedules are in UTC. The workflow is worked out for your time zone. Where the clocks change, each time has a winter line and a summer line, and the program only runs a script within an hour after its time, so the other line does nothing. GitHub often starts runs a few minutes late, sometimes skips one when it's busy, and runs 'every' scripts at most every 5 minutes.
 - **What it remembers:** after each run, `memory.json` and `outputs/` are committed back to the repository. That's why the repository should be private. To keep them out of it, the workflow says how to use `actions/cache` instead, but GitHub deletes a cache it hasn't used for 7 days.
-- **Approval:** adding the workflow is your yes to what the program can do (`SETUP.md` lists it), so it runs with `approve = no`. An agent tool that asks first still gets no answer there, so it says no.
+- **Approval:** adding the workflow is your yes to what the program can do (`SETUP.md` lists it), so it runs with `approve = no`. An agent tool that asks first still gets no answer there, so it says no. The You blocks (*ask me*, *I approve …*) can ask on Telegram instead: add `RB_APPROVE_BY` to the workflow's `env` (from a repository secret) and each block's minutes and default apply (#434).
 - **What can't run there:** programs that wait for things to happen (messages, web requests, changes, new files); programs that use Llama, MCP servers or folders on your computer; and programs whose scheduled scripts ask you questions. The page says which, and why. Home Assistant, Homey and MQTT have to be reachable from the internet.
 - **Free minutes:** on GitHub's free plan, private repositories get 2,000 a month, and a run takes about a minute.
 - **When it fails:** the reason is on the run's page on GitHub, under Annotations, as well as in the log.

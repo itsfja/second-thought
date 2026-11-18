@@ -21,7 +21,7 @@ from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, H
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _private_open, _short, _write_json, clean_svg, exact_checks, field_list, num, parse_rules, read_text_file, record_schema, review_verdicts,
     round_js, stuck_rule, to_bool, to_list, to_record, to_str)
-from .connectors import Connections, get_url
+from .connectors import Connections, get_url, markdown_to_telegram
 from .mcp import MCPTools
 from .agent import AgentTools
 from .spending import Spending, any_allowance, check_plans, reported_lines
@@ -36,6 +36,45 @@ import unicodedata  # noqa: E402 - below the line, so python/runtime.py has it t
 # not words for people). Newlines inside it are written %0A.
 ACTIONS_ERROR = "::error::"
 ACTIONS_ERROR_TITLED = "::error title={title}::"  # an error on the run's page with a heading of its own
+
+
+class _Channel:
+    """One way a question reaches you when nobody's at the keyboard (#434). The small set of jobs every channel
+    shares: ask a question (with optional choices), wait for the answer up to a time limit, and say who answered.
+    Telegram is the first; ntfy and Home Assistant's actionable notifications come later behind the same jobs."""
+    name = ""
+
+    def __init__(self, rt):
+        self.rt = rt
+
+    async def ask(self, question, choices=(), timeout_s=300, default=""):
+        """Sends the question and waits up to timeout_s seconds. Gives (answer, who): the first reply as (text,
+        sender), or (default, '') when the time limit runs out."""
+        raise NotImplementedError
+
+
+class _TelegramChannel(_Channel):
+    name = "telegram"
+
+    async def ask(self, question, choices=(), timeout_s=300, default=""):
+        rt = self.rt
+        chat = next(iter(rt._tg_chats()), "")
+        if not chat:
+            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
+        text = tr("Second Thought: {question}", question=question)
+        if choices:
+            text += "\n" + "\n".join(f"{i}. {to_str(c)}" for i, c in enumerate(choices, 1)) + "\n" + tr("Reply with a number or the words.")
+        sent_at = time.time()
+        await rt._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(text), "parse_mode": "HTML"})
+        deadline = time.monotonic() + timeout_s
+        while time.monotonic() < deadline:
+            for m in await rt.tg_fetch(wait=int(max(0, min(25, deadline - time.monotonic())))):
+                if m.get("chat") != chat or not to_str(m.get("text", "")).strip():
+                    continue
+                if m.get("date") and m["date"] < sent_at - 5:
+                    continue  # an older message, not an answer to this question
+                return to_str(m["text"]).strip(), m.get("sender") or ""
+        return default, ""
 
 
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, Updates):
@@ -561,17 +600,71 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._record(kind, key, out)
         return out
 
-    async def ask_me(self, q):
-        out = await self._journaled("ask_me", self._key(to_str(q)), lambda: self._ask_me_live(q))
+    # ----- The You blocks: the keyboard, or the approve_by channel when nobody's there (#434) -----
+    def _nobody_to_type(self):
+        """True when no one can type an answer: an MCP tool call, or a run from a scheduler (--schedule, or
+        --run-schedule from cron, Task Scheduler or GitHub Actions), where stdin isn't a terminal."""
+        return getattr(self, "mcp_mode", False) or not sys.stdin.isatty()
+
+    def _you_channel(self):
+        """The channel the You blocks ask on when nobody's at the keyboard: approve_by's, for now (#434). None when
+        approve_by isn't a channel, so the blocks keep reading the keyboard."""
+        if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
+            return _TelegramChannel(self)
+        return None
+
+    async def _ask_channel(self, question, choices=(), mins=0, default=""):
+        """Asks on the channel when nobody's at the keyboard (#434). Gives (answer, who), or None when there's no
+        channel to ask on, so the block reads the keyboard as before. The channel's answer is never journaled: the
+        person answers now, each time, not from a stopped run's journal."""
+        channel = self._you_channel()
+        if channel is None or self.dry_run() or not self._nobody_to_type():
+            return None
+        timeout_s = round(num(mins) * 60)  # the block's time limit in seconds; 0 waits not at all
+        answer, who = await channel.ask(question, choices, timeout_s, to_str(default))
+        if who:
+            self.log(tr("Question on {channel}", channel=channel.name), _short(to_str(question), 120),
+                     tr("{who} answered: {answer}", who=who, answer=_short(answer, 200)), tr("answered"))
+        else:
+            self.log(tr("Question on {channel}", channel=channel.name), _short(to_str(question), 120),
+                     tr("No answer within {mins} min, so the default was used: {answer}", mins=num(mins), answer=_short(answer, 200)), tr("timed out"))
+        return answer, who
+
+    async def ask_me(self, q, mins=0, default=""):
+        q = to_str(q)
+        got = await self._ask_channel(q, mins=mins, default=default)
+        if got is not None:
+            self.answer = got[0]
+            return got[0]
+        out = await self._journaled("ask_me", self._key(q), lambda: self._ask_me_live(q))
         self.answer = out
         return out
 
-    async def approve(self, text, offer=False):
+    async def approve(self, text, offer=False, mins=0, default=""):
         # offer=True is the "I approve …" block: a no there offers the reason as a new rule (#428); action asks don't
+        got = await self._ask_channel(to_str(text), choices=[tr("Yes"), tr("No")], mins=mins, default=default)
+        if got is not None:
+            return said_yes(got[0]) if got[1] else said_yes(default)  # a timeout takes the block's default
         return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text, offer))
 
-    async def choose(self, items):
-        return await self._journaled("choose", self._key(to_list(items)), lambda: self._choose_live(items))
+    async def choose(self, items, mins=0, default=""):
+        items = to_list(items)
+        got = None if not items else await self._ask_channel(tr("Choose one") + ": " + "; ".join(_short(it, 60) for it in items),
+                                                            choices=[_short(it, 80) for it in items], mins=mins, default=default)
+        if got is not None:
+            reply = to_str(got[0]).strip()
+            if reply.isdigit() and 1 <= int(reply) <= len(items):
+                return items[int(reply) - 1]
+            for it in items:
+                if to_str(it).strip().lower() == reply.lower():
+                    return it
+            if not got[1]:  # a timeout: the default when it's one of the items, else the first
+                for it in items:
+                    if to_str(it).strip().lower() == to_str(default).strip().lower():
+                        return it
+                return items[0]
+            return reply
+        return await self._journaled("choose", self._key(items), lambda: self._choose_live(items))
 
     async def choose_file(self):
         return await self._journaled("choose_file", self._key("file"), self._choose_file_live)
@@ -1430,8 +1523,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 return items[int(a) - 1]
             print(tr("  Type a number from 1 to {items}.", items=len(items)))
 
-    async def pause(self, note):
+    async def pause(self, note, mins=0):
         if getattr(self, "testing", False):
+            return
+        got = await self._ask_channel(to_str(note) or tr("Paused."), mins=mins)  # #434: on the channel, any reply (or the time limit) continues
+        if got is not None:
             return
         print("\n⏸ " + (to_str(note) or tr("Paused.")), flush=True)
         await self._input(tr("Press Enter to continue > "))

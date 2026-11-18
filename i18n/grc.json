@@ -37,8 +37,8 @@
    "message0": "ἀπόκρισις"
   },
   "rb_approve": {
-   "message0": "δοκιμάζω %1",
-   "tooltip": "Δείκνυσι τὰ γράμματα καὶ μένει ἕως ἂν δοκιμάσῃς ἢ ἀποπέμψῃς."
+   "message0": "ἐγγραφω %1; Ἑν οὐκ αποκρίνηται σε %2 λεπτών, λάβε %3",
+   "tooltip": "ἡ φανεραι το κείμενον και περιμένει τὴν ἀπόκρισιν. Ἑν οὐκ ἐστις τῶ πληκτρολόγιον και approve_by = telegram, ἡ ρωτῶ στο Telegram για τα ορισμένα λεπτόν; Ἑν οὐκ αποκρίνηται, παρέχεται τὴ προεπιλέγμενη (ναι ὅχι)."
   },
   "rb_ask": {
    "message0": "ἐρώτα τὸν Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Ὁ Claude ἀποκρίνεται καταλόγῳ ὃν δύνασαι περιέρχεσθαι."
   },
   "rb_ask_me": {
-   "message0": "ἐρώτα με %1 καὶ μένε",
-   "tooltip": "Παύει τὴν πρᾶξιν ἕως ἂν γράψῃς ἀπόκρισιν ἐν τῇ ἀναγραφῇ."
+   "message0": "ἰωτησαί με %1 και περίμενον %2 λεπτών; Ἑν οὐκ αποκρίνηται, χρῶσαι %3",
+   "tooltip": "παύεται την τέλεσην μέχρι στο ημερολόγιον σου αποκρίνεις. Ἑν οὐκ ἐστις τῶ πληκτρολόγιον και approve_by = telegram, ἡ ρωτῶ στο Telegram για τα ορισμένα λεπτόν; Ἑν οὐκ αποκρίνηται, χρῶσαι τη προεπιλήγμενη."
   },
   "rb_ask_number": {
    "message0": "αἴτησον τὸν Claude ἀριθμόν· %1"
@@ -116,7 +116,8 @@
    "tooltip": "Μνημονεύει τὸ ἔργον, τὸ σχέδιον, τὴν ἐξέτασιν, τὸ ἀποτέλεσμα καὶ τὰ μεταβλητὰ ὡς νῦν ἐστιν, ὑπὸ τούτῳ τῷ ὀνόματι, εἰς τὸ λοιπὸν τῆς πράξεως."
   },
   "rb_choose": {
-   "message0": "ἔασόν με ἐκλέξασθαι ἐκ %1"
+   "message0": "ἐπιλέγω ἐκ %1; Ἑν οὐκ αποκρίνηται σε %2 λεπτών, λάβε %3",
+   "tooltip": "ἡ φανεραι τη λίστα και περιμένει μια. Ἑν οὐκ ἐστις τῶ πληκτρολόγιον και approve_by = telegram, ἡ ρωτῶ στο Telegram για τα ορισμένα λεπτόν; Ἑν οὐκ αποκρίνηται, παρέχεται τὴ προεπιλήγμενη."
   },
   "rb_clear_instructions": {
    "message0": "κάθαρον τὰς ἐντολὰς τοῦ Claude"
@@ -361,8 +362,8 @@
    "message0": "τὸ σχέδιον τὴν ἐξέτασιν παρῆλθεν"
   },
   "rb_pause": {
-   "message0": "παῦσον ἕως ἂν πατάξω Πρόβαινε· %1",
-   "tooltip": "Σημεῖον ἐξετάσεως. Δείκνυσι τὴν σημείωσιν ἐν τῇ ἀναγραφῇ καὶ μένει σε."
+   "message0": "παύεσθαι μέχρι τοῦ συνεχίσαι: %1 (τοπολῦ %2 λεπτού)",
+   "tooltip": "Σημεἰον τελευταί. το σημεἰον φανεραι στο ημερολόγιον και περιμένει. Ἑν οὐκ ἐστις τῶ πληκτρολόγιον και approve_by = telegram, ἡ ρωτῶ στο Telegram και συνεχίζεται μέχρι τῶ λεπτῶν, ἢ παραστῶσει."
   },
   "rb_problems": {
    "message0": "τὰ σφάλματα τῆς ἐξετάσεως"
@@ -3819,7 +3820,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "αλλα δεὶ TELEGRAM_BOT_TOKEN καὶ TELEGRAM_CHAT_ID τεθεσαι προβεσθω {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: τοῦτο runtime νῦν μόνον εις telegram αποστέλλει",
   "heartbeat_url is fetched after each finished scheduled run": "παρά πασαν χρονοπρογραμματισμένης τελευταἱσαν αναγίγνεται τὸ heartbeat_url",
-  "heartbeat_url must start with http:// or https://": "τὸ heartbeat_url δεὶ ἀρξασθαι ἐκ http:// ἢ https://"
+  "heartbeat_url must start with http:// or https://": "τὸ heartbeat_url δεὶ ἀρξασθαι ἐκ http:// ἢ https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Απαντήστε με αριθμό ἢ τη λέξεις.",
+  "Question on {channel}": "Ερώτηση στο {channel}",
+  "{who} answered: {answer}": "{who} απάντησε: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Όχι απάντηση σε {mins} λεπτά, ἡχρησιμοποιηθηκα τη προεπιλήγμενη: {answer}",
+  "answered": "απαντημένη",
+  "timed out": "πέρασε ο χρόνος"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

@@ -38,8 +38,8 @@
    "message0": "ᛋᚢᛅᚱ"
   },
   "rb_approve": {
-   "message0": "ᛁᚴ ᛋᛅᛘᚦᚢᚴᛁ %1",
-   "tooltip": "ᛋᚢᚾᛁᛦ ᚱᛁᛏᛁᛏ ᚢᚴ ᛒᛁᚦᚱ ᚢᚾᛋ ᚦᚢ ᛋᛅᛘᚦᚢᚴᛁᛦ ᚦᛅᛏ ᛁᚦᛅ ᛋᛁᚾᛏᛁᛦ ᚦᛅᛏ ᛅᛒᛏᚱ."
+   "message0": "ᛁᚴ ᛋᛅᛘᚦᚢᚴᛁ %1; ᛁᚠ ᛁᚴᛁᚾ ᛋᚢᛅᚱᛅᛦ ᛁᚾᛅᚾ %2 ᛘᛁᚾ, ᛏᛅᚴ %3",
+   "tooltip": "ᛋᚢᚾᛁᛦ ᛏᛁᚴᛋᛏᛅᚾ ᚢᚴ ᛒᛁᚦᚢᛦ ᛋᛅᛘᚦᚢᚴᛁᛋ ᚦᛁᚾᚱᛅᛦ ᛁᚦᛅ ᛁᚾᛏᚢᚱᛋᛁᚾᛏᛁᚴᛅᛦ. ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᚢᛁᚦ ᛚᚢᚴᛚᛅᛒᚢᚱᚦᛁᚦ ᚢᚴ approve_by = ᛏᛁᛚᛁᚴᚱᛅᛘ, ᛋᛒᚢᚱᚦᚢ ᚬ Telegram ᛁᛅᚦᛅᛦ ᛘᛁᚾᚢᛏᚢᛦ; ᛋᛁᛅᛚᚠᚴᛁᚠᛁᚦ (ᛁ ᛁᚦᛅ ᚾ) ᛁᚱ ᛏᛁᚴᛁᚦ ᛁᚠ ᛁᚴᛁᚾ ᛋᚢᛅᚱᛅᛦ."
   },
   "rb_ask": {
    "message0": "ᛋᛒᚢᚱ Claude %1",
@@ -54,8 +54,8 @@
    "tooltip": "Claude ᛋᚢᛅᚱᛅᛦ ᛘᛁᚦ ᚱᛅᚢᚦ ᛁᚱ ᚦᚢ ᛘᛅᛏ ᚠᛅᚱᛅ ᚢᚠᛁᛦ."
   },
   "rb_ask_me": {
-   "message0": "ᛋᛒᚢᚱ ᛘᛁᚴ %1 ᚢᚴ ᛒᛁᚦ",
-   "tooltip": "ᛋᛏᛅᚢᚦᚢᛅᛦ ᚠᛁᚱᚦᛁᚾᛅ ᚢᚾᛋ ᚦᚢ ᚱᛁᛏᛅᛦ ᛋᚢᛅᚱ ᛁ ᛅᚾᛅᛚᛁᚾ."
+   "message0": "ᛋᛒᚢᚱᚦᚢ ᛘᛁᚴ %1 ᚢᚴ ᛒᛁᚦ %2 ᛘᛁᚾ; ᛁᚠ ᛁᚴᛁᚾ ᛋᚢᛅᚱᛅᛦ, ᚾᚢᛏᛅ %3",
+   "tooltip": "ᛒᛁᚦᚢᛦ ᚱᛅᚦᚴᛁᚱᚦᛁᚾᛅ ᚦᛅᚴᛅ ᛋᛁᛘ ᚦᚢ ᛋᚢᛅᚱᛅᛦ ᛁ ᛏᛅᚴᛒᚢᚴᛁᚾᛁ. ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᚢᛁᚦ ᛚᚢᚴᛚᛅᛒᚢᚱᚦᛁᚦ ᚢᚴ approve_by = ᛏᛁᛚᛁᚴᚱᛅᛘ, ᛋᛒᚢᚱᚦᚢ ᚬ Telegram ᛁᛅᚦᛅᛦ ᛘᛁᚾᚢᛏᚢᛦ ᚢᚴ ᚾᚢᛏᛅᛦ ᛋᛁᛅᛚᚠᚴᛁᚠᛁᚦ ᛁᚠ ᛁᚴᛁᚾ ᛋᚢᛅᚱᛅᛦ."
   },
   "rb_ask_number": {
    "message0": "ᛋᛒᚢᚱ Claude ᚢᛘ ᛏᛅᚢᛚᚢ: %1"
@@ -117,7 +117,8 @@
    "tooltip": "ᛘᛁᚾᛁᛋᚴ ᚢᛁᚱᚴᛁᛏ, ᚠᚱᚢᛘᚱᛁᛏᛁᛏ, ᛏᚢᛘᛁᚾ, ᚢᚱᛋᛚᛁᛏᛁᚾ ᚢᚴ ᛒᚱᛅᚢᛏᚢᚱᚾᛅᛦ ᛋᛁᛘ ᚦᛅᚢ ᛁᚱᚢ ᚾᚢ, ᚢᚾᛏᛁᛦ ᚦᛁᛋᚢ ᚾᛅᚠᚾᛁ, ᛏᛁᛚ ᛚᚢᚴᛅ ᚠᛁᚱᚦᛅᚱᛁᚾᛅᛦ."
   },
   "rb_choose": {
-   "message0": "ᛚᛅᛏ ᛘᛁᚴ ᚢᛁᛚᛁᛅ ᛅᚠ %1"
+   "message0": "ᛁᚴ ᚢᛁᛚ ᚢᚱ %1; ᛁᚠ ᛁᚴᛁᚾ ᛋᚢᛅᚱᛅᛦ ᛁᚾᛅᚾ %2 ᛘᛁᚾ, ᛏᛅᚴ %3",
+   "tooltip": "ᛋᚢᚾᛁᛦ ᛚᛁᛋᛏᛅᚾ ᚢᚴ ᛒᛁᚦᚢᛦ ᛅᚦ ᚦᚢ ᚢᛁᛚᚢᛦ ᛅᛁᛏ. ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᚢᛁᚦ ᛚᚢᚴᛚᛅᛒᚢᚱᚦᛁᚦ ᚢᚴ approve_by = ᛏᛁᛚᛁᚴᚱᛅᛘ, ᛋᛒᚢᚱᚦᚢ ᚬ Telegram ᛁᛅᚦᛅᛦ ᛘᛁᚾᚢᛏᚢᛦ; ᛋᛁᛅᛚᚠᚴᛁᚠᛁᚦ ᛁᚱ ᛏᛁᚴᛁᚦ ᛁᚠ ᛁᚴᛁᚾ ᛋᚢᛅᚱᛅᛦ."
   },
   "rb_clear_instructions": {
    "message0": "ᚼᚱᛅᛁᚾ ᚠᚢᚱᛁᚱᛘᛅᛚᛁ ᛏᛁᛚ Claude"
@@ -362,8 +363,8 @@
    "message0": "ᚠᚱᚢᛘᚱᛁᛏ ᛋᛏᚢᚦᛋᚴ ᛏᚢᛘ"
   },
   "rb_pause": {
-   "message0": "ᛒᛁᚦ ᚢᚾᛋ ᛁᚴ ᛋᛘᛁᛚᛁ ᚬ ᛅᚠᚱᛅᛘ: %1",
-   "tooltip": "ᚢᛅᚱᚦᛅ. ᛋᚢᚾᛁᛦ ᛘᛁᚾᛁᛋᚴᚱᛅᛁᚾᛁᚾᛅ ᛁ ᛅᚾᛅᛚᛁᚾᚢᛘ ᚢᚴ ᛒᛁᚦᚱ ᚦᛁᚾ."
+   "message0": "ᛒᛁᚦᛅ ᚦᛅᚴᛅ ᛋᛁᛘ ᛁᚴ ᛋᛘᛁᛚᛁ ᚬ ᚼᛅᛚᛏᛅ ᛅᚠᚱᛅᛘ: %1 ( ᛘᛁᛋᛏ %2 ᛘᛁᚾ)",
+   "tooltip": "ᛋᛏᛅᚢᚦᚢᛅᛋᛏᚢᛦ. ᛋᚢᚾᛁᛦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏᛁᚾᛅ ᛁ ᛏᛅᚴᛒᚢᚴᛁᚾᛁ ᚢᚴ ᛒᛁᚦᚢᛦ. ᛁᚠ ᛁᚴᛁᚾ ᛁᚱ ᚢᛁᚦ ᛚᚢᚴᛚᛅᛒᚢᚱᚦᛁᚦ ᚢᚴ approve_by = ᛏᛁᛚᛁᚴᚱᛅᛘ, ᛋᛒᚢᚱᚦᚢ ᚬ Telegram ᚢᚴ ᚼᛁᛚᛏᚢᛦ ᛅᚠᚱᛅᛘ ᛁᚠᛏᛁᛦ ᛘᛁᚾᚢᛏᚢᚱᚾᛅᛦ ᛋᛁᛘ ᛋᛁᛏᛅᛦ ᛁᚱᚢ, ᛁᚦᛅ ᚢᛁᚦ ᚼᚢᛁᚱᛁᛅ ᛋᛁᛘ ᛋᚢᛅᚱ."
   },
   "rb_problems": {
    "message0": "ᛒᚱᛁᛋᛏᛁᛦ ᛏᚢᛘᛋᛁᚾᛋ"
@@ -3820,7 +3821,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "en bæði TELEGRAM_BOT_TOKEN og TELEGRAM_CHAT_ID verða að vera sett {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: þessi runtime sendir aðeins á telegram, sem stendur",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url er sótt eftir hverja skipuða keyrslu er lýkur",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url verður að byrja á http:// eða https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url verður að byrja á http:// eða https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Svaraðu með tölu eða orðunum.",
+  "Question on {channel}": "Spurning á {channel}",
+  "{who} answered: {answer}": "{who} svaraði: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Ekkert svar innan {mins} mín, svo sjálfgefið var notað: {answer}",
+  "answered": "svarað",
+  "timed out": "tímað út"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

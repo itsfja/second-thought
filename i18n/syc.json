@@ -75,8 +75,8 @@
    "tooltip": "ܫܠܝ ܠܗܝ ܦܣܩܬܐ ܥܕܡܐ ܕܦܣܩܬܐ ܐܚܪܝܬܐ ܬܫܕܪ ܡܠܬܐ."
   },
   "rb_pause": {
-   "message0": "ܫܠܝ ܥܕܡܐ ܕܝܫ ܐܢܐ ܐܡܢ: %1",
-   "tooltip": "ܬܚܘܡܐ. ܡܚܘܐ ܡܠܬܐ ܒܦܝܢܩܣܐ ܘܡܣܟܐ ܠܟ."
+   "message0": "ܦܘܣ ܐܘܢܬܝܠ I click continue: %1 (ܐܬ ܡܘܣܬ %2 ܡܝܢ)",
+   "tooltip": "checkpoint. ܣܗܘܘܣ ܬܗ ܢܘܬ ܐܝܢ ܠܘܓ ܐܢܕ ܘܝܬܣ. ܘܗܢ ܢܘܒܘܕܝ ܐܬ ܟܝܒܘܪܕ ܐܢܕ approve_by = ܬܠܓܪܡ, ܐܣܟܣ ܐܘܢ ܬܠܓܪܡ ܐܢܕ ܓܘܣ ܐܘܢ after ܬܗ ܡܝܢܘܬܣ, ܐܘܪ ܐܘܢ ܐܢܝ ܪܦܠܝ."
   },
   "rb_timer": {
    "message0": "ܫܥܘܢܐ",
@@ -168,18 +168,19 @@
    "message0": "ܫܦܝܪ ܡܢ %1 w%2 l%3"
   },
   "rb_ask_me": {
-   "message0": "ܫܐܠ ܐܢܐ %1 ܘܣܟܐ",
-   "tooltip": "ܫܠܐ ܪܗܛܐ ܥܕܡܐ ܕܟܬܒܬ ܦܬܓܡܐ ܒܦܝܢܩܣܐ."
+   "message0": "ܐܣܟ ܡ %1 ܐܢܕ ܘܝܬ %2 ܡܝܢ; if ܢܘܒܘܕܝ ܐܢܣܘܪܣ, ܐܘܣ %3",
+   "tooltip": "ܦܘܣܣ ܐܘܢܬܝܠ ܝܘܘ ܐܢܣܘܪ ܐܝܢ ܠܘܓ. ܘܗܢ ܢܘܒܘܕܝ ܐܬ ܟܝܒܘܪܕ ܐܢܕ approve_by = ܬܠܓܪܡ, ܐܣܟܣ ܐܘܢ ܬܠܓܪܡ for ܬܗ ܡܝܢܘܬܣ, ܐܠܣ ܬܗ default."
   },
   "rb_answer": {
    "message0": "ܦܬܓܡܐ"
   },
   "rb_approve": {
-   "message0": "ܡܩܒܠ ܐܢܐ %1",
-   "tooltip": "ܡܚܘܐ ܟܬܒܐ ܘܡܣܟܐ ܕܬܩܒܠܗ ܐܘ ܬܗܦܟܗ."
+   "message0": "I approve %1; if ܢܘܒܘܕܝ ܐܢܣܘܪܣ ܐܝܢ %2 ܡܝܢ, ܬܟ %3",
+   "tooltip": "ܣܗܘܘܣ ܬܗ text ܐܢܕ ܘܝܬܣ for approval. ܘܗܢ ܢܘܒܘܕܝ ܐܬ ܟܝܒܘܪܕ ܐܢܕ approve_by = ܬܠܓܪܡ, ܐܣܟܣ ܐܘܢ ܬܠܓܪܡ for ܬܗ ܡܝܢܘܬܣ; default (ܝ ܐܘܪ ܢ) if ܢܘ ܐܢܣܘܪ."
   },
   "rb_choose": {
-   "message0": "ܫܒܘܩ ܠܝ ܕܐܓܒܐ ܡܢ %1"
+   "message0": "ܠܬ ܡ choose from %1; if ܢܘܒܘܕܝ ܐܢܣܘܪܣ ܐܝܢ %2 ܡܝܢ, ܬܟ %3",
+   "tooltip": "ܣܗܘܘܣ ܬܗ ܠܝܣܬ ܐܢܕ ܘܝܬܣ for ܐ pick. ܘܗܢ ܢܘܒܘܕܝ ܐܬ ܟܝܒܘܪܕ ܐܢܕ approve_by = ܬܠܓܪܡ, ܐܣܟܣ ܐܘܢ ܬܠܓܪܡ for ܬܗ ܡܝܢܘܬܣ; default if ܢܘ ܐܢܣܘܪ."
   },
   "rb_say": {
    "message0": "ܐܡܪ %1",
@@ -3811,7 +3812,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID both must be set {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: this runtime sends on telegram oonly, for now",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet after each finished scheduled run",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "reply with a number or the words.",
+  "Question on {channel}": "question on {channel}",
+  "{who} answered: {answer}": "{who} answerede: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "no answer within {mins} min, so the default was used: {answer}",
+  "answered": "answerd",
+  "timed out": "tyme out"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

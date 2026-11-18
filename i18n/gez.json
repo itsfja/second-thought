@@ -38,8 +38,8 @@
    "message0": "ተሰጥዎ"
   },
   "rb_approve": {
-   "message0": "እፈቅድ %1",
-   "tooltip": "ያርኢ ጽሑፈ ወይጸንሕ እስከ ትፈቅድ አው ታገብኦ።"
+   "message0": "%1 ዪሜሪምር.a iነ appሮve ዪሆነል; iነ %2 ዴfኪ ሌለ ዬቴሴመ, %3 ዪመሬስ",
+   "tooltip": "ቴxት ዪዜሪaል ኔው iነ appሮve ዎዬቴ ሴ ዬቴበየ ሴ ዬቴበየ. ሌለ ብዘተይ ቤ ኬይቦaርድ aለየሁ iነ appሮve_ብይ = ቴሌgረም, ቤ Teሌgረም ዴfኪ ዴኪቅ ሚኑቴስ ዪቴሰወል; ሌለ ዬቴሴመ, ዴfauልት (ይ ዎዬቴ ን) ዪመሬስ."
   },
   "rb_ask": {
    "message0": "ስአል Claude %1",
@@ -54,8 +54,8 @@
    "tooltip": "Claude ያወሥእ በዝርዝር ዘትክል ትዑድ ላዕሌሁ።"
   },
   "rb_ask_me": {
-   "message0": "ስአለኒ %1 ወጽናሕ",
-   "tooltip": "ያቀውም ሩጸተ እስከ ትጽሕፍ ተሰጥዎ ውስተ መዝገበ ሩጸት።"
+   "message0": "%1 feቴን.a iነ %2 ዴfኪ ሴ ዬቴበየ; ሌለ ዬቴሴመ, %3 ዪመሬስ",
+   "tooltip": "ቤ ሎg ሬስpiንስ ዌዴ ዬቴበየ መሌት ዌዴ ዪሜሪምር. ሌለ ብዘተይ ቤ ኬይቦaርድ aለየሁ iነ appሮve_ብይ = ቴሌgረም, ቤ Teሌgረም ዴfኪ ዴኪቅ ሚኑቴስ ዪቴሰወል; ሌለ ዬቴሴመ, ዴfauልት ዪመሬስ."
   },
   "rb_ask_number": {
    "message0": "ስአል Claude ኍልቈ፡ %1"
@@ -117,7 +117,8 @@
    "tooltip": "ይዜከር ግብረ፣ ቅድመ ጽሑፈ፣ ሐተታ፣ ፍሬ ወተወላጥያነ በከመ ሀለዉ ይእዜ፣ በዝንቱ ስም፣ ለዘተርፈ እምሩጸት።"
   },
   "rb_choose": {
-   "message0": "ኅድገኒ እኅረይ እም %1"
+   "message0": "%1 ዌዴ ዪሜሪምር.a iነ cሆoሴ ዪሆነል; iነ %2 ዴfኪ ሌለ ዬቴሴመ, %3 ዪመሬስ",
+   "tooltip": "ሊስት ዪዜሪaል ኔው iነ ዌዴ cሆoሴ ዬቴሆነል. ሌለ ብዘተይ ቤ ኬይቦaርድ aለየሁ iነ appሮve_ብይ = ቴሌgረም, ቤ Teሌgረም ዴfኪ ዴኪቅ ሚኑቴስ ዪቴሰወል; ሌለ ዬቴሴመ, ዴfauልት ዪመሬስ."
   },
   "rb_clear_instructions": {
    "message0": "ደምስስ ትእዛዛተ ለ Claude"
@@ -362,8 +363,8 @@
    "message0": "ቅድመ ጽሑፍ ኀለፈ ሐተታ"
   },
   "rb_pause": {
-   "message0": "ጽናሕ እስከ እጠቅዕ ሑር፡ %1",
-   "tooltip": "ምዕራፍ። ያርኢ ማስታወሻ በመዝገበ ሩጸት ወይጸንሐከ።"
+   "message0": "ኔ ቤርሀ ኬሚቴ ዌዴ ክሊኬ: %1 (በሌ %2 ዴfኪ)",
+   "tooltip": "ዬሜርከቤ ኖቲስ ቤ ሎg ዪዜሪaል ኔው ሴ ዬቴበየ. ሌለ ብዘተይ ቤ ኬይቦaርድ aለየሁ iነ appሮve_ብይ = ቴሌgረም, ቤ Teሌgረም ዪቴሰወል, iነ ዴfኪ ዴኪቅ ሚኑቴስ ዌዴ ዪሜሪምር, ዎዬቴ ዬቴበየ."
   },
   "rb_problems": {
    "message0": "ጌጋያተ ሐተታ"
@@ -3820,7 +3821,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "TELEGRAM_BOT_TOKEN iነ TELEGRAM_CHAT_ID ሁሌቱ ዪሜመረል: {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "ኖቲfይ_oን_faiሉሬ = {channel}: ዪሄ ሩንቲሜ aሁን ቴሌgረም ለዪ ዪቴዌሬ.",
   "heartbeat_url is fetched after each finished scheduled run": "መሌተ ዪሜሪምሩ ሴተ ኬሜዌሴዴ ሄaርትቤaት_uርል ዪቴዌሬ.",
-  "heartbeat_url must start with http:// or https://": "ሄaርትቤaት_uርል ህትትp:// ዎዪ ህትትpስ:// ዪቴዌሬ."
+  "heartbeat_url must start with http:// or https://": "ሄaርትቤaት_uርል ህትትp:// ዎዪ ህትትpስ:// ዪቴዌሬ.",
+  "Second Thought: {question}": "Secoንድ Tሆugህት: {question}",
+  "Reply with a number or the words.": "ቤኖሜር ዎዬቴ ቤ ክ'aለት ሬስpiንስ iሁ.",
+  "Question on {channel}": "ቤ {channel} ዬቴሰወሉ ቁeስቲoን",
+  "{who} answered: {answer}": "{who} ሬስpiንስ a: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "ቤ {mins} ዴfኪ ሌለ ሬስpiንስ aለየሁ, iነ ዴfauልት ዪመሬስ: {answer}",
+  "answered": "ዬቴሴመ",
+  "timed out": "ቲሜ aሁሬ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

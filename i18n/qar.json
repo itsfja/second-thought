@@ -38,8 +38,8 @@
    "message0": "ᚪᚾᛞᛋᚹᚪᚱᚢ"
   },
   "rb_approve": {
-   "message0": "ᛁᚳ ᚷᛖᚦᚪᚠᛁᚷᛖ %1",
-   "tooltip": "ᚫᛏᚣᚹᚦ ᚦᚫᛏ ᚷᛖᚹᚱᛁᛏ ᚪᚾᛞ ᚪᛒᛁᛏ ᚩᚦ ᚦᚫᛏ ᚦᚢ ᚻᛁᛏ ᚷᛖᚦᚪᚠᛁᚷᛖ ᚩᚦᚦᛖ ᛖᚠᛏ ᛋᛖᚾᛞᛖ."
+   "message0": "ᛁᚳ ᚪᚾᛞᛖᛏᛏ %1; ᚷᛁᚠ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᚪᚾᛞᛋᚹᚪᚱᛖᚦ ᛁᚾ %2 ᛗᛁᚾᚪᛏᚪ, ᚾᛁᛗ %3",
+   "tooltip": "SƷweleþ þǡ text ᚪᚾᛞ ᛒᛁᛞᛖᚦ þǗ ᚪᛈᛈᚱᚩᚠ ᚩᚱ ᛋᛖᚾᛞ ᛒᚪᚳᛣ. ᚫᚦ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᛁᛋ ᚪᛏ ᚦᚫᛗ cǧbore ᚪᚾᛞ approve_by = ᛏᛖᛚᛖᚷᚱᚪᛗ, ᚻᛁᛏ ᚪᛋᚳᛁᚦ ᚩᚾ Telegram ᚠᚩᚱ ᚦᚫᛗ ᛗᛁᚾᚢᛗ ᛋᛖᛏ; ᚦᚫᛗ ᛞᛖᚠᚪᚢᛚᛏ (ᚣ ᚩᚦ ᚾ) ᛁᛋ ᛏᚪᚳᚪᚾ ᚷᛁᚠ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᚪᚾᛞᛋᚹᚪᚱᛖᚦ."
   },
   "rb_ask": {
    "message0": "ᚪᛉᚪ Claude %1",
@@ -54,8 +54,8 @@
    "tooltip": "Claude ᚪᚾᛞᛋᚹᚪᚱᚪᚦ ᛗᛁᛞ ᚷᛖᛏᚫᛚᛖ ᚦᛖ ᚦᚢ ᚣᛗᛒᚷᚪᚾ ᛗᛁᛇᛏ."
   },
   "rb_ask_me": {
-   "message0": "ᚪᛉᚪ ᛗᛖ %1 ᚪᚾᛞ ᚪᛒᛁᛞ",
-   "tooltip": "ᚫᛏᛋᛏᛖᚾᛏ ᛋᛖᚩ ᚠᚱᛖᛗᛗᛁᛝ ᚩᚦ ᚦᚫᛏ ᚦᚢ ᚪᚾᛞᛋᚹᚪᚱᛖ ᚹᚱᛁᛏᛖ ᚩᚾ ᚦᚫᚱᛖ ᛒᛖᚳ."
+   "message0": "ᚪᛋᚳᛁᚪ ᛗᛖ %1 ᚪᚾᛞ ᛒᛁᛞᛖ %2 ᛗᛁᚾᚪᛏᚪ; ᚷᛁᚠ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᚪᚾᛞᛋᚹᚪᚱᛖᚦ, ᚢᛋᚪ %3",
+   "tooltip": "ᛒᛁᛞᛖᚦ ᚦᚫᛗ ᚱᚢᚾᛖ ᚩᚦᚦ þǗ ᚪᚾᛋᚹᛠᚱᛖ ᛁᚾ ᚦᚫᛗ ᛚᚩᚷᛖ. ᚫᚦ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᛁᛋ ᚪᛏ ᚦᚫᛗ cǧbore ᚪᚾᛞ approve_by = ᛏᛖᛚᛖᚷᚱᚪᛗ, ᚻᛁᛏ ᚪᛋᚳᛁᚦ ᚩᚾ Telegram ᚠᚩᚱ ᚦᚫᛗ ᛗᛁᚾᚢᛗ ᛋᛖᛏ, ᚪᚾᛞ ᚢᛋᛖᚦ ᚦᚫᛗ ᛞᛖᚠᚪᚢᛚᛏ ᚷᛁᚠ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᚪᚾᛞᛋᚹᚪᚱᛖᚦ."
   },
   "rb_ask_number": {
    "message0": "ᚪᛉᚪ Claude ᚱᛁᛗᛖᛋ: %1"
@@ -117,7 +117,8 @@
    "tooltip": "ᚷᛖᛗᚪᚾᚪᚦ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ, ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ, ᚦᚪ ᛋᚳᛠᚹᚢᛝᛖ, ᚦᚩᚾᛖ ᚹᚫᛋᛏᛗ ᚪᚾᛞ ᚦᚪ ᚹᛖᚾᛞᛚᛁᛝᚪᛋ ᛋᚹᚪ ᚻᛁᛖ ᚾᚢ ᛋᛁᚾᛞ, ᚢᚾᛞᛖᚱ ᚦᛁᛋᛋᚢᛗ ᚾᚪᛗᚪᚾ, ᚠᚩᚱ ᚦᚪᛗ ᛚᚪᚠᛖ ᚦᚫᚱᛖ ᚠᚱᛖᛗᛗᛁᛝᛖ."
   },
   "rb_choose": {
-   "message0": "ᛚᚫᛏ ᛗᛖ ᚷᛖᚳᛖᚩᛋᚪᚾ ᚩᚠ %1"
+   "message0": "ᛁᚳ ᚳᛖᚩᛋᛖ ᚩᚠ %1; ᚷᛁᚠ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᚪᚾᛞᛋᚹᚪᚱᛖᚦ ᛁᚾ %2 ᛗᛁᚾᚪᛏᚪ, ᚾᛁᛗ %3",
+   "tooltip": "SƷweleþ ᚦᚫᛗ list ᚪᚾᛞ ᛒᛁᛞᛖᚦ ᚩᚦ þǗ ᚳᛖᚩᛋᛖ ᚪᚾ. ᚫᚦ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᛁᛋ ᚪᛏ ᚦᚫᛗ cǧbore ᚪᚾᛞ approve_by = ᛏᛖᛚᛖᚷᚱᚪᛗ, ᚻᛁᛏ ᚪᛋᚳᛁᚦ ᚩᚾ Telegram ᚠᚩᚱ ᚦᚫᛗ ᛗᛁᚾᚢᛗ ᛋᛖᛏ; ᚦᚫᛗ ᛞᛖᚠᚪᚢᛚᛏ ᛁᛋ ᛏᚪᚳᚪᚾ ᚷᛁᚠ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᚪᚾᛞᛋᚹᚪᚱᛖᚦ."
   },
   "rb_clear_instructions": {
    "message0": "ᚪᛞᛁᛚᚷᚪ ᚦᚪ ᛚᚪᚱᛖ ᚠᚩᚱ Claude"
@@ -362,8 +363,8 @@
    "message0": "ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚩᚠᛖᚱᚠᛖᚱᛞᛖ ᛋᚳᛠᚹᚢᛝᛖ"
   },
   "rb_pause": {
-   "message0": "ᚫᛏᛋᛏᚪᚾᛞ ᚩᚦ ᚦᚫᛏ ᛁᚳ ᚷᚪ ᚠᚩᚱᚦ ᚦᚣᛞᛖ: %1",
-   "tooltip": "ᛋᚳᛠᚹᚢᛝᛋᛏᛖᛞᛖ. ᚫᛏᚣᚹᚦ ᚦᚫᛏ ᚷᛖᛗᛠᚱᚳ ᚩᚾ ᚦᚫᚱᛖ ᛒᛖᚳ ᚪᚾᛞ ᚪᛒᛁᛏ ᚦᛖ."
+   "message0": "ᛒᛁᚦᚪ ᚩᚦᚦ ᚦᚫᛏ Ʒ ᛁᚳ ᚳᚾᚢᛚᛚᛖ on_framhald: %1 (ᚾᚪ ᛗᚪᚱᛖ ᚦᚩᚾᚾᛖ %2 ᛗᛁᚾᚪᛏᚪ)",
+   "tooltip": "ᛋᛏᚩᛈᛈᚢᚾᛣᛏ. SƷweleþ ᚦᚫ ᚾᚩᛏᛖ ᛁᚾ ᚦᚫᛗ ᛚᚩᚷᛖ ᚪᚾᛞ ᛒᛁᛞᛖᚦ. ᚫᚦ ᚾᚪ ᛗᚪᚾᚾᛖᛋ ᛁᛋ ᚪᛏ ᚦᚫᛗ cǧbore ᚪᚾᛞ approve_by = ᛏᛖᛚᛖᚷᚱᚪᛗ, ᚻᛁᛏ ᚪᛋᚳᛁᚦ ᚩᚾ Telegram ᚪᚾᛞ gǧ after ᚦᚫᛗ ᛗᛁᚾᚢᛗ ᛋᛖᛏ, ᚩᚦ ᚩᚾ ᚫᛚᚳᚢᛗ ᚪᚾᛞᛋᚹᚪᚱᛖ."
   },
   "rb_problems": {
    "message0": "ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ"
@@ -3820,7 +3821,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "ac bā TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID sceolan bēon sett {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: þs runtime sendþ ānlīce on telegram, tō nū",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet æfter ǣlc gewunelica þǧunge þƷ endiaþ",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url sceal beginnan mid http:// oþþ https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url sceal beginnan mid http:// oþþ https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Andsware mid þǣm number oþ þǣm wordum.",
+  "Question on {channel}": "Ascian on {channel}",
+  "{who} answered: {answer}": "{who} andswarode: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Na andswaru within {mins} mīnata, swa þǣm default was used: {answer}",
+  "answered": "andswarod",
+  "timed out": "tīma þát"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ᚣᚳ ᚳᚹᛁᛞᛖ",

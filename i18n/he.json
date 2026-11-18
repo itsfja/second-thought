@@ -38,8 +38,8 @@
    "message0": "תשובה"
   },
   "rb_approve": {
-   "message0": "אני מאשר %1",
-   "tooltip": "מציג את הטקסט ומחכה שתאשרו אותו או תחזירו אותו."
+   "message0": "אני מאשר %1; אם אין עונה ב-%2 דקות, קח %3",
+   "tooltip": "מציג את הטקסט ומתין לאישור או החזרה. כאש אין אין בלוחיה ו-approve_by = telegram, שואל ב-Telegram לפי הדקות צנקבעו; אם אין עונה, הבריל אין הבריל (y או n) נשמשי."
   },
   "rb_ask": {
    "message0": "שאל את Claude %1",
@@ -54,8 +54,8 @@
    "tooltip": "Claude עונה ברשימה שאפשר לעבור עליה בלולאה."
   },
   "rb_ask_me": {
-   "message0": "שאל אותי %1 וחכה",
-   "tooltip": "עוצר את ההרצה עד שתקלידו תשובה ביומן."
+   "message0": "שאל אותי %1 ומתן %2 דקות; אם אין עונה, השתמש ב-%3",
+   "tooltip": "מעצרת את הרצה עד שתעוב ביומן. כאש אין אין בלוחיה ו-approve_by = telegram, שואל ב-Telegram לפי הדקות שנקבעו; אם אין עונה, הבריל אין הבריל נשמשי."
   },
   "rb_ask_number": {
    "message0": "בקש מ-Claude מספר: %1"
@@ -117,7 +117,8 @@
    "tooltip": "זוכר את המשימה, הטיוטה, הביקורת, התוצאה והמשתנים כפי שהם עכשיו, תחת השם הזה, עד סוף ההרצה."
   },
   "rb_choose": {
-   "message0": "תן לי לבחור מתוך %1"
+   "message0": "אני מתוך מ-%1; אם אין עונה ב-%2 דקות, קח %3",
+   "tooltip": "מציג את הרשימה ומתין לבחור אחד. כאש אין אין בלוחיה ו-approve_by = telegram, שואל ב-Telegram לפי הדקות צנקבעו; אם אין עונה, הבריל אין הבריל נשמשי."
   },
   "rb_clear_instructions": {
    "message0": "נקה את ההוראות ל-Claude"
@@ -362,8 +363,8 @@
    "message0": "הטיוטה עברה ביקורת"
   },
   "rb_pause": {
-   "message0": "השהה עד שאלחץ על המשך: %1",
-   "tooltip": "נקודת עצירה. מציג את ההערה ביומן ומחכה לכם."
+   "message0": "עצור עד שאנצח על “המשך”: %1 (לא יותר מה-%2 דקות)",
+   "tooltip": "נקודת ביקורה. מציגה את ההערה ביומן וממתין. כאש אין אין בלוחיה ו-approve_by = telegram, שואל ב-Telegram וממשיך לאחרי הדקות שנקבעו, או בכל תשובה."
   },
   "rb_problems": {
    "message0": "בעיות שעלו בביקורת"
@@ -3820,6 +3821,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "אבל TELEGRAM_BOT_TOKEN ו-TELEGRAM_CHAT_ID חייבים להיו מוגדרים אלו {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: ה-runtime הזה שולח כרגע רק אל telegram",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url נקרא כל הרצה מיתוזמנת שהסתיימה",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url חייב להתחיל ב-http:// או https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url חייב להתחיל ב-http:// או https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "השב במספר או במילים.",
+  "Question on {channel}": "שאלה ב-{channel}",
+  "{who} answered: {answer}": "{who} ענה: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "אין תשובה ב-{mins} דקות, כך שימש בבריל אין הבריל: {answer}",
+  "answered": "נענה",
+  "timed out": "זמן פגער"
  }
 }

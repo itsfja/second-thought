@@ -460,6 +460,9 @@
     function expr(b){
       const I = (n, d) => inp(b, n, d);
       const F = n => b.getFieldValue(n);
+      // the You blocks' "when nobody answers" fields (#434): minutes to wait on the channel, and the default answer
+      const MINS = () => pyNum(F("MINS") == null ? 5 : F("MINS"));
+      const DEFLT = () => pyStr(F("DEFAULT") || "");
       switch (b.type) {
         case "math_number": return pyNum(F("NUM"));
         case "text": case "rb_longtext": return pyStr(F("TEXT"));
@@ -498,7 +501,7 @@
         case "rb_score": return "(await R.score(" + I("TEXT", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_better": return "(await R.better(" + I("A", '""') + ", " + I("B", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_answer": return "R.answer";
-        case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True))";  // a no offers the reason as a new rule (#428)
+        case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True, mins=" + MINS() + ", default=" + DEFLT() + "))";  // a no offers the reason as a new rule (#428)
         case "rb_tokens_used": return "R.tokens_used()";
         case "rb_setup_check": return "(await R.setup_check())";
         case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";
@@ -507,7 +510,7 @@
           const name = String(F("NAME") || "").trim();
           return "(await R.run_program(" + pyStr(name) + ", " + (programFn.get(memKey(name)) || "None") + ", " + I("VALUE", '""') + "))";
         }
-        case "rb_choose": return "(await R.choose(" + I("LIST", "[]") + "))";
+        case "rb_choose": return "(await R.choose(" + I("LIST", "[]") + ", mins=" + MINS() + ", default=" + DEFLT() + "))";
         case "rb_timer": return "R.timer()";
         case "rb_now": return "R.now(" + pyStr(F("PART")) + ")";
         case "rb_img_choose": return "(await R.choose_picture())";
@@ -601,6 +604,8 @@
         if (!enabled(b)) continue;
         const I = (n, d) => inp(b, n, d);
         const F = n => b.getFieldValue(n);
+        const MINS = () => pyNum(F("MINS") == null ? 5 : F("MINS"));   // the You blocks' "when nobody answers" fields (#434)
+        const DEFLT = () => pyStr(F("DEFAULT") || "");
         const body = (name, extra) => {
           const c = Object.assign({}, ctx, { tick:false }, extra || {});
           const before = out.length;
@@ -646,7 +651,7 @@
             E("await R.wait_until_time(" + h + ", " + m + ")"); break;
           }
           case "rb_wait_msg": E("await R.wait_for_message(" + pyStr(String(F("MSG") || "").trim()) + ")"); break;
-          case "rb_pause": E("await R.pause(" + I("TEXT", '""') + ")"); break;
+          case "rb_pause": E("await R.pause(" + I("TEXT", '""') + ", mins=" + MINS() + ")"); break;
           case "rb_reset_timer": E("R.reset_timer()"); break;
           case "rb_stop": case "rb_result": E("raise Finish()"); break;
           case "rb_finish_with": E("R.finish_with(" + I("TEXT", '""') + ")"); break;
@@ -686,7 +691,7 @@
             stmts(b.getInputTargetBlock("FIX"), ind + 2, Object.assign({}, ctx, { loop:true }), out);
             break;
           }
-          case "rb_ask_me": E("await R.ask_me(" + I("TEXT", '""') + ")"); break;
+          case "rb_ask_me": E("await R.ask_me(" + I("TEXT", '""') + ", mins=" + MINS() + ", default=" + DEFLT() + ")"); break;
           case "rb_say": E("R.say(" + I("TEXT", '""') + ")"); break;
           case "rb_set_instructions": E("R.set_instructions(" + I("TEXT", '""') + ")"); break;
           case "rb_clear_instructions": E("R.set_instructions(\"\")"); break;

@@ -421,7 +421,7 @@ Unraid:
 
 Wait & time:
   rb_now (PART): current %1
-  rb_pause (TEXT): pause until I click Continue: %1 — A checkpoint. Shows the note in the log and waits for you.
+  rb_pause (TEXT, MINS): pause until I click Continue: %1 (at most %2 min) — A checkpoint. Shows the note in the log and waits for you. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram and carries on after the minutes set, or on any reply.
   rb_reset_timer: reset timer
   rb_timer: timer — Seconds since the run started or the timer was reset.
   rb_wait_msg (MSG): wait until I receive %1 — Pause this script until another script broadcasts the message.
@@ -429,10 +429,10 @@ Wait & time:
 
 You:
   rb_answer: answer
-  rb_approve (TEXT): I approve %1 — Shows the text and waits for you to approve or send it back.
+  rb_approve (TEXT, MINS, DEFAULT): I approve %1; if nobody answers in %2 min, take %3 — Shows the text and waits for you to approve or send it back. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default (y or n) is taken if nobody answers.
   rb_ask_first (WHAT): ask me before %1 — From here on, the program shows what it's about to do and waits for you to allow it. If you say no, it skips that step and carries on. Exported Python asks in the terminal; a scheduled run with nobody there skips it.
-  rb_ask_me (TEXT): ask me %1 and wait — Pauses the run until you type an answer in the log.
-  rb_choose (LIST): let me choose from %1
+  rb_ask_me (TEXT, MINS, DEFAULT): ask me %1 and wait %2 min; if nobody answers, use %3 — Pauses the run until you type an answer in the log. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set, and uses the default if nobody answers.
+  rb_choose (LIST, MINS, DEFAULT): let me choose from %1; if nobody answers in %2 min, take %3 — Shows the list and waits for you to pick one. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default is taken if nobody answers.
 <!-- sync:blocks-end -->
 
 HOW TO MAP CODE

@@ -9064,6 +9064,45 @@ ACTIONS_ERROR = "::error::"
 ACTIONS_ERROR_TITLED = "::error title={title}::"  # an error on the run's page with a heading of its own
 
 
+class _Channel:
+    """One way a question reaches you when nobody's at the keyboard (#434). The small set of jobs every channel
+    shares: ask a question (with optional choices), wait for the answer up to a time limit, and say who answered.
+    Telegram is the first; ntfy and Home Assistant's actionable notifications come later behind the same jobs."""
+    name = ""
+
+    def __init__(self, rt):
+        self.rt = rt
+
+    async def ask(self, question, choices=(), timeout_s=300, default=""):
+        """Sends the question and waits up to timeout_s seconds. Gives (answer, who): the first reply as (text,
+        sender), or (default, '') when the time limit runs out."""
+        raise NotImplementedError
+
+
+class _TelegramChannel(_Channel):
+    name = "telegram"
+
+    async def ask(self, question, choices=(), timeout_s=300, default=""):
+        rt = self.rt
+        chat = next(iter(rt._tg_chats()), "")
+        if not chat:
+            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
+        text = tr("Second Thought: {question}", question=question)
+        if choices:
+            text += "\n" + "\n".join(f"{i}. {to_str(c)}" for i, c in enumerate(choices, 1)) + "\n" + tr("Reply with a number or the words.")
+        sent_at = time.time()
+        await rt._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(text), "parse_mode": "HTML"})
+        deadline = time.monotonic() + timeout_s
+        while time.monotonic() < deadline:
+            for m in await rt.tg_fetch(wait=int(max(0, min(25, deadline - time.monotonic())))):
+                if m.get("chat") != chat or not to_str(m.get("text", "")).strip():
+                    continue
+                if m.get("date") and m["date"] < sent_at - 5:
+                    continue  # an older message, not an answer to this question
+                return to_str(m["text"]).strip(), m.get("sender") or ""
+        return default, ""
+
+
 class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, Updates):
     def __init__(self):
         self.vars = {}
@@ -9587,17 +9626,71 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self._record(kind, key, out)
         return out
 
-    async def ask_me(self, q):
-        out = await self._journaled("ask_me", self._key(to_str(q)), lambda: self._ask_me_live(q))
+    # ----- The You blocks: the keyboard, or the approve_by channel when nobody's there (#434) -----
+    def _nobody_to_type(self):
+        """True when no one can type an answer: an MCP tool call, or a run from a scheduler (--schedule, or
+        --run-schedule from cron, Task Scheduler or GitHub Actions), where stdin isn't a terminal."""
+        return getattr(self, "mcp_mode", False) or not sys.stdin.isatty()
+
+    def _you_channel(self):
+        """The channel the You blocks ask on when nobody's at the keyboard: approve_by's, for now (#434). None when
+        approve_by isn't a channel, so the blocks keep reading the keyboard."""
+        if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
+            return _TelegramChannel(self)
+        return None
+
+    async def _ask_channel(self, question, choices=(), mins=0, default=""):
+        """Asks on the channel when nobody's at the keyboard (#434). Gives (answer, who), or None when there's no
+        channel to ask on, so the block reads the keyboard as before. The channel's answer is never journaled: the
+        person answers now, each time, not from a stopped run's journal."""
+        channel = self._you_channel()
+        if channel is None or self.dry_run() or not self._nobody_to_type():
+            return None
+        timeout_s = round(num(mins) * 60)  # the block's time limit in seconds; 0 waits not at all
+        answer, who = await channel.ask(question, choices, timeout_s, to_str(default))
+        if who:
+            self.log(tr("Question on {channel}", channel=channel.name), _short(to_str(question), 120),
+                     tr("{who} answered: {answer}", who=who, answer=_short(answer, 200)), tr("answered"))
+        else:
+            self.log(tr("Question on {channel}", channel=channel.name), _short(to_str(question), 120),
+                     tr("No answer within {mins} min, so the default was used: {answer}", mins=num(mins), answer=_short(answer, 200)), tr("timed out"))
+        return answer, who
+
+    async def ask_me(self, q, mins=0, default=""):
+        q = to_str(q)
+        got = await self._ask_channel(q, mins=mins, default=default)
+        if got is not None:
+            self.answer = got[0]
+            return got[0]
+        out = await self._journaled("ask_me", self._key(q), lambda: self._ask_me_live(q))
         self.answer = out
         return out
 
-    async def approve(self, text, offer=False):
+    async def approve(self, text, offer=False, mins=0, default=""):
         # offer=True is the "I approve …" block: a no there offers the reason as a new rule (#428); action asks don't
+        got = await self._ask_channel(to_str(text), choices=[tr("Yes"), tr("No")], mins=mins, default=default)
+        if got is not None:
+            return said_yes(got[0]) if got[1] else said_yes(default)  # a timeout takes the block's default
         return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text, offer))
 
-    async def choose(self, items):
-        return await self._journaled("choose", self._key(to_list(items)), lambda: self._choose_live(items))
+    async def choose(self, items, mins=0, default=""):
+        items = to_list(items)
+        got = None if not items else await self._ask_channel(tr("Choose one") + ": " + "; ".join(_short(it, 60) for it in items),
+                                                            choices=[_short(it, 80) for it in items], mins=mins, default=default)
+        if got is not None:
+            reply = to_str(got[0]).strip()
+            if reply.isdigit() and 1 <= int(reply) <= len(items):
+                return items[int(reply) - 1]
+            for it in items:
+                if to_str(it).strip().lower() == reply.lower():
+                    return it
+            if not got[1]:  # a timeout: the default when it's one of the items, else the first
+                for it in items:
+                    if to_str(it).strip().lower() == to_str(default).strip().lower():
+                        return it
+                return items[0]
+            return reply
+        return await self._journaled("choose", self._key(items), lambda: self._choose_live(items))
 
     async def choose_file(self):
         return await self._journaled("choose_file", self._key("file"), self._choose_file_live)
@@ -10456,8 +10549,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 return items[int(a) - 1]
             print(tr("  Type a number from 1 to {items}.", items=len(items)))
 
-    async def pause(self, note):
+    async def pause(self, note, mins=0):
         if getattr(self, "testing", False):
+            return
+        got = await self._ask_channel(to_str(note) or tr("Paused."), mins=mins)  # #434: on the channel, any reply (or the time limit) continues
+        if got is not None:
             return
         print("\n⏸ " + (to_str(note) or tr("Paused.")), flush=True)
         await self._input(tr("Press Enter to continue > "))
@@ -16759,7 +16855,7 @@ Unraid:
 
 Wait & time:
   rb_now (PART): current %1
-  rb_pause (TEXT): pause until I click Continue: %1 — A checkpoint. Shows the note in the log and waits for you.
+  rb_pause (TEXT, MINS): pause until I click Continue: %1 (at most %2 min) — A checkpoint. Shows the note in the log and waits for you. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram and carries on after the minutes set, or on any reply.
   rb_reset_timer: reset timer
   rb_timer: timer — Seconds since the run started or the timer was reset.
   rb_wait_msg (MSG): wait until I receive %1 — Pause this script until another script broadcasts the message.
@@ -16767,10 +16863,10 @@ Wait & time:
 
 You:
   rb_answer: answer
-  rb_approve (TEXT): I approve %1 — Shows the text and waits for you to approve or send it back.
+  rb_approve (TEXT, MINS, DEFAULT): I approve %1; if nobody answers in %2 min, take %3 — Shows the text and waits for you to approve or send it back. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default (y or n) is taken if nobody answers.
   rb_ask_first (WHAT): ask me before %1 — From here on, the program shows what it's about to do and waits for you to allow it. If you say no, it skips that step and carries on. Exported Python asks in the terminal; a scheduled run with nobody there skips it.
-  rb_ask_me (TEXT): ask me %1 and wait — Pauses the run until you type an answer in the log.
-  rb_choose (LIST): let me choose from %1
+  rb_ask_me (TEXT, MINS, DEFAULT): ask me %1 and wait %2 min; if nobody answers, use %3 — Pauses the run until you type an answer in the log. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set, and uses the default if nobody answers.
+  rb_choose (LIST, MINS, DEFAULT): let me choose from %1; if nobody answers in %2 min, take %3 — Shows the list and waits for you to pick one. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default is taken if nobody answers.
 <!-- sync:blocks-end -->
 
 HOW TO MAP CODE
@@ -17257,7 +17353,8 @@ HOW TO MAP CODE
       { style:"time", tooltip:"Pause until this time (24-hour clock). If it has passed today, waits until tomorrow." }),
     S("rb_wait_msg", "wait until I receive %1", [{ type:"field_input", name:"MSG", text:"message1" }],
       { style:"time", tooltip:"Pause this script until another script broadcasts the message." }),
-    S("rb_pause", "pause until I click Continue: %1", [val("TEXT")], { style:"time", inputsInline:true, tooltip:"A checkpoint. Shows the note in the log and waits for you." }),
+    S("rb_pause", "pause until I click Continue: %1 (at most %2 min)", [val("TEXT"), { type:"field_number", name:"MINS", value:5, min:0, max:1440, precision:1 }], { style:"time", inputsInline:true,
+      tooltip:"A checkpoint. Shows the note in the log and waits for you. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram and carries on after the minutes set, or on any reply." }),
     V("rb_timer", "timer", [], "Number", { style:"time", tooltip:"Seconds since the run started or the timer was reset." }),
     S("rb_reset_timer", "reset timer", [], { style:"time" }),
     V("rb_now", "current %1", [{ type:"field_dropdown", name:"PART", options:[["time","time"],["date","date"],["date and time","datetime"],["hour","hour"],["minute","minute"],["day of week","weekday"]] }],
@@ -17314,10 +17411,13 @@ HOW TO MAP CODE
       previousStatement:"Check", nextStatement:"Check", style:"review",
       tooltip:"Fails the review unless the draft contains a link (http://… or www.…)." },
     /* You */
-    S("rb_ask_me", "ask me %1 and wait", [val("TEXT")], { style:"you", inputsInline:true, tooltip:"Pauses the run until you type an answer in the log." }),
+    S("rb_ask_me", "ask me %1 and wait %2 min; if nobody answers, use %3", [val("TEXT"), { type:"field_number", name:"MINS", value:5, min:0, max:1440, precision:1 }, { type:"field_input", name:"DEFAULT", text:"" }], { style:"you", inputsInline:true,
+      tooltip:"Pauses the run until you type an answer in the log. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set, and uses the default if nobody answers." }),
     V("rb_answer", "answer", [], "String", { style:"you" }),
-    V("rb_approve", "I approve %1", [val("TEXT")], "Boolean", { style:"you", inputsInline:true, tooltip:"Shows the text and waits for you to approve or send it back." }),
-    V("rb_choose", "let me choose from %1", [val("LIST")], "String", { style:"you", inputsInline:true }),
+    V("rb_approve", "I approve %1; if nobody answers in %2 min, take %3", [val("TEXT"), { type:"field_number", name:"MINS", value:5, min:0, max:1440, precision:1 }, { type:"field_input", name:"DEFAULT", text:"" }], "Boolean", { style:"you", inputsInline:true,
+      tooltip:"Shows the text and waits for you to approve or send it back. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default (y or n) is taken if nobody answers." }),
+    V("rb_choose", "let me choose from %1; if nobody answers in %2 min, take %3", [val("LIST"), { type:"field_number", name:"MINS", value:5, min:0, max:1440, precision:1 }, { type:"field_input", name:"DEFAULT", text:"" }], "String", { style:"you", inputsInline:true,
+      tooltip:"Shows the list and waits for you to pick one. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default is taken if nobody answers." }),
     /* Output */
     S("rb_say", "say %1", [val("TEXT")], { style:"output", inputsInline:true, tooltip:"Writes a note in the run log." }),
     S("rb_show", "show the draft in the log", [], { style:"output" }),
@@ -20919,6 +21019,9 @@ HOW TO MAP CODE
     function expr(b){
       const I = (n, d) => inp(b, n, d);
       const F = n => b.getFieldValue(n);
+      // the You blocks' "when nobody answers" fields (#434): minutes to wait on the channel, and the default answer
+      const MINS = () => pyNum(F("MINS") == null ? 5 : F("MINS"));
+      const DEFLT = () => pyStr(F("DEFAULT") || "");
       switch (b.type) {
         case "math_number": return pyNum(F("NUM"));
         case "text": case "rb_longtext": return pyStr(F("TEXT"));
@@ -20957,7 +21060,7 @@ HOW TO MAP CODE
         case "rb_score": return "(await R.score(" + I("TEXT", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_better": return "(await R.better(" + I("A", '""') + ", " + I("B", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_answer": return "R.answer";
-        case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True))";  // a no offers the reason as a new rule (#428)
+        case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True, mins=" + MINS() + ", default=" + DEFLT() + "))";  // a no offers the reason as a new rule (#428)
         case "rb_tokens_used": return "R.tokens_used()";
         case "rb_setup_check": return "(await R.setup_check())";
         case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";
@@ -20966,7 +21069,7 @@ HOW TO MAP CODE
           const name = String(F("NAME") || "").trim();
           return "(await R.run_program(" + pyStr(name) + ", " + (programFn.get(memKey(name)) || "None") + ", " + I("VALUE", '""') + "))";
         }
-        case "rb_choose": return "(await R.choose(" + I("LIST", "[]") + "))";
+        case "rb_choose": return "(await R.choose(" + I("LIST", "[]") + ", mins=" + MINS() + ", default=" + DEFLT() + "))";
         case "rb_timer": return "R.timer()";
         case "rb_now": return "R.now(" + pyStr(F("PART")) + ")";
         case "rb_img_choose": return "(await R.choose_picture())";
@@ -21060,6 +21163,8 @@ HOW TO MAP CODE
         if (!enabled(b)) continue;
         const I = (n, d) => inp(b, n, d);
         const F = n => b.getFieldValue(n);
+        const MINS = () => pyNum(F("MINS") == null ? 5 : F("MINS"));   // the You blocks' "when nobody answers" fields (#434)
+        const DEFLT = () => pyStr(F("DEFAULT") || "");
         const body = (name, extra) => {
           const c = Object.assign({}, ctx, { tick:false }, extra || {});
           const before = out.length;
@@ -21105,7 +21210,7 @@ HOW TO MAP CODE
             E("await R.wait_until_time(" + h + ", " + m + ")"); break;
           }
           case "rb_wait_msg": E("await R.wait_for_message(" + pyStr(String(F("MSG") || "").trim()) + ")"); break;
-          case "rb_pause": E("await R.pause(" + I("TEXT", '""') + ")"); break;
+          case "rb_pause": E("await R.pause(" + I("TEXT", '""') + ", mins=" + MINS() + ")"); break;
           case "rb_reset_timer": E("R.reset_timer()"); break;
           case "rb_stop": case "rb_result": E("raise Finish()"); break;
           case "rb_finish_with": E("R.finish_with(" + I("TEXT", '""') + ")"); break;
@@ -21145,7 +21250,7 @@ HOW TO MAP CODE
             stmts(b.getInputTargetBlock("FIX"), ind + 2, Object.assign({}, ctx, { loop:true }), out);
             break;
           }
-          case "rb_ask_me": E("await R.ask_me(" + I("TEXT", '""') + ")"); break;
+          case "rb_ask_me": E("await R.ask_me(" + I("TEXT", '""') + ", mins=" + MINS() + ", default=" + DEFLT() + ")"); break;
           case "rb_say": E("R.say(" + I("TEXT", '""') + ")"); break;
           case "rb_set_instructions": E("R.set_instructions(" + I("TEXT", '""') + ")"); break;
           case "rb_clear_instructions": E("R.set_instructions(\"\")"); break;

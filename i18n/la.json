@@ -37,8 +37,8 @@
    "message0": "responsum"
   },
   "rb_approve": {
-   "message0": "probo %1",
-   "tooltip": "Textum ostendit et exspectat dum probes aut remittas."
+   "message0": "ego approbo %1; si nemo intra %2 min respondet, sume %3",
+   "tooltip": "Textum ostendit et exspectat ut eum approbes aut remittas. Si nemo ad claviculam sedet et approve_by = telegram, per Telegram rogat per minutas positas; praepositum (y aut n) sumitur si nemo respondet."
   },
   "rb_ask": {
    "message0": "interroga Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude indice respondet quem per orbem percurrere potes."
   },
   "rb_ask_me": {
-   "message0": "interroga me %1 et exspecta",
-   "tooltip": "Exsecutionem sistit donec responsum in actis scribas."
+   "message0": "rogo te %1 et exspecto %2 min; si nemo respondet, Cape %3",
+   "tooltip": "Exsecutionem sistit donec in actis responderis. Si nemo ad claviculam sedet et approve_by = telegram, per Telegram rogat per minutas positas, et praepositum sumitur si nemo respondet."
   },
   "rb_ask_number": {
    "message0": "pete a Claude numerum: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Pensum, adumbrationem, recognitionem, effectum et variabiles ut nunc sunt, hoc nomine, ad reliquam exsecutionem meminit."
   },
   "rb_choose": {
-   "message0": "sine me eligere ex %1"
+   "message0": "ex %1 eligo; si nemo intra %2 min respondet, sume %3",
+   "tooltip": "Listam ostendit et exspectat ut unam eligas. Si nemo ad claviculam sedet et approve_by = telegram, per Telegram rogat per minutas positas; praepositum sumitur si nemo respondet."
   },
   "rb_clear_instructions": {
    "message0": "dele praecepta ad Claude"
@@ -361,8 +362,8 @@
    "message0": "adumbratio recognitionem superavit"
   },
   "rb_pause": {
-   "message0": "siste donec Perge premam: %1",
-   "tooltip": "Punctum inspectionis. Notam in actis ostendit et te exspectat."
+   "message0": "pausa donec ego Contingeam: %1 (plus quam %2 min)",
+   "tooltip": "Statio. Notam in actis ostendit et exspectat. Si nemo ad claviculam sedet et approve_by = telegram, per Telegram rogat et post minutas positas procedit, aut quavis responsione."
   },
   "rb_problems": {
    "message0": "vitia recognitionis"
@@ -3819,7 +3820,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "sed TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID ambo posita esse debent {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: hoc runtime nunc tantum in telegram mittit",
   "heartbeat_url is fetched after each finished scheduled run": "post quamlibet executionem praefixam confectam heartbeat_url petitur",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url incipere debet http:// vel https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url incipere debet http:// vel https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Responde numero aut verbis.",
+  "Question on {channel}": "Quaestio in {channel}",
+  "{who} answered: {answer}": "{who} respondit: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Nulla responsione intra {mins} min, ita praepositum usum est: {answer}",
+  "answered": "responsum",
+  "timed out": "tempus praeteritum"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

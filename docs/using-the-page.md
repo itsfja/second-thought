@@ -46,7 +46,7 @@ There are more categories down the left side of the screen.
 - Write, check, then try again until the writing passes. If it runs out of tries, it keeps the best attempt, not the last, and each check makes sure earlier problems haven't come back. If the review raises the same problems after two revisions in a row, it stops there and says so: revising can't fix them, so the program probably needs something it wasn't given, such as a web page, a file or a fact.
 - **Save a checkpoint** when the draft is good, and **go back to the checkpoint** if later changes make it worse.
 - Use the web while it writes: tick **using the web** on *write a first draft* or *revise*, and an exported program's model can search and read pages for it (on the page, it says it can't). If a task names a web address and the step can't open it, the run log says so.
-- Ask you questions and wait for your answer. At an **I approve …** step, **Send back** asks why in one sentence and offers the reason as a new rule — accepting adds it to every review block's rules, so the next run is checked against it (#428).
+- Ask you questions and wait for your answer. At an **I approve …** step, **Send back** asks why in one sentence and offers the reason as a new rule — accepting adds it to every review block's rules, so the next run is checked against it (#428). Each You block also sets how many **minutes** to wait when nobody's at the keyboard and `approve_by = telegram`, and the **default** answer to use when the time runs out — the question then goes to your Telegram (#434).
 - Look at a picture you give it and describe it, or draw simple pictures.
 - Read a document, such as a PDF or a Word file.
 - Save its work as a file.

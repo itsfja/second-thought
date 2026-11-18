@@ -38,8 +38,8 @@
    "message0": "𒀀𒁉𒅋𒌅𒌝"
   },
   "rb_approve": {
-   "message0": "𒀀𒈾𒆪 𒄠𒄖𒌨 %1",
-   "tooltip": "𒀀𒉿𒋫𒄠 𒌑𒅗𒀠𒆷𒄠 𒌋 𒀀𒁲 𒋫𒄠𒄖𒊒𒋗 𒌑𒇻 𒌅𒋫𒅈𒊒𒋗 𒄿𒆠𒅁."
+   "message0": "I approve %1; if nobody answers 𒅔 %2 𒈪𒅔, take %3",
+   "tooltip": "shows the text and waits for approval. when nobody 𒀜 keyboard and approve_by = telegram, asks on telegram for the minutes; default (y or n) if no answer."
   },
   "rb_ask": {
    "message0": "Claude 𒊭𒀠 %1",
@@ -54,8 +54,8 @@
    "tooltip": "Claude 𒄿𒈾 𒋗𒈠𒋾𒅎 𒊭 𒌅𒊓𒄴𒄩𒊒 𒅁𒉺𒀠."
   },
   "rb_ask_me": {
-   "message0": "%1 𒊭𒆷𒀭𒉌 𒌋 𒄑𒍣𒄑",
-   "tooltip": "𒂊𒁉𒅖𒋫𒄠 𒄿𒅗𒀠𒆷 𒀀𒁲 𒀀𒁉𒅋𒋫𒄠 𒄿𒈾 𒌅𒌒 𒂊𒁉𒅖𒋾𒅎 𒋫𒊭𒀜𒁕𒊒."
+   "message0": "ask 𒈨 %1 and 𒉿𒀉 %2 𒈪𒅔; if nobody answers, use %3",
+   "tooltip": "pauses 𒌦𒋾𒅋 you answer 𒅔 log. when nobody 𒀜 keyboard and approve_by = telegram, asks on telegram for the minutes, else the default."
   },
   "rb_ask_number": {
    "message0": "𒈪𒉡𒋫𒄠 𒄿𒈾 Claude 𒅕𒊑𒅖: %1"
@@ -117,7 +117,8 @@
    "tooltip": "𒁺𒌌𒆷𒄠, 𒈠𒀸𒁕𒊏𒄠, 𒁉𒊏𒄠, 𒍢𒋫𒄠 𒌋 𒅆𒈾𒋾𒅎 𒆠𒈠 𒄿𒈾𒀭𒈾 𒄿𒁀𒀸𒋗, 𒄿𒈾 𒋗𒈪𒅎 𒀭𒉌𒅎, 𒀀𒁲 𒆠𒀉 𒂊𒁉𒅖𒋾𒅎 𒄿𒄩𒊍𒊓𒊍."
   },
   "rb_choose": {
-   "message0": "𒄿𒈾 %1 𒇻𒄭𒅕"
+   "message0": "𒇷𒀉 𒈨 choose from %1; if nobody answers 𒅔 %2 𒈪𒅔, take %3",
+   "tooltip": "shows the list and waits for 𒀀 pick. when nobody 𒀜 keyboard and approve_by = telegram, asks on telegram for the minutes; default if no answer."
   },
   "rb_clear_instructions": {
    "message0": "𒁲𒈠𒄠 𒀀𒈾 Claude 𒁍𒋗𒌓"
@@ -362,8 +363,8 @@
    "message0": "𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅"
   },
   "rb_pause": {
-   "message0": "𒀀𒁲 𒀀𒇷𒅅 𒀀𒈠𒄴𒄩𒍮 𒅗𒀠𒇷: %1",
-   "tooltip": "𒈠𒊍𒍝𒅈𒌅𒌝. 𒅆𒀉𒊏𒄠 𒄿𒈾 𒌅𒌒 𒂊𒁉𒅖𒋾𒅎 𒌑𒅗𒀠𒆷𒄠 𒌋 𒄿𒋡𒀠𒅗."
+   "message0": "𒉿𒀉 𒌦𒋾𒅋 I click continue: %1 (𒀜 most %2 𒈪𒅔)",
+   "tooltip": "checkpoint. shows the note 𒅔 log and waits. when nobody 𒀜 keyboard and approve_by = telegram, asks on telegram and goes on after the minutes, or on any reply."
   },
   "rb_problems": {
    "message0": "𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎"
@@ -3820,7 +3821,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID both must be set {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: this runtime sends on telegram oonly, for now",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet after each finished scheduled run",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "reply with a number or the words.",
+  "Question on {channel}": "question on {channel}",
+  "{who} answered: {answer}": "{who} answerede: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "no answer within {mins} min, so the default was used: {answer}",
+  "answered": "answerd",
+  "timed out": "tyme out"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

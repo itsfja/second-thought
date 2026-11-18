@@ -37,8 +37,8 @@
    "message0": "antwoord"
   },
   "rb_approve": {
-   "message0": "ik keur %1 goed",
-   "tooltip": "Toont de tekst en wacht tot je hem goedkeurt of terugstuurt."
+   "message0": "ik keur %1 goed; als niemand binnen %2 min antwoordt, neem %3",
+   "tooltip": "Toont de tekst en wacht op je goedkeuring of terugsturen. Als er niemand aan het toetsenbord zit en approve_by = telegram, vraagt het op Telegram Gedurende de ingestelde minuten; de standaard (j of n) wordt genomen als niemand antwoordt."
   },
   "rb_ask": {
    "message0": "vraag Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude antwoordt met een lijst die je kunt doorlopen."
   },
   "rb_ask_me": {
-   "message0": "vraag me %1 en wacht",
-   "tooltip": "Pauzeert de run tot je een antwoord typt in het logboek."
+   "message0": "vraag me %1 en wacht %2 min; als niemand antwoordt, gebruik %3",
+   "tooltip": "Pauzeert de run tot je in het log antwoordt. Als er niemand aan het toetsenbord zit en approve_by = telegram, vraagt het op Telegram Gedurende de ingestelde minuten, en gebruikt de standaardwaarde als niemand antwoordt."
   },
   "rb_ask_number": {
    "message0": "vraag Claude om een getal: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Onthoudt de taak, het concept, de beoordeling, het resultaat en de variabelen zoals ze nu zijn, onder deze naam, voor de rest van de run."
   },
   "rb_choose": {
-   "message0": "laat me kiezen uit %1"
+   "message0": "ik kies uit %1; als niemand binnen %2 min antwoordt, neem %3",
+   "tooltip": "Toont de lijst en wacht tot je er een kiest. Als er niemand aan het toetsenbord zit en approve_by = telegram, vraagt het op Telegram Gedurende de ingestelde minuten; de standaardwaarde wordt genomen als niemand antwoordt."
   },
   "rb_clear_instructions": {
    "message0": "instructies voor Claude wissen"
@@ -361,8 +362,8 @@
    "message0": "concept is door de beoordeling gekomen"
   },
   "rb_pause": {
-   "message0": "pauzeer tot ik op Doorgaan klik: %1",
-   "tooltip": "Een controlepunt. Toont de notitie in het logboek en wacht op jou."
+   "message0": "pauzeren tot ik op Doorgaan klik: %1 (hooguit %2 min)",
+   "tooltip": "Een controlepunt. Toont de notitie in het log en wacht. Als er niemand aan het toetsenbord zit en approve_by = telegram, vraagt het op Telegram en gaat door na de ingestelde minuten, of bij elk antwoord."
   },
   "rb_problems": {
    "message0": "problemen uit de beoordeling"
@@ -3819,6 +3820,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", maar TELEGRAM_BOT_TOKEN en TELEGRAM_CHAT_ID moeten beide ingesteld zijn {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: deze runtime verzendt alleen op telegram, op dit moment",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url wordt opgehaald na elke voltooide geplande run",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url moet beginnen met http:// of https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url moet beginnen met http:// of https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Antwoord met een nummer of de woorden.",
+  "Question on {channel}": "Vraag op {channel}",
+  "{who} answered: {answer}": "{who} antwoordde: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Geen antwoord binnen {mins} min, dus de standaardwaarde is gebruikt: {answer}",
+  "answered": "beantwoord",
+  "timed out": "time-out"
  }
 }

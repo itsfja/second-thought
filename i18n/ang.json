@@ -37,8 +37,8 @@
    "message0": "andswaru"
   },
   "rb_approve": {
-   "message0": "ic geþafige %1",
-   "tooltip": "Ætywþ þæt gewrit and abit oþ þæt þu hit geþafige oþþe eft sende."
+   "message0": "ic andétt %1; gif na mannes andswareþ in %2 mīnata, nim %3",
+   "tooltip": "SƷweleþ þǡ text and bídeþ þǗ approf or send back. Æþ na mannes is at þǣm cǧbore and approve_by = telegram, hit asciþ on Telegram for þǣm mīnum set; þǣm default (y oþ n) is tacan gif na mannes andswareþ."
   },
   "rb_ask": {
    "message0": "axa Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude andswaraþ mid getæle þe þu ymbgan miht."
   },
   "rb_ask_me": {
-   "message0": "axa me %1 and abid",
-   "tooltip": "Ætstent seo fremming oþ þæt þu andsware write on þære bec."
+   "message0": "ascia me %1 and bíde %2 mīnata; gif na mannes andswareþ, usa %3",
+   "tooltip": "Bideþ þǣm rune oþþ þǗ answeare in þǣm lóge. Æþ na mannes is at þǣm cǧbore and approve_by = telegram, hit asciþ on Telegram for þǣm mīnum set, and useþ þǣm default gif na mannes andswareþ."
   },
   "rb_ask_number": {
    "message0": "axa Claude rimes: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Gemanaþ þæt ærende, þæt frumgewrit, þa sceawunge, þone wæstm and þa wendlingas swa hie nu sind, under þissum naman, for þam lafe þære fremminge."
   },
   "rb_choose": {
-   "message0": "læt me geceosan of %1"
+   "message0": "ic ceose of %1; gif na mannes andswareþ in %2 mīnata, nim %3",
+   "tooltip": "SƷweleþ þǣm list and bídeþ oþ þǗ ceose an. Æþ na mannes is at þǣm cǧbore and approve_by = telegram, hit asciþ on Telegram for þǣm mīnum set; þǣm default is tacan gif na mannes andswareþ."
   },
   "rb_clear_instructions": {
    "message0": "adilga þa lare for Claude"
@@ -361,8 +362,8 @@
    "message0": "frumgewrit oferferde sceawunge"
   },
   "rb_pause": {
-   "message0": "ætstand oþ þæt ic Ga forþ þyde: %1",
-   "tooltip": "Sceawungstede. Ætywþ þæt gemearc on þære bec and abit þe."
+   "message0": "bíða oþþ þæt Ʒ ic cnulle on_framhald: %1 (na māre þonne %2 mīnata)",
+   "tooltip": "Stoppunkt. SƷweleþ þǣ note in þǣm lóge and bídeþ. Æþ na mannes is at þǣm cǧbore and approve_by = telegram, hit asciþ on Telegram and gǧ after þǣm mīnum set, oþ on ǣlcum andsware."
   },
   "rb_problems": {
    "message0": "sceawunge leahtras"
@@ -3819,7 +3820,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "ac bā TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID sceolan bēon sett {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: þs runtime sendþ ānlīce on telegram, tō nū",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet æfter ǣlc gewunelica þǧunge þƷ endiaþ",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url sceal beginnan mid http:// oþþ https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url sceal beginnan mid http:// oþþ https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Andsware mid þǣm number oþ þǣm wordum.",
+  "Question on {channel}": "Ascian on {channel}",
+  "{who} answered: {answer}": "{who} andswarode: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Na andswaru within {mins} mīnata, swa þǣm default was used: {answer}",
+  "answered": "andswarod",
+  "timed out": "tīma þát"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Yc cwide",
