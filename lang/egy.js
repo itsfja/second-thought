@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"𓂝𓎛 𓇋𓂋 𓈖𓆑𓂋𓅱 𓋴𓂝",
 "must fail":"𓇋𓂋 𓈖𓆑𓂋",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𓈖𓆑𓂋𓅱 𓄿𓂝, must-fail 𓇋𓂋 𓈖𓆑𓂋𓅱 — 𓈖𓆑𓂋𓅱 𓅓𓄿𓂝",
-"The review failed, but not on the rule it must break ({rule}).":"𓅓𓄿𓂝 𓈖𓆑𓂋 𓈖𓂝 𓈖𓆑𓂋𓅱 ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"𓅓𓄿𓂝 𓈖𓆑𓂋 𓈖𓂝 𓈖𓆑𓂋𓅱 ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" 𓈖𓆑𓂋𓅱 𓅓𓄿𓂝",
+"Add to the rules":"𓈖𓆑𓂋𓅱 𓅓𓄿𓂝",
+"Just send back":"𓂝𓎛 𓄿𓂝",
+"New rule":"𓈖𓆑𓂋𓅱 𓅓𓄿𓂝 𓂝𓎛",
+"Why not? In one sentence, as a rule":"𓂝𓎛 𓇋𓂋 𓋴𓂝"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"nfrw mꜣꜥ",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"nfrw mꜣꜥ: ꜥḥ mꜣꜥ ꜥḥ nfr — nfrw mꜣꜥ",
 "{met} of {n} runs met the rule.":"{met} ꜥḥ {n} nfrw mꜣꜥ",
-"{p} of {n} runs passed.":"{p} ꜥḥ {n} mꜣꜥ"
+"{p} of {n} runs passed.":"{p} ꜥḥ {n} mꜣꜥ",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" nfrw mꜣꜥ? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"ꜥḥ nfrw sꜥ: {rule}",
+"New rule":"nfrw mꜣꜥ ꜥḥ",
+"{n} rules saved beside the program are checked too.":"{n} nfrw mꜣꜥ — ꜥḥ mꜣꜥ",
+"\"{rule}\" saved in {path}.":"\"{rule}\" mꜣꜥ {path}",
+"\n? Why not? In one sentence, as a rule > ":"\n? ꜥḥ ir sꜥ > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

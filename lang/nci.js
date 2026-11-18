@@ -1232,7 +1232,12 @@
 "Say which rule it must break first.":"achto xiquihtōhua cualli tlanahuatilli quimpiya.",
 "must fail":"quimpiya",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"tlanahuatilli ōmochīhqui: must-fail nēnematiliztli quimpiya — tlanahuatilli occeppa xiquihtōhua.",
-"The review failed, but not on the rule it must break ({rule}).":"tlapōhualli ahmo ōmochīhqui, ahmo ipan tlanahuatilli quimpiya ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"tlapōhualli ahmo ōmochīhqui, ahmo ipan tlanahuatilli quimpiya ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" quimpiya ipan tlanahuatilli tlapōhualli.",
+"Add to the rules":"quimpiya ipan tlanahuatilli",
+"Just send back":"zan xiquixpana",
+"New rule":"yancan tlanahuatilli",
+"Why not? In one sentence, as a rule":"cualli ahmo? cē tlahtolli, tlanahuatilli"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2419,7 +2424,13 @@
 "Flaky rules":"ahmo cualli tlanahuatilli",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"ahmo cualli tlanahuatilli: zancān cualli nēnematiliztli ōmochīhqui, zancān ahmo — occeppa xiquihtōhua.",
 "{met} of {n} runs met the rule.":"{met} ipān {n} nēnematiliztli tlanahuatilli ōmochīhqui.",
-"{p} of {n} runs passed.":"{p} ipān {n} nēnematiliztli ōmahcique."
+"{p} of {n} runs passed.":"{p} ipān {n} nēnematiliztli ōmahcique.",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" quimpiya ipan tlanahuatilli? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"tlahtolli quimpiya ipan tlanahuatilli tlapōhualli: {rule}",
+"New rule":"yancan tlanahuatilli",
+"{n} rules saved beside the program are checked too.":"{n} tlanahuatilli tlapōhualli achtopa quimpiya — occeppa tlachīhua.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" oquiya in {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? cualli ahmo? cē tlahtolli, tlanahuatilli > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

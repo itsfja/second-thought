@@ -1234,7 +1234,12 @@
 "Say which rule it must break first.":"𐀏𐀙 say first rule",
 "must fail":"𐀏𐀙 fail",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𐀏𐀙 rule ok, must-fail 𐀏𐀙 break — 𐀏𐀙 write rule again",
-"The review failed, but not on the rule it must break ({rule}).":"𐀏𐀙 check fail, not 𐀏𐀙 rule ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"𐀏𐀙 check fail, not 𐀏𐀙 rule ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" 𐀏𐀙 rules",
+"Add to the rules":"𐀏𐀙 add rules",
+"Just send back":"𐀏𐀙 just back",
+"New rule":"𐀏𐀙 new rule",
+"Why not? In one sentence, as a rule":"𐀏𐀙 why not one line"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2421,7 +2426,13 @@
 "Flaky rules":"ka-na waky rules",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"ka-na waky rules: some ka-na pass, some fail — ka-na write again",
 "{met} of {n} runs met the rule.":"{met} of {n} ka-na runs rule ok",
-"{p} of {n} runs passed.":"{p} of {n} ka-na runs pass"
+"{p} of {n} runs passed.":"{p} of {n} ka-na runs pass",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" ka-na rules? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"ka-na line: {rule}",
+"New rule":"ka-na new rule",
+"{n} rules saved beside the program are checked too.":"{n} ka-na rules ka-na check",
+"\"{rule}\" saved in {path}.":"\"{rule}\" ka-na saved {path}",
+"\n? Why not? In one sentence, as a rule > ":"\n? ka-na why not one line > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

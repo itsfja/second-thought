@@ -117,6 +117,46 @@
     });
   }
 
+  /* #428: sending a result back asks why in a sentence, and offers the reason as a new rule, added to every
+     review block's rules on the canvas, so the next export carries it. */
+  function offerRule(box, done){
+    const row = document.createElement("div"); row.className = "row";
+    const why = document.createElement("textarea"); why.rows = 2; why.placeholder = tr("Why not? In one sentence, as a rule");
+    const add = document.createElement("button"); add.type = "button"; add.className = "primary"; add.textContent = tr("Add to the rules");
+    const skip = document.createElement("button"); skip.type = "button"; skip.textContent = tr("Just send back");
+    add.onclick = () => {
+      const rule = why.value.trim().replace(/\.+$/, "");
+      if (!rule) { why.focus(); return; }
+      if (addRuleToReviews(rule))
+        addStep(tr("New rule"), { text:tr("Added \"{rule}\" to the review block's rules.", { rule }) }).done(tr("added"), "ok");
+      done(false, "sent back");
+    };
+    skip.onclick = () => done(false, "sent back");
+    row.append(why, add, skip); box.appendChild(row); why.focus();
+  }
+  function mergeRule(criteria, rule){  // one rule into the review block's rules text, not twice (#428)
+    const parts = String(criteria || "").split(/[;\n]/).map(s => s.trim()).filter(Boolean);
+    return parts.includes(rule) ? String(criteria || "") : parts.concat(rule).join("; ");
+  }
+  function addRuleToReviews(rule){  // appends the rule to every review block's CRITERIA; returns how many changed
+    let n = 0;
+    for (const b of ws.getAllBlocks(false)) {
+      if (b.type !== "rb_review" && b.type !== "rb_reflect") continue;
+      const inp = b.getInput("CRITERIA");
+      let sh = inp && inp.connection.targetBlock();
+      if (!sh) {
+        if (!inp) continue;
+        sh = ws.newBlock("text");
+        inp.connection.connect(sh.outputConnection);
+      }
+      const merged = mergeRule(sh.getFieldValue("TEXT"), rule);
+      if (merged === String(sh.getFieldValue("TEXT") || "")) continue;
+      sh.setFieldValue(merged, "TEXT");
+      n++;
+    }
+    return n;
+  }
+
   function fmtLeft(ms){
     const t = Math.max(0, Math.ceil(ms / 1000)), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), sec = t % 60;
     return h ? h + "h " + m + "m" : m ? m + "m " + sec + "s" : sec + "s";
@@ -472,7 +512,7 @@
           const row = document.createElement("div"); row.className = "row";
           const yes = document.createElement("button"); yes.type = "button"; yes.className = "primary"; yes.textContent = tr("Approve");
           const no = document.createElement("button"); no.type = "button"; no.textContent = tr("Send back");
-          yes.onclick = () => done(true, "approved"); no.onclick = () => done(false, "sent back");
+          yes.onclick = () => done(true, "approved"); no.onclick = () => offerRule(box, done);  // a send-back offers the reason as a new rule (#428)
           row.append(yes, no); box.appendChild(row);
         });
       }

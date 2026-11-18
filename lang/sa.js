@@ -1234,7 +1234,12 @@
 "Say which rule it must break first.":"प्रथमं् वदः् यः् नियमः् भेदनीयः्.",
 "must fail":"भेदनीयः्",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"नियमः् सिद्धः्: must-fail परिण्णामः् तं् भेदनीयः् — नियमं् पुनर् लिख वा अधमं् लेखं् रक्ष.",
-"The review failed, but not on the rule it must break ({rule}).":"परीक्षणं् निष्फलम् अभवत्, किन्तु न तस्मिन् नियमे यः् भेदनीयः् ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"परीक्षणं् निष्फलम् अभवत्, किन्तु न तस्मिन् नियमे यः् भेदनीयः् ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" परीक्षकस्य नियमेभ्यह्ः् युक्तः्.",
+"Add to the rules":"नियमेभ्यह्ः् प्रयोजय",
+"Just send back":"केवलं् प्रत्यादेशय",
+"New rule":"नवः् नियमः्",
+"Why not? In one sentence, as a rule":"किं् न? एकेन वाक्येन, नियमरूपेण"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2421,7 +2426,13 @@
 "Flaky rules":"अस्थिराः् नियमाः्",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"अस्थिराः् नियमाः्: एतेषां् केचित् प्रयोगेषु सिद्धाः् केचित् निष्फलाः् — ये पुनर् लेखितव्याः्.",
 "{met} of {n} runs met the rule.":"{n} प्रयोगेषु {met} नियमम् पूरयन्ति.",
-"{p} of {n} runs passed.":"{n} प्रयोगेषु {p} सफलाः् अभवन्."
+"{p} of {n} runs passed.":"{n} प्रयोगेषु {p} सफलाः् अभवन्.",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" नियमेभ्यह्ः् प्रयोजयामः्? [य्/न्] > ",
+"Line to add to the review block's rules on the page: {rule}":"परीक्षकस्य नियमेभ्यह्ः् प्रयोजनीया: {rule}",
+"New rule":"नवः् नियमः्",
+"{n} rules saved beside the program are checked too.":"{n} सं्रक्षिताः् नियमाः् अपि परीक्ष्यन्ते.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" {path} इति सं्रक्षितम्.",
+"\n? Why not? In one sentence, as a rule > ":"\n? किं् न? एकेन वाक्येन, नियमरूपेण > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

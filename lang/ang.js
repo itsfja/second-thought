@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"sec fyrst hwilce regol he sceal gebannan.",
 "must fail":"sceal feallan",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"seo regol wæs met: must-fail wyrcung sceal hio gebannan — gewrita seo regol eft oðþe begiete weors drafte.",
-"The review failed, but not on the rule it must break ({rule}).":"seo sceawung feoll, ac næt on þære regol þe he sceal gebannan ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"seo sceawung feoll, ac næt on þære regol þe he sceal gebannan ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" regolum þære sceawunge beęacod.",
+"Add to the rules":"setta to regolum",
+"Just send back":"anlice eft sendan",
+"New rule":"nīwe regol",
+"Why not? In one sentence, as a rule":"hwy næt? ánre spræce, swa regol"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"wacian regolas",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"wacian regolas: þæs sindon þæt þær is sumum wyrcungum geondsawod, sumum feallad — þæt sind þæt man sceal eft gewritan.",
 "{met} of {n} runs met the rule.":"{met} of {n} wyrcungum seo regol wæs met.",
-"{p} of {n} runs passed.":"{p} of {n} wyrcungum þurhdrifon."
+"{p} of {n} runs passed.":"{p} of {n} wyrcungum þurhdrifon.",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" to regolum secgan? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"līn to regolum sceawunge on þǣapian: {rule}",
+"New rule":"nīwe regol",
+"{n} rules saved beside the program are checked too.":"{n} regolas be þæm þǣapian sindon sceawode.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" in {path} bewogen.",
+"\n? Why not? In one sentence, as a rule > ":"\n? hwy næt? ánre spræce, swa regol > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

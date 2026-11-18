@@ -1976,7 +1976,12 @@
   "Say which rule it must break first.": "请先说出必须违反哪条规则。",
   "must fail": "必须失败",
   "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "规则已满足：必须失败的用例必须违反它——请重写该规则或保存更差的草稿。",
-  "The review failed, but not on the rule it must break ({rule}).": "审阅未通过，但不是因为必须违反的那条规则（{rule}）。"
+  "The review failed, but not on the rule it must break ({rule}).": "审阅未通过，但不是因为必须违反的那条规则（{rule}）。",
+  "Added \"{rule}\" to the review block's rules.": "已将“{rule}”添加到审查块的规则中。",
+  "Add to the rules": "添加到规则",
+  "Just send back": "直接退回",
+  "New rule": "新规则",
+  "Why not? In one sentence, as a rule": "为什么不行？用一句话，作为一条规则"
  },
  "examples": {
   "review": {
@@ -3795,6 +3800,12 @@
   "Flaky rules": "不稳定的规则",
   "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "不稳定的规则：这些规则在某些运行中通过、在另一些中失败——需要重写的就是它们。",
   "{met} of {n} runs met the rule.": "{n} 次运行中有 {met} 次满足该规则。",
-  "{p} of {n} runs passed.": "{n} 次运行中有 {p} 次通过。"
+  "{p} of {n} runs passed.": "{n} 次运行中有 {p} 次通过。",
+  "Add \"{rule}\" to the rules? [y/n] > ": "把“{rule}”加入规则？[y/n] > ",
+  "Line to add to the review block's rules on the page: {rule}": "在页面上要添加到审查块规则中的行：{rule}",
+  "New rule": "新规则",
+  "{n} rules saved beside the program are checked too.": "保存在程序旁边的{n}条规则也会被检查。",
+  "\"{rule}\" saved in {path}.": "“{rule}”已保存到{path}。",
+  "\n? Why not? In one sentence, as a rule > ": "\n? 为什么不行？用一句话，作为一条规则 > "
  }
 }

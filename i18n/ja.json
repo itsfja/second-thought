@@ -1976,7 +1976,12 @@
   "Say which rule it must break first.": "まず、どのルールに違反するかを言ってください。",
   "must fail": "違反必須",
   "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ルールは満たされました：違反必須のケースはそれに違反しなければなりません — ルールを書き直すか、もっと悪い下書きを保存してください。",
-  "The review failed, but not on the rule it must break ({rule}).": "レビューは失敗しましたが、違反しなければならないルール（{rule}）ではありません。"
+  "The review failed, but not on the rule it must break ({rule}).": "レビューは失敗しましたが、違反しなければならないルール（{rule}）ではありません。",
+  "Added \"{rule}\" to the review block's rules.": "「{rule}」をレビューブロックのルールに追加しました。",
+  "Add to the rules": "ルールに追加",
+  "Just send back": "そのまま差り戻す",
+  "New rule": "新しいルール",
+  "Why not? In one sentence, as a rule": "なぜですか？ルールとして一文で"
  },
  "examples": {
   "review": {
@@ -3795,6 +3800,12 @@
   "Flaky rules": "不安定なルール",
   "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "不安定なルール：実行によって通り、失敗するもの — 書き直すべきはそれらです。",
   "{met} of {n} runs met the rule.": "{n} 回中 {met} 回がルールを満たしました。",
-  "{p} of {n} runs passed.": "{n} 回中 {p} 回が合格しました。"
+  "{p} of {n} runs passed.": "{n} 回中 {p} 回が合格しました。",
+  "Add \"{rule}\" to the rules? [y/n] > ": "「{rule}」をルールに追加しますか？ [y/n] > ",
+  "Line to add to the review block's rules on the page: {rule}": "ページのレビューブロックのルールに追加する行：{rule}",
+  "New rule": "新しいルール",
+  "{n} rules saved beside the program are checked too.": "プログラムの横に保存された{n}件のルールもチェックされます。",
+  "\"{rule}\" saved in {path}.": "「{rule}」を{path}に保存しました。",
+  "\n? Why not? In one sentence, as a rule > ": "\n? なぜですか？ルールとして一文で > "
  }
 }

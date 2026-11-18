@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"पटमं् वदेहि यो नियमो भेदेतब्बो.",
 "must fail":"भेदेतब्बो",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"नियमो सिद्धो: must-fail परिणामो तं् भेदेतब्बो — नियमं् पुन लिख वा अधमं् लेखं् रक्ख.",
-"The review failed, but not on the rule it must break ({rule}).":"परीखणं् निप्फलं् अहोसि, किन्तु न तस्मिं् नियमे यो भेदेतब्बो ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"परीखणं् निप्फलं् अहोसि, किन्तु न तस्मिं् नियमे यो भेदेतब्बो ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" परीखणकस्स नियमेसु युत्तो.",
+"Add to the rules":"नियमेसु योजेतब्बं्",
+"Just send back":"केवलं् पच्चाहरितब्बो",
+"New rule":"नवं् नियमो",
+"Why not? In one sentence, as a rule":"कस्मा न? एकेन वाक्येन, नियमेन"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"अस्थिरा नियमा",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"अस्थिरा नियमा: एते केसुचि पयोगेसु सिद्धा केसुचि निप्फला — ये पुन लिखितब्बा.",
 "{met} of {n} runs met the rule.":"{n} पयोगेसु {met} नियमं् सिद्धं् अकं्सु.",
-"{p} of {n} runs passed.":"{n} पयोगेसु {p} पयोगा सप्फला अहेसुं्."
+"{p} of {n} runs passed.":"{n} पयोगेसु {p} पयोगा सप्फला अहेसुं्.",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" नियमेसु योजेतब्बो? [य्/न्] > ",
+"Line to add to the review block's rules on the page: {rule}":"परीखणकस्स नियमेसु योजेतब्बो: {rule}",
+"New rule":"नवं् नियमो",
+"{n} rules saved beside the program are checked too.":"{n} नियमा लेखं् पक्खे सं्रक्खिता अपि परीखण्णन्ति.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" {path}-ti सं्रक्खितं्.",
+"\n? Why not? In one sentence, as a rule > ":"\n? कस्मा न? एकेन वाक्येन, नियमेन > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

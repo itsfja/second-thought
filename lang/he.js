@@ -1234,7 +1234,12 @@
 "Say which rule it must break first.":"קולם אמוק איזה כלל היא חייבת לשבור.",
 "must fail":"חייבת להיכשל",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"הכלל התקים: מקרה must-fail חייבת לשבור אותו, לכן כתוב מחודש הכלל או שמוק טיוטה גקועה.",
-"The review failed, but not on the rule it must break ({rule}).":"הבדיקה נכשלה, אך לא על הכלל הוא חייבת לשבור ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"הבדיקה נכשלה, אך לא על הכלל הוא חייבת לשבור ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" נוסף לכללי בלוק הביקורת.",
+"Add to the rules":"הוסף לכללים",
+"Just send back":"פשוט החזר",
+"New rule":"כלל חדש",
+"Why not? In one sentence, as a rule":"למה לא? במשפט אחד, ככלל"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2421,6 +2426,12 @@
 "Flaky rules":"כללים לא יציבים",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"כללים לא יציבים: בחלקם הם הם ובחלקם הם לא יציבים — אלה כתב מחדש.",
 "{met} of {n} runs met the rule.":"מה {met} מתוך {n} הכלל נכבע.",
-"{p} of {n} runs passed.":"מה {p} מתוך {n} עברו."
+"{p} of {n} runs passed.":"מה {p} מתוך {n} עברו.",
+"Add \"{rule}\" to the rules? [y/n] > ":"להוסיף \"{rule}\" לכללים? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"השורה להוספה לכללים בלוק הביקורת בעמוד: {rule}",
+"New rule":"כלל חדש",
+"{n} rules saved beside the program are checked too.":"{n} כללים שנשמרו ליד הקובץ נבדקים גם.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" נשמר ב־{path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? למה לא? במשפט אחד, ככלל > "
 }
 };

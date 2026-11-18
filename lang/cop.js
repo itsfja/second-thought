@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"ⲧⲁⲙⲟ ⲡⲓ ϥⲓⲣⲥⲧ ⲥⲁⲩ ⲣⲩⲗⲉ",
 "must fail":"ⲧⲁⲙⲟ ⲡⲓ ϥⲁⲓⲗ",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ⲟⲕ, must-fail ⲧⲁⲙⲟ ⲡⲓ ⲃⲣⲉⲁⲕ — ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ⲁⲅⲁⲓⲛ",
-"The review failed, but not on the rule it must break ({rule}).":"ⲧⲁⲙⲟ ⲡⲓ ϭϩⲉϭⲕ ϥⲁⲓⲗ, ⲛⲟⲧ ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"ⲧⲁⲙⲟ ⲡⲓ ϭϩⲉϭⲕ ϥⲁⲓⲗ, ⲛⲟⲧ ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ",
+"Add to the rules":"ⲧⲁⲙⲟ ⲡⲓ ⲁⲇⲇ ⲣⲩⲗⲉ",
+"Just send back":"ⲧⲁⲙⲟ ⲡⲓ ϫⲩⲥⲧ ⲃⲁϭⲕ",
+"New rule":"ⲧⲁⲙⲟ ⲡⲓ new ⲣⲩⲗⲉ",
+"Why not? In one sentence, as a rule":"ⲧⲁⲙⲟ ⲡⲓ why ⲛⲟⲧ ⲟⲛⲉ ⲗⲓⲛⲉ"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"tamo pi waky rules",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"tamo pi waky rules: some pass some fail — tamo pi again",
 "{met} of {n} runs met the rule.":"{met} of {n} tamo pi runs rule ok",
-"{p} of {n} runs passed.":"{p} of {n} tamo pi runs pass"
+"{p} of {n} runs passed.":"{p} of {n} tamo pi runs pass",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" tamo pi rule? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"tamo pi line: {rule}",
+"New rule":"tamo pi new rule",
+"{n} rules saved beside the program are checked too.":"{n} tamo pi rules tamo pi check",
+"\"{rule}\" saved in {path}.":"\"{rule}\" tamo pi saved {path}",
+"\n? Why not? In one sentence, as a rule > ":"\n? tamo pi why not one line > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

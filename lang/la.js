@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"dic primum quam regulam frangere debeat.",
 "must fail":"debet falli",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"regula servata est: casus must-fail eam frangere debet — regulam rescribe vel deteriorem adumbrationem serva.",
-"The review failed, but not on the rule it must break ({rule}).":"examinatio defecit, sed non in regula quam frangere debet ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"examinatio defecit, sed non in regula quam frangere debet ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"«{rule}» regulis examinatoris additum est.",
+"Add to the rules":"regulis addere",
+"Just send back":"modo remitte",
+"New rule":"nova regula",
+"Why not? In one sentence, as a rule":"cur non? una sententia, velut regula"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"regulae instabiles",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"regulae instabiles: hae interdum satisfaciunt, interdum franguntur — eae sunt rescribendae.",
 "{met} of {n} runs met the rule.":"{met} ex {n} executionibus regulam servaverunt.",
-"{p} of {n} runs passed.":"{p} ex {n} executionibus transierunt."
+"{p} of {n} runs passed.":"{p} ex {n} executionibus transierunt.",
+"Add \"{rule}\" to the rules? [y/n] > ":"«{rule}» regulis addendum? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"linea regulis examinatoris in pagina addenda: {rule}",
+"New rule":"nova regula",
+"{n} rules saved beside the program are checked too.":"{n} regulae iuxta programma servatae etiam examinantur.",
+"\"{rule}\" saved in {path}.":"«{rule}» in {path} servatum est.",
+"\n? Why not? In one sentence, as a rule > ":"\n? cur non? una sententia, velut regula > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

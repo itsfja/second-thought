@@ -1234,7 +1234,12 @@
 "Say which rule it must break first.":"ᛋᛖᚳ ᚠᚣᚱᛋᛏ ᚻᚹᛁᛚᚳᛖ ᚱᛖᚷᚩᛚ ᚻᛖ ᛋᚳᛠᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ.",
 "must fail":"ᛋᚳᛠᛚ ᚠᛠᛚᛚᚪᚾ",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ᛋᛖᚩ ᚱᛖᚷᚩᛚ ᚹᚫᛋ ᛗᛖᛏ: ᛗᚢᛋᛏ-ᚠᚪᛁᛚ ᚹᚣᚱᚳᚢᛝ ᛋᚳᛠᛚ ᚻᛁᚩ ᚷᛖᛒᚪᚾᚾᚪᚾ — ᚷᛖᚹᚱᛁᛏᚪ ᛋᛖᚩ ᚱᛖᚷᚩᛚ ᛖᚠᛏ ᚩᚦᚦᛖ ᛒᛖᚷᛁᛖᛏᛖ ᚹᛖᚩᚱᛋ ᛞᚱᚪᚠᛏᛖ.",
-"The review failed, but not on the rule it must break ({rule}).":"ᛋᛖᚩ ᛋᚳᛠᚹᚢᛝ ᚠᛖᚩᛚᛚ, ᚪᚳ ᚾᚫᛏ ᚩᚾ ᚦᚫᚱᛖ ᚱᛖᚷᚩᛚ ᚦᛖ ᚻᛖ ᛋᚳᛠᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"ᛋᛖᚩ ᛋᚳᛠᚹᚢᛝ ᚠᛖᚩᛚᛚ, ᚪᚳ ᚾᚫᛏ ᚩᚾ ᚦᚫᚱᛖ ᚱᛖᚷᚩᛚ ᚦᛖ ᚻᛖ ᛋᚳᛠᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" ᚱᛖᚷᚩᛚᚢᛗ ᚦᚫᚱᛖ ᛋᚳᛠᚹᚢᛝᛖ beęacod.",
+"Add to the rules":"ᛋᛖᛏᛏᚪ ᛏᚩ ᚱᛖᚷᚩᛚᚢᛗ",
+"Just send back":"ᚪᚾᛚᛁᚳᛖ ᛖᚠᛏ ᛋᛖᚾᛞᚪᚾ",
+"New rule":"ᚾᛁᚹᛖ ᚱᛖᚷᚩᛚ",
+"Why not? In one sentence, as a rule":"ᚻᚹᚣ ᚾᚫᛏ? ᚪᚾᚱᛖ ᛋᛈᚱᚫᚳᛖ, ᛋᚹᚪ ᚱᛖᚷᚩᛚ"
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},
@@ -2421,7 +2426,13 @@
 "Flaky rules":"wacian regolas",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"wacian regolas: þæs sindon þæt þær is sumum wyrcungum geondsawod, sumum feallad — þæt sind þæt man sceal eft gewritan.",
 "{met} of {n} runs met the rule.":"{met} of {n} wyrcungum seo regol wæs met.",
-"{p} of {n} runs passed.":"{p} of {n} wyrcungum þurhdrifon."
+"{p} of {n} runs passed.":"{p} of {n} wyrcungum þurhdrifon.",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" to regolum secgan? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"līn to regolum sceawunge on þǣapian: {rule}",
+"New rule":"nīwe regol",
+"{n} rules saved beside the program are checked too.":"{n} regolas be þæm þǣapian sindon sceawode.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" in {path} bewogen.",
+"\n? Why not? In one sentence, as a rule > ":"\n? hwy næt? ánre spræce, swa regol > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

@@ -1976,7 +1976,12 @@
   "Say which rule it must break first.": "seye first what rewle it moste breke.",
   "must fail": "moste faille",
   "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "the rewle was met: a must-fail rennyng moste breke it — wryte the rewle ageyn or save a worse draughte.",
-  "The review failed, but not on the rule it must break ({rule}).": "the examynynge failled, but not on the rewle it moste breke ({rule})."
+  "The review failed, but not on the rule it must break ({rule}).": "the examynynge failled, but not on the rewle it moste breke ({rule}).",
+  "Added \"{rule}\" to the review block's rules.": "\"{rule}\" was added to the rewles of the examynynge blak.",
+  "Add to the rules": "add to the rewles",
+  "Just send back": "just send it bak",
+  "New rule": "newe rewle",
+  "Why not? In one sentence, as a rule": "why nat? in oon sentence, as a rewle"
  },
  "examples": {
   "review": {
@@ -3795,7 +3800,13 @@
   "Flaky rules": "wakly rewles",
   "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "wakly rewles: these ben met in som rennynges and faillyn in othere — tho ben the oneth that schullen be wryten ageyn.",
   "{met} of {n} runs met the rule.": "{met} of {n} rennynges weren met the rewle.",
-  "{p} of {n} runs passed.": "{p} of {n} rennynges passed."
+  "{p} of {n} runs passed.": "{p} of {n} rennynges passed.",
+  "Add \"{rule}\" to the rules? [y/n] > ": "add \"{rule}\" to the rewles? [y/n] > ",
+  "Line to add to the review block's rules on the page: {rule}": "lyne to add to the rewles of the examynynge blak on the page: {rule}",
+  "New rule": "newe rewle",
+  "{n} rules saved beside the program are checked too.": "{n} rewles saved beside the prograemme ben examyned also.",
+  "\"{rule}\" saved in {path}.": "\"{rule}\" saved in {path}.",
+  "\n? Why not? In one sentence, as a rule > ": "\n? why nat? in oon sentence, as a rewle > "
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

@@ -142,6 +142,10 @@ A scheduled program, with nobody there to answer, won't start until you've appro
 
 If a program has an **ask me before** block, Python asks in the terminal and waits for `y` or `n`. With nobody there to answer, it says no and carries on.
 
+### Rules from corrections
+
+Saying `n` at an *I approve …* step asks why, in one sentence, and offers the reason as a new rule: `Add "prices in pounds, not dollars" to the rules? [y/n]`. On `y` the rule is saved beside the program in `.<program>.rules.json` — the program file itself is not changed — and every review checks it from then on (the log notes how many saved rules are in play). The line to add to the review block's rules on the page is printed too, so the next export carries the rule in the blocks. On the page, **Send back** at an approve step does the same: accepting adds the rule to every review block's rules on the canvas.
+
 ### Test cases
 
 A program that checks its own work deserves a check of its own, especially after you change its model. After a run you're happy with, press **Save as test case** under the result, and say what any good result must do, like *mentions the date; under 200 words; no jargon*. The test case keeps your answers to the program's questions and the files you chose. **Run tests**, at the top of the run log, runs every test case again: it gives the same answers instead of asking, the models answer afresh, and a strict reviewer checks each result against its criteria. The log ends with which passed, and why the others didn't.

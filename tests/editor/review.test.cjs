@@ -42,3 +42,12 @@ test("reviewerTier picks the same model, another maker's, or a named one", () =>
   assert.equal(units.makerOfTier("default"), "Anthropic");
   assert.equal(units.makerOfTier("gemini-default"), "Google");
 });
+
+// A rule offered when someone sends a result back (#428) is merged into the review block's rules, not twice.
+test("mergeRule adds the offered rule once", () => {
+  assert.equal(units.mergeRule("", "prices in pounds, not dollars"), "prices in pounds, not dollars");
+  assert.equal(units.mergeRule("clear", "prices in pounds, not dollars"), "clear; prices in pounds, not dollars");
+  assert.equal(units.mergeRule("clear; titled", "prices in pounds, not dollars"), "clear; titled; prices in pounds, not dollars");
+  assert.equal(units.mergeRule("clear\ntitled", "titled"), "clear\ntitled");
+  assert.equal(units.mergeRule("clear; titled", "titled"), "clear; titled");
+});

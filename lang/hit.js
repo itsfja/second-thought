@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"šumma 𒁹 first say rule",
 "must fail":"šumma 𒁹 fail",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"šumma 𒁹 rule ok, must-fail šumma 𒁹 break — šumma 𒁹 rule again",
-"The review failed, but not on the rule it must break ({rule}).":"šumma 𒁹 check fail, not šumma 𒁹 rule ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"šumma 𒁹 check fail, not šumma 𒁹 rule ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" šumma 𒁹 rule",
+"Add to the rules":"šumma 𒁹 add rule",
+"Just send back":"šumma 𒁹 just back",
+"New rule":"šumma 𒁹 new rule",
+"Why not? In one sentence, as a rule":"šumma 𒁹 why not one line"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"šumma ana waky rules",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"šumma ana waky rules: some pass some fail — šumma ana again",
 "{met} of {n} runs met the rule.":"{met} of {n} šumma ana runs rule ok",
-"{p} of {n} runs passed.":"{p} of {n} šumma ana runs pass"
+"{p} of {n} runs passed.":"{p} of {n} šumma ana runs pass",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" šumma ana rule? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"šumma ana line: {rule}",
+"New rule":"šumma ana new rule",
+"{n} rules saved beside the program are checked too.":"{n} šumma ana rules šumma ana check",
+"\"{rule}\" saved in {path}.":"\"{rule}\" šumma ana saved {path}",
+"\n? Why not? In one sentence, as a rule > ":"\n? šumma ana why not one line > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

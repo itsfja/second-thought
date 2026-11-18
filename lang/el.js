@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"Πες πρώτα ποιον κανόνα πρέπει να παραβεί.",
 "must fail":"πρέπει να αποτύχει",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Ο κανόνας τηρήθηκε: μια must-fail περίπτωση πρέπει να τον παραβεί — ξαναγράψτε τον κανόνα ή αποθηκεύστε χειρότερο προσχέδιο.",
-"The review failed, but not on the rule it must break ({rule}).":"Η επισκόπηση απέτυχε, αλλά όχι στον κανόνα που πρέπει να παραβεί ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"Η επισκόπηση απέτυχε, αλλά όχι στον κανόνα που πρέπει να παραβεί ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"«{rule}» προστέθηκε στους κανόνες του μπλοκ επισκόπησης.",
+"Add to the rules":"Προσθήκη στους κανόνες",
+"Just send back":"Απλώς επιστροφή",
+"New rule":"Νέος κανόνας",
+"Why not? In one sentence, as a rule":"Γιατί όχι; Σε μία πρόταση, ως κανόνας"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2420,6 +2425,12 @@
 "Flaky rules":"Ασταθείς κανόνες",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Ασταθείς κανόνες: αυτοί περνοφν σε ορισμένες εκτελέσεις και αποτυγχάνουν σε άλλες — αυτοί είναι που πρέπει να ξαναγραφούν.",
 "{met} of {n} runs met the rule.":"{met} από {n} εκτελέσεις τήρησαν τον κανόνα.",
-"{p} of {n} runs passed.":"{p} από {n} εκτελέσεις πέρασαν."
+"{p} of {n} runs passed.":"{p} από {n} εκτελέσεις πέρασαν.",
+"Add \"{rule}\" to the rules? [y/n] > ":"Να προστεθεί το «{rule}» στους κανόνες; [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"Γραμμή για προσθήκη στους κανόνες του μπλοκ επισκόπησησ στη σελίδα: {rule}",
+"New rule":"Νέος κανόνας",
+"{n} rules saved beside the program are checked too.":"Οι {n} κανόνες που είνα αποθηκευμένοι δίπλα στο πρόγραμμα ελέγχονται κι αυτοί.",
+"\"{rule}\" saved in {path}.":"Το «{rule}» αποθηκεύτηκε στο {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? Γιατί όχι; Σε μία πρόταση, ως κανόνα > "
 }
 };
