@@ -21,7 +21,7 @@ from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, H
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _private_open, _short, _write_json, clean_svg, exact_checks, field_list, num, parse_rules, read_text_file, record_schema, review_verdicts,
     round_js, stuck_rule, to_bool, to_list, to_record, to_str)
-from .connectors import Connections
+from .connectors import Connections, get_url
 from .mcp import MCPTools
 from .agent import AgentTools
 from .spending import Spending, any_allowance, check_plans, reported_lines
@@ -2007,7 +2007,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             return 0
         if not self.approve_program(can, unattended=not sys.stdin.isatty()):
             return 1
-        return asyncio.run(self.run([s[-1]], s[-2] if s[0] == "every" else tr("Scheduled {time}", time=f"{s[1]:02d}:{s[2]:02d}")))
+        label = s[-2] if s[0] == "every" else tr("Scheduled {time}", time=f"{s[1]:02d}:{s[2]:02d}")
+        code = asyncio.run(self.run([s[-1]], label))
+        asyncio.run(self._scheduled_end(label, code))  # the failure notice and the heartbeat, if they're set (#433)
+        return code
 
     async def run_schedules(self, schedules, watches=(), telegram=(), listeners=()):
         if not schedules and not watches and not telegram and not listeners:
@@ -2049,11 +2052,61 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                         due = True
                 if due:
                     fn = s[-1]
+                    label = s[-2] if s[0] == "every" else tr("Scheduled {time}", time=f"{s[1]:02d}:{s[2]:02d}")
                     if busy and not busy.done():
                         self.start_script(fn)
                     else:
-                        busy = asyncio.ensure_future(self.run([fn], s[-2] if s[0] == "every" else tr("Scheduled {time}", time=f"{s[1]:02d}:{s[2]:02d}")))
+                        busy = asyncio.ensure_future(self.run([fn], label))
+                        busy.add_done_callback(lambda t, label=label: self._background(self._scheduled_end(label, t)))  # #433
             await asyncio.sleep(5)
+
+    async def _scheduled_end(self, label, result):
+        """After a scheduled run finishes (#433): one notify_on_failure message if it stopped with an error, and a
+        heartbeat_url fetch either way, so a schedule that goes quiet gets noticed too. Neither is ever an error, and
+        in a test or a rehearsal neither happens."""
+        if self.dry_run():
+            return
+        if isinstance(result, asyncio.Task):
+            try:
+                code = result.result()
+            except BaseException:  # noqa: BLE001 - a run that was stopped or crashed counts as stopped
+                code = 1
+        else:
+            code = result
+        if code and self.error:
+            await self._notify_failure(label, self._describe(self.error))
+        await self._heartbeat()
+
+    async def _notify_failure(self, label, reason):
+        """One message on the notify_on_failure channel when a scheduled run stops with an error (#433). The run is
+        unattended, so the message goes without asking first; a channel that can't be reached is only a note."""
+        channel = os.environ.get("RB_NOTIFY_ON_FAILURE", "").strip().lower()
+        if not channel:
+            return
+        prog = os.path.basename(sys.argv[0] or "program")
+        text = tr("{program}: scheduled run \u201c{label}\u201d stopped with an error: {reason}",
+                  program=prog, label=label, reason=_short(reason, 300))
+        if channel == "telegram":
+            try:
+                if await self.tg_send(text, approved=True):
+                    print(tr("  (Sent a failure notice on {channel}.)", channel=channel), flush=True)
+            except Exception as e:  # noqa: BLE001 - a notice that can't go out is a note, never an error
+                print(tr("  (Couldn't send the failure notice on {channel}: {e})", channel=channel, e=_short(e, 160)), flush=True)
+        else:
+            print(tr("  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})",
+                     channel=channel, reason=_short(reason, 160)), flush=True)
+
+    async def _heartbeat(self):
+        """Fetches heartbeat_url after a scheduled run finishes (#433), for Healthchecks.io or an Uptime Kuma push
+        monitor. Its failure is a note, never an error: the next run tries again."""
+        url = os.environ.get("RB_HEARTBEAT_URL", "").strip()
+        if not url:
+            return
+        try:
+            await asyncio.to_thread(get_url, url, True, tr("Heartbeat"), 4096)
+            print(tr("  (Heartbeat sent: {url})", url=_short(url, 80)), flush=True)
+        except Exception as e:  # noqa: BLE001 - a heartbeat that can't be sent is only a note
+            print(tr("  (The heartbeat {url} couldn't be fetched, which is only a note: {e})", url=_short(url, 80), e=_short(e, 160)), flush=True)
 
     async def _watch(self, watches):
         """Polls Home Assistant and starts 'when … changes' scripts."""

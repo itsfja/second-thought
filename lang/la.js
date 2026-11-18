@@ -2431,7 +2431,20 @@
 "New rule":"nova regula",
 "{n} rules saved beside the program are checked too.":"{n} regulae iuxta programma servatae etiam examinantur.",
 "\"{rule}\" saved in {path}.":"«{rule}» in {path} servatum est.",
-"\n? Why not? In one sentence, as a rule > ":"\n? cur non? una sententia, velut regula > "
+"\n? Why not? In one sentence, as a rule > ":"\n? cur non? una sententia, velut regula > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: executio praefixa «{label}» errore constitit: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (nuntius erroris in {channel} missus est.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (nuntius erroris in {channel} mitti non potuit: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (notify_on_failure = {channel} nondum est canalis cui hoc runtime mittere possit; error erat: {reason})",
+"  (Heartbeat sent: {url})":"  (heartbeat missum est: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (heartbeat {url} peti non potuit, quod tantum nota est: {e})",
+"Failure notices":"Nuntii errorum",
+"Heartbeat":"Heartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: executio praefixa quae errore constitit unum nuntium Telegram mittit cum causa",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"sed TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID ambo posita esse debent {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: hoc runtime nunc tantum in telegram mittit",
+"heartbeat_url is fetched after each finished scheduled run":"post quamlibet executionem praefixam confectam heartbeat_url petitur",
+"heartbeat_url must start with http:// or https://":"heartbeat_url incipere debet http:// vel https://"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

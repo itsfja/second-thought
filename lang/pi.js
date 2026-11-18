@@ -2431,7 +2431,20 @@
 "New rule":"नवं् नियमो",
 "{n} rules saved beside the program are checked too.":"{n} नियमा लेखं् पक्खे सं्रक्खिता अपि परीखण्णन्ति.",
 "\"{rule}\" saved in {path}.":"\"{rule}\" {path}-ti सं्रक्खितं्.",
-"\n? Why not? In one sentence, as a rule > ":"\n? कस्मा न? एकेन वाक्येन, नियमेन > "
+"\n? Why not? In one sentence, as a rule > ":"\n? कस्मा न? एकेन वाक्येन, नियमेन > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: नियुत्तं् चलनं् \"{label}\" दोसेन विरमि: {reason}",
+"  (Sent a failure notice on {channel}.)":"  ({channel} तत्थ doṣa-sañṇaṃ पेसितं्.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  ({channel} तत्थ doṣa-sañṇaṃ पेसेतुं् न सक्का: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (नोतिfय्_ओन्_faइलुरे = {channel} अधुण्ं् पन एसो चलनो यस्मिं् पेसेतुं् न सक्कोति; दोसो आसि: {reason})",
+"  (Heartbeat sent: {url})":"  (हदयस्पर्सं् पेसितं्: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (हदयस्पर्सं् {url} आहातुं् न सक्का, यं् पन केवलं् लेखं्: {e})",
+"Failure notices":"Dosaspañṇā",
+"Heartbeat":"Hadayasparsaṃ",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"नोतिfय्_ओन्_faइलुरे = तेलेग्रम्: नियुत्तं् चलनं् दोसेन विरमन्तं् एकं् Telegram-sandesaṃ दोसेन सद्धिं् पेसेति",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"किन्तु TELEGRAM_BOT_TOKEN च TELEGRAM_CHAT_ID उभयम्पि ठपितानि भवन्ति {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"नोतिfय्_ओन्_faइलुरे = {channel}: एसो चलनो अधुण्ं् केवलं् तेलेग्रम् तत्थ पेसेति",
+"heartbeat_url is fetched after each finished scheduled run":"पच्चुपं् नियुत्तं् चलनं् समत्तं् सति हेअर्त्बेअत्_उर्ल् आहायते",
+"heartbeat_url must start with http:// or https://":"हेअर्त्बेअत्_उर्ल् ह्त्त्प्:// वा ह्त्त्प्स्:// तेन आरभब्बं्"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

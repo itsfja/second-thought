@@ -3806,6 +3806,19 @@
   "New rule": "Nouvelle règle",
   "{n} rules saved beside the program are checked too.": "{n} règles enregistrées à côté du programme sont aussi vérifiées.",
   "\"{rule}\" saved in {path}.": "« {rule} » enregistré dans {path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? Pourquoi pas ? En une phrase, comme règle > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? Pourquoi pas ? En une phrase, comme règle > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program} : le lancement planifié « {label} » s'est arrêté avec une erreur : {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (Notification d'échec envoyée sur {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (La notification d'échec n'a pas pu être envoyée sur {channel} : {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} n'est pas encore un canal sur lequel ce runtime peut envoyer ; l'erreur était : {reason})",
+  "  (Heartbeat sent: {url})": "  (Heartbeat envoyé : {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (Le heartbeat {url} n'a pas pu être récupéré, ce qui n'est qu'une note : {e})",
+  "Failure notices": "Notifications d'échec",
+  "Heartbeat": "Heartbeat",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram : un lancement planifié qui s'arrête avec une erreur envoie un message Telegram avec la raison",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", mais TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID doivent tous deux être définis {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel} : ce runtime n'envoie que sur telegram pour l'instant",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url est récupéré après chaque lancement planifié terminé",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url doit commencer par http:// ou https://"
  }
 }

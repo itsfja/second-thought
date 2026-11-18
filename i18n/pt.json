@@ -3806,6 +3806,19 @@
   "New rule": "Nova regra",
   "{n} rules saved beside the program are checked too.": "As {n} regras guardadas junto ao programa também são verificadas.",
   "\"{rule}\" saved in {path}.": "“{rule}” guardado em {path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? Porquê não? Numa frase, como regra > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? Porquê não? Numa frase, como regra > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: a execução agendada “{label}” parou com um erro: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (Aviso de falha enviado por {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (Não foi possível enviar o aviso de falha por {channel}: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} ainda não é um canal para o qual este runtime possa enviar; o erro foi: {reason})",
+  "  (Heartbeat sent: {url})": "  (Heartbeat enviado: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (Não foi possível obter o heartbeat {url}, o que é apenas uma nota: {e})",
+  "Failure notices": "Avisos de falha",
+  "Heartbeat": "Heartbeat",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: uma execução agendada que para com um erro envia uma mensagem de Telegram com o motivo",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", mas TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID têm ambos de estar definidos {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: este runtime só envia por telegram, por agora",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url é obtido depois de cada execução agendada que termina",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url deve começar por http:// ou https://"
  }
 }

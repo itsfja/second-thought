@@ -45,6 +45,8 @@ The first time, it makes a private `.venv` next to the program and installs into
 
 If a program has timed jobs or listeners, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves, and if the program stops with a problem they start it again 30 seconds later.
 
+**Say when it fails, or goes quiet.** A schedule that breaks at three in the morning only tells the terminal, so `notify_on_failure = telegram` in `second-thought.ini` sends one Telegram message when a scheduled run stops with an error, with the reason (the run is unattended, so the message goes without asking first). And `heartbeat_url` — a [Healthchecks.io](https://healthchecks.io) or Uptime Kuma push address — is fetched after each scheduled run that finishes, so a schedule that goes silent gets noticed too; if that fetch fails, it's only a note in the log, never an error. Both are commented in `second-thought.example.ini`, and `--doctor` checks them. The same happens for runs started with `--run-schedule N`, like the ones a GitHub Actions workflow makes — there, put `RB_NOTIFY_ON_FAILURE` and `RB_HEARTBEAT_URL` in the workflow's `env` (from repository secrets) to get the notices. Tests (`--test`) and rehearsals (`--rehearse`) never send or fetch anything.
+
 To start it automatically:
 
 - **Windows:** double-click `install-startup.bat` once. The program then starts in a small window each time you log in. To undo it, press Windows+R, type `shell:startup`, and delete "Second Thought - my-program".

@@ -3807,7 +3807,20 @@
   "New rule": "ný regla",
   "{n} rules saved beside the program are checked too.": "{n} reglur vistaðar við forritið eru líka skoðaðar.",
   "\"{rule}\" saved in {path}.": "\"{rule}\" vistað í {path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? hvers vegna ekki? í einni setningu, sem regla > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? hvers vegna ekki? í einni setningu, sem regla > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: hin skipaða keyrsla „{label}“ nam staðar við villu: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (villuboð sent á {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (villuboð gat eigi sent á {channel}: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} er eigi enn rás er þessi runtime getr sent á; villan var: {reason})",
+  "  (Heartbeat sent: {url})": "  (hjartsláttarboð sent: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (hjartsláttarboðið {url} gat eigi sótt, er aðeins athugasemd: {e})",
+  "Failure notices": "Villuboð",
+  "Heartbeat": "Hjartsláttur",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: skipuð keyrsla er nemr staðar við villu sendir eina Telegram-skeyti með ástæðu",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "en bæði TELEGRAM_BOT_TOKEN og TELEGRAM_CHAT_ID verða að vera sett {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: þessi runtime sendir aðeins á telegram, sem stendur",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url er sótt eftir hverja skipuða keyrslu er lýkur",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url verður að byrja á http:// eða https://"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

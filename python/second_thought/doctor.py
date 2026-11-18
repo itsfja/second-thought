@@ -671,6 +671,20 @@ class Doctor:
             folder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0] or ".")), LOG_DIR)
             ok = os.access(folder if os.path.isdir(folder) else os.path.dirname(folder), os.W_OK)
             row("ok" if ok else "FAIL", "Run logs", tr("saved in {folder}", folder=folder) if ok else tr("can't be saved in {folder}", folder=folder))
+        notify = os.environ.get("RB_NOTIFY_ON_FAILURE", "").strip().lower()
+        if notify:  # what a scheduled run that stops with an error sends (#433)
+            if notify == "telegram":
+                ready = bool(os.environ.get("TELEGRAM_BOT_TOKEN", "").strip() and self._tg_chats())
+                row("ok" if ready else "FAIL", "Failure notices",
+                    tr("notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason")
+                    + ("" if ready else " \u2014 " + tr("but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}", where_keys=WHERE_KEYS)))
+            else:
+                row("NOTE", "Failure notices", tr("notify_on_failure = {channel}: this runtime sends on telegram only, for now", channel=notify))
+        heartbeat = os.environ.get("RB_HEARTBEAT_URL", "").strip()
+        if heartbeat:  # fetched after each finished scheduled run (#433); not fetched now, so the monitor isn't pinged
+            ok = heartbeat.lower().startswith(("http://", "https://"))
+            row("ok" if ok else "FAIL", "Heartbeat", tr("heartbeat_url is fetched after each finished scheduled run") if ok else
+                tr("heartbeat_url must start with http:// or https://"))
         for server in self.__dict__.get("_mcp_servers", {}).values():
             if hasattr(server, "close"):
                 server.close()

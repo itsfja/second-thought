@@ -2430,7 +2430,20 @@
 "New rule":"новъ законъ",
 "{n} rules saved beside the program are checked too.":"{n} законъ, ꙗже сохранєны при программѣ, тоже провѣрѧѭтсѧ.",
 "\"{rule}\" saved in {path}.":"\"{rule}\" сохранєнъ въ {path}.",
-"\n? Why not? In one sentence, as a rule > ":"\n? почєму нѣтъ? ѡдинъмъ прєдложєніємъ, ꙗко законъ > "
+"\n? Why not? In one sentence, as a rule > ":"\n? почєму нѣтъ? ѡдинъмъ прєдложєніємъ, ꙗко законъ > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: planovый zapusk «{label}» oustavil s ошибкой: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (uvedomlenie ob oшibке otpravleno v {channel}.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (ne udalosь otpravitь uvodomlenie ob oшibке v {channel}: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (notify_on_failure = {channel} poka еще ne kanal, v kotoryj etot runtime možet otpravljatь; oшibка: {reason})",
+"  (Heartbeat sent: {url})":"  (heartbeat otpravlen: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (ne udalosь poluchitь heartbeat {url}, čto lišь primeчanie: {e})",
+"Failure notices":"Uvodomlenija ob oшibах",
+"Heartbeat":"Heartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: planovый zapusk, oustanovivšiйся s oшibкkoй, otpravljaet odno soobщenie Telegram s prichinoj",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"no TELEGRAM_BOT_TOKEN i TELEGRAM_CHAT_ID dolžny bytь zadany oba {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: etot runtime poka otpravljaet tolьko v telegram",
+"heartbeat_url is fetched after each finished scheduled run":"heartbeat_url zaprašivaetsja posle každoгo zavaršivšegosja planovogo zapuska",
+"heartbeat_url must start with http:// or https://":"heartbeat_url dolžen načinatьsja s http:// ili https://"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

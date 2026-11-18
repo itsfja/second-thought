@@ -3807,7 +3807,20 @@
   "New rule": "aለga ሴተ",
   "{n} rules saved beside the program are checked too.": "{n} ሴተ ኬ pሮgረም ዌዴ ዪምሴሩ ዬሜሪምሩ",
   "\"{rule}\" saved in {path}.": "\"{rule}\" {path} ዌዴ ሁኔ",
-  "\n? Why not? In one sentence, as a rule > ": "\n? ሚኒም ሌለ? ቤ aንድ ዊስት'a, ስወ ሴተ > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? ሚኒም ሌለ? ቤ aንድ ዊስት'a, ስወ ሴተ > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: ዪሜሪምሩ ሴተ {label} ቤ ሲሌተ ዌዴ: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (ቤ {channel} ዬfeለ ኖቲስ ዪቴዌሬ.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (ዬfeለ ኖቲስ ቤ {channel} aዪቴዌሬ: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (ኖቲfይ_oን_faiሉሬ = {channel} ዬተሆኖ ዬቴሴመዉ cሀንኔል aዪዴሌም; ሲሌተው: {reason})",
+  "  (Heartbeat sent: {url})": "  (ሄaርትቤaት ዪቴዌሬ: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (ሄaርትቤaት {url} መዌተት aዪcሀል; ዪሁ ኖቲስ ኔው: {e})",
+  "Failure notices": "ዬfeለ ኖቲሶcሂ",
+  "Heartbeat": "ሄaርትቤaት",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "ኖቲfይ_oን_faiሉሬ = ቴሌgረም: ቤ ሲሌተ ዌዴ ዪሜሪምሩ ሴተ Teሌgረም ሜስሰge aንዲ ቤ ሲሌተ ዪቴዌሬ.",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "TELEGRAM_BOT_TOKEN iነ TELEGRAM_CHAT_ID ሁሌቱ ዪሜመረል: {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "ኖቲfይ_oን_faiሉሬ = {channel}: ዪሄ ሩንቲሜ aሁን ቴሌgረም ለዪ ዪቴዌሬ.",
+  "heartbeat_url is fetched after each finished scheduled run": "መሌተ ዪሜሪምሩ ሴተ ኬሜዌሴዴ ሄaርትቤaት_uርል ዪቴዌሬ.",
+  "heartbeat_url must start with http:// or https://": "ሄaርትቤaት_uርል ህትትp:// ዎዪ ህትትpስ:// ዪቴዌሬ."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

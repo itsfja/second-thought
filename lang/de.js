@@ -2431,6 +2431,19 @@
 "New rule":"Neue Regel",
 "{n} rules saved beside the program are checked too.":"{n} neben dem Programm gespeicherte Regeln werden auch geprüft.",
 "\"{rule}\" saved in {path}.":"„{rule}“ in {path} gespeichert.",
-"\n? Why not? In one sentence, as a rule > ":"\n? Warum nicht? In einem Satz, als Regel > "
+"\n? Why not? In one sentence, as a rule > ":"\n? Warum nicht? In einem Satz, als Regel > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: geplanter Lauf „{label}“ ist mit einem Fehler gestoppt: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (Fehlermeldung auf {channel} gesendet.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (Fehlermeldung auf {channel} konnte nicht gesendet werden: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (notify_on_failure = {channel} ist noch kein Kanal, auf dem dieses Runtime senden kann; der Fehler war: {reason})",
+"  (Heartbeat sent: {url})":"  (Heartbeat gesendet: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (Der Heartbeat {url} konnte nicht abgerufen werden, was nur ein Hinweis ist: {e})",
+"Failure notices":"Fehlermeldungen",
+"Heartbeat":"Heartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: Ein geplanter Lauf, der mit einem Fehler stoppt, sendet eine Telegram-Nachricht mit dem Grund",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":", aber TELEGRAM_BOT_TOKEN und TELEGRAM_CHAT_ID müssen beide gesetzt sein {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: Dieses Runtime sendet im Moment nur auf Telegram",
+"heartbeat_url is fetched after each finished scheduled run":"heartbeat_url wird nach jedem beendeten geplanten Lauf abgerufen",
+"heartbeat_url must start with http:// or https://":"heartbeat_url muss mit http:// oder https:// beginnen"
 }
 };

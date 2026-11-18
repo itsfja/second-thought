@@ -2431,6 +2431,19 @@
 "New rule":"新规则",
 "{n} rules saved beside the program are checked too.":"保存在程序旁边的{n}条规则也会被检查。",
 "\"{rule}\" saved in {path}.":"“{rule}”已保存到{path}。",
-"\n? Why not? In one sentence, as a rule > ":"\n? 为什么不行？用一句话，作为一条规则 > "
+"\n? Why not? In one sentence, as a rule > ":"\n? 为什么不行？用一句话，作为一条规则 > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}：计划运行“{label}”因错误停止：{reason}",
+"  (Sent a failure notice on {channel}.)":"  （已在 {channel} 上发送失败通知。）",
+"  (Couldn't send the failure notice on {channel}: {e})":"  （无法在 {channel} 上发送失败通知：{e}）",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  （notify_on_failure = {channel} 还不是此运行时可以发送的渠道；错误为：{reason}）",
+"  (Heartbeat sent: {url})":"  （已发送心跳：{url}）",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  （无法获取心跳 {url}，这只是一条备注：{e}）",
+"Failure notices":"失败通知",
+"Heartbeat":"心跳",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram：计划运行因错误停止时，会发送一条带原因的 Telegram 消息",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"但 TELEGRAM_BOT_TOKEN 和 TELEGRAM_CHAT_ID 必须都已设置 {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}：此运行时目只发送到 telegram",
+"heartbeat_url is fetched after each finished scheduled run":"每次计划运行结束后都会获取 heartbeat_url",
+"heartbeat_url must start with http:// or https://":"heartbeat_url 必须以 http:// 或 https:// 开头"
 }
 };
