@@ -40,8 +40,8 @@
 "rb_ask_list":{"message0":"Xicnequi ce mecatl itech Claude: %1","tooltip":"Claude quinānquilia ica ce mecatl in huel ticmotlalōz."},
 "rb_rewrite":{"message0":"Occeppa xictlahcuilo %1 iuhqui %2","tooltip":"Machiyōtl: occeppa xictlahcuilo (achtlahcuilōlli) iuhqui (ic caxtiltēcatlahtōlli xiccuepa)."},
 "rb_extract":{"message0":"Xicquīxti %1 itech %2"},
-"rb_reflect":{"message0":"Xictlatta in achtlahcuilōlli ica %1","message1":"ixquichcāuh %1 cepa; intlā ahmo yēctli, xicchīhua","message2":"%1","tooltip":"Claude quitlatta in achtlahcuilōlli. Intlā ahmo yēctli, mochīhuah in tlaxtlapalli in itic, niman occeppa quitlatta. Cēcen cepa in tlattani no quitta ahmo mocuepah in achto tlatlacōlli. Intlā tlamih in cepa, mopiya in achtlahcuilōlli in achi tlatlacōle, ahmo zan in zātepan.","message3":"auh xiquita %1"},
-"rb_review":{"message0":"Xictlatta in achtlahcuilōlli ica %1","tooltip":"Ce tlattaliztli. Zātepan xictequitlālli «In achtlahcuilōlli ōquiz» ihuān «In tlatlacōlli».","message1":"auh xiquita %1"},
+"rb_reflect":{"message0":"Xictlatta in achtlahcuilōlli ica %1, icoyōtl %2","message1":"ixquichcāuh %1 cepa; intlā ahmo yēctli, xicchīhua","message2":"%1","tooltip":"Claude quitlatta in achtlahcuilōlli. Intlā ahmo yēctli, mochīhuah in tlaxtlapalli in itic, niman occeppa quitlatta. Cēcen cepa in tlattani no quitta ahmo mocuepah in achto tlatlacōlli. Intlā tlamih in cepa, mopiya in achtlahcuilōlli in achi tlatlacōle, ahmo zan in zātepan.","message3":"auh xiquita %1"},
+"rb_review":{"message0":"Xictlatta in achtlahcuilōlli ica %1, icoyōtl %2","tooltip":"Ce tlattaliztli. Zātepan xictequitlālli «In achtlahcuilōlli ōquiz» ihuān «In tlatlacōlli».","message1":"auh xiquita %1"},
 "rb_passed":{"message0":"In achtlahcuilōlli ōquiz"},
 "rb_problems":{"message0":"In tlatlacōlli"},
 "rb_score":{"message0":"Xicpōhua %1 ic mahtlactli ic %2"},
@@ -237,7 +237,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"itlantlahtōl tlamachīuhqui","same":"zan tlamachīuhqui","another":"ocachi tlamachīuhqui"},
+"rb_reflect.REVIEWER":{"":"itlantlahtōl tlamachīuhqui","same":"zan tlamachīuhqui","another":"ocachi tlamachīuhqui"}
 },
 "categories":{
 "Agent":"Tītlantli",
@@ -1221,7 +1223,10 @@
 "All":"Mochi",
 "Built in":"Oquixtic",
 "Shared":"Tlahtoltecpa",
-"{n} of {m} examples":"{n} pan {m} machehualtin"
+"{n} of {m} examples":"{n} pan {m} machehualtin",
+"Reviewer":"tlamachīuhqui",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"amo kwali tlamachīuhqui, yeh in tlamachīuhqui tlachīhua in achtlahcuilōlli.",
+"Written by {writer}; checked by {checker}.":"Tlacuilohtli {writer}; tlamachīuhqui {checker}."
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2397,7 +2402,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Amo yetl tlachipahualiztli: ahtlen tlen inin programa quichih ipan tlalticpac amo momati.",
 "The chain is broken: a line is missing or was edited.":"In cadena quipoloa: ce linea falta o mo patlac.",
 "The chain is intact: every line carries the fingerprint of the one before.":"In cadena cualli: cada linea quipiya in huella tlen achto.",
-"Couldn't read {path} ({err}).":"Amo oquix in {path} ({err})."
+"Couldn't read {path} ({err}).":"Amo oquix in {path} ({err}).",
+"Reviewer":"tlamachīuhqui",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"amo kwali tlamachīuhqui, yeh in tlamachīuhqui tlachīhua in achtlahcuilōlli.",
+"Written by {writer}; checked by {checker}.":"Tlacuilohtli {writer}; tlamachīuhqui {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

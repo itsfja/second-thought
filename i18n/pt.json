@@ -392,7 +392,7 @@
    "tooltip": "Executa os blocos abaixo sempre que esta mensagem é difundida. Vários scripts podem ouvir a mesma mensagem."
   },
   "rb_reflect": {
-   "message0": "rever o rascunho segundo %1",
+   "message0": "rever o rascunho segundo %1, revisto por %2",
    "message1": "até %1 rondas; se falhar, fazer",
    "message2": "%1",
    "tooltip": "O Claude critica o rascunho. Se falhar, correm os blocos lá dentro e depois critica outra vez. Em cada ronda o revisor também verifica que os problemas anteriores não voltaram. Se as rondas acabarem, fica o rascunho com menos problemas, não simplesmente o último.",
@@ -415,7 +415,7 @@
    "tooltip": "Se algo lá dentro falhar de uma forma que uma segunda tentativa possa resolver (uma ligação que caiu, uma resposta truncada), espera um pouco e volta a executar."
   },
   "rb_review": {
-   "message0": "rever o rascunho segundo %1",
+   "message0": "rever o rascunho segundo %1, revisto por %2",
    "tooltip": "Uma revisão. Use depois «o rascunho passou na revisão» e «problemas da revisão».",
    "message1": "e verificar %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "a definição do revisor",
+   "same": "o mesmo modelo",
+   "another": "um modelo de outro fabricante"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "a definição do revisor",
+   "same": "o mesmo modelo",
+   "another": "um modelo de outro fabricante"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "Todos",
   "Built in": "Integrados",
   "Shared": "Partilhados",
-  "{n} of {m} examples": "{n} de {m} exemplos"
+  "{n} of {m} examples": "{n} de {m} exemplos",
+  "Reviewer": "Revisor",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "Nenhum modelo de outro fabricante tem uma chave nesta página, por isso é o mesmo modelo que revê o rascunho. Adicione uma chave com «Add another key», ou escolha um modelo com nome em «revisto por».",
+  "Written by {writer}; checked by {checker}.": "Escrito por {writer}; revisto por {checker}."
  },
  "examples": {
   "review": {
@@ -3765,6 +3778,9 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Ainda não há recibos: nada do que este programa fez ao mundo ficou registado.",
   "The chain is broken: a line is missing or was edited.": "A corrente está partida: falta uma linha ou foi editada.",
   "The chain is intact: every line carries the fingerprint of the one before.": "A corrente está intacta: cada linha traz a impressão digital da anterior.",
-  "Couldn't read {path} ({err}).": "Não foi possível ler {path} ({err})."
+  "Couldn't read {path} ({err}).": "Não foi possível ler {path} ({err}).",
+  "Reviewer": "Revisor",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "Nenhum modelo de outro fabricante tem uma chave, por isso é o mesmo modelo que revê o rascunho. Adicione uma chave de outro serviço, ou indique um modelo na escolha «revisto por» do bloco de revisão.",
+  "Written by {writer}; checked by {checker}.": "Escrito por {writer}; revisto por {checker}."
  }
 }

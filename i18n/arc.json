@@ -393,7 +393,7 @@
    "tooltip": "מרהט לבנין דלתחתא כל אימת דאגרתא הדא מתכרזא. סדרין סגיאין יכלין למשמע לאגרתא חדא."
   },
   "rb_reflect": {
-   "message0": "בדוק טופסא כלקבל %1",
+   "message0": "בדוק את הטיוטא לפי %1, הבודק: %2",
    "message1": "עד %1 סבובין; כד נפיל, עביד",
    "message2": "%1",
    "tooltip": "Claude בדיק טופסא. אי נפיל, לבנין דבגוה רהטין, ובתר כן בדיק תוב. בכל סבובא בודקא בדיק נמי דפגמין קדמאין לא תבו. אי סבוביא שלמו, טופסא דאית ביה פגמין זעירין נטיר, לא בתראה לחוד.",
@@ -416,7 +416,7 @@
    "tooltip": "אי מדעם בגוה נפיל באורחא דנסיונא תניינא יכיל לתקנא (קשרא דאתפסק, פתגמא משבשא), מתין קליל ומרהט תוב."
   },
   "rb_review": {
-   "message0": "בדוק טופסא כלקבל %1",
+   "message0": "בדוק את הטיוטא לפי %1, הבודק: %2",
    "tooltip": "בדיקתא חדא. שמש בתר כן ב\"טופסא עבר בדיקתא\" וב\"פגמי בדיקתא\".",
    "message1": "ܡܦܕܐ %1"
   },
@@ -974,6 +974,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "הגדרת הבודק",
+   "same": "אותו מודל",
+   "another": "מודל של יצרן אחר"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "הגדרת הבודק",
+   "same": "אותו מודל",
+   "another": "מודל של יצרן אחר"
   }
  },
  "categories": {
@@ -1958,7 +1968,10 @@
   "All": "ܟܠ",
   "Built in": "ܒܢܝܬܐ",
   "Shared": "ܡܫܘܬܦܐ",
-  "{n} of {m} examples": "{n} ܡܢ {m} ܡܬܠ̈ܐ"
+  "{n} of {m} examples": "{n} ܡܢ {m} ܡܬܠ̈ܐ",
+  "Reviewer": "בדוק",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "אין מודל של יצרן אחר עם מפתח בדף זה — אותו מודל בדוק את הטיוטה. הוסף מפתח דרך «Add another key», או בחר מודל לפי שם «בדוק».",
+  "Written by {writer}; checked by {checker}.": "נכתב על ידי {writer}; נבדק על ידי {checker}."
  },
  "examples": {
   "review": {
@@ -3766,7 +3779,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "lā qabūlāt baʿd: lā šayʾ mimma faʿala hādhā al-barnāmaj lil-ʿālam sajjala.",
   "The chain is broken: a line is missing or was edited.": "al-silsila makinšara: saṭr wāḥid mafqūd aw mubaddal.",
   "The chain is intact: every line carries the fingerprint of the one before.": "al-silsila salīma: kull saṭr yaḥmil baṣmat al-sābiq.",
-  "Couldn't read {path} ({err}).": "lā neškur {path} ({err})."
+  "Couldn't read {path} ({err}).": "lā neškur {path} ({err}).",
+  "Reviewer": "בדוק",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "אין מודל של יצרן אחר עם מפתח — אותו מודל בדוק את הטיוטה. הוסף מפתח של שירות אחר, או ציין מודל ב«בדוק» של גוש הביקורת.",
+  "Written by {writer}; checked by {checker}.": "נכתב על ידי {writer}; נבדק על ידי {checker}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

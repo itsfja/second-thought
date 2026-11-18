@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nuovo record"},
 "rb_rec_set":{"message0":"imposta %1 di %2 a %3","tooltip":"Cambia un campo di un record (di solito una variabile record)."},
 "rb_receive":{"message0":"quando ricevo %1","tooltip":"Esegue i blocchi sotto ogni volta che questo messaggio viene trasmesso. Più script possono ascoltare lo stesso messaggio."},
-"rb_reflect":{"message0":"rivedi la bozza secondo %1","message1":"fino a %1 giri; se non passa, fai","message2":"%1","tooltip":"Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima.","message3":"e controlla %1"},
+"rb_reflect":{"message0":"rivedi la bozza secondo %1, rivista da %2","message1":"fino a %1 giri; se non passa, fai","message2":"%1","tooltip":"Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima.","message3":"e controlla %1"},
 "rb_reset_timer":{"message0":"azzera il timer"},
 "rb_result":{"message0":"termina e mostra il risultato","tooltip":"Termina l'esecuzione. Mostra ciò che hai aggiunto al risultato, o la bozza se non hai aggiunto nulla."},
 "rb_result_text":{"message0":"il risultato finora","tooltip":"Tutto ciò che è stato aggiunto al risultato, come testo."},
 "rb_retry":{"message0":"riprova fino a %1 volte","message1":"%1","tooltip":"Se qualcosa all'interno fallisce in un modo che un secondo tentativo potrebbe risolvere (una connessione caduta, una risposta incomprensibile), aspetta un po' e lo esegue di nuovo."},
-"rb_review":{"message0":"rivedi la bozza secondo %1","tooltip":"Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione».","message1":"e controlla %1"},
+"rb_review":{"message0":"rivedi la bozza secondo %1, rivista da %2","tooltip":"Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione».","message1":"e controlla %1"},
 "rb_revise":{"message0":"rivedi per correggere i problemi della revisione %1 usando il web","tooltip":"Claude corregge i problemi trovati dall'ultima revisione."},
 "rb_rework":{"message0":"rielabora la bozza: %1","tooltip":"Claude riscrive la bozza seguendo la tua istruzione."},
 "rb_rewrite":{"message0":"riscrivi %1 per %2","tooltip":"Per esempio: riscrivi (bozza) per (tradurre in francese)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"l'impostazione del revisore","same":"lo stesso modello","another":"un modello di un altro produttore"},
+"rb_reflect.REVIEWER":{"":"l'impostazione del revisore","same":"lo stesso modello","another":"un modello di un altro produttore"}
 },
 "categories":{
 "Events":"Eventi",
@@ -1222,7 +1224,10 @@
 "All":"Tutti",
 "Built in":"Integrati",
 "Shared":"Condivisi",
-"{n} of {m} examples":"{n} di {m} esempi"
+"{n} of {m} examples":"{n} di {m} esempi",
+"Reviewer":"Revisore",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Nessun modello di un altro produttore ha una chiave in questa pagina, quindi è lo stesso modello a rivedere la bozza. Aggiungi una chiave con «Add another key», o scegli un modello nominato in «rivista da».",
+"Written by {writer}; checked by {checker}.":"Scritto da {writer}; rivisto da {checker}."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},
@@ -2398,6 +2403,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Nessuna ricevuta ancora: nulla di ciò che questo programma ha fatto al mondo è registrato.",
 "The chain is broken: a line is missing or was edited.":"La catena è rotta: manca una riga o è stata modificata.",
 "The chain is intact: every line carries the fingerprint of the one before.":"La catena è intatta: ogni riga porta l'impronta della precedente.",
-"Couldn't read {path} ({err}).":"Impossibile leggere {path} ({err})."
+"Couldn't read {path} ({err}).":"Impossibile leggere {path} ({err}).",
+"Reviewer":"Revisore",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Nessun modello di un altro produttore ha una chiave, quindi è lo stesso modello a rivedere la bozza. Aggiungi una chiave per un altro servizio, o indica un modello nella scelta «rivista da» del blocco di revisione.",
+"Written by {writer}; checked by {checker}.":"Scritto da {writer}; rivisto da {checker}."
 }
 };

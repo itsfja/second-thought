@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude دن بر لیسته ایسته: %1","tooltip":"Claude اوزرنده دونه‌بیله‌جكڭ بر لیسته ایله جواب ویرر."},
 "rb_rewrite":{"message0":"%1 یی %2 اولارق یڭیدن یاز","tooltip":"مثلا: (مسوده) یی (فرانسزجه‌یه ترجمه ایت) اولارق یڭیدن یاز."},
 "rb_extract":{"message0":"%2 دن %1 چیقار"},
-"rb_reflect":{"message0":"مسوده‌یی %1 ه گوره تدقیق ایت","message1":"%1 دوره‌یه قدر؛ مقبول اولمازسه، شونی یاپ","message2":"%1","tooltip":"Claude مسوده‌یی تنقید ایدر. مقبول اولمازسه ایچنده‌كی قطعه‌لر اجرا اولونور، صوڭرا ینه تنقید ایدر. هر دوره‌ده مدقق اسكی قصورلرڭ گری گلمدیكنی ده یوقلار. دوره‌لر بیترسه، یالڭز صوڭكی دكل، اڭ آز قصورلی مسوده صاقلانیر.","message3":"ve kontrol et %1"},
-"rb_review":{"message0":"مسوده‌یی %1 ه گوره تدقیق ایت","tooltip":"بر تدقیق. صوڭره «مسوده تدقیقدن كچدی» و «تدقیق قصورلری» نی قوللان.","message1":"ve kontrol et %1"},
+"rb_reflect":{"message0":"%1'e göre müsveddeyi tedkik et, tedkik eden: %2","message1":"%1 دوره‌یه قدر؛ مقبول اولمازسه، شونی یاپ","message2":"%1","tooltip":"Claude مسوده‌یی تنقید ایدر. مقبول اولمازسه ایچنده‌كی قطعه‌لر اجرا اولونور، صوڭرا ینه تنقید ایدر. هر دوره‌ده مدقق اسكی قصورلرڭ گری گلمدیكنی ده یوقلار. دوره‌لر بیترسه، یالڭز صوڭكی دكل، اڭ آز قصورلی مسوده صاقلانیر.","message3":"ve kontrol et %1"},
+"rb_review":{"message0":"%1'e göre müsveddeyi tedkik et, tedkik eden: %2","tooltip":"بر تدقیق. صوڭره «مسوده تدقیقدن كچدی» و «تدقیق قصورلری» نی قوللان.","message1":"ve kontrol et %1"},
 "rb_passed":{"message0":"مسوده تدقیقدن كچدی"},
 "rb_problems":{"message0":"تدقیق قصورلری"},
 "rb_score":{"message0":"%2 ایچون %1 ه اوندن نومره ویر"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"tetkikçi ayarı","same":"aynı model","another":"başka bir yapımcının modeli"},
+"rb_reflect.REVIEWER":{"":"tetkikçi ayarı","same":"aynı model","another":"başka bir yapımcının modeli"}
 },
 "categories":{
 "Agent":"وكیل",
@@ -1222,7 +1224,10 @@
 "All":"الكل",
 "Built in":"مدمج",
 "Shared":"مشارك",
-"{n} of {m} examples":"{n} من {m} أمثلة"
+"{n} of {m} examples":"{n} من {m} أمثلة",
+"Reviewer":"tetkikçi",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Bu sayfada başka bir yapımcının modelinin anahtarı yok, bu yüzden müsveddeyi aynı model tedkik eder.",
+"Written by {writer}; checked by {checker}.":"yazan {writer}; tedkik eden {checker}."
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Henüz dekont yok: bu programın dünyaya yaptığı hiçbir şey kayıtlı değil.",
 "The chain is broken: a line is missing or was edited.":"Zincir kırık: bir satır eksik veya değiştirilmiş.",
 "The chain is intact: every line carries the fingerprint of the one before.":"Zincir sağlam: her satır öncekinin parmak izini taşıyor.",
-"Couldn't read {path} ({err}).":"{path} okunamadı ({err})."
+"Couldn't read {path} ({err}).":"{path} okunamadı ({err}).",
+"Reviewer":"tetkikçi",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Başka bir yapımcının modelinin anahtarı yok, bu yüzden müsveddeyi aynı model tedkik eder.",
+"Written by {writer}; checked by {checker}.":"yazan {writer}; tedkik eden {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

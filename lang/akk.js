@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"𒅆𒀉𒊒𒌝 𒅖𒋗𒌝"},
 "rb_rec_set":{"message0":"%1 𒊭 %2 𒀀𒈾 %3 𒋗𒆪𒌦","tooltip":"𒅅𒆷𒄠 𒅖𒋼𒅔 𒊭 𒅆𒀉𒊑𒅎 𒌑𒈾𒀝𒅗𒅈 (𒈠𒁲𒅖 𒅆𒉌𒀉 𒅆𒀉𒊑𒅎)."},
 "rb_receive":{"message0":"𒄿𒉡𒈠 %1 𒀀𒇷𒅅𒆠","tooltip":"𒇷𒅁𒈾𒋾𒅎 𒊭𒀊𒇷𒀀𒋾𒅎 𒌑𒊺𒁉𒅖 𒈠𒋾𒈠 𒅆𒅁𒊒𒌝 𒀭𒉡𒌝 𒅖𒊭𒊍𒋢. 𒅁𒊺𒌅𒌝 𒈠𒁺𒌅𒌝 𒀀𒈾 𒅆𒅁𒊑𒅎 𒅖𒋼𒅔 𒄿𒊺𒅎𒈨𒀀."},
-"rb_reflect":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑","message1":"𒀀𒁲 %1 𒊓𒄴𒄷𒊏𒋾𒅎; 𒄿𒉡𒈠 𒄿𒄩𒀜𒁲, 𒂊𒁍𒍑","message2":"%1","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒄿𒄩𒀜𒁲, 𒇷𒅁𒈾𒌅𒌝 𒊭 𒇷𒅁𒁉 𒅁𒁍𒊭, 𒌋 𒋗𒌦𒈾𒄠 𒄿𒁀𒅈𒊑. 𒄿𒈾 𒊓𒄴𒄷𒌨𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒁀𒊒𒌝 𒄭𒁕𒌅𒌝 𒉺𒈾𒌅𒌝 𒆷 𒄿𒌅𒊏 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒊓𒄴𒄷𒊏𒌅𒌝 𒅅𒈬𒊏, 𒈠𒀸𒁕𒊒𒌝 𒊭 𒄭𒁕𒌅𒋗 𒈠𒁕 𒈾𒍢𒅕, 𒌌 𒉿𒅈𒆪𒌝 𒂊𒁲𒅖𒋗.","message3":"𒌑 𒊭𒅗𒀭 %1"},
+"rb_reflect":{"message0":"𒈾𒁉𒅖𒌅 𒀀𒈾 %1 𒋗𒌝𒈠, 𒊭 %2 𒋗𒌝𒈠","message1":"𒀀𒁲 %1 𒊓𒄴𒄷𒊏𒋾𒅎; 𒄿𒉡𒈠 𒄿𒄩𒀜𒁲, 𒂊𒁍𒍑","message2":"%1","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒄿𒄩𒀜𒁲, 𒇷𒅁𒈾𒌅𒌝 𒊭 𒇷𒅁𒁉 𒅁𒁍𒊭, 𒌋 𒋗𒌦𒈾𒄠 𒄿𒁀𒅈𒊑. 𒄿𒈾 𒊓𒄴𒄷𒌨𒋾𒅎 𒅖𒋾𒀜 𒅖𒋾𒀜 𒁀𒊒𒌝 𒄭𒁕𒌅𒌝 𒉺𒈾𒌅𒌝 𒆷 𒄿𒌅𒊏 𒄿𒁀𒅈𒊑. 𒋗𒌝𒈠 𒊓𒄴𒄷𒊏𒌅𒌝 𒅅𒈬𒊏, 𒈠𒀸𒁕𒊒𒌝 𒊭 𒄭𒁕𒌅𒋗 𒈠𒁕 𒈾𒍢𒅕, 𒌌 𒉿𒅈𒆪𒌝 𒂊𒁲𒅖𒋗.","message3":"𒌑 𒊭𒅗𒀭 %1"},
 "rb_reset_timer":{"message0":"𒋗𒌓 𒋛𒈠𒉌𒅎 𒋼𒅕𒊑"},
 "rb_result":{"message0":"𒄖𒈬𒌨 𒌋 𒍢𒋫𒄠 𒆪𒌌𒇷𒅎","tooltip":"𒂊𒁉𒅖𒋫𒄠 𒌑𒂵𒄠𒈠𒅈. 𒊭 𒀀𒈾 𒍢𒋾𒅎 𒌅𒊏𒀜𒁺 𒌑𒅗𒀠𒆷𒄠, 𒌑𒇻 𒈠𒀸𒁕𒊏𒄠 𒋗𒌝𒈠 𒈪𒅎𒈠 𒆷 𒌅𒊏𒀜𒁺."},
 "rb_result_text":{"message0":"𒍢𒌅𒌝 𒀀𒁲 𒄿𒈾𒀭𒈾","tooltip":"𒅗𒆷 𒊭 𒀀𒈾 𒍢𒋾𒅎 𒌑𒊏𒀜𒁺, 𒆠𒈠 𒀀𒉿𒋾𒅎."},
 "rb_retry":{"message0":"𒀀𒁲 %1 𒊭𒉌𒋗 𒋗𒌦𒉌","message1":"%1","tooltip":"𒋗𒌝𒈠 𒈪𒅎𒈠 𒄿𒈾 𒇷𒅁𒁉 𒄴𒁲 𒆠𒈠 𒂊𒁉𒅖𒌅𒌝 𒊭𒉌𒌅𒌝 𒌑𒊭𒀝𒆷𒇻 (𒊑𒅅𒋢𒌝 𒁀𒀜𒄣𒌝, 𒀀𒁉𒅋𒌅𒌝 𒂊𒅆𒌅𒌝), 𒄿𒍝𒄠 𒄿𒋡𒀠 𒌋 𒋗𒌦𒈾𒄠 𒅁𒁉𒅖."},
-"rb_review":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒀀𒈾 %1 𒁉𒊑","tooltip":"𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠.","message1":"𒌑 𒊭𒅗𒀭 %1"},
+"rb_review":{"message0":"𒈾𒁉𒅖𒌅 𒀀𒈾 %1 𒋗𒌝𒈠, 𒊭 %2 𒋗𒌝𒈠","tooltip":"𒁉𒊒𒌝 𒅖𒋼𒅔. 𒉿𒅈𒅗 „𒈠𒀸𒁕𒊒𒌝 𒁉𒊏𒄠 𒄿𒋼𒅅” 𒌋 „𒄭𒁕𒌅𒌝 𒊭 𒁉𒊑𒅎” 𒇷𒆠.","message1":"𒌑 𒊭𒅗𒀭 %1"},
 "rb_revise":{"message0":"𒄭𒁕𒋾 𒁉𒊑𒅎 𒋗𒋼𒊺𒅕 %1 𒄿𒈾 𒆠 𒊺𒋾𒅎","tooltip":"Claude 𒄭𒁕𒋾𒅎 𒊭 𒁉𒊒𒌝 𒉿𒅈𒆪𒌝 𒅅𒋗𒁺 𒍑𒋼𒅖𒊺𒅕."},
 "rb_rework":{"message0":"𒈠𒀸𒁕𒊏𒄠 𒅖𒅆𒅖 𒂊𒁍𒍑: %1","tooltip":"Claude 𒈠𒀸𒁕𒊏𒄠 𒆠𒈠 𒁲𒈪𒅗 𒅖𒅆𒅖 𒄿𒊭𒀜𒁕𒅈."},
 "rb_rewrite":{"message0":"%1 𒅖𒅆𒅖 𒋗𒌅𒌨: %2","tooltip":"𒆠𒈠: (𒈠𒀸𒁕𒊏𒄠) 𒅖𒅆𒅖 𒋗𒌅𒌨: (𒀀𒈾 𒇷𒊭𒉌𒅎 𒊭 Faransa 𒋗𒌒𒅆𒄴)."},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"𒋗𒌝𒈠 𒊭𒅈𒊏𒋾𒅎","same":"𒋗𒌝𒈠 𒊭 𒅎","another":"𒈠𒅈 𒋗𒌝𒈠 𒊭 aḫêrim"},
+"rb_reflect.REVIEWER":{"":"𒋗𒌝𒈠 𒊭𒅈𒊏𒋾𒅎","same":"𒋗𒌝𒈠 𒊭 𒅎","another":"𒈠𒅈 𒋗𒌝𒈠 𒊭 aḫêrim"}
 },
 "categories":{
 "Events":"𒀉𒋫𒌅𒌝",
@@ -1223,7 +1225,10 @@
 "All":"𒆪𒌌𒇷𒅖",
 "Built in":"𒁉𒌅𒌝",
 "Shared":"𒈬𒌓𒋫𒊍𒋛𒊒𒌝",
-"{n} of {m} examples":"{n} 𒅖 {m}"
+"{n} of {m} examples":"{n} 𒅖 {m}",
+"Reviewer":"𒋗𒌝𒈠 𒊭𒅈𒊏𒉡",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"𒌌 aḫêrim 𒋗𒌝𒈠 𒊭 𒆠𒇻, 𒄿𒉡𒈠 𒋗𒌝𒈠 𒊭 𒅎 𒈾𒁉𒅖𒌅 𒋗𒌝𒈠",
+"Written by {writer}; checked by {checker}.":"𒀸𒁕𒌅 {writer}; 𒋗𒌝𒈠 𒊭 {checker}."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"lā kanākū lā šaknu: lā šumma ša program ilqe.",
 "The chain is broken: a line is missing or was edited.":"šarrirtum šaknu: amēlum ul wadû.",
 "The chain is intact: every line carries the fingerprint of the one before.":"šarrirtum dārī: šumma amēlū ḫatam ša ilte.",
-"Couldn't read {path} ({err}).":"lā šaknu {path} ({err})."
+"Couldn't read {path} ({err}).":"lā šaknu {path} ({err}).",
+"Reviewer":"šumma šarrānu",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ul aḫêrim šumma ša kīlu, inūma šumma ša im napištu šumma",
+"Written by {writer}; checked by {checker}.":"ašṭāṭu {writer}; šumma ša {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

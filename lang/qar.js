@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"ᚾᛁᚹᛖ ᚷᛖᛗᛠᚱᚳ"},
 "rb_rec_set":{"message0":"ᛋᛖᛏᛖ %1 ᚩᚠ %2 ᛏᚩ %3","tooltip":"ᚹᛖᚾᛞᛖᚦ ᚪᚾ ᚠᛖᛚᛞ ᚷᛖᛗᛠᚱᚳᛖᛋ (ᚩᚠᛏᚩᛋᛏ ᚷᛖᛗᛠᚱᚳᛖᛋ ᚹᛖᚾᛞᛚᛁᛝ)."},
 "rb_receive":{"message0":"ᚦᚩᚾᚾᛖ ᛁᚳ ᚩᚾᚠᚩ %1","tooltip":"ᚠᚱᛖᛗᛖᚦ ᚦᚪ ᛋᛏᚩᚳᚳᚪᛋ ᛒᛖᚾᛖᚩᚦᚪᚾ ᛋᚹᚪ ᚩᚠᛏ ᛋᚹᚪ ᚦᛁᛋ ᚫᚱᛖᚾᛞᚷᛖᚹᚱᛁᛏ ᛒᛁᚦ ᚷᛖᛒᚩᛞᛖᚾ. ᛗᚪᚾᛖᚷᚪ ᛖᚾᛞᛖᛒᚣᚱᛞᚾᛖᛋᛋᚪ ᛗᚪᚷᚩᚾ ᚻᛚᚣᛋᛏᚪᚾ ᚦᚪᛗ ᚣᛚᚳᚪᚾ ᚫᚱᛖᚾᛞᚷᛖᚹᚱᛁᛏᛖ."},
-"rb_reflect":{"message0":"ᛋᚳᛠᚹᚪ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛒᛖ %1","message1":"ᚩᚦ %1 ᚣᛗᛒᚷᚪᛝᚪᛋ; ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᛞᚩ","message2":"%1","tooltip":"Claude ᛞᛖᛗᛖᚦ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ. ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᚦᚪ ᛋᛏᚩᚳᚳᚪᛋ ᚦᚫᚱᛁᚾᚾᛖ ᚣᚱᚾᚪᚦ, ᚪᚾᛞ ᚻᛖ ᚻᛁᛏ ᛖᚠᛏ ᛞᛖᛗᛖᚦ. ᚫᛚᚳᛖ ᚣᛗᛒᚷᚪᛝᛖ ᛋᛖ ᛋᚳᛠᚹᛖᚱᛖ ᛠᚳ ᛚᚩᚳᚪᚦ ᚦᚫᛏ ᚫᚱᚱᚪᚾ ᛚᛠᛇᛏᚱᚪᛋ ᛖᚠᛏ ᚾᛖ ᚳᚩᛗᚩᚾ. ᚷᛁᚠ ᚦᚪ ᚣᛗᛒᚷᚪᛝᚪᛋ ᚪᛏᛖᚩᚱᛁᚪᚦ, ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛗᛁᛞ ᚠᛖᚹᛖᛋᛏᚢᛗ ᛚᛠᛇᛏᚱᚢᛗ ᛒᛁᚦ ᚷᛖᚻᛠᛚᛞᛖᚾ, ᚾᚪ ᚪᚾᚪ ᚦᚫᛏ ᚣᛏᛖᛗᛖᛋᛏᛖ.","message3":"ᚪᚾᛞ ᛒᛖᛋᚳᛠᚹᚪ %1"},
+"rb_reflect":{"message0":"ᛋᚳᛠᚹᚪ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛒᛖ %1, ᚷᛖᛋᚳᛠᚹᚩᛞ ᛒᛖ %2","message1":"ᚩᚦ %1 ᚣᛗᛒᚷᚪᛝᚪᛋ; ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᛞᚩ","message2":"%1","tooltip":"Claude ᛞᛖᛗᛖᚦ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ. ᚷᛁᚠ ᚻᛁᛏ ᛗᛁᛋᛏᛁᛗᚦ, ᚦᚪ ᛋᛏᚩᚳᚳᚪᛋ ᚦᚫᚱᛁᚾᚾᛖ ᚣᚱᚾᚪᚦ, ᚪᚾᛞ ᚻᛖ ᚻᛁᛏ ᛖᚠᛏ ᛞᛖᛗᛖᚦ. ᚫᛚᚳᛖ ᚣᛗᛒᚷᚪᛝᛖ ᛋᛖ ᛋᚳᛠᚹᛖᚱᛖ ᛠᚳ ᛚᚩᚳᚪᚦ ᚦᚫᛏ ᚫᚱᚱᚪᚾ ᛚᛠᛇᛏᚱᚪᛋ ᛖᚠᛏ ᚾᛖ ᚳᚩᛗᚩᚾ. ᚷᛁᚠ ᚦᚪ ᚣᛗᛒᚷᚪᛝᚪᛋ ᚪᛏᛖᚩᚱᛁᚪᚦ, ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛗᛁᛞ ᚠᛖᚹᛖᛋᛏᚢᛗ ᛚᛠᛇᛏᚱᚢᛗ ᛒᛁᚦ ᚷᛖᚻᛠᛚᛞᛖᚾ, ᚾᚪ ᚪᚾᚪ ᚦᚫᛏ ᚣᛏᛖᛗᛖᛋᛏᛖ.","message3":"ᚪᚾᛞ ᛒᛖᛋᚳᛠᚹᚪ %1"},
 "rb_reset_timer":{"message0":"ᛖᛞᚾᛁᚹᚪ ᛏᛁᛞᛗᛖᛏᛖᚾᛞ"},
 "rb_result":{"message0":"ᚷᛖᛖᚾᛞᛁᚷᛖ ᚪᚾᛞ ᚫᛏᚣᚹ ᚦᚩᚾᛖ ᚹᚫᛋᛏᛗ","tooltip":"ᚷᛖᛖᚾᛞᚪᚦ ᚦᚪ ᚠᚱᛖᛗᛗᛁᛝᛖ. ᚫᛏᚣᚹᚦ ᚦᚫᛏ ᚦᚢ ᛏᚩ ᚦᚪᛗ ᚹᚫᛋᛏᛗᛖ ᛁᛇᛏᛖᛋᛏ, ᚩᚦᚦᛖ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚷᛁᚠ ᚦᚢ ᚾᚪᛇᛏ ᚾᛖ ᛁᛇᛏᛖᛋᛏ."},
 "rb_result_text":{"message0":"ᛋᛖ ᚹᚫᛋᛏᛗ ᚩᚦ ᚦᛁᛋ","tooltip":"ᛠᛚᛚ ᚦᚫᛏ ᛏᚩ ᚦᚪᛗ ᚹᚫᛋᛏᛗᛖ ᚷᛖᛁᛇᛏ ᚹᚫᛋ, ᛋᚹᚪ ᚷᛖᚹᚱᛁᛏ."},
 "rb_retry":{"message0":"ᚠᚪᚾᛞᚪ ᛖᚠᛏ ᚩᚦ %1 ᛋᛁᚦᚢᛗ","message1":"%1","tooltip":"ᚷᛁᚠ ᚻᚹᚫᛏ ᚦᚫᚱᛁᚾᚾᛖ ᛗᛁᛋᛏᛁᛗᚦ ᚩᚾ ᚹᛁᛋᚪᚾ ᚦᛖ ᚩᚦᛖᚱ ᚠᚪᚾᛞᚢᛝ ᛗᛁᛇᛏᛖ ᚷᛖᛒᛖᛏᚪᚾ (ᚠᚩᚱᛚᚩᚱᛖᚾ ᚷᛖᛒᛁᚾᛞ, ᚷᛖᛗᛖᛝᛖᛞ ᚪᚾᛞᛋᚹᚪᚱᚢ), ᚻᛁᛏ ᚪᛒᛁᛏ ᚻᚹᚩᚾ ᚪᚾᛞ ᚠᚱᛖᛗᛖᚦ ᚻᛁᛏ ᛖᚠᛏ."},
-"rb_review":{"message0":"ᛋᚳᛠᚹᚪ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛒᛖ %1","tooltip":"ᚪᚾ ᛋᚳᛠᚹᚢᛝ. ᛒᚱᚢᚳ “ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚩᚠᛖᚱᚠᛖᚱᛞᛖ ᛋᚳᛠᚹᚢᛝᛖ” ᚪᚾᛞ “ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ” ᚫᚠᛏᛖᚱᚹᛠᚱᛞ.","message1":"ᚪᚾᛞ ᛒᛖᛋᚳᛠᚹᚪ %1"},
+"rb_review":{"message0":"ᛋᚳᛠᚹᚪ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛒᛖ %1, ᚷᛖᛋᚳᛠᚹᚩᛞ ᛒᛖ %2","tooltip":"ᚪᚾ ᛋᚳᛠᚹᚢᛝ. ᛒᚱᚢᚳ “ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚩᚠᛖᚱᚠᛖᚱᛞᛖ ᛋᚳᛠᚹᚢᛝᛖ” ᚪᚾᛞ “ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ” ᚫᚠᛏᛖᚱᚹᛠᚱᛞ.","message1":"ᚪᚾᛞ ᛒᛖᛋᚳᛠᚹᚪ %1"},
 "rb_revise":{"message0":"ᛖᛞᚹᚣᚱᚳ ᛏᚩ ᛒᛖᛏᚪᚾᚾᛖ ᚦᚫᚱᛖ ᛋᚳᛠᚹᚢᛝᛖ ᛚᛠᛇᛏᚱᚪᛋ %1 ᚦᚢᚱᚻ ᚦᚫᛏ ᚹᛖᛒᛒ","tooltip":"Claude ᛒᛖᛏᛖᚦ ᚦᚪ ᛚᛠᛇᛏᚱᚪᛋ ᚦᛖ ᛋᛖᚩ ᚣᛏᛖᛗᛖᛋᛏᛖ ᛋᚳᛠᚹᚢᛝ ᚠᚢᚾᛞᛖ."},
 "rb_rework":{"message0":"ᛖᛞᚹᚣᚱᚳ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ: %1","tooltip":"Claude ᚹᚱᛁᛏ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᛖᚠᛏ ᚫᚠᛏᛖᚱ ᚦᛁᚾᚱᛖ ᛚᚪᚱᛖ."},
 "rb_rewrite":{"message0":"ᛖᛞᚹᚱᛁᛏ %1 ᛏᚩ %2","tooltip":"ᛋᚹᚪ: ᛖᛞᚹᚱᛁᛏ (ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ) ᛏᚩ (ᚪᚹᛖᚾᛞ ᚩᚾ ᚠᚱᛖᚾᚳᛁᛋᚳ)."},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"ᛋᚳᛠᚹᛖᚾᛞᛚᛁᚳ ᛋᛖᛏᛖᛞᚾᛖᛋᛋ","same":"ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ","another":"ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ"},
+"rb_reflect.REVIEWER":{"":"ᛋᚳᛠᚹᛖᚾᛞᛚᛁᚳ ᛋᛖᛏᛖᛞᚾᛖᛋᛋ","same":"ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ","another":"ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ"}
 },
 "categories":{
 "Events":"ᚷᛖᛚᛁᛗᛈᚢ",
@@ -1223,7 +1225,10 @@
 "All":"ᚪᛚᛚᛖ",
 "Built in":"ᛁᚾᛒᚩᚱᛖᚾ",
 "Shared":"ᚷᛖᛗᛠᚱᚳ",
-"{n} of {m} examples":"{n} ᚩᚠ {m} ᛖᚾᛋᚪᛗᛈᛚᛖᛋ"
+"{n} of {m} examples":"{n} ᚩᚠ {m} ᛖᚾᛋᚪᛗᛈᛚᛖᛋ",
+"Reviewer":"ᛋᚳᛠᚹᚪ",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"ᚾᚪᚾ ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ ᚾᚫᚠᚦ ᚻᛖᚱ ᚾᚣᛈᛖ, ᛋᚹᚪ ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ ᛋᚳᛠᚹᚪᚦ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ.",
+"Written by {writer}; checked by {checker}.":"ᚷᛖᚹᚱᛁᛏᛖᚾ ᛒᛖ {writer}; ᚷᛖᛋᚳᛠᚹᚩᛞ ᛒᛖ {checker}."
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Nā receits yet: náþing þæt þis program hæbbeþ don to þǣm worulde is notod.",
 "The chain is broken: a line is missing or was edited.":"The chain is broken: a line is missing oþþe was corrected.",
 "The chain is intact: every line carries the fingerprint of the one before.":"The chain is heal: ælc line berþ the fingermarc of þe oþer.",
-"Couldn't read {path} ({err}).":"ne meahte rǣdan {path} ({err})."
+"Couldn't read {path} ({err}).":"ne meahte rǣdan {path} ({err}).",
+"Reviewer":"sceawa",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"nan oðres cynnes tacn næfþ nype, swa þæt ilce tacn sceawaþ þæt frumgewrit.",
+"Written by {writer}; checked by {checker}.":"gewriten be {writer}; gesceawod be {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

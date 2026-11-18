@@ -453,6 +453,8 @@
       }
       return "[" + parts.join(", ") + "]";
     };
+    // A review block's 'checked by' choice, as reviewer="..." for R.review(...) (#426); empty means the reviewer setting.
+    const pyReviewer = bb => { const v = bb.getFieldValue("REVIEWER"); return v ? ", reviewer=" + pyStr(v) : ""; };
 
     function inp(b, name, dflt){ const t = b.getInputTargetBlock(name); return t ? expr(t) : dflt; }
     function expr(b){
@@ -665,7 +667,7 @@
           case "rb_set_draft": E("R.set_draft(" + I("TEXT", '""') + ")"); break;
           case "rb_checkpoint_save": E("R.save_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
           case "rb_checkpoint_restore": E("R.restore_checkpoint(" + pyStr(F("NAME") || "") + ")"); break;
-          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ", checks=" + pyChecks(b) + ")"); break;
+          case "rb_review": E("await R.review(" + I("CRITERIA", '""') + ", checks=" + pyChecks(b) + pyReviewer(b) + ")"); break;
           case "rb_reflect": {
             const crit = tmp("criteria"), chk = tmp("checks"), max = tmp("max_rounds"), rnd = tmp("round");
             E(crit + " = " + I("CRITERIA", '""'));
@@ -674,7 +676,7 @@
             E("with R.reviewing():");
             out.push(pad + "    for " + rnd + " in range(1, " + max + " + 2):");
             out.push(pad + "        R.tick()");
-            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True, checks=" + chk + "):");
+            out.push(pad + "        if await R.review(" + crit + ", \"Review, round \" + str(" + rnd + "), in_loop=True, checks=" + chk + pyReviewer(b) + "):");
             out.push(pad + "            break");
             out.push(pad + "        if " + rnd + " > " + max + ":");
             out.push(pad + "            R.out_of_rounds()");

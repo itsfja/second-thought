@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"新しいレコード"},
 "rb_rec_set":{"message0":"%2 の %1 を %3 にする","tooltip":"レコード（たいていはレコード変数）の一つのフィールドを変えます。"},
 "rb_receive":{"message0":"%1 を受け取ったとき","tooltip":"このメッセージが送られるたびに下のブロックを実行します。複数のスクリプトが同じメッセージを待てます。"},
-"rb_reflect":{"message0":"%1 に照らして下書きをレビュー","message1":"最大 %1 回まで。不合格なら次を実行","message2":"%1","tooltip":"Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。","message3":"さらに確認 %1"},
+"rb_reflect":{"message0":"%1 に照らして下書きをレビュー、チェック担当は %2","message1":"最大 %1 回まで。不合格なら次を実行","message2":"%1","tooltip":"Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。","message3":"さらに確認 %1"},
 "rb_reset_timer":{"message0":"タイマーをリセット"},
 "rb_result":{"message0":"終えて結果を表示","tooltip":"実行を終えます。結果に追加したものを表示し、何も追加していなければ下書きを表示します。"},
 "rb_result_text":{"message0":"これまでの結果","tooltip":"結果に追加されたすべてを、テキストで。"},
 "rb_retry":{"message0":"最大 %1 回やり直す","message1":"%1","tooltip":"中の何かが、もう一度やれば直りそうな形で失敗したとき（接続が切れた、返事が崩れた）、少し待ってからもう一度実行します。"},
-"rb_review":{"message0":"%1 に照らして下書きをレビュー","tooltip":"1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。","message1":"さらに確認 %1"},
+"rb_review":{"message0":"%1 に照らして下書きをレビュー、チェック担当は %2","tooltip":"1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。","message1":"さらに確認 %1"},
 "rb_revise":{"message0":"レビューの問題を直すように修正 %1 ウェブを使う","tooltip":"Claude が前回のレビューで見つかった問題を直します。"},
 "rb_rework":{"message0":"下書きを手直し：%1","tooltip":"Claude があなたの指示に沿って下書きを書き直します。"},
 "rb_rewrite":{"message0":"%1 を %2 ように書き直す","tooltip":"例：（下書き）を（フランス語に訳す）ように書き直す。"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"レビュアーの設定","same":"同じモデル","another":"別のメーカーのモデル"},
+"rb_reflect.REVIEWER":{"":"レビュアーの設定","same":"同じモデル","another":"別のメーカーのモデル"}
 },
 "categories":{
 "Events":"イベント",
@@ -1222,7 +1224,10 @@
 "All":"すべて",
 "Built in":"組み込み",
 "Shared":"共有",
-"{n} of {m} examples":"{m} 件中 {n} 件"
+"{n} of {m} examples":"{m} 件中 {n} 件",
+"Reviewer":"レビュアー",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"このページには別のメーカーのモデルのキーがないため、同じモデルが下書きをチェックします。「Add another key」でキーを追加するか、「チェック担当」で名前のあるモデルを選んでください。",
+"Written by {writer}; checked by {checker}.":"執筆: {writer}、チェック: {checker}。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2398,6 +2403,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"まだレシートがありません: このプログラムが世界に対して行ったことは記録されていません。",
 "The chain is broken: a line is missing or was edited.":"チェーンが壊れています: 行が欠落または編集されています。",
 "The chain is intact: every line carries the fingerprint of the one before.":"チェーンは無傷です: 各行が前の行のフィンガープリントを持っています。",
-"Couldn't read {path} ({err}).":"{path} を読めませんでした ({err})。"
+"Couldn't read {path} ({err}).":"{path} を読めませんでした ({err})。",
+"Reviewer":"レビュアー",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"別のメーカーのモデルのキーがないため、同じモデルが下書きをチェックします。別のサービスのキーを追加するか、レビューブロックの「チェック担当」でモデルを指定してください。",
+"Written by {writer}; checked by {checker}.":"執筆: {writer}、チェック: {checker}。"
 }
 };

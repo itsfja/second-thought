@@ -42,8 +42,8 @@
 "rb_ask_list":{"message0":"ܫܐܠ ܠ-Claude ܣܕܪܐ: %1","tooltip":"Claude ܥܢܐ ܒܣܕܪܐ ܕܡܫܟܚ ܐܢܬ ܕܬܗܦܘܟ ܥܠܘܗܝ."},
 "rb_rewrite":{"message0":"ܟܬܘܒ ܬܘܒ %1 l%2","tooltip":"ܐܟ ܗܢܐ: ܟܬܘܒ ܬܘܒ (ܪܘܫܡܐ) l(targem ܠܦܪܢܓܝܐ)."},
 "rb_extract":{"message0":"ܫܩܘܠ %1 ܡܢ %2"},
-"rb_reflect":{"message0":"ܒܚܢ ܪܘܫܡܐ ܠܘܬ %1","message1":"ܥܕܡܐ l%1 ܙܒܢܝܢ; ܟܕ ܢܦܠ, ܥܒܕ","message2":"%1","tooltip":"Claude ܕܐܢ ܠܪܘܫܡܐ. ܐܢ ܢܦܠ, ܠܒܢܐ ܕܠܓܘ ܪܗܛܢ, ܘܗܦܟ ܕܐܢ. ܒܟܘܠ ܙܒܢܐ ܒܚܘܚܐ ܚܙܐ ܐܦ ܕܡܚܫܠܬܐ ܩܕܡܝܬܐ ܠܐ ܗܦܟ ܐܬܘ. ܐܢ ܫܠܡܘ ܙܒܢܐ, ܪܘܫܡܐ ܕܒܝܗ ܙܥܘܪܢ ܡܚܫܠܬܐ ܡܬܢܛܪ, ܠܐ ܚܪܝܐ ܒܠܚܘܕ.","message3":"u-mḥaššl %1"},
-"rb_review":{"message0":"ܒܚܢ ܪܘܫܡܐ ܠܘܬ %1","tooltip":"ܒܘܚܪܢܐ ܚܕ. ܒܬܪ ܗܕܐ ܐܛܥܢ 'ܪܘܫܡܐ ܥܒܪ ܒܘܚܪܢܐ' ܘ'ܡܚܫܠܬܐ ܕܒܘܚܪܢܐ'.","message1":"u-mḥaššl %1"},
+"rb_reflect":{"message0":"ܚܘܐ %1, ܗܘܐ %2","message1":"ܥܕܡܐ l%1 ܙܒܢܝܢ; ܟܕ ܢܦܠ, ܥܒܕ","message2":"%1","tooltip":"Claude ܕܐܢ ܠܪܘܫܡܐ. ܐܢ ܢܦܠ, ܠܒܢܐ ܕܠܓܘ ܪܗܛܢ, ܘܗܦܟ ܕܐܢ. ܒܟܘܠ ܙܒܢܐ ܒܚܘܚܐ ܚܙܐ ܐܦ ܕܡܚܫܠܬܐ ܩܕܡܝܬܐ ܠܐ ܗܦܟ ܐܬܘ. ܐܢ ܫܠܡܘ ܙܒܢܐ, ܪܘܫܡܐ ܕܒܝܗ ܙܥܘܪܢ ܡܚܫܠܬܐ ܡܬܢܛܪ, ܠܐ ܚܪܝܐ ܒܠܚܘܕ.","message3":"u-mḥaššl %1"},
+"rb_review":{"message0":"ܚܘܐ %1, ܗܘܐ %2","tooltip":"ܒܘܚܪܢܐ ܚܕ. ܒܬܪ ܗܕܐ ܐܛܥܢ 'ܪܘܫܡܐ ܥܒܪ ܒܘܚܪܢܐ' ܘ'ܡܚܫܠܬܐ ܕܒܘܚܪܢܐ'.","message1":"u-mḥaššl %1"},
 "rb_passed":{"message0":"ܪܘܫܡܐ ܥܒܪ ܒܘܚܪܢܐ"},
 "rb_problems":{"message0":"ܡܚܫܠܬܐ ܕܒܘܚܪܢܐ"},
 "rb_score":{"message0":"ܫܡܐ %1 ܡܢ 10 l%2"},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"ܚܘܐ ܣܬ","same":"ܚܘܐ ܙ","another":"ܚܘܐ o-ze"},
+"rb_reflect.REVIEWER":{"":"ܚܘܐ ܣܬ","same":"ܚܘܐ ܙ","another":"ܚܘܐ o-ze"}
 },
 "categories":{
 "Agent":"ܫܠܝܚܐ",
@@ -1223,7 +1225,10 @@
 "All":"ܟܠ",
 "Built in":"ܒܢܝܬ",
 "Shared":"ܡܫܬܘܬ",
-"{n} of {m} examples":"{n} ܡܢ {m}"
+"{n} of {m} examples":"{n} ܡܢ {m}",
+"Reviewer":"ܚܘܐ",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"o-ze ܚܘܐ ܢ, ܚܘܐ ܙ ܚܘܐ",
+"Written by {writer}; checked by {checker}.":"ܚܘܐ {writer}; ܚܘܐ {checker}."
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"lā qabūlāt baꜥd: lā šayꜣ mimma faꜥala hādhā al-barnāmaj lil-ꜥālam sajjala.",
 "The chain is broken: a line is missing or was edited.":"al-silsila makinšara: saṭr wāḥid mafqūd aw mubaddal.",
 "The chain is intact: every line carries the fingerprint of the one before.":"al-silsila salīma: kull saṭr yaḥmil baṣmat al-sābiq.",
-"Couldn't read {path} ({err}).":"lā neškur {path} ({err})."
+"Couldn't read {path} ({err}).":"lā neškur {path} ({err}).",
+"Reviewer":"ḥwā",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"o-ze ḥwā na, ḥwā ze ḥwā",
+"Written by {writer}; checked by {checker}.":"ḥwā {writer}; ḥwā {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"नूतनः अभिलेखः"},
 "rb_rec_set":{"message0":"%2 इत्यस्य %1 %3 इति स्थापय","tooltip":"अभिलेखस्य एकं क्षेत्रं परिवर्तयति (प्रायः अभिलेखचरस्य)।"},
 "rb_receive":{"message0":"यदा अहं %1 प्राप्नोमि","tooltip":"यदा यदा अयं सन्देशः उद्घोष्यते तदा तदा अधःस्थान् खण्डान् चालयति। बहवः प्रक्रमाः एकमेव सन्देशं शृण्वन्ति।"},
-"rb_reflect":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","message1":"%1 आवर्तनानि यावत्; यदा विफलं, कुरु","message2":"%1","tooltip":"Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।","message3":"और जांच %1"},
+"rb_reflect":{"message0":"%1 anusārena lekhyaṃ parīkṣaya, parīkṣakaḥ %2","message1":"%1 आवर्तनानि यावत्; यदा विफलं, कुरु","message2":"%1","tooltip":"Claude प्रारूपं समीक्षते। यदि विफलं, अन्तःस्थाः खण्डाः चलन्ति, ततः पुनः समीक्षते। प्रत्येकम् आवर्तने समीक्षकः पूर्वदोषाः न प्रत्यागताः इत्यपि परीक्षते। यदि आवर्तनानि समाप्यन्ते, अल्पतमदोषयुक्तं प्रारूपं रक्ष्यते, न केवलम् अन्तिमम्।","message3":"और जांच %1"},
 "rb_reset_timer":{"message0":"समयमापकं पुनःस्थापय"},
 "rb_result":{"message0":"समापय परिणामं च दर्शय","tooltip":"चालनं समापयति। त्वया परिणामे यत् योजितं तत् दर्शयति, यदि किमपि न योजितं तर्हि प्रारूपम्।"},
 "rb_result_text":{"message0":"इदानीं यावत् परिणामः","tooltip":"परिणामे योजितं सर्वं, पाठरूपेण।"},
 "rb_retry":{"message0":"%1 वारान् यावत् पुनः प्रयतस्व","message1":"%1","tooltip":"यदि अन्तः किमपि तथा विफलं यथा द्वितीयः प्रयत्नः तत् समादध्यात् (त्रुटितः सम्बन्धः, विकृतम् उत्तरम्), किञ्चित् प्रतीक्ष्य पुनः चालयति।"},
-"rb_review":{"message0":"प्रारूपं %1 अनुसृत्य समीक्षस्व","tooltip":"एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।","message1":"और जांच %1"},
+"rb_review":{"message0":"%1 anusārena lekhyaṃ parīkṣaya, parīkṣakaḥ %2","tooltip":"एका समीक्षा। ततः “प्रारूपं समीक्षाम् उत्तीर्णम्” “समीक्षायाः दोषाः” च प्रयुङ्क्ष्व।","message1":"और जांच %1"},
 "rb_revise":{"message0":"समीक्षायाः दोषान् शोधयितुं संस्कुरु %1 जालस्य साहाय्येन","tooltip":"अन्तिमया समीक्षया लब्धान् दोषान् Claude शोधयति।"},
 "rb_rework":{"message0":"प्रारूपं पुनः रचय: %1","tooltip":"Claude तव निर्देशम् अनुसृत्य प्रारूपं पुनः लिखति।"},
 "rb_rewrite":{"message0":"%1 पुनः लिख: %2","tooltip":"यथा: (प्रारूपम्) पुनः लिख: (फ्रेञ्चभाषायाम् अनूदय)।"},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"parīkṣakasya vyavasthā","same":"tad eva mānam","another":"anyasya kārayituḥ mānam"},
+"rb_reflect.REVIEWER":{"":"parīkṣakasya vyavasthā","same":"tad eva mānam","another":"anyasya kārayituḥ mānam"}
 },
 "categories":{
 "Events":"घटनाः",
@@ -1223,7 +1225,10 @@
 "All":"सर्वम्",
 "Built in":"अन्तर्गतं",
 "Shared":"संविभक्तं",
-"{n} of {m} examples":"{n} ओf {m} उदाहरणानि"
+"{n} of {m} examples":"{n} ओf {m} उदाहरणानि",
+"Reviewer":"parīkṣakaḥ",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"anyasya kārayituḥ mānasya kuñcikā atra nāsti, ataḥ tad eva mānaṃ lekhyaṃ parīkṣati.",
+"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā."
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2399,7 +2404,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"अद्य अपि प्रापयः नास्ति: यत् किञ्जित् इदं प्रोग्रमं जगते अकरोत्, तत् न लिखितम्",
 "The chain is broken: a line is missing or was edited.":"श्ṛङ्खला विज्चिन्ना: एकः पङ्क्तिः गतः वा परिवर्तिता",
 "The chain is intact: every line carries the fingerprint of the one before.":"श्ṛङ्खला अखण्डा: प्रत्येका पङ्क्तिः पूर्वस्याः अङ्गुलीमुद्रां वहति",
-"Couldn't read {path} ({err}).":"न शक्नोति {path} पठितुं ({err})."
+"Couldn't read {path} ({err}).":"न शक्नोति {path} पठितुं ({err}).",
+"Reviewer":"parīkṣakaḥ",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"anyasya kārayituḥ mānasya kuñcikā nāsti, ataḥ tad eva mānaṃ lekhyaṃ parīkṣati.",
+"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

@@ -57,7 +57,7 @@ There are more categories down the left side of the screen.
 - Stop itself before it uses too many tokens, or spends too much: put **limit this run to …** near the top, in tokens or US dollars.
 - Ask you first before it sends a message, says something out loud, saves a file or changes something at home: use **ask me before …**.
 - Use one of your saved programs as a single block: **run program … with …**, from **Programs**.
-- Use other models alongside Claude, for example Claude writes and Gemini reviews. See [Models](settings.md#models).
+- Use other models alongside Claude, for example Claude writes and Gemini reviews: the review blocks have a *checked by* choice — the same model, another maker's model when you have a key for one, or a named one — and the run log says who wrote and who checked. On the page, where only your one key is available, it says so rather than failing; exported programs use the other service for real. See [Models](settings.md#models) and the `reviewer` setting.
 
 ## Examples and the gallery
 

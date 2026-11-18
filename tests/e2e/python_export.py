@@ -554,6 +554,34 @@ def python_tests(codes, share=None):
             out = out.replace("\r\n", "\n")
             check(code_ == 0 and "6 words; the limit is 5" in out and "RESULT" in out,
                   "t_checks.py works the review's exact checks out in Python, with no model call (#425)" + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            print("A second opinion in Python (#426)")
+            (pathlib.Path(tmp) / "t_reviewer.py").write_text(EXTRA["t_reviewer"], encoding="utf-8")
+            (pathlib.Path(tmp) / "t_reviewer2.py").write_text(EXTRA["t_reviewer2"], encoding="utf-8")
+            fakelog = pathlib.Path(tmp) / "fake426.log"
+            reviews426 = [json.dumps({"approved": True, "rules": [{"rule": "clear", "met": True, "problem": "", "shows": ""}], "problems": []})]
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_reviewer.py")],
+                                    dict(env, FAKE_LOG=str(fakelog), FAKE_JSON_SCRIPT=json.dumps(reviews426)), tmp)
+            out = out.replace("\r\n", "\n")
+            g = fakelog.read_text(encoding="utf-8") if fakelog.exists() else ""
+            check(code_ == 0 and "Written by Claude, balanced; checked by Gemini Flash." in out and "GEMINI" in g and "strict reviewer" in g,
+                  "a named 'checked by' sends the review to that model, and the log names writer and checker"
+                  + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            fakelog.unlink(missing_ok=True)
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_reviewer2.py")],
+                                    dict(env, FAKE_LOG=str(fakelog), FAKE_JSON_SCRIPT=json.dumps(reviews426)), tmp)
+            out = out.replace("\r\n", "\n")
+            g = fakelog.read_text(encoding="utf-8") if fakelog.exists() else ""
+            check(code_ == 0 and "checked by Gemini Flash." in out and "GEMINI" in g and "strict reviewer" in g,
+                  "'another' picks another maker's model that has a key (Gemini here), and the log says who checked"
+                  + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            only_claude = {k: v for k, v in env.items() if not (k.endswith(("_API_KEY", "_TOKEN")) and k != "ANTHROPIC_API_KEY")}
+            only_claude["LLAMA_BASE_URL"] = "https://llama.example.com/v1"  # no local Llama without a key
+            code_, out, err = drive([sys.executable, "-u", str(pathlib.Path(tmp) / "t_reviewer2.py")],
+                                    dict(only_claude, FAKE_JSON_SCRIPT=json.dumps(reviews426)), tmp)
+            out = out.replace("\r\n", "\n")
+            check(code_ == 0 and "No other maker's model has a key" in out and "checked by Claude, balanced." in out,
+                  "with no other key, 'another' says so and the same model checks, rather than the run failing"
+                  + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
             print("Rehearsing a run (#430)")
             (pathlib.Path(tmp) / "t_rehearse.py").write_text(EXTRA["t_rehearse"], encoding="utf-8")
             (pathlib.Path(tmp) / "memory.json").write_text(json.dumps({"runs": {"name": "runs", "value": ["real"]}}), encoding="utf-8")

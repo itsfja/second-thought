@@ -392,7 +392,7 @@
    "tooltip": "Esegue i blocchi sotto ogni volta che questo messaggio viene trasmesso. Più script possono ascoltare lo stesso messaggio."
   },
   "rb_reflect": {
-   "message0": "rivedi la bozza secondo %1",
+   "message0": "rivedi la bozza secondo %1, rivista da %2",
    "message1": "fino a %1 giri; se non passa, fai",
    "message2": "%1",
    "tooltip": "Claude critica la bozza. Se non passa, girano i blocchi all'interno, poi la critica di nuovo. A ogni giro il revisore controlla anche che i problemi precedenti non siano tornati. Se i giri finiscono, viene tenuta la bozza con meno problemi, non semplicemente l'ultima.",
@@ -415,7 +415,7 @@
    "tooltip": "Se qualcosa all'interno fallisce in un modo che un secondo tentativo potrebbe risolvere (una connessione caduta, una risposta incomprensibile), aspetta un po' e lo esegue di nuovo."
   },
   "rb_review": {
-   "message0": "rivedi la bozza secondo %1",
+   "message0": "rivedi la bozza secondo %1, rivista da %2",
    "tooltip": "Una revisione. Usa poi «la bozza ha superato la revisione» e «problemi della revisione».",
    "message1": "e controlla %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "l'impostazione del revisore",
+   "same": "lo stesso modello",
+   "another": "un modello di un altro produttore"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "l'impostazione del revisore",
+   "same": "lo stesso modello",
+   "another": "un modello di un altro produttore"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "Tutti",
   "Built in": "Integrati",
   "Shared": "Condivisi",
-  "{n} of {m} examples": "{n} di {m} esempi"
+  "{n} of {m} examples": "{n} di {m} esempi",
+  "Reviewer": "Revisore",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "Nessun modello di un altro produttore ha una chiave in questa pagina, quindi è lo stesso modello a rivedere la bozza. Aggiungi una chiave con «Add another key», o scegli un modello nominato in «rivista da».",
+  "Written by {writer}; checked by {checker}.": "Scritto da {writer}; rivisto da {checker}."
  },
  "examples": {
   "review": {
@@ -3765,6 +3778,9 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Nessuna ricevuta ancora: nulla di ciò che questo programma ha fatto al mondo è registrato.",
   "The chain is broken: a line is missing or was edited.": "La catena è rotta: manca una riga o è stata modificata.",
   "The chain is intact: every line carries the fingerprint of the one before.": "La catena è intatta: ogni riga porta l'impronta della precedente.",
-  "Couldn't read {path} ({err}).": "Impossibile leggere {path} ({err})."
+  "Couldn't read {path} ({err}).": "Impossibile leggere {path} ({err}).",
+  "Reviewer": "Revisore",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "Nessun modello di un altro produttore ha una chiave, quindi è lo stesso modello a rivedere la bozza. Aggiungi una chiave per un altro servizio, o indica un modello nella scelta «rivista da» del blocco di revisione.",
+  "Written by {writer}; checked by {checker}.": "Scritto da {writer}; rivisto da {checker}."
  }
 }

@@ -106,12 +106,12 @@
 "rb_rec_new":{"message0":"רשומה חדשה"},
 "rb_rec_set":{"message0":"קבע את %1 של %2 ל-%3","tooltip":"משנה שדה אחד ברשומה (בדרך כלל משתנה של רשומה)."},
 "rb_receive":{"message0":"כשאני מקבל %1","tooltip":"מריץ את הבלוקים שמתחת בכל פעם שההודעה הזו משודרת. כמה תסריטים יכולים להאזין לאותה הודעה."},
-"rb_reflect":{"message0":"בקר את הטיוטה לפי %1","message1":"עד %1 סבבים; כשהיא נכשלת, עשה","message2":"%1","tooltip":"Claude מבקר את הטיוטה. אם היא נכשלת, הבלוקים שבפנים רצים, ואז הוא מבקר שוב. בכל סבב הבודק גם מוודא שבעיות קודמות לא חזרו. אם הסבבים נגמרים, נשמרת הטיוטה עם הכי מעט בעיות, לא רק האחרונה.","message3":"ובדוק %1"},
+"rb_reflect":{"message0":"בדוק את הטיוטה לפי %1, הבודק: %2","message1":"עד %1 סבבים; כשהיא נכשלת, עשה","message2":"%1","tooltip":"Claude מבקר את הטיוטה. אם היא נכשלת, הבלוקים שבפנים רצים, ואז הוא מבקר שוב. בכל סבב הבודק גם מוודא שבעיות קודמות לא חזרו. אם הסבבים נגמרים, נשמרת הטיוטה עם הכי מעט בעיות, לא רק האחרונה.","message3":"ובדוק %1"},
 "rb_reset_timer":{"message0":"אפס את הטיימר"},
 "rb_result":{"message0":"סיים והצג את התוצאה","tooltip":"מסיים את ההרצה. מציג את מה שהוספתם לתוצאה, או את הטיוטה אם לא הוספתם כלום."},
 "rb_result_text":{"message0":"התוצאה עד עכשיו","tooltip":"כל מה שנוסף לתוצאה, כטקסט."},
 "rb_retry":{"message0":"נסה שוב עד %1 פעמים","message1":"%1","tooltip":"אם משהו בפנים נכשל באופן שניסיון נוסף יכול לתקן (חיבור שנפל, תשובה משובשת), מחכה קצת ומריץ אותו שוב."},
-"rb_review":{"message0":"בקר את הטיוטה לפי %1","tooltip":"ביקורת אחת. השתמשו אחר כך ב\"הטיוטה עברה ביקורת\" וב\"בעיות שעלו בביקורת\".","message1":"ובדוק %1"},
+"rb_review":{"message0":"בדוק את הטיוטה לפי %1, הבודק: %2","tooltip":"ביקורת אחת. השתמשו אחר כך ב\"הטיוטה עברה ביקורת\" וב\"בעיות שעלו בביקורת\".","message1":"ובדוק %1"},
 "rb_revise":{"message0":"תקן את הבעיות שעלו בביקורת %1 בעזרת הרשת","tooltip":"Claude מתקן את הבעיות שהביקורת האחרונה מצאה."},
 "rb_rework":{"message0":"עבד מחדש את הטיוטה: %1","tooltip":"Claude כותב מחדש את הטיוטה לפי ההוראה שלכם."},
 "rb_rewrite":{"message0":"כתוב מחדש את %1: %2","tooltip":"לדוגמה: כתוב מחדש את (טיוטה): (תרגם לצרפתית)."},
@@ -239,7 +239,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"},
+"rb_reflect.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"}
 },
 "categories":{
 "Events":"אירועים",
@@ -1223,7 +1225,10 @@
 "All":"הכל",
 "Built in":"מובנה",
 "Shared":"משותף",
-"{n} of {m} examples":"{n} מתוך {m} דוגמאות"
+"{n} of {m} examples":"{n} מתוך {m} דוגמאות",
+"Reviewer":"בדוק",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"אין מודל של יצרן אחר עם מפתח בדף זה — אותו מודל בדוק את הטיוטה. הוסף מפתח דרך «Add another key», או בחר מודל לפי שם «בדוק».",
+"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2399,6 +2404,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"אין קבלווית ככר: שום דבר שהתוכנהה העולם לאנרמד.",
 "The chain is broken: a line is missing or was edited.":"השרשרה שבוקה: שורה חסס אושור.",
 "The chain is intact: every line carries the fingerprint of the one before.":"השרשרה סלמומ: כלדה משנהה כערידית הפברה.",
-"Couldn't read {path} ({err}).":"לא הצלחתי קרוא {path} ({err})."
+"Couldn't read {path} ({err}).":"לא הצלחתי קרוא {path} ({err}).",
+"Reviewer":"בדוק",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"אין מודל של יצרן אחר עם מפתח — אותו מודל בדוק את הטיוטה. הוסף מפתח של שירות אחר, או ציין מודל ב«בדוק» של גוש הביקורת.",
+"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}."
 }
 };

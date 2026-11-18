@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nieuw record"},
 "rb_rec_set":{"message0":"%1 van %2 instellen op %3","tooltip":"Wijzigt één veld van een record (meestal een recordvariabele)."},
 "rb_receive":{"message0":"wanneer ik %1 ontvang","tooltip":"Voert de blokken eronder uit telkens wanneer dit bericht wordt uitgezonden. Meerdere scripts kunnen naar hetzelfde bericht luisteren."},
-"rb_reflect":{"message0":"beoordeel het concept op %1","message1":"tot %1 rondes; als het niet slaagt, doe","message2":"%1","tooltip":"Claude beoordeelt het concept kritisch. Slaagt het niet, dan draaien de blokken erin en beoordeelt hij opnieuw. Elke ronde controleert de beoordelaar ook dat eerdere problemen niet zijn teruggekomen. Zijn de rondes op, dan wordt het concept met de minste problemen bewaard, niet gewoon het laatste.","message3":"en controleer %1"},
+"rb_reflect":{"message0":"beoordeel het concept op %1, beoordeeld door %2","message1":"tot %1 rondes; als het niet slaagt, doe","message2":"%1","tooltip":"Claude beoordeelt het concept kritisch. Slaagt het niet, dan draaien de blokken erin en beoordeelt hij opnieuw. Elke ronde controleert de beoordelaar ook dat eerdere problemen niet zijn teruggekomen. Zijn de rondes op, dan wordt het concept met de minste problemen bewaard, niet gewoon het laatste.","message3":"en controleer %1"},
 "rb_reset_timer":{"message0":"timer resetten"},
 "rb_result":{"message0":"afronden en het resultaat tonen","tooltip":"Beëindigt de run. Toont wat je aan het resultaat hebt toegevoegd, of het concept als je niets hebt toegevoegd."},
 "rb_result_text":{"message0":"het resultaat tot nu toe","tooltip":"Alles wat aan het resultaat is toegevoegd, als tekst."},
 "rb_retry":{"message0":"tot %1 keer opnieuw proberen","message1":"%1","tooltip":"Mislukt er iets erin op een manier die een tweede poging kan oplossen (een verbroken verbinding, een verminkt antwoord), dan wacht het even en voert het opnieuw uit."},
-"rb_review":{"message0":"beoordeel het concept op %1","tooltip":"Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’.","message1":"en controleer %1"},
+"rb_review":{"message0":"beoordeel het concept op %1, beoordeeld door %2","tooltip":"Eén beoordeling. Gebruik daarna ‘concept is door de beoordeling gekomen’ en ‘problemen uit de beoordeling’.","message1":"en controleer %1"},
 "rb_revise":{"message0":"herzien om de problemen uit de beoordeling op te lossen %1 met het web","tooltip":"Claude lost de problemen op die de laatste beoordeling vond."},
 "rb_rework":{"message0":"het concept herwerken: %1","tooltip":"Claude herschrijft het concept volgens jouw instructie."},
 "rb_rewrite":{"message0":"%1 herschrijven: %2","tooltip":"Bijvoorbeeld: (concept) herschrijven: (vertaal naar het Frans)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"de instelling van de reviewer","same":"hetzelfde model","another":"een model van een andere maker"},
+"rb_reflect.REVIEWER":{"":"de instelling van de reviewer","same":"hetzelfde model","another":"een model van een andere maker"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -1222,7 +1224,10 @@
 "All":"Alle",
 "Built in":"Ingebouwd",
 "Shared":"Gedeeld",
-"{n} of {m} examples":"{n} van {m} voorbeelden"
+"{n} of {m} examples":"{n} van {m} voorbeelden",
+"Reviewer":"Reviewer",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Geen model van een andere maker heeft een sleutel op deze pagina, dus hetzelfde model beoordeelt het concept. Voeg een sleutel toe via «Add another key», of kies een model met naam bij «beoordeeld door».",
+"Written by {writer}; checked by {checker}.":"Geschreven door {writer}; beoordeeld door {checker}."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2398,6 +2403,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Nog geen ontvangstbewijzen: niets van wat dit programma de wereld heeft aangedaan is opgenomen.",
 "The chain is broken: a line is missing or was edited.":"De keten is gebroken: een regel ontbreekt of is bewerkt.",
 "The chain is intact: every line carries the fingerprint of the one before.":"De keten is intact: elke regel draagt de vingerafdruk van de vorige.",
-"Couldn't read {path} ({err}).":"Kon {path} niet lezen ({err})."
+"Couldn't read {path} ({err}).":"Kon {path} niet lezen ({err}).",
+"Reviewer":"Reviewer",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Geen model van een andere maker heeft een sleutel, dus hetzelfde model beoordeelt het concept. Voeg een sleutel voor een andere dienst toe, of noem een model bij «beoordeeld door» in het reviewblok.",
+"Written by {writer}; checked by {checker}.":"Geschreven door {writer}; beoordeeld door {checker}."
 }
 };

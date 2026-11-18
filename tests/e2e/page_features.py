@@ -180,6 +180,30 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and table and "at most 2 words" in table[-1] and "3 words; the limit is 2" in table[-1],
           f"an exact check shows as a rule in the round table ({(table[-1][:110] if table else '')!r})")
 
+    print("A second opinion on the review blocks (#426)")
+    ok_clear = {"approved": True, "rules": [{"rule": "clear", "met": True, "problem": "", "shows": ""}], "problems": []}
+    rev_prog = lambda rev: script(blk("rb_set_draft", inputs={"TEXT": tx("A draft.")}),  # noqa: E731
+                                  blk("rb_review", fields={"REVIEWER": rev}, inputs={"CRITERIA": tx("clear")}),
+                                  add(val(blk("rb_passed"))))
+    status, steps, items, prompts = await scripted(rev_prog("another"), [ok_clear])
+    note = [t for n, p_, t in steps if n == "Reviewer"]
+    rev = [t for n, p_, t in steps if n.startswith("Review")]
+    check(status.startswith("done") and items == ["true"] and note and "No other maker's model has a key on this page" in note[0]
+          and rev and "Written by" in rev[0] and "checked by" in rev[0],
+          f"with no other maker's key on the page, 'another' says so and the same model checks; the log names both ({note[:1]}, {rev[:1]})")
+    status, steps, items, prompts = await scripted(rev_prog("gemini-default"), [ok_clear])
+    rev = [t for n, p_, t in steps if n.startswith("Review")]
+    names = [n for n, *_ in steps]
+    check(status.startswith("done") and rev and "checked by Gemini Flash" in rev[0]
+          and any("Claude standing in for Gemini Flash" in n for n in names),
+          f"a named model checks, with Claude standing in on the page, and the log says who checked ({rev[:1]})")
+    await load_state(pg, rev_prog("gemini-default"))
+    EXTRA["t_reviewer"] = await export_python(pg, "t_reviewer")
+    await load_state(pg, rev_prog("another"))
+    EXTRA["t_reviewer2"] = await export_python(pg, "t_reviewer2")
+    check('reviewer="gemini-default"' in EXTRA["t_reviewer"] and 'reviewer="another"' in EXTRA["t_reviewer2"],
+          "the block's 'checked by' choice is exported into the Python")
+
     print("Rehearsing a run (#430)")
     reh_prog = script(blk("rb_ha_call", inputs={"SERVICE": tx("light.turn_off"), "ENTITY": tx("light.kitchen"), "DATA": tx("")}),
                       blk("rb_tg_send", inputs={"TEXT": tx("hello from the rehearsal")}),

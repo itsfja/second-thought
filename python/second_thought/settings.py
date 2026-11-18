@@ -42,7 +42,7 @@ for _stream in (sys.stdout, sys.stderr):
 # Python looks for it next to the program, then in the current folder, then in your home folder;
 # SECOND_THOUGHT_INI can point somewhere else. A real environment variable wins over the file.
 SETTINGS_FILE = "second-thought.ini"
-SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS",
+SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups": "RB_BACKUPS", "reviewer": "RB_REVIEWER",
                  "max_seconds": "RB_MAX_SECONDS", "call_timeout": "RB_CALL_TIMEOUT",
                  "budget": "RB_BUDGET", "budget_dollars": "RB_BUDGET_DOLLARS", "budget_money": "RB_BUDGET_MONEY",
                  "currency": "RB_CURRENCY", "exchange_rate": "RB_EXCHANGE_RATE", "rates_url": "RB_RATES_URL", "quota_hourly": "RB_QUOTA_HOURLY",
@@ -55,7 +55,7 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
 
 # Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
 # "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
-ONE_WORD_SETTINGS = {"primary", "model", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
+ONE_WORD_SETTINGS = {"primary", "model", "reviewer", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
                      "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse"}
 

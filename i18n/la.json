@@ -392,7 +392,7 @@
    "tooltip": "Lateres infra exsequitur quotiens hic nuntius praedicatur. Plura scripta eundem nuntium auscultare possunt."
   },
   "rb_reflect": {
-   "message0": "recognosce adumbrationem secundum %1",
+   "message0": "recognosce adumbrationem secundum %1, recognita a %2",
    "message1": "usque ad %1 circuitus; si deficit, fac",
    "message2": "%1",
    "tooltip": "Claude adumbrationem censet. Si deficit, lateres intus currunt, deinde iterum censet. Quoque circuitu recognitor etiam inspicit ne vitia priora redierint. Si circuitus deficiunt, adumbratio cum paucissimis vitiis servatur, non solum ultima.",
@@ -415,7 +415,7 @@
    "tooltip": "Si quid intus deficit modo quem secundus conatus sanare possit (conexio amissa, responsum confusum), paulum exspectat et iterum exsequitur."
   },
   "rb_review": {
-   "message0": "recognosce adumbrationem secundum %1",
+   "message0": "recognosce adumbrationem secundum %1, recognita a %2",
    "tooltip": "Una recognitio. Postea utere «adumbratio recognitionem superavit» et «vitia recognitionis».",
    "message1": "et proba %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "ratio examinatoris",
+   "same": "idem exemplar",
+   "another": "alterius opificis exemplar"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "ratio examinatoris",
+   "same": "idem exemplar",
+   "another": "alterius opificis exemplar"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "Omnia",
   "Built in": "Intrinseca",
   "Shared": "Communia",
-  "{n} of {m} examples": "{n} ex {m} exemplis"
+  "{n} of {m} examples": "{n} ex {m} exemplis",
+  "Reviewer": "examinator",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "nulli alterius opificis exemplari clavis est in hac pagina, ergo idem exemplar adumbrationem examinat.",
+  "Written by {writer}; checked by {checker}.": "scriptum a {writer}; examinatum a {checker}."
  },
  "examples": {
   "review": {
@@ -3765,7 +3778,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Nondum tesserae: nihil quod hoc programa mundo fecit relatum est.",
   "The chain is broken: a line is missing or was edited.": "Catena fracta est: linea deest vel mutata est.",
   "The chain is intact: every line carries the fingerprint of the one before.": "Catena integra est: quaque linea signum prioris fert.",
-  "Couldn't read {path} ({err}).": "{path} legere non potui ({err})."
+  "Couldn't read {path} ({err}).": "{path} legere non potui ({err}).",
+  "Reviewer": "examinator",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "nulli alterius opificis exemplari clavis est, ergo idem exemplar adumbrationem examinat.",
+  "Written by {writer}; checked by {checker}.": "scriptum a {writer}; examinatum a {checker}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

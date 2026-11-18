@@ -41,8 +41,8 @@
 "rb_ask_list":{"message0":"Claude-𒀭 𒆏𒁍𒌋𒉿𒅈 𒁍𒉡𒍑: %1","tooltip":"Claude 𒆏𒁍𒌋𒉿𒅈 𒂕𒉺 𒈨𒈠𒄿, 𒆪𒅔 𒂕𒉺 𒂕𒉺 𒄿𒉿𒅆."},
 "rb_rewrite":{"message0":"%1 𒀀𒈾 %2 𒂕𒉺 𒄢𒀸","tooltip":"𒈠𒄴𒄩𒀭: (𒄩𒀭𒋼𒄑𒍣 𒁾) 𒀀𒈾 (Faransa-𒈠𒍝 𒈨𒈪𒀭) 𒂕𒉺 𒄢𒀸."},
 "rb_extract":{"message0":"%1 𒅖𒌅 %2 𒅈𒄩 𒁕"},
-"rb_reflect":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒈾 %1 𒀀𒍑","message1":"%1 𒄿𒉿𒌋𒉿𒅈𒅆; 𒈠𒀀𒀭 𒌌 𒅆𒂟, 𒄿𒉿","message2":"%1","tooltip":"Claude 𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒍑𒍣. 𒁖𒆪 𒌌 𒅆𒂟, 𒋞𒄭𒀀 𒀭𒁕𒀭 𒄿𒉿𒀭𒍣, 𒉡 𒂕𒉺 𒀀𒍑𒍣. 𒄿𒉿𒌋𒉿𒅈 𒄷𒌋𒈠𒀭 𒊭𒆪𒉿𒋻 𒉿𒀸𒋫𒌌 𒅗𒊒𒌑𒄿𒇷 𒌌 𒂕𒉺 𒌑𒀉 𒀀𒍑𒍣. 𒁖𒆪 𒄿𒉿𒌋𒉿𒅈 𒍣𒅔𒈾𒀭𒍣, 𒄩𒀭𒋼𒄑𒍣 𒁾 𒉿𒀸𒋫𒌌 𒌉 𒄯𒍣, 𒀊𒁉𒄑𒍣𒉿 𒌌.","message3":"𒆪𒀉𒋫 %1"},
-"rb_review":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒈾 %1 𒀀𒍑","tooltip":"𒊭𒆪𒉿𒋻 1. 𒂕𒀭 “𒄩𒀭𒋼𒄑𒍣 𒁾 𒅆𒂟” 𒅇 “𒉿𒀸𒋫𒌌 𒊭𒆪𒉿𒋻” 𒄿𒉿.","message1":"𒆪𒀉𒋫 %1"},
+"rb_reflect":{"message0":"šumma 𒁹 %1 𒇻, 𒊭 %2 𒇻","message1":"%1 𒄿𒉿𒌋𒉿𒅈𒅆; 𒈠𒀀𒀭 𒌌 𒅆𒂟, 𒄿𒉿","message2":"%1","tooltip":"Claude 𒄩𒀭𒋼𒄑𒍣 𒁾 𒀀𒍑𒍣. 𒁖𒆪 𒌌 𒅆𒂟, 𒋞𒄭𒀀 𒀭𒁕𒀭 𒄿𒉿𒀭𒍣, 𒉡 𒂕𒉺 𒀀𒍑𒍣. 𒄿𒉿𒌋𒉿𒅈 𒄷𒌋𒈠𒀭 𒊭𒆪𒉿𒋻 𒉿𒀸𒋫𒌌 𒅗𒊒𒌑𒄿𒇷 𒌌 𒂕𒉺 𒌑𒀉 𒀀𒍑𒍣. 𒁖𒆪 𒄿𒉿𒌋𒉿𒅈 𒍣𒅔𒈾𒀭𒍣, 𒄩𒀭𒋼𒄑𒍣 𒁾 𒉿𒀸𒋫𒌌 𒌉 𒄯𒍣, 𒀊𒁉𒄑𒍣𒉿 𒌌.","message3":"𒆪𒀉𒋫 %1"},
+"rb_review":{"message0":"šumma 𒁹 %1 𒇻, 𒊭 %2 𒇻","tooltip":"𒊭𒆪𒉿𒋻 1. 𒂕𒀭 “𒄩𒀭𒋼𒄑𒍣 𒁾 𒅆𒂟” 𒅇 “𒉿𒀸𒋫𒌌 𒊭𒆪𒉿𒋻” 𒄿𒉿.","message1":"𒆪𒀉𒋫 %1"},
 "rb_passed":{"message0":"𒄩𒀭𒋼𒄑𒍣 𒁾 𒅆𒂟"},
 "rb_problems":{"message0":"𒉿𒀸𒋫𒌌 𒊭𒆪𒉿𒋻𒀸"},
 "rb_score":{"message0":"%1 𒄿𒈾 10 𒀀𒈾 %2 𒋃"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"šumma 𒇻 set","same":"šumma 𒇻 𒍣","another":"šumma 𒇻 𒄩"},
+"rb_reflect.REVIEWER":{"":"šumma 𒇻 set","same":"šumma 𒇻 𒍣","another":"šumma 𒇻 𒄩"}
 },
 "categories":{
 "Agent":"𒇽𒆥𒄄𒀀",
@@ -1222,7 +1224,10 @@
 "All":"𒅗𒈾",
 "Built in":"𒅗𒈾",
 "Shared":"𒅗𒈾",
-"{n} of {m} examples":"{n} 𒅗 {m}"
+"{n} of {m} examples":"{n} 𒅗 {m}",
+"Reviewer":"šumma 𒇻",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"𒄩 𒇻 𒈾, šumma 𒇻 𒍣 𒇻",
+"Written by {writer}; checked by {checker}.":"𒇻 {writer}; 𒇻 {checker}."
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"memai UL arḫa: UL memai.",
 "The chain is broken: a line is missing or was edited.":"memai parku: UL memai.",
 "The chain is intact: every line carries the fingerprint of the one before.":"memai parku: arḫa memai.",
-"Couldn't read {path} ({err}).":"UL memai {path} ({err})."
+"Couldn't read {path} ({err}).":"UL memai {path} ({err}).",
+"Reviewer":"šumma lu",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ḫa lu na, šumma lu ze lu",
+"Written by {writer}; checked by {checker}.":"lu {writer}; lu {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒈨𒈪𒀭 𒀭𒁕 𒁕𒀀𒄿",

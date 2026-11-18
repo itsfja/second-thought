@@ -392,7 +392,7 @@
    "tooltip": "このメッセージが送られるたびに下のブロックを実行します。複数のスクリプトが同じメッセージを待てます。"
   },
   "rb_reflect": {
-   "message0": "%1 に照らして下書きをレビュー",
+   "message0": "%1 に照らして下書きをレビュー、チェック担当は %2",
    "message1": "最大 %1 回まで。不合格なら次を実行",
    "message2": "%1",
    "tooltip": "Claude が下書きを批評します。不合格なら中のブロックを実行し、もう一度批評します。各回でレビュアーは以前の問題が再発していないかも確認します。回数を使い切ったら、最後のものではなく、問題が最も少なかった下書きを残します。",
@@ -415,7 +415,7 @@
    "tooltip": "中の何かが、もう一度やれば直りそうな形で失敗したとき（接続が切れた、返事が崩れた）、少し待ってからもう一度実行します。"
   },
   "rb_review": {
-   "message0": "%1 に照らして下書きをレビュー",
+   "message0": "%1 に照らして下書きをレビュー、チェック担当は %2",
    "tooltip": "1 回のレビュー。その後「下書きがレビューに合格した」と「レビューで見つかった問題」を使います。",
    "message1": "さらに確認 %1"
   },
@@ -973,6 +973,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "レビュアーの設定",
+   "same": "同じモデル",
+   "another": "別のメーカーのモデル"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "レビュアーの設定",
+   "same": "同じモデル",
+   "another": "別のメーカーのモデル"
   }
  },
  "categories": {
@@ -1957,7 +1967,10 @@
   "All": "すべて",
   "Built in": "組み込み",
   "Shared": "共有",
-  "{n} of {m} examples": "{m} 件中 {n} 件"
+  "{n} of {m} examples": "{m} 件中 {n} 件",
+  "Reviewer": "レビュアー",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "このページには別のメーカーのモデルのキーがないため、同じモデルが下書きをチェックします。「Add another key」でキーを追加するか、「チェック担当」で名前のあるモデルを選んでください。",
+  "Written by {writer}; checked by {checker}.": "執筆: {writer}、チェック: {checker}。"
  },
  "examples": {
   "review": {
@@ -3765,6 +3778,9 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "まだレシートがありません: このプログラムが世界に対して行ったことは記録されていません。",
   "The chain is broken: a line is missing or was edited.": "チェーンが壊れています: 行が欠落または編集されています。",
   "The chain is intact: every line carries the fingerprint of the one before.": "チェーンは無傷です: 各行が前の行のフィンガープリントを持っています。",
-  "Couldn't read {path} ({err}).": "{path} を読めませんでした ({err})。"
+  "Couldn't read {path} ({err}).": "{path} を読めませんでした ({err})。",
+  "Reviewer": "レビュアー",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "別のメーカーのモデルのキーがないため、同じモデルが下書きをチェックします。別のサービスのキーを追加するか、レビューブロックの「チェック担当」でモデルを指定してください。",
+  "Written by {writer}; checked by {checker}.": "執筆: {writer}、チェック: {checker}。"
  }
 }

@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"nueva ficha"},
 "rb_rec_set":{"message0":"fijar %1 de %2 en %3","tooltip":"Cambia un campo de una ficha (normalmente una variable con una ficha)."},
 "rb_receive":{"message0":"al recibir %1","tooltip":"Ejecuta los bloques de debajo cada vez que se envía este mensaje. Varios guiones pueden esperar el mismo mensaje."},
-"rb_reflect":{"message0":"revisar el borrador según %1","message1":"hasta %1 rondas; si no lo cumple, hacer","message2":"%1","tooltip":"Claude critica el borrador. Si no lo cumple, se ejecutan los bloques de dentro y vuelve a criticarlo. En cada ronda el revisor comprueba también que los problemas anteriores no han vuelto. Si se acaban las rondas, se queda con el borrador con menos problemas, no solo con el último.","message3":"y comprobar %1"},
+"rb_reflect":{"message0":"revisar el borrador según %1, revisado por %2","message1":"hasta %1 rondas; si no lo cumple, hacer","message2":"%1","tooltip":"Claude critica el borrador. Si no lo cumple, se ejecutan los bloques de dentro y vuelve a criticarlo. En cada ronda el revisor comprueba también que los problemas anteriores no han vuelto. Si se acaban las rondas, se queda con el borrador con menos problemas, no solo con el último.","message3":"y comprobar %1"},
 "rb_reset_timer":{"message0":"reiniciar el cronómetro"},
 "rb_result":{"message0":"terminar y mostrar el resultado","tooltip":"Termina la ejecución. Muestra lo que añadiste al resultado, o el borrador si no añadiste nada."},
 "rb_result_text":{"message0":"el resultado hasta ahora","tooltip":"Todo lo añadido al resultado, como texto."},
 "rb_retry":{"message0":"reintentar hasta %1 veces","message1":"%1","tooltip":"Si algo de dentro falla de una forma que un segundo intento podría arreglar (una conexión caída, una respuesta confusa), espera un poco y lo vuelve a ejecutar."},
-"rb_review":{"message0":"revisar el borrador según %1","tooltip":"Una revisión. Usa después 'el borrador pasó la revisión' y 'problemas de la revisión'.","message1":"y comprobar %1"},
+"rb_review":{"message0":"revisar el borrador según %1, revisado por %2","tooltip":"Una revisión. Usa después 'el borrador pasó la revisión' y 'problemas de la revisión'.","message1":"y comprobar %1"},
 "rb_revise":{"message0":"corregir los problemas de la revisión %1 usando la web","tooltip":"Claude corrige los problemas que encontró la última revisión."},
 "rb_rework":{"message0":"rehacer el borrador: %1","tooltip":"Claude reescribe el borrador siguiendo tu indicación."},
 "rb_rewrite":{"message0":"reescribir %1 para %2","tooltip":"Por ejemplo: reescribir (borrador) para (traducirlo al francés)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"el ajuste del revisor","same":"el mismo modelo","another":"un modelo de otro fabricante"},
+"rb_reflect.REVIEWER":{"":"el ajuste del revisor","same":"el mismo modelo","another":"un modelo de otro fabricante"}
 },
 "categories":{
 "Events":"Eventos",
@@ -1222,7 +1224,10 @@
 "All":"Todos",
 "Built in":"Integrados",
 "Shared":"Compartidos",
-"{n} of {m} examples":"{n} de {m} ejemplos"
+"{n} of {m} examples":"{n} de {m} ejemplos",
+"Reviewer":"Revisor",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Ningún modelo de otro fabricante tiene una clave en esta página, así que el mismo modelo revisa el borrador. Añade una clave con «Add another key» o elige un modelo con nombre en «revisado por».",
+"Written by {writer}; checked by {checker}.":"Escrito por {writer}; revisado por {checker}."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -2398,6 +2403,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Aún no hay recibos: nada de lo que este programa ha hecho al mundo quedó registrado.",
 "The chain is broken: a line is missing or was edited.":"La cadena está rota: falta una línea o fue editada.",
 "The chain is intact: every line carries the fingerprint of the one before.":"La cadena está intacta: cada línea lleva la huella de la anterior.",
-"Couldn't read {path} ({err}).":"No se pudo leer {path} ({err})."
+"Couldn't read {path} ({err}).":"No se pudo leer {path} ({err}).",
+"Reviewer":"Revisor",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Ningún modelo de otro fabricante tiene una clave, así que el mismo modelo revisa el borrador. Añade una clave de otro servicio o indica un modelo en «revisado por» del bloque de revisión.",
+"Written by {writer}; checked by {checker}.":"Escrito por {writer}; revisado por {checker}."
 }
 };

@@ -40,8 +40,8 @@
 "rb_ask_list":{"message0":"問 Claude 以列：%1","tooltip":"Claude 以列答之，可循而遍之。"},
 "rb_rewrite":{"message0":"改寫 %1 為 %2","tooltip":"譬如：改寫（稿）為（譯為法蘭西語）。"},
 "rb_extract":{"message0":"自 %2 取 %1"},
-"rb_reflect":{"message0":"依 %1 審其稿","message1":"至多 %1 回；不中則行","message2":"%1","tooltip":"Claude 評其稿。不中，則行其內之塊，而復評之。每回審者並察前失之不復。回盡，則存其失最少之稿，非徒其末者。","message3":"又驗 %1"},
-"rb_review":{"message0":"依 %1 審其稿","tooltip":"一審也。後用「稿中審」及「審之失」。","message1":"又驗 %1"},
+"rb_reflect":{"message0":"依 %1 審草稿，審者 %2","message1":"至多 %1 回；不中則行","message2":"%1","tooltip":"Claude 評其稿。不中，則行其內之塊，而復評之。每回審者並察前失之不復。回盡，則存其失最少之稿，非徒其末者。","message3":"又驗 %1"},
+"rb_review":{"message0":"依 %1 審草稿，審者 %2","tooltip":"一審也。後用「稿中審」及「審之失」。","message1":"又驗 %1"},
 "rb_passed":{"message0":"稿中審"},
 "rb_problems":{"message0":"審之失"},
 "rb_score":{"message0":"以 %2 評之，十分得 %1"},
@@ -237,7 +237,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"審者之設","same":"同一模型","another":"他廠之模型"},
+"rb_reflect.REVIEWER":{"":"審者之設","same":"同一模型","another":"他廠之模型"}
 },
 "categories":{
 "Agent":"使者",
@@ -1221,7 +1223,10 @@
 "All":"悉",
 "Built in":"內建",
 "Shared":"分授",
-"{n} of {m} examples":"{m} 例之中 {n} 例"
+"{n} of {m} examples":"{m} 例之中 {n} 例",
+"Reviewer":"審者",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"此頁無他廠模型之鑰，故以同一模型審稿。請以「Add another key」增鑰，或於「審者」選一模型。",
+"Written by {writer}; checked by {checker}.":"撰者 {writer}；審者 {checker}。"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2397,7 +2402,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"尚無憑：此程式之所為於世者，未之有記。",
 "The chain is broken: a line is missing or was edited.":"鏈斷矣：有行缺失或見改。",
 "The chain is intact: every line carries the fingerprint of the one before.":"鏈完好：每行皆載前行之印。",
-"Couldn't read {path} ({err}).":"不能讀 {path}（{err}）。"
+"Couldn't read {path} ({err}).":"不能讀 {path}（{err}）。",
+"Reviewer":"審者",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"無他廠模型之鑰，故以同一模型審稿。請為他服務增鑰，或於審稿塊之「審者」擇一模型。",
+"Written by {writer}; checked by {checker}.":"撰者 {writer}；審者 {checker}。"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

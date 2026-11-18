@@ -645,9 +645,52 @@
       addStep("Web address in the task", { text:tr("The task names a web address, but this step can't open it. Tick 'using the web' on the block, or put the page's words in the task.") }).done("note", "warn");
   }
 
-  async function reviewOnce(criteria, checks, label, inLoop){
+  // Who makes a tier's model, as maker_of in exported programs (#426).
+  function makerOfTier(t){
+    t = String(t || "");
+    for (const s of SERVICES) {
+      for (const [k, v] of Object.entries(s.tiers || {})) {
+        if ((s.prefix || "") + k === t) {
+          const hit = Object.entries(s.makers || {}).find(([start]) => String(v[0]).startsWith(start));
+          return (hit || [null, s.maker || ""])[1];
+        }
+      }
+      if (s.any_model && t.startsWith(s.any_model)) return (s.makers && Object.values(s.makers)[0]) || s.maker || "";
+    }
+    return "";
+  }
+  // Another maker's tiers that have a key on this page, for 'checked by: another maker's model' (#426).
+  function otherMakerTiers(t, hasKey){
+    hasKey = hasKey || (s => !!pageKeyFor(s));
+    const maker = makerOfTier(t), out = [];
+    for (const s of SERVICES) {
+      if (!hasKey(s)) continue;
+      for (const k of Object.keys(s.tiers || {}).sort((a, b) => (a !== "default") - (b !== "default"))) {
+        const tier = (s.prefix || "") + k, m = makerOfTier(tier);
+        if (m && m !== maker) { out.push(tier); break; }
+      }
+    }
+    return out;
+  }
+  // The model that checks the draft: the block's 'checked by' choice, else the same model (#426). Says so when no
+  // other maker has a key here, instead of failing.
+  function reviewerTier(choice, tier, hasKey){
+    const c = String(choice || "").trim();
+    tier = tier || run.tier;
+    if (!c || c.toLowerCase() === "same") return { tier, note: null };
+    if (c.toLowerCase() === "another") {
+      const others = otherMakerTiers(tier, hasKey);
+      if (others.length) return { tier: others[0], note: null };
+      return { tier, note: tr("No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.") };
+    }
+    return { tier: c, note: null };
+  }
+
+  async function reviewOnce(criteria, checks, label, inLoop, reviewer){
     const s = addStep(label);
     const loop = inLoop ? run.reflect : null;
+    const { tier: rtier, note } = reviewerTier(reviewer);
+    if (note) addStep(tr("Reviewer"), { text: note }).done("note", "warn");
     const rules = parseRules(criteria);
     const cv = exactChecks(run.draft, checks);  // the exact checks, worked out by code, no model call (#425)
     const earlier = loop && loop.earlier.length ? "\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, and list it again, in the same words, if it has come back:\n" +
@@ -655,10 +698,14 @@
     let res;
     if (rules.length) {  // written rules are judged by the model; with only exact checks there is no model call (#425)
       const ruleList = rules.map((r, i) => (i + 1) + ". " + r).join("\n") || str(criteria);
-      const v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
-        "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
-        '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
-        "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+      const before = run.tier; run.tier = rtier;  // the reviewer checks the draft, not the model that wrote it (#426)
+      let v;
+      try {
+        v = await askChecked(q => ask(q, s, "json"), "You are a strict reviewer. Judge the draft ONLY against these rules, one per line:\n" + ruleList +
+          "\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft + earlier +
+          '\n\nReply with only JSON like {"approved": false, "rules": [{"rule": "the rule\'s own words", "met": false, "problem": "specific fixable problem", "shows": "the words in the draft that show it"}], "problems": ["specific fixable problem"]}. ' +
+          "approved is true only if every rule is met; for each rule not met, problem says what to fix and shows quotes the words in the draft that show it; problems repeats the unmet rules' problems as a flat list.", SCHEMAS.review);
+      } finally { run.tier = before; }
       res = reviewVerdicts(rules, v);
       res.verdicts = cv.concat(res.verdicts);
       res.approved = res.verdicts.every(x => x.met) && res.approved;
@@ -686,8 +733,9 @@
       loop.lastUnmet = res.unmet.slice();
       (loop.rounds = loop.rounds || []).push({ round:loop.round, verdicts:res.verdicts });
     }
-    if (approved) { s.text(tr("Meets every criterion.")); s.done("approved", "ok"); }
-    else { s.list(run.problems); s.done("needs work", "warn"); }
+    const who = tr("Written by {writer}; checked by {checker}.", { writer:tierLabel(run.draftTier || run.primary), checker:tierLabel(rtier) });
+    if (approved) { s.text(who + "\n" + tr("Meets every criterion.")); s.done("approved", "ok"); }
+    else { s.list(run.problems); const d = document.createElement("div"); d.textContent = who; s.body.appendChild(d); s.done("needs work", "warn"); }
     return { approved, step:s };
   }
 
@@ -890,6 +938,7 @@
       case "rb_generate": {
         needTask();
         run.draft = await askStep("Write a first draft", "Complete the task below. Reply with only the finished piece, no preamble.\n\nTask:\n" + run.task);
+        run.draftTier = run.tier;  // who wrote the draft, for the review's "who checked" (#426)
         run.problems = []; run.approved = undefined;
         webNote(b, run.task);
         break;
@@ -900,6 +949,7 @@
         if (!instr) fail(tr("The 'rework the draft' block has no instruction."));
         run.draft = await askStep(tr("Rework: {how}", { how:short(instr, 60) }), "Rewrite the draft below following this instruction: " + instr +
           "\nKeep it true to the original task. Reply with only the rewritten piece.\n\nTask:\n" + (run.task || "(none given)") + "\n\nDraft:\n" + run.draft);
+        run.draftTier = run.tier;
         break;
       }
       case "rb_revise": {
@@ -910,11 +960,12 @@
         const keep = fixed.length ? "\n\nThese problems were fixed in earlier rounds. Don't bring them back:\n" + fixed.map(e => "- " + e).join("\n") : "";
         run.draft = await ask("Revise the draft so it fixes every problem listed. Change nothing else that works. Reply with only the improved piece.\n\nTask:\n" +
           (run.task || "(none given)") + "\n\nProblems:\n" + run.problems.map(p => "- " + p).join("\n") + keep + "\n\nDraft:\n" + run.draft, s);
+        run.draftTier = run.tier;
         s.done("revised", "ok");
         webNote(b, "");
         break;
       }
-      case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); break;
+      case "rb_set_draft": run.draft = str(await input(b, tc, "TEXT")); run.draftTier = run.tier; break;
       case "rb_checkpoint_save": {
         const name = String(b.getFieldValue("NAME") || "").trim();
         if (!name) fail(tr("The 'save checkpoint' block needs a name."));
@@ -930,10 +981,11 @@
         addStep(tr("Back to checkpoint \u201c{name}\u201d", { name }), { text:run.draft ? tr("Restored the task, draft, review, result and variables. Draft: {draft}", { draft:short(run.draft, 80) }) : tr("Restored the task, draft, review, result and variables.") }).done("restored", "ok");
         break;
       }
-      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), await collectChecks(b, tc), tr("Review")); break; }
+      case "rb_review": { needDraft(); await reviewOnce(str(await input(b, tc, "CRITERIA")), await collectChecks(b, tc), tr("Review"), false, b.getFieldValue("REVIEWER")); break; }
       case "rb_reflect": {
         needDraft();
         const criteria = str(await input(b, tc, "CRITERIA"));
+        const reviewer = b.getFieldValue("REVIEWER");
         const checks = await collectChecks(b, tc);
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
@@ -941,7 +993,7 @@
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
-            const { approved, step } = await reviewOnce(criteria, checks, tr("Review, round {n}", { n:round }), true);
+            const { approved, step } = await reviewOnce(criteria, checks, tr("Review, round {n}", { n:round }), true, reviewer);
             // the rules by round, shown in the log as the rounds happen (#424)
             if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
             run.reflect.table.table(rulesTableRows(run.reflect));

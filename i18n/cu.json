@@ -1,7 +1,7 @@
 {
  "name": "словѣнскїй",
  "blockly": "en",
- "note": "Church Slavonic (словѣнскїй) in pre-reform Cyrillic, with ѣ, ї, ѡ, ѿ and ѧ and a final ъ, but without titla or stress marks so that it shows in ordinary fonts, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg): \"blockly\" is \"en\" with Church Slavonic laid over it, as Latin does. The liturgical language has no words for most of this, so the wording uses its own vocabulary for new things: чинъ (an order, a rite) for a program, чреда (a course, a turn) for a script, звѣно (a link) for a block, подобїе (a likeness) for a model, посланникъ for an agent, ѡрудїе for a tool, начертанїе for a draft, испытанїе for a review, плодъ (fruit) for a result, лѣтопись теченїѧ for the run log, ключь for a key, свитокъ (a scroll) for a file, ковчегъ for a folder, хартїѧ (a charter) for a record, поле for a field, знаменїе for a token, предѣлъ for a checkpoint, источникъ for a news feed, посланїе for email, степень for a channel, вещь for a Home Assistant entity, молитва for a prompt and мрежа (a net) for the web. Buttons: Тецы Run, Ѡстанови Stop, Продолжи Continue, Одобри Approve, Возврати Send back, Попусти Allow, Не твори Don't, Времена Schedules. Typed answers: ей or да for yes, ни or нѣтъ for no (y and n work too). It is a modern use of the church language, not genuine ancient text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+ "note": "Church Slavonic (словѣнскїй) in pre-reform Cyrillic, with ѣ, ї, ѡ, ѿ and ѧ and a final ъ, but without titla or stress marks so that it shows in ordinary fonts, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg): \"blockly\" is \"en\" with Church Slavonic laid over it, as Latin does. The liturgical language has no words for most of this, so the wording uses its own vocabulary for new things: чинъ (an order, a rite) for a program, чреда (a course, a turn) for a script, звѣно (a link) for a block, подобїе (a likeness) for a model, посланникъ for an agent, ѡрудїе for a tool, начертанїе for a draft, испытанїе for a review, плодъ (fruit) for a result, лѣтопись теченїѧ for the run log, ключь for a key, свитокъ (a scroll) for a file, ковчегъ for a folder, хартїѧ (a charter) for a record, поле for a field, знаменїе for a token, предѣлъ for a checkpoint, источникъ for a news feed, посланїе for email, степень for a channel, вещь for a Home Assistant entity, моделитва for a prompt and мрежа (a net) for the web. Buttons: Тецы Run, Ѡстанови Stop, Продолжи Continue, Одобри Approve, Возврати Send back, Попусти Allow, Не твори Don't, Времена Schedules. Typed answers: ей or да for yes, ни or нѣтъ for no (y and n work too). It is a modern use of the church language, not genuine ancient text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
  "blocks": {
   "rb_longtext": {
    "message0": "%1",
@@ -142,14 +142,14 @@
    "message0": "извлецы %1 изъ %2"
   },
   "rb_reflect": {
-   "message0": "испытай начертанїе по %1",
+   "message0": "испытай начертанїе по %1, испытано %2",
    "message1": "до %1 кратъ; аще не удовлетворитъ, сотвори",
    "message2": "%1",
    "tooltip": "Claude судитъ начертанїе. Аще не удовлетворитъ, звѣна внутрь текутъ, и паки судитъ. Во всѧкъ кратъ испытатель смотритъ и прежнихъ погрѣшностей невозвращенїѧ. Аще кратѡвъ не достанетъ, хранитсѧ начертанїе съ меньшими погрѣшностьми, а не послѣднее токмо.",
    "message3": "и провѣри %1"
   },
   "rb_review": {
-   "message0": "испытай начертанїе по %1",
+   "message0": "испытай начертанїе по %1, испытано %2",
    "tooltip": "Едино испытанїе. По семъ употреби «начертанїе прошло испытанїе» и «погрѣшности испытанїѧ».",
    "message1": "и провѣри %1"
   },
@@ -253,8 +253,8 @@
    "tooltip": "Значенїе, посланное съ возглашенїемъ, еже начатъ сїю чреду (или возбуди сїе «жди, дондеже прїиму»). Въ чинѣ, теченномъ «тецы чинъ», данное ему значенїе."
   },
   "rb_prompt": {
-   "message0": "молитва %1",
-   "tooltip": "Писанїе изъ хранилища молитвъ твоихъ (ѿверзи «Чины», да приложиши)."
+   "message0": "моделитва %1",
+   "tooltip": "Писанїе изъ хранилища моделитвъ твоихъ (ѿверзи «Чины», да приложиши)."
   },
   "rb_file_choose": {
    "message0": "писанїе свитка, егоже изберу",
@@ -963,6 +963,16 @@
   "rb_arr_search.WHICH": {
    "radarr": "Radarr",
    "sonarr": "Sonarr"
+  },
+  "rb_review.REVIEWER": {
+   "": "оуставъ проверѧющаго",
+   "same": "та же модел",
+   "another": "модел иного творца"
+  },
+  "rb_reflect.REVIEWER": {
+   "": "оуставъ проверѧющаго",
+   "same": "та же модел",
+   "another": "модел иного творца"
   }
  },
  "categories": {
@@ -1289,7 +1299,7 @@
   "No 'when I receive {msg}' script is listening, so nothing happened.": "Ни едина чреда «егда прїиму {msg}» слушаетъ, сегѡ ради ничтоже бысть.",
   "No answer.": "Нѣсть ѿвѣта.",
   "No money budget for this run.": "Нѣсть смѣты сребра сему теченїю.",
-  "No prompts yet. Add reusable prompt text here, then use the 'prompt' block in Ask Claude.": "Еще нѣсть молитвъ. Приложи здѣ писанїе молитвы употребляемое многажды, по семъ употреби звѣно «молитва» въ Вопроси Claude.",
+  "No prompts yet. Add reusable prompt text here, then use the 'prompt' block in Ask Claude.": "Еще нѣсть моделитвъ. Приложи здѣ писанїе моделитвы употребляемое многажды, по семъ употреби звѣно «моделитва» въ Вопроси Claude.",
   "No review problems recorded, so nothing to fix.": "Ни едина бѣда испытанїѧ записана, сегѡ ради нечегѡ исправити.",
   "No saved programs yet. Name the one on the canvas and press Save.": "Еще нѣсть сохраненныхъ чинѡвъ. Нареци имѧ сущему на полотнѣ и пожми «Сохрани».",
   "No scheduled scripts": "Нѣсть уроченныхъ чредъ",
@@ -1325,7 +1335,7 @@
   "Programs inside programs went more than 10 deep, so the run stopped.": "Чины внутрь чинѡвъ пройдоша глубле 10, сегѡ ради теченїе ѡстависѧ.",
   "Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.": "Чины, ѧже инїи раздѣлиша. Всѧкъ испытанъ бѣ прежде приложенїѧ, и глаголетъ, что можетъ, ѿ звѣнъ егѡ разсужденное. Да раздѣлиши свой, зри gallery/README.md въ ковчезѣ Second Thought.",
   "Programs run with your own keys: {keys}. Each is charged to its own account.": "Чины текутъ съ ключами твоими: {keys}. Всѧкъ взимаетсѧ ѿ своеѧ записки.",
-  "Prompt library": "Книгохранилище молитвъ",
+  "Prompt library": "Книгохранилище моделитвъ",
   "Python code copied. Save it as {name}.py.": "Писанїе Python списано. Сохрани е яко {name}.py.",
   "Question for you": "Вопросъ къ тебѣ",
   "Reached {time}": "Достигнуто {time}",
@@ -1346,7 +1356,7 @@
   "Result": "Плодъ",
   "Result:": "Плодъ:",
   "Retrying": "Паки покушаю",
-  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "Писанїе молитвы употребляемое многажды. Положи звѣно «молитва» (въ Вопроси Claude) въ всѧко мѣсто и напиши имѧ молитвы.",
+  "Reusable prompt text. Drop the 'prompt' block (in Ask Claude) into any slot and type the prompt's name.": "Писанїе моделитвы употребляемое многажды. Положи звѣно «моделитва» (въ Вопроси Claude) въ всѧко мѣсто и напиши имѧ моделитвы.",
   "Review": "Испытанїе",
   "Review stuck": "Испытанїе заѧзе",
   "Review, round {n}": "Испытанїе, кругъ {n}",
@@ -1374,14 +1384,14 @@
   "Save file": "Сохрани свитокъ",
   "Save log": "Сохрани лѣтопись",
   "Save picture": "Сохрани изображенїе",
-  "Save prompt": "Сохрани молитву",
+  "Save prompt": "Сохрани моделитву",
   "Save test": "Сохрани искусъ",
   "Saved": "Сохранено",
   "Saved in this browser only.": "Сохранено токмо въ семъ зрителѣ.",
   "Saved memory isn't available here, so this will only last while the page is open.": "Сохраненнаѧ памѧть здѣ недоступна, сегѡ ради сїе пребудетъ токмо, дондеже листъ ѿверзтъ.",
   "Saved memory isn't available here. Everything lasts only while the page is open.": "Сохраненнаѧ памѧть здѣ недоступна. Всѐ пребываетъ токмо, дондеже листъ ѿверзтъ.",
-  "Saved programs and prompts": "Сохраненнїи чини и молитвы",
-  "Saved prompt “{name}”. Use it with the 'prompt' block.": "Сохранена молитва «{name}». Употреби ю со звѣномъ «молитва».",
+  "Saved programs and prompts": "Сохраненнїи чини и моделитвы",
+  "Saved prompt “{name}”. Use it with the 'prompt' block.": "Сохранена моделитва «{name}». Употреби ю со звѣномъ «моделитва».",
   "Saved the task, draft, review, result and variables.": "Сохранены дѣло, начертанїе, испытанїе, плодъ и измѣняемаѧ.",
   "Saved the task, draft, review, result and variables. Draft: {draft}": "Сохранены дѣло, начертанїе, испытанїе, плодъ и измѣняемаѧ. Начертанїе: {draft}",
   "Saved to your account for this page. Only you can see them.": "Сохранено въ записцѣ твоей для сегѡ листа. Токмо ты видиши ѧ.",
@@ -1499,7 +1509,7 @@
   "The program “{name}” runs itself ({chain}), which would never end.": "Чинъ «{name}» течетъ самъ себе ({chain}), еже никогдаже скончалосѧ бы.",
   "The program “{name}” {problem}, so it can't run as a block.": "Чинъ «{name}» {problem}, сегѡ ради не можетъ тещи яко звѣно.",
   "The reply didn't have the expected shape: {problem}.\nAsking once more for a corrected reply.": "Ѿвѣтъ не имѣѧше чаемагѡ ѡбраза: {problem}.\nВопрошаю единою паки исправленнагѡ ѿвѣта.",
-  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "Ѿвѣтъ достиже предѣла долготы, сегѡ ради подобїе умолено продолжити ѿ мѣста, идѣже ѡстависѧ.",
+  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "Ѿвѣтъ достиже предѣла долготы, сегѡ ради подобїе умоделено продолжити ѿ мѣста, идѣже ѡстависѧ.",
   "The reply wasn't readable JSON, so this step was wasted.": "Ѿвѣтъ не бѣ чтомый JSON, сегѡ ради сей шагъ утраченъ.",
   "The run stopped.": "Теченїе ѡстависѧ.",
   "The sample house has no camera called “{id}”. Try camera.front_door, camera.driveway, camera.garden, camera.garage or camera.pet.": "Образецъ дома не имать образопріѧтелѧ, нарицаемагѡ «{id}». Покусисѧ camera.front_door, camera.driveway, camera.garden, camera.garage или camera.pet.",
@@ -1518,7 +1528,7 @@
   "There's no definition for the block '{name}'.": "Нѣсть ѡпредѣленїѧ звѣну «{name}».",
   "There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.": "Еще нѣсть начертанїѧ. Положи звѣно «напиши первое начертанїе» или «постави начертанїе» прежде сегѡ шага.",
   "There's no email with id {id}.": "Нѣсть посланїѧ съ id {id}.",
-  "There's no prompt called “{name}” in your prompt library. Open Programs to add it.": "Нѣсть молитвы, нарицаемыѧ «{name}», въ книгохранилищи молитвъ твоихъ. Ѿверзи Чины, да приложиши ю.",
+  "There's no prompt called “{name}” in your prompt library. Open Programs to add it.": "Нѣсть моделитвы, нарицаемыѧ «{name}», въ книгохранилищи моделитвъ твоихъ. Ѿверзи Чины, да приложиши ю.",
   "There's no saved program called “{name}”. Save it from the Programs button first.": "Нѣсть сохраненнагѡ чина, нарицаемагѡ «{name}». Сохрани е прежде кнопкою Чины.",
   "There's nothing to save: the value in the 'save as file' block is empty.": "Нечегѡ сохранити: значенїе въ звѣнѣ «сохрани … яко свитокъ» пусто есть.",
   "Thinking…": "Мыслю…",
@@ -1551,7 +1561,7 @@
   "Type a name for this program first.": "Напиши прежде имѧ сему чину.",
   "Type an answer first.": "Напиши прежде ѿвѣтъ.",
   "Type the key first.": "Напиши прежде ключь.",
-  "Type the prompt text.": "Напиши писанїе молитвы.",
+  "Type the prompt text.": "Напиши писанїе моделитвы.",
   "US dollars": "Доллары США",
   "Undo": "Ѿмени",
   "Undo import": "Ѿмени внесенїе",
@@ -1947,7 +1957,10 @@
   "All": "Вьсь",
   "Built in": "Въстроѥны",
   "Shared": "Дѣлимы",
-  "{n} of {m} examples": "{n} ꙗꙁ {m} примѣровъ"
+  "{n} of {m} examples": "{n} ꙗꙁ {m} примѣровъ",
+  "Reviewer": "проверѧѭщїй",
+  "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "ни єдинъ модел иного творца не имать ключа на сеи страницѣ, тѣмже та же модел испытуетъ начертанїе.",
+  "Written by {writer}; checked by {checker}.": "написано {writer}; испытано {checker}."
  },
  "examples": {
   "review": {
@@ -2905,7 +2918,7 @@
   "Choose one": "Избери едино",
   "Chose file": "Избранъ свитокъ",
   "Chose picture": "Избрано изображенїе",
-  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude ѿречесѧ ѿвѣщати на сей шагъ. Зри данное ему (молитву шага, въ лѣтописи или въ сохраненной лѣтописи), и рцы е инакѡ, или ѡстави читаемое имъ.",
+  "Claude declined to answer this step. Look at what it was given (the step's prompt, in the log or the saved log), and word it another way or leave out what it was reading.": "Claude ѿречесѧ ѿвѣщати на сей шагъ. Зри данное ему (моделитву шага, въ лѣтописи или въ сохраненной лѣтописи), и рцы е инакѡ, или ѡстави читаемое имъ.",
   "Claude needs a key. Put ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com).": "Claude требуетъ ключа. Положи ANTHROPIC_API_KEY = your-key {where_keys} (https://console.anthropic.com).",
   "Claude needs the Anthropic SDK. Install it with:  pip install anthropic": "Claude требуетъ Anthropic SDK. Устави е съ:  pip install anthropic",
   "Claude refused the key. Check ANTHROPIC_API_KEY {where_keys}.": "Claude ѿверже ключь. Испытай ANTHROPIC_API_KEY {where_keys}.",
@@ -3187,7 +3200,7 @@
   "The last run stopped part-way, after {n} saved steps.": "Послѣднее теченїе ѡстависѧ на полупути, по {n} сохраненныхъ шагахъ.",
   "The program “{name}” runs itself ({x}), which would never end.": "Чинъ «{name}» течетъ самъ себе ({x}), еже никогдаже скончалосѧ бы.",
   "The reply didn't have the expected shape: {bad}.": "Ѿвѣтъ не имѧше чаемагѡ ѡбраза: {bad}.",
-  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "Ѿвѣтъ достиже предѣла долготы, сегѡ ради подобїе умолено продолжити ѿ мѣста, идѣже ѡстависѧ.",
+  "The reply reached the length limit, so the model was asked to carry on from where it stopped.": "Ѿвѣтъ достиже предѣла долготы, сегѡ ради подобїе умоделено продолжити ѿ мѣста, идѣже ѡстависѧ.",
   "The reply wasn't readable JSON, so this step was wasted.": "Ѿвѣтъ не бѣ чтомый JSON, сегѡ ради сей шагъ утраченъ.",
   "The run stopped.": "Теченїе ѡстависѧ.",
   "The run took longer than {x} seconds (max_seconds in second-thought.ini), so it stopped.": "Теченїе продолжисѧ долѣе {x} секундъ (max_seconds въ second-thought.ini), сегѡ ради ѡстависѧ.",
@@ -3218,7 +3231,7 @@
   "There's no draft yet. Put a 'write a first draft' or 'set draft to' block before this step.": "Еще нѣсть начертанїѧ. Положи звѣно «напиши первое начертанїе» или «постави начертанїе» прежде сегѡ шага.",
   "There's no email with id {uid}.": "Нѣсть посланїѧ съ id {uid}.",
   "There's no folder {folder}.": "Нѣсть ковчега {folder}.",
-  "There's no prompt called “{name}” in this program's prompt library.": "Нѣсть молитвы, нарицаемыѧ «{name}», въ книгохранилищи молитвъ сегѡ чина.",
+  "There's no prompt called “{name}” in this program's prompt library.": "Нѣсть моделитвы, нарицаемыѧ «{name}», въ книгохранилищи моделитвъ сегѡ чина.",
   "There's no scheduled script {n}: this program has {count}.": "Нѣсть уроченныѧ чреды {n}: сей чинъ имать {count}.",
   "There's nothing to save: the value in the 'save as file' block is empty.": "Нечегѡ сохранити: значенїе въ звѣнѣ «сохрани … яко свитокъ» пусто есть.",
   "These {n} tests cost {cost}.": "Сїи {n} искусы стоѧтъ {cost}.",
@@ -3755,7 +3768,10 @@
   "No receipts yet: nothing this program has done to the world is recorded.": "Квитанций пока нет: ничего из того, что эта программа сделала миру, не записано.",
   "The chain is broken: a line is missing or was edited.": "Цепочка нарушена: строка отсутствует или была изменена.",
   "The chain is intact: every line carries the fingerprint of the one before.": "Цепочка цела: каждая строка несёт отпечаток предыдущей.",
-  "Couldn't read {path} ({err}).": "Не удалось прочитать {path} ({err})."
+  "Couldn't read {path} ({err}).": "Не удалось прочитать {path} ({err}).",
+  "Reviewer": "проверѧѭщїй",
+  "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "ни єдинъ модел иного творца не имать ключа, тѣмже та же модел испытуетъ.",
+  "Written by {writer}; checked by {checker}.": "написано {writer}; испытано {checker}."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",

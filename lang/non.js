@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"ný skrá"},
 "rb_rec_set":{"message0":"set %1 af %2 í %3","tooltip":"Breytir einum reit skrár (oftast skrár-breytu)."},
 "rb_receive":{"message0":"þá er ek fæ %1","tooltip":"Keyrir kubbana hér fyrir neðan hvert sinn er þessi boð eru kǫlluð. Mǫrg ferli mega hlýða á sǫmu boð."},
-"rb_reflect":{"message0":"dœm frumritit eptir %1","message1":"allt at %1 umferðum; þá er þat bregzk, ger","message2":"%1","tooltip":"Claude dœmir frumritit. Ef þat bregzk, keyra kubbarnir hér inni, ok þá dœmir hann aptr. Hverja umferð skoðar dómarinn ok at fyrri brestir hafi eigi aptr komit. Ef umferðirnar þrjóta, er haldit því frumriti er fæsta bresti hefir, eigi einungis hinu síðasta.","message3":"og athuga %1"},
+"rb_reflect":{"message0":"skoða drögina mið %1, skoðað af %2","message1":"allt at %1 umferðum; þá er þat bregzk, ger","message2":"%1","tooltip":"Claude dœmir frumritit. Ef þat bregzk, keyra kubbarnir hér inni, ok þá dœmir hann aptr. Hverja umferð skoðar dómarinn ok at fyrri brestir hafi eigi aptr komit. Ef umferðirnar þrjóta, er haldit því frumriti er fæsta bresti hefir, eigi einungis hinu síðasta.","message3":"og athuga %1"},
 "rb_reset_timer":{"message0":"endrset stundamæli"},
 "rb_result":{"message0":"lúk ok sýn úrslitin","tooltip":"Lýkr ferðinni. Sýnir hvat þú bættir við úrslitin, eða frumritit ef þú bættir engu við."},
 "rb_result_text":{"message0":"úrslitin hingat til","tooltip":"Allt er bætt var við úrslitin, sem rit."},
 "rb_retry":{"message0":"reyn aptr allt at %1 sinnum","message1":"%1","tooltip":"Ef nakkvat hér inni bregzk svá at ǫnnur tilraun mætti bœta (slitit samband, ruglat svar), bíðr þat lítt ok keyrir þat aptr."},
-"rb_review":{"message0":"dœm frumritit eptir %1","tooltip":"Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á.","message1":"og athuga %1"},
+"rb_review":{"message0":"skoða drögina mið %1, skoðað af %2","tooltip":"Einn dómr. Nota „frumrit stóðsk dóm“ ok „brestir dómsins“ eptir á.","message1":"og athuga %1"},
 "rb_revise":{"message0":"endrbœt at laga bresti dómsins %1 með vefnum","tooltip":"Claude lagar þá bresti er hinn síðasti dómr fann."},
 "rb_rework":{"message0":"endrger frumritit: %1","tooltip":"Claude ritar frumritit aptr eptir fyrirmælum þínum."},
 "rb_rewrite":{"message0":"rita %1 aptr til %2","tooltip":"Svá sem: rita (frumrit) aptr til (snú á frakkneska tungu)."},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"stilling skoaðara","same":"sama táknið","another":"tákn annars smiðs"},
+"rb_reflect.REVIEWER":{"":"stilling skoaðara","same":"sama táknið","another":"tákn annars smiðs"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -1222,7 +1224,10 @@
 "All":"Alle",
 "Built in":"Innebygd",
 "Shared":"Delt",
-"{n} of {m} examples":"{n} av {m} eksempler"
+"{n} of {m} examples":"{n} av {m} eksempler",
+"Reviewer":"skoðari",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"engin tákn annars smiðs á einkulykil á þessari síðu, svo sama táknið skoðar drögina.",
+"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2398,7 +2403,10 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"Ingen kvitteringer ennå: ingenting dette programmet har gjort mot verden er registrert.",
 "The chain is broken: a line is missing or was edited.":"Kjeden er brutt: en linje mangler eller er endret.",
 "The chain is intact: every line carries the fingerprint of the one before.":"Kjeden er hel: hver linje bærer fingeravtrykket av den forrige.",
-"Couldn't read {path} ({err}).":"Kunne ikke lese {path} ({err})."
+"Couldn't read {path} ({err}).":"Kunne ikke lese {path} ({err}).",
+"Reviewer":"skoðari",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"engin tákn annars smiðs á einkulykil, svo sama táknið skoðar drögina.",
+"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

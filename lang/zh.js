@@ -105,12 +105,12 @@
 "rb_rec_new":{"message0":"新记录"},
 "rb_rec_set":{"message0":"把 %2 的 %1 设为 %3","tooltip":"修改记录的一个字段（通常是记录变量）。"},
 "rb_receive":{"message0":"当我收到 %1","tooltip":"每当这条消息被广播时运行下面的积木。多个脚本可以收听同一条消息。"},
-"rb_reflect":{"message0":"按 %1 审阅草稿","message1":"最多 %1 轮；不通过时执行","message2":"%1","tooltip":"Claude 评审草稿。如果不通过，里面的积木会运行，然后再评审一次。每一轮审阅者也会检查之前的问题没有再出现。轮数用完时，保留问题最少的草稿，而不只是最后一份。","message3":"并检查 %1"},
+"rb_reflect":{"message0":"按 %1 审阅草稿，审阅人：%2","message1":"最多 %1 轮；不通过时执行","message2":"%1","tooltip":"Claude 评审草稿。如果不通过，里面的积木会运行，然后再评审一次。每一轮审阅者也会检查之前的问题没有再出现。轮数用完时，保留问题最少的草稿，而不只是最后一份。","message3":"并检查 %1"},
 "rb_reset_timer":{"message0":"重置计时器"},
 "rb_result":{"message0":"结束并显示结果","tooltip":"结束运行。显示你加入结果的内容；如果什么都没加，就显示草稿。"},
 "rb_result_text":{"message0":"目前的结果","tooltip":"加入结果的所有内容，作为文本。"},
 "rb_retry":{"message0":"最多重试 %1 次","message1":"%1","tooltip":"如果里面的某件事以重试可能修好的方式失败（连接中断、回复乱码），稍等一下再运行一次。"},
-"rb_review":{"message0":"按 %1 审阅草稿","tooltip":"一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。","message1":"并检查 %1"},
+"rb_review":{"message0":"按 %1 审阅草稿，审阅人：%2","tooltip":"一次审阅。之后使用“草稿通过了审阅”和“审阅发现的问题”。","message1":"并检查 %1"},
 "rb_revise":{"message0":"修改以解决审阅发现的问题 %1 使用网络","tooltip":"Claude 修正上一次审阅发现的问题。"},
 "rb_rework":{"message0":"改写草稿：%1","tooltip":"Claude 按照你的指示重写草稿。"},
 "rb_rewrite":{"message0":"把 %1 改写为 %2","tooltip":"例如：把（草稿）改写为（翻译成法语）。"},
@@ -238,7 +238,9 @@
 "rb_arr_queue.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_missing.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
-"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"}
+"rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
+"rb_review.REVIEWER":{"":"审阅者设置","same":"同一模型","another":"其他厂商的模型"},
+"rb_reflect.REVIEWER":{"":"审阅者设置","same":"同一模型","another":"其他厂商的模型"}
 },
 "categories":{
 "Events":"事件",
@@ -1222,7 +1224,10 @@
 "All":"全部",
 "Built in":"内置",
 "Shared":"社区分享",
-"{n} of {m} examples":"{m} 个中的 {n} 个"
+"{n} of {m} examples":"{m} 个中的 {n} 个",
+"Reviewer":"审阅者",
+"No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"此页面上没有其他厂商模型的密钥，因此由同一模型审阅草稿。请通过「Add another key」添加密钥，或在「审阅人」中选择指定模型。",
+"Written by {writer}; checked by {checker}.":"执笔：{writer}；审阅：{checker}。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2398,6 +2403,9 @@
 "No receipts yet: nothing this program has done to the world is recorded.":"还没有收据: 此程序对世界做的任何事都没有记录。",
 "The chain is broken: a line is missing or was edited.":"链已断裂: 某行缺失或被修改。",
 "The chain is intact: every line carries the fingerprint of the one before.":"链完好: 每行都带有前一行的指纹。",
-"Couldn't read {path} ({err}).":"无法读取 {path}（{err}）。"
+"Couldn't read {path} ({err}).":"无法读取 {path}（{err}）。",
+"Reviewer":"审阅者",
+"No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"没有其他厂商模型的密钥，因此由同一模型审阅草稿。请为其他服务添加密钥，或在审阅块的「审阅人」中选择指定模型。",
+"Written by {writer}; checked by {checker}.":"执笔：{writer}；审阅：{checker}。"
 }
 };
