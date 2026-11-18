@@ -73,8 +73,8 @@
    "tooltip": "暫止此段，待他段傳此信。"
   },
   "rb_pause": {
-   "message0": "暫止，待吾按「續」：%1",
-   "tooltip": "一關也。書其言於錄，而待汝。"
+   "message0": "待吾按續續：%1（至多 %2 刻）",
+   "tooltip": "止點之止。示記於日誌而待。若無人在键前，且 approve_by = telegram，則問於 Telegram，至設定之刻後或得答則續。"
   },
   "rb_timer": {
    "message0": "計時",
@@ -166,18 +166,19 @@
    "message0": "就 %3，%1 與 %2 孰優"
   },
   "rb_ask_me": {
-   "message0": "問我 %1 而待之",
-   "tooltip": "暫止其行，待汝書答於錄。"
+   "message0": "問吾 %1 且待 %2 刻；若無人答，用 %3",
+   "tooltip": "直至你於日誌答才止行。若無人在键前，且 approve_by = telegram，則問於 Telegram，止訮定之刻；無人答則用預設。"
   },
   "rb_answer": {
    "message0": "答"
   },
   "rb_approve": {
-   "message0": "吾許 %1",
-   "tooltip": "示其文，待汝許之或退之。"
+   "message0": "吾准 %1；若 %2 刻內無人答，取 %3",
+   "tooltip": "示文而待你准許或退回。若無人在键前，且 approve_by = telegram，則問於 Telegram，止訮定之刻；無人答则取預設 (y 或 n)。"
   },
   "rb_choose": {
-   "message0": "使我擇於 %1"
+   "message0": "自 %1 中擇；若 %2 刻內無人答，取 %3",
+   "tooltip": "示簿而待你擇一。若無人在键前，且 approve_by = telegram，則問於 Telegram，止訮定之刻；無人答则取預設。"
   },
   "rb_say": {
    "message0": "言 %1",
@@ -3809,7 +3810,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "然 TELEGRAM_BOT_TOKEN 與 TELEGRAM_CHAT_ID 皆須設之 {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}：此 runtime 今僅能發諸 telegram",
   "heartbeat_url is fetched after each finished scheduled run": "凡計番之行既畢，則取 heartbeat_url",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url 須始於 http:// 或 https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url 須始於 http:// 或 https://",
+  "Second Thought: {question}": "Second Thought：{question}",
+  "Reply with a number or the words.": "以号碼或字答。",
+  "Question on {channel}": "問於 {channel}",
+  "{who} answered: {answer}": "{who} 答：{answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "{mins} 刻內無答，故用預設：{answer}",
+  "answered": "已答",
+  "timed out": "逾時"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

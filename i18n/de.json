@@ -37,8 +37,8 @@
    "message0": "Antwort"
   },
   "rb_approve": {
-   "message0": "ich genehmige %1",
-   "tooltip": "Zeigt den Text und wartet, bis Sie ihn genehmigen oder zurückschicken."
+   "message0": "ich genehmige %1; wenn niemand in %2 Min. antwortet, nimm %3",
+   "tooltip": "Zeigt den Text und wartet auf Genehmigung oder Rückgabe. Ist niemand an der Tastatur und approve_by = telegram, fragt es auf Telegram so viele Minuten; die Vorgabe (j oder n) gilt, wenn niemand antwortet."
   },
   "rb_ask": {
    "message0": "Claude fragen %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude antwortet mit einer Liste, die Sie in einer Schleife durchgehen können."
   },
   "rb_ask_me": {
-   "message0": "mich %1 fragen und warten",
-   "tooltip": "Hält den Lauf an, bis Sie im Protokoll eine Antwort eintippen."
+   "message0": "frag mich %1 und warte %2 Min.; wenn niemand antwortet, nimm %3",
+   "tooltip": "Hält den Lauf an, bis Sie im Protokoll antworten. Ist niemand an der Tastatur und approve_by = telegram, fragt es auf Telegram so viele Minuten; die Vorgabe wird genommen, wenn niemand antwortet."
   },
   "rb_ask_number": {
    "message0": "Claude nach einer Zahl fragen: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Merkt sich Aufgabe, Entwurf, Prüfung, Ergebnis und Variablen, wie sie jetzt sind, unter diesem Namen, für den Rest des Laufs."
   },
   "rb_choose": {
-   "message0": "mich wählen lassen aus %1"
+   "message0": "ich wähle aus %1; wenn niemand in %2 Min. antwortet, nimm %3",
+   "tooltip": "Zeigt die Liste und wartet, bis Sie eine wählen. Ist niemand an der Tastatur und approve_by = telegram, fragt es auf Telegram so viele Minuten; die Vorgabe gilt, wenn niemand antwortet."
   },
   "rb_clear_instructions": {
    "message0": "Anweisungen für Claude löschen"
@@ -361,8 +362,8 @@
    "message0": "Entwurf hat die Prüfung bestanden"
   },
   "rb_pause": {
-   "message0": "anhalten, bis ich auf Weiter klicke: %1",
-   "tooltip": "Ein Kontrollpunkt. Zeigt die Notiz im Protokoll und wartet auf Sie."
+   "message0": "anhalten, bis ich auf Weiter klicke: %1 (höchstens %2 Min.)",
+   "tooltip": "Ein Kontrollpunkt. Zeigt die Notiz im Protokoll und wartet. Ist niemand an der Tastatur und approve_by = telegram, fragt es auf Telegram und macht nach den eingestellten Minuten weiter, oder bei jeder Antwort."
   },
   "rb_problems": {
    "message0": "Probleme der Prüfung"
@@ -3819,6 +3820,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", aber TELEGRAM_BOT_TOKEN und TELEGRAM_CHAT_ID müssen beide gesetzt sein {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: Dieses Runtime sendet im Moment nur auf Telegram",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url wird nach jedem beendeten geplanten Lauf abgerufen",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url muss mit http:// oder https:// beginnen"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url muss mit http:// oder https:// beginnen",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Antworte mit einer Nummer oder den Worten.",
+  "Question on {channel}": "Frage auf {channel}",
+  "{who} answered: {answer}": "{who} hat geantwortet: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Keine Antwort innerhalb von {mins} Min., also wurde die Vorgabe verwendet: {answer}",
+  "answered": "beantwortet",
+  "timed out": "Zeitüberschreitung"
  }
 }

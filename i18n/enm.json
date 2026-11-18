@@ -37,8 +37,8 @@
    "message0": "answere"
   },
   "rb_approve": {
-   "message0": "I graunte %1",
-   "tooltip": "Sheweth the text and abideth til thou graunte it or sende it agayn."
+   "message0": "ich approve %1; if nober answereth in %2 min, take %3",
+   "tooltip": "Sheweth the text and waiteth for thine approval or sendyng bak. When nober is at the keybord and approve_by = telegram, it asketh on Telegram for the mynutes set; the defaute (y or n) is taken if nober answereth."
   },
   "rb_ask": {
    "message0": "aske Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude answereth with a rolle that thou mayst go aboute."
   },
   "rb_ask_me": {
-   "message0": "aske me %1 and abide",
-   "tooltip": "Stinteth the rennyng til thou write an answere in the book."
+   "message0": "ask me %1 and wait %2 min; if nober answereth, use %3",
+   "tooltip": "Pauseth the run til thou answerest in the log. When nober is at the keybord and approve_by = telegram, it asketh on Telegram for the mynutes set, and useth the defaute if nober answereth."
   },
   "rb_ask_number": {
    "message0": "aske Claude for a nombre: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Remembreth the charge, the draughte, the examinacioun, the effect and the variables as they ben now, under this name, for the remenaunt of the rennyng."
   },
   "rb_choose": {
-   "message0": "lat me chese fro %1"
+   "message0": "ich chese of %1; if nober answereth in %2 min, take %3",
+   "tooltip": "Sheweth the list and waiteth til thou chesest oon. When nober is at the keybord and approve_by = telegram, it asketh on Telegram for the mynutes set; the defaute is taken if nober answereth."
   },
   "rb_clear_instructions": {
    "message0": "clere the instruccioun for Claude"
@@ -361,8 +362,8 @@
    "message0": "draughte passed examinacioun"
   },
   "rb_pause": {
-   "message0": "stinte til I presse Go forth: %1",
-   "tooltip": "A place of restyng. Sheweth the note in the book and abideth thee."
+   "message0": "pause til ich clicke on_CONTINUE: %1 (at most %2 min)",
+   "tooltip": "A checkpoint. Sheweth the note in the log and waiteth. When nober is at the keybord and approve_by = telegram, it asketh on Telegram and procedeth after the mynutes set, or on eny answere."
   },
   "rb_problems": {
    "message0": "defautes of the examinacioun"
@@ -3819,7 +3820,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID bothe moot be set {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: this runtime sendeth oonly on telegram, for now",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet after euery scheduked run that endeth",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url moot biginne with http:// or https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url moot biginne with http:// or https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Answer with a noumbre or the wordes.",
+  "Question on {channel}": "Question on {channel}",
+  "{who} answered: {answer}": "{who} answerede: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "No answere within {mins} min, so the defaute was used: {answer}",
+  "answered": "answered",
+  "timed out": "tyme out"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde comente",

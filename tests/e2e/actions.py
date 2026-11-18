@@ -162,6 +162,14 @@ async def actions_tests():
             await pg.fill("#io-name", "notices")
             nfiles = await pg.evaluate("window.__actionsFiles()")
             check(any(f["name"] == "notices.py" for f in nfiles), "the notices program exports for the terminal runs")
+            # A scheduled *ask me*, once waiting on Telegram (#434) and once with a 0-minute limit and a default.
+            await load_state(pg, program(
+                every(1, "m", blk("rb_ask_me", None, {"TEXT": tx("What to bake?")}, nxt=add({"block": blk("rb_answer")}))),
+                every(2, "m", blk("rb_ask_me", {"MINS": 0, "DEFAULT": "bread"}, {"TEXT": tx("What to bake?")}, nxt=add({"block": blk("rb_answer")})))))
+            await pg.click("#io-export")
+            await pg.fill("#io-name", "asks")
+            afiles = await pg.evaluate("window.__exportFiles()")  # Actions export refuses scheduled scripts that ask; plain Python export doesn't
+            check(any(f["name"].endswith(".py") for f in afiles), "the asks program exports for the terminal runs")
             await ctx.close()
         await browser.close()
 
@@ -206,6 +214,24 @@ async def actions_tests():
         rc, out, err = drive([sys.executable, "-u", "notices.py", "--run-schedule", "1", "--now"],
                              dict(env_ok, RB_HEARTBEAT_URL="http://127.0.0.1:9/dead"), tmp)
         check(rc == 0 and "only a note" in (out + err), f"a heartbeat that fails is a note, not an error (exit {rc}; {(err or out)[-160:]!r})")
+
+    # The You blocks on the approve_by channel when nobody's at the keyboard (#434): a scheduled *ask me*
+    # answered on the stand-in Telegram, and one whose time limit ran out taking the block's default.
+    acode = next(f["text"] for f in afiles if f["name"].endswith(".py"))
+    check('R.ask_me("What to bake?", mins=5, default="")' in acode and 'mins=0, default="bread"' in acode,
+          "the You blocks export their time limit and default answer")
+    with tempfile.TemporaryDirectory() as tmp:
+        (pathlib.Path(tmp) / "asks.py").write_text(acode, encoding="utf-8")
+        aenv = dict(no_keys, PYTHONIOENCODING="utf-8", RB_LANGUAGE="en", RB_APPROVE="no", RB_APPROVE_BY="telegram",
+                    TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT), TELEGRAM_API_URL=base + "/tg")
+        import threading
+        threading.Timer(2.0, lambda: _tg_add("rye flour")).start()  # a reply to the question, while the run waits
+        rc, out, err = drive([sys.executable, "-u", "asks.py", "--run-schedule", "1", "--now"], aenv, tmp)
+        check(rc == 0 and "rye flour" in out and any("What to bake?" in m.get("text", "") for m in svc_log["tg_sent"]),
+              f"a scheduled ask-me is answered on Telegram (exit {rc}; tg={svc_log['tg_sent']}; {(err or out)[-250:]!r})")
+        rc, out, err = drive([sys.executable, "-u", "asks.py", "--run-schedule", "2", "--now"], aenv, tmp)
+        check(rc == 0 and "bread" in out and "No answer within 0 min" in out,
+              f"the time limit running out takes the block's default (exit {rc}): {(err or out)[-250:]!r}")
 
 
 async def paste_gallery(pg, name):

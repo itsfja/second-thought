@@ -86,11 +86,13 @@
  },
  {
   "type": "rb_approve",
-  "words": "I approve %1",
+  "words": "I approve %1; if nobody answers in %2 min, take %3",
   "slots": [
-   "TEXT"
+   "TEXT",
+   "MINS",
+   "DEFAULT"
   ],
-  "tooltip": "Shows the text and waits for you to approve or send it back.",
+  "tooltip": "Shows the text and waits for you to approve or send it back. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default (y or n) is taken if nobody answers.",
   "category": "You",
   "capability": null
  },
@@ -166,11 +168,13 @@
  },
  {
   "type": "rb_ask_me",
-  "words": "ask me %1 and wait",
+  "words": "ask me %1 and wait %2 min; if nobody answers, use %3",
   "slots": [
-   "TEXT"
+   "TEXT",
+   "MINS",
+   "DEFAULT"
   ],
-  "tooltip": "Pauses the run until you type an answer in the log.",
+  "tooltip": "Pauses the run until you type an answer in the log. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set, and uses the default if nobody answers.",
   "category": "You",
   "capability": null
  },
@@ -390,11 +394,13 @@
  },
  {
   "type": "rb_choose",
-  "words": "let me choose from %1",
+  "words": "let me choose from %1; if nobody answers in %2 min, take %3",
   "slots": [
-   "LIST"
+   "LIST",
+   "MINS",
+   "DEFAULT"
   ],
-  "tooltip": "",
+  "tooltip": "Shows the list and waits for you to pick one. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram for the minutes set; the default is taken if nobody answers.",
   "category": "You",
   "capability": null
  },
@@ -1219,11 +1225,12 @@
  },
  {
   "type": "rb_pause",
-  "words": "pause until I click Continue: %1",
+  "words": "pause until I click Continue: %1 (at most %2 min)",
   "slots": [
-   "TEXT"
+   "TEXT",
+   "MINS"
   ],
-  "tooltip": "A checkpoint. Shows the note in the log and waits for you.",
+  "tooltip": "A checkpoint. Shows the note in the log and waits for you. When nobody's at the keyboard and approve_by = telegram, it asks on Telegram and carries on after the minutes set, or on any reply.",
   "category": "Wait & time",
   "capability": null
  },

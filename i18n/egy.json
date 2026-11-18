@@ -74,8 +74,8 @@
    "tooltip": "𓂝𓎛𓂝 𓋴𓈙 𓊪𓈖 𓂋 𓋴𓆓𓂧 𓋴𓈙 𓎡𓏭 𓅱𓆓𓏏"
   },
   "rb_pause": {
-   "message0": "𓎛𓅓𓋴 𓂋 𓆓𓂧𓇋 𓅱𓆓𓄿: %1",
-   "tooltip": "𓋴𓅓𓈖𓏏 𓂋𓂧𓇋 𓅓𓄿𓄿 𓋴𓐍𓄿𓅱 𓅓 𓎼𓈖𓅱𓏏, 𓎛𓅓𓋴 𓈖𓎡"
+   "message0": "pause until I click continue: %1 (at most %2 𓅓𓇋𓈖)",
+   "tooltip": "checkpoint. shows note 𓇋𓈖 log and waits. when nobody at keyboard and approve_by = telegram, asks on telegram, goes on after minutes or any reply."
   },
   "rb_timer": {
    "message0": "𓎛𓋴𓃀 𓄿𓏏",
@@ -167,18 +167,19 @@
    "message0": "𓈖𓆑𓂋 𓂋 %1 𓎛𓈖𓂝 %2 𓈖 %3"
   },
   "rb_ask_me": {
-   "message0": "𓈖𓆓 𓅱𓇋 %1 𓎛𓅓𓋴",
-   "tooltip": "𓂝𓎛𓂝 𓇋𓂋𓏏 𓂋 𓋴𓈙𓎡 𓅱𓈙𓃀 𓅓 𓎼𓈖𓅱𓏏"
+   "message0": "ask me %1 and wait %2 𓅓𓇋𓈖; 𓇋𓆑 nobody answers, use %3",
+   "tooltip": "pauses until you answer 𓇋𓈖 log. when nobody at keyboard and approve_by = telegram, asks on telegram for the minutes, else default."
   },
   "rb_answer": {
    "message0": "𓅱𓈙𓃀"
   },
   "rb_approve": {
-   "message0": "𓎛𓋴𓇋𓇋 %1",
-   "tooltip": "𓂋𓂧𓇋 𓅓𓄿𓄿 𓅓𓂧𓅱, 𓎛𓅓𓋴 𓂋 𓎛𓋴𓇋𓎡 𓅓 𓂝𓈖𓈖𓎡 𓋴𓅱"
+   "message0": "I approve %1; 𓇋𓆑 nobody answers 𓇋𓈖 %2 𓅓𓇋𓈖, take %3",
+   "tooltip": "shows text and waits for approval. when nobody at keyboard and approve_by = telegram, asks on telegram for the minutes; default (𓏭 or 𓈖) 𓇋𓆑 no answer."
   },
   "rb_choose": {
-   "message0": "𓇋𓅓𓇋 𓋴𓏏𓊪𓇋 𓅓 %1"
+   "message0": "let me choose from %1; 𓇋𓆑 nobody answers 𓇋𓈖 %2 𓅓𓇋𓈖, take %3",
+   "tooltip": "shows list and waits for a pick. when nobody at keyboard and approve_by = telegram, asks on telegram for the minutes; default 𓇋𓆑 no answer."
   },
   "rb_say": {
    "message0": "𓆓𓂧 %1",
@@ -3810,7 +3811,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID bothe must be set {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: this runtime sends on telegram oonly, for now",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet after each finished scheduled run",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "reply with a number or the words.",
+  "Question on {channel}": "question on {channel}",
+  "{who} answered: {answer}": "{who} answerede: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "no answer within {mins} min, so the default was used: {answer}",
+  "answered": "answerd",
+  "timed out": "tyme out"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

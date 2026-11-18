@@ -37,8 +37,8 @@
    "message0": "svar"
   },
   "rb_approve": {
-   "message0": "ek samþykki %1",
-   "tooltip": "Sýnir ritit ok bíðr unz þú samþykkir þat eða sendir þat aptr."
+   "message0": "ég samþykki %1; ef enginn svarar innan %2 mín, tak %3",
+   "tooltip": "Sýnir textann og bíður samþykkis þínrar eða endursendingar. Ef enginn er við lyklaborðið og approve_by = telegram, spyrðu á Telegram íæðar mínútur; sjálfgefið (j eða n) er tekið ef enginn svarar."
   },
   "rb_ask": {
    "message0": "spyr Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude svarar með rǫð er þú mátt fara yfir."
   },
   "rb_ask_me": {
-   "message0": "spyr mik %1 ok bíð",
-   "tooltip": "Stǫðvar ferðina unz þú ritar svar í annálinn."
+   "message0": "spyrðu mig %1 og bíð %2 mín; ef enginn svarar, nota %3",
+   "tooltip": "Biður ráðgerðina þanga sem þú svarar í dagbókinni. Ef enginn er við lyklaborðið og approve_by = telegram, spyrðu á Telegram íæðar mínútur og notar sjálfgefið ef enginn svarar."
   },
   "rb_ask_number": {
    "message0": "spyr Claude um tǫlu: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Minnisk verkit, frumritit, dóminn, úrslitin ok breyturnar sem þau eru nú, undir þessu nafni, til loka ferðarinnar."
   },
   "rb_choose": {
-   "message0": "lát mik velja af %1"
+   "message0": "ég vel úr %1; ef enginn svarar innan %2 mín, tak %3",
+   "tooltip": "Sýnir listann og bíður að þú velur eitt. Ef enginn er við lyklaborðið og approve_by = telegram, spyrðu á Telegram íæðar mínútur; sjálfgefið er tekið ef enginn svarar."
   },
   "rb_clear_instructions": {
    "message0": "hrein fyrirmæli til Claude"
@@ -361,8 +362,8 @@
    "message0": "frumrit stóðsk dóm"
   },
   "rb_pause": {
-   "message0": "bíð unz ek smelli á Áfram: %1",
-   "tooltip": "Varða. Sýnir minnisgreinina í annálinum ok bíðr þín."
+   "message0": "bíða þanga sem ég smelli á Halda áfram: %1 ( mest %2 mín)",
+   "tooltip": "Stöðvastur. Sýnir athugasemdina í dagbókinni og bíður. Ef enginn er við lyklaborðið og approve_by = telegram, spyrðu á Telegram og heldur áfram eftir mínúturnar sem settar eru, eða við hverja sem svar."
   },
   "rb_problems": {
    "message0": "brestir dómsins"
@@ -3819,7 +3820,14 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "en bæði TELEGRAM_BOT_TOKEN og TELEGRAM_CHAT_ID verða að vera sett {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: þessi runtime sendir aðeins á telegram, sem stendur",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url er sótt eftir hverja skipuða keyrslu er lýkur",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url verður að byrja á http:// eða https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url verður að byrja á http:// eða https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Svaraðu með tölu eða orðunum.",
+  "Question on {channel}": "Spurning á {channel}",
+  "{who} answered: {answer}": "{who} svaraði: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Ekkert svar innan {mins} mín, svo sjálfgefið var notað: {answer}",
+  "answered": "svarað",
+  "timed out": "tímað út"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

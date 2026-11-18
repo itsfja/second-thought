@@ -37,8 +37,8 @@
    "message0": "απάντηση"
   },
   "rb_approve": {
-   "message0": "εγκρίνω %1",
-   "tooltip": "Δείχνει το κείμενο και περιμένει να το εγκρίνετε ή να το επιστρέψετε."
+   "message0": "εγγρίνω %1; αν δεν απαντήσει σε %2 λεπτόν, πάρε %3",
+   "tooltip": "Εμφανίζει το κείμενο και περιμένει την επισροφή ή την το στείλει πίσι. Όταν δεν είναι στο πληκτρολόγιο και approve_by = telegram, ρωτάει στο Telegram για τα ορισμένα λεπτά; αν δεν απαντήσει κανείς, παρέχεται τη προεπιλήσμενη (ναι όχι)."
   },
   "rb_ask": {
    "message0": "ρώτα τον Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Ο Claude απαντά με μια λίστα που μπορείτε να διατρέξετε."
   },
   "rb_ask_me": {
-   "message0": "ρώτα με %1 και περίμενε",
-   "tooltip": "Παγώνει την εκτέλεση ώσπου να γράψετε απάντηση στο αρχείο καταγραφής."
+   "message0": "ρώτησαί με %1 και αναμένει %2 λεπτά; αν δεν απαντήσει κανείς, χρησιμοποιείσει %3",
+   "tooltip": "Αυτή την εκτέλεση μέχρι να απαντήσεις στο ημερολόγιο. Όταν δεν είναι στο πληκτρολόγιο και approve_by = telegram, ρωτάει στο Telegram για τα ορισμένα λεπτά; αν δεν απαντήσει κανείς, χρησιμοποιείσει τη προεπιλήσμενη."
   },
   "rb_ask_number": {
    "message0": "ζήτα από τον Claude έναν αριθμό: %1"
@@ -116,7 +116,8 @@
    "tooltip": "Θυμάται την εργασία, το πρόχειρο, τον έλεγχο, το αποτέλεσμα και τις μεταβλητές όπως είναι τώρα, με αυτό το όνομα, για την υπόλοιπη εκτέλεση."
   },
   "rb_choose": {
-   "message0": "άσε με να διαλέξω από %1"
+   "message0": "επιλέγω από %1; αν δεν αποκρίνηται σε %2 λεπτών, πάρε %3",
+   "tooltip": "Εμφανίζει τη λίστα και περιμένει μια. Όταν δεν είναι στο πληκτρολόγιο και approve_by = telegram, ρωτάει στο Telegram για τα ορισμένα λεπτά; αν δεν αποκρίνηται, παρέχεται τη προεπιλήγμενη."
   },
   "rb_clear_instructions": {
    "message0": "καθάρισε τις οδηγίες για τον Claude"
@@ -361,8 +362,8 @@
    "message0": "το πρόχειρο πέρασε τον έλεγχο"
   },
   "rb_pause": {
-   "message0": "παύση ώσπου να πατήσω Συνέχεια: %1",
-   "tooltip": "Ένα σημείο στάσης. Δείχνει τη σημείωση στο αρχείο καταγραφής και σας περιμένει."
+   "message0": "παύση μέχρι να πατήσω Συνέχεια: %1 (το πολύ %2 λεπτά)",
+   "tooltip": "Ένα σημείο ελέγχου. Εμφανίζει τη σημείωση στο ημερολόγιο και περιμένει. Όταν δεν είναι στο πληκτρολόγιο και approve_by = telegram, ρωτάει στο Telegram και συνεχίζει μετά τα ορισμένα λεπτά, ή με οποιαδήποτε."
   },
   "rb_problems": {
    "message0": "προβλήματα του ελέγχου"
@@ -3819,6 +3820,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "αλλά τα TELEGRAM_BOT_TOKEN και TELEGRAM_CHAT_ID πρέπει να είναι ορισμένα {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: αυτό το runtime στέλνει μόνον στο telegram προς το παρόν",
   "heartbeat_url is fetched after each finished scheduled run": "το heartbeat_url ανακτάται μετά κάθε προγραμματισμένη εκτέλεση που ολοκληρώνεται",
-  "heartbeat_url must start with http:// or https://": "το heartbeat_url πρέπει να ξεκινά με http:// ή https://"
+  "heartbeat_url must start with http:// or https://": "το heartbeat_url πρέπει να ξεκινά με http:// ή https://",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "Απαντήστε με αριθμό ή τη λέξεις.",
+  "Question on {channel}": "Ερώτηση στο {channel}",
+  "{who} answered: {answer}": "{who} απάντησε: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Όχι απάντηση σε {mins} λεπτά, ἡχρησιμοποιηθηκα τη προεπιλήγμενη: {answer}",
+  "answered": "απαντημένη",
+  "timed out": "πέρασε ο χρόνος"
  }
 }

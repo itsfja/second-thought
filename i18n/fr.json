@@ -37,8 +37,8 @@
    "message0": "réponse"
   },
   "rb_approve": {
-   "message0": "j'approuve %1",
-   "tooltip": "Affiche le texte et attend que vous l'approuviez ou le renvoyiez."
+   "message0": "j'approuve %1 ; si personne ne répond en %2 min, prends %3",
+   "tooltip": "Affiche le texte et attend votre approbation ou votre renvoi. Quand personne n'est au clavier et approve_by = telegram, la question part sur Telegram pendant les minutes réglées ; la valeur par défaut (o ou n) est prise si personne ne répond."
   },
   "rb_ask": {
    "message0": "demander à Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude répond par une liste que vous pouvez parcourir en boucle."
   },
   "rb_ask_me": {
-   "message0": "me demander %1 et attendre",
-   "tooltip": "Met l'exécution en pause jusqu'à ce que vous tapiez une réponse dans le journal."
+   "message0": "demande-moi %1 et attends %2 min ; si personne ne répond, prends %3",
+   "tooltip": "Met le lancement en pause jusqu'à ce que vous répondiez dans le journal. Quand personne n'est au clavier et approve_by = telegram, la question part sur Telegram pendant les minutes réglées, et la valeur par défaut est prise si personne ne répond."
   },
   "rb_ask_number": {
    "message0": "demander à Claude un nombre : %1"
@@ -116,7 +116,8 @@
    "tooltip": "Retient la tâche, le brouillon, la relecture, le résultat et les variables tels qu'ils sont, sous ce nom, pour le reste de l'exécution."
   },
   "rb_choose": {
-   "message0": "me laisser choisir parmi %1"
+   "message0": "je choisis parmi %1 ; si personne ne répond en %2 min, prends %3",
+   "tooltip": "Affiche la liste et attend votre choix. Quand personne n'est au clavier et approve_by = telegram, la question part sur Telegram pendant les minutes réglées ; la valeur par défaut est prise si personne ne répond."
   },
   "rb_clear_instructions": {
    "message0": "effacer les instructions pour Claude"
@@ -361,8 +362,8 @@
    "message0": "le brouillon a passé la relecture"
   },
   "rb_pause": {
-   "message0": "pause jusqu'à ce que je clique sur Continuer : %1",
-   "tooltip": "Un point d'arrêt. Affiche la note dans le journal et vous attend."
+   "message0": "mettre en pause jusqu'à ce que je clique sur Continuer : %1 (au plus %2 min)",
+   "tooltip": "Un point de contrôle. Affiche la note dans le journal et attend. Quand personne n'est au clavier et approve_by = telegram, la question part sur Telegram et le programme continue après les minutes réglées, ou dès toute réponse."
   },
   "rb_problems": {
    "message0": "problèmes de la relecture"
@@ -3819,6 +3820,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", mais TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID doivent tous deux être définis {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel} : ce runtime n'envoie que sur telegram pour l'instant",
   "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url est récupéré après chaque lancement planifié terminé",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url doit commencer par http:// ou https://"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url doit commencer par http:// ou https://",
+  "Second Thought: {question}": "Second Thought : {question}",
+  "Reply with a number or the words.": "Répondez par un numéro ou par les mots.",
+  "Question on {channel}": "Question sur {channel}",
+  "{who} answered: {answer}": "{who} a répondu : {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "Pas de réponse en {mins} min, donc la valeur par défaut a été utilisée : {answer}",
+  "answered": "répondu",
+  "timed out": "délai dépassé"
  }
 }

@@ -37,8 +37,8 @@
    "message0": "回答"
   },
   "rb_approve": {
-   "message0": "我批准 %1",
-   "tooltip": "显示文本并等你批准或退回。"
+   "message0": "我批准 %1；如果 %2 分钟内无人回答，采 %3",
+   "tooltip": "显示文本并等你批准或退回。当无人在键盘旁且 approve_by = telegram 时，会在 Telegram 上问设定的分钟；无人回答则采取默认值 (y 或 n)。"
   },
   "rb_ask": {
    "message0": "问 Claude %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude 回复一个可以循环遍历的列表。"
   },
   "rb_ask_me": {
-   "message0": "问我 %1 并等待",
-   "tooltip": "暂停运行，直到你在日志中输入回答。"
+   "message0": "问我 %1 并等 %2 分钟；如果无人回答，使用 %3",
+   "tooltip": "直到你在日志里回答才会暂停运行。当无人在键盘旁且 approve_by = telegram 时，会在 Telegram 上问设定的分钟；无人回答则使用默认值。"
   },
   "rb_ask_number": {
    "message0": "向 Claude 要一个数字：%1"
@@ -116,7 +116,8 @@
    "tooltip": "以这个名字记住此刻的任务、草稿、审阅、结果和变量，供本次运行余下部分使用。"
   },
   "rb_choose": {
-   "message0": "让我从 %1 中选择"
+   "message0": "从 %1 中选；如果 %2 分钟内无人回答，采 %3",
+   "tooltip": "显示列表并等你选一个。当无人在键盘旁且 approve_by = telegram 时，会在 Telegram 上问设定的分钟；无人回答则采取默认值。"
   },
   "rb_clear_instructions": {
    "message0": "清除给 Claude 的指示"
@@ -361,8 +362,8 @@
    "message0": "草稿通过了审阅"
   },
   "rb_pause": {
-   "message0": "暂停，直到我点击继续：%1",
-   "tooltip": "一个检查点。在日志中显示备注并等你。"
+   "message0": "在我点击“继续”之前暂停：%1（最多 %2 分钟）",
+   "tooltip": "检查点。在日志中显示备注并等待。当无人在键盘旁且 approve_by = telegram 时，会在 Telegram 上提问，并在设定的分钟后或收到任何回复后继续。"
   },
   "rb_problems": {
    "message0": "审阅发现的问题"
@@ -3819,6 +3820,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "但 TELEGRAM_BOT_TOKEN 和 TELEGRAM_CHAT_ID 必须都已设置 {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}：此运行时目只发送到 telegram",
   "heartbeat_url is fetched after each finished scheduled run": "每次计划运行结束后都会获取 heartbeat_url",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url 必须以 http:// 或 https:// 开头"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url 必须以 http:// 或 https:// 开头",
+  "Second Thought: {question}": "Second Thought：{question}",
+  "Reply with a number or the words.": "用号码或字词回复。",
+  "Question on {channel}": "在 {channel} 上的问题",
+  "{who} answered: {answer}": "{who} 回答：{answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "{mins} 分钟内无回答，因此使用了默认值：{answer}",
+  "answered": "已回答",
+  "timed out": "超时"
  }
 }

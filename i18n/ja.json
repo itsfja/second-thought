@@ -37,8 +37,8 @@
    "message0": "答え"
   },
   "rb_approve": {
-   "message0": "承認する %1",
-   "tooltip": "テキストを表示し、承認するか差し戻すまで待ちます。"
+   "message0": "%1 を承認。%2 分以内に誰も返事しなければ %3 を取る",
+   "tooltip": "テキストを表示して承認か差り返しを待ちます。キーボードに誰もいない場合で approve_by = telegram なら、設定した分だけ Telegram で問問。返事がなければデフォルト (y か n) が使われます。"
   },
   "rb_ask": {
    "message0": "Claude に聞く %1",
@@ -53,8 +53,8 @@
    "tooltip": "Claude が、繰り返しで順に扱えるリストで答えます。"
   },
   "rb_ask_me": {
-   "message0": "%1 と聞いて待つ",
-   "tooltip": "ログに答えを入力するまで実行を止めます。"
+   "message0": "%1 を聞いて %2 分待つ。誰も返事しなければ %3 を使う",
+   "tooltip": "ログに答えるまで実行を一時停止します。キーボードに誰もいない場合で approve_by = telegram なら、設定した分だけ Telegram で問問、返事がなければデフォルトを使います。"
   },
   "rb_ask_number": {
    "message0": "Claude に数値を頼む：%1"
@@ -116,7 +116,8 @@
    "tooltip": "今のタスク、下書き、レビュー、結果、変数を、この名前で、実行の残りの間覚えておきます。"
   },
   "rb_choose": {
-   "message0": "%1 から選ばせる"
+   "message0": "%1 から選ぶ。%2 分以内に誰も返事しなければ %3 を取る",
+   "tooltip": "リストを表示して選んを待ちます。キーボードに誰もいない場合で approve_by = telegram なら、設定した分だけ Telegram で問問。返事がなければデフォルトが使われます。"
   },
   "rb_clear_instructions": {
    "message0": "Claude への指示を消す"
@@ -361,8 +362,8 @@
    "message0": "下書きがレビューに合格した"
   },
   "rb_pause": {
-   "message0": "続けるを押すまで一時停止：%1",
-   "tooltip": "チェックポイント。メモをログに表示して、あなたを待ちます。"
+   "message0": "続行をクリックするまで一時停止: %1 (最大 %2 分)",
+   "tooltip": "チェックポイント。ログにメモを表示して待ちます。キーボードに誰もいない場合で approve_by = telegram なら Telegram に質問を送信し、設定した分経つか返信があれば続行します。"
   },
   "rb_problems": {
    "message0": "レビューで見つかった問題"
@@ -3819,6 +3820,13 @@
   "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "ただし TELEGRAM_BOT_TOKEN と TELEGRAM_CHAT_ID の両方を設定する必要があります {where_keys}",
   "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: このランタイムは現在 telegram にの送信します",
   "heartbeat_url is fetched after each finished scheduled run": "スケジュール実行が終了するたびに heartbeat_url を取得します",
-  "heartbeat_url must start with http:// or https://": "heartbeat_url は http:// または https:// で始まる必要があります"
+  "heartbeat_url must start with http:// or https://": "heartbeat_url は http:// または https:// で始まる必要があります",
+  "Second Thought: {question}": "Second Thought: {question}",
+  "Reply with a number or the words.": "番号かその言葉で返信してください。",
+  "Question on {channel}": "{channel} 上の質問",
+  "{who} answered: {answer}": "{who} が回答: {answer}",
+  "No answer within {mins} min, so the default was used: {answer}": "{mins} 分以内に返事がなく、デフォルトを使用: {answer}",
+  "answered": "返答あり",
+  "timed out": "タイムアウト"
  }
 }
