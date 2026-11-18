@@ -56,10 +56,43 @@ async def program_test_tests():
         check(any("FAIL  Test 1" in b and "it never mentions rye" in b for b in bodies) and "0 of 1 passed." in (await pg.text_content("#status")),
               "a result that misses its criteria fails, with the reviewer's problems")
 
+        # #427: a must-fail case — a saved bad run, and the rule it must break
+        await pg.click("#run")
+        await pg.wait_for_selector(".ask textarea")
+        await pg.fill(".ask textarea", "rye bread")
+        await pg.click(".ask button.primary")
+        await pg.wait_for_selector(".result")
+        await pg.click(".result-actions button:has-text('Save as test case')")
+        await pg.check(".test-form input[type=checkbox]")
+        await pg.click(".test-form button.primary")
+        msg = await pg.text_content(".test-form .msg")
+        check("Say which rule it must break first." in msg, "a must-fail case needs the rule it must break")
+        await pg.fill(".test-form input[aria-label='The rule it must break, like: under 200 words']", "under 200 words")
+        await pg.click(".test-form button.primary")
+        msg = await pg.text_content(".test-form .msg")
+        label = await pg.text_content("#log-tests")
+        check("Saved." in msg and label == "Run tests (2)", f"a must-fail case saves with its rule ({msg}; {label})")
+        good_review = {"approved": True, "rules": [{"rule": "mentions rye bread", "met": True}, {"rule": "under 100 words", "met": True}], "problems": []}
+        await pg.evaluate("r => { window.__jsonScript = r; }", [good_review,
+            {"approved": False, "rules": [{"rule": "under 200 words", "met": False, "problem": "231 words; the limit is 200"}], "problems": ["231 words; the limit is 200"]}])
+        await pg.click("#log-tests")
+        await pg.wait_for_function("[...document.querySelectorAll('.step-name')].some(e => e.textContent === 'Tests')", timeout=20000)
+        bodies = await pg.eval_on_selector_all(".step", "e => e.map(x => x.innerText)")
+        check(any("PASS  Test 1" in b for b in bodies) and any("PASS  Test 2  [must fail]" in b for b in bodies) and "2 of 2 passed." in (await pg.text_content("#status")),
+              f"a must-fail case passes when the review fails it on the rule it must break ({bodies[-1:]})")
+        await pg.evaluate("r => { window.__jsonScript = r; }", [good_review, {"approved": False, "problems": ["unclear"]}])
+        await pg.click("#log-tests")
+        await pg.wait_for_function("[...document.querySelectorAll('.step-name')].some(e => e.textContent === 'Tests')", timeout=20000)
+        bodies = await pg.eval_on_selector_all(".step", "e => e.map(x => x.innerText)")
+        check(any("FAIL  Test 2  [must fail]" in b and "The review failed, but not on the rule it must break (under 200 words)." in b for b in bodies)
+              and "1 of 2 passed." in (await pg.text_content("#status")),
+              "a must-fail case fails when the review fails on another rule, saying which rule it must break")
+
         files = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
         cases = json.loads(files.get("my-program.tests.json", "[]"))
-        check(len(cases) == 1 and cases[0]["inputs"]["answer"] == ["rye bread"] and cases[0]["criteria"] == "mentions rye bread; under 100 words",
-              f"the exported zip has the test cases next to the program ({sorted(files)})")
+        check(len(cases) == 2 and cases[0]["inputs"]["answer"] == ["rye bread"] and cases[0]["criteria"] == "mentions rye bread; under 100 words"
+              and cases[1].get("must_fail") == "under 200 words",
+              f"the exported zip has the test cases, must-fail rule included ({sorted(files)})")
         await pg.click("#io-export")
         await pg.click("#io-copy")
         block_file = json.loads(await pg.input_value("#io-export-text"))
@@ -71,7 +104,7 @@ async def program_test_tests():
         await paste(pg, json.dumps(block_file))
         await pg.click("#io-load-paste")
         await pg.click("#io-export")
-        check(await pg.text_content("#log-tests") == "Run tests (1)", "importing the block file brings its test cases back")
+        check(await pg.text_content("#log-tests") == "Run tests (2)", "importing the block file brings its test cases back")
         check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
         await browser.close()
 
@@ -80,7 +113,7 @@ async def program_test_tests():
     with tempfile.TemporaryDirectory() as tmp:
         prog = pathlib.Path(tmp) / "my-program.py"
         prog.write_text(files["my-program.py"], encoding="utf-8")
-        (pathlib.Path(tmp) / "my-program.tests.json").write_text(json.dumps(cases * 2), encoding="utf-8")
+        (pathlib.Path(tmp) / "my-program.tests.json").write_text(json.dumps(cases[:1] * 2), encoding="utf-8")
         code, out, err = drive([sys.executable, "-u", str(prog), "--test"], env, tmp)
         check("rye bread" in out and "? What should I write about?" not in out and "Not done, because this is a test: send a Telegram message" in out,
               f"--test replays the answers and acts on nothing ({(err or out)[-400:]!r})")
@@ -93,3 +126,38 @@ async def program_test_tests():
         (pathlib.Path(tmp) / "my-program.tests.json").unlink()
         code, out, _ = drive([sys.executable, "-u", str(prog), "--test"], env, tmp)
         check(code == 1 and "No tests:" in out, "with no tests file, --test says how to make one")
+
+        # #427: a must-fail case passes only if the review fails the saved result on the named rule
+        good, bad = cases[0], dict(cases[0], name="Bad draft", criteria="", must_fail="under 200 words")
+        (pathlib.Path(tmp) / "my-program.tests.json").write_text(json.dumps([good, bad]), encoding="utf-8")
+        r_good = json.dumps({"approved": True, "rules": [{"rule": "mentions rye bread", "met": True}, {"rule": "under 100 words", "met": True}], "problems": []})
+        r_rule_broken = json.dumps({"approved": False, "rules": [{"rule": "under 200 words", "met": False, "problem": "231 words; the limit is 200"}], "problems": ["231 words; the limit is 200"]})
+        r_rule_met = json.dumps({"approved": True, "rules": [{"rule": "under 200 words", "met": True}], "problems": []})
+        code, out, err = drive([sys.executable, "-u", str(prog), "--test"], dict(env, FAKE_JSON_SCRIPT=json.dumps([r_good, r_rule_broken])), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code == 0 and "PASS  Test 1" in out and "PASS  Bad draft  [must fail]" in out and "2 of 2 passed." in out,
+              f"a must-fail case passes when the review fails it on the rule it must break ({(err or out)[-400:]!r})")
+        code, out, err = drive([sys.executable, "-u", str(prog), "--test"], dict(env, FAKE_JSON_SCRIPT=json.dumps([r_good, r_rule_met])), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code == 1 and "FAIL  Bad draft  [must fail]" in out and "The rule was met: a must-fail case must break it" in out and "1 of 2 passed." in out,
+              f"a must-fail case fails when the rule is met, saying to rewrite the rule or save a worse draft ({(err or out)[-400:]!r})")
+        code, out, err = drive([sys.executable, "-u", str(prog), "--test"], dict(env, FAKE_JSON_SCRIPT=json.dumps([r_good, json.dumps({"approved": False, "problems": ["unclear"]})])), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code == 1 and "The review failed, but not on the rule it must break (under 200 words)." in out,
+              f"a must-fail case fails when the review fails on another rule, naming the rule it must break ({(err or out)[-400:]!r})")
+        # --test --times 3: the rule flips on the middle run, so the case is flaky and the report lists it
+        code, out, err = drive([sys.executable, "-u", str(prog), "--test", "--times", "3"],
+                               dict(env, FAKE_JSON_SCRIPT=json.dumps([r_good, r_good, r_good, r_rule_broken, r_rule_met, r_rule_broken])), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code == 1 and "PASS  Test 1" in out and "FAIL  Bad draft  [must fail]" in out and "2 of 3 runs passed." in out
+              and "Flaky rules: these pass on some runs and fail on others" in out
+              and "Bad draft \u00b7 under 200 words \u2014 1 of 3 runs met the rule." in out and "1 of 2 passed." in out,
+              f"--times N runs each case N times and lists the flaky rules ({(err or out)[-500:]!r})")
+        code, out, err = drive([sys.executable, "-u", str(prog), "--test", "--times", "3"],
+                               dict(env, FAKE_JSON_SCRIPT=json.dumps([r_good] * 3 + [r_rule_broken] * 3)), tmp)
+        out = out.replace("\r\n", "\n")
+        check(code == 0 and "PASS  Bad draft  [must fail]" in out and "Flaky rules" not in out and "2 of 2 passed." in out,
+              f"--times N with a stable rule passes every run and lists no flaky rules ({(err or out)[-400:]!r})")
+        code, out, err = drive([sys.executable, "-u", str(prog), "--test", "--times", "x"], env, tmp)
+        check(code != 0 and "--times needs a number of runs, like --test --times 3." in (out + err),
+              "--times without a number says so")

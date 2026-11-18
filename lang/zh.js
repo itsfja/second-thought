@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{m} 个中的 {n} 个",
 "Reviewer":"审阅者",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"此页面上没有其他厂商模型的密钥，因此由同一模型审阅草稿。请通过「Add another key」添加密钥，或在「审阅人」中选择指定模型。",
-"Written by {writer}; checked by {checker}.":"执笔：{writer}；审阅：{checker}。"
+"Written by {writer}; checked by {checker}.":"执笔：{writer}；审阅：{checker}。",
+"This run is bad on purpose: it must fail a rule":"这次运行是故意出错的：必须违反一条规则",
+"The rule it must break, like: under 200 words":"必须违反的规则，例如：不超过200词",
+"Say which rule it must break first.":"请先说出必须违反哪条规则。",
+"must fail":"必须失败",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"规则已满足：必须失败的用例必须违反它——请重写该规则或保存更差的草稿。",
+"The review failed, but not on the rule it must break ({rule}).":"审阅未通过，但不是因为必须违反的那条规则（{rule}）。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2406,6 +2412,14 @@
 "Couldn't read {path} ({err}).":"无法读取 {path}（{err}）。",
 "Reviewer":"审阅者",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"没有其他厂商模型的密钥，因此由同一模型审阅草稿。请为其他服务添加密钥，或在审阅块的「审阅人」中选择指定模型。",
-"Written by {writer}; checked by {checker}.":"执笔：{writer}；审阅：{checker}。"
+"Written by {writer}; checked by {checker}.":"执笔：{writer}；审阅：{checker}。",
+"must fail":"必须失败",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"规则已满足：必须失败的用例必须违反它——请重写该规则或保存更差的草稿。",
+"The review failed, but not on the rule it must break ({rule}).":"审阅未通过，但不是因为必须违反的那条规则（{rule}）。",
+"--times needs a number of runs, like --test --times 3.":"--times 需要一个运行次数，例如：--test --times 3。",
+"Flaky rules":"不稳定的规则",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"不稳定的规则：这些规则在某些运行中通过、在另一些中失败——需要重写的就是它们。",
+"{met} of {n} runs met the rule.":"{n} 次运行中有 {met} 次满足该规则。",
+"{p} of {n} runs passed.":"{n} 次运行中有 {p} 次通过。"
 }
 };

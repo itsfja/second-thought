@@ -1971,7 +1971,13 @@
   "{n} of {m} examples": "{n} ᛅᚢ {m} ᛁᚴᛋᛁᛘᛒᛚᛁᛦ",
   "Reviewer": "ᛋᚴᚢᚦᛅᚱᛁ",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "ᛁᚴᛁᚾ ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ ᚬ ᛅᛁᚴᚢᛚᚢᚴᛁᛚ ᚬ ᚦᛁᛋᛅᚱᛁ ᛋᛁᚦᚢ, ᛋᚢ ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ ᛋᚴᚢᚦᛅᛦ ᛏᚱᛅᚢᚴᛁᚾᛅ.",
-  "Written by {writer}; checked by {checker}.": "ᚱᛁᛏᛅᛏ ᛅᚠ {writer}; ᛋᚴᚢᚦᛅᚦ ᛅᚠ {checker}."
+  "Written by {writer}; checked by {checker}.": "ᚱᛁᛏᛅᛏ ᛅᚠ {writer}; ᛋᚴᚢᚦᛅᚦ ᛅᚠ {checker}.",
+  "This run is bad on purpose: it must fail a rule": "ᚦᛁᛋᛁ ᚴᛅᚢᚱᛋᛚᛅ ᛁᚱ ᛋᛚᛅᛘ ᛅᚠ ᛅᛋᛁᛏᚾᛁᚴ: ᚼᛅᚾ ᛋᚴᛅᛚ ᛒᚱᛁᚢᛏᛅ ᛅᛁᚾᛅ ᚱᛁᚴᛚᚢ",
+  "The rule it must break, like: under 200 words": "ᚱᛁᚴᛚᛅᚾ ᛋᛁᛘ ᚼᛅᚾ ᛋᚴᛅᛚ ᛒᚱᛁᚢᛏᛅ, t.d.: ᚢᚾᛏᛁᛦ 200 ᚢᚱᚦ",
+  "Say which rule it must break first.": "ᛋᛁᚴ ᚠᚢᚱᛋᛏ ᚼᚢᛅᚦᛅ ᚱᛁᚴᛚᚢ ᚼᛅᚾ ᛋᚴᛅᛚ ᛒᚱᛁᚢᛏᛅ.",
+  "must fail": "ᛋᚴᛅᛚ ᚠᛅᛚᛅ",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ᚱᛁᚴᛚᛅᚾ ᚢᛅᚱᚦ ᚢᛒᚠᚢᛚᛏ: ᛘᚢᛋᛏ-ᚠᛅᛁᛚ ᚴᛅᚢᚱᛋᛚᛅ ᛋᚴᛅᛚ ᛒᚱᛁᚢᛏᛅ ᚼᛅᚾᛅ — ᛁᚾᛏᚢᚱᛋᚴᚱᛁᚠᛅ ᚱᛁᚴᛚᚢᚾᛅ ᛁᚦᛅ ᚢᛁᛋᛏᛅ ᚢᛁᚱᛁ ᛏᚱᛅᚢᚴ.",
+  "The review failed, but not on the rule it must break ({rule}).": "ᛋᚴᚢᚦᚢᚾᛁᚾ ᛘᛁᛋᛏᚢᚴᛋᛏ, ᛁᚾ ᛁᚴᛁ ᚬ ᚱᛁᚴᛚᚢᚾᛁ ᛋᛁᛘ ᚼᛅᚾ ᛋᚴᛅᛚ ᛒᚱᛁᚢᛏᛅ ({rule})."
  },
  "examples": {
   "review": {
@@ -3782,7 +3788,15 @@
   "Couldn't read {path} ({err}).": "Kunne ikke lese {path} ({err}).",
   "Reviewer": "skoðari",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "engin tákn annars smiðs á einkulykil, svo sama táknið skoðar drögina.",
-  "Written by {writer}; checked by {checker}.": "ritat af {writer}; skoðað af {checker}."
+  "Written by {writer}; checked by {checker}.": "ritat af {writer}; skoðað af {checker}.",
+  "must fail": "skal falla",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "reglan varð uppfyllt: must-fail keyrsla skal brjóta hana — endurskrifa regluna eða vista verri drög.",
+  "The review failed, but not on the rule it must break ({rule}).": "skoðunin mistókst, en ekki á reglunni sem hann skal brjóta ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times þarf tölu keyrslna, t.d. --test --times 3.",
+  "Flaky rules": "óstöðugar reglur",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "óstöðugar reglur: þessar ganga í sumum keyrslum en falla í öðrum — þær á að endurskrifa.",
+  "{met} of {n} runs met the rule.": "{met} af {n} keyrslum uppfylltu regluna.",
+  "{p} of {n} runs passed.": "{p} af {n} keyrslum stóðust."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

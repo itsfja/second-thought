@@ -1970,7 +1970,13 @@
   "{n} of {m} examples": "{n} ἐκ {m} παραδειγμάτων",
   "Reviewer": "ἐξεταστής",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "οὐδεὶς ἄλλου δημιουργοῦ πρότυπον κλεῖδα ἔχει ἐνθάδε, διὸ τὸ αὐτὸ πρότυπον ἐξετάζει τὸ προσχέδιον.",
-  "Written by {writer}; checked by {checker}.": "γεγραμμένον ὑπὸ {writer}· ἐξετασθὲν ὑπὸ {checker}."
+  "Written by {writer}; checked by {checker}.": "γεγραμμένον ὑπὸ {writer}· ἐξετασθὲν ὑπὸ {checker}.",
+  "This run is bad on purpose: it must fail a rule": "ὕτη ἡ ἐκτέλεσις κακὴ ἐπίτηδες: κανόνα τινὰ δεῖ παραβῆναι",
+  "The rule it must break, like: under 200 words": "ὁ κανὼν ὃν δεῖ παραβῆναι, οἷον: ὑπὸ διακοσίων λέξεων",
+  "Say which rule it must break first.": "εἰπέ πρῶτον τίνα κανόνα δεῖ παραβῆναι.",
+  "must fail": "δεῖ ἀποτύχειν",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ὁ κανὼν ἐτηρήθη: ἡ must-fail περίπτωσις δεῖ αὐτὸν παραβῆναι — ἀναγράψον τὸν κανόνα ἢ ἀποθήκευσιν χείρονον προσχέδιον.",
+  "The review failed, but not on the rule it must break ({rule}).": "ἡ ἐξέτασις ἀπέτυχεν, ἀλλ' οὐκ ἐπὶ τοῦ κανόνος ὃν δεῖ παραβῆναι ({rule})."
  },
  "examples": {
   "review": {
@@ -3781,7 +3787,15 @@
   "Couldn't read {path} ({err}).": "οὐκ ἠδυνήθην {path} ἀναγνῶναι ({err}).",
   "Reviewer": "ἐξεταστής",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "οὐδεὶς ἄλλου δημιουργοῦ πρότυπον κλεῖδα ἔχει, διὸ τὸ αὐτὸ πρότυπον ἐξετάζει τὸ προσχέδιον.",
-  "Written by {writer}; checked by {checker}.": "γεγραμμένον ὑπὸ {writer}· ἐξετασθὲν ὑπὸ {checker}."
+  "Written by {writer}; checked by {checker}.": "γεγραμμένον ὑπὸ {writer}· ἐξετασθὲν ὑπὸ {checker}.",
+  "must fail": "δεῖ ἀποτύχειν",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ὁ κανὼν ἐτηρήθη: ἡ must-fail περίπτωσις δεῖ αὐτὸν παραβῆναι — ἀναγράψον τὸν κανόνα ἢ ἀποθήκευσιν χείρονον προσχέδιον.",
+  "The review failed, but not on the rule it must break ({rule}).": "ἡ ἐξέτασις ἀπέτυχεν, ἀλλ' οὐκ ἐπὶ τοῦ κανόνος ὃν δεῖ παραβῆναι ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times χρῄζει ἀριθμοῦ ἐκτελέσεων, οἷον --test --times 3.",
+  "Flaky rules": "ἀσταθεῖς κανόνες",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "ἀσταθεῖς κανόνες: οὗτοι ἐνίτοι μὲν ἐπιτυγχάνουσιν ἐνίοτυγχάνουσιν — ἐκεῖνοι ἀναγραπτέοι.",
+  "{met} of {n} runs met the rule.": "ἐν {met} ἐκ {n} ἐκτελέσεων ὁ κανὼν ἐτηρήθη.",
+  "{p} of {n} runs passed.": "ἐν {p} ἐκ {n} ἐκτελέσεων ἐπέτυχον."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Πρόσθες σχόλιον",

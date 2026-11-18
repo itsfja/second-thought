@@ -1970,7 +1970,13 @@
   "{n} of {m} examples": "{n} ex {m} exemplis",
   "Reviewer": "examinator",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "nulli alterius opificis exemplari clavis est in hac pagina, ergo idem exemplar adumbrationem examinat.",
-  "Written by {writer}; checked by {checker}.": "scriptum a {writer}; examinatum a {checker}."
+  "Written by {writer}; checked by {checker}.": "scriptum a {writer}; examinatum a {checker}.",
+  "This run is bad on purpose: it must fail a rule": "haec executio malo consilio: regulam aliquam frangere debet",
+  "The rule it must break, like: under 200 words": "regulam quam frangere debet, velut: infra ducentas verba",
+  "Say which rule it must break first.": "dic primum quam regulam frangere debeat.",
+  "must fail": "debet falli",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "regula servata est: casus must-fail eam frangere debet — regulam rescribe vel deteriorem adumbrationem serva.",
+  "The review failed, but not on the rule it must break ({rule}).": "examinatio defecit, sed non in regula quam frangere debet ({rule})."
  },
  "examples": {
   "review": {
@@ -3781,7 +3787,15 @@
   "Couldn't read {path} ({err}).": "{path} legere non potui ({err}).",
   "Reviewer": "examinator",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "nulli alterius opificis exemplari clavis est, ergo idem exemplar adumbrationem examinat.",
-  "Written by {writer}; checked by {checker}.": "scriptum a {writer}; examinatum a {checker}."
+  "Written by {writer}; checked by {checker}.": "scriptum a {writer}; examinatum a {checker}.",
+  "must fail": "debet falli",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "regula servata est: casus must-fail eam frangere debet — regulam rescribe vel deteriorem adumbrationem serva.",
+  "The review failed, but not on the rule it must break ({rule}).": "examinatio defecit, sed non in regula quam frangere debet ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times numerum executionum poscit, velut --test --times 3.",
+  "Flaky rules": "regulae instabiles",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "regulae instabiles: hae interdum satisfaciunt, interdum franguntur — eae sunt rescribendae.",
+  "{met} of {n} runs met the rule.": "{met} ex {n} executionibus regulam servaverunt.",
+  "{p} of {n} runs passed.": "{p} ex {n} executionibus transierunt."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Adde commentarium",

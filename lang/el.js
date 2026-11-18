@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} από {m} παραδείγματα",
 "Reviewer":"Ελεγκτής",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Κανένα μοντέλο άλλου κατασκευαστή δεν έχει κλειδί σε αυτήν τη σελίδα, οπότε το ίδιο μοντέλο ελέγχει το προσχέδιο. Προσθέστε κλειδί με «Add another key» ή επιλέξτε επώνυμο μοντέλο στο «έλεγχος από».",
-"Written by {writer}; checked by {checker}.":"Γράφτηκε από {writer}; ελέγχθηκε από {checker}."
+"Written by {writer}; checked by {checker}.":"Γράφτηκε από {writer}; ελέγχθηκε από {checker}.",
+"This run is bad on purpose: it must fail a rule":"Αυτή η εκτέλεση είναι κακή επίτηδες: πρέπει να παραβεί έναν κανόνα",
+"The rule it must break, like: under 200 words":"Ο κανόνας που πρέπει να παραβεί, π.χ.: κάτω από 200 λέξεις",
+"Say which rule it must break first.":"Πες πρώτα ποιον κανόνα πρέπει να παραβεί.",
+"must fail":"πρέπει να αποτύχει",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Ο κανόνας τηρήθηκε: μια must-fail περίπτωση πρέπει να τον παραβεί — ξαναγράψτε τον κανόνα ή αποθηκεύστε χειρότερο προσχέδιο.",
+"The review failed, but not on the rule it must break ({rule}).":"Η επισκόπηση απέτυχε, αλλά όχι στον κανόνα που πρέπει να παραβεί ({rule})."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},
@@ -2406,6 +2412,14 @@
 "Couldn't read {path} ({err}).":"Δεν μπόρεσα να διαβάσω {path} ({err}).",
 "Reviewer":"Ελεγκτής",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Κανένα μοντέλο άλλου κατασκευαστή δεν έχει κλειδί, οπότε το ίδιο μοντέλο ελέγχει το προσχέδιο. Προσθέστε κλειδί για άλλη υπηρεσία ή ονομάστε μοντέλο στην επιλογή «έλεγχος από» του μπλοκ.",
-"Written by {writer}; checked by {checker}.":"Γράφτηκε από {writer}; ελέγχθηκε από {checker}."
+"Written by {writer}; checked by {checker}.":"Γράφτηκε από {writer}; ελέγχθηκε από {checker}.",
+"must fail":"πρέπει να αποτύχει",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Ο κανόνας τηρήθηκε: μια must-fail περίπτωση πρέπει να τον παραβεί — ξαναγράψτε τον κανόνα ή αποθηκεύστε χειρότερο προσχέδιο.",
+"The review failed, but not on the rule it must break ({rule}).":"Η επισκόπηση απέτυχε, αλλά όχι στον κανόνα που πρέπει να παραβεί ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times θέλει έναν αριθμό εκτελέσεων, π.χ. --test --times 3.",
+"Flaky rules":"Ασταθείς κανόνες",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Ασταθείς κανόνες: αυτοί περνοφν σε ορισμένες εκτελέσεις και αποτυγχάνουν σε άλλες — αυτοί είναι που πρέπει να ξαναγραφούν.",
+"{met} of {n} runs met the rule.":"{met} από {n} εκτελέσεις τήρησαν τον κανόνα.",
+"{p} of {n} runs passed.":"{p} από {n} εκτελέσεις πέρασαν."
 }
 };

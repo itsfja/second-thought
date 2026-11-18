@@ -1961,7 +1961,13 @@
   "{n} of {m} examples": "{n} από {m} παραδείγματα",
   "Reviewer": "ⲧⲁⲙⲟ ⲡⲓ",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "o-ze ⲡⲓ ⲛⲁ, ⲧⲁⲙⲟ ⲡⲓ ⲍⲉ ⲧⲁⲙⲟ",
-  "Written by {writer}; checked by {checker}.": "ⲧⲁⲙⲟ {writer}; ⲧⲁⲙⲟ {checker}."
+  "Written by {writer}; checked by {checker}.": "ⲧⲁⲙⲟ {writer}; ⲧⲁⲙⲟ {checker}.",
+  "This run is bad on purpose: it must fail a rule": "ⲧⲁⲙⲟ ⲃⲁⲇ ⲣⲩⲛ: ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ",
+  "The rule it must break, like: under 200 words": "ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ, ⲧⲁⲙⲟ ⲡⲓ 200",
+  "Say which rule it must break first.": "ⲧⲁⲙⲟ ⲡⲓ ϥⲓⲣⲥⲧ ⲥⲁⲩ ⲣⲩⲗⲉ",
+  "must fail": "ⲧⲁⲙⲟ ⲡⲓ ϥⲁⲓⲗ",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ⲟⲕ, must-fail ⲧⲁⲙⲟ ⲡⲓ ⲃⲣⲉⲁⲕ — ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ⲁⲅⲁⲓⲛ",
+  "The review failed, but not on the rule it must break ({rule}).": "ⲧⲁⲙⲟ ⲡⲓ ϭϩⲉϭⲕ ϥⲁⲓⲗ, ⲛⲟⲧ ⲧⲁⲙⲟ ⲡⲓ ⲣⲩⲗⲉ ({rule})"
  },
  "examples": {
   "review": {
@@ -3772,7 +3778,15 @@
   "Couldn't read {path} ({err}).": "ne akau {path} ({err}).",
   "Reviewer": "tamo pi",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "o-ze pi na, tamo pi ze tamo",
-  "Written by {writer}; checked by {checker}.": "tamo {writer}; tamo {checker}."
+  "Written by {writer}; checked by {checker}.": "tamo {writer}; tamo {checker}.",
+  "must fail": "tamo pi fail",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "tamo pi rule ok, must-fail tamo pi break — tamo pi rule again",
+  "The review failed, but not on the rule it must break ({rule}).": "tamo pi check fail, not tamo pi rule ({rule})",
+  "--times needs a number of runs, like --test --times 3.": "--times tamo pi runs, like --test --times 3.",
+  "Flaky rules": "tamo pi waky rules",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "tamo pi waky rules: some pass some fail — tamo pi again",
+  "{met} of {n} runs met the rule.": "{met} of {n} tamo pi runs rule ok",
+  "{p} of {n} runs passed.": "{p} of {n} tamo pi runs pass"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

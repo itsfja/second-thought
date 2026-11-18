@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} von {m} Beispielen",
 "Reviewer":"Prüfer",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Kein Modell eines anderen Herstellers hat auf dieser Seite einen Schlüssel, also prüft dasselbe Modell den Entwurf. Füge über „Add another key“ einen Schlüssel hinzu oder wähle unter „geprüft von“ ein bestimmtes Modell.",
-"Written by {writer}; checked by {checker}.":"Geschrieben von {writer}; geprüft von {checker}."
+"Written by {writer}; checked by {checker}.":"Geschrieben von {writer}; geprüft von {checker}.",
+"This run is bad on purpose: it must fail a rule":"Dieser Lauf ist absichtlich schlecht: Er muss eine Regel brechen",
+"The rule it must break, like: under 200 words":"Die Regel, die er brechen muss, z. B.: unter 200 Wörter",
+"Say which rule it must break first.":"Sag zuerst, welche Regel er brechen muss.",
+"must fail":"muss fehlschlagen",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Die Regel wurde erfüllt: Ein Muss-fehlschlagen-Fall muss sie brechen — formuliere die Regel um oder speichere einen schlechteren Entwurf.",
+"The review failed, but not on the rule it must break ({rule}).":"Die Prüfung ist fehlgeschlagen, aber nicht bei der Regel, die er brechen muss ({rule})."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2406,6 +2412,14 @@
 "Couldn't read {path} ({err}).":"Konnte {path} nicht lesen ({err}).",
 "Reviewer":"Prüfer",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Kein Modell eines anderen Herstellers hat einen Schlüssel, also prüft dasselbe Modell den Entwurf. Füge einen Schlüssel für einen anderen Dienst hinzu oder nenne im Review-Block unter „geprüft von“ ein Modell.",
-"Written by {writer}; checked by {checker}.":"Geschrieben von {writer}; geprüft von {checker}."
+"Written by {writer}; checked by {checker}.":"Geschrieben von {writer}; geprüft von {checker}.",
+"must fail":"muss fehlschlagen",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Die Regel wurde erfüllt: Ein Muss-fehlschlagen-Fall muss sie brechen — formuliere die Regel um oder speichere einen schlechteren Entwurf.",
+"The review failed, but not on the rule it must break ({rule}).":"Die Prüfung ist fehlgeschlagen, aber nicht bei der Regel, die er brechen muss ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times braucht eine Anzahl von Läufen, z. B. --test --times 3.",
+"Flaky rules":"Wackelige Regeln",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Wackelige Regeln: Diese bestehen manche Läufe und bei anderen schlagen sie fehl — die sind umzuschreiben.",
+"{met} of {n} runs met the rule.":"{met} von {n} Läufen hat die Regel erfüllt.",
+"{p} of {n} runs passed.":"{p} von {n} Läufen bestanden."
 }
 };

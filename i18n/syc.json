@@ -1962,7 +1962,13 @@
   "{n} of {m} examples": "{n} ܡܢ {m}",
   "Reviewer": "ܚܘܐ",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "o-ze ܚܘܐ ܢ, ܚܘܐ ܙ ܚܘܐ",
-  "Written by {writer}; checked by {checker}.": "ܚܘܐ {writer}; ܚܘܐ {checker}."
+  "Written by {writer}; checked by {checker}.": "ܚܘܐ {writer}; ܚܘܐ {checker}.",
+  "This run is bad on purpose: it must fail a rule": "ܚܘܐ ܒܕ ܪܘܢ: ܚܘܐ ܣܬ ܪܘܠ",
+  "The rule it must break, like: under 200 words": "ܚܘܐ ܣܬ ܪܘܠ, ܚܘܐ ܣܬ 200",
+  "Say which rule it must break first.": "ܚܘܐ ܣܬ first ܣܝ ܪܘܠ",
+  "must fail": "ܚܘܐ ܣܬ fail",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ܚܘܐ ܣܬ ܪܘܠ ܐܘܟ, must-fail ܚܘܐ ܣܬ ܒܪܟ — ܚܘܐ ܣܬ ܪܘܠ ܐܓܝܢ",
+  "The review failed, but not on the rule it must break ({rule}).": "ܚܘܐ ܣܬ check fail, ܢܘܬ ܚܘܐ ܣܬ ܪܘܠ ({rule})"
  },
  "examples": {
   "review": {
@@ -3773,7 +3779,15 @@
   "Couldn't read {path} ({err}).": "lā neškur {path} ({err}).",
   "Reviewer": "ḥwā",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "o-ze ḥwā na, ḥwā ze ḥwā",
-  "Written by {writer}; checked by {checker}.": "ḥwā {writer}; ḥwā {checker}."
+  "Written by {writer}; checked by {checker}.": "ḥwā {writer}; ḥwā {checker}.",
+  "must fail": "ḥwā set fail",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ḥwā set rule ok, must-fail ḥwā set break — ḥwā set rule again",
+  "The review failed, but not on the rule it must break ({rule}).": "ḥwā set check fail, not ḥwā set rule ({rule})",
+  "--times needs a number of runs, like --test --times 3.": "--times ḥwā set runs, like --test --times 3.",
+  "Flaky rules": "ḥwā set waky rules",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "ḥwā set waky rules: some pass some fail — ḥwā set again",
+  "{met} of {n} runs met the rule.": "{met} of {n} ḥwā set runs rule ok",
+  "{p} of {n} runs passed.": "{p} of {n} ḥwā set runs pass"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ܐܘܣܦ ܫܪܚܐ",

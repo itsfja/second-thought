@@ -1228,7 +1228,13 @@
 "{n} of {m} examples":"{n} of {m} eksamples",
 "Reviewer":"𐀁𐀩",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"𐀃𐀽 𐀁𐀩 𐀙, 𐀁𐀩𐀄 𐀽 𐀁𐀩",
-"Written by {writer}; checked by {checker}.":"𐀁𐀩 {writer}; 𐀁𐀩 {checker}."
+"Written by {writer}; checked by {checker}.":"𐀁𐀩 {writer}; 𐀁𐀩 {checker}.",
+"This run is bad on purpose: it must fail a rule":"𐀏𐀙 bad run: 𐀏𐀙 rule",
+"The rule it must break, like: under 200 words":"𐀏𐀙 rule, 𐀏𐀙 200",
+"Say which rule it must break first.":"𐀏𐀙 say first rule",
+"must fail":"𐀏𐀙 fail",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𐀏𐀙 rule ok, must-fail 𐀏𐀙 break — 𐀏𐀙 write rule again",
+"The review failed, but not on the rule it must break ({rule}).":"𐀏𐀙 check fail, not 𐀏𐀙 rule ({rule})"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},
@@ -2407,7 +2413,15 @@
 "Couldn't read {path} ({err}).":"o-u akau {path} ({err}).",
 "Reviewer":"e-re",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"o-ze e-re na, e-re-u ze e-re",
-"Written by {writer}; checked by {checker}.":"e-re {writer}; e-re {checker}."
+"Written by {writer}; checked by {checker}.":"e-re {writer}; e-re {checker}.",
+"must fail":"ka-na fail",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ka-na rule ok, must-fail ka-na break — ka-na write rule again",
+"The review failed, but not on the rule it must break ({rule}).":"ka-na check fail, not ka-na rule ({rule})",
+"--times needs a number of runs, like --test --times 3.":"--times ka-na runs, like --test --times 3.",
+"Flaky rules":"ka-na waky rules",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"ka-na waky rules: some ka-na pass, some fail — ka-na write again",
+"{met} of {n} runs met the rule.":"{met} of {n} ka-na runs rule ok",
+"{p} of {n} runs passed.":"{p} of {n} ka-na runs pass"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

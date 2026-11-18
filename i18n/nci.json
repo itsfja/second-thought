@@ -1960,7 +1960,13 @@
   "{n} of {m} examples": "{n} pan {m} machehualtin",
   "Reviewer": "tlamachīuhqui",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "amo kwali tlamachīuhqui, yeh in tlamachīuhqui tlachīhua in achtlahcuilōlli.",
-  "Written by {writer}; checked by {checker}.": "Tlacuilohtli {writer}; tlamachīuhqui {checker}."
+  "Written by {writer}; checked by {checker}.": "Tlacuilohtli {writer}; tlamachīuhqui {checker}.",
+  "This run is bad on purpose: it must fail a rule": "inīn nēnematiliztli ahcualli: quimpiya cē tlanahuatilli",
+  "The rule it must break, like: under 200 words": "tlanahuatilli quimpiya, ihcuāc: ahtlan 200 tlahcuilōlli",
+  "Say which rule it must break first.": "achto xiquihtōhua cualli tlanahuatilli quimpiya.",
+  "must fail": "quimpiya",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "tlanahuatilli ōmochīhqui: must-fail nēnematiliztli quimpiya — tlanahuatilli occeppa xiquihtōhua.",
+  "The review failed, but not on the rule it must break ({rule}).": "tlapōhualli ahmo ōmochīhqui, ahmo ipan tlanahuatilli quimpiya ({rule})."
  },
  "examples": {
   "review": {
@@ -3771,7 +3777,15 @@
   "Couldn't read {path} ({err}).": "Amo oquix in {path} ({err}).",
   "Reviewer": "tlamachīuhqui",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "amo kwali tlamachīuhqui, yeh in tlamachīuhqui tlachīhua in achtlahcuilōlli.",
-  "Written by {writer}; checked by {checker}.": "Tlacuilohtli {writer}; tlamachīuhqui {checker}."
+  "Written by {writer}; checked by {checker}.": "Tlacuilohtli {writer}; tlamachīuhqui {checker}.",
+  "must fail": "quimpiya",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "tlanahuatilli ōmochīhqui: must-fail nēnematiliztli quimpiya — tlanahuatilli occeppa xiquihtōhua.",
+  "The review failed, but not on the rule it must break ({rule}).": "tlapōhualli ahmo ōmochīhqui, ahmo ipan tlanahuatilli quimpiya ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times quimpiya cē ōmōtl, ihcuāc --test --times 3.",
+  "Flaky rules": "ahmo cualli tlanahuatilli",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "ahmo cualli tlanahuatilli: zancān cualli nēnematiliztli ōmochīhqui, zancān ahmo — occeppa xiquihtōhua.",
+  "{met} of {n} runs met the rule.": "{met} ipān {n} nēnematiliztli tlanahuatilli ōmochīhqui.",
+  "{p} of {n} runs passed.": "{p} ipān {n} nēnematiliztli ōmahcique."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

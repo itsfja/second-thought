@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} 𓅓 {m}",
 "Reviewer":"𓅓𓆓𓄿 𓈖𓆑𓂋",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"𓂝𓎛𓂝 𓈖𓆑𓂋 𓈖𓋴𓅱 𓎛𓄿𓃀, 𓅓𓆓𓄿 𓂝𓎛𓂝 𓅓𓆓𓄿 𓈖𓆑𓂋",
-"Written by {writer}; checked by {checker}.":"𓅓𓆓𓄿 {writer}; 𓅓𓆓𓄿 {checker}."
+"Written by {writer}; checked by {checker}.":"𓅓𓆓𓄿 {writer}; 𓅓𓆓𓄿 {checker}.",
+"This run is bad on purpose: it must fail a rule":"𓇋𓂋 𓈖𓆑𓂋 𓂝𓎛: 𓈖𓆑𓂋𓅱 𓅓𓄿𓂝",
+"The rule it must break, like: under 200 words":"𓈖𓆑𓂋𓅱 𓇋𓂋, 𓋴𓂝: 200 𓅓𓄿𓂝",
+"Say which rule it must break first.":"𓂝𓎛 𓇋𓂋 𓈖𓆑𓂋𓅱 𓋴𓂝",
+"must fail":"𓇋𓂋 𓈖𓆑𓂋",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𓈖𓆑𓂋𓅱 𓄿𓂝, must-fail 𓇋𓂋 𓈖𓆑𓂋𓅱 — 𓈖𓆑𓂋𓅱 𓅓𓄿𓂝",
+"The review failed, but not on the rule it must break ({rule}).":"𓅓𓄿𓂝 𓈖𓆑𓂋 𓈖𓂝 𓈖𓆑𓂋𓅱 ({rule})"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -2406,7 +2412,15 @@
 "Couldn't read {path} ({err}).":"nn ḥꜣḥ {path} ({err}).",
 "Reviewer":"mḏꜣ nfr",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ꜥḥꜥ nfr nsw ḥꜣb, mḏꜣ ꜥḥꜥ mḏꜣ nfr",
-"Written by {writer}; checked by {checker}.":"mḏꜣ {writer}; mḏꜣ {checker}."
+"Written by {writer}; checked by {checker}.":"mḏꜣ {writer}; mḏꜣ {checker}.",
+"must fail":"ir nfr",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"nfrw ꜣꜥ, must-fail ir nfrw — nfrw mꜣꜥ",
+"The review failed, but not on the rule it must break ({rule}).":"mꜣꜥ nfr nꜥ nfrw ({rule})",
+"--times needs a number of runs, like --test --times 3.":"--times mꜣꜥ, sꜥ --test --times 3.",
+"Flaky rules":"nfrw mꜣꜥ",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"nfrw mꜣꜥ: ꜥḥ mꜣꜥ ꜥḥ nfr — nfrw mꜣꜥ",
+"{met} of {n} runs met the rule.":"{met} ꜥḥ {n} nfrw mꜣꜥ",
+"{p} of {n} runs passed.":"{p} ꜥḥ {n} mꜣꜥ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

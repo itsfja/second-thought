@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} ओf {m} उदाहरणानि",
 "Reviewer":"parīkṣako",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"aññassa kārakassa mānassa kuñcikā atra nāsti, ataḥ tad eva mānaṃ lekhaṃ parīkṣati.",
-"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer}ena; parīkṣitaṃ {checker}ena."
+"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer}ena; parīkṣitaṃ {checker}ena.",
+"This run is bad on purpose: it must fail a rule":"अयं् परिणामो सयमेव दोसवा: नियमं् भेदेतब्बो",
+"The rule it must break, like: under 200 words":"सो नियमो यो भेदेतब्बो, यथा: द्विसताधिकेहि पदीहि",
+"Say which rule it must break first.":"पटमं् वदेहि यो नियमो भेदेतब्बो.",
+"must fail":"भेदेतब्बो",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"नियमो सिद्धो: must-fail परिणामो तं् भेदेतब्बो — नियमं् पुन लिख वा अधमं् लेखं् रक्ख.",
+"The review failed, but not on the rule it must break ({rule}).":"परीखणं् निप्फलं् अहोसि, किन्तु न तस्मिं् नियमे यो भेदेतब्बो ({rule})."
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},
@@ -2406,7 +2412,15 @@
 "Couldn't read {path} ({err}).":"न सक्का {path} पठितुं ({err}).",
 "Reviewer":"parīkṣako",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"aññassa kārakassa mānassa kuñcikā nāsti, ataḥ tad eva mānaṃ lekhaṃ parīkṣati.",
-"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer}ena; parīkṣitaṃ {checker}ena."
+"Written by {writer}; checked by {checker}.":"liikhitaṃ {writer}ena; parīkṣitaṃ {checker}ena.",
+"must fail":"भेदेतब्बो",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"नियमो सिद्धो: must-fail परिणामो तं् भेदेतब्बो — नियमं् पुन लिख वा अधमं् लेखं् रक्ख.",
+"The review failed, but not on the rule it must break ({rule}).":"परीखणं् निप्फलं् अहोसि, किन्तु न तस्मिं् नियमे यो भेदेतब्बो ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times पयोगानं् सङ्ख्या आवज्जति, यथा --test --times 3.",
+"Flaky rules":"अस्थिरा नियमा",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"अस्थिरा नियमा: एते केसुचि पयोगेसु सिद्धा केसुचि निप्फला — ये पुन लिखितब्बा.",
+"{met} of {n} runs met the rule.":"{n} पयोगेसु {met} नियमं् सिद्धं् अकं्सु.",
+"{p} of {n} runs passed.":"{n} पयोगेसु {p} पयोगा सप्फला अहेसुं्."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

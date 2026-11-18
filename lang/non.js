@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} av {m} eksempler",
 "Reviewer":"skoðari",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"engin tákn annars smiðs á einkulykil á þessari síðu, svo sama táknið skoðar drögina.",
-"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}."
+"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}.",
+"This run is bad on purpose: it must fail a rule":"þessi keyrsla er slæm af ásetning: hann skal brjóta eina reglu",
+"The rule it must break, like: under 200 words":"reglan sem hann skal brjóta, t.d.: undir 200 orð",
+"Say which rule it must break first.":"seg fyrst hvaða reglu hann skal brjóta.",
+"must fail":"skal falla",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"reglan varð uppfyllt: must-fail keyrsla skal brjóta hana — endurskrifa regluna eða vista verri drög.",
+"The review failed, but not on the rule it must break ({rule}).":"skoðunin mistókst, en ekki á reglunni sem hann skal brjóta ({rule})."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2406,7 +2412,15 @@
 "Couldn't read {path} ({err}).":"Kunne ikke lese {path} ({err}).",
 "Reviewer":"skoðari",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"engin tákn annars smiðs á einkulykil, svo sama táknið skoðar drögina.",
-"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}."
+"Written by {writer}; checked by {checker}.":"ritat af {writer}; skoðað af {checker}.",
+"must fail":"skal falla",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"reglan varð uppfyllt: must-fail keyrsla skal brjóta hana — endurskrifa regluna eða vista verri drög.",
+"The review failed, but not on the rule it must break ({rule}).":"skoðunin mistókst, en ekki á reglunni sem hann skal brjóta ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times þarf tölu keyrslna, t.d. --test --times 3.",
+"Flaky rules":"óstöðugar reglur",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"óstöðugar reglur: þessar ganga í sumum keyrslum en falla í öðrum — þær á að endurskrifa.",
+"{met} of {n} runs met the rule.":"{met} af {n} keyrslum uppfylltu regluna.",
+"{p} of {n} runs passed.":"{p} af {n} keyrslum stóðust."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

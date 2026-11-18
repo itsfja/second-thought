@@ -92,28 +92,31 @@ class TestReport(unittest.TestCase):
         rt = Runtime()
         rt.reset()
         rt.usage, rt.cost = {"Claude": [1200, 300]}, [0.0054, True]
-        results = [("Says hello", True, []), ("Counts: to | ten", False, ["It stopped at 9.", "No list."])]
+        results = [("Says hello", True, [], ""), ("Counts: to | ten", False, ["It stopped at 9.", "No list."], ""), ("Bad draft", True, [], "under 200 words")]
         with tempfile.TemporaryDirectory() as tmp:
             summary = os.path.join(tmp, "summary.md")
             out = io.StringIO()
             with mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "GITHUB_STEP_SUMMARY": summary}), redirect_stdout(out):
-                rt.report_tests_on_actions(results)
+                rt.report_tests_on_actions(results, [("Says hello", "clear", 1, 3)])
             text = open(summary, encoding="utf-8").read()
         lines = out.getvalue().splitlines()
         self.assertEqual(len(lines), 1, "only the failed case is an error")
         self.assertTrue(lines[0].startswith("::error title=Test failed%3A Counts%3A to | ten::"), lines[0])
         self.assertTrue(lines[0].endswith("It stopped at 9.%0ANo list."))
-        self.assertIn("## Test cases: 1 of 2 passed", text)
+        self.assertIn("## Test cases: 2 of 3 passed", text)
         self.assertIn("| ✅ | Says hello |  |", text)
         self.assertIn("| ❌ | Counts: to \\| ten | It stopped at 9.; No list. |", text)
-        self.assertIn("These 2 tests cost about $0.01 at list prices.", text)
+        self.assertIn("| ✅ | Bad draft (must fail) |  |", text)
+        self.assertIn("### Flaky rules", text)
+        self.assertIn("Says hello · clear — 1 of 3 runs met the rule.", text)
+        self.assertIn("These 3 tests cost about $0.01 at list prices.", text)
 
     def test_no_summary_file_still_annotates(self):
         rt = Runtime()
         rt.reset()
         out = io.StringIO()
         with mock.patch.dict(os.environ, {"GITHUB_ACTIONS": "true", "GITHUB_STEP_SUMMARY": ""}), redirect_stdout(out):
-            rt.report_tests_on_actions([("A", False, [])])
+            rt.report_tests_on_actions([("A", False, [], "")])
         self.assertIn("The run stopped.", out.getvalue())
 
 

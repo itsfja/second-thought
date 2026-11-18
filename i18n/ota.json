@@ -1961,7 +1961,13 @@
   "{n} of {m} examples": "{n} من {m} أمثلة",
   "Reviewer": "tetkikçi",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "Bu sayfada başka bir yapımcının modelinin anahtarı yok, bu yüzden müsveddeyi aynı model tedkik eder.",
-  "Written by {writer}; checked by {checker}.": "yazan {writer}; tedkik eden {checker}."
+  "Written by {writer}; checked by {checker}.": "yazan {writer}; tedkik eden {checker}.",
+  "This run is bad on purpose: it must fail a rule": "Bu çalıştırma kasıtlı olarak kötüdür: bir kuralı ihlal etmesi gerekir",
+  "The rule it must break, like: under 200 words": "İhlal etmesi gereken kural, ör.: 200 kelimeden az",
+  "Say which rule it must break first.": "Önce hangi kuralı ihlal etmesi gerektiğini söyleyin.",
+  "must fail": "başarısız olmalı",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "Kural sağlandı: must-fail bir çalıştırma onu ihlal etmeli — kuralı yeniden yazın veya daha kötü bir taslak saklayın.",
+  "The review failed, but not on the rule it must break ({rule}).": "İnceleme başarısız oldu, ama ihlal etmesi gereken kuralda değil ({rule})."
  },
  "examples": {
   "review": {
@@ -3772,7 +3778,15 @@
   "Couldn't read {path} ({err}).": "{path} okunamadı ({err}).",
   "Reviewer": "tetkikçi",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "Başka bir yapımcının modelinin anahtarı yok, bu yüzden müsveddeyi aynı model tedkik eder.",
-  "Written by {writer}; checked by {checker}.": "yazan {writer}; tedkik eden {checker}."
+  "Written by {writer}; checked by {checker}.": "yazan {writer}; tedkik eden {checker}.",
+  "must fail": "başarısız olmalı",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "Kural sağlandı: must-fail bir çalıştırma onu ihlal etmeli — kuralı yeniden yazın veya daha kötü bir taslak saklayın.",
+  "The review failed, but not on the rule it must break ({rule}).": "İnceleme başarısız oldu, ama ihlal etmesi gereken kuralda değil ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times bir çalıştırma sayısı ister, ör. --test --times 3.",
+  "Flaky rules": "Değişken kurallar",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "Değişken kurallar: bunlar bazı çalıştırmalarda geçer, bazılarında kalır — yeniden yazılması gerekenler bunlardır.",
+  "{met} of {n} runs met the rule.": "{n} çalıştırmanın {met} tanesi kuralı sağladı.",
+  "{p} of {n} runs passed.": "{n} çalıştırmanın {p} tanesi geçti."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

@@ -10307,7 +10307,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
         return os.path.splitext(prog)[0] + ".tests.json"
 
-    async def run_tests(self, start_scripts):
+    async def run_tests(self, start_scripts, times=1):
         import shutil
         import tempfile
         path = self.tests_path()
@@ -10327,53 +10327,86 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if not cases:
             print(tr("No tests: {path} isn't there. Make them on the page: after a good run, press Save as test case, then export again.", path=path), flush=True)
             return 1
+        times = max(1, min(10, int(times or 1)))
         self.testing = True
-        results = []
+        results = []       # (name, passed, problems, must-fail rule or "")
+        rule_runs = {}     # (case name, rule) -> [met on each run], for --times' flaky rules (#427)
         real_memory = MEMORY_FILE
         with tempfile.TemporaryDirectory() as tmp:
             memory = os.path.join(tmp, "memory.json")
             try:
                 for i, case in enumerate(cases, 1):
                     name = to_str(case.get("name")).strip() or tr("Test {n}", n=i)
-                    if os.path.isfile(real_memory):
-                        shutil.copy(real_memory, memory)  # each case starts from your real notes, and can't change them
-                    elif os.path.isfile(memory):
-                        os.remove(memory)
-                    globals()["MEMORY_FILE"] = memory
-                    self.test_inputs = {k: list(v) for k, v in (case.get("inputs") or {}).items() if isinstance(v, list)}
-                    code = await self.run([(fn, to_str(case.get("value", ""))) for fn in start_scripts], tr("Test: {name}", name=name))
-                    criteria = to_str(case.get("criteria")).strip()
-                    if code != 0:
-                        passed, problems = False, [str(self.error) if isinstance(self.error, RunError) else tr("The run stopped.")]
-                    elif not criteria:
-                        passed, problems = True, []
-                    else:
-                        text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
-                        self.ending = False  # the run has ended; the check is one more call
-                        self.task, self.draft = "The result of one run of this program.", text or tr("(no result)")
-                        passed = await self.review(criteria, tr("Test check"))
-                        # name the rule that failed (#424)
-                        problems = [f"{v['rule']}: {v['problem'] or tr('not met')}" for v in self.verdicts if not v["met"]] or list(self.problems)
-                    results.append((name, passed, problems))
+                    must_fail = to_str(case.get("must_fail", "")).strip()  # a saved bad result, and the rule it must break (#427)
+                    criteria = to_str(case.get("criteria")).strip() or must_fail
+                    runs_passed, problems = 0, []
+                    for _ in range(times):
+                        if os.path.isfile(real_memory):
+                            shutil.copy(real_memory, memory)  # each run starts from your real notes, and can't change them
+                        elif os.path.isfile(memory):
+                            os.remove(memory)
+                        globals()["MEMORY_FILE"] = memory
+                        self.test_inputs = {k: list(v) for k, v in (case.get("inputs") or {}).items() if isinstance(v, list)}
+                        code = await self.run([(fn, to_str(case.get("value", ""))) for fn in start_scripts], tr("Test: {name}", name=name))
+                        if code != 0:
+                            passed, problems = False, [str(self.error) if isinstance(self.error, RunError) else tr("The run stopped.")]
+                        elif not criteria:
+                            passed, problems = True, []
+                        else:
+                            text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
+                            self.ending = False  # the run has ended; the check is one more call
+                            self.task, self.draft = "The result of one run of this program.", text or tr("(no result)")
+                            approved = await self.review(criteria, tr("Test check"))
+                            unmet = [v for v in self.verdicts if not v["met"]]
+                            for v in self.verdicts:  # for --times: was each rule met on this run? (#427)
+                                rule_runs.setdefault((name, v["rule"]), []).append(bool(v["met"]))
+                            if must_fail:
+                                # passes only if the review fails the saved result on that rule (#427)
+                                passed = (not approved) and any(v["rule"] == must_fail for v in unmet)
+                                if approved:
+                                    problems = [tr("The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.")]
+                                elif not passed:
+                                    problems = [tr("The review failed, but not on the rule it must break ({rule}).", rule=must_fail)] + \
+                                               [f"{v['rule']}: {v['problem'] or tr('not met')}" for v in unmet]
+                                else:
+                                    problems = []
+                            else:
+                                passed = approved
+                                # name the rule that failed (#424)
+                                problems = [f"{v['rule']}: {v['problem'] or tr('not met')}" for v in unmet] or list(self.problems)
+                        runs_passed += bool(passed)
+                    passed = runs_passed == times
+                    if times > 1 and not passed and runs_passed:
+                        problems = problems + [tr("{p} of {n} runs passed.", p=runs_passed, n=times)]
+                    results.append((name, passed, problems, must_fail))
             finally:
                 globals()["MEMORY_FILE"] = real_memory
+        flaky = []  # rules that passed on some runs and failed on others: the ones to rewrite (#427)
+        if times > 1:
+            for (name, rule), mets in rule_runs.items():
+                if len(mets) > 1 and any(mets) and not all(mets):
+                    flaky.append((name, rule, sum(mets), len(mets)))
         print("\n" + "=" * 60 + "\n" + tr("TESTS") + "\n" + "=" * 60, flush=True)
-        for name, passed, problems in results:
+        for name, passed, problems, must_fail in results:
             mark = "PASS" if passed else "FAIL"  # stays in English, like --doctor's ok and FAIL, for scripts that read it
-            print(f"{mark:<6}{name}", flush=True)
+            print(f"{mark:<6}{name}" + (f"  [{tr('must fail')}]" if must_fail else ""), flush=True)
             for p_ in problems:
                 print("      - " + p_, flush=True)
-        failed = sum(not p for _, p, _ in results)
+        if flaky:
+            print("\n" + tr("Flaky rules: these pass on some runs and fail on others \u2014 the ones to rewrite."), flush=True)
+            for name, rule, met, n in flaky:
+                print(f"      {name} \u00b7 {rule} \u2014 " + tr("{met} of {n} runs met the rule.", met=met, n=n), flush=True)
+        failed = sum(not p for _, p, _, _ in results)
         print("\n" + tr("{passed} of {n} passed.", passed=len(results) - failed, n=len(results)), flush=True)
         if on_github_actions():
-            self.report_tests_on_actions(results)
+            self.report_tests_on_actions(results, flaky)
         return 1 if failed else 0
 
-    def report_tests_on_actions(self, results):
+    def report_tests_on_actions(self, results, flaky=()):
         """On GitHub Actions (#246): each failed case as an error on the run's page, and a table of every case in the
-        job's summary, with what the tests cost."""
+        job's summary, with what the tests cost. Must-fail cases and flaky rules from --times are marked too (#427)."""
         esc = lambda s: to_str(s).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")  # noqa: E731
-        for name, passed, problems in results:
+        for name, passed, problems, _mf in results:
             if not passed:
                 title = esc(tr("Test failed: {name}", name=name)).replace(",", "%2C").replace(":", "%3A")
                 marker = ACTIONS_ERROR_TITLED.replace("{title}", title)
@@ -10382,10 +10415,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if not path:
             return
         cell = lambda s: to_str(s).replace("|", "\\|").replace("\n", " ")  # noqa: E731
-        failed = sum(not p for _, p, _ in results)
+        failed = sum(not p for _, p, _, _ in results)
         lines = ["## " + tr("Test cases: {passed} of {n} passed", passed=len(results) - failed, n=len(results)), "",
                  "| | " + tr("Test") + " | " + tr("What was wrong") + " |", "|---|---|---|"]
-        lines += [f"| {'✅' if passed else '❌'} | {cell(name)} | {cell('; '.join(problems))} |" for name, passed, problems in results]
+        rows = []
+        for name, passed, problems, mf in results:
+            tag = f" ({tr('must fail')})" if mf else ""
+            rows.append(f"| {'✅' if passed else '❌'} | {cell(name + tag)} | {cell('; '.join(problems))} |")
+        lines += rows
+        if flaky:
+            lines += ["", "### " + tr("Flaky rules"), ""]
+            lines += [f"- {cell(name)} · {cell(rule)} — " + tr("{met} of {n} runs met the rule.", met=met, n=n)
+                      for name, rule, met, n in flaky]
         cost = self.cost_text()
         if cost:
             lines += ["", tr("These {n} tests cost {cost}.", n=len(results), cost=cost[len(" · "):])]
@@ -10641,7 +10682,14 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))
         if "--test" in sys.argv:
-            sys.exit(asyncio.run(self.run_tests(start_scripts)))
+            times = 1  # --test --times 3 runs each case three times and lists the rules that flip (#427)
+            if "--times" in sys.argv:
+                j = sys.argv.index("--times")
+                nxt = sys.argv[j + 1] if j + 1 < len(sys.argv) else ""
+                if not nxt.isdigit() or int(nxt) < 1:
+                    sys.exit(tr("--times needs a number of runs, like --test --times 3."))
+                times = min(int(nxt), 10)
+            sys.exit(asyncio.run(self.run_tests(start_scripts, times)))
         if "--run-schedule" in sys.argv:
             sys.exit(self.run_one_schedule(schedules, can))
         use_schedule = "--schedule" in sys.argv or ((schedules or watches or telegram or listeners) and not start_scripts)

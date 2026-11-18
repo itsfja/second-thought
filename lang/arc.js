@@ -1228,7 +1228,13 @@
 "{n} of {m} examples":"{n} ܡܢ {m} ܡܬܠ̈ܐ",
 "Reviewer":"בדוק",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"אין מודל של יצרן אחר עם מפתח בדף זה — אותו מודל בדוק את הטיוטה. הוסף מפתח דרך «Add another key», או בחר מודל לפי שם «בדוק».",
-"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}."
+"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}.",
+"This run is bad on purpose: it must fail a rule":"הרצה זו רעה בכוונה: היא חייבת לשבור כלל",
+"The rule it must break, like: under 200 words":"הכלל חייבת לשבור, לדוגמה: מתחת ל־200 מילים",
+"Say which rule it must break first.":"קולם אמוק איזה כלל היא חייבת לשבור.",
+"must fail":"חייבת להיכשל",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"הכלל התקים: מקרה must-fail חייבת לשבור אותו, לכן כתוב מחודש הכלל או שמוק טיוטה גקועה.",
+"The review failed, but not on the rule it must break ({rule}).":"הבדיקה נכשלה, אך לא על הכלל הוא חייבת לשבור ({rule})."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2407,7 +2413,15 @@
 "Couldn't read {path} ({err}).":"lā neškur {path} ({err}).",
 "Reviewer":"בדוק",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"אין מודל של יצרן אחר עם מפתח — אותו מודל בדוק את הטיוטה. הוסף מפתח של שירות אחר, או ציין מודל ב«בדוק» של גוש הביקורת.",
-"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}."
+"Written by {writer}; checked by {checker}.":"נכתב על ידי {writer}; נבדק על ידי {checker}.",
+"must fail":"חייבת להיכשל",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"הכלל התקים: מקרה must-fail חייבת לשבור אותו, לכן כתוב מחודש הכלל או שמוק טיוטה גקועה.",
+"The review failed, but not on the rule it must break ({rule}).":"הבדיקה נכשלה, אך לא על הכלל הוא חייבת לשבור ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times דרוש מספר ריצות, דוגמה: --test --times 3.",
+"Flaky rules":"כללים לא יציבים",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"כללים לא יציבים: בחלקם הם הם ובחלקם הם לא יציבים — אלה כתב מחדש.",
+"{met} of {n} runs met the rule.":"מה {met} מתוך {n} הכלל נכבע.",
+"{p} of {n} runs passed.":"מה {p} מתוך {n} עברו."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

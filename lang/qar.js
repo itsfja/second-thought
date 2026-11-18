@@ -1228,7 +1228,13 @@
 "{n} of {m} examples":"{n} ᚩᚠ {m} ᛖᚾᛋᚪᛗᛈᛚᛖᛋ",
 "Reviewer":"ᛋᚳᛠᚹᚪ",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"ᚾᚪᚾ ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ ᚾᚫᚠᚦ ᚻᛖᚱ ᚾᚣᛈᛖ, ᛋᚹᚪ ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ ᛋᚳᛠᚹᚪᚦ ᚦᚫᛏ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ.",
-"Written by {writer}; checked by {checker}.":"ᚷᛖᚹᚱᛁᛏᛖᚾ ᛒᛖ {writer}; ᚷᛖᛋᚳᛠᚹᚩᛞ ᛒᛖ {checker}."
+"Written by {writer}; checked by {checker}.":"ᚷᛖᚹᚱᛁᛏᛖᚾ ᛒᛖ {writer}; ᚷᛖᛋᚳᛠᚹᚩᛞ ᛒᛖ {checker}.",
+"This run is bad on purpose: it must fail a rule":"ᚦᚩᛋ ᚹᚣᚱᚳᚢᛝ ᛁᛋ ᚣᚠᛖᛚ ᚩᚾ ᛗᛠᛇᛏᛖ: ᚻᛖ ᛋᚳᛠᛚ ᚱᛖᚷᚩᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ",
+"The rule it must break, like: under 200 words":"ᛋᛖᚩ ᚱᛖᚷᚩᛚ ᚦᛖ ᚻᛖ ᛋᚳᛠᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ, ᛋᚹᚪ ᚦᚫᛏ: ᚢᚾᛞᛖᚱ 200 ᚹᚩᚱᛞᚢᛗ",
+"Say which rule it must break first.":"ᛋᛖᚳ ᚠᚣᚱᛋᛏ ᚻᚹᛁᛚᚳᛖ ᚱᛖᚷᚩᛚ ᚻᛖ ᛋᚳᛠᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ.",
+"must fail":"ᛋᚳᛠᛚ ᚠᛠᛚᛚᚪᚾ",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ᛋᛖᚩ ᚱᛖᚷᚩᛚ ᚹᚫᛋ ᛗᛖᛏ: ᛗᚢᛋᛏ-ᚠᚪᛁᛚ ᚹᚣᚱᚳᚢᛝ ᛋᚳᛠᛚ ᚻᛁᚩ ᚷᛖᛒᚪᚾᚾᚪᚾ — ᚷᛖᚹᚱᛁᛏᚪ ᛋᛖᚩ ᚱᛖᚷᚩᛚ ᛖᚠᛏ ᚩᚦᚦᛖ ᛒᛖᚷᛁᛖᛏᛖ ᚹᛖᚩᚱᛋ ᛞᚱᚪᚠᛏᛖ.",
+"The review failed, but not on the rule it must break ({rule}).":"ᛋᛖᚩ ᛋᚳᛠᚹᚢᛝ ᚠᛖᚩᛚᛚ, ᚪᚳ ᚾᚫᛏ ᚩᚾ ᚦᚫᚱᛖ ᚱᛖᚷᚩᛚ ᚦᛖ ᚻᛖ ᛋᚳᛠᛚ ᚷᛖᛒᚪᚾᚾᚪᚾ ({rule})."
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},
@@ -2407,7 +2413,15 @@
 "Couldn't read {path} ({err}).":"ne meahte rǣdan {path} ({err}).",
 "Reviewer":"sceawa",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"nan oðres cynnes tacn næfþ nype, swa þæt ilce tacn sceawaþ þæt frumgewrit.",
-"Written by {writer}; checked by {checker}.":"gewriten be {writer}; gesceawod be {checker}."
+"Written by {writer}; checked by {checker}.":"gewriten be {writer}; gesceawod be {checker}.",
+"must fail":"sceal feallan",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"seo regol wæs met: must-fail wyrcung sceal hio gebannan — gewrita seo regol eft oðþe begiete weors drafte.",
+"The review failed, but not on the rule it must break ({rule}).":"seo sceawung feoll, ac næt on þære regol þe he sceal gebannan ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times þarf getæl wyrcunga, swa --test --times 3.",
+"Flaky rules":"wacian regolas",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"wacian regolas: þæs sindon þæt þær is sumum wyrcungum geondsawod, sumum feallad — þæt sind þæt man sceal eft gewritan.",
+"{met} of {n} runs met the rule.":"{met} of {n} wyrcungum seo regol wæs met.",
+"{p} of {n} runs passed.":"{p} of {n} wyrcungum þurhdrifon."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

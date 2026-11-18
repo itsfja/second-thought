@@ -1971,7 +1971,13 @@
   "{n} of {m} examples": "{n} {m}",
   "Reviewer": "ዬሜሪምሩ",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "ሌለ ዬሜሪምሩ ሜስወድ ኬይ በ ትሂስ page aለ, ዬ aደgiው ሜስወድ ዪሜሪሚር",
-  "Written by {writer}; checked by {checker}.": "ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}."
+  "Written by {writer}; checked by {checker}.": "ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}.",
+  "This run is bad on purpose: it must fail a rule": "ዪሄ ሜሰሌ የሌቤት: ቂደሜ ሴተ geበረ",
+  "The rule it must break, like: under 200 words": "ዬም geበረ ሴተ, ዌዴ: የሌ 200 ኬሊመቶcህ",
+  "Say which rule it must break first.": "aሌfiት ዬቱ ሴተ ዬም geበረ",
+  "must fail": "geበረ",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ሴተ ሜት'aቴ: ሙስት-faiል ሜሰሌ ሴተ geበረ — ሴተ ዌዴ ዪምሴረስህ o የሌ ቁለሌ ሜሰሌ ሁኒ",
+  "The review failed, but not on the rule it must break ({rule}).": "ዬሜሪምሩ ዌዴ, ሌለ ሴተ ዪም geበረ ({rule})"
  },
  "examples": {
   "review": {
@@ -3782,7 +3788,15 @@
   "Couldn't read {path} ({err}).": "እንተ {path} በንታየ ({err}).",
   "Reviewer": "ዬሜሪምሩ",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "ሌለ ዬሜሪምሩ ሜስወድ ኬይ aለ, ዬ aደgiው ሜስወድ ዪሜሪሚር",
-  "Written by {writer}; checked by {checker}.": "ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}."
+  "Written by {writer}; checked by {checker}.": "ዬትሴሀfe {writer}; ዬሜሪምሩ {checker}.",
+  "must fail": "geበረ",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "ሴተ ሜት'aቴ: ሙስት-faiል ሜሰሌ ሴተ geበረ — ሴተ ዌዴ ዪምሴረስህ o የሌ ቁለሌ ሜሰሌ ሁኒ",
+  "The review failed, but not on the rule it must break ({rule}).": "ዬሜሪምሩ ዌዴ, ሌለ ሴተ ዪም geበረ ({rule})",
+  "--times needs a number of runs, like --test --times 3.": "--ቲሜስ ዬዌሴዱ ዊስት'a, ዌዴ: --ቴስት --ቲሜስ 3.",
+  "Flaky rules": "ቴወሬድ ሴተ",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "ቴወሬድ ሴተ: የሌ ዊስት'a ሜት', የሌ ዌዴ — ዬዌሴድ",
+  "{met} of {n} runs met the rule.": "{met} ኬ {n} ዊስት'a ሴተ ሜት'aቴ",
+  "{p} of {n} runs passed.": "{p} ኬ {n} ዊስት'a aሌመድ"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",
