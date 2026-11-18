@@ -2431,6 +2431,19 @@
 "New rule":"Νέος κανόνας",
 "{n} rules saved beside the program are checked too.":"Οι {n} κανόνες που είνα αποθηκευμένοι δίπλα στο πρόγραμμα ελέγχονται κι αυτοί.",
 "\"{rule}\" saved in {path}.":"Το «{rule}» αποθηκεύτηκε στο {path}.",
-"\n? Why not? In one sentence, as a rule > ":"\n? Γιατί όχι; Σε μία πρόταση, ως κανόνα > "
+"\n? Why not? In one sentence, as a rule > ":"\n? Γιατί όχι; Σε μία πρόταση, ως κανόνα > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: η προγραμματισμένη εκτέλεση «{label}» σταμάτησε με σφάλμα: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (Στάλθηκε ειδοποίηση σφάλματος στο {channel}.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (Δεν μπόρεσε να σταλεί η ειδοποίηση σφάλματος στο {channel}: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (το notify_on_failure = {channel} ουπω εστί κανάλι στο οποίο αυτό το runtime μπορεί να στείλείναίνι; το σφάλμα ήν: {reason})",
+"  (Heartbeat sent: {url})":"  (Στάλθηκε heartbeat: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (Δεν μπόρεσε να ανακτηθή το heartbeat {url}, που είναι μόνο σημείώσίς: {e})",
+"Failure notices":"Ειδοποιήσεις σφαλμάτων",
+"Heartbeat":"Heartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: μια προγραμματισμένη εκτέλεση που σταματά με σφάλμα στέλνει ένα μήνυμα Telegram με τον λόγο",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"αλλά τα TELEGRAM_BOT_TOKEN και TELEGRAM_CHAT_ID πρέπει να είναι ορισμένα {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: αυτό το runtime στέλνει μόνον στο telegram προς το παρόν",
+"heartbeat_url is fetched after each finished scheduled run":"το heartbeat_url ανακτάται μετά κάθε προγραμματισμένη εκτέλεση που ολοκληρώνεται",
+"heartbeat_url must start with http:// or https://":"το heartbeat_url πρέπει να ξεκινά με http:// ή https://"
 }
 };

@@ -3797,7 +3797,20 @@
   "New rule": "Yeni kural",
   "{n} rules saved beside the program are checked too.": "Programın yanında saklanan {n} kural da denetlenir.",
   "\"{rule}\" saved in {path}.": "“{rule}” {path} dosyasına kaydedildi.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? Neden olmasın? Tek cümleyle, kural olarak > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? Neden olmasın? Tek cümleyle, kural olarak > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: zamanlanmış çalışma \"{label}\" hatâ ile durdu: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  ({channel} üzerine hata bildirimi gönderildi.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (Hata bildirimi {channel} üzerine gönderilemedi: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} henüz bu runtime'ın gönderebileceği bir kanal değil; hata şuydu: {reason})",
+  "  (Heartbeat sent: {url})": "  (Kalp atışı gönderildi: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  ({url} kalp atışı alınamadı, bu sadece bir notdur: {e})",
+  "Failure notices": "Hata bildirimleri",
+  "Heartbeat": "Kalp atışı",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: hatâ ile duran zamanlanmış bir çalışma, sebebiyle birlikte bir Telegram iletisi gönderir",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "ancak TELEGRAM_BOT_TOKEN ve TELEGRAM_CHAT_ID ikisi de ayarlanmış olmalıdır {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: bu runtime şimdilik yalnızca telegram'a gönderir",
+  "heartbeat_url is fetched after each finished scheduled run": "zamanlanmış her çalışma bittikten sonra heartbeat_url alınır",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url http:// veya https:// ile başlamalıdır"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

@@ -3797,7 +3797,20 @@
   "New rule": "tamo pi new rule",
   "{n} rules saved beside the program are checked too.": "{n} tamo pi rules tamo pi check",
   "\"{rule}\" saved in {path}.": "\"{rule}\" tamo pi saved {path}",
-  "\n? Why not? In one sentence, as a rule > ": "\n? tamo pi why not one line > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? tamo pi why not one line > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: scheduled run {label} stopped with error: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (failure notice sent on {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (failure notice not sent on {channel}: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} not yet a channel this runtime sends on; the error: {reason})",
+  "  (Heartbeat sent: {url})": "  (heartbeat sent: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (heartbeat {url} not fetched, only a note: {e})",
+  "Failure notices": "failure notices",
+  "Heartbeat": "heartbeat",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram mesage, with the reson",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID both must be set {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: this runtime sends on telegram oonly, for now",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url is fet after each finished scheduled run",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url must bigin with http:// or https://"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

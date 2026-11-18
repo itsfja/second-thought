@@ -3806,6 +3806,19 @@
   "New rule": "Nueva regla",
   "{n} rules saved beside the program are checked too.": "Las {n} reglas guardadas junto al programa también se comprueban.",
   "\"{rule}\" saved in {path}.": "«{rule}» guardado en {path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? ¿Por qué no? En una frase, como regla > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? ¿Por qué no? En una frase, como regla > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: la ejecución programada «{label}» se detuvo con un error: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (Aviso de fallo enviado por {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (No se pudo enviar el aviso de fallo por {channel}: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} aún no es un canal al que este runtime pueda enviar; el error fue: {reason})",
+  "  (Heartbeat sent: {url})": "  (Heartbeat enviado: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (No se pudo obtener el heartbeat {url}, lo que solo es una nota: {e})",
+  "Failure notices": "Avisos de fallo",
+  "Heartbeat": "Heartbeat",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: una ejecución programada que se detiene con un error envía un mensaje de Telegram con la razón",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", pero TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID deben estar ambos puestos {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: este runtime solo envía por telegram de momento",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url se obtiene después de cada ejecución programada que termina",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url debe empezar por http:// o https://"
  }
 }

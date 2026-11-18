@@ -3796,7 +3796,20 @@
   "New rule": "新規",
   "{n} rules saved beside the program are checked too.": "存於程式之中{n}規亦審。",
   "\"{rule}\" saved in {path}.": "「{rule}」已存於{path}。",
-  "\n? Why not? In one sentence, as a rule > ": "\n? 何不可？一語為規 > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? 何不可？一語為規 > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}：計番之行「{label}」以謭而止：{reason}",
+  "  (Sent a failure notice on {channel}.)": "  （已於 {channel} 送失敗之訊。）",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  （不能於 {channel} 送失敗之訊：{e}）",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  （notify_on_failure = {channel} 尚未能發之道；謭為：{reason}）",
+  "  (Heartbeat sent: {url})": "  （已發心跳：{url}）",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  （不能取心跳 {url}，僅為記也：{e}）",
+  "Failure notices": "失敗之訊",
+  "Heartbeat": "心跳",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram：計番之行以謭而止，則發一 Telegram 之訊，書其故",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "然 TELEGRAM_BOT_TOKEN 與 TELEGRAM_CHAT_ID 皆須設之 {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}：此 runtime 今僅能發諸 telegram",
+  "heartbeat_url is fetched after each finished scheduled run": "凡計番之行既畢，則取 heartbeat_url",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url 須始於 http:// 或 https://"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

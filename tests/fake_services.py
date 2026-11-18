@@ -86,6 +86,7 @@ def start():
     data = json.loads((ROOT / "samples" / "connections.json").read_text(encoding="utf-8"))
     gh = data["github"]
     log = {"gh": [], "tg_sent": [], "tg_updates": [], "mail_sent": [], "homey": [], "homey_flows": [], "discord": {}, "discord_sent": [], "slack": {}, "slack_sent": [],
+           "heartbeats": [],  # heartbeat_url fetches (#433)
            "page": {"price": "£2.40", "visitors": 17}}
 
     def homey_change(device, cap, value):
@@ -160,6 +161,9 @@ def start():
                 if token != TG_TOKEN:
                     return self._send(401, {"ok": False, "error_code": 401, "description": "Unauthorized"})
                 return self._telegram(call)
+            if path == "/heartbeat":  # a Healthchecks.io-style ping: just note that it arrived
+                log["heartbeats"].append(self.path)
+                return self._send(200, "OK", "text/plain")
             self._send(404, {"message": "Not Found"})
 
         def _discord(self, method, path, q):

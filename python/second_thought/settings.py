@@ -50,14 +50,15 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "approve_by": "RB_APPROVE_BY", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK", "rehearse": "RB_REHEARSE",
-                 "releases_url": "RB_RELEASES_URL"}
+                 "releases_url": "RB_RELEASES_URL", "notify_on_failure": "RB_NOTIFY_ON_FAILURE", "heartbeat_url": "RB_HEARTBEAT_URL"}
 
 
 # Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
 # "; save_log = yes      write each run's log…": with the ; taken off, the note isn't part of the value (#338).
 ONE_WORD_SETTINGS = {"primary", "model", "reviewer", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
-                     "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse"}
+                     "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse",
+                     "notify_on_failure", "heartbeat_url"}
 
 
 def _settings_value(name, value):

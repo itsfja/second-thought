@@ -3796,7 +3796,20 @@
   "New rule": "yancan tlanahuatilli",
   "{n} rules saved beside the program are checked too.": "{n} tlanahuatilli tlapōhualli achtopa quimpiya — occeppa tlachīhua.",
   "\"{rule}\" saved in {path}.": "\"{rule}\" oquiya in {path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? cualli ahmo? cē tlahtolli, tlanahuatilli > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? cualli ahmo? cē tlahtolli, tlanahuatilli > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: in tlapōhqui cualōlli \"{label}\" ōmocuepqui ica ahcualli: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (ahcualli tlanōnōtzli quicalaqui {channel}-pan.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (ahcualli tlanōnōtzli ax quicalaqui {channel}-pan: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} ahmo oc yequi in quipiya inōn tōtōtin; in ahcualli ōcat: {reason})",
+  "  (Heartbeat sent: {url})": "  (yōlōlli tlanōnōtzli quicalaqui: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (in yōlōlli {url} ax mohuelī, yehica zan tlahcuilōlli: {e})",
+  "Failure notices": "Ahcualli tlanōnōtzli",
+  "Heartbeat": "Yōlōlli",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: cualōlli tlapōhqui ōmocuepqui ica ahcualli quimpiya cē Telegram tlanōnōtzli",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "ahmo TELEGRAM_BOT_TOKEN ihuan TELEGRAM_CHAT_ID ōmōtlācatilia {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: inīn runtime zan Telegram quimpiya, axan",
+  "heartbeat_url is fetched after each finished scheduled run": "nochipa tlapōhqui cualōlli tlanōmati heartbeat_url mohuelī",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url quipiya http:// o huēyi https:// iuhqui pehua"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Xictlāli tlahtōlli",

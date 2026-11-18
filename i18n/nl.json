@@ -3806,6 +3806,19 @@
   "New rule": "Nieuwe regel",
   "{n} rules saved beside the program are checked too.": "De {n} regels die naast het programma zijn opgeslagen, worden ook gecontroleerd.",
   "\"{rule}\" saved in {path}.": "“{rule}” opgeslagen in {path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? Waarom niet? In één zin, als regel > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? Waarom niet? In één zin, als regel > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: geplande run „{label}” is gestopt met een fout: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (Foutmelding verzonden op {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (De foutmelding kon niet worden verzonden op {channel}: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} is nog geen kanaal waarop deze runtime kan verzenden; de fout was: {reason})",
+  "  (Heartbeat sent: {url})": "  (Heartbeat verzonden: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (De heartbeat {url} kon niet worden opgehaald, wat slechts een notitie is: {e})",
+  "Failure notices": "Foutmeldingen",
+  "Heartbeat": "Heartbeat",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: een geplande run die stopt met een fout stuurt één Telegram-bericht met de reden",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": ", maar TELEGRAM_BOT_TOKEN en TELEGRAM_CHAT_ID moeten beide ingesteld zijn {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: deze runtime verzendt alleen op telegram, op dit moment",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url wordt opgehaald na elke voltooide geplande run",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url moet beginnen met http:// of https://"
  }
 }

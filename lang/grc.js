@@ -2431,7 +2431,20 @@
 "New rule":"νέος κανών",
 "{n} rules saved beside the program are checked too.":"οἱ {n} κανόνες οἱ παρὰ τῦ προγράμματος ἀποθηκευμένοι ἐλέγχονται καὶ οἵτοι.",
 "\"{rule}\" saved in {path}.":"τὸ «{rule}» ἀπεθηκεύθη ἐν {path}.",
-"\n? Why not? In one sentence, as a rule > ":"\n? τί οὐ; μιῃς φράσει, ὡς κανόνι > "
+"\n? Why not? In one sentence, as a rule > ":"\n? τί οὐ; μιῃς φράσει, ὡς κανόνι > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: ἡ χρονοπρογραμματισμένη μ7στελευσα «{label}» διεκόπη δια σφαλματος· {reason}",
+"  (Sent a failure notice on {channel}.)":"  (ἡ εἰδοποίησις τοῦ σφάλματος εις {channel} έσταλη.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (οὐκ μπορε἖ αποσταλεἱναι το σφάλμα εις {channel}· {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (τὸ notify_on_failure = {channel} οὔπω εστα κανάλι στο οἰς δυναται τοῦτο runtime αποστεἰλειν· τὸ σφάλμα ἦν: {reason})",
+"  (Heartbeat sent: {url})":"  (εστάλη τὸ heartbeat· {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (οὐκ ἐδυνήθη ανακτησαι τὸ heartbeat {url}, ὅπερ μόνον σημείωσίς μόνον· {e})",
+"Failure notices":"Εἰδοποιήσεις σφαλμάτων",
+"Heartbeat":"Heartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: χρονοπρογραμματισμένη τελευτα δια σφάλματος αποστέλλει ἕνα Telegram μήνυμα συν τῷ λόγο",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"αλλα δεὶ TELEGRAM_BOT_TOKEN καὶ TELEGRAM_CHAT_ID τεθεσαι προβεσθω {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: τοῦτο runtime νῦν μόνον εις telegram αποστέλλει",
+"heartbeat_url is fetched after each finished scheduled run":"παρά πασαν χρονοπρογραμματισμένης τελευταἱσαν αναγίγνεται τὸ heartbeat_url",
+"heartbeat_url must start with http:// or https://":"τὸ heartbeat_url δεὶ ἀρξασθαι ἐκ http:// ἢ https://"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

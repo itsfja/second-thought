@@ -155,6 +155,13 @@ async def actions_tests():
             check(saved[-1:] == ["my-program-actions.zip"] and "SETUP.md" in msg, f"Save as GitHub Actions saves a zip, and says what to do next ({msg})")
             await pg.click("#io-export")
             check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
+            # A scheduled script with a model call in it, for the failure-notice and heartbeat runs below (#433):
+            # run without a key, the call raises.
+            await load_state(pg, program(every(1, "m", blk("rb_say", None, {"TEXT": {"block": blk("rb_chat", inputs={"TEXT": tx("hi")})}}))))
+            await pg.click("#io-export")
+            await pg.fill("#io-name", "notices")
+            nfiles = await pg.evaluate("window.__actionsFiles()")
+            check(any(f["name"] == "notices.py" for f in nfiles), "the notices program exports for the terminal runs")
             await ctx.close()
         await browser.close()
 
@@ -174,6 +181,31 @@ async def actions_tests():
         check(rc == 0 and "every half hour" in out, f"an 'every' script runs whenever it's started ({(err or out)[-200:]!r})")
         rc, out, err = run("--run-schedule", "9")
         check(rc == 1 and "There's no scheduled script 9: this program has 2." in err, f"a number it doesn't have is an error ({err[-200:]!r})")
+
+    # Scheduled-run notices (#433): a failing scheduled run sends one message on the stand-in Telegram, and every
+    # finished scheduled run fetches the stand-in heartbeat URL.
+    base, svc_log, _tg_add, _imap_port, _smtp_port = fake_services.start()
+    ncode = next(f["text"] for f in nfiles if f["name"] == "notices.py")
+    with tempfile.TemporaryDirectory() as tmp:
+        (pathlib.Path(tmp) / "notices.py").write_text(ncode, encoding="utf-8")
+        no_keys = {k: v for k, v in os.environ.items() if not k.endswith(("_API_KEY", "_TOKEN")) and not k.startswith("RB_")}
+        nenv = dict(no_keys, PYTHONIOENCODING="utf-8", RB_LANGUAGE="en", RB_APPROVE="no",
+                    TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT), TELEGRAM_API_URL=base + "/tg",
+                    RB_NOTIFY_ON_FAILURE="telegram", RB_HEARTBEAT_URL=base + "/heartbeat")
+        rc, out, err = drive([sys.executable, "-u", "notices.py", "--run-schedule", "1", "--now"], nenv, tmp)
+        check(rc == 1 and "Run stopped" in (out + err) and len(svc_log["tg_sent"]) == 1 and "needs a key" in svc_log["tg_sent"][0]["text"]
+              and svc_log["heartbeats"] == ["/heartbeat"],
+              f"a scheduled run that raises sends one Telegram message with the reason, and still fetches the heartbeat "
+              f"(exit {rc}; tg={svc_log['tg_sent']}; hb={svc_log['heartbeats']}; {(err or out)[-200:]!r})")
+        env_ok = dict(nenv, ANTHROPIC_API_KEY="test", PYTHONPATH=str(HERE / "fakeapi"))
+        rc, out, err = drive([sys.executable, "-u", "notices.py", "--run-schedule", "1", "--now"], env_ok, tmp)
+        check(rc == 0 and len(svc_log["tg_sent"]) == 1 and svc_log["heartbeats"] == ["/heartbeat", "/heartbeat"],
+              f"a scheduled run that finishes fetches the heartbeat and sends no message (exit {rc}; tg={len(svc_log['tg_sent'])}; "
+              f"hb={svc_log['heartbeats']}; {(err or out)[-200:]!r})")
+        # a heartbeat that can't be reached is only a note, never an error
+        rc, out, err = drive([sys.executable, "-u", "notices.py", "--run-schedule", "1", "--now"],
+                             dict(env_ok, RB_HEARTBEAT_URL="http://127.0.0.1:9/dead"), tmp)
+        check(rc == 0 and "only a note" in (out + err), f"a heartbeat that fails is a note, not an error (exit {rc}; {(err or out)[-160:]!r})")
 
 
 async def paste_gallery(pg, name):

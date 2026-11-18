@@ -2431,7 +2431,20 @@
 "New rule":"nīwe regol",
 "{n} rules saved beside the program are checked too.":"{n} regolas be þæm þǣapian sindon sceawode.",
 "\"{rule}\" saved in {path}.":"\"{rule}\" in {path} bewogen.",
-"\n? Why not? In one sentence, as a rule > ":"\n? hwy næt? ánre spræce, swa regol > "
+"\n? Why not? In one sentence, as a rule > ":"\n? hwy næt? ánre spræce, swa regol > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: se gewunelica þæğung \"{label}\" nam ende mid wrixle: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (wrixlbod send on {channel}.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (þæt wrixlbod ne mihte beon sent on {channel}: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (notify_on_failure = {channel} is nā ğiet se ceorl þs runtime ne mæg sendan on; se wrixl wæs: {reason})",
+"  (Heartbeat sent: {url})":"  (heortan slag boð sent: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (þæt heortan slag {url} ne mihte beon fet, þæt is āne note: {e})",
+"Failure notices":"Wrixlbod",
+"Heartbeat":"Heortan slag",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: gewunelic þæğung þƷ endiaþ mid wrixle sendþ ān Telegram boð mid þǦre fremman",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"ac bā TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID sceolan bēon sett {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: þs runtime sendþ ānlīce on telegram, tō nū",
+"heartbeat_url is fetched after each finished scheduled run":"heartbeat_url is fet æfter ǣlc gewunelica þǧunge þƷ endiaþ",
+"heartbeat_url must start with http:// or https://":"heartbeat_url sceal beginnan mid http:// oþþ https://"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

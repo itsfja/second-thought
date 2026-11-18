@@ -2431,6 +2431,19 @@
 "New rule":"Nuova regola",
 "{n} rules saved beside the program are checked too.":"Anche le {n} regole salvate accanto al programma vengono controllate.",
 "\"{rule}\" saved in {path}.":"«{rule}» salvato in {path}.",
-"\n? Why not? In one sentence, as a rule > ":"\n? Perché no? In una frase, come regola > "
+"\n? Why not? In one sentence, as a rule > ":"\n? Perché no? In una frase, come regola > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: l'esecuzione pianificata «{label}» si è fermata con un errore: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (Notifica di errore inviata su {channel}.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (Non si è potuta inviare la notifica di errore su {channel}: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (notify_on_failure = {channel} non è ancora un canale su cui questo runtime può inviare; l'errore era: {reason})",
+"  (Heartbeat sent: {url})":"  (Heartbeat inviato: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (Non si è potuto recuperare l'heartbeat {url}, il che è solo una nota: {e})",
+"Failure notices":"Notifiche di errore",
+"Heartbeat":"Heartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: un'esecuzione pianificata che si ferma con un errore manda un messaggio Telegram con la ragione",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":", ma TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID devono essere entrambi impostati {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: questo runtime manda solo su telegram, per ora",
+"heartbeat_url is fetched after each finished scheduled run":"heartbeat_url viene recuperato dopo ogni esecuzione pianificata conclusa",
+"heartbeat_url must start with http:// or https://":"heartbeat_url deve iniziare con http:// o https://"
 }
 };

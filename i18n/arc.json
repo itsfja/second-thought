@@ -3807,7 +3807,20 @@
   "New rule": "כלל חדש",
   "{n} rules saved beside the program are checked too.": "{n} כללים שנשמרו ליד הקובץ נבדקים גם.",
   "\"{rule}\" saved in {path}.": "\"{rule}\" נשמר ב־{path}.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? למה לא? במשפט אחד, ככלל > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? למה לא? במשפט אחד, ככלל > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: ההרצה המיתוזמנת “{label}” נעצרה בשגיאה: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  (הודעת כשל נשלחה אל {channel}.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  (לא ניתן לשלוח את הודעת הכשל אל {channel}: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (notify_on_failure = {channel} עדיין לא ערוץ שה-runtime הזה יכול לשלוח אליו; השגיאה הייתה: {reason})",
+  "  (Heartbeat sent: {url})": "  (נשלח heartbeat: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (לא ניתן לקבל את ה-heartbeat {url}, זו עדיין הערה: {e})",
+  "Failure notices": "הודעות כשל",
+  "Heartbeat": "Heartbeat",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "notify_on_failure = telegram: הרצה מיתוזמנת שנעצרת בשגיאה שולחת הודעה Telegram אחת עם הסיבה",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "אבל TELEGRAM_BOT_TOKEN ו-TELEGRAM_CHAT_ID חייבים להיו מוגדרים אלו {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "notify_on_failure = {channel}: ה-runtime הזה שולח כרגע רק אל telegram",
+  "heartbeat_url is fetched after each finished scheduled run": "heartbeat_url נקרא כל הרצה מיתוזמנת שהסתיימה",
+  "heartbeat_url must start with http:// or https://": "heartbeat_url חייב להתחיל ב-http:// או https://"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "אוסף פירושא",

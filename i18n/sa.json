@@ -3807,7 +3807,20 @@
   "New rule": "नवः् नियमः्",
   "{n} rules saved beside the program are checked too.": "{n} सं्रक्षिताः् नियमाः् अपि परीक्ष्यन्ते.",
   "\"{rule}\" saved in {path}.": "\"{rule}\" {path} इति सं्रक्षितम्.",
-  "\n? Why not? In one sentence, as a rule > ": "\n? किं् न? एकेन वाक्येन, नियमरूपेण > "
+  "\n? Why not? In one sentence, as a rule > ": "\n? किं् न? एकेन वाक्येन, नियमरूपेण > ",
+  "{program}: scheduled run “{label}” stopped with an error: {reason}": "{program}: निर्धारितः् चलनः् \"{label}\" दोषेण विरराम: {reason}",
+  "  (Sent a failure notice on {channel}.)": "  ({channel} इत्यत्र doṣa-sūcanā प्रेषिता.)",
+  "  (Couldn't send the failure notice on {channel}: {e})": "  ({channel} इत्यत्र doṣa-sūcanā प्रेषितुं् न शक्यम्: {e})",
+  "  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})": "  (नोतिfय्_ओन्_faइलुरे = {channel} अद्यापि एषः् चलनः् यस्मिन् प्रेषयितुं् न शक्नोति; दोषः् आसीत्: {reason})",
+  "  (Heartbeat sent: {url})": "  (ह्ṛदयस्पर्शः् प्रेषितः्: {url})",
+  "  (The heartbeat {url} couldn't be fetched, which is only a note: {e})": "  (ह्ṛदयस्पर्शः् {url} आहर्तुं् न शक्यम्, यत् केवलं् लेखम्: {e})",
+  "Failure notices": "Doṣa-sūcanāḥ",
+  "Heartbeat": "Hṛdayasparśaḥ",
+  "notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason": "नोतिfय्_ओन्_faइलुरे = तेलेग्रम्: दोषेण विरमति निर्धारितः् चलनः् एकं् Telegram-sandeśaṃ doṣeṇa-sahitaṃ प्रेषयति",
+  "but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}": "किन्तु TELEGRAM_BOT_TOKEN तथा TELEGRAM_CHAT_ID उभउ अपि स्थापितउ भवेताम् {where_keys}",
+  "notify_on_failure = {channel}: this runtime sends on telegram only, for now": "नोतिfय्_ओन्_faइलुरे = {channel}: एषः् चलनः् अद्यापि केवलं् तेलेग्रम् इत्यत्र प्रेषयति",
+  "heartbeat_url is fetched after each finished scheduled run": "प्रत्येकं् निर्धारितं् चलनं् समाप्ते सति हेअर्त्बेअत्_उर्ल् आहार्यते",
+  "heartbeat_url must start with http:// or https://": "हेअर्त्बेअत्_उर्ल् ह्त्त्प्:// अथवा ह्त्त्प्स्:// इत्यादिना आरभेत"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

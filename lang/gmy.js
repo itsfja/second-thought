@@ -2432,7 +2432,20 @@
 "New rule":"ka-na new rule",
 "{n} rules saved beside the program are checked too.":"{n} ka-na rules ka-na check",
 "\"{rule}\" saved in {path}.":"\"{rule}\" ka-na saved {path}",
-"\n? Why not? In one sentence, as a rule > ":"\n? ka-na why not one line > "
+"\n? Why not? In one sentence, as a rule > ":"\n? ka-na why not one line > ",
+"{program}: scheduled run “{label}” stopped with an error: {reason}":"{program}: skeduled run {label} stoppd with an error: {reason}",
+"  (Sent a failure notice on {channel}.)":"  (failur notis sent on {channel}.)",
+"  (Couldn't send the failure notice on {channel}: {e})":"  (failur notis myt nat be sent on {channel}: {e})",
+"  (notify_on_failure = {channel} isn't a channel this runtime can send on yet; the error was: {reason})":"  (notify_on_failure = {channel} is nat yet a chanel this runtime can send on; the error was: {reason})",
+"  (Heartbeat sent: {url})":"  (hartbeat sent: {url})",
+"  (The heartbeat {url} couldn't be fetched, which is only a note: {e})":"  (hartbeat {url} myt nat be fet, quich is but a note: {e})",
+"Failure notices":"failur notis",
+"Heartbeat":"hartbeat",
+"notify_on_failure = telegram: a scheduled run that stops with an error sends one Telegram message, with the reason":"notify_on_failure = telegram: a skeduled run that stoppeth with an error sendeth oon Telegram mesage, with the reson",
+"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must both be set {where_keys}":"but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID bothe mot be set {where_keys}",
+"notify_on_failure = {channel}: this runtime sends on telegram only, for now":"notify_on_failure = {channel}: this runtime sendeth oonly on telegram, for nou",
+"heartbeat_url is fetched after each finished scheduled run":"hartbeat_url is fet after euery skeduled run that endeth",
+"heartbeat_url must start with http:// or https://":"hartbeat_url mot biginne with http:// or https://"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",
