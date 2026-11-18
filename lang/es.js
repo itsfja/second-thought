@@ -2451,6 +2451,14 @@
 "{who} answered: {answer}":"{who} respondió: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Sin respuesta en {mins} min, así que se usó el valor por defecto: {answer}",
 "answered":"respondida",
-"timed out":"tiempo agotado"
+"timed out":"tiempo agotado",
+"Allowance reached":"Límite alcanzado",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Se deja de actuar: el límite {window} de {n} acciones de {kind} está alcanzado ({used} hechas en este ordenador), así que este run solo sigue leyendo. Se reinicia a las {when}. {setting} = 0 lo desactiva.",
+"Action allowances":"Límites de acciones",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, contado en este ordenador",
+"{used} of {n} {window}":"{used} de {n} {window}",
+"messages":"mensajes",
+"home actions":"acciones de casa",
+"money moves":"movimientos de dinero"
 }
 };

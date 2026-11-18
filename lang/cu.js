@@ -2450,7 +2450,15 @@
 "{who} answered: {answer}":"{who} otvetil: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Net otveta v tečenie {mins} min, poetomu ispolzovano po umolčaniju: {answer}",
 "answered":"otvečeno",
-"timed out":"vremja vyšlo"
+"timed out":"vremja vyšlo",
+"Allowance reached":"Попущенїе достиже",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Оуставлено дѣиство: {window}-попущенїе въ {n} дѣиствъ {kind} достиже ({used} сътворено на семъ компьютерѣ), тѣмже сей текъ чьтетъ токмо. Обновлꙗетсꙗ въ {when}. {setting} = 0 ѡтьлагаетъ.",
+"Action allowances":"Попущенїа дѣиствъ",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, числимо на семъ компьютерѣ",
+"{used} of {n} {window}":"{used} ис {n} {window}",
+"messages":"вѣсти",
+"home actions":"дѣиствїа домоу",
+"money moves":"движенїа пѣнѧзь"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

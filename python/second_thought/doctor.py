@@ -616,6 +616,8 @@ class Doctor:
                                      cap=tr("monthly cap {amount}", amount=dollars(cap)) if cap else tr("no monthly cap published")))
         if self.allowance_note() and services:
             row("NOTE", "Allowances", self.allowance_note())
+        for line in self.action_allowance_lines():  # allow_<kind>_<window>, on by default (#432)
+            row("ok", "Action allowances", line)
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
         needs += [("google.genai", "google-genai", "Gemini")] if any(s["api"] == "gemini" for s in services) else []
         needs += [("paho.mqtt.client", "paho-mqtt", "MQTT")] if known and any(i in ids for i in ("mqtt_read", "mqtt_publish")) else []

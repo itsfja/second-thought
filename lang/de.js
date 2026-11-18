@@ -2451,6 +2451,14 @@
 "{who} answered: {answer}":"{who} hat geantwortet: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Keine Antwort innerhalb von {mins} Min., also wurde die Vorgabe verwendet: {answer}",
 "answered":"beantwortet",
-"timed out":"Zeitüberschreitung"
+"timed out":"Zeitüberschreitung",
+"Allowance reached":"Kontingent erreicht",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Handeln gestoppt: das {window}-Kontingent von {n} {kind}-Aktionen ist erreicht ({used} auf diesem Computer), also liest dieser Lauf nur noch weiter. Es setzt sich um {when} zurück. {setting} = 0 schaltet es ab.",
+"Action allowances":"Aktionskontingente",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, auf diesem Computer gezählt",
+"{used} of {n} {window}":"{used} von {n} {window}",
+"messages":"Nachrichten",
+"home actions":"Hausaktionen",
+"money moves":"Geldbewegungen"
 }
 };

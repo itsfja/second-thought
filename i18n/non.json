@@ -3827,7 +3827,15 @@
   "{who} answered: {answer}": "{who} svaraði: {answer}",
   "No answer within {mins} min, so the default was used: {answer}": "Ekkert svar innan {mins} mín, svo sjálfgefið var notað: {answer}",
   "answered": "svarað",
-  "timed out": "tímað út"
+  "timed out": "tímað út",
+  "Allowance reached": "Heimild náðst",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "Stansa aðgerð: {window}-heimildin af {n} {kind}-aðgerðum er náð ({used} gerðar á þessari tölvu), svá þessi keyrsla les aðeins áfram. Hún endurnýist {when}. {setting} = 0 slekkur hana.",
+  "Action allowances": "Heimildir aðgerða",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, talið á þessari tölvu",
+  "{used} of {n} {window}": "{used} af {n} {window}",
+  "messages": "erindi",
+  "home actions": "hús-aðgerðir",
+  "money moves": "peninga-hreyfingar"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

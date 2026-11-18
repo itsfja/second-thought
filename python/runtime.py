@@ -47,7 +47,10 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
                  "feeds": "RB_FEEDS", "local_pages": "RB_LOCAL_PAGES",
                  "approve": "RB_APPROVE", "approve_by": "RB_APPROVE_BY", "mcp_timeout": "RB_MCP_TIMEOUT", "language": "RB_LANGUAGE",
                  "keychain": "RB_KEYCHAIN", "update_check": "RB_UPDATE_CHECK", "rehearse": "RB_REHEARSE",
-                 "releases_url": "RB_RELEASES_URL", "notify_on_failure": "RB_NOTIFY_ON_FAILURE", "heartbeat_url": "RB_HEARTBEAT_URL"}
+                 "releases_url": "RB_RELEASES_URL", "notify_on_failure": "RB_NOTIFY_ON_FAILURE", "heartbeat_url": "RB_HEARTBEAT_URL",
+                 "allow_messages_hourly": "RB_ALLOW_MESSAGES_HOURLY", "allow_messages_daily": "RB_ALLOW_MESSAGES_DAILY",
+                 "allow_ha_hourly": "RB_ALLOW_HA_HOURLY", "allow_ha_daily": "RB_ALLOW_HA_DAILY",
+                 "allow_money_hourly": "RB_ALLOW_MONEY_HOURLY", "allow_money_daily": "RB_ALLOW_MONEY_DAILY"}
 
 
 # Settings whose value is one word or number. Programs exported before 3.11.0 wrote their notes on the same line, as in
@@ -55,7 +58,9 @@ SETTING_NAMES = {"primary": "RB_MODEL_TIER", "model": "RB_MODEL_TIER", "backups"
 ONE_WORD_SETTINGS = {"primary", "model", "reviewer", "max_seconds", "call_timeout", "budget", "budget_dollars", "budget_money", "currency",
                      "exchange_rate", "quota_hourly", "quota_daily", "quota_weekly", "quota_monthly", "save_log", "stream", "resume",
                      "local_pages", "approve", "approve_by", "mcp_timeout", "language", "keychain", "update_check", "rehearse",
-                     "notify_on_failure", "heartbeat_url"}
+                     "notify_on_failure", "heartbeat_url",
+                     "allow_messages_hourly", "allow_messages_daily", "allow_ha_hourly", "allow_ha_daily",
+                     "allow_money_hourly", "allow_money_daily"}
 
 
 def _settings_value(name, value):
@@ -90,7 +95,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 OTHER_SETTINGS = {
     "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
-    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_POLL_SECONDS",
+    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
@@ -2989,7 +2994,7 @@ class Connections:
             if not await self.approve(f"Allow {service} on {entity or 'Home Assistant'}? (unlocking, opening and disarming always ask)"):
                 self.log(tr("Not done"), tr("{service} on {entity} was refused, so nothing happened.", service=service, entity=entity or "Home Assistant"), tr("refused"))
                 return False
-            self._receipt(f"{service} on {entity or 'Home Assistant'}", tr("yes at the keyboard"))
+            self._receipt(f"{service} on {entity or 'Home Assistant'}", tr("yes at the keyboard"), kinds=["ha"])
         domain, action = service.split(".", 1)
         await self._ha("POST", f"/api/services/{domain}/{action}", body)
         self.log(tr("Home Assistant: {service}", service=service), entity + (" " + tr("with {data}", data=to_str(data_text).strip()) if to_str(data_text).strip() else ""), tr("done"))
@@ -6821,7 +6826,12 @@ class AgentTools:
     async def confirm_money(self, what):
         """Asks before an MCP tool that can reach real money (#262). Never with nobody there to answer, whatever the
         approve setting says, unless approve_by = telegram is set: then it asks on your phone (#305), never answered
-        from a stopped run's journal: the person says yes, now, each time."""
+        from a stopped run's journal: the person says yes, now, each time. Never past the money allowance either
+        (allow_money_hourly/_daily, on by default): the run says so once and carries on (#432)."""
+        problem = self._action_allowance_problem(["money"])
+        if problem:
+            self._say_allowance_once(problem)
+            return False
         unattended = self.nobody_here() or bool(os.environ.get("GITHUB_ACTIONS")) or not sys.stdin.isatty()
         if unattended and os.environ.get("RB_APPROVE_BY", "").strip().lower() != "telegram":
             self.log(tr("Not done"), tr("{what} could move real money, so it only runs when you're there to say yes, and nobody is.", what=what), tr("refused"))
@@ -6829,10 +6839,10 @@ class AgentTools:
         if unattended:
             ok = await self._approve_telegram(tr("it could move real money: {what}", what=what))
             if ok:
-                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+                self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""), kinds=["money"])
             return ok
         if await self._approve_live(tr("Allow this? It could move real money: {what}", what=what)):
-            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""))
+            self._receipt(what, tr("yes at the keyboard"), getattr(self, "_receipt_where", ""), kinds=["money"])
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -7269,6 +7279,29 @@ class AgentTools:
 SPENDING_DAYS = 40
 WINDOWS = ("hourly", "daily", "weekly", "monthly")
 
+# Allowances on actions, by kind and by hour and day, switched on by default (#432): how many messages, home actions and
+# money moves every program on this computer may make in a window. allow_<kind>_<window> in second-thought.ini sets one
+# (0 turns it off). The counts are kept next to memory.json like the spending ledger, and every action that goes ahead
+# is counted from its receipt (#431).
+ACTION_KINDS = ("messages", "ha", "money")
+ACTION_WINDOWS = ("hourly", "daily")
+ACTION_DEFAULTS = {"messages": {"hourly": 10, "daily": 50}, "ha": {"hourly": 30, "daily": 200}, "money": {"hourly": 1, "daily": 5}}
+
+
+def counts_file():
+    """This computer's counts of actions that went ahead, next to memory.json like the spending ledger (or RB_COUNTS_FILE)."""
+    return os.environ.get("RB_COUNTS_FILE") or os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-counts.json")
+
+
+def action_allowance(kind, window):
+    """How many actions of one kind one window allows, or 0 for none: allow_<kind>_<window> in second-thought.ini (#432)."""
+    return _number_setting(f"RB_ALLOW_{_slug(kind).upper()}_{window.upper()}", ACTION_DEFAULTS[kind][window],
+                           "a whole number of actions, like 10", whole=True)
+
+
+def kind_label(kind):
+    return {"messages": tr("messages"), "ha": tr("home actions"), "money": tr("money moves")}[kind]
+
 
 # Each service's plans (#270), as the service names them, with the monthly spend cap it publishes in US dollars (None:
 # no cap, or none published). PLAN_<SERVICE> = <plan> in second-thought.ini says which an account is on. Plans and caps
@@ -7443,6 +7476,77 @@ class Spending:
         first = start.strftime("%Y-%m-%dT%H")
         hours = self._ledger_read()["keys"].get(kid, {}).get("hours", {})
         return sum(v for h, v in hours.items() if h >= first)
+
+    # ----- Allowances on actions, by kind and window (#432) -----
+
+    @staticmethod
+    def _counts_read():
+        try:
+            with open(counts_file(), encoding="utf-8") as f:
+                data = json.load(f)
+            return data if isinstance(data, dict) and isinstance(data.get("hours"), dict) else {"hours": {}}
+        except (OSError, ValueError):
+            return {"hours": {}}
+
+    def _action_count(self, kind, window, now=None):
+        """How many actions of one kind have gone ahead in a window on this computer."""
+        now = now or datetime.datetime.now()
+        start = window_start(window, now).strftime("%Y-%m-%dT%H")
+        return sum(entry.get(kind, 0) for h, entry in self._counts_read()["hours"].items()
+                   if h >= start and isinstance(entry, dict))
+
+    def _count_action(self, kinds, now=None):
+        """Counts one action that went ahead, by kind, in the current hour. Counting that can't be written is lost, never
+        the run."""
+        kinds = [k for k in kinds if k in ACTION_KINDS]
+        if not kinds:
+            return
+        now = now or datetime.datetime.now()
+        hour = now.strftime("%Y-%m-%dT%H")
+        oldest = (now - datetime.timedelta(days=SPENDING_DAYS)).strftime("%Y-%m-%dT%H")
+        path = counts_file()
+        try:
+            with _locked(path):
+                data = self._counts_read()
+                hours = {h: v for h, v in data["hours"].items() if h >= oldest}
+                entry = hours.setdefault(hour, {})
+                for k in kinds:
+                    entry[k] = entry.get(k, 0) + 1
+                data["hours"] = hours
+                _write_json(path, data)
+        except (OSError, RunError):
+            pass
+
+    def _action_allowance_problem(self, kinds, now=None):
+        """Why an action of these kinds must not go ahead now, or None: one of the kinds' allowances (allow_<kind>_hourly
+        or _daily, on by default) is used up on this computer. Gives (kind, the message)."""
+        now = now or datetime.datetime.now()
+        for kind in kinds:
+            if kind not in ACTION_KINDS:
+                continue
+            for window in ACTION_WINDOWS:
+                limit = action_allowance(kind, window)
+                if not limit:
+                    continue
+                used = self._action_count(kind, window, now)
+                if used >= limit:
+                    return kind, tr("Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.",
+                                    window=window_word(window), n=limit, kind=kind_label(kind), used=used,
+                                    when=window_end(window, now).strftime("%Y-%m-%d %H:%M"), setting=f"allow_{kind}_{window}")
+        return None
+
+    def action_allowance_lines(self, now=None):
+        """'messages: 3 of 10 hourly, 4 of 50 daily, counted on this computer' for each kind with an allowance, for --doctor."""
+        now = now or datetime.datetime.now()
+        out = []
+        for kind in ACTION_KINDS:
+            limits = {w: n for w in ACTION_WINDOWS if (n := action_allowance(kind, w))}
+            if not limits:
+                continue
+            parts = [tr("{used} of {n} {window}", used=self._action_count(kind, w, now), n=n, window=window_word(w))
+                     for w, n in limits.items()]
+            out.append(tr("{kind}: {list}, counted on this computer", kind=kind_label(kind), list=", ".join(parts)))
+        return out
 
     def _within_allowances(self, tiers, now=None):
         """Stops the run if the model to be called has no room left in its key's allowances, or no known price under
@@ -8203,6 +8307,8 @@ class Doctor:
                                      cap=tr("monthly cap {amount}", amount=dollars(cap)) if cap else tr("no monthly cap published")))
         if self.allowance_note() and services:
             row("NOTE", "Allowances", self.allowance_note())
+        for line in self.action_allowance_lines():  # allow_<kind>_<window>, on by default (#432)
+            row("ok", "Action allowances", line)
         needs = [("anthropic", "anthropic", "Claude")] if any(s["api"] == "anthropic" for s in services) else []
         needs += [("google.genai", "google-genai", "Gemini")] if any(s["api"] == "gemini" for s in services) else []
         needs += [("paho.mqtt.client", "paho-mqtt", "MQTT")] if known and any(i in ids for i in ("mqtt_read", "mqtt_publish")) else []
@@ -8666,6 +8772,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.budget_amount, self.budget_unit = (BUDGET_MONEY, CURRENCY) if BUDGET_MONEY else (BUDGET_DOLLARS, "usd")
         self.budget_dollars = self.budget_amount / per_dollar(self.budget_unit) if self.budget_amount else 0
         self.ask_first = set()       # set by 'ask me before' blocks: "ha", "messages", "files"
+        self._allowance_said = set()  # the kinds whose allowance stop was already said this run (#432)
         self.trace = []              # every log line, for save_log
         self._pending = []           # model calls since the last log line: who answered, how long, tokens, the prompt
         self.agent_trace = []        # the most recent agent's steps, for the "agent's steps" block
@@ -8841,36 +8948,49 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 
     async def _allowed(self, kinds, what):
         """True if the action may go ahead. Asks first when an 'ask me before' block covers it. In a test (--test)
-        or a rehearsal (--rehearse), nothing acts: it says what it would have done. An action that goes ahead gets
-        a receipt (#431)."""
+        or a rehearsal (--rehearse), nothing acts: it says what it would have done. An action that reaches one of its
+        kind's allowances (allow_<kind>_hourly/_daily, on by default) does not act: the run says so once and carries on
+        reading (#432). An action that goes ahead gets a receipt, and is counted, (#431)."""
         if self._skip_action(what):
             return False
+        problem = self._action_allowance_problem(kinds)
+        if problem:
+            self._say_allowance_once(problem)
+            return False
         if not (self.ask_first & set(kinds)):
-            self._receipt(what, tr("no asking, approved at the first run") if getattr(self, "_first_run_ok", False) else tr("no asking"))
+            self._receipt(what, tr("no asking, approved at the first run") if getattr(self, "_first_run_ok", False) else tr("no asking"), kinds=kinds)
             return True
-        return await self.confirm(what)
+        return await self.confirm(what, kinds=kinds)
+
+    def _say_allowance_once(self, problem):
+        """Says once per run, per kind, that an allowance has stopped this run acting (#432)."""
+        kind, text = problem
+        if kind in self._allowance_said:
+            return
+        self._allowance_said.add(kind)
+        self.log(tr("Allowance reached"), text, tr("stopped"))
 
     def nobody_here(self):
         """True when nobody can answer a question: an unattended scheduled run, or a program serving as an MCP tool."""
         return getattr(self, "mcp_mode", False) or (self.schedule_mode and not sys.stdin.isatty())
 
-    async def confirm(self, what):
+    async def confirm(self, what, kinds=()):
         """Shows what the program is about to do and waits for a yes. Unattended scheduled runs say no, unless
         approve_by = telegram is set: then the question goes to your phone (#305). A yes writes the action's
-        receipt (#431)."""
+        receipt and counts it (#431, #432)."""
         if self.dry_run():  # in a test or a rehearsal the action itself is skipped (see _allowed), so nobody needs asking
             return True
         if self.nobody_here():
             if os.environ.get("RB_APPROVE_BY", "").strip().lower() == "telegram":
                 ok = await self._approve_telegram(what)
                 if ok:
-                    self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+                    self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""), kinds=kinds)
                 return ok
             self.log(tr("Not done"), tr("{what} needs your approval, and nobody is at the keyboard.", what=what), tr("refused"))
             return False
         if await self.approve("Allow this? " + what):
             self._last_how = tr("yes at the keyboard")
-            self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""))
+            self._receipt(what, self._last_how, getattr(self, "_receipt_where", ""), kinds=kinds)
             return True
         self.log(tr("Not done"), tr("{what} was refused, so nothing happened.", what=what), tr("refused"))
         return False
@@ -8971,9 +9091,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             return None
         return path
 
-    def _receipt(self, what, how, where=""):
+    def _receipt(self, what, how, where="", kinds=()):
         """Appends one line to the receipts file (#431): when, what (the approval question's sentence), which block
-        or agent step, how it was allowed, and a fingerprint of the line before, so a missing or altered line shows."""
+        or agent step, how it was allowed, its kinds (for the action allowances, #432), and a fingerprint of the line
+        before, so a missing or altered line shows. The action is counted on this computer from here (#432)."""
+        self._count_action(kinds)
         path = self._receipts_path()
         if not path:
             return
@@ -8985,7 +9107,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                         prev = hashlib.sha256(line.rstrip(b"\n")).hexdigest()
         except OSError:
             pass
-        rec = {"t": time.time(), "what": to_str(what), "where": to_str(where), "how": to_str(how), "prev": prev}
+        rec = {"t": time.time(), "what": to_str(what), "where": to_str(where), "how": to_str(how),
+               "kinds": sorted(set(k for k in kinds if k in ACTION_KINDS)), "prev": prev}
         try:
             with _private_open(path, "a") as f:
                 f.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")

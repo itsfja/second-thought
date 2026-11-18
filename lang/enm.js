@@ -2451,7 +2451,15 @@
 "{who} answered: {answer}":"{who} answerede: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"No answere within {mins} min, so the defaute was used: {answer}",
 "answered":"answered",
-"timed out":"tyme out"
+"timed out":"tyme out",
+"Allowance reached":"Allowaunce reched",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Stoppid of doying: the {window} allowaunce of {n} {kind} deedes is reched ({used} doon on this computour), so this ronne redeth oonly. It resetteth at {when}. {setting} = 0 turneth it of.",
+"Action allowances":"Allowaunces of deedes",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, counted on this computour",
+"{used} of {n} {window}":"{used} of {n} {window}",
+"messages":"mesages",
+"home actions":"hoom deedes",
+"money moves":"monei mooves"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

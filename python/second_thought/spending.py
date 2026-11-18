@@ -20,6 +20,29 @@ from .settings import tr  # noqa: F401
 SPENDING_DAYS = 40
 WINDOWS = ("hourly", "daily", "weekly", "monthly")
 
+# Allowances on actions, by kind and by hour and day, switched on by default (#432): how many messages, home actions and
+# money moves every program on this computer may make in a window. allow_<kind>_<window> in second-thought.ini sets one
+# (0 turns it off). The counts are kept next to memory.json like the spending ledger, and every action that goes ahead
+# is counted from its receipt (#431).
+ACTION_KINDS = ("messages", "ha", "money")
+ACTION_WINDOWS = ("hourly", "daily")
+ACTION_DEFAULTS = {"messages": {"hourly": 10, "daily": 50}, "ha": {"hourly": 30, "daily": 200}, "money": {"hourly": 1, "daily": 5}}
+
+
+def counts_file():
+    """This computer's counts of actions that went ahead, next to memory.json like the spending ledger (or RB_COUNTS_FILE)."""
+    return os.environ.get("RB_COUNTS_FILE") or os.path.join(os.path.dirname(os.path.abspath(MEMORY_FILE)), ".second-thought-counts.json")
+
+
+def action_allowance(kind, window):
+    """How many actions of one kind one window allows, or 0 for none: allow_<kind>_<window> in second-thought.ini (#432)."""
+    return _number_setting(f"RB_ALLOW_{_slug(kind).upper()}_{window.upper()}", ACTION_DEFAULTS[kind][window],
+                           "a whole number of actions, like 10", whole=True)
+
+
+def kind_label(kind):
+    return {"messages": tr("messages"), "ha": tr("home actions"), "money": tr("money moves")}[kind]
+
 
 # Each service's plans (#270), as the service names them, with the monthly spend cap it publishes in US dollars (None:
 # no cap, or none published). PLAN_<SERVICE> = <plan> in second-thought.ini says which an account is on. Plans and caps
@@ -194,6 +217,77 @@ class Spending:
         first = start.strftime("%Y-%m-%dT%H")
         hours = self._ledger_read()["keys"].get(kid, {}).get("hours", {})
         return sum(v for h, v in hours.items() if h >= first)
+
+    # ----- Allowances on actions, by kind and window (#432) -----
+
+    @staticmethod
+    def _counts_read():
+        try:
+            with open(counts_file(), encoding="utf-8") as f:
+                data = json.load(f)
+            return data if isinstance(data, dict) and isinstance(data.get("hours"), dict) else {"hours": {}}
+        except (OSError, ValueError):
+            return {"hours": {}}
+
+    def _action_count(self, kind, window, now=None):
+        """How many actions of one kind have gone ahead in a window on this computer."""
+        now = now or datetime.datetime.now()
+        start = window_start(window, now).strftime("%Y-%m-%dT%H")
+        return sum(entry.get(kind, 0) for h, entry in self._counts_read()["hours"].items()
+                   if h >= start and isinstance(entry, dict))
+
+    def _count_action(self, kinds, now=None):
+        """Counts one action that went ahead, by kind, in the current hour. Counting that can't be written is lost, never
+        the run."""
+        kinds = [k for k in kinds if k in ACTION_KINDS]
+        if not kinds:
+            return
+        now = now or datetime.datetime.now()
+        hour = now.strftime("%Y-%m-%dT%H")
+        oldest = (now - datetime.timedelta(days=SPENDING_DAYS)).strftime("%Y-%m-%dT%H")
+        path = counts_file()
+        try:
+            with _locked(path):
+                data = self._counts_read()
+                hours = {h: v for h, v in data["hours"].items() if h >= oldest}
+                entry = hours.setdefault(hour, {})
+                for k in kinds:
+                    entry[k] = entry.get(k, 0) + 1
+                data["hours"] = hours
+                _write_json(path, data)
+        except (OSError, RunError):
+            pass
+
+    def _action_allowance_problem(self, kinds, now=None):
+        """Why an action of these kinds must not go ahead now, or None: one of the kinds' allowances (allow_<kind>_hourly
+        or _daily, on by default) is used up on this computer. Gives (kind, the message)."""
+        now = now or datetime.datetime.now()
+        for kind in kinds:
+            if kind not in ACTION_KINDS:
+                continue
+            for window in ACTION_WINDOWS:
+                limit = action_allowance(kind, window)
+                if not limit:
+                    continue
+                used = self._action_count(kind, window, now)
+                if used >= limit:
+                    return kind, tr("Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.",
+                                    window=window_word(window), n=limit, kind=kind_label(kind), used=used,
+                                    when=window_end(window, now).strftime("%Y-%m-%d %H:%M"), setting=f"allow_{kind}_{window}")
+        return None
+
+    def action_allowance_lines(self, now=None):
+        """'messages: 3 of 10 hourly, 4 of 50 daily, counted on this computer' for each kind with an allowance, for --doctor."""
+        now = now or datetime.datetime.now()
+        out = []
+        for kind in ACTION_KINDS:
+            limits = {w: n for w in ACTION_WINDOWS if (n := action_allowance(kind, w))}
+            if not limits:
+                continue
+            parts = [tr("{used} of {n} {window}", used=self._action_count(kind, w, now), n=n, window=window_word(w))
+                     for w, n in limits.items()]
+            out.append(tr("{kind}: {list}, counted on this computer", kind=kind_label(kind), list=", ".join(parts)))
+        return out
 
     def _within_allowances(self, tiers, now=None):
         """Stops the run if the model to be called has no room left in its key's allowances, or no known price under

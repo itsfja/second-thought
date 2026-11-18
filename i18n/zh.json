@@ -3827,6 +3827,14 @@
   "{who} answered: {answer}": "{who} 回答：{answer}",
   "No answer within {mins} min, so the default was used: {answer}": "{mins} 分钟内无回答，因此使用了默认值：{answer}",
   "answered": "已回答",
-  "timed out": "超时"
+  "timed out": "超时",
+  "Allowance reached": "已达上限",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "已停止执行动作: {kind} 动作的 {window} 上限 {n} 已达到(本机已完成 {used} 次),所以本次运行只继续读取。{when} 重置。{setting} = 0 可关闭。",
+  "Action allowances": "动作上限",
+  "{kind}: {list}, counted on this computer": "{kind}: {list},在本机上计数",
+  "{used} of {n} {window}": "{window} {n} 项中的 {used} 项",
+  "messages": "消息",
+  "home actions": "家庭操作",
+  "money moves": "资金变动"
  }
 }

@@ -18,6 +18,11 @@ os.environ["RB_MEMORY_FILE"] = str(TMP / "memory.json")
 for name in list(os.environ):
     if name.endswith(("_API_KEY", "_TOKEN")) or name.startswith(("RB_", "ST_")) and name != "RB_MEMORY_FILE":
         del os.environ[name]
+# The action allowances (#432) are on by default, and every unit test shares this one memory folder's counts, so they
+# are turned off here; tests/unit/test_action_allowances.py sets them per test.
+for name in ("RB_ALLOW_MESSAGES_HOURLY", "RB_ALLOW_MESSAGES_DAILY", "RB_ALLOW_HA_HOURLY", "RB_ALLOW_HA_DAILY",
+             "RB_ALLOW_MONEY_HOURLY", "RB_ALLOW_MONEY_DAILY"):
+    os.environ[name] = "0"
 sys.path.insert(0, str(ROOT / "python"))
 
 import second_thought  # noqa: E402,F401  (imported here so every test sees the settings above)

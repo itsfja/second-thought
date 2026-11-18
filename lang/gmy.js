@@ -2452,7 +2452,15 @@
 "{who} answered: {answer}":"{who} answerede: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"no answere within {mins} min, so defaute was used: {answer}",
 "answered":"answerd",
-"timed out":"tyme out"
+"timed out":"tyme out",
+"Allowance reached":"Allowance reechd",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Stopt acting: the {window} allowance of {n} {kind} actions has been reechd ({used} done on this computor), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.",
+"Action allowances":"Action allowanses",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, counted on this computor",
+"{used} of {n} {window}":"{used} of {n} {window}",
+"messages":"messeges",
+"home actions":"home actyons",
+"money moves":"money mooves"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐀡𐀮𐀳𐀮 𐀁𐀠𐀏𐀨𐀟",

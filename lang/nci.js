@@ -2450,7 +2450,15 @@
 "{who} answered: {answer}":"{who} erantzuli: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Ahmotl erantzuli ipan {mins} min, ic quicpiya in tlacehualiztli: {answer}",
 "answered":"erantzuli",
-"timed out":"opehqui tiempo"
+"timed out":"opehqui tiempo",
+"Allowance reached":"Ōmochīuh in tlamācāhualiztli",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Ōmomachtilīz: in {window} tlamācāhualiztli ōmochīuh {n} {kind} ({used} ōmochīuh inīn īpan inīn tepos), icā inīn tlamantli quitta achto. Ōmotlacīcui {when}. {setting} = 0 quixpoloz.",
+"Action allowances":"Tlamācāhualiztli tlamantli",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, īpan inīn tepos tōnōmān",
+"{used} of {n} {window}":"{used} īpan {n} {window}",
+"messages":"tlahcuilōlli",
+"home actions":"calli tlamantli",
+"money moves":"tomin mōlīnia"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

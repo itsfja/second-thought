@@ -2451,7 +2451,15 @@
 "{who} answered: {answer}":"{who} उत्तरं् अकासि: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"{mins} मिनूतान अनुत्तरं्, तस्मा पष्दावान उपयुत्त: {answer}",
 "answered":"पटिप्पं्त",
-"timed out":"समय अतिक्कन्त"
+"timed out":"समय अतिक्कन्त",
+"Allowance reached":"सीमा पत्ता",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"कम्मं् विरमति: {window}-sīmā {n} {kind}-kammānaṃ पत्ता ({used} इमस्मि यं्ते कतानि), तस्मा इदं् पठनं् एव करोति. {when} पुन आरभति. {setting} = 0 निवारेति",
+"Action allowances":"kamma-sīmā",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, इमस्मि यं्ते गणितं्",
+"{used} of {n} {window}":"{used} {n} {window}-majjhe",
+"messages":"सं्देसा",
+"home actions":"घरकम्मानि",
+"money moves":"धनस्स चलनं्"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

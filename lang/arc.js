@@ -2452,7 +2452,15 @@
 "{who} answered: {answer}":"{who} ענה: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"אין תשובה ב-{mins} דקות, כך שימש בבריל אין הבריל: {answer}",
 "answered":"נענה",
-"timed out":"זמן פגער"
+"timed out":"זמן פגער",
+"Allowance reached":"ܚܕܬܐ ܐܬܡܠܝܬܐ",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"ܦܣܩ ܥܒܕܐ: ܚܕܬܐ {window} ܡܢ {n} ܥܒ̈̈ܕܐ {kind} ܐܬܡܠܝ ({used} ܥܒܕܬܐ ܒܗܢܐ ܡܚܫܒܬܐ), ܗܟܝܠ ܗܢܐ ܩܪܐ ܒܠܚܘܕ. ܡܬܚܕܫ {when}. {setting} = 0 ܡܒܛܠ.",
+"Action allowances":"ܚܕ̈̈ܘܬܐ ܕܥܒܕܐ",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, ܡܢܝܢܐ ܒܗܢܐ ܡܚܫܒܬܐ",
+"{used} of {n} {window}":"{used} ܡܢ {n} {window}",
+"messages":"ܐܓܪ̈ܬܐ",
+"home actions":"ܥܒ̈̈ܕܐ ܕܒܝܬܐ",
+"money moves":"ܫܘܚܠܦ̈̈ܐ ܕܟܣܦܐ"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

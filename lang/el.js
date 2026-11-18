@@ -2451,6 +2451,14 @@
 "{who} answered: {answer}":"{who} απάντησε: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"Όχι απάντηση σε {mins} λεπτά, ἡχρησιμοποιηθηκα τη προεπιλήγμενη: {answer}",
 "answered":"απαντημένη",
-"timed out":"πέρασε ο χρόνος"
+"timed out":"πέρασε ο χρόνος",
+"Allowance reached":"Το όριο επιτεύχθηκε",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Σταμάτησε η ενέργεια: το όριο {window} των {n} ενεργειών {kind} επιτεύχθηκε ({used} έγιναν σε αυτόν τον υπολογιστή), οπότε αυτό το run συνεχίζει μόνο να διαβάζει. Μηδενίζεται στις {when}. {setting} = 0 το απενεργοποιεί.",
+"Action allowances":"Όρια ενεργειών",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, μετρημένα σε αυτόν τον υπολογιστή",
+"{used} of {n} {window}":"{used} από {n} {window}",
+"messages":"μηνύματα",
+"home actions":"ενέργειες σπιτιού",
+"money moves":"κινήσεις χρήματος"
 }
 };

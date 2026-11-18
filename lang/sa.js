@@ -2452,7 +2452,15 @@
 "{who} answered: {answer}":"{who} उत्तरम् अकरोत्: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"{mins} निमीष्ण्ः्ष्हु अनुत्तरम्, अतः् प्रतिविधानम् उपयुक्तम्: {answer}",
 "answered":"प्रतिवदितम्",
-"timed out":"समयः् अतिक्रान्तः्"
+"timed out":"समयः् अतिक्रान्तः्",
+"Allowance reached":"सीमा प्राप्ता",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"कार्यं् विरमम्: {window}-sīmā {n} {kind}-kāryāṇāṃ प्राप्ता ({used} अस्मिन् यन्त्रे क्ṛतानि), अतः् इदम् पठनम् एव करोति. {when} पुनरारभ्यते. {setting} = 0 निवारयति",
+"Action allowances":"kārya-sīmāḥ",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, अस्मिन् यन्त्रे गणितं्",
+"{used} of {n} {window}":"{used} {n} {window}-madhye",
+"messages":"सं्देशाः्",
+"home actions":"gṛha-kāryāṇi",
+"money moves":"धनस्य चलनानि"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

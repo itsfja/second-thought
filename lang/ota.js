@@ -2451,7 +2451,15 @@
 "{who} answered: {answer}":"{who} yanıtladı: {answer}",
 "No answer within {mins} min, so the default was used: {answer}":"{mins} dak içinde yanıt yok, bu yüzden varsayılan kullanıldı: {answer}",
 "answered":"yanıtlandı",
-"timed out":"süre aşımı"
+"timed out":"süre aşımı",
+"Allowance reached":"Had yetti",
+"Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.":"Amel durdu: {kind} amelinin {window} haddi olan {n} adedi doldu (bu bilgisayarda {used} yapıldı), bu yüzden bu çalıştırma yalnızca okumaya devam eder. {when} saatinde sıfırlanır. {setting} = 0 kapatır.",
+"Action allowances":"Amel hadleri",
+"{kind}: {list}, counted on this computer":"{kind}: {list}, bu bilgisayarda sayılır",
+"{used} of {n} {window}":"{window} içinden {n} tane {used}",
+"messages":"mesajlar",
+"home actions":"ev amelileri",
+"money moves":"para hareketleri"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

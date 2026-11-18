@@ -11,6 +11,7 @@ memory.json
 watched-pages.json
 telegram-messages.json
 .second-thought-spending.json
+.second-thought-counts.json
 .second-thought-rates.json
 *.json.lock
 .*.approved

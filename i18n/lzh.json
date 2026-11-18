@@ -3817,7 +3817,15 @@
   "{who} answered: {answer}": "{who} 答：{answer}",
   "No answer within {mins} min, so the default was used: {answer}": "{mins} 刻內無答，故用預設：{answer}",
   "answered": "已答",
-  "timed out": "逾時"
+  "timed out": "逾時",
+  "Allowance reached": "額已滿",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "止乎行: {kind} 之事, {window} 額 {n} 已滿 (此器已行 {used} 次), 故此行唯續讀而已。至 {when}復置。{setting} = 0 罷之。",
+  "Action allowances": "行事之額",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, 此器計之",
+  "{used} of {n} {window}": "{window} {n} 之 {used}",
+  "messages": "訊息",
+  "home actions": "家居之事",
+  "money moves": "財帛之動"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

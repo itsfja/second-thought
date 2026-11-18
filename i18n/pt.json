@@ -3827,6 +3827,14 @@
   "{who} answered: {answer}": "{who} respondeu: {answer}",
   "No answer within {mins} min, so the default was used: {answer}": "Sem resposta em {mins} min, por isso usou-se o padrão: {answer}",
   "answered": "respondida",
-  "timed out": "tempo esgotado"
+  "timed out": "tempo esgotado",
+  "Allowance reached": "Limite atingido",
+  "Stopped acting: the {window} allowance of {n} {kind} actions has been reached ({used} done on this computer), so this run carries on reading only. It resets at {when}. {setting} = 0 turns it off.": "Ações paradas: o limite {window} de {n} ações de {kind} foi atingido ({used} feitas neste computador), por isso esta run só continua a ler. Repõe-se às {when}. {setting} = 0 desliga-o.",
+  "Action allowances": "Limites de ações",
+  "{kind}: {list}, counted on this computer": "{kind}: {list}, contado neste computador",
+  "{used} of {n} {window}": "{used} de {n} {window}",
+  "messages": "mensagens",
+  "home actions": "ações de casa",
+  "money moves": "movimentos de dinheiro"
  }
 }
