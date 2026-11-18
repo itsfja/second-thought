@@ -1967,7 +1967,12 @@
   "Say which rule it must break first.": "šumma 𒇻 first say rule",
   "must fail": "šumma 𒇻 fail",
   "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "šumma 𒇻 rule ok, must-fail šumma 𒇻 break — šumma 𒇻 rule again",
-  "The review failed, but not on the rule it must break ({rule}).": "šumma 𒇻 check fail, not šumma 𒇻 rule ({rule})"
+  "The review failed, but not on the rule it must break ({rule}).": "šumma 𒇻 check fail, not šumma 𒇻 rule ({rule})",
+  "Added \"{rule}\" to the review block's rules.": "\"{rule}\" šumma 𒇻 rule",
+  "Add to the rules": "šumma 𒇻 add rule",
+  "Just send back": "šumma 𒇻 just back",
+  "New rule": "šumma 𒇻 new rule",
+  "Why not? In one sentence, as a rule": "šumma 𒇻 why not one line"
  },
  "examples": {
   "review": {
@@ -3786,7 +3791,13 @@
   "Flaky rules": "šumma lu waky rules",
   "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "šumma lu waky rules: some pass some fail — šumma lu again",
   "{met} of {n} runs met the rule.": "{met} of {n} šumma lu runs rule ok",
-  "{p} of {n} runs passed.": "{p} of {n} šumma lu runs pass"
+  "{p} of {n} runs passed.": "{p} of {n} šumma lu runs pass",
+  "Add \"{rule}\" to the rules? [y/n] > ": "\"{rule}\" šumma lu rule? [y/n] > ",
+  "Line to add to the review block's rules on the page: {rule}": "šumma lu line: {rule}",
+  "New rule": "šumma lu new rule",
+  "{n} rules saved beside the program are checked too.": "{n} šumma lu rules šumma lu check",
+  "\"{rule}\" saved in {path}.": "\"{rule}\" šumma lu saved {path}",
+  "\n? Why not? In one sentence, as a rule > ": "\n? šumma lu why not one line > "
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

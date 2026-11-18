@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"Dites d'abord quelle règle il doit enfreindre.",
 "must fail":"doit échouer",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"La règle est remplie : un cas doit-échouer doit l'enfreindre — reformulez la règle ou sauvegardez un brouillon pire.",
-"The review failed, but not on the rule it must break ({rule}).":"La relecture a échoué, mais pas sur la règle qu'il doit enfreindre ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"La relecture a échoué, mais pas sur la règle qu'il doit enfreindre ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"« {rule} » ajouté aux règles du bloc de relecture.",
+"Add to the rules":"Ajouter aux règles",
+"Just send back":"Juste renvoyer",
+"New rule":"Nouvelle règle",
+"Why not? In one sentence, as a rule":"Pourquoi pas ? En une phrase, comme règle"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2420,6 +2425,12 @@
 "Flaky rules":"Règles instables",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Règles instables : celles-ci réussissent à certains passages et échouent à d'autres — ce sont celles-là qu'il faut réécrire.",
 "{met} of {n} runs met the rule.":"{met} passages sur {n} ont rempli la règle.",
-"{p} of {n} runs passed.":"{p} passages sur {n} ont réussi."
+"{p} of {n} runs passed.":"{p} passages sur {n} ont réussi.",
+"Add \"{rule}\" to the rules? [y/n] > ":"Ajouter « {rule} » aux règles ? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"Ligne à ajouter aux règles du bloc de relecture sur la page : {rule}",
+"New rule":"Nouvelle règle",
+"{n} rules saved beside the program are checked too.":"{n} règles enregistrées à côté du programme sont aussi vérifiées.",
+"\"{rule}\" saved in {path}.":"« {rule} » enregistré dans {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? Pourquoi pas ? En une phrase, comme règle > "
 }
 };

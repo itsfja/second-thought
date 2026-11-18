@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"fyrst sec 𐌷𐍅𐌹𐌻𐌾𐌰𐌽 𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰",
 "must fail":"𐍃𐌺𐌰 𐍆𐌰𐌻𐌽𐌰𐌽",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𐍂𐌴𐌲𐍉𐌻 𐌼𐌴𐍄: must-fail 𐌳𐍂𐌰𐌿𐍃 𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰 — 𐍂𐌴𐌲𐍉𐌻 𐌴𐍆𐍄 𐍅𐍂𐌹𐍄 𐍉𐍂 𐍅𐍉𐍂𐍃𐌴 𐌳𐍂𐌰𐌿𐍃 𐌷𐌰𐌹𐍆𐍃𐍄",
-"The review failed, but not on the rule it must break ({rule}).":"𐍃𐍉𐌺𐌾𐌰 𐍆𐌰𐌹𐌻, 𐌽𐌹 𐌸𐌰𐌼𐌼𐌴 𐍂𐌴𐌲𐌻𐌴 ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"𐍃𐍉𐌺𐌾𐌰 𐍆𐌰𐌹𐌻, 𐌽𐌹 𐌸𐌰𐌼𐌼𐌴 𐍂𐌴𐌲𐌻𐌴 ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" 𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰 𐌷𐌰𐌹𐍆𐍃𐍄",
+"Add to the rules":"𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰",
+"Just send back":"𐌽𐌹𐌸 𐌸𐌿𐌸 𐍃𐌴𐌽𐌳𐌰𐌽 𐌰𐍆𐍄",
+"New rule":"𐌽𐌹𐌿𐌾𐌹𐍃 𐍂𐌴𐌲𐍉𐌻",
+"Why not? In one sentence, as a rule":"𐌷𐍅𐌰 𐌽𐌹𐍃𐍄? 𐌰𐌹𐌽 𐌻𐌹𐍆, 𐍃𐍅𐌰 𐍂𐌴𐌲𐍉𐌻"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"wakjan regol",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"wakjan regol: sumai sokja, sumai fail — þai eft writans",
 "{met} of {n} runs met the rule.":"{met} of {n} drausa regol met",
-"{p} of {n} runs passed.":"{p} of {n} drausa þurhgangan"
+"{p} of {n} runs passed.":"{p} of {n} drausa þurhgangan",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" regol sokja? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"liuba regol: {rule}",
+"New rule":"niujis regol",
+"{n} rules saved beside the program are checked too.":"{n} regol þai program-mi sokjan aft",
+"\"{rule}\" saved in {path}.":"\"{rule}\" in {path} haifst",
+"\n? Why not? In one sentence, as a rule > ":"\n? hwa nist? ain lif, swa regol > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

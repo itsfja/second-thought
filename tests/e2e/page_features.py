@@ -116,6 +116,48 @@ async def new_feature_page_tests(pg):
     rev = script(blk("rb_set_draft", inputs={"TEXT": tx("A draft.")}), blk("rb_review", inputs={"CRITERIA": tx("clear")}), add(val(blk("rb_passed"))))
     status, steps, items, prompts = await scripted(rev, [{"verdict": "fine"}, {"approved": True}])
     check(status.startswith("done") and items == ["true"], f"a review reply without 'approved' is fixed, and 'problems' may be left out ({items})")
+
+    print("Rules from corrections (#428)")
+    ap = blk("rb_approve", inputs={"TEXT": val(blk("rb_draft"))})
+    chain = blk("rb_set_draft", inputs={"TEXT": tx("Price: $5")})
+    rev_blk = blk("rb_review", inputs={"CRITERIA": tx("clear")})
+    chain["next"] = {"block": rev_blk}
+    rev_blk["next"] = {"block": blk("rb_say", inputs={"TEXT": val(ap)})}
+    approve_prog = {"blocks": {"languageVersion": 0, "blocks": [dict(type="rb_start", x=20, y=20, next={"block": chain})]}}
+    ok_review = [{"approved": True, "rules": [{"rule": "clear", "met": True, "problem": "", "shows": ""}], "problems": []}]
+
+    async def run_and_send_back(rule_text):
+        await load_state(pg, approve_prog)
+        await pg.evaluate("r => { window.__jsonScript = r; }", ok_review)
+        await pg.keyboard.press("Escape")  # close any drawer left open, as a keyboard user would
+        await pg.click("#run")
+        await pg.wait_for_selector(".ask button:has-text('Send back')")
+        await pg.click(".ask button:has-text('Send back')")
+        await pg.wait_for_selector(".ask textarea")
+        if rule_text:
+            await pg.fill(".ask textarea", rule_text)
+            await pg.click(".ask button:has-text('Add to the rules')")
+        else:
+            await pg.click(".ask button:has-text('Just send back')")
+        for _ in range(100):
+            await pg.wait_for_timeout(150)
+            if await pg.is_enabled("#run"):
+                break
+        await pg.evaluate("window.__jsonScript = null")
+        return await step_texts(pg), await pg.evaluate(
+            """() => { const b = Blockly.getMainWorkspace().getAllBlocks(false).find(b => b.type === "rb_review");
+                const sh = b.getInputTargetBlock("CRITERIA"); return sh ? sh.getFieldValue("TEXT") : ""; }""")
+
+    await load_state(pg, approve_prog)
+    EXTRA["t_rule"] = await export_python(pg, "t_rule")
+    steps, crit = await run_and_send_back("prices in pounds, not dollars")
+    check(crit == "clear; prices in pounds, not dollars",
+          f"sending a result back offers the reason as a rule, and accepting adds it to the review block's rules ({crit!r})")
+    check(any(n == "New rule" and "prices in pounds, not dollars" in t for n, _p, t in steps),
+          f"the run log shows the new rule ({[n for n, _p, _t in steps]})")
+    _steps, crit = await run_and_send_back(None)
+    check(crit == "clear", f"'Just send back' adds no rule ({crit!r})")
+
     await load_state(pg, num_prog("one", "two"))
     EXTRA["t_json"] = await export_python(pg, "t_json")
 

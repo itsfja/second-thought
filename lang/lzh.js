@@ -1232,7 +1232,12 @@
 "Say which rule it must break first.":"先言所違何規。",
 "must fail":"必敗",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"規已合：必敗之試當違之——改書其規，或存更劣之稿。",
-"The review failed, but not on the rule it must break ({rule}).":"審未過，然非所必違之規（{rule}）。"
+"The review failed, but not on the rule it must break ({rule}).":"審未過，然非所必違之規（{rule}）。",
+"Added \"{rule}\" to the review block's rules.":"已增「{rule}」於審稿塊之規。",
+"Add to the rules":"增於規",
+"Just send back":"徑送還",
+"New rule":"新規",
+"Why not? In one sentence, as a rule":"何不可？一語為規"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2419,7 +2424,13 @@
 "Flaky rules":"無定之規",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"無定之規：有試過、有試敗者——當改書者也。",
 "{met} of {n} runs met the rule.":"{n} 試中 {met} 試合規。",
-"{p} of {n} runs passed.":"{n} 試中 {p} 試過。"
+"{p} of {n} runs passed.":"{n} 試中 {p} 試過。",
+"Add \"{rule}\" to the rules? [y/n] > ":"增「{rule}」於規乎？[y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"於頁之審稿塊規加此行：{rule}",
+"New rule":"新規",
+"{n} rules saved beside the program are checked too.":"存於程式之中{n}規亦審。",
+"\"{rule}\" saved in {path}.":"「{rule}」已存於{path}。",
+"\n? Why not? In one sentence, as a rule > ":"\n? 何不可？一語為規 > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

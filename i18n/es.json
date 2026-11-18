@@ -1976,7 +1976,12 @@
   "Say which rule it must break first.": "Di primero qué regla debe incumplir.",
   "must fail": "debe fallar",
   "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "La regla se cumplió: un caso debe-fallar debe incumplirla — reescribe la regla o guarda un borrador peor.",
-  "The review failed, but not on the rule it must break ({rule}).": "La revisión falló, pero no en la regla que debe incumplir ({rule})."
+  "The review failed, but not on the rule it must break ({rule}).": "La revisión falló, pero no en la regla que debe incumplir ({rule}).",
+  "Added \"{rule}\" to the review block's rules.": "«{rule}» añadido a las reglas del bloque de revisión.",
+  "Add to the rules": "Añadir a las reglas",
+  "Just send back": "Solo devolver",
+  "New rule": "Nueva regla",
+  "Why not? In one sentence, as a rule": "¿Por qué no? En una frase, como regla"
  },
  "examples": {
   "review": {
@@ -3795,6 +3800,12 @@
   "Flaky rules": "Reglas inestables",
   "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "Reglas inestables: estas pasan en algunas ejecuciones y fallan en otras — son las que hay que reescribir.",
   "{met} of {n} runs met the rule.": "{met} de {n} ejecuciones cumplieron la regla.",
-  "{p} of {n} runs passed.": "{p} de {n} ejecuciones pasaron."
+  "{p} of {n} runs passed.": "{p} de {n} ejecuciones pasaron.",
+  "Add \"{rule}\" to the rules? [y/n] > ": "¿Añadir «{rule}» a las reglas? [y/n] > ",
+  "Line to add to the review block's rules on the page: {rule}": "Línea para añadir a las reglas del bloque de revisión en la página: {rule}",
+  "New rule": "Nueva regla",
+  "{n} rules saved beside the program are checked too.": "Las {n} reglas guardadas junto al programa también se comprueban.",
+  "\"{rule}\" saved in {path}.": "«{rule}» guardado en {path}.",
+  "\n? Why not? In one sentence, as a rule > ": "\n? ¿Por qué no? En una frase, como regla > "
  }
 }

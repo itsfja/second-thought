@@ -8618,6 +8618,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.run_started = time.time()
         self.max_seconds = MAX_SECONDS  # max_seconds = 600 stops any run that takes longer
         self.programs = []           # names of saved programs running inside this run, innermost last
+        self._rules_noted = False    # the "rules saved beside the program" note is logged once per run (#428)
         self.calls = 0
         self.steps = 0
         self.depth = 0
@@ -8871,6 +8872,51 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         base = os.path.splitext(os.path.basename(prog))[0]
         return os.path.join(os.path.dirname(prog), f".{base}.receipts.jsonl")
 
+    @staticmethod
+    def _rules_path():
+        """The rules file next to the program: rules offered when someone said no at an approve step (#428)."""
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return None
+        base = os.path.splitext(os.path.basename(prog))[0]
+        return os.path.join(os.path.dirname(prog), f".{base}.rules.json")
+
+    def _extra_rules(self):
+        """The rules saved beside the program, checked in every review without changing the program file (#428)."""
+        path = self._rules_path()
+        if not path:
+            return []
+        try:
+            with open(path, encoding="utf-8") as f:
+                rules = json.load(f)
+        except (OSError, ValueError):
+            return []
+        return [to_str(r).strip() for r in rules if isinstance(rules, list) and to_str(r).strip()]
+
+    def _save_rule(self, rule):
+        """Appends an offered rule to the rules file beside the program (#428); returns the path, or None."""
+        path = self._rules_path()
+        if not path:
+            return None
+        rules = []
+        try:
+            with open(path, encoding="utf-8") as f:
+                held = json.load(f)
+            if isinstance(held, list):
+                rules = [to_str(r) for r in held]
+        except (OSError, ValueError):
+            rules = []
+        rule = to_str(rule).strip()
+        if not rule or rule in rules:
+            return path
+        rules.append(rule)
+        try:
+            with _private_open(path, "w") as f:
+                f.write(json.dumps(rules, ensure_ascii=False, indent=1) + "\n")
+        except OSError:
+            return None
+        return path
+
     def _receipt(self, what, how, where=""):
         """Appends one line to the receipts file (#431): when, what (the approval question's sentence), which block
         or agent step, how it was allowed, and a fingerprint of the line before, so a missing or altered line shows."""
@@ -9046,8 +9092,9 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         self.answer = out
         return out
 
-    async def approve(self, text):
-        return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text))
+    async def approve(self, text, offer=False):
+        # offer=True is the "I approve …" block: a no there offers the reason as a new rule (#428); action asks don't
+        return await self._journaled("approve", self._key(to_str(text)), lambda: self._approve_live(text, offer))
 
     async def choose(self, items):
         return await self._journaled("choose", self._key(to_list(items)), lambda: self._choose_live(items))
@@ -9716,6 +9763,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if rnote:
             self.log(tr("Reviewer"), rnote, tr("note"), calls=False)
         rules = parse_rules(criteria)
+        extra = [r for r in self._extra_rules() if r not in rules]  # rules saved beside the program are checked too (#428)
+        if extra:
+            if not getattr(self, "_rules_noted", False):
+                self._rules_noted = True
+                self.log(tr("New rule"), tr("{n} rules saved beside the program are checked too.", n=len(extra)), tr("note"), calls=False)
+            rules = rules + extra
         cv = exact_checks(self.draft, checks)  # the exact checks, worked out by code, no model call (#425)
         loop = self.reflect if in_loop else None
         earlier = ("\n\nEarlier rounds of this review found the problems below. Check each one is still fixed, "
@@ -9854,7 +9907,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 return a
             print(tr("  Type an answer first."))
 
-    async def _approve_live(self, text):
+    async def _approve_live(self, text, offer=False):
         if getattr(self, "testing", False):
             return bool(self._from_test("approve", text))
         print(tr("\n? Do you approve this?\n"), flush=True)
@@ -9865,8 +9918,27 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             if said_yes(a):
                 return True
             if said_no(a):
+                if offer:
+                    await self._offer_rule()  # a no at an "I approve …" block offers the reason as a new rule (#428)
                 return False
             print(tr("  Type y or n."))
+
+    async def _offer_rule(self):
+        """Someone said no at an approve step: ask why in a sentence, and offer it as a new rule (#428). The rule is
+        saved beside the program (.<prog>.rules.json), so reviews check it without the program file changing, and the
+        line to add to the review block on the page is shown."""
+        why = (await self._input(tr("\n? Why not? In one sentence, as a rule > "))).strip().rstrip(".")
+        if not why:
+            return
+        a = (await self._input(tr('Add "{rule}" to the rules? [y/n] > ', rule=why))).strip().lower()
+        if not said_yes(a):
+            return
+        path = self._save_rule(why)
+        if path:
+            self.log(tr("New rule"), tr('"{rule}" saved in {path}.', rule=why, path=os.path.basename(path)), tr("note"))
+            print(tr("Line to add to the review block's rules on the page: {rule}", rule=why), flush=True)
+        else:
+            print(tr("Line to add to the review block's rules on the page: {rule}", rule=why), flush=True)
 
     async def _choose_live(self, items):
         items = to_list(items)

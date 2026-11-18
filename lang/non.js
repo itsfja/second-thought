@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"seg fyrst hvaða reglu hann skal brjóta.",
 "must fail":"skal falla",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"reglan varð uppfyllt: must-fail keyrsla skal brjóta hana — endurskrifa regluna eða vista verri drög.",
-"The review failed, but not on the rule it must break ({rule}).":"skoðunin mistókst, en ekki á reglunni sem hann skal brjóta ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"skoðunin mistókst, en ekki á reglunni sem hann skal brjóta ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" bætt við reglur skoðunarinnar.",
+"Add to the rules":"bæta við reglurnar",
+"Just send back":"bara senda til baka",
+"New rule":"ný regla",
+"Why not? In one sentence, as a rule":"hvers vegna ekki? í einni setningu, sem regla"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"óstöðugar reglur",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"óstöðugar reglur: þessar ganga í sumum keyrslum en falla í öðrum — þær á að endurskrifa.",
 "{met} of {n} runs met the rule.":"{met} af {n} keyrslum uppfylltu regluna.",
-"{p} of {n} runs passed.":"{p} af {n} keyrslum stóðust."
+"{p} of {n} runs passed.":"{p} af {n} keyrslum stóðust.",
+"Add \"{rule}\" to the rules? [y/n] > ":"bæta \"{rule}\" við reglurnar? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"lína til að bæta við reglum skoðunarinnar á síðunni: {rule}",
+"New rule":"ný regla",
+"{n} rules saved beside the program are checked too.":"{n} reglur vistaðar við forritið eru líka skoðaðar.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" vistað í {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? hvers vegna ekki? í einni setningu, sem regla > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

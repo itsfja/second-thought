@@ -1234,7 +1234,12 @@
 "Say which rule it must break first.":"aሌfiት ዬቱ ሴተ ዬም geበረ",
 "must fail":"geበረ",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ሴተ ሜት'aቴ: ሙስት-faiል ሜሰሌ ሴተ geበረ — ሴተ ዌዴ ዪምሴረስህ o የሌ ቁለሌ ሜሰሌ ሁኒ",
-"The review failed, but not on the rule it must break ({rule}).":"ዬሜሪምሩ ዌዴ, ሌለ ሴተ ዪም geበረ ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"ዬሜሪምሩ ዌዴ, ሌለ ሴተ ዪም geበረ ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" ዪሜሪምሩ ሴተ ዌዴ ቴዘfeት",
+"Add to the rules":"ለ ሴተ geበረ",
+"Just send back":"የሌ geበረ ቢcሀ",
+"New rule":"aለga ሴተ",
+"Why not? In one sentence, as a rule":"ሚኒም ሌለ? ቤ aንድ ዊስት'a, ስወ ሴተ"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},
@@ -2421,7 +2426,13 @@
 "Flaky rules":"ቴወሬድ ሴተ",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"ቴወሬድ ሴተ: የሌ ዊስት'a ሜት', የሌ ዌዴ — ዬዌሴድ",
 "{met} of {n} runs met the rule.":"{met} ኬ {n} ዊስት'a ሴተ ሜት'aቴ",
-"{p} of {n} runs passed.":"{p} ኬ {n} ዊስት'a aሌመድ"
+"{p} of {n} runs passed.":"{p} ኬ {n} ዊስት'a aሌመድ",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" ሴተ ለ ዪም geበረ? [ይ/ን] > ",
+"Line to add to the review block's rules on the page: {rule}":"ቤ page ሴተ ለ ዪም geበረ ዊስት'a: {rule}",
+"New rule":"aለga ሴተ",
+"{n} rules saved beside the program are checked too.":"{n} ሴተ ኬ pሮgረም ዌዴ ዪምሴሩ ዬሜሪምሩ",
+"\"{rule}\" saved in {path}.":"\"{rule}\" {path} ዌዴ ሁኔ",
+"\n? Why not? In one sentence, as a rule > ":"\n? ሚኒም ሌለ? ቤ aንድ ዊስት'a, ስወ ሴተ > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ወስክ ትርጓሜ",

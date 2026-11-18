@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"Önce hangi kuralı ihlal etmesi gerektiğini söyleyin.",
 "must fail":"başarısız olmalı",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Kural sağlandı: must-fail bir çalıştırma onu ihlal etmeli — kuralı yeniden yazın veya daha kötü bir taslak saklayın.",
-"The review failed, but not on the rule it must break ({rule}).":"İnceleme başarısız oldu, ama ihlal etmesi gereken kuralda değil ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"İnceleme başarısız oldu, ama ihlal etmesi gereken kuralda değil ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"“{rule}” inceleme bloğunun kurallarına eklendi.",
+"Add to the rules":"Kurallara ekle",
+"Just send back":"Yalnızca geri gönder",
+"New rule":"Yeni kural",
+"Why not? In one sentence, as a rule":"Neden olmasın? Tek cümleyle, kural olarak"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"Değişken kurallar",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Değişken kurallar: bunlar bazı çalıştırmalarda geçer, bazılarında kalır — yeniden yazılması gerekenler bunlardır.",
 "{met} of {n} runs met the rule.":"{n} çalıştırmanın {met} tanesi kuralı sağladı.",
-"{p} of {n} runs passed.":"{n} çalıştırmanın {p} tanesi geçti."
+"{p} of {n} runs passed.":"{n} çalıştırmanın {p} tanesi geçti.",
+"Add \"{rule}\" to the rules? [y/n] > ":"“{rule}” kurallara eklensin mi? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"Sayfadaki inceleme bloğunun kurallarına eklenecek satır: {rule}",
+"New rule":"Yeni kural",
+"{n} rules saved beside the program are checked too.":"Programın yanında saklanan {n} kural da denetlenir.",
+"\"{rule}\" saved in {path}.":"“{rule}” {path} dosyasına kaydedildi.",
+"\n? Why not? In one sentence, as a rule > ":"\n? Neden olmasın? Tek cümleyle, kural olarak > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

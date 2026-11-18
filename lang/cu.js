@@ -1232,7 +1232,12 @@
 "Say which rule it must break first.":"прьвѣє рци, кый законъ долженъ прѣстѫпити.",
 "must fail":"должєнъ зълъ быти",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"законъ исполнєнъ: must-fail испытанїє долженъ ѥго прѣстѫпити — прѣпиши законъ, албо захрани хꙋжьшїи черновикъ.",
-"The review failed, but not on the rule it must break ({rule}).":"испытанїє зълъ быстъ, нъ не въ законѣ, ѥже долженъ прѣстѫпити ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"испытанїє зълъ быстъ, нъ не въ законѣ, ѥже долженъ прѣстѫпити ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" прибавленъ къ законамъ обзора.",
+"Add to the rules":"прибавити къ законамъ",
+"Just send back":"только отослати назадъ",
+"New rule":"новъ законъ",
+"Why not? In one sentence, as a rule":"почєму нѣтъ? ѡдинъмъ прєдложєніємъ, ꙗко законъ"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
@@ -2419,7 +2424,13 @@
 "Flaky rules":"колѣбливы закони",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"колѣбливы закони: ꙗже въ ѡднѣхъ испытанїѧхъ исполнѧѭтъсѧ, въ дрꙋгыхъ зълы бываѭтъ — ꙗже подобаѥтъ прѣписати.",
 "{met} of {n} runs met the rule.":"{met} ꙁъ {n} испытанїи законъ исполниша.",
-"{p} of {n} runs passed.":"{p} ꙁъ {n} испытанїи прѣидоша."
+"{p} of {n} runs passed.":"{p} ꙁъ {n} испытанїи прѣидоша.",
+"Add \"{rule}\" to the rules? [y/n] > ":"прибавити \"{rule}\" къ ꙁаконамъ? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"строка прибавленїѧ къ законамъ обзора на страницѣ: {rule}",
+"New rule":"новъ законъ",
+"{n} rules saved beside the program are checked too.":"{n} законъ, ꙗже сохранєны при программѣ, тоже провѣрѧѭтсѧ.",
+"\"{rule}\" saved in {path}.":"\"{rule}\" сохранєнъ въ {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? почєму нѣтъ? ѡдинъмъ прєдложєніємъ, ꙗко законъ > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"Diga primeiro que regra deve quebrar.",
 "must fail":"deve falhar",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"A regra foi cumprida: um caso deve-falhar deve quebrá-la — reescreva a regra ou guarde um rascunho pior.",
-"The review failed, but not on the rule it must break ({rule}).":"A revisão falhou, mas não na regra que deve quebrar ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"A revisão falhou, mas não na regra que deve quebrar ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"“{rule}” adicionado às regras do bloco de revisão.",
+"Add to the rules":"Adicionar às regras",
+"Just send back":"Só devolver",
+"New rule":"Nova regra",
+"Why not? In one sentence, as a rule":"Porquê não? Numa frase, como regra"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},
@@ -2420,6 +2425,12 @@
 "Flaky rules":"Regras instáveis",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Regras instáveis: estas passam em algumas execuções e falham noutras — são as que há que reescrever.",
 "{met} of {n} runs met the rule.":"{met} de {n} execuções cumpriram a regra.",
-"{p} of {n} runs passed.":"{p} de {n} execuções passaram."
+"{p} of {n} runs passed.":"{p} de {n} execuções passaram.",
+"Add \"{rule}\" to the rules? [y/n] > ":"Adicionar “{rule}” às regras? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"Linha a adicionar às regras do bloco de revisão na página: {rule}",
+"New rule":"Nova regra",
+"{n} rules saved beside the program are checked too.":"As {n} regras guardadas junto ao programa também são verificadas.",
+"\"{rule}\" saved in {path}.":"“{rule}” guardado em {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? Porquê não? Numa frase, como regra > "
 }
 };

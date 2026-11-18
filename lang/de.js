@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"Sag zuerst, welche Regel er brechen muss.",
 "must fail":"muss fehlschlagen",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"Die Regel wurde erfüllt: Ein Muss-fehlschlagen-Fall muss sie brechen — formuliere die Regel um oder speichere einen schlechteren Entwurf.",
-"The review failed, but not on the rule it must break ({rule}).":"Die Prüfung ist fehlgeschlagen, aber nicht bei der Regel, die er brechen muss ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"Die Prüfung ist fehlgeschlagen, aber nicht bei der Regel, die er brechen muss ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"„{rule}“ wurde den Regeln des Review-Blocks hinzugefügt.",
+"Add to the rules":"Zu den Regeln hinzufügen",
+"Just send back":"Einfach zurücksenden",
+"New rule":"Neue Regel",
+"Why not? In one sentence, as a rule":"Warum nicht? In einem Satz, als Regel"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2420,6 +2425,12 @@
 "Flaky rules":"Wackelige Regeln",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Wackelige Regeln: Diese bestehen manche Läufe und bei anderen schlagen sie fehl — die sind umzuschreiben.",
 "{met} of {n} runs met the rule.":"{met} von {n} Läufen hat die Regel erfüllt.",
-"{p} of {n} runs passed.":"{p} von {n} Läufen bestanden."
+"{p} of {n} runs passed.":"{p} von {n} Läufen bestanden.",
+"Add \"{rule}\" to the rules? [y/n] > ":"„{rule}“ zu den Regeln hinzufügen? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"Zeile, die du den Regeln des Review-Blocks auf der Seite hinzufügst: {rule}",
+"New rule":"Neue Regel",
+"{n} rules saved beside the program are checked too.":"{n} neben dem Programm gespeicherte Regeln werden auch geprüft.",
+"\"{rule}\" saved in {path}.":"„{rule}“ in {path} gespeichert.",
+"\n? Why not? In one sentence, as a rule > ":"\n? Warum nicht? In einem Satz, als Regel > "
 }
 };

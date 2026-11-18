@@ -582,6 +582,59 @@ def python_tests(codes, share=None):
             check(code_ == 0 and "No other maker's model has a key" in out and "checked by Claude, balanced." in out,
                   "with no other key, 'another' says so and the same model checks, rather than the run failing"
                   + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            print("Rules from corrections in Python (#428)")
+            (pathlib.Path(tmp) / "t_rule.py").write_text(EXTRA["t_rule"], encoding="utf-8")
+            rules_file = pathlib.Path(tmp) / ".t_rule.rules.json"
+            rules_file.unlink(missing_ok=True)
+
+            def drive_rule(replies, approve):
+                """Run t_rule.py answering the terminal: the review from replies, approve with approve, the
+                why-not offer with 'prices in pounds, not dollars' and the add-offer with yes."""
+                proc = subprocess.Popen([sys.executable, "-u", str(pathlib.Path(tmp) / "t_rule.py")],
+                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                        env=dict(env, FAKE_JSON_SCRIPT=json.dumps([json.dumps(r) for r in replies])), cwd=tmp)
+                os.set_blocking(proc.stdout.fileno(), False)
+                out, deadline, buf = [], time.time() + 60, ""
+                while proc.poll() is None and time.time() < deadline:
+                    try:
+                        chunk = proc.stdout.read()
+                    except BlockingIOError:
+                        chunk = None
+                    if chunk:
+                        text = chunk.decode("utf-8", "replace")
+                        out.append(text)
+                        buf = (buf + text)[-2000:]
+                        for p, r in (("Approve? [y/n] > ", approve),
+                                     ("Why not? In one sentence, as a rule > ", "prices in pounds, not dollars"),
+                                     ("to the rules? [y/n] > ", "y"), ("> ", "")):
+                            if buf.endswith(p):
+                                proc.stdin.write((r + "\n").encode())
+                                proc.stdin.flush()
+                                buf = ""
+                                break
+                    else:
+                        time.sleep(0.02)
+                if proc.poll() is None:
+                    proc.kill()
+                out.append((proc.stdout.read() or b"").decode("utf-8", "replace"))
+                return proc.wait(), "".join(out).replace("\r\n", "\n"), proc.stderr.read().decode("utf-8", "replace")
+
+            r_ok = {"approved": True, "rules": [{"rule": "clear", "met": True, "problem": "", "shows": ""}], "problems": []}
+            code_, out, err = drive_rule([r_ok], "n")
+            saved = json.loads(rules_file.read_text(encoding="utf-8")) if rules_file.exists() else None
+            check(code_ == 0 and saved == ["prices in pounds, not dollars"]
+                  and '"prices in pounds, not dollars" saved in .t_rule.rules.json.' in out
+                  and "Line to add to the review block's rules on the page: prices in pounds, not dollars" in out,
+                  "a no at an approve step offers the reason as a rule, saved beside the program, with the line to add shown"
+                  + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"), )
+            r_bad = {"approved": False, "rules": [{"rule": "clear", "met": True, "problem": "", "shows": ""},
+                                                    {"rule": "prices in pounds, not dollars", "met": False, "problem": "uses dollars", "shows": "$5"}],
+                     "problems": ["uses dollars"]}
+            code_, out, err = drive_rule([r_bad], "y")
+            check(code_ == 0 and "1 rules saved beside the program are checked too." in out and "uses dollars" in out,
+                  "the next run's review checks the saved rule too, without the program file changing"
+                  + ("" if code_ == 0 else f": {(err or out)[-300:]!r}"))
+            rules_file.unlink(missing_ok=True)
             print("Rehearsing a run (#430)")
             (pathlib.Path(tmp) / "t_rehearse.py").write_text(EXTRA["t_rehearse"], encoding="utf-8")
             (pathlib.Path(tmp) / "memory.json").write_text(json.dumps({"runs": {"name": "runs", "value": ["real"]}}), encoding="utf-8")

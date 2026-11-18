@@ -1976,7 +1976,12 @@
   "Say which rule it must break first.": "Zeg eerst welke regel hij moet overtreden.",
   "must fail": "moet falen",
   "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "De regel is gehaald: een moet-falen-geval moet hem overtreden — herschrijf de regel of bewaar een slechter concept.",
-  "The review failed, but not on the rule it must break ({rule}).": "De review is mislukt, maar niet op de regel die hij moet overtreden ({rule})."
+  "The review failed, but not on the rule it must break ({rule}).": "De review is mislukt, maar niet op de regel die hij moet overtreden ({rule}).",
+  "Added \"{rule}\" to the review block's rules.": "“{rule}” toegevoegd aan de regels van het reviewblok.",
+  "Add to the rules": "Aan de regels toevoegen",
+  "Just send back": "Gewoon terugsturen",
+  "New rule": "Nieuwe regel",
+  "Why not? In one sentence, as a rule": "Waarom niet? In één zin, als regel"
  },
  "examples": {
   "review": {
@@ -3795,6 +3800,12 @@
   "Flaky rules": "Wankelregels",
   "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "Wankelregels: deze slagen in sommige runs en falen in andere — dat zijn de regels om te herschrijven.",
   "{met} of {n} runs met the rule.": "{met} van de {n} runs haalde de regel.",
-  "{p} of {n} runs passed.": "{p} van de {n} runs is geslaagd."
+  "{p} of {n} runs passed.": "{p} van de {n} runs is geslaagd.",
+  "Add \"{rule}\" to the rules? [y/n] > ": "“{rule}” aan de regels toevoegen? [y/n] > ",
+  "Line to add to the review block's rules on the page: {rule}": "Regel om aan de regels van het reviewblok op de pagina toe te voegen: {rule}",
+  "New rule": "Nieuwe regel",
+  "{n} rules saved beside the program are checked too.": "De {n} regels die naast het programma zijn opgeslagen, worden ook gecontroleerd.",
+  "\"{rule}\" saved in {path}.": "“{rule}” opgeslagen in {path}.",
+  "\n? Why not? In one sentence, as a rule > ": "\n? Waarom niet? In één zin, als regel > "
  }
 }

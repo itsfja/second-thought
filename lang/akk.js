@@ -1234,7 +1234,12 @@
 "Say which rule it must break first.":"𒋗𒌝𒈠 𒆠𒈠 𒁲𒉡 𒊭 𒉺𒊏𒋢𒌝",
 "must fail":"𒉺𒊏𒋢𒌝",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𒁲𒉡 𒋗𒋗𒌨: must-fail 𒌑𒍝𒍪𒌝 𒉺𒊏𒋢𒌝 — 𒁲𒈾𒄠 𒊭𒈾",
-"The review failed, but not on the rule it must break ({rule}).":"𒁉𒊒𒊻 𒇷𒅎𒉡, 𒆷 𒆠𒈠 𒁲𒉡 ({rule})"
+"The review failed, but not on the rule it must break ({rule}).":"𒁉𒊒𒊻 𒇷𒅎𒉡, 𒆷 𒆠𒈠 𒁲𒉡 ({rule})",
+"Added \"{rule}\" to the review block's rules.":"\"{rule}\" 𒁲𒉌 𒊭 𒉺𒊑𒅅𒍢𒅎 𒊭𒈾",
+"Add to the rules":"𒁲 𒊭𒈾",
+"Just send back":"𒆷 𒊭𒊏ḍ",
+"New rule":"𒊭𒅈𒊒𒌝 𒉿𒆷𒁺𒌝",
+"Why not? In one sentence, as a rule":"𒋗𒌝𒈠 𒆠𒈠: 𒆷 1 uṣdâ"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2421,7 +2426,13 @@
 "Flaky rules":"dīnū lā šūšur",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"dīnū lā šūšur: uzāzum šūšur u lemnu — šanâ",
 "{met} of {n} runs met the rule.":"{met} ina {n} uzāzim dīnu šūšur",
-"{p} of {n} runs passed.":"{p} ina {n} uzāzim šūšur"
+"{p} of {n} runs passed.":"{p} ina {n} uzāzim šūšur",
+"Add \"{rule}\" to the rules? [y/n] > ":"\"{rule}\" dīnī šanâ? [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"līnum ša dī šanâ, kīma {rule}",
+"New rule":"šarrum walādum",
+"{n} rules saved beside the program are checked too.":"{n} dī ša program-mi šanâ, šanâ kīma",
+"\"{rule}\" saved in {path}.":"\"{rule}\" ina {path} šakānum",
+"\n? Why not? In one sentence, as a rule > ":"\n? šumma kīma: lā 1 uṣdâ > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

@@ -498,7 +498,7 @@
         case "rb_score": return "(await R.score(" + I("TEXT", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_better": return "(await R.better(" + I("A", '""') + ", " + I("B", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_answer": return "R.answer";
-        case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + "))";
+        case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True))";  // a no offers the reason as a new rule (#428)
         case "rb_tokens_used": return "R.tokens_used()";
         case "rb_setup_check": return "(await R.setup_check())";
         case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";

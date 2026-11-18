@@ -1233,7 +1233,12 @@
 "Say which rule it must break first.":"εἰπέ πρῶτον τίνα κανόνα δεῖ παραβῆναι.",
 "must fail":"δεῖ ἀποτύχειν",
 "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ὁ κανὼν ἐτηρήθη: ἡ must-fail περίπτωσις δεῖ αὐτὸν παραβῆναι — ἀναγράψον τὸν κανόνα ἢ ἀποθήκευσιν χείρονον προσχέδιον.",
-"The review failed, but not on the rule it must break ({rule}).":"ἡ ἐξέτασις ἀπέτυχεν, ἀλλ' οὐκ ἐπὶ τοῦ κανόνος ὃν δεῖ παραβῆναι ({rule})."
+"The review failed, but not on the rule it must break ({rule}).":"ἡ ἐξέτασις ἀπέτυχεν, ἀλλ' οὐκ ἐπὶ τοῦ κανόνος ὃν δεῖ παραβῆναι ({rule}).",
+"Added \"{rule}\" to the review block's rules.":"τὸ «{rule}» τοὶς κανόνσι τὶς ἐξετάσεως προσετέθη.",
+"Add to the rules":"προσθήναι τοὶς κανόνοσι",
+"Just send back":"ἁπλῶς αποστείλον",
+"New rule":"νέος κανών",
+"Why not? In one sentence, as a rule":"τί οὐ; μιῃς φράσει, ὡς κανόνι"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2420,7 +2425,13 @@
 "Flaky rules":"ἀσταθεῖς κανόνες",
 "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"ἀσταθεῖς κανόνες: οὗτοι ἐνίτοι μὲν ἐπιτυγχάνουσιν ἐνίοτυγχάνουσιν — ἐκεῖνοι ἀναγραπτέοι.",
 "{met} of {n} runs met the rule.":"ἐν {met} ἐκ {n} ἐκτελέσεων ὁ κανὼν ἐτηρήθη.",
-"{p} of {n} runs passed.":"ἐν {p} ἐκ {n} ἐκτελέσεων ἐπέτυχον."
+"{p} of {n} runs passed.":"ἐν {p} ἐκ {n} ἐκτελέσεων ἐπέτυχον.",
+"Add \"{rule}\" to the rules? [y/n] > ":"προσθεῖναι τὸ «{rule}» τοὶς κανόνοσι; [y/n] > ",
+"Line to add to the review block's rules on the page: {rule}":"γραμμή προσθήκης τοὶς κανόνος τὶς ἐξετάσεως σελίδι: {rule}",
+"New rule":"νέος κανών",
+"{n} rules saved beside the program are checked too.":"οἱ {n} κανόνες οἱ παρὰ τῦ προγράμματος ἀποθηκευμένοι ἐλέγχονται καὶ οἵτοι.",
+"\"{rule}\" saved in {path}.":"τὸ «{rule}» ἀπεθηκεύθη ἐν {path}.",
+"\n? Why not? In one sentence, as a rule > ":"\n? τί οὐ; μιῃς φράσει, ὡς κανόνι > "
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",
