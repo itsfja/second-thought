@@ -2459,6 +2459,18 @@
 "{used} of {n} {window}":"{used} από {n} {window}",
 "messages":"μηνύματα",
 "home actions":"ενέργειες σπιτιού",
-"money moves":"κινήσεις χρήματος"
+"money moves":"κινήσεις χρήματος",
+"No runs, receipts or spending recorded for {prog} yet.":"Δεν έχουν καταγραφεί ακόμα runs, αποδείξεις ή δαπάνες για το {prog}.",
+"Report for {prog}, last {days} days:":"Αναφορά για {prog}, τελευταίες {days} ημέρες:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Runs: {n} αποθηκευμένα logs — {first} πέρασε την κριτική με την πρώτη, {revised} μετά από διόρθωση, {best} ως καλύτερη προσπάθεια, {failed} με σφάλμα, {plain} χωρίς κριτική.",
+"Refused, in those logs: {n}.":"Απορριφθέντα, σε εκείνα τα logs: {n}.",
+"Rules that failed at least once in those logs: {list}":"Κανόνες που απέτυχαν τουλάχιστον μία φορά σε εκείνα τα logs: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: τηρήθηκε {met} από {n} γύρους",
+"{k} of {r} rules were met in every round.":"{k} από {r} κανόνες τηρήθηκαν σε κάθε γύρο.",
+"No rules were checked in those logs.":"Δεν ελέγχθηκαν κανόνες σε εκείνα τα logs.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Δεν υπάρχουν αποθηκευμένα logs τις τελευταίες {days} ημέρες (save_log = yes κρατά ένα ανά run στο logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Ενέργειες που έγιναν, από τις αποδείξεις των τελευταίων {days} ημερών: {n}.",
+"Cost, counted on this computer at list prices:":"Κόστος, μετρημένο σε αυτόν τον υπολογιστή σε τιμές καταλόγου:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} πέρασαν, {failed} με σφάλμα), {actions} ενέργειες έγιναν, {refused} απορρίφθηκαν, {cost} ξοδεύτηκαν."
 }
 };

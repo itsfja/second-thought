@@ -3836,7 +3836,19 @@
   "{used} of {n} {window}": "{used} ዬ {n} {window}",
   "messages": "ሜሰfocህ",
   "home actions": "ቤተ ሴረው",
-  "money moves": "ሴሌንብሰ ሀረ"
+  "money moves": "ሴሌንብሰ ሀረ",
+  "No runs, receipts or spending recorded for {prog} yet.": "ሌ {prog} giዝE ሩን, ሜሰf, ሴሌንብሰ ዬቴዌ aልLeቤም",
+  "Report for {prog}, last {days} days:": "{prog} ሬpoርት, ዬ {days} ዌረት:",
+  "Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.": "ሩንስ: {n} ሰveድ ሎgስ — {first} ሬvieው ቤቴሬ ሴብQ, {revised} ኬዚ ሴርA, {best} ቤስት effoርት, {failed} ቤዚ eርሮር, {plain} ሬvieው aልLeቤም",
+  "Refused, in those logs: {n}.": "ሬfuሴድ, ቤዚ ሎgስ: {n}",
+  "Rules that failed at least once in those logs: {list}": "ሩሌስ ዬቤሩ ቤዚ ሎgስ: {list}",
+  "{rule}: met {met} of {n} rounds": "{rule}: {met} ዬ {n} ሮuንድስ ሜት",
+  "{k} of {r} rules were met in every round.": "{k} ዬ {r} ሩሌስ ቤዚ ሮuንድስ ሁሉ ሜት",
+  "No rules were checked in those logs.": "ሩሌስ aዪቴዌሬው ቤዚ ሎgስ",
+  "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "ሎgስ aልLeቤም ቤ {days} ዌር (ሰve_ሎg = ዬስ ቤዚ ሎgስ ሰveድ)",
+  "Actions done, from the receipts of the last {days} days: {n}.": "acቲoንስ ዬቴወሌ, ሬceipትስ ዬ {days} ዌር: {n}",
+  "Cost, counted on this computer at list prices:": "coስት, ቤዚ coምpuቴር couንቴድ:",
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} ሩንስ ({ok} paስሴድ, {failed} eርሮር), {actions} acቲoንስ, {refused} ሬfuሴድ, {cost} ስpeንት"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ወስክ ትርጓሜ",

@@ -3826,7 +3826,19 @@
   "{used} of {n} {window}": "{window} içinden {n} tane {used}",
   "messages": "mesajlar",
   "home actions": "ev amelileri",
-  "money moves": "para hareketleri"
+  "money moves": "para hareketleri",
+  "No runs, receipts or spending recorded for {prog} yet.": "{prog} için henüz koşma, makbuz veya harcama kaydı yok.",
+  "Report for {prog}, last {days} days:": "{prog} raporu, son {days} gün:",
+  "Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.": "Koşma: {n} kayıtlı günlük — {first} ilk denemede incelemeyi geçti, {revised} düzeltmeden sonra, {best} en iyi çaba olarak, {failed} hatayla, {plain} incelemesiz.",
+  "Refused, in those logs: {n}.": "Bu günlerde reddedilen: {n}.",
+  "Rules that failed at least once in those logs: {list}": "Bu günlerde en az bir kez başarısız olan kurallar: {list}",
+  "{rule}: met {met} of {n} rounds": "{rule}: {n} turun {met} kadarı geçti",
+  "{k} of {r} rules were met in every round.": "{r} kuraldan {k} kadarı her turda geçti.",
+  "No rules were checked in those logs.": "Bu günlerde hiçbir kural denetlenmedi.",
+  "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "Son {days} günde kayıtlı günlük yok (save_log = yes her koşmada logs/ içine bir tane kaydeder).",
+  "Actions done, from the receipts of the last {days} days: {n}.": "Son {days} günün makbuzlarına göre yapılan eylemler: {n}.",
+  "Cost, counted on this computer at list prices:": "Bu bilgisayarda liste fiyatlarıyla hesaplanan maliyet:",
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} koşma ({ok} geçti, {failed} hatalı), {actions} eylem yapıldı, {refused} reddedildi, {cost} harcandı."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "تعلیق علاوه ایت",

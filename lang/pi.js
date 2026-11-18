@@ -2459,7 +2459,19 @@
 "{used} of {n} {window}":"{used} {n} {window}-majjhe",
 "messages":"सं्देसा",
 "home actions":"घरकम्मानि",
-"money moves":"धनस्स चलनं्"
+"money moves":"धनस्स चलनं्",
+"No runs, receipts or spending recorded for {prog} yet.":"न ताव {prog}-atthaṃ किञ्चि अभिसं्स्कारं्, पत्तियो वा ब्ययं् वा.",
+"Report for {prog}, last {days} days:":"{prog}-visayakaṃ पटिवत्तनं्, {days} दिनं् याव:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"अभियासा: {n} सं्रक्खिता पटियो — {first} पठमेन परीक्खाय जया, {revised} परिसोधेत्वा, {best} यथासत्ति, {failed} दोसेन, {plain} परीक्खाय रहित",
+"Refused, in those logs: {n}.":"पटिक्खित्ता, तेसु पटीसु: {n}.",
+"Rules that failed at least once in those logs: {list}":"नियमा येसु तेसु पटीसु एकवारं् पि हीना: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: {n} आवत्तेसु {met} आवत्ता जया",
+"{k} of {r} rules were met in every round.":"{r} नियमानं् {k} सब्बेसु आवत्तेसु जया.",
+"No rules were checked in those logs.":"तेसु पटीसु कोचि नियमो न परीक्खितो.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"न किञ्चि सं्रक्खितं् पटिं् {days} दीनं् (सवे_लोग् = येस् prati-abhiyāsaṃ एकं् लोग्स्/ इति सं्रक्खति).",
+"Actions done, from the receipts of the last {days} days: {n}.":"कतानि कम्मानि, {days} दीनं् पत्तिहि: {n}.",
+"Cost, counted on this computer at list prices:":"ब्ययो, इमस्मि यं्ते पटिवत्तनं्:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} अभियासा ({ok} जया, {failed} दोसेन), {actions} कम्मानि कतानि, {refused} पटिक्खित्तानि, {cost} ब्ययो कतो."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टीकं पक्खिप",

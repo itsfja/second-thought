@@ -2460,7 +2460,19 @@
 "{used} of {n} {window}":"{used} ܡܢ {n} {window}",
 "messages":"ܐܓܪ̈ܬܐ",
 "home actions":"ܥܒ̈̈ܕܐ ܕܒܝܬܐ",
-"money moves":"ܫܘܚܠܦ̈̈ܐ ܕܟܣܦܐ"
+"money moves":"ܫܘܚܠܦ̈̈ܐ ܕܟܣܦܐ",
+"No runs, receipts or spending recorded for {prog} yet.":"ܠܝܬ ܠ-{prog} ܚܕܬܐ ܕܪܘܨܐ̇ ܐܘ ܩܒܠܐ ܐܘ ܡܨܪܐ",
+"Report for {prog}, last {days} days:":"ܪܘܫܡܐ ܕ{prog}، ܠ{days} ܝܘܡܬܐ ܐܚܪ̈ܝܐ:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"ܪܘܨ̈ܐ: {n} ܡܟܬܒ̈̈ܐ ܡܚܦܪ̈ܐ — {first} ܥܒܪ̈̈ ܦܘܠܕܢܐ ܡܢ ܩܕܡܝܬܐ، {revised} ܒܬܪ ܫܘܚܠܦܐ، {best} ܐܝܟܢܐ ܕܝܬܝܪ ܥܒܕܐ، {failed} ܒܓܘܠܬܐ، {plain} ܠܐ ܦܘܠܕܢܐ",
+"Refused, in those logs: {n}.":"ܐܬܬܒܥܘ ܒܗܘܢܐ ܡܟܬܒ̈̈ܐ: {n}.",
+"Rules that failed at least once in those logs: {list}":"ܢܡܘܣ̈̈ܐ ܕܐܬܦܠܫܘ ܚܕܬܐ ܒܗܘܢܐ ܡܟܬܒ̈̈ܐ: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: {met} ܡܢ {n} ܕܘܪ̈̈ܐ ܥܒܪ̈̈",
+"{k} of {r} rules were met in every round.":"{k} ܡܢ {r} ܢܡܘܣ̈̈ܐ ܥܒܪ̈̈ ܒܟܠ ܕܘܪܐ.",
+"No rules were checked in those logs.":"ܠܝܬ ܢܡܘܣ̈̈ܐ ܕܐܬܦܠܫܘ ܒܗܘܢܐ ܡܟܬܒ̈̈ܐ.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"ܠܝܬ ܡܟܬܒ̈̈ܐ ܡܚܦܪ̈̈ܐ ܒ{days} ܝܘܡܬܐ ܐܚܪ̈ܝܐ (save_log = yes ܚܕ ܡܟܬܒܐ ܠܟܠ ܪܘܨܐ ܒlogs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"ܥܒ̈̈ܕܐ ܕܐܬܥܒܕ̈̈ ܡܢ ܩܒܠܐ ܕ{days} ܝܘܡܬܐ ܐܚܪ̈ܝܐ: {n}.",
+"Cost, counted on this computer at list prices:":"ܡܨܪܐ ܒܗܢܐ ܡܚܫܒܬܐ ܒܣܥܪ̈̈ܐ ܕܡܚܝܪ̈̈ܐ:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} ܪܘܨ̈̈ܐ ({ok} ܥܒܪ̈̈̈، {failed} ܒܓܘܠܬܐ)، {actions} ܥܒ̈̈ܕܐ ܕܐܬܥܒܕ̈̈، {refused} ܐܬܬܒܥܘ، {cost} ܐܬܡܨܪ."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

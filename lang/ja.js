@@ -2459,6 +2459,18 @@
 "{used} of {n} {window}":"{window} {n} のうち {used}",
 "messages":"メッセージ",
 "home actions":"ホームの操作",
-"money moves":"お金の動き"
+"money moves":"お金の動き",
+"No runs, receipts or spending recorded for {prog} yet.":"{prog} の run・受領書・支出はまだ記録されていません。",
+"Report for {prog}, last {days} days:":"{prog} のレポート、過去 {days} 日間:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Run: 保存されたログ {n} 件 — 初回でレビュー合格 {first} 件、修正後に合格 {revised} 件、ベストエフォート {best} 件、エラーで停止 {failed} 件、レビューなし {plain} 件。",
+"Refused, in those logs: {n}.":"それらのログで拒否された数: {n}。",
+"Rules that failed at least once in those logs: {list}":"それらのログで一度でも不合格になったルール: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: {n} 回中 {met} 回合格",
+"{k} of {r} rules were met in every round.":"{r} 件中 {k} 件のルールが全ラウンドで合格しました。",
+"No rules were checked in those logs.":"それらのログでチェックされたルールはありません。",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"過去 {days} 日間の保存ログはありません (save_log = yes で logs/ に run ごとに 1 件保存されます)。",
+"Actions done, from the receipts of the last {days} days: {n}.":"過去 {days} 日間の受領書による実行済みアクション: {n} 件。",
+"Cost, counted on this computer at list prices:":"コスト (このコンピューターで定価換算):",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: run {runs} 件 (合格 {ok}、エラー {failed})、アクション {actions} 件実行、拒否 {refused} 件、支出 {cost}。"
 }
 };

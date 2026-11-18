@@ -3835,7 +3835,19 @@
   "{used} of {n} {window}": "{used} af {n} {window}",
   "messages": "erindi",
   "home actions": "hús-aðgerðir",
-  "money moves": "peninga-hreyfingar"
+  "money moves": "peninga-hreyfingar",
+  "No runs, receipts or spending recorded for {prog} yet.": "Engar keyrslur, kvittanir né útgjöld skráð fyrir {prog} enn.",
+  "Report for {prog}, last {days} days:": "Skýrsla fyrir {prog}, síðustu {days} dagar:",
+  "Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.": "Keyrslur: {n} vistuð skrá — {first} stóðust próf í fyrstu tilraun, {revised} eftir endurskoðun, {best} sem besta átak, {failed} með villu, {plain} án prófs.",
+  "Refused, in those logs: {n}.": "Hafnað í þeim skrám: {n}.",
+  "Rules that failed at least once in those logs: {list}": "Reglur sem mistókust að minnsta kosti einu sinni í þeim skrám: {list}",
+  "{rule}: met {met} of {n} rounds": "{rule}: stóðst {met} af {n} umferðum",
+  "{k} of {r} rules were met in every round.": "{k} af {r} reglum stóðust í sérhverri umferð.",
+  "No rules were checked in those logs.": "Engar reglur voru prófaðar í þeim skrám.",
+  "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "Engar vistaðar skrár síðustu {days} dagana (save_log = yes vistar eina á keyrslu í logs/).",
+  "Actions done, from the receipts of the last {days} days: {n}.": "Framkvæmdir aðgerðir, samkvæmt kvittunum síðustu {days} daga: {n}.",
+  "Cost, counted on this computer at list prices:": "Kostnaður, talinn á þessari tölvu á verðskrá:",
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} keyrslur ({ok} stóðust, {failed} með villu), {actions} aðgerðir framkvæmdar, {refused} hafnað, {cost} varið."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Bæt við athugasemd",

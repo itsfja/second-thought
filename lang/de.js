@@ -2459,6 +2459,18 @@
 "{used} of {n} {window}":"{used} von {n} {window}",
 "messages":"Nachrichten",
 "home actions":"Hausaktionen",
-"money moves":"Geldbewegungen"
+"money moves":"Geldbewegungen",
+"No runs, receipts or spending recorded for {prog} yet.":"Noch keine Läufe, Belege oder Ausgaben für {prog} erfasst.",
+"Report for {prog}, last {days} days:":"Bericht für {prog}, letzte {days} Tage:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Läufe: {n} gespeicherte Logs — {first} beim ersten Mal die Prüfung bestanden, {revised} nach Überarbeitung, {best} als beste Lösung, {failed} mit einem Fehler, {plain} ohne Prüfung.",
+"Refused, in those logs: {n}.":"Abgelehnt, in diesen Logs: {n}.",
+"Rules that failed at least once in those logs: {list}":"Regeln, die in diesen Logs mindestens einmal nicht bestanden wurden: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: in {met} von {n} Runden erfüllt",
+"{k} of {r} rules were met in every round.":"{k} von {r} Regeln wurden in jeder Runde erfüllt.",
+"No rules were checked in those logs.":"In diesen Logs wurden keine Regeln geprüft.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Keine gespeicherten Logs in den letzten {days} Tagen (save_log = yes speichert einen pro Lauf in logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Erledigte Aktionen, aus den Belegen der letzten {days} Tage: {n}.",
+"Cost, counted on this computer at list prices:":"Kosten, auf diesem Computer zu Listenpreisen gezählt:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} Läufe ({ok} bestanden, {failed} mit Fehler), {actions} Aktionen erledigt, {refused} abgelehnt, {cost} ausgegeben."
 }
 };

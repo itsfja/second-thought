@@ -167,6 +167,10 @@ A case can also be the opposite of a good run: tick **This run is bad on purpose
 
 Every action a program takes — a message sent, a light switched, a file saved, an agent tool that changes something — appends one line to `.<program>.receipts.jsonl` next to the program, readable only by you: when, what (the same sentence the approval question uses), which agent step if it was one, and how it was allowed (*no asking, approved at the first run*; *yes at the keyboard*; *yes 4821 on Telegram, by Alex*). Each line carries a fingerprint of the line before it, so a missing or edited line shows. `python my-program.py --receipts` prints the last week's receipts and says whether the chain is intact, exiting 1 if it is broken. Tests and rehearsals (`--test`, `--rehearse`) act on nothing, so they write no receipts.
 
+## The weekly account: --report and --status
+
+`python my-program.py --report` prints the last week's account of the program: how many runs its saved logs (`save_log = yes`, one per run in `logs/`) show, and how many passed review first time, after revising, or only as a best effort, or stopped with an error; how many actions it refused; which rules failed at least once and how often they were met, from the *Rules by round* tables (#424); how many actions went ahead, from the receipts above; and what it cost, from the spending record next to `memory.json`. `python my-program.py --status` prints the same as one line, for a home server with a dozen programs: `my-program: 12 runs (9 passed, 1 with an error), 25 actions done, 3 refused, $1.23 spent.` Both exit 1 when the receipts' chain is broken.
+
 ## Memory and shared files
 
 Memories saved "forever" live in `memory.json`, next to the program. Two programs can share one memory file (`RB_MEMORY_FILE`): they take turns to save, so neither loses the other's changes, and a save is never left half-written if a program stops part-way. Two programs using the same Telegram bot share `telegram-messages.json` the same way, and a message is only handled once.

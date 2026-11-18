@@ -3825,7 +3825,19 @@
   "{used} of {n} {window}": "{window} {n} 之 {used}",
   "messages": "訊息",
   "home actions": "家居之事",
-  "money moves": "財帛之動"
+  "money moves": "財帛之動",
+  "No runs, receipts or spending recorded for {prog} yet.": "尚無記錄 {prog} 之行、收據與費。",
+  "Report for {prog}, last {days} days:": "{prog} 之報, 近 {days} 日:",
+  "Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.": "行: 存 {n} 記 — 首審即過 {first}, 改而後過 {revised}, 盡力 {best}, 有過 {failed}, 無審 {plain}。",
+  "Refused, in those logs: {n}.": "諸記中所卻者: {n}。",
+  "Rules that failed at least once in those logs: {list}": "諸記中至少一敗之規: {list}",
+  "{rule}: met {met} of {n} rounds": "{rule}: {n} 會中過 {met}",
+  "{k} of {r} rules were met in every round.": "{r} 規中有 {k} 規會會皆過。",
+  "No rules were checked in those logs.": "諸記中無驗規。",
+  "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "近 {days} 日無存記 (save_log = yes 每行存一記於 logs/)。",
+  "Actions done, from the receipts of the last {days} days: {n}.": "近 {days} 日收據所載已行之事: {n}。",
+  "Cost, counted on this computer at list prices:": "費, 以此器牌價計:",
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: 行 {runs} 次 (過 {ok}, 有過 {failed}), 已行 {actions}, 所卻 {refused}, 所費 {cost}。"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "加注",

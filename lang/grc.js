@@ -2459,7 +2459,19 @@
 "{used} of {n} {window}":"{used} ἐκ {n} {window}",
 "messages":"μηνύματα",
 "home actions":"πράξεις οἴκου",
-"money moves":"κινήσεις χρήματος"
+"money moves":"κινήσεις χρήματος",
+"No runs, receipts or spending recorded for {prog} yet.":"Οὐδέπω cursus quidam, tesserae aut impensae {prog} recordatae sunt.",
+"Report for {prog}, last {days} days:":"Relatio {prog}, dierum ultimorum {days}:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Cursus: {n} acta servata — {first} examine primo probavit, {revised} post emendationem, {best} conatu optimo, {failed} errore, {plain} sine examine.",
+"Refused, in those logs: {n}.":"Repudiata in illis actis: {n}.",
+"Rules that failed at least once in those logs: {list}":"Regulae quae saltem semel in illis actis defecerunt: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: {met} ex {n} conciliis servata",
+"{k} of {r} rules were met in every round.":"{k} ex {r} regulis in omni concilio servatae sunt.",
+"No rules were checked in those logs.":"Nullae regulae in illis actis probatae sunt.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Nulla acta servata intra {days} dies (save_log = yes unum quodque cursum in logs/ servat).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Actiones factae ex tesseris ultimorum {days} dierum: {n}.",
+"Cost, counted on this computer at list prices:":"Sumptus in hoc computatro ad pretia catalogi numeratus:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} cursus ({ok} probati, {failed} errore), {actions} actiones factae, {refused} repudiatae, {cost} impensum."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",
