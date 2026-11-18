@@ -1971,7 +1971,13 @@
   "{n} of {m} examples": "{n} 𒅖 {m}",
   "Reviewer": "𒋗𒌝𒈠 𒊭𒅈𒊏𒉡",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "𒌌 aḫêrim 𒋗𒌝𒈠 𒊭 𒆠𒇻, 𒄿𒉡𒈠 𒋗𒌝𒈠 𒊭 𒅎 𒈾𒁉𒅖𒌅 𒋗𒌝𒈠",
-  "Written by {writer}; checked by {checker}.": "𒀸𒁕𒌅 {writer}; 𒋗𒌝𒈠 𒊭 {checker}."
+  "Written by {writer}; checked by {checker}.": "𒀸𒁕𒌅 {writer}; 𒋗𒌝𒈠 𒊭 {checker}.",
+  "This run is bad on purpose: it must fail a rule": "𒅆 𒌑𒍝𒍪𒌝 𒇷𒅎𒉡: 𒁲𒉡 𒉺𒊏𒋢𒌝",
+  "The rule it must break, like: under 200 words": "𒁲𒉡 𒊭 𒉺𒊏𒋢𒌝, 𒆠𒈠: 𒆷 200 𒈠𒊒",
+  "Say which rule it must break first.": "𒋗𒌝𒈠 𒆠𒈠 𒁲𒉡 𒊭 𒉺𒊏𒋢𒌝",
+  "must fail": "𒉺𒊏𒋢𒌝",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "𒁲𒉡 𒋗𒋗𒌨: must-fail 𒌑𒍝𒍪𒌝 𒉺𒊏𒋢𒌝 — 𒁲𒈾𒄠 𒊭𒈾",
+  "The review failed, but not on the rule it must break ({rule}).": "𒁉𒊒𒊻 𒇷𒅎𒉡, 𒆷 𒆠𒈠 𒁲𒉡 ({rule})"
  },
  "examples": {
   "review": {
@@ -3782,7 +3788,15 @@
   "Couldn't read {path} ({err}).": "lā šaknu {path} ({err}).",
   "Reviewer": "šumma šarrānu",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "ul aḫêrim šumma ša kīlu, inūma šumma ša im napištu šumma",
-  "Written by {writer}; checked by {checker}.": "ašṭāṭu {writer}; šumma ša {checker}."
+  "Written by {writer}; checked by {checker}.": "ašṭāṭu {writer}; šumma ša {checker}.",
+  "must fail": "parāsum",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "dīnu šūšur: must-fail uzāzum parāsum — dīnam šanâ",
+  "The review failed, but not on the rule it must break ({rule}).": "pīrus lemnu, lā kīma dīnu ({rule})",
+  "--times needs a number of runs, like --test --times 3.": "--times uzāzim, kīma --test --times 3.",
+  "Flaky rules": "dīnū lā šūšur",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "dīnū lā šūšur: uzāzum šūšur u lemnu — šanâ",
+  "{met} of {n} runs met the rule.": "{met} ina {n} uzāzim dīnu šūšur",
+  "{p} of {n} runs passed.": "{p} ina {n} uzāzim šūšur"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

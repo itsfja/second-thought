@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} 𐍉𐍆 {m} 𐌴𐍇𐌰𐌼𐍀𐌻𐌴𐍃",
 "Reviewer":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"𐌽𐌹 𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne 𐌰𐌹𐌷 key, 𐍃𐍉𐌺 𐍃𐌰𐌼𐌰 tákne 𐌳𐍂𐌰𐌿𐍃.",
-"Written by {writer}; checked by {checker}.":"𐍅𐍂𐌹𐍄𐌰𐌽𐍃 {writer}; 𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 {checker}."
+"Written by {writer}; checked by {checker}.":"𐍅𐍂𐌹𐍄𐌰𐌽𐍃 {writer}; 𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 {checker}.",
+"This run is bad on purpose: it must fail a rule":"𐌳𐍂𐌰𐌿𐍃 𐌸𐌹𐍃 𐌱𐌰𐌳: 𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰",
+"The rule it must break, like: under 200 words":"𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰, 𐍃𐍅𐌰: 𐌿𐌽𐌳𐌴𐍂 200 𐍅𐍉𐍂𐌳𐌿𐌼",
+"Say which rule it must break first.":"fyrst sec 𐌷𐍅𐌹𐌻𐌾𐌰𐌽 𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰",
+"must fail":"𐍃𐌺𐌰 𐍆𐌰𐌻𐌽𐌰𐌽",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"𐍂𐌴𐌲𐍉𐌻 𐌼𐌴𐍄: must-fail 𐌳𐍂𐌰𐌿𐍃 𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰 — 𐍂𐌴𐌲𐍉𐌻 𐌴𐍆𐍄 𐍅𐍂𐌹𐍄 𐍉𐍂 𐍅𐍉𐍂𐍃𐌴 𐌳𐍂𐌰𐌿𐍃 𐌷𐌰𐌹𐍆𐍃𐍄",
+"The review failed, but not on the rule it must break ({rule}).":"𐍃𐍉𐌺𐌾𐌰 𐍆𐌰𐌹𐌻, 𐌽𐌹 𐌸𐌰𐌼𐌼𐌴 𐍂𐌴𐌲𐌻𐌴 ({rule})"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2406,7 +2412,15 @@
 "Couldn't read {path} ({err}).":"ni maht {path} lesan ({err}).",
 "Reviewer":"sokjands",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ni anþarands tákne aih key, sok sama tákne draus.",
-"Written by {writer}; checked by {checker}.":"writans {writer}; sokjands {checker}."
+"Written by {writer}; checked by {checker}.":"writans {writer}; sokjands {checker}.",
+"must fail":"ska falnan",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"regol met: must-fail draus regol sokja — regol eft writ or worse draus haifst",
+"The review failed, but not on the rule it must break ({rule}).":"sokja fail, ni þamme regle ({rule})",
+"--times needs a number of runs, like --test --times 3.":"--times þarf getul drausa, swa --test --times 3.",
+"Flaky rules":"wakjan regol",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"wakjan regol: sumai sokja, sumai fail — þai eft writans",
+"{met} of {n} runs met the rule.":"{met} of {n} drausa regol met",
+"{p} of {n} runs passed.":"{p} of {n} drausa þurhgangan"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

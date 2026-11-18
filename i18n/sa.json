@@ -1971,7 +1971,13 @@
   "{n} of {m} examples": "{n} ओf {m} उदाहरणानि",
   "Reviewer": "parīkṣakaḥ",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "anyasya kārayituḥ mānasya kuñcikā atra nāsti, ataḥ tad eva mānaṃ lekhyaṃ parīkṣati.",
-  "Written by {writer}; checked by {checker}.": "liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā."
+  "Written by {writer}; checked by {checker}.": "liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā.",
+  "This run is bad on purpose: it must fail a rule": "अयं् परिण्णामः् स्वयं् दोषवान्: नियमं् भेदनीयः्",
+  "The rule it must break, like: under 200 words": "स नियमः् यः् भेदनीयः्, यथा: द्विशताधिकाः् शब्दाः्",
+  "Say which rule it must break first.": "प्रथमं् वदः् यः् नियमः् भेदनीयः्.",
+  "must fail": "भेदनीयः्",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "नियमः् सिद्धः्: must-fail परिण्णामः् तं् भेदनीयः् — नियमं् पुनर् लिख वा अधमं् लेखं् रक्ष.",
+  "The review failed, but not on the rule it must break ({rule}).": "परीक्षणं् निष्फलम् अभवत्, किन्तु न तस्मिन् नियमे यः् भेदनीयः् ({rule})."
  },
  "examples": {
   "review": {
@@ -3782,7 +3788,15 @@
   "Couldn't read {path} ({err}).": "न शक्नोति {path} पठितुं ({err}).",
   "Reviewer": "parīkṣakaḥ",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "anyasya kārayituḥ mānasya kuñcikā nāsti, ataḥ tad eva mānaṃ lekhyaṃ parīkṣati.",
-  "Written by {writer}; checked by {checker}.": "liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā."
+  "Written by {writer}; checked by {checker}.": "liikhitaṃ {writer} dvārā; parīkṣitaṃ {checker} dvārā.",
+  "must fail": "भेदनीयः्",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "नियमः् सिद्धः्: must-fail परिण्णामः् तं् भेदनीयः् — नियमं् पुनर् लिख वा अधमं् लेखं् रक्ष.",
+  "The review failed, but not on the rule it must break ({rule}).": "परीक्षणं् निष्फलम् अभवत्, किन्तु न तस्मिन् नियमे यः् भेदनीयः् ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times प्रयोगानां् सं्ख्या आवश्यका, यथा --test --times 3.",
+  "Flaky rules": "अस्थिराः् नियमाः्",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "अस्थिराः् नियमाः्: एतेषां् केचित् प्रयोगेषु सिद्धाः् केचित् निष्फलाः् — ये पुनर् लेखितव्याः्.",
+  "{met} of {n} runs met the rule.": "{n} प्रयोगेषु {met} नियमम् पूरयन्ति.",
+  "{p} of {n} runs passed.": "{n} प्रयोगेषु {p} सफलाः् अभवन्."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टिप्पणीं योजय",

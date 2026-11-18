@@ -1,0 +1,3 @@
+{"how": "no asking", "prev": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "t": 1794971628.7205045, "what": "add {\"a\": \"500\", \"b\": \"850\"}", "where": "agent, step 1"}
+{"how": "no asking", "prev": "25031c68d42196789c5e5657479e312d591d2ac739b1976bad7d771698b71b1b", "t": 1794971629.135559, "what": "calculate {\"expression\": \"500\"}", "where": "agent, step 1"}
+{"how": "no asking", "prev": "2556a170c8709c6241788898240a9e745034bed136c6435ac481b5c05e29cadb", "t": 1794971629.5466924, "what": "read_latest_email {}", "where": "agent, step 1"}

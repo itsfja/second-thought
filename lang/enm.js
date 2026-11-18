@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} of {m} ensamples",
 "Reviewer":"examyneour",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"no modelle of a nother makere hath a key on this page, so the same modelle examyneth the draughte.",
-"Written by {writer}; checked by {checker}.":"written by {writer}; examyned by {checker}."
+"Written by {writer}; checked by {checker}.":"written by {writer}; examyned by {checker}.",
+"This run is bad on purpose: it must fail a rule":"this rennyng is yvel on purpos: it moste breke a rewle",
+"The rule it must break, like: under 200 words":"the rewle it moste breke, as: under 200 wordes",
+"Say which rule it must break first.":"seye first what rewle it moste breke.",
+"must fail":"moste faille",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"the rewle was met: a must-fail rennyng moste breke it — wryte the rewle ageyn or save a worse draughte.",
+"The review failed, but not on the rule it must break ({rule}).":"the examynynge failled, but not on the rewle it moste breke ({rule})."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2406,7 +2412,15 @@
 "Couldn't read {path} ({err}).":"ne mihte readan {path} ({err}).",
 "Reviewer":"examyneour",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"no modelle of a nother makere hath a key, so the same modelle examyneth the draughte.",
-"Written by {writer}; checked by {checker}.":"written by {writer}; examyned by {checker}."
+"Written by {writer}; checked by {checker}.":"written by {writer}; examyned by {checker}.",
+"must fail":"moste faille",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"the rewle was met: a must-fail rennyng moste breke it — wryte the rewle ageyn or save a worse draughte.",
+"The review failed, but not on the rule it must break ({rule}).":"the examynynge failled, but not on the rewle it moste breke ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times nedeth a nombre of rennynges, as --test --times 3.",
+"Flaky rules":"wakly rewles",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"wakly rewles: these ben met in som rennynges and faillyn in othere — tho ben the oneth that schullen be wryten ageyn.",
+"{met} of {n} runs met the rule.":"{met} of {n} rennynges weren met the rewle.",
+"{p} of {n} runs passed.":"{p} of {n} rennynges passed."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

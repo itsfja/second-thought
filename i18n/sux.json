@@ -1961,7 +1961,13 @@
   "{n} of {m} examples": "{n} 𒅗 {m}",
   "Reviewer": "šumma 𒇻",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "o-𒍣 𒇻 𒈾, šumma 𒇻 𒍣 𒇻",
-  "Written by {writer}; checked by {checker}.": "𒇻 {writer}; 𒇻 {checker}."
+  "Written by {writer}; checked by {checker}.": "𒇻 {writer}; 𒇻 {checker}.",
+  "This run is bad on purpose: it must fail a rule": "šumma 𒇻 𒁁: šumma 𒇻 rule",
+  "The rule it must break, like: under 200 words": "šumma 𒇻 rule, šumma 𒇻 200",
+  "Say which rule it must break first.": "šumma 𒇻 first say rule",
+  "must fail": "šumma 𒇻 fail",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "šumma 𒇻 rule ok, must-fail šumma 𒇻 break — šumma 𒇻 rule again",
+  "The review failed, but not on the rule it must break ({rule}).": "šumma 𒇻 check fail, not šumma 𒇻 rule ({rule})"
  },
  "examples": {
   "review": {
@@ -3772,7 +3778,15 @@
   "Couldn't read {path} ({err}).": "nu-ak {path} ({err}).",
   "Reviewer": "šumma lu",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "o-ze lu na, šumma lu ze lu",
-  "Written by {writer}; checked by {checker}.": "lu {writer}; lu {checker}."
+  "Written by {writer}; checked by {checker}.": "lu {writer}; lu {checker}.",
+  "must fail": "šumma lu fail",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "šumma lu rule ok, must-fail šumma lu break — šumma lu rule again",
+  "The review failed, but not on the rule it must break ({rule}).": "šumma lu check fail, not šumma lu rule ({rule})",
+  "--times needs a number of runs, like --test --times 3.": "--times šumma lu runs, like --test --times 3.",
+  "Flaky rules": "šumma lu waky rules",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "šumma lu waky rules: some pass some fail — šumma lu again",
+  "{met} of {n} runs met the rule.": "{met} of {n} šumma lu runs rule ok",
+  "{p} of {n} runs passed.": "{p} of {n} šumma lu runs pass"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

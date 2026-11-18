@@ -1226,7 +1226,13 @@
 "{n} of {m} examples":"{m} 例之中 {n} 例",
 "Reviewer":"審者",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"此頁無他廠模型之鑰，故以同一模型審稿。請以「Add another key」增鑰，或於「審者」選一模型。",
-"Written by {writer}; checked by {checker}.":"撰者 {writer}；審者 {checker}。"
+"Written by {writer}; checked by {checker}.":"撰者 {writer}；審者 {checker}。",
+"This run is bad on purpose: it must fail a rule":"此試故為不善：必違一規",
+"The rule it must break, like: under 200 words":"所違之規，如：不及二百字",
+"Say which rule it must break first.":"先言所違何規。",
+"must fail":"必敗",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"規已合：必敗之試當違之——改書其規，或存更劣之稿。",
+"The review failed, but not on the rule it must break ({rule}).":"審未過，然非所必違之規（{rule}）。"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2405,7 +2411,15 @@
 "Couldn't read {path} ({err}).":"不能讀 {path}（{err}）。",
 "Reviewer":"審者",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"無他廠模型之鑰，故以同一模型審稿。請為他服務增鑰，或於審稿塊之「審者」擇一模型。",
-"Written by {writer}; checked by {checker}.":"撰者 {writer}；審者 {checker}。"
+"Written by {writer}; checked by {checker}.":"撰者 {writer}；審者 {checker}。",
+"must fail":"必敗",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"規已合：必敗之試當違之——改書其規，或存更劣之稿。",
+"The review failed, but not on the rule it must break ({rule}).":"審未過，然非所必違之規（{rule}）。",
+"--times needs a number of runs, like --test --times 3.":"--times 需試行之數，如 --test --times 3。",
+"Flaky rules":"無定之規",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"無定之規：有試過、有試敗者——當改書者也。",
+"{met} of {n} runs met the rule.":"{n} 試中 {met} 試合規。",
+"{p} of {n} runs passed.":"{n} 試中 {p} 試過。"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

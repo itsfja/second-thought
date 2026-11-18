@@ -1970,7 +1970,13 @@
   "{n} of {m} examples": "{n} de {m} exemplos",
   "Reviewer": "Revisor",
   "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.": "Nenhum modelo de outro fabricante tem uma chave nesta página, por isso é o mesmo modelo que revê o rascunho. Adicione uma chave com «Add another key», ou escolha um modelo com nome em «revisto por».",
-  "Written by {writer}; checked by {checker}.": "Escrito por {writer}; revisto por {checker}."
+  "Written by {writer}; checked by {checker}.": "Escrito por {writer}; revisto por {checker}.",
+  "This run is bad on purpose: it must fail a rule": "Esta execução é má de propósito: deve quebrar uma regra",
+  "The rule it must break, like: under 200 words": "A regra que deve quebrar, p. ex.: menos de 200 palavras",
+  "Say which rule it must break first.": "Diga primeiro que regra deve quebrar.",
+  "must fail": "deve falhar",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "A regra foi cumprida: um caso deve-falhar deve quebrá-la — reescreva a regra ou guarde um rascunho pior.",
+  "The review failed, but not on the rule it must break ({rule}).": "A revisão falhou, mas não na regra que deve quebrar ({rule})."
  },
  "examples": {
   "review": {
@@ -3781,6 +3787,14 @@
   "Couldn't read {path} ({err}).": "Não foi possível ler {path} ({err}).",
   "Reviewer": "Revisor",
   "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.": "Nenhum modelo de outro fabricante tem uma chave, por isso é o mesmo modelo que revê o rascunho. Adicione uma chave de outro serviço, ou indique um modelo na escolha «revisto por» do bloco de revisão.",
-  "Written by {writer}; checked by {checker}.": "Escrito por {writer}; revisto por {checker}."
+  "Written by {writer}; checked by {checker}.": "Escrito por {writer}; revisto por {checker}.",
+  "must fail": "deve falhar",
+  "The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.": "A regra foi cumprida: um caso deve-falhar deve quebrá-la — reescreva a regra ou guarde um rascunho pior.",
+  "The review failed, but not on the rule it must break ({rule}).": "A revisão falhou, mas não na regra que deve quebrar ({rule}).",
+  "--times needs a number of runs, like --test --times 3.": "--times precisa de um número de execuções, p. ex. --test --times 3.",
+  "Flaky rules": "Regras instáveis",
+  "Flaky rules: these pass on some runs and fail on others — the ones to rewrite.": "Regras instáveis: estas passam em algumas execuções e falham noutras — são as que há que reescrever.",
+  "{met} of {n} runs met the rule.": "{met} de {n} execuções cumpriram a regra.",
+  "{p} of {n} runs passed.": "{p} de {n} execuções passaram."
  }
 }

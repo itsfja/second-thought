@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} ⱑⰸ {m} ⱂⱃⰻⰿⱑⱃⱁⰲⱏ",
 "Reviewer":"ⱂⱃⱁⰲⰵⱃⱔⱙⱋⰹⰻ",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"ⱀⰻ ⰵⰴⰻⱀⱏ ⰿⱁⰴⰵⰾ ⰻⱀⱁⰳⱁ ⱅⰲⱁⱃⱌⰰ ⱀⰵ ⰻⰿⰰⱅⱐ ⰽⰾⱓⱍⰰ ⱀⰰ ⱄⰵⰻ ⱄⱅⱃⰰⱀⰻⱌⱑ, ⱅⱑⰿⰶⰵ ⱅⰰ ⰶⰵ ⰿⱁⰴⰵⰾ ⰻⱄⱂⱏⰹⱅⱆⰵⱅⱏ ⱀⰰⱍⰵⱃⱅⰰⱀⰹⰵ.",
-"Written by {writer}; checked by {checker}.":"ⱀⰰⱂⰻⱄⰰⱀⱁ {writer}; ⰻⱄⱂⱏⰹⱅⰰⱀⱁ {checker}."
+"Written by {writer}; checked by {checker}.":"ⱀⰰⱂⰻⱄⰰⱀⱁ {writer}; ⰻⱄⱂⱏⰹⱅⰰⱀⱁ {checker}.",
+"This run is bad on purpose: it must fail a rule":"ⱄⰹ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ ⰸⱏⰾⱏ ⱀⰰⱃⱁⱍⰻⱅⱉ: ⰴⱁⰾⰶⰵⱀⱏ ⱉⰴⰻⱀⱏ ⰸⰰⰽⱁⱀⱏ ⱂⱃⱑⱄⱅⱘⱂⰻⱅⰻ",
+"The rule it must break, like: under 200 words":"ⰸⰰⰽⱁⱀⱏ, ⰵⰶⰵ ⰴⱁⰾⰶⰵⱀⱏ ⱂⱃⱑⱄⱅⱘⱂⰻⱅⰻ, ⱑⰽⱁ: ⰿⰵⱀⱎⰻ ⰴⰲⱁⱓⱄⱘⱅⱏ ⱄⰾⱁⰲⰵⱄⱏ",
+"Say which rule it must break first.":"ⱂⱃⱐⰲⱑⰵ ⱃⱌⰻ, ⰽⱏⰹⰻ ⰸⰰⰽⱁⱀⱏ ⰴⱁⰾⰶⰵⱀⱏ ⱂⱃⱑⱄⱅⱘⱂⰻⱅⰻ.",
+"must fail":"ⰴⱁⰾⰶⰵⱀⱏ ⰸⱏⰾⱏ ⰱⱏⰹⱅⰻ",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ⰸⰰⰽⱁⱀⱏ ⰻⱄⱂⱁⰾⱀⰵⱀⱏ: must-fail ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ ⰴⱁⰾⰶⰵⱀⱏ ⰵⰳⱁ ⱂⱃⱑⱄⱅⱘⱂⰻⱅⰻ — ⱂⱃⱑⱂⰻⱎⰻ ⰸⰰⰽⱁⱀⱏ, ⰰⰾⰱⱁ ⰸⰰⱈⱃⰰⱀⰻ ⱈⱆⰶⱐⱎⰹⰻ ⱍⰵⱃⱀⱁⰲⰻⰽⱏ.",
+"The review failed, but not on the rule it must break ({rule}).":"ⰻⱄⱂⱏⰹⱅⰰⱀⰹⰵ ⰸⱏⰾⱏ ⰱⱏⰹⱄⱅⱏ, ⱀⱏ ⱀⰵ ⰲⱏ ⰸⰰⰽⱁⱀⱑ, ⰵⰶⰵ ⰴⱁⰾⰶⰵⱀⱏ ⱂⱃⱑⱄⱅⱘⱂⰻⱅⰻ ({rule})."
 },
 "examples":{
 "review":{"title":"Ⱉⰱⱈⱁⰶⰴⰵⱀⰹⰵ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ","desc":"Claude ⱂⰻⱎⰵⱅⱏ ⱉ autolyse, ⰻⱄⱂⱏⰹⱅⱆⰵⱅⱏ ⱂⱁ ⱂⱃⰰⰲⰻⰾⰰⰿⱏ ⱅⰲⱁⰻⰿⱏ, ⰻ ⰻⱄⱂⱃⰰⰲⰾⱑⰵⱅⱏ ⱀⰵⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⰲⱎⰵⰵ, ⰴⱁ 3 ⰽⱃⰰⱅⱏ.","tip":"Ⱂⱃⰵⰿⱑⱀⰻ ⰴⱑⰾⱁ ⰲⱏ ⱄⰻⱀⰵⰿⱏ ⰸⰲⱑⱀⱑ ⰻ ⱂⱃⰰⰲⰻⰾⰰ ⰲⱏ ⰱⰰⰳⱃⱔⱀⱁⰿⱏ."},
@@ -2406,7 +2412,15 @@
 "Couldn't read {path} ({err}).":"Не удалось прочитать {path} ({err}).",
 "Reviewer":"проверѧѭщїй",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"ни єдинъ модел иного творца не имать ключа, тѣмже та же модел испытуетъ.",
-"Written by {writer}; checked by {checker}.":"написано {writer}; испытано {checker}."
+"Written by {writer}; checked by {checker}.":"написано {writer}; испытано {checker}.",
+"must fail":"должєнъ зълъ быти",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"законъ исполнєнъ: must-fail испытанїє долженъ ѥго прѣстѫпити — прѣпиши законъ, албо захрани хꙋжьшїи черновикъ.",
+"The review failed, but not on the rule it must break ({rule}).":"испытанїє зълъ быстъ, нъ не въ законѣ, ѥже долженъ прѣстѫпити ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times трєбы сѧ число испытанїи, ꙗко --test --times 3.",
+"Flaky rules":"колѣбливы закони",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"колѣбливы закони: ꙗже въ ѡднѣхъ испытанїѧхъ исполнѧѭтъсѧ, въ дрꙋгыхъ зълы бываѭтъ — ꙗже подобаѥтъ прѣписати.",
+"{met} of {n} runs met the rule.":"{met} ꙁъ {n} испытанїи законъ исполниша.",
+"{p} of {n} runs passed.":"{p} ꙁъ {n} испытанїи прѣидоша."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Ⱂⱃⰻⰾⱁⰶⰻ ⱅⱁⰾⰽⱏ",

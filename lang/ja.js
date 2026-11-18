@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{m} 件中 {n} 件",
 "Reviewer":"レビュアー",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"このページには別のメーカーのモデルのキーがないため、同じモデルが下書きをチェックします。「Add another key」でキーを追加するか、「チェック担当」で名前のあるモデルを選んでください。",
-"Written by {writer}; checked by {checker}.":"執筆: {writer}、チェック: {checker}。"
+"Written by {writer}; checked by {checker}.":"執筆: {writer}、チェック: {checker}。",
+"This run is bad on purpose: it must fail a rule":"この実行はわざと悪いものです：ルールに違反しなければなりません",
+"The rule it must break, like: under 200 words":"違反しなければならないルール、例：200語以下",
+"Say which rule it must break first.":"まず、どのルールに違反するかを言ってください。",
+"must fail":"違反必須",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ルールは満たされました：違反必須のケースはそれに違反しなければなりません — ルールを書き直すか、もっと悪い下書きを保存してください。",
+"The review failed, but not on the rule it must break ({rule}).":"レビューは失敗しましたが、違反しなければならないルール（{rule}）ではありません。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
@@ -2406,6 +2412,14 @@
 "Couldn't read {path} ({err}).":"{path} を読めませんでした ({err})。",
 "Reviewer":"レビュアー",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"別のメーカーのモデルのキーがないため、同じモデルが下書きをチェックします。別のサービスのキーを追加するか、レビューブロックの「チェック担当」でモデルを指定してください。",
-"Written by {writer}; checked by {checker}.":"執筆: {writer}、チェック: {checker}。"
+"Written by {writer}; checked by {checker}.":"執筆: {writer}、チェック: {checker}。",
+"must fail":"違反必須",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"ルールは満たされました：違反必須のケースはそれに違反しなければなりません — ルールを書き直すか、もっと悪い下書きを保存してください。",
+"The review failed, but not on the rule it must break ({rule}).":"レビューは失敗しましたが、違反しなければならないルール（{rule}）ではありません。",
+"--times needs a number of runs, like --test --times 3.":"--times には実行回数が必要です。例：--test --times 3。",
+"Flaky rules":"不安定なルール",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"不安定なルール：実行によって通り、失敗するもの — 書き直すべきはそれらです。",
+"{met} of {n} runs met the rule.":"{n} 回中 {met} 回がルールを満たしました。",
+"{p} of {n} runs passed.":"{n} 回中 {p} 回が合格しました。"
 }
 };

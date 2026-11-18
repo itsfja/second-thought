@@ -1227,7 +1227,13 @@
 "{n} of {m} examples":"{n} van {m} voorbeelden",
 "Reviewer":"Reviewer",
 "No other maker's model has a key on this page, so the same model checks the draft. Add a key with “Add another key”, or choose a named model in 'checked by'.":"Geen model van een andere maker heeft een sleutel op deze pagina, dus hetzelfde model beoordeelt het concept. Voeg een sleutel toe via «Add another key», of kies een model met naam bij «beoordeeld door».",
-"Written by {writer}; checked by {checker}.":"Geschreven door {writer}; beoordeeld door {checker}."
+"Written by {writer}; checked by {checker}.":"Geschreven door {writer}; beoordeeld door {checker}.",
+"This run is bad on purpose: it must fail a rule":"Deze run is expres slecht: hij moet een regel overtreden",
+"The rule it must break, like: under 200 words":"De regel die hij moet overtreden, bijv.: minder dan 200 woorden",
+"Say which rule it must break first.":"Zeg eerst welke regel hij moet overtreden.",
+"must fail":"moet falen",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"De regel is gehaald: een moet-falen-geval moet hem overtreden — herschrijf de regel of bewaar een slechter concept.",
+"The review failed, but not on the rule it must break ({rule}).":"De review is mislukt, maar niet op de regel die hij moet overtreden ({rule})."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2406,6 +2412,14 @@
 "Couldn't read {path} ({err}).":"Kon {path} niet lezen ({err}).",
 "Reviewer":"Reviewer",
 "No other maker's model has a key, so the same model checks the draft. Add a key for another service, or name a model in the review block's 'checked by' choice.":"Geen model van een andere maker heeft een sleutel, dus hetzelfde model beoordeelt het concept. Voeg een sleutel voor een andere dienst toe, of noem een model bij «beoordeeld door» in het reviewblok.",
-"Written by {writer}; checked by {checker}.":"Geschreven door {writer}; beoordeeld door {checker}."
+"Written by {writer}; checked by {checker}.":"Geschreven door {writer}; beoordeeld door {checker}.",
+"must fail":"moet falen",
+"The rule was met: a must-fail case must break it, so rewrite the rule or save a worse draft.":"De regel is gehaald: een moet-falen-geval moet hem overtreden — herschrijf de regel of bewaar een slechter concept.",
+"The review failed, but not on the rule it must break ({rule}).":"De review is mislukt, maar niet op de regel die hij moet overtreden ({rule}).",
+"--times needs a number of runs, like --test --times 3.":"--times heeft een aantal runs nodig, bijv. --test --times 3.",
+"Flaky rules":"Wankelregels",
+"Flaky rules: these pass on some runs and fail on others — the ones to rewrite.":"Wankelregels: deze slagen in sommige runs en falen in andere — dat zijn de regels om te herschrijven.",
+"{met} of {n} runs met the rule.":"{met} van de {n} runs haalde de regel.",
+"{p} of {n} runs passed.":"{p} van de {n} runs is geslaagd."
 }
 };
