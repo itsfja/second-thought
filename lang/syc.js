@@ -2460,7 +2460,19 @@
 "{used} of {n} {window}":"{used} of {n} {window}",
 "messages":"messeges",
 "home actions":"home actyons",
-"money moves":"money mooves"
+"money moves":"money mooves",
+"No runs, receipts or spending recorded for {prog} yet.":"No runs, resetes or spendyng recorded for {prog} yet.",
+"Report for {prog}, last {days} days:":"Report for {prog}, laste {days} dayes:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Runs: {n} savid logs — {first} passed rewewe first time, {revised} after revising, {best} as a best effort, {failed} with an errour, {plain} without a rewewe.",
+"Refused, in those logs: {n}.":"Refused, in thoos logs: {n}.",
+"Rules that failed at least once in those logs: {list}":"Rules þat failed at lest ones in thoos logs: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: met {met} ov {n} roundes",
+"{k} of {r} rules were met in every round.":"{k} of {r} rules were met in every rounde.",
+"No rules were checked in those logs.":"No rules were checked in thoos logs.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Doon actions, of the resetes of the laste {days} dayes: {n}.",
+"Cost, counted on this computer at list prices:":"Cost, counted on this computour at liste prices:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",

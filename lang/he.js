@@ -2460,6 +2460,18 @@
 "{used} of {n} {window}":"{used} מתוך {n} {window}",
 "messages":"הודעות",
 "home actions":"פעולות בית",
-"money moves":"תנועות כסף"
+"money moves":"תנועות כסף",
+"No runs, receipts or spending recorded for {prog} yet.":"עדיין לא נרשמו runs, קבלות או הוצאות עבור {prog}.",
+"Report for {prog}, last {days} days:":"דוח עבור {prog}, {days} הימים האחרונים:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"runs: {n} לוגים שמורים — {first} עברו ביקורת בהצלחה מיד, {revised} אחרי תיקון, {best} כמאמץ מיטב, {failed} עם שגיאה, {plain} בלי ביקורת.",
+"Refused, in those logs: {n}.":"סורבו, בלוגים ההם: {n}.",
+"Rules that failed at least once in those logs: {list}":"כללים falhou at least once in those logs: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: עבר ב-{met} מתוך {n} סיבובים",
+"{k} of {r} rules were met in every round.":"{k} מתוך {r} כללים עברו בכל סיבוב.",
+"No rules were checked in those logs.":"לא נבדקו כללים בלוגים ההם.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"אין לוגים שמורים ב-{days} הימים האחרונים (save_log = yes שומר אחד לכל run ב-logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"פעולות שבוצעו, מהקבלות של {days} הימים האחרונים: {n}.",
+"Cost, counted on this computer at list prices:":"עלות counted on this computer at list prices:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} עברו, {failed} עם שגיאה), {actions} פעולות בוצעו, {refused} סורבו, {cost} spent."
 }
 };

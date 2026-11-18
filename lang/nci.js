@@ -2458,7 +2458,19 @@
 "{used} of {n} {window}":"{used} īpan {n} {window}",
 "messages":"tlahcuilōlli",
 "home actions":"calli tlamantli",
-"money moves":"tomin mōlīnia"
+"money moves":"tomin mōlīnia",
+"No runs, receipts or spending recorded for {prog} yet.":"Ayamo ōmōchīuh in {prog}: ahmo tlamantli, tlamachtiliztli no ic ōmotitlan.",
+"Report for {prog}, last {days} days:":"Tlamantli {prog}, in {days} tōnalli:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Tlahcuilōlli: {n} tlamantli ōmocīuhque — {first} ōquicnōchpan īpan achto, {revised} ōmopatlac, {best} tlamachtiliztli, {failed} ōmotlahuelī, {plain} ahmo ōmocnōchpan.",
+"Refused, in those logs: {n}.":"Ōmotlāzque inīn tlamantli: {n}.",
+"Rules that failed at least once in those logs: {list}":"Tlahcuilōlli ōmotlahuelīzque achto inīn tlamantli: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: ōmochīuh {met} īpan {n} tlamantli",
+"{k} of {r} rules were met in every round.":"{k} īpan {r} tlahcuilōlli ōmochīuhque inīn tlamantli.",
+"No rules were checked in those logs.":"Ahmo tlahcuilōlli ōmocnōchpanque inīn tlamantli.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Ahmo tlamantli ōmocīuhque in {days} tōnalli (save_log = yes quitta cē īpan logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Ōmochīuhque tlamantli, in {days} tōnalli tlamachtiliztli: {n}.",
+"Cost, counted on this computer at list prices:":"Tomin, īpan inīn tepos īpan tlahcuilōlli:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} tlahcuilōlli ({ok} ōmochīuhque, {failed} ōmotlahuelī), {actions} ōmochīuhque, {refused} ōmotlāzque, {cost} ōmotitlan."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

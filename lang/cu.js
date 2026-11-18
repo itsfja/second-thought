@@ -2458,7 +2458,19 @@
 "{used} of {n} {window}":"{used} ис {n} {window}",
 "messages":"вѣсти",
 "home actions":"дѣиствїа домоу",
-"money moves":"движенїа пѣнѧзь"
+"money moves":"движенїа пѣнѧзь",
+"No runs, receipts or spending recorded for {prog} yet.":"Записей о запусках, квитанциях или расходах для {prog} пока нет.",
+"Report for {prog}, last {days} days:":"Отчёт для {prog}, за последние {days} дней:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Запуски: {n} сохранённых журналов — {first} прошли проверку с первого раза, {revised} после правки, {best} как лучшее усилие, {failed} с ошибкой, {plain} без проверки.",
+"Refused, in those logs: {n}.":"Отклонено в этих журналах: {n}.",
+"Rules that failed at least once in those logs: {list}":"Правила, проваленные хотя бы раз в этих журналах: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: пройдено {met} из {n} раундов",
+"{k} of {r} rules were met in every round.":"{k} из {r} правил пройдены в каждом раунде.",
+"No rules were checked in those logs.":"В этих журналах правила не проверялись.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Нет сохранённых журналов за последние {days} дней (save_log = yes сохраняет один на запуск в logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Выполнено действий по квитанциям за последние {days} дней: {n}.",
+"Cost, counted on this computer at list prices:":"Расходы на этом компьютере по ценам каталога:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: запусков {runs} ({ok} пройдено, {failed} с ошибкой), действий выполнено {actions}, отклонено {refused}, потрачено {cost}."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Приложи толкъ",

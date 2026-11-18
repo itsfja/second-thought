@@ -2460,7 +2460,19 @@
 "{used} of {n} {window}":"{used} of {n} {window}",
 "messages":"ærend",
 "home actions":"hús gewyrhta",
-"money moves":"peninga stirunga"
+"money moves":"peninga stirunga",
+"No runs, receipts or spending recorded for {prog} yet.":"Nænige feorennunga, þǣre bócra oþþe maniunge þe {prog} is on gemyndg.",
+"Report for {prog}, last {days} days:":"Dǣl {prog}, þǣm dagum {days}:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"Rynn: {n} gehealdenra bócra — {first} þafode prófunge on fyrst, {revised} æfter andvette, {best} swa besta dǣd, {failed} mid wrixle, {plain} butan prófunge.",
+"Refused, in those logs: {n}.":"Forwyrnde on þissum bócum: {n}.",
+"Rules that failed at least once in those logs: {list}":"Lārbec þe feollon hwæt on þissum bócum: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: gefullod {met} of {n} rimum",
+"{k} of {r} rules were met in every round.":"{k} of {r} lārbeca gefullod on ǣlcum rime.",
+"No rules were checked in those logs.":"Nǣnige lārbec wæron prófode on þissum bócum.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Nænige gehealdenra bócra on þǣm dagum {days} (save_log = yes healt ān on ǣlcere rynne on logs/).",
+"Actions done, from the receipts of the last {days} days: {n}.":"Wyrcunga gedon, of þǣm bócum þǣre daga {days}: {n}.",
+"Cost, counted on this computer at list prices:":"Cost on þissum tǣle æt cennunge:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rynn ({ok} þafodon, {failed} mid wrixle), {actions} wyrcunga gedon, {refused} forwyrned, {cost} maniunge."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

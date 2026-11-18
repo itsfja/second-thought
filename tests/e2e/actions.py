@@ -179,6 +179,13 @@ async def actions_tests():
             alfiles = await pg.evaluate("window.__exportFiles()")
             alcode = next(f["text"] for f in alfiles if f["name"] == "allowance.py")
             check("telegram_send" in alcode, "the allowance program exports for the terminal runs")
+            # A program with one Telegram send, for the --report/--status runs below (#435).
+            await load_state(pg, program(script(blk("rb_tg_send", None, {"TEXT": tx("report msg")}))["blocks"]["blocks"][0]))
+            await pg.click("#io-export")
+            await pg.fill("#io-name", "reporter")
+            rfiles = await pg.evaluate("window.__exportFiles()")
+            rcode = next(f["text"] for f in rfiles if f["name"] == "reporter.py")
+            check("telegram_send" in rcode, "the reporter program exports for the terminal runs")
             await ctx.close()
         await browser.close()
 
@@ -257,6 +264,22 @@ async def actions_tests():
         rc, out, err = drive([sys.executable, "-u", "allowance.py"], lenv, tmp)
         check(rc == 0 and len(sent()) == 3 and out.count("Allowance reached") == 1 and "Added to result" in out,
               f"the next run on the same computer sends nothing and is stopped at once (exit {rc}; tg={len(sent())}; {(err or out)[-300:]!r})")
+    # --report and --status (#435): the weekly account read from the saved log, the receipt and the spending record.
+    with tempfile.TemporaryDirectory() as tmp:
+        (pathlib.Path(tmp) / "reporter.py").write_text(rcode, encoding="utf-8")
+        renv = dict(no_keys, PYTHONIOENCODING="utf-8", RB_LANGUAGE="en", RB_APPROVE="no", RB_SAVE_LOG="yes",
+                    TELEGRAM_BOT_TOKEN=fake_services.TG_TOKEN, TELEGRAM_CHAT_ID=str(fake_services.TG_CHAT), TELEGRAM_API_URL=base + "/tg")
+        rc, out, err = drive([sys.executable, "-u", "reporter.py"], renv, tmp)
+        check(rc == 0 and "Log saved to" in out, f"a run with save_log = yes saves a log (exit {rc}; {(err or out)[-200:]!r})")
+        rc, out, err = drive([sys.executable, "-u", "reporter.py", "--report"], renv, tmp)
+        check(rc == 0 and "Report for reporter, last 7 days:" in out and "Runs: 1 saved logs" in out
+              and "1 without a review" in out and "Actions done, from the receipts of the last 7 days: 1." in out
+              and "The chain is intact" in out,
+              f"--report reads the log, the receipt and the spending record (exit {rc}): {(err or out)[-400:]!r})")
+        rc, out, err = drive([sys.executable, "-u", "reporter.py", "--status"], renv, tmp)
+        check(rc == 0 and len(out.strip().splitlines()) == 1 and out.startswith("reporter: 1 runs")
+              and "1 actions done" in out and "0 refused" in out,
+              f"--status says the same in one line (exit {rc}): {out!r})")
 
 
 async def paste_gallery(pg, name):

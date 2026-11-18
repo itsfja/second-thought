@@ -9643,6 +9643,160 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         print(tr("The chain is intact: every line carries the fingerprint of the one before."))
         return 0
 
+    # ----- --report and --status (#435) -----
+
+    REPORT_DAYS = 7  # the weekly account: saved logs and receipts from the last week
+
+    def _receipts_data(self, days):
+        """(receipts from the last `days` days, whether the chain is broken), or (None, False) with no receipts file:
+        the shared reader behind --report/--status (#431, #435)."""
+        path = self._receipts_path()
+        if not path or not os.path.isfile(path):
+            return None, False
+        try:
+            with open(path, "rb") as f:
+                raw_lines = [l for l in f.read().split(b"\n") if l.strip()]
+        except OSError:
+            return None, False
+        broken = False
+        prev = hashlib.sha256(b"").hexdigest()
+        recs = []
+        for raw in raw_lines:
+            try:
+                rec = json.loads(raw.decode("utf-8"))
+            except ValueError:
+                broken = True
+                continue
+            if not isinstance(rec, dict) or rec.get("prev") != prev:
+                broken = True
+            prev = hashlib.sha256(raw).hexdigest()
+            if isinstance(rec, dict):
+                recs.append(rec)
+        cutoff = time.time() - days * 86400
+        return [r for r in recs if isinstance(r.get("t"), (int, float)) and r["t"] >= cutoff], broken
+
+    def _log_paths(self, days):
+        """The saved run logs from the last `days` days, oldest first: logs/<program>-<date>-<time>.md."""
+        prog = os.path.abspath(sys.argv[0]) if sys.argv and sys.argv[0] else ""
+        if not prog or not os.path.isfile(prog):
+            return []
+        folder = os.path.join(os.path.dirname(prog), LOG_DIR)
+        cutoff = (datetime.datetime.now() - datetime.timedelta(days=days)).strftime("%Y%m%d")
+        try:
+            names = [n for n in os.listdir(folder) if n.endswith(".md") and len(n.split("-")) >= 2 and n.split("-")[-2] >= cutoff]
+        except OSError:
+            return []
+        return [os.path.join(folder, n) for n in sorted(names)]
+
+    def _parse_log(self, text):
+        """One saved log's facts for --report (#435): whether it stopped with an error, its review outcomes in order,
+        how many actions it refused, and its rules-by-round tables as {rule: [met, rounds]}."""
+        sections = re.findall(r"^## \d+\. (.+?) \[([^\]]+)\]", text, re.M)
+        failed = any(l.startswith("- Stopped with an error:") for l in text.splitlines())
+        reviews = [st for label, st in sections if label == tr("Review") or re.fullmatch(r"Review, round \d+", label)]
+        refused = sum(1 for _, st in sections if st == tr("refused"))
+        rules = {}
+        lines = text.splitlines()
+        i = 0
+        while i < len(lines):
+            if re.match(r"^## \d+\. " + re.escape(tr("Rules by round")) + r" \[table\]$", lines[i]):
+                i += 1
+                while i < len(lines) and lines[i] in ("", "~~~~"):  # the log puts the table behind a ~~~~ fence
+                    i += 1
+                while i < len(lines) and lines[i].startswith("|"):
+                    cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+                    if len(cells) > 1 and not all(set(c) <= {"-", ":"} for c in cells) and cells[0] != tr("Rule"):
+                        met = sum(1 for c in cells[1:] if c == tr("met"))
+                        agg = rules.setdefault(cells[0], [0, 0])
+                        agg[0] += met
+                        agg[1] += len(cells) - 1
+                    i += 1
+                continue
+            i += 1
+        return {"failed": failed, "reviews": reviews, "refused": refused, "rules": rules}
+
+    def _report_data(self, days):
+        """Everything --report and --status say, from the saved logs, the receipts and the spending record (#435):
+        {runs, first, revised, best, failed, plain, refused, rules, recs, broken, spent}."""
+        runs = []
+        for path in self._log_paths(days):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    runs.append(self._parse_log(f.read()))
+            except OSError:
+                pass
+        recs, broken = self._receipts_data(days)
+        spent = sum(v for entry in self._ledger_read()["keys"].values() for v in (entry.get("hours") or {}).values())
+        first = revised = best = failed = plain = refused = 0
+        rules = {}
+        for run in runs:
+            failed += run["failed"]
+            refused += run["refused"]
+            rev = run["reviews"]
+            if not rev or (tr("approved") not in rev and tr("failed") not in rev):
+                plain += 1
+            elif rev[0] == tr("approved"):
+                first += 1
+            elif tr("approved") in rev:
+                revised += 1
+            else:
+                best += 1
+            for rule, (met, n) in run["rules"].items():
+                agg = rules.setdefault(rule, [0, 0])
+                agg[0] += met
+                agg[1] += n
+        return {"runs": len(runs), "first": first, "revised": revised, "best": best, "failed": failed, "plain": plain,
+                "refused": refused, "rules": rules, "recs": recs, "broken": broken, "spent": spent}
+
+    def show_report(self, days=REPORT_DAYS):
+        """--report: the weekly account (#435) — runs and how they went, actions done and refused, cost, and rules by
+        round — read from the saved logs (save_log = yes), the receipts (#431) and the spending record. Gives the exit
+        code: 1 when the receipts' chain is broken."""
+        prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
+        d = self._report_data(days)
+        if not d["runs"] and d["recs"] is None and not d["spent"]:
+            print(tr("No runs, receipts or spending recorded for {prog} yet.", prog=prog))
+            return 0
+        print(tr("Report for {prog}, last {days} days:", prog=prog, days=days))
+        if d["runs"]:
+            print(tr("Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.",
+                     n=d["runs"], first=d["first"], revised=d["revised"], best=d["best"], failed=d["failed"], plain=d["plain"]))
+            print(tr("Refused, in those logs: {n}.", n=d["refused"]))
+            if d["rules"]:
+                always = sum(1 for met, n in d["rules"].values() if met == n)
+                parts = [tr("{rule}: met {met} of {n} rounds", rule=rule, met=met, n=n)
+                         for rule, (met, n) in sorted(d["rules"].items()) if met < n]
+                if parts:
+                    print(tr("Rules that failed at least once in those logs: {list}", list=", ".join(parts)))
+                print(tr("{k} of {r} rules were met in every round.", k=always, r=len(d["rules"])))
+            else:
+                print(tr("No rules were checked in those logs."))
+        else:
+            print(tr("No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).", days=days))
+        if d["recs"] is None:
+            print(tr("No receipts yet: nothing this program has done to the world is recorded."))
+        else:
+            print(tr("Actions done, from the receipts of the last {days} days: {n}.", days=days, n=len(d["recs"])))
+            chain = (tr("The chain is broken: a line is missing or was edited.") if d["broken"]
+                     else tr("The chain is intact: every line carries the fingerprint of the one before."))
+            print(chain)
+        print(tr("Cost, counted on this computer at list prices:"))
+        for line in usage_text().splitlines():
+            print(line)
+        return 1 if d["broken"] else 0
+
+    def show_status(self, days=REPORT_DAYS):
+        """--status: the same account in one line (#435), for a home server with a dozen programs. Gives the exit code."""
+        prog = os.path.splitext(os.path.basename(sys.argv[0] or "program"))[0] or "program"
+        d = self._report_data(days)
+        if not d["runs"] and d["recs"] is None and not d["spent"]:
+            print(tr("No runs, receipts or spending recorded for {prog} yet.", prog=prog))
+            return 0
+        print(tr("{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.",
+                 prog=prog, runs=d["runs"], ok=d["first"] + d["revised"], failed=d["failed"],
+                 actions=len(d["recs"] or []), refused=d["refused"], cost=dollars(d["spent"])))
+        return 1 if d["broken"] else 0
+
     async def _journal_start(self):
         """At the start of a run: offer to pick up a run that stopped, then start a fresh journal."""
         self.journal, self.replay, self.replay_pos, self._replay_noted = None, None, 0, False
@@ -11522,6 +11676,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             sys.exit(self.update_runtime(can))
         if "--receipts" in sys.argv:
             sys.exit(self.show_receipts())
+        if "--report" in sys.argv:
+            sys.exit(self.show_report())
+        if "--status" in sys.argv:
+            sys.exit(self.show_status())
         self.receivers = {k.lower(): v for k, v in receivers.items()}
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))

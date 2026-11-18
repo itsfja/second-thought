@@ -15,6 +15,9 @@ telegram-messages.json
 .second-thought-rates.json
 *.json.lock
 .*.approved
+.*.receipts.jsonl
+.*.rules.json
+.*.resume.jsonl
 .DS_Store
 second-thought.ini
 # The report from tools/smoke_test.py gallery

@@ -2459,6 +2459,18 @@
 "{used} of {n} {window}":"{window} {n} 项中的 {used} 项",
 "messages":"消息",
 "home actions":"家庭操作",
-"money moves":"资金变动"
+"money moves":"资金变动",
+"No runs, receipts or spending recorded for {prog} yet.":"还没有为 {prog} 记录任何运行、回执或支出。",
+"Report for {prog}, last {days} days:":"{prog} 的报告,最近 {days} 天:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"运行: 已保存日志 {n} 份 — 首次审查通过 {first} 次,修改后通过 {revised} 次,尽力而为 {best} 次,出错停止 {failed} 次,无审查 {plain} 次。",
+"Refused, in those logs: {n}.":"在这些日志中被拒绝的: {n} 次。",
+"Rules that failed at least once in those logs: {list}":"在这些日志中至少失败过一次的规则: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: {n} 轮中通过 {met} 轮",
+"{k} of {r} rules were met in every round.":"{r} 条规则中有 {k} 条在每一轮都通过。",
+"No rules were checked in those logs.":"这些日志中没有检查任何规则。",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"最近 {days} 天没有已保存的日志 (save_log = yes 会在 logs/ 中为每次运行保存一份)。",
+"Actions done, from the receipts of the last {days} days: {n}.":"最近 {days} 天的回执显示已完成的操作: {n} 次。",
+"Cost, counted on this computer at list prices:":"成本 (按本机定价计):",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: 运行 {runs} 次 (通过 {ok} 次,出错 {failed} 次),完成操作 {actions} 次,拒绝 {refused} 次,支出 {cost}。"
 }
 };

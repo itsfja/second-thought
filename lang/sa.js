@@ -2460,7 +2460,19 @@
 "{used} of {n} {window}":"{used} {n} {window}-madhye",
 "messages":"सं्देशाः्",
 "home actions":"gṛha-kāryāṇi",
-"money moves":"धनस्य चलनानि"
+"money moves":"धनस्य चलनानि",
+"No runs, receipts or spending recorded for {prog} yet.":"न तावत् {prog}-āyaḥ कश्चिद् अभिसं्स्कारः्, प्राप्तयः् वा व्ययः् वा.",
+"Report for {prog}, last {days} days:":"{prog}-viṣayā प्रतिव्ṛत्तं्, {days} दिनं् यावत्:",
+"Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.":"अभ्यासाः्: {n} सं्रक्षिताः् पटयः् — {first} प्रथमेनइव परीक्षया जयाः्, {revised} परिशोधने, {best} यथाशक्ति, {failed} दोषेण, {plain} परीक्षया रहिते",
+"Refused, in those logs: {n}.":"प्रत्याख्याताः्, तेषु पटयेषु: {n}.",
+"Rules that failed at least once in those logs: {list}":"नियमाः् येषु तेषु पटयेषु एकवारं् अपि हीनाः्: {list}",
+"{rule}: met {met} of {n} rounds":"{rule}: {n} आवर्तनेषु {met} आवर्ताः् जयाः्",
+"{k} of {r} rules were met in every round.":"{r} नियमानाम् {k} सर्वेष्व् आवर्तनेषु जयाः्.",
+"No rules were checked in those logs.":"तेषु पटयेषु को 'पि नियमः् न परीक्षितः्.",
+"No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"न कश्चित् सं्रक्षितः् पटिः् {days} दिनानाम् (सवे_लोग् = येस् prati-abhyāsaṃ एकं् लोग्स्/ इति सं्रक्षति).",
+"Actions done, from the receipts of the last {days} days: {n}.":"क्ṛतानि कर्माणि, {days} दिनानां् प्राप्तयः्: {n}.",
+"Cost, counted on this computer at list prices:":"व्ययः्, अस्मिन् यन्त्रे प्रतिव्ṛत्तः्:",
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} अभ्यासाः् ({ok} जयाः्, {failed} दोषेण), {actions} कर्माणि क्ṛतानि, {refused} प्रत्याख्यातानि, {cost} व्ययः् क्ṛतः्."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

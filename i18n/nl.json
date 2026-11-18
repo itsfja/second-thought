@@ -3835,6 +3835,18 @@
   "{used} of {n} {window}": "{used} van {n} {window}",
   "messages": "berichten",
   "home actions": "huisacties",
-  "money moves": "geldbewegingen"
+  "money moves": "geldbewegingen",
+  "No runs, receipts or spending recorded for {prog} yet.": "Nog geen runs, bonnen of uitgaven vastgelegd voor {prog}.",
+  "Report for {prog}, last {days} days:": "Rapport van {prog}, laatste {days} dagen:",
+  "Runs: {n} saved logs — {first} passed review first time, {revised} after revising, {best} as a best effort, {failed} with an error, {plain} without a review.": "Runs: {n} opgeslagen logs — {first} slaagde de eerste keer, {revised} na herziening, {best} als best effort, {failed} met een fout, {plain} zonder review.",
+  "Refused, in those logs: {n}.": "Geweigerd, in die logs: {n}.",
+  "Rules that failed at least once in those logs: {list}": "Regels die in die logs minstens één keer niet lukten: {list}",
+  "{rule}: met {met} of {n} rounds": "{rule}: {met} van {n} rondes gehaald",
+  "{k} of {r} rules were met in every round.": "{k} van {r} regels werden in elke ronde gehaald.",
+  "No rules were checked in those logs.": "In die logs zijn geen regels gecontroleerd.",
+  "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "Geen opgeslagen logs in de laatste {days} dagen (save_log = yes bewaart er één per run in logs/).",
+  "Actions done, from the receipts of the last {days} days: {n}.": "Gedane acties, uit de bonnen van de laatste {days} dagen: {n}.",
+  "Cost, counted on this computer at list prices:": "Kosten, geteld op deze computer tegen lijstprijzen:",
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} geslaagd, {failed} met een fout), {actions} acties gedaan, {refused} geweigerd, {cost} uitgegeven."
  }
 }
