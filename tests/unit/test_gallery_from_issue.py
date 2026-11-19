@@ -23,7 +23,8 @@ def pack(program, version=1, name="x", envelope=False):
     payload = {"version": version, "name": name, "program": program}
     if envelope:
         payload = {"format": "reflection-blocks", **payload}
-    raw = zlib.compress(json.dumps(payload, separators=(",", ":")).encode(), 9, -15)
+    c = zlib.compressobj(9, zlib.DEFLATED, -15)  # deflate-raw; zlib.compress's wbits is 3.11+
+    raw = c.compress(json.dumps(payload, separators=(",", ":")).encode()) + c.flush()
     return base64.urlsafe_b64encode(raw).decode().rstrip("=")
 
 

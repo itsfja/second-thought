@@ -69,7 +69,8 @@ def unpack_link(link):
         fail("the Program link field has no #p= part: " + (link or "")[:120])
     try:
         raw = base64.urlsafe_b64decode(m.group(1) + "=" * (-len(m.group(1)) % 4))
-        data = json.loads(zlib.decompress(raw, -15).decode("utf-8"))
+        d = zlib.decompressobj(-15)  # deflate-raw, as the page packs it; decompressobj's wbits works on every Python
+        data = json.loads((d.decompress(raw) + d.flush()).decode("utf-8"))
     except Exception as e:
         fail(f"the #p= link doesn't unpack ({e}); it should be a link from the page's Share… form")
     if not isinstance(data, dict):
