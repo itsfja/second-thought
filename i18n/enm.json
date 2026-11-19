@@ -1982,7 +1982,14 @@
   "Add to the rules": "add to the rewles",
   "Just send back": "just send it bak",
   "New rule": "newe rewle",
-  "Why not? In one sentence, as a rule": "why nat? in oon sentence, as a rewle"
+  "Why not? In one sentence, as a rule": "why nat? in oon sentence, as a rewle",
+  "Copy link": "Copye linke",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "Linke copyed. Openynge it offreth this program; noþyng lysketh til Load is cliked.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "Copyen is nat alowed her, so þe linke is selectid below. Pression Ctrl+C (or Cmd+C).",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "This browser cannat pakke a linke (no CompressionStream); copy þe blok file instede.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "This linke bereth a program: “{name}” ({n} blokkes).{can} It lysketh oonly if þou chesest Load.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Þat linke is broken: it holdeth na program þis page kan rede. Noþyng was loded.",
+  "This browser can't unpack links (no DecompressionStream).": "This browser cannat unpakke linkes (no DecompressionStream)."
  },
  "examples": {
   "review": {

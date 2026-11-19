@@ -1238,7 +1238,14 @@
 "Add to the rules":"Προσθήκη στους κανόνες",
 "Just send back":"Απλώς επιστροφή",
 "New rule":"Νέος κανόνας",
-"Why not? In one sentence, as a rule":"Γιατί όχι; Σε μία πρόταση, ως κανόνας"
+"Why not? In one sentence, as a rule":"Γιατί όχι; Σε μία πρόταση, ως κανόνας",
+"Copy link":"Αντιγραφή συνδέσμου",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Ο σύνδεσμος αντιγράφηκε. Κατά το άνοιγμα προσφέρεται αυτό το πρόγραμμα· τίποτα δεν φορτώνεται μέχρι να πατηθεί Φόρτωση.",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Η αντιγραφή δεν επιτρέπεται εδώ, οπότε ο σύνδεσμος είναι επιλεγμένος παρακάτω. Πατήστε Ctrl+C (ή Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Αυτός ο περιηγητής δεν μπορεί να πακετάρει σύνδεσμο (χωρίς CompressionStream)· αντιγράψτε το αρχείο μπλοκ.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Αυτός ο σύνδεσμος περιέχει ένα πρόγραμμα: «{name}» ({n} μπλοκ).{can} Φορτώνεται μόνο αν επιλέξετε Φόρτωση.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Αυτός ο σύνδεσμος είναι σπασμένος: δεν περιέχει πρόγραμμα που να διαβάζει αυτή η σελίδα. Δεν φορτώθηκε τίποτα.",
+"This browser can't unpack links (no DecompressionStream).":"Αυτός ο περιηγητής δεν μπορεί να αποσυμπιέσει συνδέσμους (χωρίς DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

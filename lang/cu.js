@@ -1237,7 +1237,14 @@
 "Add to the rules":"прибавити къ законамъ",
 "Just send back":"только отослати назадъ",
 "New rule":"новъ законъ",
-"Why not? In one sentence, as a rule":"почєму нѣтъ? ѡдинъмъ прєдложєніємъ, ꙗко законъ"
+"Why not? In one sentence, as a rule":"почєму нѣтъ? ѡдинъмъ прєдложєніємъ, ꙗко законъ",
+"Copy link":"Скопирꙋй ссылкꙋ",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Ссылка скопирована. При ѡтврытїи предлагается сїа программа; ничтоже не ꙁагрꙋжается, ꙗко кликнꙋт на «Загрꙋзить».",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Копїа здѣсь не позволена, ꙗко же ссылка избрана нижѣ. Нажми Ctrl+C (или Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Сей ꙁрителъ не можетъ паковать ссылкꙋ (нѣсть CompressionStream); копирꙋй файлъ блоковъ.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Сїе звѣно носитъ програмꙋ: «{name}» ({n} блокѡвъ).{can} Загрꙋжается токмо ꙗко избереши «Загрꙋзкꙋ».",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ссылка сїа разорена: не носитъ программы, юже сїа страница можетъ чести. Ничтоже не ꙁагрꙋжено.",
+"This browser can't unpack links (no DecompressionStream).":"Сей ꙁрителъ не можетъ распаковати звѣна (нѣсть DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},

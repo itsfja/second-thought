@@ -1238,7 +1238,14 @@
 "Add to the rules":"Aan de regels toevoegen",
 "Just send back":"Gewoon terugsturen",
 "New rule":"Nieuwe regel",
-"Why not? In one sentence, as a rule":"Waarom niet? In één zin, als regel"
+"Why not? In one sentence, as a rule":"Waarom niet? In één zin, als regel",
+"Copy link":"Koppeling kopiëren",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Koppeling gekopieerd. Bij openen wordt dit programma aangeboden; er laadt niets tot op Laden wordt geklikt.",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Kopiëren is hier niet toegestaan, dus de koppeling is hieronder geselecteerd. Druk op Ctrl+C (of Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Deze browser kan geen koppeling inpakken (geen CompressionStream); kopieer in plaats daarvan het blokbestand.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Deze koppeling bevat een programma: “{name}” ({n} blokken).{can} Het laadt pas als je Laden kiest.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Die koppeling is stuk: er zit geen programma in dat deze pagina kan lezen. Er is niets geladen.",
+"This browser can't unpack links (no DecompressionStream).":"Deze browser kan koppelingen niet uitpakken (geen DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

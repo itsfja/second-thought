@@ -1238,7 +1238,14 @@
 "Add to the rules":"添加到规则",
 "Just send back":"直接退回",
 "New rule":"新规则",
-"Why not? In one sentence, as a rule":"为什么不行？用一句话，作为一条规则"
+"Why not? In one sentence, as a rule":"为什么不行？用一句话，作为一条规则",
+"Copy link":"复制链接",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"链接已复制。打开时会提供此程序；点击“加载”前不会加载任何内容。",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"此处不允许复制，因此链接已在下方选中。请按 Ctrl+C(或 Cmd+C)。",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"此浏览器无法打包链接(没有 CompressionStream)；请改为复制块文件。",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"此链接包含一个程序:“{name}”({n} 个块)。{can} 只有选择“加载”时才会加载。",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"该链接已损坏:其中没有此页面可读取的程序。未加载任何内容。",
+"This browser can't unpack links (no DecompressionStream).":"此浏览器无法解压链接(没有 DecompressionStream)。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

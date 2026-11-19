@@ -1239,7 +1239,14 @@
 "Add to the rules":"הוסף לכללים",
 "Just send back":"פשוט החזר",
 "New rule":"כלל חדש",
-"Why not? In one sentence, as a rule":"למה לא? במשפט אחד, ככלל"
+"Why not? In one sentence, as a rule":"למה לא? במשפט אחד, ככלל",
+"Copy link":"העתק קישור",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"הקישור הועתק. בפתיחה מוצעת התוכנית; לא נטען כלום עד שלוחצים 'טען'.",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"אי אפשר להעתיק כאן, ולכן הקישור שלמטה מסומן. לחצו Ctrl+C (או Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"הדפדפן הזה לא יכול לדחוס קישור (אין CompressionStream); העתק את קובץ הבלוקים.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"הקישור הזה נושא תוכנית: «{name}» ({n} בלוקים).{can} היא נטענת רק אם תבחר 'טען'.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"הקישור הזה שבור: אין בו תוכנית שהדף הזה יכול לקרוא. לא נטען כלום.",
+"This browser can't unpack links (no DecompressionStream).":"הדפדפן הזה לא יכול לפרוס קישורים (אין DecompressionStream)."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

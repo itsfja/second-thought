@@ -291,6 +291,87 @@ async def page_tests():
             check(await pg.evaluate("p => document.querySelector(p).hidden", panel),
                   f"Esc closes {panel} (open drawer now: {await pg.evaluate('window.__openDrawer()')})")
 
+        # A program as a link (#436): Copy link packs the block file into #p=; opening the link in a fresh page offers
+        # the program with its capabilities and loads nothing until Load; a broken or too-new link says so, loads nothing.
+        print("Program links (#436)")
+        await pg.select_option("#example", "a_inbox")
+        await pg.click("#load")
+        n_src = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        src_json = await pg.evaluate("JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()), (k, v) => k === 'id' ? undefined : v)")
+        await pg.click("#io-export")  # opens the Import / export drawer
+        await pg.wait_for_timeout(250)
+        await pg.fill("#io-name", "link test")
+        await pg.context.grant_permissions(["clipboard-read", "clipboard-write"], origin="http://test")
+        await pg.click("#io-link")
+        await pg.wait_for_timeout(300)
+        link = await pg.evaluate("window.__programLink()")
+        clip = await pg.evaluate("navigator.clipboard ? navigator.clipboard.readText().catch(() => '') : ''")
+        msg = await pg.text_content("#io-export-msg")
+        ta = await pg.input_value("#io-export-text")
+        copied = clip if clip.startswith("http://test/#p=") else (ta if ta.startswith("http://test/#p=") else "")
+        check(link.startswith("http://test/#p=") and len(link) > len("http://test/#p=") and copied == link,
+              f"Copy link puts the #p= link on the clipboard ({len(link)} chars) — or selects it below if copying is refused ({msg!r})")
+        await pg.keyboard.press("Escape")  # close the drawer
+
+        # What a fresh page's canvas holds before any link is opened, to prove a link loads nothing by itself.
+        pgRef = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        await pgRef.route("**/*", route)
+        await pgRef.add_init_script(MOCK)
+        await pgRef.goto("http://test/")
+        await pgRef.wait_for_timeout(1500)
+        ref = await pgRef.evaluate("""() => ({ blocks: Blockly.getMainWorkspace().getAllBlocks(false).length,
+            json: JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()), (k, v) => k === 'id' ? undefined : v) })""")
+        await pgRef.close()
+
+        pg4 = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        pg4.on("pageerror", lambda e: errors.append(str(e)))
+        await pg4.route("**/*", route)
+        await pg4.add_init_script(MOCK)
+        await pg4.goto(link)
+        await pg4.wait_for_timeout(1800)
+        offer = await pg4.evaluate("""() => ({ ioOpen: !document.getElementById('io').hidden,
+            msg: document.getElementById('io-import-msg').textContent,
+            choices: [...document.querySelectorAll('#io-choice button')].map(b => b.textContent),
+            blocks: Blockly.getMainWorkspace().getAllBlocks(false).length,
+            json: JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()), (k, v) => k === 'id' ? undefined : v), hash: location.hash })""")
+        check(offer["ioOpen"] and "link test" in offer["msg"] and "blocks" in offer["msg"]
+              and "It can send email" in offer["msg"] and "loads only if you choose Load" in offer["msg"]
+              and offer["choices"] == ["Load this program"] and offer["blocks"] == ref["blocks"] and offer["json"] == ref["json"]
+              and offer["hash"].startswith("#p="),
+              f"opening the link offers the program with its capabilities and loads nothing yet "
+              f"(msg {offer['msg'][:110]!r}…, choices {offer['choices']}, canvas still the fresh page's {offer['blocks']} blocks)")
+        await pg4.click("#io-choice button")
+        await pg4.wait_for_timeout(400)
+        loaded = await pg4.evaluate("""() => ({ blocks: Blockly.getMainWorkspace().getAllBlocks(false).length,
+            name: document.getElementById('io-name').value, hash: location.hash,
+            json: JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()), (k, v) => k === 'id' ? undefined : v) })""")
+        check(loaded["blocks"] == n_src and loaded["name"] == "link-test" and loaded["hash"] == "" and loaded["json"] == src_json,
+              f"Load loads the same program ({loaded['blocks']} blocks), sets the file name, and clears the hash")
+        await pg4.close()
+
+        import base64 as _b64, zlib as _zlib
+        pg5 = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        pg5.on("pageerror", lambda e: errors.append(str(e)))
+        await pg5.route("**/*", route)
+        await pg5.add_init_script(MOCK)
+        await pg5.goto("http://test/#p=abc")  # well-formed characters, not a deflated program
+        await pg5.wait_for_timeout(1800)
+        broken = await pg5.evaluate("""() => ({ msg: document.getElementById('io-import-msg').textContent,
+            choices: document.querySelectorAll('#io-choice button').length,
+            blocks: Blockly.getMainWorkspace().getAllBlocks(false).length, hash: location.hash })""")
+        check("broken" in broken["msg"] and broken["choices"] == 0 and broken["blocks"] == ref["blocks"] and broken["hash"] == "",
+              f"a broken link says so and loads nothing ({broken['msg'][:100]!r})")
+        future = _b64.urlsafe_b64encode(_zlib.compress(json.dumps({"format": "reflection-blocks", "version": 999, "name": "future",
+              "program": {"blocks": {"languageVersion": 0, "blocks": []}}}, separators=(",", ":")).encode(), 9, -15)).decode().rstrip("=")
+        await pg5.goto(f"http://test/#p={future}")  # same page, new hash: the hashchange handler offers it too
+        await pg5.wait_for_timeout(1800)
+        newer = await pg5.evaluate("""() => ({ msg: document.getElementById('io-import-msg').textContent,
+            choices: document.querySelectorAll('#io-choice button').length,
+            blocks: Blockly.getMainWorkspace().getAllBlocks(false).length, hash: location.hash })""")
+        check("newer Second Thought" in newer["msg"] and newer["choices"] == 0 and newer["blocks"] == ref["blocks"] and newer["hash"] == "",
+              f"a too-new link says so and loads nothing ({newer['msg'][:100]!r})")
+        await pg5.close()
+
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()
         return codes

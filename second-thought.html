@@ -405,6 +405,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <div class="row">
       <button type="button" id="io-save" class="primary" hidden>Save .json file</button>
       <button type="button" id="io-copy">Copy as text</button>
+      <button type="button" id="io-link">Copy link</button>
     </div>
     <h3>As Python code</h3>
     <p class="hint">Runs without this page open, on your computer or a server. Needs an Anthropic API key; API calls are billed separately from claude.ai.<span id="io-py-version"></span></p>
@@ -20837,6 +20838,96 @@ HOW TO MAP CODE
     if ($("io").hidden) toggleIo(true);
     readFile(e.dataTransfer.files[0]);
   });
+
+  /* ---------- Program links: #p=<the block file, deflated, in base64url> (#436) ---------- */
+
+  const b64url = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const unb64url = s => { s = String(s).replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return Uint8Array.from(atob(s), c => c.charCodeAt(0)); };
+
+  function linkPayload(){
+    // Compact, so the link stays short: the #p= hash itself says the link is ours, so the payload is the block file's
+    // program with its version and name — every gallery program comes out under 1,800 characters this way, half under 1,000.
+    const out = { version:FORMAT_VERSION, name:$("io-name").value.trim() || "my-program", program:saveWs() };
+    if (programTests.length) out.tests = programTests;
+    return JSON.stringify(out);
+  }
+  async function packLinkText(text){
+    if (typeof CompressionStream === "undefined") return "";
+    const cs = new CompressionStream("deflate-raw");
+    const buf = await new Response(new Blob([text]).stream().pipeThrough(cs)).arrayBuffer();
+    return b64url(new Uint8Array(buf));
+  }
+  window.__packLinkText = text => packLinkText(text);  // for the tests: how long a #p= part gets
+  async function programLink(){
+    const packed = await packLinkText(linkPayload());
+    return packed ? location.href.split("#")[0] + "#p=" + packed : "";
+  }
+  window.__programLink = () => programLink();
+  $("io-link").onclick = async () => {
+    const ta = $("io-export-text");
+    let link = "";
+    try { link = await programLink(); } catch(e) { link = ""; }
+    if (!link) { ioMsg("io-export-msg", tr("This browser can't pack a link (no CompressionStream); copy the block file instead."), "bad"); return; }
+    try { await navigator.clipboard.writeText(link); ta.hidden = true; ioMsg("io-export-msg", tr("Link copied. Opening it offers this program; nothing loads until Load is clicked."), "ok"); }
+    catch(e) { ta.value = link; ta.dataset.kind = "link"; ta.hidden = false; ta.focus(); ta.select(); ioMsg("io-export-msg", tr("Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C)."), "bad"); }
+  };
+
+  function stateCapsAndCount(state){
+    const got = new Set(); let count = 0;
+    const walk = b => {
+      if (!b) return;
+      count += 1;
+      const c = blockCapability({ type:b.type, getFieldValue:n => (b.fields || {})[n] });
+      if (c) got.add(c);
+      Object.values(b.inputs || {}).forEach(i => { walk(i.block); walk(i.shadow); });
+      walk(b.next && b.next.block);
+    };
+    ((state.blocks && state.blocks.blocks) || []).forEach(walk);
+    return [CAPABILITIES.filter(c => got.has(c[0])), count];
+  }
+
+  // A #p= link offers its program — name, block count and what it can do, worked out from its blocks — and loads
+  // nothing until the person chooses Load. The program is untrusted, exactly as an import is.
+  async function offerLinkedProgram(){
+    const m = /^#p=([A-Za-z0-9\-_]+)$/.exec(location.hash || "");
+    if (!m) return;
+    const broken = tr("That link is broken: it doesn't hold a program this page can read. Nothing was loaded.");
+    const bad = msg => { if ($("io").hidden) toggleIo(true); ioMsg("io-import-msg", msg, "bad"); history.replaceState(null, "", location.pathname + location.search); };
+    let text = null, why = "";
+    try {
+      if (typeof DecompressionStream === "undefined") why = tr("This browser can't unpack links (no DecompressionStream).");
+      else text = await new Response(new Blob([unb64url(m[1])]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text();
+    } catch(e) { text = null; }
+    let data = null;
+    if (text !== null) { try { data = JSON.parse(text); } catch(e) { data = null; } }
+    if (!data || typeof data !== "object") { bad(why || broken); return; }
+    // A #p= link packs { version, name, program }; a whole block file (with its format marker) in the link works too.
+    const isOurs = data.format === FORMAT || (data.program && typeof data.program === "object" && !!data.program.blocks);
+    const state = isOurs ? data.program : data;
+    const version = data.version || 1;
+    if (!state || typeof state !== "object" || !state.blocks || !Array.isArray(state.blocks.blocks)) { bad(broken); return; }
+    let migrated = null;
+    try { migrated = migrateProgram(state, version).state; } catch(e) { bad(e && e.message ? e.message : broken); return; }  // saved by a newer page, etc.
+    const badTypes = unknownTypes(migrated);
+    if (badTypes.length) { bad(tr("This program uses blocks this page doesn't have: {blocks}.", { blocks:badTypes.join(", ") })); return; }
+    const capsCount = stateCapsAndCount(migrated);
+    const can = capabilitySentence(capsCount[0]);
+    const name = (isOurs && data.name) ? String(data.name) : "";
+    if ($("io").hidden) toggleIo(true);
+    ioMsg("io-import-msg", tr("This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.", { name, n:capsCount[1], can:can ? " " + can : "" }));
+    const c = $("io-choice"); c.innerHTML = "";
+    const btn = document.createElement("button"); btn.type = "button"; btn.className = "primary"; btn.textContent = tr("Load this program");
+    btn.onclick = () => {
+      clearChoice();
+      if (applyProgram(state, name, false, version, isOurs ? data.tests || [] : [])) {
+        if (name) $("io-name").value = slug(name);
+        history.replaceState(null, "", location.pathname + location.search);
+      }
+    };
+    c.appendChild(btn); c.hidden = false;
+  }
+  window.addEventListener("hashchange", () => { offerLinkedProgram(); });
+  offerLinkedProgram();
 
   // 10-python-export.js: Turning blocks into Python, and the exported settings and launchers.
   /* ---------- Python export ---------- */

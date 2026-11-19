@@ -1982,7 +1982,14 @@
   "Add to the rules": "setta to regolum",
   "Just send back": "anlice eft sendan",
   "New rule": "nīwe regol",
-  "Why not? In one sentence, as a rule": "hwy næt? ánre spræce, swa regol"
+  "Why not? In one sentence, as a rule": "hwy næt? ánre spræce, swa regol",
+  "Copy link": "Copige þone hlync",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "Hlync copod. Æt openunge þis tacn is geboden; naht þing is gelæden oþþe þæt man clice on hlæd.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "Copian ne is her geþungen, swa þæt se hlync is her under gecoren. Þriste Ctrl+C (oþþe Cmd+C).",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Þes recedere ne cann hlync beclyppan (næs CompressionStream); copige þone bloccfile.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Þis hlync berþ tacn: „{name}“ ({n} blocca).{can} Hit is gelæden anly þonne þu cyrst hlæd.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Þis hlync is gebrocen: he ne berþ na tacn þe þis page cann rædan. Naht næs gelæden.",
+  "This browser can't unpack links (no DecompressionStream).": "Þes recedere ne cann hlync unwrapian (næs DecompressionStream)."
  },
  "examples": {
   "review": {

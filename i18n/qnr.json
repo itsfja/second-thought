@@ -1983,7 +1983,14 @@
   "Add to the rules": "ᛒᛅᛏᛅ ᚢᛁᚦ ᚱᛁᚴᛚᚢᚱᚾᛅᛦ",
   "Just send back": "ᛒᛅᚱᛅ ᛋᛁᚾᛏᛅ ᛏᛁᛚ ᛒᛅᚴᛅ",
   "New rule": "ᚾᚢ ᚱᛁᚴᛚᛅ",
-  "Why not? In one sentence, as a rule": "ᚼᚢᛁᚱᛋ ᚢᛁᚴᚾᛅ ᛁᚴᛁ? ᛁ ᛅᛁᚾᛁ ᛋᛁᛏᚾᛁᚴᚢ, ᛋᛁᛘ ᚱᛁᚴᛚᛅ"
+  "Why not? In one sentence, as a rule": "ᚼᚢᛁᚱᛋ ᚢᛁᚴᚾᛅ ᛁᚴᛁ? ᛁ ᛅᛁᚾᛁ ᛋᛁᛏᚾᛁᚴᚢ, ᛋᛁᛘ ᚱᛁᚴᛚᛅ",
+  "Copy link": "ᛅᚠᚱᛁᛏᛅ ᛏᛁᚴᛁᛚ",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "ᛏᛁᚴᛁᛚ ᛅᚠᚱᛁᛏᛅᚦᚢᛦ. ᚢᛁᚦ ᚢᛒᚾᚢᚾ ᛁᚱ ᚦᛁᛋᛁ ᛅᛏᛚᚢᚾ ᛒᚢᚦᛁᚾ; ᛁᚴᛁᚱᛏ ᚼᛚᛁᚦᛋᛏ ᚠᚢᚱ ᛁᚾ ᛋᛘᛁᛚᛏ ᛁᚱ ᚬ ᚼᛚᛅᚦᛅ.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "ᛅᚠᚱᛁᛏᚢᚾ ᛁᚱ ᛁᚴᛁ ᛚᛅᚢᚠᚦ ᚼᛁᚱ, ᛋᚢ ᛏᛁᚴᛁᛚᛁᚾ ᛁᚱ ᚢᛅᛚᛁᚾ ᚼᛁᚱ ᚠᚢᚱᛁᛦ ᚾᛁᚦᛅᚾ. ᚢᛏᚢ ᚬ Ctrl+C (ᛁᚦᛅ Cmd+C).",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ᚦᛁᛋᛁ ᚢᛅᚠᚱᛁ ᚴᛁᛏᚢᛦ ᛁᚴᛁ ᛒᛅᚴᛅᚦ ᛏᛁᚴᛚᛁ (ᛁᚴᛁᚱᛏ CompressionStream); ᛅᚠᚱᛁᛏᛅᚦᚢ ᛒᛚᚢᚴᛅᚱᛋᚴᚱᛅᚾᛅ ᛁ ᛋᛏᛅᚦᛁᚾ.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "ᚦᛁᛋᛁ ᛏᛁᚴᛁᛚ ᛒᛁᚱ ᚠᚢᚱᛁᛏ: „{name}“ ({n} ᛒᛚᚢᚴᛁᛦ).{can} ᚦᛅᚦ ᚼᛚᛁᚦᛋᛏ ᛅᚦᛅᛁᚾᛋ ᛁᚠ ᚦᚢ ᚢᛁᛚᚢᛦ ᚼᛚᛅᚦᛅ.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "ᚦᛁᛋᛁ ᛏᛁᚴᛁᛚ ᛁᚱ ᛒᛁᛚᛅᚦᚢᛦ: ᚼᛅᚾ ᛁᚾᛁᚼᛁᛚᛏᚢᛦ ᛁᚴᛁᚱᛏ ᚠᚢᚱᛁᛏ ᛋᛁᛘ ᚦᛁᛋᛁ ᛋᛁᚦᛅ ᚴᛁᛏᚢᛦ ᛚᛁᛋᛁᚦ. ᛁᚴᛁᚱᛏ ᚢᛅᚱ ᚼᛚᛅᚦᛁᚦ.",
+  "This browser can't unpack links (no DecompressionStream).": "ᚦᛁᛋᛁ ᚢᛅᚠᚱᛁ ᚴᛁᛏᚢᛦ ᛁᚴᛁ ᚢᛒᚾᛅᚦ ᛏᛁᚴᛚᛅ (ᛁᚴᛁᚱᛏ DecompressionStream)."
  },
  "examples": {
   "review": {

@@ -1974,7 +1974,14 @@
   "Add to the rules": "ܚܘܐ ܣܬ ܐܕ ܪܘܠ",
   "Just send back": "ܚܘܐ ܣܬ just back",
   "New rule": "ܚܘܐ ܣܬ ܢܘ ܪܘܠ",
-  "Why not? In one sentence, as a rule": "ܚܘܐ ܣܬ ܘܗܝ ܢܘܬ ܐܘܢ ܠܝܢ"
+  "Why not? In one sentence, as a rule": "ܚܘܐ ܣܬ ܘܗܝ ܢܘܬ ܐܘܢ ܠܝܢ",
+  "Copy link": "ܣ ܟ",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "ܣ ܢܘ ܟ",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "Copy ܐܝܣܢ'ܬ ܐܠܘܘܕ ܗܪ, ܣܘ ܬܗ ܠܝܢܟ ܐܝܣ selected ܒܠܘܘ. Press Ctrl+C (ܐܘܪ Cmd+C).",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ܬܗܝܣ ܐܝܣܢܬ",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "This ܠܝܢܟ carries ܐ ܦܪܘܓܪܡ: “{name}” ({n} blocks).{can} It ܠܘܕܣ ܐܘܢܠܝ if ܝܘܘ choose Load.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "That ܠܝܢܟ ܐܝܣ ܒܪܘܟܢ: ܐܝܬ ܕܘܣܢ'ܬ ܗܘܠܕ ܐ ܦܪܘܓܪܡ ܬܗܝܣ ܦܓ can ܪܕ. Nothing ܘܣ ܠܘܕܕ.",
+  "This browser can't unpack links (no DecompressionStream).": "ܬܗܝܣ ܐܝܣܢܬ"
  },
  "examples": {
   "review": {
