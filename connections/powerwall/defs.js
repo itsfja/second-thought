@@ -1,0 +1,5 @@
+    /* Powerwall (#362): reads, and one change that always asks */
+    V("rb_powerwall_now", "Powerwall figures", [], null, { style:"powerwall",
+      tooltip:"A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall." }),
+    S("rb_powerwall_reserve", "set Powerwall backup reserve to %1 %", [val("N")], { style:"powerwall", inputsInline:true,
+      tooltip:"Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes." }),

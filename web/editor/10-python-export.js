@@ -71,7 +71,9 @@
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
+             // sync:connections-need-begin
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
+             // sync:connections-need-end
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
@@ -198,6 +200,7 @@
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    // sync:connections-ini-begin
     if (need.powerwall) out.push("", "[powerwall]",
       "; Your Tesla Powerwall (a Powerwall, Powerwall 2 or Powerwall+), read through the gateway's local API. The",
       "; Powerwall 3 has no local web API: use Home Assistant or Teslemetry for one of those.",
@@ -207,6 +210,7 @@
       "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
       ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
       ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
+    // sync:connections-ini-end
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -559,7 +563,9 @@
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_solax_now": return "(await R.solax_now())";
+        // sync:connections-pyread-begin
         case "rb_powerwall_now": return "(await R.powerwall_now())";
+        // sync:connections-pyread-end
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -723,7 +729,9 @@
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
+          // sync:connections-pyact-begin
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
+          // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;

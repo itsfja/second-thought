@@ -646,7 +646,11 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL", "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256", "EMAIL_ADDRESS",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL",
+    # sync:connections-known-begin
+    "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
+    # sync:connections-known-end
+    "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
@@ -710,7 +714,11 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID", "POWERWALL_PASSWORD", "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID",
+    # sync:connections-secret-begin
+    "POWERWALL_PASSWORD",
+    # sync:connections-secret-end
+    "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1756,10 +1764,12 @@ SAFETY = {
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
+    # sync:connections-safety-begin
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
     "powerwall_asks": [["POST", r"^/api/operation$"]],
+    # sync:connections-safety-end
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
@@ -1877,12 +1887,14 @@ def coinbase_money(method, path):
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
 
 
+# sync:connections-fns-begin
 def powerwall_allowed(method, path, approved=False):
     """True for one of the few Tesla gateway calls the runtime makes (#362): the reads in powerwall_free, and the
     backup reserve change in powerwall_asks, only after the person's yes."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
         or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
+# sync:connections-fns-end
 
 
 def mikrotik_allowed(method, path):
@@ -2522,7 +2534,9 @@ CAPABILITIES = [
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
+    # sync:connections-capabilities-act-begin
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
+    # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
@@ -2537,7 +2551,9 @@ CAPABILITIES = [
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    # sync:connections-capabilities-read-begin
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
+    # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
@@ -5940,6 +5956,7 @@ class Connections:
                  tr("from {time}", time=out.get("upload_time") or "?"))
         return out
 
+    # sync:connections-runtime-begin
     # Powerwall (#362)
     # Tesla's local gateway API (the one the gateway's web portal uses), for a Powerwall, Powerwall 2 or Powerwall+ on
     # your network: POWERWALL_URL (the gateway's address, like https://192.168.1.50) and POWERWALL_PASSWORD, the
@@ -6024,6 +6041,7 @@ class Connections:
         await self._powerwall("POST", "/api/operation", {"backup_reserve_percent": n}, approved=True)
         self.log(tr("Powerwall"), what, tr("done"))
         return True
+    # sync:connections-runtime-end
 
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
@@ -8521,6 +8539,7 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
+        # sync:connections-check-begin
         if has("powerwall_read", "powerwall_control"):
             async def powerwall():
                 base = os.environ.get("POWERWALL_URL", "").strip()
@@ -8532,6 +8551,7 @@ class Doctor:
                 return tr("battery at {pct}%, reserve {reserve}%, grid {grid}", pct=got.get("battery_soc_pct") or "?",
                           reserve=got.get("reserve_pct") or "?", grid=got.get("grid") or "?")
             out.append(("Powerwall", powerwall))
+        # sync:connections-check-end
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -8949,7 +8969,11 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID", "Powerwall": "POWERWALL_URL"}.get(area)
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID",
+                # sync:connections-settingsmap-begin
+                "Powerwall": "POWERWALL_URL"
+                # sync:connections-settingsmap-end
+}.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
 
 
@@ -16434,33 +16458,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    "uploadTime": "2026-11-11 14:05:00"
   }
  },
- "powerwall": {
-  "note": "A sample Tesla Powerwall for the page and the tests (#362), shaped the way the gateway's local API answers: evening, battery three-quarters full, exporting a little to the grid. The reads are the four the runtime makes; operation shows the reserve the program may raise after asking.",
-  "meters_aggregates": {
-   "site": {
-    "instant_power": "-450"
-   },
-   "battery": {
-    "instant_power": "1200"
-   },
-   "load": {
-    "instant_power": "800"
-   },
-   "solar": {
-    "instant_power": "2450"
-   }
-  },
-  "system_status_soe": {
-   "percentage": "76.5"
-  },
-  "system_status_grid_status": {
-   "grid_status": "SystemGridConnected"
-  },
-  "operation": {
-   "real_mode": "self_consumption",
-   "backup_reserve_percent": "20"
-  }
- },
  "unraid": {
   "note": "A sample Unraid server for the page and the tests (#399), shaped the way its GraphQL API answers: the array is started, with one parity, two data disks and a cache; plex is running and pihole has stopped, one VM is up and one is down.",
   "array": {
@@ -16777,6 +16774,33 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
     "duration": 2700
    }
   ]
+ },
+ "powerwall": {
+  "note": "A sample Tesla Powerwall for the page and the tests (#362), shaped the way the gateway's local API answers: evening, battery three-quarters full, exporting a little to the grid. The reads are the four the runtime makes; operation shows the reserve the program may raise after asking.",
+  "meters_aggregates": {
+   "site": {
+    "instant_power": "-450"
+   },
+   "battery": {
+    "instant_power": "1200"
+   },
+   "load": {
+    "instant_power": "800"
+   },
+   "solar": {
+    "instant_power": "2450"
+   }
+  },
+  "system_status_soe": {
+   "percentage": "76.5"
+  },
+  "system_status_grid_status": {
+   "grid_status": "SystemGridConnected"
+  },
+  "operation": {
+   "real_mode": "self_consumption",
+   "backup_reserve_percent": "20"
+  }
  }
 }
 </script>
@@ -17368,7 +17392,11 @@ HOW TO MAP CODE
   const HUES = {
     events:"#D9A21B", control:"#E07B24", operators:"#4E9E3A", text:"#2F9A7A", variables:"#E0583A",
     lists:"#C2413B", procedures:"#D04F7E", draft:"#3E7BFA", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41", powerwall:"#C8102E", sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A", pihole:"#9E2B25", plex:"#E5A00D"
+    you:"#1E94A8", output:"#2E9E5E", time:"#5F7F96", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#3B8A8C", ha:"#2C7FB8", agent:"#6E7F1A", tools:"#8A7A14", conn:"#C2185B", homey:"#2E8B57", coinbase:"#2851A3", mikrotik:"#6B4E2E", unifi:"#1F7A8C", proxmox:"#B4531F", docker:"#1D63ED", solax:"#3E8E41",
+    // sync:connections-hues-begin
+    powerwall:"#C8102E",
+    // sync:connections-hues-end
+    sabnzbd:"#C77800", arr:"#44A24A", unraid:"#E8590C", nzbgeek:"#6A1B9A", pihole:"#9E2B25", plex:"#E5A00D"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -17380,7 +17408,11 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax), powerwall:style(HUES.powerwall), sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), pihole:style(HUES.pihole), plex:style(HUES.plex),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker), solax:style(HUES.solax),
+    // sync:connections-styles-begin
+    powerwall:style(HUES.powerwall),
+    // sync:connections-styles-end
+    sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), pihole:style(HUES.pihole), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -17583,7 +17615,10 @@ HOW TO MAP CODE
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     rb_solax_now:"solax_read",
-    rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control" };
+    // sync:connections-caps-begin
+    rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control",
+    // sync:connections-caps-end
+  };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_chk_json rb_chk_link rb_chk_max_words rb_chk_mentions rb_chk_no_mention rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
@@ -18051,11 +18086,13 @@ HOW TO MAP CODE
     /* Solax (#361): read only, from SolaxCloud */
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
+    // sync:connections-defs-begin
     /* Powerwall (#362): reads, and one change that always asks */
     V("rb_powerwall_now", "Powerwall figures", [], null, { style:"powerwall",
       tooltip:"A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall." }),
     S("rb_powerwall_reserve", "set Powerwall backup reserve to %1 %", [val("N")], { style:"powerwall", inputsInline:true,
       tooltip:"Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes." }),
+    // sync:connections-defs-end
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
@@ -18269,7 +18306,9 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"Solax", categorystyle:"solax", contents:[ B("rb_solax_now") ]},
+    // sync:connections-toolbox-begin
     { kind:"category", name:"Powerwall", categorystyle:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
+    // sync:connections-toolbox-end
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},
@@ -21069,7 +21108,9 @@ HOW TO MAP CODE
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
+             // sync:connections-need-begin
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
+             // sync:connections-need-end
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
@@ -21196,6 +21237,7 @@ HOW TO MAP CODE
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    // sync:connections-ini-begin
     if (need.powerwall) out.push("", "[powerwall]",
       "; Your Tesla Powerwall (a Powerwall, Powerwall 2 or Powerwall+), read through the gateway's local API. The",
       "; Powerwall 3 has no local web API: use Home Assistant or Teslemetry for one of those.",
@@ -21205,6 +21247,7 @@ HOW TO MAP CODE
       "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
       ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
       ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
+    // sync:connections-ini-end
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -21557,7 +21600,9 @@ HOW TO MAP CODE
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_solax_now": return "(await R.solax_now())";
+        // sync:connections-pyread-begin
         case "rb_powerwall_now": return "(await R.powerwall_now())";
+        // sync:connections-pyread-end
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -21721,7 +21766,9 @@ HOW TO MAP CODE
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
+          // sync:connections-pyact-begin
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
+          // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
@@ -24329,6 +24376,7 @@ HOW TO MAP CODE
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
   }
+  // sync:connections-page-begin
   /* Powerwall on the page (#362): a sample Powerwall. Exported Python reads your own through the gateway's local
      API, and the reserve change always asks. Matches the runtime's powerwall_ methods and tests/fake_powerwall.py. */
   const pwSample = () => { connNote("Powerwall"); return CONN.powerwall || {}; };
@@ -24351,6 +24399,7 @@ HOW TO MAP CODE
     addStep("Powerwall", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  // sync:connections-page-end
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){
     const ws = str(words).toLowerCase().split(/\s+/).filter(Boolean);
@@ -25200,7 +25249,9 @@ HOW TO MAP CODE
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       case "rb_solax_now": return solaxNow();
+      // sync:connections-iread-begin
       case "rb_powerwall_now": return powerwallNow();
+      // sync:connections-iread-end
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();
@@ -25947,7 +25998,9 @@ HOW TO MAP CODE
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
+      // sync:connections-iact-begin
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
+      // sync:connections-iact-end
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {

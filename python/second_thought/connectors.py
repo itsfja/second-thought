@@ -17,9 +17,14 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
-from .core import (SAFETY, coinbase_money, mikrotik_allowed, powerwall_allowed, unifi_allowed, proxmox_call, docker_call, sabnzbd_call, arr_call, ARR_SEARCH, unraid_call, nzbgeek_call, pihole_call, plex_call, tautulli_call, DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
+from .core import (SAFETY, coinbase_money, mikrotik_allowed, unifi_allowed, proxmox_call, docker_call, sabnzbd_call, arr_call, ARR_SEARCH, unraid_call, nzbgeek_call, pihole_call, plex_call, tautulli_call, DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
     Picture, Retryable, RunError, _clean_num, SLACK_API, TELEGRAM_API, TELEGRAM_FILE, WEEKDAYS, _WebSocket, _locked, _num_like,
     _short, _write_json, ha_sensitive, num, read_text_file, round_js, to_str, _MEDIA)
+from .core import (
+    # sync:connections-imports-begin
+    powerwall_allowed,
+    # sync:connections-imports-end
+)
 from .settings import tr  # noqa: F401
 # ---- package only: tools/sync.py leaves everything above this line out of python/runtime.py ----
 import fnmatch  # noqa: E402 - below the line, so python/runtime.py has it too
@@ -3010,6 +3015,7 @@ class Connections:
                  tr("from {time}", time=out.get("upload_time") or "?"))
         return out
 
+    # sync:connections-runtime-begin
     # Powerwall (#362)
     # Tesla's local gateway API (the one the gateway's web portal uses), for a Powerwall, Powerwall 2 or Powerwall+ on
     # your network: POWERWALL_URL (the gateway's address, like https://192.168.1.50) and POWERWALL_PASSWORD, the
@@ -3094,6 +3100,7 @@ class Connections:
         await self._powerwall("POST", "/api/operation", {"backup_reserve_percent": n}, approved=True)
         self.log(tr("Powerwall"), what, tr("done"))
         return True
+    # sync:connections-runtime-end
 
     # MQTT
     def _mqtt_new(self, on_message=None, topics=()):
