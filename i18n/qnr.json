@@ -1952,7 +1952,6 @@
   "New": "ᚾᚢᛏ",
   "Import": "ᛁᚾᛒᛁᛦ",
   "Export": "ᚢᛏᛒᛁᛦ",
-  "Share": "ᛏᛅᛁᛚᛅ",
   "Theme": "ᛚᛁᛏᚢᛦ",
   "System": "ᚴᛁᚱᚠᛁ",
   "Light": "ᛚᛁᚢᛋ",
@@ -1990,7 +1989,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ᚦᛁᛋᛁ ᚢᛅᚠᚱᛁ ᚴᛁᛏᚢᛦ ᛁᚴᛁ ᛒᛅᚴᛅᚦ ᛏᛁᚴᛚᛁ (ᛁᚴᛁᚱᛏ CompressionStream); ᛅᚠᚱᛁᛏᛅᚦᚢ ᛒᛚᚢᚴᛅᚱᛋᚴᚱᛅᚾᛅ ᛁ ᛋᛏᛅᚦᛁᚾ.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "ᚦᛁᛋᛁ ᛏᛁᚴᛁᛚ ᛒᛁᚱ ᚠᚢᚱᛁᛏ: „{name}“ ({n} ᛒᛚᚢᚴᛁᛦ).{can} ᚦᛅᚦ ᚼᛚᛁᚦᛋᛏ ᛅᚦᛅᛁᚾᛋ ᛁᚠ ᚦᚢ ᚢᛁᛚᚢᛦ ᚼᛚᛅᚦᛅ.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "ᚦᛁᛋᛁ ᛏᛁᚴᛁᛚ ᛁᚱ ᛒᛁᛚᛅᚦᚢᛦ: ᚼᛅᚾ ᛁᚾᛁᚼᛁᛚᛏᚢᛦ ᛁᚴᛁᚱᛏ ᚠᚢᚱᛁᛏ ᛋᛁᛘ ᚦᛁᛋᛁ ᛋᛁᚦᛅ ᚴᛁᛏᚢᛦ ᛚᛁᛋᛁᚦ. ᛁᚴᛁᚱᛏ ᚢᛅᚱ ᚼᛚᛅᚦᛁᚦ.",
-  "This browser can't unpack links (no DecompressionStream).": "ᚦᛁᛋᛁ ᚢᛅᚠᚱᛁ ᚴᛁᛏᚢᛦ ᛁᚴᛁ ᚢᛒᚾᛅᚦ ᛏᛁᚴᛚᛅ (ᛁᚴᛁᚱᛏ DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "ᚦᛁᛋᛁ ᚢᛅᚠᚱᛁ ᚴᛁᛏᚢᛦ ᛁᚴᛁ ᚢᛒᚾᛅᚦ ᛏᛁᚴᛚᛅ (ᛁᚴᛁᚱᛏ DecompressionStream).",
+  "Share…": "ᛏᛅᛁᛚᛅ…",
+  "Share this program with the community gallery": "ᛏᛅᛁᛚ ᚦᛁᛋᚢ ᚠᚢᚱᛁᛏᛁ ᛘᛁᚦ ᛋᛅᛘᚠᛁᛚᛅᚴᛋᚴᛅᛚᛁᚱᛁᚾᚢ",
+  "Title": "ᛏᛁᛏᛁᛚ",
+  "Category": "ᚠᛚᚢᚴᚢᛦ",
+  "Description": "ᛚᚢᛋᛁᚴ",
+  "Tip": "ᚱᛅᚦ",
+  "Author": "ᚼᛅᚢᚠᚢᚾᛏᚢᛦ",
+  "Open the share form on GitHub": "ᚢᛒᚾᛅ ᛏᛅᛁᛚᛁᚠᚢᚱᛘᛁᚦ ᚬ GitHub",
+  "Fill in the title, a description, a tip and your name first.": "ᚠᚢᛚᛏᚢ ᚠᚢᚱᛋᛏ ᚢᛏ ᛏᛁᛏᛁᛚ, ᛚᚢᛋᛁᚴᚢ, ᛅᛒᛁᚾᛏᛁᚴᚢ ᚢᚴ ᚾᛅᚠᚾᛁᚦ ᚦᛁᛏ.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "ᚢᛒᚾᛅᛦ ᛋᚼᛅᚱᛁ ᛅ ᛒᚱᚢᚴᚱᛅᛘ issue ᚬ GitHub ᛘᛁᚦ ᚦᛁᛋᚢᛘ ᚱᛅᛁᛏᚢᛘ ᚢᚴ #p= ᛏᛁᚴᛚᛁ ᚬ ᚠᚢᚱᛁᛏᛁᚦ ᛅᚦᚢᛦ ᚠᚢᛚᛏ ᚢᛏ. ᛁᚴᛁᚱᛏ ᛁᚱ ᛋᛁᚾᛏ ᚠᚢᚱ ᛁᚾ ᚦᚢ ᚢᛏᛁᛦ ᚬ Open: issue-ᛁᚦ ᚢᛒᚾᛅᛋᛏ ᛁ ᚾᚢᛁᚢᛘ ᚠᛚᛁᛒᛅ, ᛏᛁᛚ ᛅᚦ ᛒᚱᛅᚢᛏᛅ ᛁᚦᛅ ᚼᛅᚠᚾᛅ. ᚢᛁᚦᚼᛅᛚᛏᛅᚱᛁ ᛋᛅᛘᚦᚢᚴᛁᛦ ᚦᛅᚦ ᛘᛁᚦ ᛘᛁᚱᚴᛁ, ᚢᚴ ᚢᚱᚴᚠᛚᚢ ᛒᚱᛅᚢᛏᛁᛦ ᚦᚢᛁ ᛁ pull request ᛋᛁᛘ ᛒᛅᛏᛁᛦ ᚠᚢᚱᛁᛏᛁᚾᚢ ᚢᛁᚦ ᚴᛅᛚᛁᚱᛁᚦ."
  },
  "examples": {
   "review": {

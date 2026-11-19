@@ -1951,7 +1951,6 @@
   "New": "Neu",
   "Import": "Importieren",
   "Export": "Exportieren",
-  "Share": "Teilen",
   "Theme": "Erscheinungsbild",
   "System": "System",
   "Light": "Hell",
@@ -1989,7 +1988,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Dieser Browser kann keinen Link packen (kein CompressionStream); kopieren Sie stattdessen die Blockdatei.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Dieser Link enthält ein Programm: „{name}“ ({n} Blöcke).{can} Es lädt erst, wenn Sie Laden wählen.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Dieser Link ist kaputt: Er enthält kein Programm, das diese Seite lesen kann. Es wurde nichts geladen.",
-  "This browser can't unpack links (no DecompressionStream).": "Dieser Browser kann Links nicht entpacken (kein DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "Dieser Browser kann Links nicht entpacken (kein DecompressionStream).",
+  "Share…": "Teilen…",
+  "Share this program with the community gallery": "Dieses Programm mit der Community-Galerie teilen",
+  "Title": "Titel",
+  "Category": "Kategorie",
+  "Description": "Beschreibung",
+  "Tip": "Tipp",
+  "Author": "Autor",
+  "Open the share form on GitHub": "Das Share-Formular auf GitHub öffnen",
+  "Fill in the title, a description, a tip and your name first.": "Füllen Sie zuerst Titel, eine Beschreibung, einen Tipp und Ihren Namen aus.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Öffnet ein Share a program-Issue auf GitHub, mit diesen Feldern und einem #p=-Link zum Programm bereits ausgefüllt. Es wird nichts gesendet, bis Sie auf Öffnen drücken: Das Issue öffnet sich in einem neuen Tab, zum Bearbeiten oder Verwerfen. Ein Maintainer nimmt es mit einem Label an, und ein Workflow macht daraus die Pull Request, die das Programm zur Galerie hinzufügt."
  },
  "examples": {
   "review": {

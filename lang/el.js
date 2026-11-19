@@ -1207,7 +1207,6 @@
 "New":"Νέο",
 "Import":"Εισαγωγή",
 "Export":"Εξαγωγή",
-"Share":"Κοινή χρήση",
 "Theme":"Θέμα",
 "System":"Σύστημα",
 "Light":"Φωτεινό",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Αυτός ο περιηγητής δεν μπορεί να πακετάρει σύνδεσμο (χωρίς CompressionStream)· αντιγράψτε το αρχείο μπλοκ.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Αυτός ο σύνδεσμος περιέχει ένα πρόγραμμα: «{name}» ({n} μπλοκ).{can} Φορτώνεται μόνο αν επιλέξετε Φόρτωση.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Αυτός ο σύνδεσμος είναι σπασμένος: δεν περιέχει πρόγραμμα που να διαβάζει αυτή η σελίδα. Δεν φορτώθηκε τίποτα.",
-"This browser can't unpack links (no DecompressionStream).":"Αυτός ο περιηγητής δεν μπορεί να αποσυμπιέσει συνδέσμους (χωρίς DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Αυτός ο περιηγητής δεν μπορεί να αποσυμπιέσει συνδέσμους (χωρίς DecompressionStream).",
+"Share…":"Κοινή χρήση…",
+"Share this program with the community gallery":"Κοινοποίηση αυτού του προγράμματος στη γκαλερί της κοινότητας",
+"Title":"Τίτλος",
+"Category":"Κατηγορία",
+"Description":"Περιγραφή",
+"Tip":"Συμβουλή",
+"Author":"Συγγραφέας",
+"Open the share form on GitHub":"Άνοιγμα της φόρμας κοινοποίησης στο GitHub",
+"Fill in the title, a description, a tip and your name first.":"Συμπλήρωσε πρώτα τον τίτλο, μια περιγραφή, μια συμβουλή και το όνομά σου.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ανοίγει ένα issue Share a program στο GitHub με αυτά τα πεδία και έναν σύνδεσμο #p= προς το πρόγραμμα ήδη συμπληρωμένα. Τίποτα δεν στέλνεται μέχρι να πατήσεις Άνοιγμα: το issue ανοίγει σε νέα καρτέλα, για επεξεργασία ή απόρριψη. Ένας συντηρητής το αποδέχεται με μια ετικέτα και μια ροή εργασίας το μετατρέπει στο pull request που προσθέτει το πρόγραμμα στη γκαλερί."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

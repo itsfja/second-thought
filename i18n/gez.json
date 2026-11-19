@@ -1952,7 +1952,6 @@
   "New": "ኔወ",
   "Import": "ሴሜነ",
   "Export": "ቴሴጋ",
-  "Share": "ሻሬ",
   "Theme": "ጤሜ",
   "System": "ሲሰቲማ",
   "Light": "ኑራ",
@@ -1990,7 +1989,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ብሮውሴር ሊንክ pacክ aሊሌቤም (CoምpሬስሲoንSትሬaም aሌም), ብሎcክ fiሌ copi",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "ሊንክ pሮgረም {name} ({n} ብሎcክስ) ዪዘል, {can} Loaድ cሊcክ ዪቴዌሪብኩ aሊሌቤም",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "ሊንክ ቢርቴ, pሮgረም aዪቴዌሪም, ኖትሂንg ሎaዴድ",
-  "This browser can't unpack links (no DecompressionStream).": "ብሮውሴር ሊንክ uንpacክ aሊሌቤም (DecoምpሬስሲoንSትሬaም aሌም)"
+  "This browser can't unpack links (no DecompressionStream).": "ብሮውሴር ሊንክ uንpacክ aሊሌቤም (DecoምpሬስሲoንSትሬaም aሌም)",
+  "Share…": "ሻሬ…",
+  "Share this program with the community gallery": "pሮgረም ሌ coምሙኒትይ gaልሌርይ ስሀሬ aረ",
+  "Title": "ሲሜ",
+  "Category": "goሰ",
+  "Description": "ኔgeር",
+  "Tip": "መስተዎክ",
+  "Author": "ትሰfi",
+  "Open the share form on GitHub": "ስሀሬ foርም GiትHuብ ዌዴ opeን",
+  "Fill in the title, a description, a tip and your name first.": "fiርስትነሜ ሲሜ, ኔgeር, መስተዎክ, ሲሜክ fiልል",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "GiትHuብ Sሀሬ a pሮgረም iስሱe ዬቴዌየል, fieልድስነ #p= ሊንክ ሌ pሮgረም ዬቴዌየል, aሊሌቤም. ቤቱ Opeን cሊcክ ዪቴዌሪብኩ aሊሌቤም, iስሱe ኔው ተብ ዬቴዌየል, eዲት ሌዲስcaርድ. መiንተiኔር ለቤል ዪቴቄቤል, ዎርክfሎው puልል ሬቁeስት ዪሆን, pሮgረም ሌ gaልሌርይ ዪዚዝ."
  },
  "examples": {
   "review": {

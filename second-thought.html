@@ -113,7 +113,7 @@ details.menu[open]>summary{border-color:var(--accent)}
 .bk-sel{max-width:420px}
 .io{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
 /* Panels are drawers over the canvas (#445): they never move the page, so the program stays where it was. */
-#gallery,#lib,#ha,#mem,#bk,#keys,#io{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
+#gallery,#lib,#ha,#mem,#bk,#keys,#io,#share{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
 .gal-tools{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .gal-tools input[type=search]{width:100%}
 .gal-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -237,7 +237,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
         <button id="lib-toggle" type="button" aria-expanded="false" aria-controls="lib">My programs</button>
         <button id="io-import" type="button" aria-expanded="false" aria-controls="io">Import</button>
         <button id="io-export" type="button" aria-expanded="false" aria-controls="io">Export</button>
-        <button id="share-prog" type="button" aria-expanded="false" aria-controls="io">Share</button>
+        <button id="share-prog" type="button" aria-expanded="false" aria-controls="share">Share…</button>
       </div>
     </details>
     <details class="menu" id="menu-data">
@@ -434,6 +434,32 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     </div>
     <p class="msg" id="io-import-msg" role="status"></p>
     <div class="row" id="io-choice" hidden></div>
+  </div>
+</section>
+<section id="share" class="io" hidden role="dialog" aria-modal="true" aria-label="Share this program with the community gallery">
+  <div class="io-col">
+    <h2 tabindex="-1">Share this program with the community gallery</h2>
+    <p class="hint">Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.</p>
+    <label class="field" for="sh-title">Title
+      <input type="text" id="sh-title" maxlength="40" autocomplete="off">
+    </label>
+    <label class="field" for="sh-category">Category
+      <select id="sh-category"></select>
+    </label>
+    <label class="field" for="sh-desc">Description
+      <textarea id="sh-desc" rows="3" maxlength="300"></textarea>
+    </label>
+    <label class="field" for="sh-tip">Tip
+      <textarea id="sh-tip" rows="2" maxlength="200"></textarea>
+    </label>
+    <label class="field" for="sh-author">Author
+      <input type="text" id="sh-author" maxlength="40" autocomplete="off">
+    </label>
+    <div class="gal-grid"><div class="gal-card" id="sh-card"></div></div>
+    <div class="row">
+      <button type="button" id="sh-open" class="primary">Open the share form on GitHub</button>
+    </div>
+    <p class="msg" id="sh-msg" role="status"></p>
   </div>
 </section>
 
@@ -17380,7 +17406,7 @@ HOW TO MAP CODE
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
   }
-  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #describe-out, main.main";
+  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #share, #describe-out, main.main";
   const PAGE_LATER = "script, style, select, textarea, #blockly, #gal-body, #ex-desc, #status, #lib-where, #mem-where";  // filled in by code
   const PAGE_ATTRS = ["title", "placeholder", "aria-label"];
   const RICH = new Set(["B", "I", "EM", "STRONG", "CODE"]);
@@ -20399,12 +20425,12 @@ HOW TO MAP CODE
 
   const FORMAT = "reflection-blocks";
   const ioMsg = (id, text, kind) => { const m = $(id); m.textContent = tr(text); m.className = "msg" + (kind ? " " + kind : ""); };
-  const ioToggles = ["io-import", "io-export", "share-prog"];
+  const ioToggles = ["io-import", "io-export"];
   registerDrawer("io", ioToggles, () => { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; });
   function toggleIo(open){ return toggleDrawer("io", open); }
   $("io-import").onclick = () => { toggleIo(true); $("io-paste").focus(); };
   $("io-export").onclick = () => { toggleIo(true); $("io-copy").focus(); };
-  $("share-prog").onclick = () => { toggleIo(true); $("io-copy").click(); };
+  // Share… opens its own drawer, wired in 23-gallery-share.js (#437).
   let downloads = null;
   const showSaves = d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("log-save").hidden = !d; };
   if (window.claude && window.claude.use) {
@@ -26406,6 +26432,74 @@ HOW TO MAP CODE
     startRun(starts, "manual");
   };
 
+// 23-gallery-share.js: Offering the program on the canvas to the community gallery (#437). Share… opens a form
+// that shows the card as it will look in Browse examples — with what the program can do worked out from its blocks,
+// as now — and opens a prefilled "Share a program" issue form on GitHub with the #p= link (#436) in it. Nothing is
+// sent until Open is pressed. A maintainer accepts the issue with the gallery-accepted label, and
+// .github/workflows/gallery-share.yml turns it into the pull request that adds gallery/<name>.json.
+  const REPO_URL = "https://github.com/itsfja/second-thought";
+  const SHARE_TEMPLATE = "share-a-program.yml";
+  const SHARE_FIELDS = ["sh-title", "sh-category", "sh-desc", "sh-tip", "sh-author"];
+
+  function shareFields(){
+    return { title:$("sh-title").value.trim(), category:$("sh-category").value,
+             desc:$("sh-desc").value.trim(), tip:$("sh-tip").value.trim(), author:$("sh-author").value.trim() };
+  }
+  function fillShareCategory(){
+    const sel = $("sh-category"); sel.innerHTML = "";
+    Object.keys(GALLERY_GROUPS).forEach(k => {
+      const o = document.createElement("option"); o.value = k; o.textContent = tr(GALLERY_GROUPS[k]); sel.appendChild(o);
+    });
+    if (!GALLERY_GROUPS[sel.value]) sel.value = "odds";
+  }
+  // The community card as it will look (08-workspace.js's fillGallery builds the same), updated as the form is filled.
+  function shareCard(){
+    const f = shareFields(), card = $("sh-card"); card.innerHTML = "";
+    const t = document.createElement("h4"); t.textContent = f.title || $("io-name").value.trim() || "my-program"; card.appendChild(t);
+    const by = document.createElement("p"); by.className = "by";
+    by.textContent = tr("Shared by {author}, made with runtime {runtime}.", { author:f.author, runtime:RUNTIME_VERSION }); card.appendChild(by);
+    const d = document.createElement("p"); d.textContent = f.desc; card.appendChild(d);
+    const can = document.createElement("p"); can.className = "can";
+    can.textContent = capabilitySentence(programCapabilities()) || tr("It only uses your models: it doesn't connect to anything else."); card.appendChild(can);
+    const tip = document.createElement("p"); tip.className = "tip"; tip.textContent = tr("Try: {tip}", { tip:f.tip }); card.appendChild(tip);
+    const btn = document.createElement("button"); btn.type = "button"; btn.textContent = tr("Load this program"); btn.disabled = true; card.appendChild(btn);
+  }
+  function shMsg(text, kind){ const m = $("sh-msg"); m.textContent = text; m.className = "msg" + (kind ? " " + kind : ""); }
+  // The issue form's address: every field prefilled from the form, plus the #p= link, the file name and the runtime.
+  function shareUrl(f, link){
+    const p = new URLSearchParams();
+    p.set("template", SHARE_TEMPLATE);
+    p.set("title", "Share a program: " + f.title);
+    p.set("name", slug($("io-name").value));
+    p.set("category", GALLERY_GROUPS[f.category] || f.category);  // the dropdown's label, as it appears in the form
+    p.set("description", f.desc);
+    p.set("tip", f.tip);
+    p.set("author", f.author);
+    p.set("runtime", RUNTIME_VERSION);
+    p.set("link", link);
+    return REPO_URL + "/issues/new?" + p.toString();
+  }
+  async function buildShareUrl(){
+    const f = shareFields();
+    if (!f.title || !f.desc || !f.tip || !f.author) return "";
+    const link = await programLink().catch(() => "");
+    return link ? shareUrl(f, link) : "";
+  }
+  window.__shareUrl = () => buildShareUrl();  // for the tests
+  function wireShare(){
+    registerDrawer("share", ["share-prog"], () => { fillShareCategory(); shareCard(); $("sh-title").focus(); });
+    $("share-prog").onclick = () => toggleDrawer("share");
+    SHARE_FIELDS.forEach(id => $(id).addEventListener("input", shareCard));
+    $("sh-open").onclick = async () => {
+      const f = shareFields();
+      if (!f.title || !f.desc || !f.tip || !f.author) { shMsg(tr("Fill in the title, a description, a tip and your name first."), "bad"); return; }
+      const link = await programLink().catch(() => "");
+      if (!link) { shMsg(tr("This browser can't pack a link (no CompressionStream); copy the block file instead."), "bad"); return; }
+      shMsg("", "");
+      window.open(shareUrl(f, link), "_blank", "noopener");
+    };
+  }
+  wireShare();
   // 23-schedules.js: Schedules and listeners on the page, and the editor's closing line.
   /* ---------- Schedules ---------- */
   const sched = { armed:false, timer:null, lastFired:new Map(), nextEvery:new Map(), wake:null };

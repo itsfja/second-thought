@@ -1208,7 +1208,6 @@
 "New":"𐀚𐀺",
 "Import":"𐀁𐀞𐀒",
 "Export":"𐀁𐀏𐀒",
-"Share":"𐀅𐀗𐀲",
 "Theme":"𐀳𐀔",
 "System":"𐀱𐀳𐀔",
 "Light":"le-u-ko",
@@ -1246,7 +1245,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"this isnt",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This link carries 𐀀 program: “{name}” ({n} blocks).{can} It loads only if you choose Load.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"That link is broken: it doesn't hold 𐀀 program this page can read. Nothing was loaded.",
-"This browser can't unpack links (no DecompressionStream).":"this isnt"
+"This browser can't unpack links (no DecompressionStream).":"this isnt",
+"Share…":"𐀅𐀗𐀲…",
+"Share this program with the community gallery":"𐀭 𐀜 𐀐",
+"Title":"𐀭",
+"Category":"𐀔",
+"Description":"𐀳",
+"Tip":"𐀨",
+"Author":"𐀛",
+"Open the share form on GitHub":"𐀐 𐀞 𐀅",
+"Fill in the title, a description, a tip and your name first.":"Fill in the title, 𐀀 description, 𐀀 tip and your name first.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opens 𐀀 Share 𐀀 program issue on GitHub with these fields and 𐀀 #p= link 𐀵 the program filled in. Nothing is sent until you press Open: the issue opens in 𐀀 new tab, 𐀵 edit or discard. A maintainer accepts it with 𐀀 label, and 𐀀 workflow turns it into the pull request that adds the program 𐀵 the gallery."
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

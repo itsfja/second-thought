@@ -1951,7 +1951,6 @@
   "New": "新建",
   "Import": "导入",
   "Export": "导出",
-  "Share": "分享",
   "Theme": "主题",
   "System": "系统",
   "Light": "浅色",
@@ -1989,7 +1988,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "此浏览器无法打包链接(没有 CompressionStream)；请改为复制块文件。",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "此链接包含一个程序:“{name}”({n} 个块)。{can} 只有选择“加载”时才会加载。",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "该链接已损坏:其中没有此页面可读取的程序。未加载任何内容。",
-  "This browser can't unpack links (no DecompressionStream).": "此浏览器无法解压链接(没有 DecompressionStream)。"
+  "This browser can't unpack links (no DecompressionStream).": "此浏览器无法解压链接(没有 DecompressionStream)。",
+  "Share…": "分享…",
+  "Share this program with the community gallery": "把这个程序分享到社区图库",
+  "Title": "标题",
+  "Category": "类别",
+  "Description": "描述",
+  "Tip": "提示",
+  "Author": "作者",
+  "Open the share form on GitHub": "在 GitHub 上打开分享表单",
+  "Fill in the title, a description, a tip and your name first.": "请先填写标题、描述、提示和你的名字。",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "打开一个 Share a program 的 GitHub issue，这些字段和指向程序的 #p= 链接都已填好。点击打开之前不会发送任何内容：issue 会在新标签页中打开，可编辑或丢弃。维护者用一个标签接受后，工作流会把它变成把程序加入图库的拉取请求。"
  },
  "examples": {
   "review": {

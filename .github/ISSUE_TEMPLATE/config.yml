@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/itsfja/second-thought/security/advisories/new
     about: Please report security problems privately, not as an issue.
   - name: Sharing a program in the gallery
-    url: https://github.com/itsfja/second-thought/blob/main/gallery/README.md
-    about: How to add a program to the community gallery.
+    url: https://github.com/itsfja/second-thought/issues/new?template=share-a-program.yml
+    about: Offer a program for the community gallery — the page's Share… button fills this form in for you.

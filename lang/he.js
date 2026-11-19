@@ -1208,7 +1208,6 @@
 "New":"חדש",
 "Import":"ייבוא",
 "Export":"ייצוא",
-"Share":"שתף",
 "Theme":"ערכת נושא",
 "System":"מערכת",
 "Light":"בהיר",
@@ -1246,7 +1245,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"הדפדפן הזה לא יכול לדחוס קישור (אין CompressionStream); העתק את קובץ הבלוקים.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"הקישור הזה נושא תוכנית: «{name}» ({n} בלוקים).{can} היא נטענת רק אם תבחר 'טען'.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"הקישור הזה שבור: אין בו תוכנית שהדף הזה יכול לקרוא. לא נטען כלום.",
-"This browser can't unpack links (no DecompressionStream).":"הדפדפן הזה לא יכול לפרוס קישורים (אין DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"הדפדפן הזה לא יכול לפרוס קישורים (אין DecompressionStream).",
+"Share…":"שתף…",
+"Share this program with the community gallery":"שיתוף התוכנית בגלריית הקהילה",
+"Title":"כותרת",
+"Category":"קטגוריה",
+"Description":"תיאור",
+"Tip":"טיפ",
+"Author":"מחבר",
+"Open the share form on GitHub":"פתיחת טופס השיתוף ב-GitHub",
+"Fill in the title, a description, a tip and your name first.":"מלאו תחילה כותרת, תיאור, טיפ ושמכם.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"פותח issue של Share a program ב-GitHub עם השדות האלה וקישור #p= לתוכנית שכבר מולא. שום דבר לא נשלח עד שלוחצים על 'פתיחה': ה-issue נפתח בלשונית חדשה, לעריכה או לביטול. מתחזק עם תווית מקבל אותו, וזרימת עבודה הופכת אותו לבקשת משיכה שמוסيفة את התוכנית לגלריה."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

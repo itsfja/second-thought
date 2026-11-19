@@ -278,7 +278,7 @@ async def page_tests():
         print("Drawers over the canvas (#445)")
         base = await pg.evaluate("JSON.stringify(document.querySelector('.canvas').getBoundingClientRect())")
         for btn, panel in [("#ex-toggle", "#gallery"), ("#io-export", "#io"), ("#lib-toggle", "#lib"), ("#mem-toggle", "#mem"),
-                           ("#ha-toggle", "#ha"), ("#bk-toggle", "#bk"), ("#keys-toggle", "#keys")]:
+                           ("#ha-toggle", "#ha"), ("#bk-toggle", "#bk"), ("#keys-toggle", "#keys"), ("#share-prog", "#share")]:
             await pg.click(btn)
             await pg.wait_for_timeout(250)
             r = await pg.evaluate("""([panel, base]) => ({ same: JSON.stringify(document.querySelector('.canvas').getBoundingClientRect()) === base,
@@ -371,6 +371,53 @@ async def page_tests():
         check("newer Second Thought" in newer["msg"] and newer["choices"] == 0 and newer["blocks"] == ref["blocks"] and newer["hash"] == "",
               f"a too-new link says so and loads nothing ({newer['msg'][:100]!r})")
         await pg5.close()
+
+        # Offering a program to the gallery (#437): Share… opens a form that shows the card as it will look and
+        # builds a prefilled "Share a program" issue form's address with the #p= link (#436) in it.
+        print("Share to the gallery (#437)")
+        await pg.select_option("#example", "a_inbox")
+        await pg.click("#load")
+        await pg.evaluate("document.getElementById('io-name').value = 'link test'")
+        await pg.evaluate("window.__opened = []; window.open = u => { if (typeof u === 'string') window.__opened.push(u); return null; }")
+        await pg.click("#share-prog")
+        await pg.wait_for_timeout(300)
+        share_open = await pg.evaluate("() => ({ open: !document.getElementById('share').hidden, focusIn: document.getElementById('share').contains(document.activeElement) })")
+        check(share_open["open"] and share_open["focusIn"], f"Share… opens the share drawer, focus inside ({share_open})")
+        await pg.click("#sh-open")
+        await pg.wait_for_timeout(300)
+        msg = await pg.text_content("#sh-msg")
+        opened = await pg.evaluate("window.__opened")
+        check("Fill in" in (msg or "") and opened == [], f"an empty form refuses to open and says why ({msg!r}, opened {opened})")
+        await pg.fill("#sh-title", "Inbox triage")
+        await pg.select_option("#sh-category", "calendar")
+        await pg.fill("#sh-desc", "Sorts my inbox and drafts replies.")
+        await pg.fill("#sh-tip", "Try it on this week's mail.")
+        await pg.fill("#sh-author", "Francis")
+        await pg.wait_for_timeout(200)
+        card = await pg.evaluate("document.getElementById('sh-card').innerText")
+        check("Inbox triage" in card and "Shared by Francis" in card and "It can send email" in card
+              and "Try: Try it on this week's mail." in card,
+              f"the card preview shows the title, author, capabilities and tip as the gallery card will look ({card[:90]!r}…)")
+        url = await pg.evaluate("window.__shareUrl()")
+        check(url.startswith("https://github.com/itsfja/second-thought/issues/new?") and "template=share-a-program.yml" in url,
+              f"the share address is the issue form with its template ({url[:80]}…)")
+        from urllib.parse import urlparse, parse_qs
+        q = parse_qs(urlparse(url).query)
+        check(q.get("title") == ["Share a program: Inbox triage"] and q.get("category") == ["Community: calendar and email"]
+              and q.get("author") == ["Francis"] and q.get("name") == ["link-test"] and q.get("runtime")
+              and q.get("link", [""])[0].startswith("http://test/#p="),
+              f"the fields are prefilled (title {q.get('title')}, category {q.get('category')}, name {q.get('name')}, runtime {q.get('runtime')})")
+        import base64 as _b64, zlib as _zlib
+        packed = q["link"][0].split("#p=")[1]
+        payload = json.loads(_zlib.decompress(_b64.urlsafe_b64decode(packed + "=" * (-len(packed) % 4)), -15).decode())
+        ws = json.loads(await pg.evaluate("JSON.stringify(Blockly.serialization.workspaces.save(Blockly.getMainWorkspace()))"))
+        check(payload.get("program") == ws and payload.get("name") == "link test" and isinstance(payload.get("version"), int),
+              f"the prefilled link unpacks to the canvas's program ({len(packed)} chars packed, name {payload.get('name')!r})")
+        await pg.click("#sh-open")
+        await pg.wait_for_timeout(600)
+        opened = await pg.evaluate("window.__opened")
+        check(opened == [url], f"Open opens exactly that address in a new tab ({[str(u)[:60] for u in opened]})")
+        await pg.keyboard.press("Escape")  # close the drawer
 
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()

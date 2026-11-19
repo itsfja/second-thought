@@ -1207,7 +1207,6 @@
 "New":"Nýtt",
 "Import":"Innber",
 "Export":"Útber",
-"Share":"Deila",
 "Theme":"Litur",
 "System":"Kerfi",
 "Light":"Ljós",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Þessi vafri getur ekki pakkað tengli (ekkert CompressionStream); afritaðu blokkarskrána í staðinn.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Þessi tengill ber forrit: „{name}“ ({n} blokkir).{can} Það hleðst aðeins ef þú velur Hlaða.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Þessi tengill er bilaður: hann inniheldur ekkert forrit sem þessi síða getur lesið. Ekkert var hlaðið.",
-"This browser can't unpack links (no DecompressionStream).":"Þessi vafri getur ekki opnað tengla (ekkert DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Þessi vafri getur ekki opnað tengla (ekkert DecompressionStream).",
+"Share…":"Deila…",
+"Share this program with the community gallery":"Deil þessu forriti með samfélagsgalleríinu",
+"Title":"Titill",
+"Category":"Flokkur",
+"Description":"Lýsing",
+"Tip":"Ráð",
+"Author":"Höfundur",
+"Open the share form on GitHub":"Opna deiliformið á GitHub",
+"Fill in the title, a description, a tip and your name first.":"Fylltu fyrst út titil, lýsingu, ábendingu og nafnið þitt.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opnar Share a program issue á GitHub með þessum reitum og #p= tengli á forritið áður fyllt út. Ekkert er sent fyrr en þú ýtir á Open: issue-ið opnast í nýjum flipa, til að breyta eða hafna. Viðhaldari samþykkir það með merki, og workflow breytir því í pull request sem bætir forritinu við galleríið."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

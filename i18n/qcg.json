@@ -1942,7 +1942,6 @@
   "New": "Ⱀⱁⰲⱁ",
   "Import": "Ⰻⰿⱂⱁⱃⱅⱏ",
   "Export": "Ⰵⰽⱄⱂⱁⱃⱅⱏ",
-  "Share": "Ⱁⰱⱋⰵⱀⰻⰵ",
   "Theme": "Ⱁⱇⱁⱃⰿⰾⰵⱀⰻⰵ",
   "System": "Ⱄⰻⱄⱅⰵⰿⰰ",
   "Light": "Ⱄⰲⱑⱅⱏ",
@@ -1980,7 +1979,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Ⱄⰵⰻ ⰸⱃⰻⱅⰵⰾⱏ ⱀⰵ ⰿⱁⰶⰵⱅⱏ ⱂⰰⰽⱁⰲⰰⱅⱐ ⱄⱄⱏⰹⰾⰽⱆ (ⱀⱑⱄⱅⱐ CompressionStream); ⰽⱁⱂⰻⱃⱆⰻ ⱇⰰⰻⰾⱏ ⰱⰾⱁⰽⱁⰲⱏ.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Ⱄⰹⰵ ⰸⰲⱑⱀⱁ ⱀⱁⱄⰻⱅⱏ ⱂⱃⱁⰳⱃⰰⰿⱆ: «{name}» ({n} ⰱⰾⱁⰽⱉⰲⱏ).{can} Ⰸⰰⰳⱃⱆⰶⰰⰵⱅⱄⱑ ⱅⱁⰽⰿⱁ ⱑⰽⱁ ⰻⰸⰱⰵⱃⰵⱎⰻ «Ⰸⰰⰳⱃⱆⰸⰽⱆ».",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Ⱄⱄⱏⰹⰾⰽⰰ ⱄⰹⰰ ⱃⰰⰸⱁⱃⰵⱀⰰ: ⱀⰵ ⱀⱁⱄⰻⱅⱏ ⱂⱃⱁⰳⱃⰰⰿⰿⱏⰹ, ⱓⰶⰵ ⱄⰹⰰ ⱄⱅⱃⰰⱀⰻⱌⰰ ⰿⱁⰶⰵⱅⱏ ⱍⰵⱄⱅⰻ. Ⱀⰻⱍⱅⱁⰶⰵ ⱀⰵ ⰸⰰⰳⱃⱆⰶⰵⱀⱁ.",
-  "This browser can't unpack links (no DecompressionStream).": "Ⱄⰵⰻ ⰸⱃⰻⱅⰵⰾⱏ ⱀⰵ ⰿⱁⰶⰵⱅⱏ ⱃⰰⱄⱂⰰⰽⱁⰲⰰⱅⰻ ⰸⰲⱑⱀⰰ (ⱀⱑⱄⱅⱐ DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "Ⱄⰵⰻ ⰸⱃⰻⱅⰵⰾⱏ ⱀⰵ ⰿⱁⰶⰵⱅⱏ ⱃⰰⱄⱂⰰⰽⱁⰲⰰⱅⰻ ⰸⰲⱑⱀⰰ (ⱀⱑⱄⱅⱐ DecompressionStream).",
+  "Share…": "Ⱁⰱⱋⰵⱀⰻⰵ…",
+  "Share this program with the community gallery": "ⱂⱁⰴⰵⰾⰻⱅⰵⱄⱑ ⱄⰻⰿⱏ ⱂⱃⱁⰳⱃⰰⰿⰿⱆ ⰳⰰⰾⰵⱃⰵⰻ ⱁⰱⱋⰻⱀⱏⰹ",
+  "Title": "ⱅⰻⱅⱆⰾ",
+  "Category": "ⰽⰰⱅⰵⰳⱁⱃⰻⱑ",
+  "Description": "ⱁⱂⰻⱄⰰⱀⰻⰵ",
+  "Tip": "ⱄⱁⰲⰵⱅ",
+  "Author": "ⰰⰲⱅⱁⱃ",
+  "Open the share form on GitHub": "ⱁⱅⰽⱃⱏⰹⱅⱐ ⱇⱁⱃⰿⱆ ⱂⱆⰱⰾⰻⰽⰰⱌⰻⰻ ⱀⰰ GitHub",
+  "Fill in the title, a description, a tip and your name first.": "ⱄⱀⰰⱍⰰⰾⰰ ⰸⰰⱂⱁⰾⱀⰻⱅⰵ ⱅⰻⱅⱆⰾ, ⱁⱂⰻⱄⰰⱀⰻⰵ, ⱄⱁⰲⰵⱅ ⰻ ⰲⰰⱎⰵ ⰻⰿⱑ.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "ⱁⱅⰽⱃⱏⰹⰲⰰⰵⱅ issue Share a program ⱀⰰ GitHub ⱄ ⰵⱅⰻⰿⰻ ⱂⱁⰾⱑⰿⰻ ⰻ ⱄⱄⱏⰹⰾⰽⱁⰻ #p= ⱀⰰ ⱂⱃⱁⰳⱃⰰⰿⰿⱆ ⱆⰶⰵ ⰸⰰⱂⱁⰾⱀⰵⱀⱀⱁⰻ. ⱀⰻⱍⰵⰳⱁ ⱀⰵ ⱂⱁⱄⱏⰹⰾⰰⰵⱅⱄⱑ, ⱂⱁⰽⰰ ⱀⰵ ⱀⰰⰶⰿⰵⱅⰵ «ⱁⱅⰽⱃⱏⰹⱅⱐ»: issue ⱁⱅⰽⱃⱁⰵⱅⱄⱑ ⰲ ⱀⱁⰲⱁⰻ ⰲⰽⰾⰰⰴⰽⰵ, ⱍⱅⱁⰱⱏⰹ ⱃⰵⰴⰰⰽⱅⰻⱃⱁⰲⰰⱅⱐ ⰻⰾⰻ ⱁⱅⰿⰵⱀⰻⱅⱐ. ⱈⱃⰰⱀⰻⱅⰵⰾⱐ ⱂⱃⰻⱀⰻⰿⰰⰵⱅ ⰵⰳⱁ ⰿⰵⱅⰽⱁⰻ, ⰻ ⱃⰰⰱⱁⱍⰻⰻ ⱂⱁⱅⱁⰽ ⱂⱃⰵⰲⱃⰰⱋⰰⰵⱅ ⰵⰳⱁ ⰲ pull request, ⰽⱁⱅⱁⱃⱏⰹⰻ ⰴⱁⰱⰰⰲⰾⱑⰵⱅ ⱂⱃⱁⰳⱃⰰⰿⰿⱆ ⰲ ⰳⰰⰾⰵⱃⰵⱓ."
  },
  "examples": {
   "review": {

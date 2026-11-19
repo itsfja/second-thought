@@ -1207,7 +1207,6 @@
 "New":"Nwe",
 "Import":"Inbere",
 "Export":"Outbere",
-"Share":"Delyng",
 "Theme":"Hwe",
 "System":"Sette",
 "Light":"Liht",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"This browser cannat pakke a linke (no CompressionStream); copy þe blok file instede.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This linke bereth a program: “{name}” ({n} blokkes).{can} It lysketh oonly if þou chesest Load.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Þat linke is broken: it holdeth na program þis page kan rede. Noþyng was loded.",
-"This browser can't unpack links (no DecompressionStream).":"This browser cannat unpakke linkes (no DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"This browser cannat unpakke linkes (no DecompressionStream).",
+"Share…":"Delyng…",
+"Share this program with the community gallery":"Dæl þis program mid þære community gallery",
+"Title":"Title",
+"Category":"Category",
+"Description":"Description",
+"Tip":"Tip",
+"Author":"Author",
+"Open the share form on GitHub":"Open þe share form on GitHub",
+"Fill in the title, a description, a tip and your name first.":"Fyll in þe title, a description, a tip and þy name first.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Openeth a Share a program issue on GitHub wiþ þes feldes and a #p= link to þe program, filled in. Naþing is sent til þu pressest Open: þe issue openeth in a newe tab, to edit or cast away. A maintainer accepteth it wiþ a label, and a workflow turneth it into þe pull request þat addeth þe program to þe gallery."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

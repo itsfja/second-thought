@@ -1207,7 +1207,6 @@
 "New":"𐌽𐌴𐍅",
 "Import":"𐌹𐌼𐍀𐍉𐍂𐍄",
 "Export":"𐌴𐍇𐍀𐍉𐍂𐍄",
-"Share":"𐍃𐌷𐌰𐍂𐌴",
 "Theme":"𐍄𐌷𐌴𐌼𐌴",
 "System":"system",
 "Light":"𐌻𐌹𐌲𐌷𐍄",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"𐍄𐌷𐌹𐍃 𐌹𐍃𐌽𐍄",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This 𐌻𐌹𐌽𐌺 carries 𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼: “{name}” ({n} blocks).{can} It 𐌻𐍉𐌰𐌳𐍃 only 𐌹𐍆 you choose Load.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"That 𐌻𐌹𐌽𐌺 𐌹𐍃 𐌱𐍂𐍉𐌺𐌴𐌽: 𐌹𐍄 doesn't 𐌷𐍉𐌻𐌳 𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 𐍄𐌷𐌹𐍃 𐍀𐌰𐌲𐌴 can 𐍂𐌴𐌰𐌳. Nothing 𐍅𐌰𐍃 𐌻𐍉𐌰𐌳𐌴𐌳.",
-"This browser can't unpack links (no DecompressionStream).":"𐍄𐌷𐌹𐍃 𐌹𐍃𐌽𐍄"
+"This browser can't unpack links (no DecompressionStream).":"𐍄𐌷𐌹𐍃 𐌹𐍃𐌽𐍄",
+"Share…":"𐍃𐌷𐌰𐍂𐌴…",
+"Share this program with the community gallery":"Share 𐍄𐌷𐌹𐍃 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 𐍅𐌹𐍄𐌷 𐍄𐌷𐌴 community gallery",
+"Title":"𐍄𐌹",
+"Category":"𐌺𐌰",
+"Description":"𐌽𐌴",
+"Tip":"𐍃𐌴",
+"Author":"𐌰𐌿",
+"Open the share form on GitHub":"Open 𐍄𐌷𐌴 𐍃𐌷𐌰𐍂𐌴 𐍆𐍉𐍂𐌼 𐍉𐌽 GitHub",
+"Fill in the title, a description, a tip and your name first.":"Fill 𐌹𐌽 𐍄𐌷𐌴 𐍄𐌹𐍄𐌻𐌴, 𐌰 description, 𐌰 𐍄𐌹𐍀 𐌰𐌽𐌳 your 𐌽𐌰𐌼𐌴 𐍆𐌹𐍂𐍃𐍄.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opens 𐌰 Share 𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 𐌹𐍃𐍃𐌿𐌴 𐍉𐌽 GitHub 𐍅𐌹𐍄𐌷 𐍄𐌷𐌴𐍃𐌴 𐍆𐌹𐌴𐌻𐌳𐍃 𐌰𐌽𐌳 𐌰 #𐍀= 𐌻𐌹𐌽𐌺 𐍄𐍉 𐍄𐌷𐌴 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 𐍆𐌹𐌻𐌻𐌴𐌳 𐌹𐌽. Nothing 𐌹𐍃 𐍃𐌴𐌽𐍄 𐌿𐌽𐍄𐌹𐌻 you 𐍀𐍂𐌴𐍃𐍃 Open: 𐍄𐌷𐌴 𐌹𐍃𐍃𐌿𐌴 𐍉𐍀𐌴𐌽𐍃 𐌹𐌽 𐌰 𐌽𐌴𐍅 𐍄𐌰𐌱, 𐍄𐍉 𐌴𐌳𐌹𐍄 𐍉𐍂 discard. A 𐌼𐌰𐌹𐌽𐍄𐌰𐌹𐌽𐌴𐍂 accepts 𐌹𐍄 𐍅𐌹𐍄𐌷 𐌰 𐌻𐌰𐌱𐌴𐌻, 𐌰𐌽𐌳 𐌰 𐍅𐍉𐍂𐌺𐍆𐌻𐍉𐍅 𐍄𐌿𐍂𐌽𐍃 𐌹𐍄 𐌹𐌽𐍄𐍉 𐍄𐌷𐌴 𐍀𐌿𐌻𐌻 𐍂𐌴𐌵𐌿𐌴𐍃𐍄 𐍄𐌷𐌰𐍄 𐌰𐌳𐌳𐍃 𐍄𐌷𐌴 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 𐍄𐍉 𐍄𐌷𐌴 gallery."
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},

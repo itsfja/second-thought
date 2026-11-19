@@ -5,6 +5,17 @@ what it does, and what it can do, which the page works out from its blocks.
 
 ## Sharing a program
 
+The easy way is from the page, no git needed:
+
+1. **Make it on the page**, then open **Program → Share…**. Fill in the title, category, description, tip and your
+   name — the card is shown as it will look, with what the program can do worked out from its blocks — and press
+   **Open the share form on GitHub**. That opens a *Share a program* issue with everything filled in, including a
+   `#p=` link to the program. Edit anything, then submit the issue.
+2. A maintainer reads it and adds the **`gallery-accepted`** label; a workflow then unpacks the link into
+   `gallery/<name>.json`, rebuilds the page and opens the pull request (which closes the issue on merge).
+
+Or by hand, in a pull request:
+
 1. **Make it on the page and save it.** Open **Import / export**, give it a name and press **Save .json file** (or
    **Copy as text** and paste it into a new `.json` file). That's a block file.
 2. **Add a `"gallery"` part** at the top level of that file, next to `"program"`:
@@ -41,7 +52,7 @@ what it does, and what it can do, which the page works out from its blocks.
    Some programs here are written as Python in `tools/gallery_build.py` instead, so their blocks can be reviewed as code.
    To change one of those, edit it there and run `python tools/gallery_build.py`; the tests check the two match.
 4. **Run `python tools/sync.py`**, which copies the gallery into `second-thought.html`, and open a pull request with
-   both files. If you don't use git, open an issue with the block file attached and the `"gallery"` part filled in.
+   both files.
 
 ## What's checked
 

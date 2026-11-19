@@ -1951,7 +1951,6 @@
   "New": "Nieuw",
   "Import": "Importeren",
   "Export": "Exporteren",
-  "Share": "Delen",
   "Theme": "Thema",
   "System": "Systeem",
   "Light": "Licht",
@@ -1989,7 +1988,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Deze browser kan geen koppeling inpakken (geen CompressionStream); kopieer in plaats daarvan het blokbestand.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Deze koppeling bevat een programma: “{name}” ({n} blokken).{can} Het laadt pas als je Laden kiest.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Die koppeling is stuk: er zit geen programma in dat deze pagina kan lezen. Er is niets geladen.",
-  "This browser can't unpack links (no DecompressionStream).": "Deze browser kan koppelingen niet uitpakken (geen DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "Deze browser kan koppelingen niet uitpakken (geen DecompressionStream).",
+  "Share…": "Delen…",
+  "Share this program with the community gallery": "Dit programma delen met de communitygalerij",
+  "Title": "Titel",
+  "Category": "Categorie",
+  "Description": "Beschrijving",
+  "Tip": "Tip",
+  "Author": "Auteur",
+  "Open the share form on GitHub": "Het deelformulier op GitHub openen",
+  "Fill in the title, a description, a tip and your name first.": "Vul eerst de titel, een beschrijving, een tip en je naam in.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Opent een Share a program-issue op GitHub met deze velden en een #p=-link naar het programma al ingevuld. Er wordt niets verstuurd tot je op Openen drukt: het issue opent in een nieuw tabblad, om te bewerken of te verwijderen. Een beheerder accepteert het met een label, en een workflow maakt er de pull request van die het programma aan de galerij toevoegt."
  },
  "examples": {
   "review": {
