@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"Un archivo de bloques guardado desde esta página (.json) o Python exportado (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Cada viernes a las 18:00, busca las mejores dos horas de este fin de semana para tender la ropa y envíamelo por Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"Cuando se abra la puerta de entrada, enciende la luz del portal y envíame un mensaje por Telegram",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Cada mañana a las 8:00, resume mi correo sin leer y envíame los tres más importantes por Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Cada mañana a las 8:00, resume mi correo sin leer y envíame los tres más importantes por Telegram",
+"This program can: {things}":"Este programa puede: {things}",
+"asks first":"pregunta primero"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

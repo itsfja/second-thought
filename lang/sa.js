@@ -1264,7 +1264,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"अस्मिन् प्ṛष्ठे सं्रक्षितः् खण्डः् कोशः् (.ज्सोन्), वा निर्यातः् Python (.प्य्, .ziप्).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"प्रतिशुक्रवासरे 18 वादने, अस्मिन् सप्तअहन्ते वस्त्राणि शोषयितुं् द्वी बेस्तउ घण्टे शोध, तां् च Telegram इति मह्यम् प्रेषय",
 "When the front door opens, turn on the porch light and send me a Telegram message":"यदा द्वारम् उद्घाट्यते, आरङ्गस्य प्रकाशं् प्रज्वालत, च मह्यम् Telegram इति सन्देस्हां् प्रेषय",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिमारम् 8 वादने, मे अपथितं् ईमेल् सं्क्षिप्य त्रीणि प्रधानतमानि Telegram इति मह्यम् प्रेषय"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिमारम् 8 वादने, मे अपथितं् ईमेल् सं्क्षिप्य त्रीणि प्रधानतमानि Telegram इति मह्यम् प्रेषय",
+"This program can: {things}":"This प्रोग्रम् चन्: {things}",
+"asks first":"अस्क्स् fiर्स्त्"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

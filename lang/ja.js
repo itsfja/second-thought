@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"このページから保存したブロックファイル（.json）、またはエクスポートした Python（.py, .zip）。",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"毎週金曜18時、今週末に洗濯物を乾かすのに最適な2時間を見つけて Telegram で送って",
 "When the front door opens, turn on the porch light and send me a Telegram message":"玄関のドアが開いたら、ポーチの照明をつけて Telegram でメッセージを送って",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"毎朝8時、未読メールを要約して、重要なものを3件 Telegram で送って"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"毎朝8時、未読メールを要約して、重要なものを3件 Telegram で送って",
+"This program can: {things}":"このプログラムができること: {things}",
+"asks first":"まず確認します"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

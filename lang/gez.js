@@ -1264,7 +1264,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"ብሎcክ fiሌ page ዌዴ ሰve (.jሶን), oር pይትሆን expoርት (.pይ, .ዚp).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"fሪደይ 6pም, ዌeኬንድ ቤስት ትዎ ሆuርስ ድርይ ወስሂንg fiንድ, ቴሌgረም ሴንድ",
 "When the front door opens, turn on the porch light and send me a Telegram message":"fሮንት ዶoር opeን, poርcህ ሊgህት oን, ቴሌgረም ሜስሰge ሴንድ",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"ሞርኒንg 8aም, uንሬaድ eመiል ሱምመሪዜ, ትህሬe ሞስት iምpoርተንት ቴሌgረም ሴንድ"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"ሞርኒንg 8aም, uንሬaድ eመiል ሱምመሪዜ, ትህሬe ሞስት iምpoርተንት ቴሌgረም ሴንድ",
+"This program can: {things}":"Tሂስ pሮgረም caን: {things}",
+"asks first":"aስክስ fiርስት"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},

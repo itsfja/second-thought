@@ -492,6 +492,46 @@ async def page_tests():
               "a browser with a program kept lands in the editor, with no first screen")
         await pgR.close()
 
+        # The acting-capabilities line and the block marks (#448): the line under the controls says what the program
+        # can do, updates as blocks come and go, is a role=status for screen readers, and every acting block carries a
+        # shape mark (triangle = asks first, diamond = no asking).
+        print("Acting capabilities line (#448)")
+        MARKS_JS = """() => Blockly.getMainWorkspace().getAllBlocks(false).map(b => {
+            const want = window.__actsMark(b);
+            const root = b.getSvgRoot && b.getSvgRoot();
+            const got = root && root.querySelector(':scope > .acts-mark') ? root.querySelector(':scope > .acts-mark').dataset.shape : null;
+            return { type:b.type, kind:b.type === 'rb_agent_builtin' ? String(b.getFieldValue('KIND') || '') : '', want, got }; })"""
+        await pg.select_option("#example", "a_inbox")
+        await pg.click("#load")
+        await pg.wait_for_timeout(400)
+        role = await pg.get_attribute("#caps-line", "role")
+        line1 = await pg.text_content("#caps-line")
+        check(role == "status", f"the capabilities line is a live region for screen readers (role={role!r})")
+        check("This program can:" in line1 and "send email (asks first)" in line1 and "read your email" in line1,
+              f"the line says what the program can send and read ({line1!r})")
+        marks = await pg.evaluate(MARKS_JS)
+        acting = [m for m in marks if m["want"]]
+        check(all(m["want"] == m["got"] for m in marks) and len(acting) == 1
+              and acting[0]["kind"] == "email_send" and acting[0]["want"] == "triangle",
+              f"the acting block carries a triangle mark and nothing else is marked ({[(m['type'], m['kind'], m['want'], m['got']) for m in marks if m['want'] or m['got']]})")
+        await pg.select_option("#example", "a_prreview")
+        await pg.click("#load")
+        await pg.wait_for_timeout(400)
+        line2 = await pg.text_content("#caps-line")
+        marks2 = await pg.evaluate(MARKS_JS)
+        acting2 = [m for m in marks2 if m["want"]]
+        check(line2 != line1 and "comment on GitHub" in line2 and "(asks first)" in line2,
+              f"the line updates when the program changes ({line2!r})")
+        check(all(m["want"] == m["got"] for m in marks2) and any(m["kind"] == "github_act" and m["want"] == "triangle" for m in acting2),
+              f"the new program's acting tool is marked ({[(m['type'], m['kind'], m['want'], m['got']) for m in marks2 if m['want'] or m['got']]})")
+        await pg.select_option("#example", "review")
+        await pg.click("#load")
+        await pg.wait_for_timeout(400)
+        line3 = await pg.text_content("#caps-line")
+        marks3 = await pg.evaluate(MARKS_JS)
+        check("only uses your models" in line3 and not any(m["want"] or m["got"] for m in marks3) and len(marks3) > 0,
+              f"a model-only program says so and carries no marks ({line3!r}, {len(marks3)} blocks)")
+
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()
         return codes

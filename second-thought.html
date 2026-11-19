@@ -55,6 +55,11 @@ details.menu[open]>summary{border-color:var(--accent)}
 .describe-inline{display:flex;gap:6px;align-items:center;flex:1 1 150px;min-width:120px}
 .describe-inline textarea{flex:1;min-width:0;min-height:34px;resize:vertical;line-height:1.4}
 .subbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;margin:-2px 0 8px;position:relative;z-index:10002;background:var(--bg)}
+/* What the program on the canvas can act on, before Run (#448): always there, read out by screen readers. */
+.caps-line{margin:0;font-size:13px;color:var(--muted);flex:1 1 auto}
+.caps-line b{color:var(--ink);font-weight:600}
+/* The mark on blocks that send, change or spend (#448): a shape, not a colour — a triangle asks first, a diamond doesn't. */
+.acts-mark{fill:var(--bad);stroke:var(--panel);stroke-width:1}
 .main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px;height:calc(100% - 100px);min-height:600px}
 .describe-out{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--panel);margin:0 0 12px}
 .describe-out .msg{margin:0 0 6px}
@@ -291,6 +296,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   </div>
 </header>
 <div class="subbar">
+  <p id="caps-line" class="caps-line" role="status"></p>
   <p id="ex-desc" class="exdesc"></p>
   <div id="banner" class="banner" hidden></div>
   <div id="offsite" class="banner slim" hidden><span id="offsite-text"></span> <a id="offsite-link" href="https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN" target="_blank" rel="noopener"></a>
@@ -26467,6 +26473,59 @@ HOW TO MAP CODE
     startRun(starts, "manual");
   };
 
+// 23-acts.js: What the program on the canvas can act on, before Run (#448). A line under the controls, always
+// there, worked out from the blocks as the import panel does — "This program can: send Telegram messages (asks
+// first) · read your calendar." — updated as blocks come and go, and read out by screen readers (role=status).
+// And a small mark on every block that sends, changes or spends: a triangle when the form asks first, a diamond
+// for the no-asking forms (the agent tools' "(no asking)" kinds). A shape, not a colour.
+  const MARK_TRIANGLE = "M0 10 L5 0 L10 10 Z";   // asks first
+  const MARK_DIAMOND = "M5 0 L10 5 L5 10 L0 5 Z"; // no asking
+
+  // Which mark a block carries, or null: an acting capability, and whether this form of it asks first.
+  function actsMark(b){
+    const c = blockCapability(b);
+    if (!c) return null;
+    const cap = CAPABILITIES.find(x => x[0] === c);
+    if (!cap || !cap[2]) return null;  // reads and model-only blocks carry no mark
+    const kind = b.type === "rb_agent_builtin" ? String(b.getFieldValue("KIND") || "") : "";
+    return kind.endsWith("_free") ? "diamond" : "triangle";
+  }
+  window.__actsMark = b => actsMark(b);       // for the tests
+  window.__capBlocks = () => ({ blocks:CAP_BLOCKS, kinds:CAP_KINDS });
+
+  function capsLineText(){
+    const caps = programCapabilities();
+    if (!caps.length) return tr("It only uses your models: it doesn't connect to anything else.");
+    const acts = caps.filter(c => c[2]), reads = caps.filter(c => !c[2]);
+    const parts = acts.map(c => tr(c[1]) + " (" + tr("asks first") + ")");
+    if (reads.length) parts.push(andList(reads.map(c => tr(c[1]))));
+    return tr("This program can: {things}", { things:parts.join(" · ") });
+  }
+
+  function updateCapsLine(){ $("caps-line").textContent = capsLineText(); }
+
+  // Re-mark every block after the canvas changes (Blockly rebuilds the SVG on render, so the marks go on after it).
+  function markActingBlocks(){
+    ws.getAllBlocks(false).forEach(b => {
+      const root = b.getSvgRoot && b.getSvgRoot();
+      if (!root) return;
+      root.querySelectorAll(":scope > .acts-mark").forEach(n => n.remove());
+      const shape = actsMark(b);
+      if (!shape) return;
+      const mark = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      mark.setAttribute("class", "acts-mark");
+      mark.setAttribute("d", shape === "diamond" ? MARK_DIAMOND : MARK_TRIANGLE);
+      mark.setAttribute("transform", `translate(${Math.max(0, (b.width || 0) - 14)} 3)`);
+      mark.dataset.shape = shape;
+      root.appendChild(mark);
+    });
+  }
+  function refreshActs(){
+    updateCapsLine();
+    setTimeout(markActingBlocks, 0);
+  }
+  ws.addChangeListener(ev => { if (!ev.isUiEvent) refreshActs(); });
+  refreshActs();
 // 23-first-screen.js: The first screen (#443). A browser with nothing kept yet (no saved program in localStorage)
 // gets three ways in — Describe it (the plain-English box, large, with three sentences to click), Start from an
 // example (six chosen ones), Open a file — and lands in the editor with the result on the canvas. Anyone who has

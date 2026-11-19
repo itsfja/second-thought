@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"𒀀 block file saved from this page (.json), or exported Python (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Every Friday 𒀜 6pm, find the best two hours this weekend to dry washing and send 𒀉 to 𒈨 on Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"When the front door opens, turn on the porch light and send 𒈨 𒀀 Telegram message",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each morning 𒀜 8am, summarize my unread email and send 𒈨 the three most important on Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each morning 𒀜 8am, summarize my unread email and send 𒈨 the three most important on Telegram",
+"This program can: {things}":"𒉺 𒋳 {things}",
+"asks first":"𒀉"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},

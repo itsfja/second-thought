@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"从本页保存的块文件（.json），或导出的 Python（.py, .zip）。",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"每周五下午6点，找出本周末晾干衣服的最佳两个小时，发到我的 Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"前门一打开，就打开门廊灯，并发 Telegram 消息给我",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"每天早上8点，总结我的未读邮件，把最重要的三封通过 Telegram 发给我"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"每天早上8点，总结我的未读邮件，把最重要的三封通过 Telegram 发给我",
+"This program can: {things}":"此程序可以：{things}",
+"asks first":"先询问"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

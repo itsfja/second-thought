@@ -50,6 +50,11 @@ details.menu[open]>summary{border-color:var(--accent)}
 .describe-inline{display:flex;gap:6px;align-items:center;flex:1 1 150px;min-width:120px}
 .describe-inline textarea{flex:1;min-width:0;min-height:34px;resize:vertical;line-height:1.4}
 .subbar{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px;margin:-2px 0 8px;position:relative;z-index:10002;background:var(--bg)}
+/* What the program on the canvas can act on, before Run (#448): always there, read out by screen readers. */
+.caps-line{margin:0;font-size:13px;color:var(--muted);flex:1 1 auto}
+.caps-line b{color:var(--ink);font-weight:600}
+/* The mark on blocks that send, change or spend (#448): a shape, not a colour — a triangle asks first, a diamond doesn't. */
+.acts-mark{fill:var(--bad);stroke:var(--panel);stroke-width:1}
 .main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:12px;height:calc(100% - 100px);min-height:600px}
 .describe-out{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--panel);margin:0 0 12px}
 .describe-out .msg{margin:0 0 6px}

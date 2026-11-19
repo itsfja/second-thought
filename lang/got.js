@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"A block 𐍆𐌹𐌻𐌴 saved 𐍆𐍂𐍉𐌼 𐍄𐌷𐌹𐍃 𐍀𐌰𐌲𐌴 (.json), 𐍉𐍂 𐌴𐍇𐍀𐍉𐍂𐍄𐌴𐌳 Python (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Every Friday 𐌰𐍄 6pm, 𐍆𐌹𐌽𐌳 𐍄𐌷𐌴 𐌱𐌴𐍃𐍄 𐍄𐍅𐍉 𐌷𐍉𐌿𐍂𐍃 𐍄𐌷𐌹𐍃 𐍅𐌴𐌴𐌺𐌴𐌽𐌳 𐍄𐍉 dry 𐍅𐌰𐍃𐌷𐌹𐌽𐌲 𐌰𐌽𐌳 𐍃𐌴𐌽𐌳 𐌹𐍄 𐍄𐍉 𐌼𐌴 𐍉𐌽 Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"When 𐍄𐌷𐌴 𐍆𐍂𐍉𐌽𐍄 𐌳𐍉𐍉𐍂 𐍉𐍀𐌴𐌽𐍃, 𐍄𐌿𐍂𐌽 𐍉𐌽 𐍄𐌷𐌴 porch 𐌻𐌹𐌲𐌷𐍄 𐌰𐌽𐌳 𐍃𐌴𐌽𐌳 𐌼𐌴 𐌰 Telegram 𐌼𐌴𐍃𐍃𐌰𐌲𐌴",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each 𐌼𐍉𐍂𐌽𐌹𐌽𐌲 𐌰𐍄 8am, 𐍃𐌿𐌼𐌼𐌰𐍂𐌹𐌶𐌴 my 𐌿𐌽𐍂𐌴𐌰𐌳 𐌴𐌼𐌰𐌹𐌻 𐌰𐌽𐌳 𐍃𐌴𐌽𐌳 𐌼𐌴 𐍄𐌷𐌴 𐍄𐌷𐍂𐌴𐌴 𐌼𐍉𐍃𐍄 𐌹𐌼𐍀𐍉𐍂𐍄𐌰𐌽𐍄 𐍉𐌽 Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each 𐌼𐍉𐍂𐌽𐌹𐌽𐌲 𐌰𐍄 8am, 𐍃𐌿𐌼𐌼𐌰𐍂𐌹𐌶𐌴 my 𐌿𐌽𐍂𐌴𐌰𐌳 𐌴𐌼𐌰𐌹𐌻 𐌰𐌽𐌳 𐍃𐌴𐌽𐌳 𐌼𐌴 𐍄𐌷𐌴 𐍄𐌷𐍂𐌴𐌴 𐌼𐍉𐍃𐍄 𐌹𐌼𐍀𐍉𐍂𐍄𐌰𐌽𐍄 𐍉𐌽 Telegram",
+"This program can: {things}":"This 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 can: {things}",
+"asks first":"𐌰𐍃𐌺𐍃 𐍆𐌹𐍂𐍃𐍄"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
