@@ -1262,7 +1262,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"дело блоковъ съхранено съ сея страницы (.json), или сышанное Python (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"каждый пятницу въ 18 часовъ, нашди два лучших часа этой недели для сушки белья, и пошли ихъ въ Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"когда дверь отврывается, вожги светиль на крыльце, и пошли мне сообщение въ Telegram",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"каждое утро въ 8 часовъ, собери непрочтенные письма, и пошли мне три важнейши въ Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"каждое утро въ 8 часовъ, собери непрочтенные письма, и пошли мне три важнейши въ Telegram",
+"This program can: {things}":"Сїи программа можєтъ: {things}",
+"asks first":"съпръва въпрашаѥтъ"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},

@@ -2008,7 +2008,9 @@
   "A block file saved from this page (.json), or exported Python (.py, .zip).": "𒋫𒁉 file",
   "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Every Friday 𒀜 6pm, find the best two hours this weekend to dry washing and send 𒀉 to 𒈨 on Telegram",
   "When the front door opens, turn on the porch light and send me a Telegram message": "When the front door opens, turn on the porch light and send 𒈨 𒀀 Telegram message",
-  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Each morning 𒀜 8𒄠, summarize my 𒌦𒊑𒀜 𒂊𒈠𒅋 and send 𒈨 the three most important on Telegram"
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Each morning 𒀜 8𒄠, summarize my 𒌦𒊑𒀜 𒂊𒈠𒅋 and send 𒈨 the three most important on Telegram",
+  "This program can: {things}": "𒊓 𒋫𒁉 {things}",
+  "asks first": "𒄑"
  },
  "examples": {
   "review": {

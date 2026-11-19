@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"Blokkaskrá vistuð af þessari síðu (.json), eða útflutt Python (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Á hverjum föstudegi klukkan 18, finndu bestu tvær klukkustundirnar þessa helgi til að þurrka þvott og sendu mér á Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"Þegar útidyra opnast, kveiktu á útiljósinu og sendu mér skilaboð á Telegram",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Á hverjum morgni klukkan 8, samantektu ólesin tölvupóstinn minn og sendu mér þrjú mikilvægustu á Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Á hverjum morgni klukkan 8, samantektu ólesin tölvupóstinn minn og sendu mér þrjú mikilvægustu á Telegram",
+"This program can: {things}":"Þetta forrit má: {things}",
+"asks first":"spyr fyrst"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

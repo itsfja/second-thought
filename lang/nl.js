@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"Een blokbestand opgeslagen vanaf deze pagina (.json), of geëxporteerde Python (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Elke vrijdag om 18:00, vind de beste twee uur van dit weekend om de was te drogen en stuur het me via Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"Als de voordeur opengaat, zet de portieklicht aan en stuur me een Telegram-bericht",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Elke ochtend om 8:00, vat mijn ongelezen e-mail samen en stuur me de drie belangrijkste via Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Elke ochtend om 8:00, vat mijn ongelezen e-mail samen en stuur me de drie belangrijkste via Telegram",
+"This program can: {things}":"Dit programma kan: {things}",
+"asks first":"vraagt eerst"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

@@ -1263,7 +1263,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"इमस्मिं् प्ṛट्ठे सं्रक्खितो खण्डो कोसो (.ज्सोन्), वा निर्यातो Python (.प्य्, .ziप्).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"प्रतिशुक्रवासरे 18 वादने, इमस्मिं् सप्तअहन्ते वत्थानि सोसेयितुं् द्वे उत्तमा घटियो विचिन, ता च Telegram इति मं् पहिण",
 "When the front door opens, turn on the porch light and send me a Telegram message":"यदा द्वारं् विवरति, आरङ्गस्स पकासं् पज्जल, च मं् Telegram इति सन्देसं् पहिण",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिदिवसा 8 वादने, मम अपथितं् ईमेलं् सं्खिप्प, तत्तानं् तयानं् प्रधानतमानि Telegram इति मं् पहिण"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिदिवसा 8 वादने, मम अपथितं् ईमेलं् सं्खिप्प, तत्तानं् तयानं् प्रधानतमानि Telegram इति मं् पहिण",
+"This program can: {things}":"This प्रोग्रम् चन्: {things}",
+"asks first":"अस्क्स् fiर्स्त्"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},

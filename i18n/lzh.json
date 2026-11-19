@@ -1997,7 +1997,9 @@
   "A block file saved from this page (.json), or exported Python (.py, .zip).": "此頁所存之塊牘（.json），或所出之 Python（.py, .zip）。",
   "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "每週五酉時，覓本週末晾衣之吉時二刻，以電訊報我",
   "When the front door opens, turn on the porch light and send me a Telegram message": "戶闥既啟，燃門廊之燈，以電訊報我",
-  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "每日卯時，綜未覽之郵，擇其要者三，以電訊報我"
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "每日卯時，綜未覽之郵，擇其要者三，以電訊報我",
+  "This program can: {things}": "此程序能為：{things}",
+  "asks first": "先問"
  },
  "examples": {
   "review": {

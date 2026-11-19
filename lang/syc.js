@@ -1264,7 +1264,9 @@
 "A block file saved from this page (.json), or exported Python (.py, .zip).":"A block file saved from ܬܗܝܣ ܦܓ (.json), ܐܘܪ exported Python (.py, .zip).",
 "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Every Friday ܐܬ 6pm, find ܬܗ ܒܣܬ ܬܘܘ ܗܘܘܪܣ ܬܗܝܣ ܘܟܢܕ ܬܘ ܕܪܝ ܘܣܗܝܢܓ ܐܢܕ ܣܢܕ ܐܝܬ ܬܘ ܡ ܐܘܢ Telegram",
 "When the front door opens, turn on the porch light and send me a Telegram message":"When ܬܗ front ܕܘܘܪ ܐܘܦܢܣ, ܬܘܪܢ ܐܘܢ ܬܗ porch ܠܝܓܗܬ ܐܢܕ ܣܢܕ ܡ ܐ Telegram ܡܣܓ",
-"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each ܡܘܪܢܝܢܓ ܐܬ 8am, ܣܘܡܪܝܙ ܡܝ ܐܘܢܪܕ ܐܡܝܠ ܐܢܕ ܣܢܕ ܡ ܬܗ ܬܗܪ ܡܘܣܬ ܐܝܡܦܘܪܬܢܬ ܐܘܢ Telegram"
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each ܡܘܪܢܝܢܓ ܐܬ 8am, ܣܘܡܪܝܙ ܡܝ ܐܘܢܪܕ ܐܡܝܠ ܐܢܕ ܣܢܕ ܡ ܬܗ ܬܗܪ ܡܘܣܬ ܐܝܡܦܘܪܬܢܬ ܐܘܢ Telegram",
+"This program can: {things}":"This ܦܪܘܓܪܡ can: {things}",
+"asks first":"ܐܣܟܣ first"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
