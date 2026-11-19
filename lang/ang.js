@@ -1254,7 +1254,16 @@
 "Author":"Auctor",
 "Open the share form on GitHub":"Opeð þæt dælform on GitHub",
 "Fill in the title, a description, a tip and your name first.":"Fyll ærest titul, andwlitan, ræd and þinne naman.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opeð Share a program issue on GitHub mid þissum feldum and #p= lencum to þæm forðemunge, gefylled. Nahð is send oþþe þu cnollest Open: þæt issue opeð in niwum tæbbe, to hasattronne oþþe to forsmengan. A maintainer acciepð hit mid labore, and workflow wyrcð hit into þæt pull request þæt eacð þæt forðemung to þære gallery."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opeð Share a program issue on GitHub mid þissum feldum and #p= lencum to þæm forðemunge, gefylled. Nahð is send oþþe þu cnollest Open: þæt issue opeð in niwum tæbbe, to hasattronne oþþe to forsmengan. A maintainer acciepð hit mid labore, and workflow wyrcð hit into þæt pull request þæt eacð þæt forðemung to þære gallery.",
+"Start a program":"Beginn a forðemung",
+"Three ways in. Whatever you make is kept in this browser as you work.":"Þrīa wege in. Hwæt þu worht is heald in þissum browser hwil þu workast.",
+"Describe it":"Besteah hit",
+"Start from an example":"Beginn fram anforan",
+"Open a file":"Ope þæt file",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"A block file saved fram þis page (.json), or exported Python (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Every Friday at 6pm, find þa best two hours þis weekend to dry wasþ and send hit to me on Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"Hwen þe front dor openaþ, turn on þe porch leo and send me a Telegram message",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Ælc morgen at 8am, Šea my unred email and send me þe þre heafodlicust on Telegram"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

@@ -1254,7 +1254,16 @@
 "Author":"Yazar",
 "Open the share form on GitHub":"GitHub'daki paylaşım formunu aç",
 "Fill in the title, a description, a tip and your name first.":"Önce başlığı, bir açıklamayı, bir ipucunu ve adını doldur.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Bu alanlar ve programa ait bir #p= bağlantısı önceden doldurulmuş bir GitHub Share a program meselesi açar. Aç'a basana kadar hiçbir şey gönderilmez: ileti yeni bir sekmede açılır, düzenlenebilir veya atılabilir. Bir bakıcı bunu bir etiketle kabul eder ve bir iş akışı onu programa galeriye ekleyen çekme isteğine dönüştürür."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Bu alanlar ve programa ait bir #p= bağlantısı önceden doldurulmuş bir GitHub Share a program meselesi açar. Aç'a basana kadar hiçbir şey gönderilmez: ileti yeni bir sekmede açılır, düzenlenebilir veya atılabilir. Bir bakıcı bunu bir etiketle kabul eder ve bir iş akışı onu programa galeriye ekleyen çekme isteğine dönüştürür.",
+"Start a program":"Bir programa başla",
+"Three ways in. Whatever you make is kept in this browser as you work.":"Girişin üç yolu. Yaptığın şey çalışırken bu tarayıcıda saklanır.",
+"Describe it":"Tarif et",
+"Start from an example":"Bir örnekten başla",
+"Open a file":"Dosya aç",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"Bu sayfadan kaydedilmiş bir blok dosyası (.json) veya dışa aktarılmış Python (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Her Cuma 18:00'de, bu hafta sonu çamaşır kurutmak için en iyi iki saati bul ve Telegram'dan bana gönder",
+"When the front door opens, turn on the porch light and send me a Telegram message":"Ön kapı açılınca sahanlık ışığını yak ve bana Telegram mesajı gönder",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Her sabah 08:00'de, okunmamış e-postalarımı özetle ve en önemli üç tanesini Telegram'dan gönder"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},

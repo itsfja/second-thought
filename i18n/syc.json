@@ -1990,7 +1990,16 @@
   "Author": "ܐܘ",
   "Open the share form on GitHub": "Open ܬܗ ܣܗܪ form ܐܘܢ GitHub",
   "Fill in the title, a description, a tip and your name first.": "Fill ܐܝܢ ܬܗ ܬܝܬܠ, ܐ description, ܐ ܬܝܦ ܐܢܕ ܝܘܘܪ ܢܡ first.",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Opens ܐ Share ܐ ܦܪܘܓܪܡ ܐܝܣܘ ܐܘܢ GitHub ܘܝܬܗ ܬܗܣ fields ܐܢܕ ܐ #ܦ= ܠܝܢܟ ܬܘ ܬܗ ܦܪܘܓܪܡ filled ܐܝܢ. Nothing ܐܝܣ ܣܢܬ ܐܘܢܬܝܠ ܝܘܘ ܦܪܣ Open: ܬܗ ܐܝܣܘ ܐܘܦܢܣ ܐܝܢ ܐ ܢܘ ܬܒ, ܬܘ ܐܕܝܬ ܐܘܪ discard. A ܡܝܢܬܝܢܪ accepts ܐܝܬ ܘܝܬܗ ܐ ܠܒܠ, ܐܢܕ ܐ workflow ܬܘܪܢܣ ܐܝܬ ܐܝܢܬܘ ܬܗ ܦܘܠ ܪܩܘܣܬ ܬܗܬ ܐܕܣ ܬܗ ܦܪܘܓܪܡ ܬܘ ܬܗ ܓܠܪܝ."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Opens ܐ Share ܐ ܦܪܘܓܪܡ ܐܝܣܘ ܐܘܢ GitHub ܘܝܬܗ ܬܗܣ fields ܐܢܕ ܐ #ܦ= ܠܝܢܟ ܬܘ ܬܗ ܦܪܘܓܪܡ filled ܐܝܢ. Nothing ܐܝܣ ܣܢܬ ܐܘܢܬܝܠ ܝܘܘ ܦܪܣ Open: ܬܗ ܐܝܣܘ ܐܘܦܢܣ ܐܝܢ ܐ ܢܘ ܬܒ, ܬܘ ܐܕܝܬ ܐܘܪ discard. A ܡܝܢܬܝܢܪ accepts ܐܝܬ ܘܝܬܗ ܐ ܠܒܠ, ܐܢܕ ܐ workflow ܬܘܪܢܣ ܐܝܬ ܐܝܢܬܘ ܬܗ ܦܘܠ ܪܩܘܣܬ ܬܗܬ ܐܕܣ ܬܗ ܦܪܘܓܪܡ ܬܘ ܬܗ ܓܠܪܝ.",
+  "Start a program": "Start ܐ ܦܪܘܓܪܡ",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "Three ܘܝܣ ܐܝܢ. Whatever ܝܘܘ ܡܟ ܐܝܣ ܟܦܬ ܐܝܢ ܬܗܝܣ ܒܪܘܘܣܪ ܐܣ ܝܘܘ ܘܘܪܟ.",
+  "Describe it": "Describe ܐܝܬ",
+  "Start from an example": "Start from ܐܢ example",
+  "Open a file": "Open ܐ file",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "A block file saved from ܬܗܝܣ ܦܓ (.json), ܐܘܪ exported Python (.py, .zip).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Every Friday ܐܬ 6pm, find ܬܗ ܒܣܬ ܬܘܘ ܗܘܘܪܣ ܬܗܝܣ ܘܟܢܕ ܬܘ ܕܪܝ ܘܣܗܝܢܓ ܐܢܕ ܣܢܕ ܐܝܬ ܬܘ ܡ ܐܘܢ Telegram",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "When ܬܗ front ܕܘܘܪ ܐܘܦܢܣ, ܬܘܪܢ ܐܘܢ ܬܗ porch ܠܝܓܗܬ ܐܢܕ ܣܢܕ ܡ ܐ Telegram ܡܣܓ",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Each ܡܘܪܢܝܢܓ ܐܬ 8am, ܣܘܡܪܝܙ ܡܝ ܐܘܢܪܕ ܐܡܝܠ ܐܢܕ ܣܢܕ ܡ ܬܗ ܬܗܪ ܡܘܣܬ ܐܝܡܦܘܪܬܢܬ ܐܘܢ Telegram"
  },
  "examples": {
   "review": {

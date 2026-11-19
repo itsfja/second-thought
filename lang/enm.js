@@ -1254,7 +1254,16 @@
 "Author":"Author",
 "Open the share form on GitHub":"Open þe share form on GitHub",
 "Fill in the title, a description, a tip and your name first.":"Fyll in þe title, a description, a tip and þy name first.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Openeth a Share a program issue on GitHub wiþ þes feldes and a #p= link to þe program, filled in. Naþing is sent til þu pressest Open: þe issue openeth in a newe tab, to edit or cast away. A maintainer accepteth it wiþ a label, and a workflow turneth it into þe pull request þat addeth þe program to þe gallery."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Openeth a Share a program issue on GitHub wiþ þes feldes and a #p= link to þe program, filled in. Naþing is sent til þu pressest Open: þe issue openeth in a newe tab, to edit or cast away. A maintainer accepteth it wiþ a label, and a workflow turneth it into þe pull request þat addeth þe program to þe gallery.",
+"Start a program":"Begin a program",
+"Three ways in. Whatever you make is kept in this browser as you work.":"Three ways in. What þou makest is kept in þis browser while þou workest.",
+"Describe it":"Describe it",
+"Start from an example":"Begin fro an ensample",
+"Open a file":"Open a file",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"A block file saved fro þis page (.json), or exported Python (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Every Friday at 6pm, find þe best two hours þis weekeend to dry washyng and send it to me on Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"When þe front dor openeth, turn on þe porch liȝt and send me a Telegram message",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each morn at 8am, summe up my unred email and send me þe þre most heuy on Telegram"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

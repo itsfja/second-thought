@@ -419,6 +419,79 @@ async def page_tests():
         check(opened == [url], f"Open opens exactly that address in a new tab ({[str(u)[:60] for u in opened]})")
         await pg.keyboard.press("Escape")  # close the drawer
 
+        # The first screen (#443): a fresh browser gets three ways in; each path lands in the editor with a program.
+        print("First screen (#443)")
+        pgF = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        pgF.on("pageerror", lambda e: errors.append(str(e)))
+        await pgF.route("**/*", route)
+        await pgF.add_init_script(MOCK)
+        await pgF.goto("http://test/")
+        await pgF.wait_for_timeout(1500)
+        first = await pgF.evaluate("""() => ({ visible: !document.getElementById('first').hidden,
+            focusIn: document.getElementById('first').contains(document.activeElement),
+            starters: document.querySelectorAll('#first-starters button').length,
+            examples: [...document.querySelectorAll('#first-examples button')].map(b => b.textContent) })""")
+        check(first["visible"] and first["focusIn"] and first["starters"] == 3 and len(first["examples"]) == 6,
+              f"a fresh browser sees the first screen with three sentences and six examples, focus inside ({first['examples']})")
+        await pgF.click("#first-starters button")
+        txt = await pgF.input_value("#first-text")
+        check("Telegram" in txt, f"clicking a sentence fills the describe box ({txt[:50]!r}…)")
+        await pgF.evaluate("r => { window.__jsonScript = r; window.__jsonPrompts = []; }",
+                           [{"program": script(add(tx("hello from the first screen"))), "summary": "Says hello.", "unmapped": []}])
+        await pgF.click("#first-build")
+        await pgF.wait_for_function("!document.getElementById('describe-load').hidden || document.getElementById('describe-msg').className.includes('bad')", timeout=20000)
+        built = await pgF.evaluate("""() => ({ firstHidden: document.getElementById('first').hidden,
+            loadVisible: !document.getElementById('describe-load').hidden,
+            blocks: Blockly.getMainWorkspace().getAllBlocks(false).length })""")
+        check(built["firstHidden"] and built["loadVisible"] and built["blocks"] > 0,
+              f"Build it leaves the first screen and offers the built program before loading anything ({built})")
+        await pgF.click("#describe-load")
+        await pgF.wait_for_timeout(400)
+        nF = await pgF.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        check(nF >= 2 and await pgF.evaluate("document.getElementById('first').hidden"),
+              f"Load it lands in the editor with the built program ({nF} blocks)")
+        await pgF.close()
+
+        pgF2 = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        pgF2.on("pageerror", lambda e: errors.append(str(e)))
+        await pgF2.route("**/*", route)
+        await pgF2.add_init_script(MOCK)
+        await pgF2.goto("http://test/")
+        await pgF2.wait_for_timeout(1500)
+        await pgF2.click("#first-examples button:nth-child(2)")
+        await pgF2.wait_for_timeout(400)
+        n2 = await pgF2.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        check(await pgF2.evaluate("document.getElementById('first').hidden") and n2 > 0,
+              f"starting from an example hides the first screen and loads the program ({n2} blocks)")
+        await pgF2.close()
+
+        import tempfile
+        prog = {"format": "reflection-blocks", "version": 1, "name": "from-a-file", "program": script(add(tx("loaded from a file")))}
+        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
+            json.dump(prog, fh)
+            fpath = fh.name
+        pgF3 = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        pgF3.on("pageerror", lambda e: errors.append(str(e)))
+        await pgF3.route("**/*", route)
+        await pgF3.add_init_script(MOCK)
+        await pgF3.goto("http://test/")
+        await pgF3.wait_for_timeout(1500)
+        await pgF3.set_input_files("#io-file", fpath)
+        await pgF3.wait_for_timeout(800)
+        n3 = await pgF3.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        check(await pgF3.evaluate("document.getElementById('first').hidden") and n3 >= 2,
+              f"opening a file lands in the editor with the program ({n3} blocks)")
+        await pgF3.close()
+
+        pgR = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        await pgR.route("**/*", route)
+        await pgR.add_init_script(MOCK + ";try{localStorage.setItem('reflection-blocks-program-v3','{}')}catch(e){}")
+        await pgR.goto("http://test/")
+        await pgR.wait_for_timeout(1500)
+        check(await pgR.evaluate("document.getElementById('first').hidden"),
+              "a browser with a program kept lands in the editor, with no first screen")
+        await pgR.close()
+
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()
         return codes

@@ -1254,7 +1254,16 @@
 "Author":"Συγγραφέας",
 "Open the share form on GitHub":"Άνοιγμα της φόρμας κοινοποίησης στο GitHub",
 "Fill in the title, a description, a tip and your name first.":"Συμπλήρωσε πρώτα τον τίτλο, μια περιγραφή, μια συμβουλή και το όνομά σου.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ανοίγει ένα issue Share a program στο GitHub με αυτά τα πεδία και έναν σύνδεσμο #p= προς το πρόγραμμα ήδη συμπληρωμένα. Τίποτα δεν στέλνεται μέχρι να πατήσεις Άνοιγμα: το issue ανοίγει σε νέα καρτέλα, για επεξεργασία ή απόρριψη. Ένας συντηρητής το αποδέχεται με μια ετικέτα και μια ροή εργασίας το μετατρέπει στο pull request που προσθέτει το πρόγραμμα στη γκαλερί."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ανοίγει ένα issue Share a program στο GitHub με αυτά τα πεδία και έναν σύνδεσμο #p= προς το πρόγραμμα ήδη συμπληρωμένα. Τίποτα δεν στέλνεται μέχρι να πατήσεις Άνοιγμα: το issue ανοίγει σε νέα καρτέλα, για επεξεργασία ή απόρριψη. Ένας συντηρητής το αποδέχεται με μια ετικέτα και μια ροή εργασίας το μετατρέπει στο pull request που προσθέτει το πρόγραμμα στη γκαλερί.",
+"Start a program":"Ξεκίνα ένα πρόγραμμα",
+"Three ways in. Whatever you make is kept in this browser as you work.":"Τρεις τρόποι για να ξεκινήσεις. Ό,τι φτιάξεις μένει σε αυτόν τον брауз器 όσο δουλεύεις.",
+"Describe it":"Περιέγραψέ το",
+"Start from an example":"Ξεκίνα από ένα παράδειγμα",
+"Open a file":"Άνοιξε ένα αρχείο",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"Ένα αρχείο μπλοκ αποθηκευμένο από αυτή τη σελίδα (.json), ή εξαγόμενο Python (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Κάθε Παρασκευή στις 6μμ, βρες τις καλύτερες δύο ώρες αυτού του σαββατοκύριακου για να στεγνώσω τα ρούχα και στείλε τις στο Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"Όταν ανοίγει η εξώπορτα, άναψε το φως της εισόδου και στείλε μου μήνυμα στο Telegram",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Κάθε πρωί στις 8πμ, κάνε περίληψη των αδιάβαστων email μου και στείλε μου τα τρία πιο σημαντικά στο Telegram"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

@@ -1999,7 +1999,16 @@
   "Author": "מחבר",
   "Open the share form on GitHub": "פתיחת טופס השיתוף ב-GitHub",
   "Fill in the title, a description, a tip and your name first.": "מלאו תחילה כותרת, תיאור, טיפ ושמכם.",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "פותח issue של Share a program ב-GitHub עם השדות האלה וקישור #p= לתוכנית שכבר מולא. שום דבר לא נשלח עד שלוחצים על 'פתיחה': ה-issue נפתח בלשונית חדשה, לעריכה או לביטול. מתחזק עם תווית מקבל אותו, וזרימת עבודה הופכת אותו לבקשת משיכה שמוסيفة את התוכנית לגלריה."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "פותח issue של Share a program ב-GitHub עם השדות האלה וקישור #p= לתוכנית שכבר מולא. שום דבר לא נשלח עד שלוחצים על 'פתיחה': ה-issue נפתח בלשונית חדשה, לעריכה או לביטול. מתחזק עם תווית מקבל אותו, וזרימת עבודה הופכת אותו לבקשת משיכה שמוסيفة את התוכנית לגלריה.",
+  "Start a program": "התחל תוכנית",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "שלוש דרכים להתחילה. מה שתצור נשמר בדפדפן הזה כל שאתה עובדה.",
+  "Describe it": "תאר אותו",
+  "Start from an example": "התחל מדוגמה",
+  "Open a file": "פתח קובץ",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "קובץ בלוקים שנשמר מהדף הזה (.json), או Python מיוצא (.py, .zip).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "כל יום שישי ב-18:00, מצא את שעי הטובות ביום הזה ליבוש את הכבסים, ושלח אותים בטלגרם",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "כשהדלת החיצון נפתחת, הפעל את האור במרכה, ושלח לי הודעה בטלגרם",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "כל בוקר ב-8:00, סכום את הדואר שלא נקרא בדואר, ושלח לי את השלוש החשובים בטלגרם"
  },
  "examples": {
   "review": {

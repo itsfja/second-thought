@@ -1255,7 +1255,16 @@
 "Author":"ܟܬܒܐ",
 "Open the share form on GitHub":"ܦܬܚ ܦܘܪܡܐ ܕܫܒܦܐ ܒGitHub",
 "Fill in the title, a description, a tip and your name first.":"ܡܠܝ ܒܪܫܝܬ ܥܢܘܐܢܐ, ܬܘܪܝܬܐ, ܡܠܟܬܐ ܘܫܡܟ.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"ܦܬܚ ܐܝܩܘܪ Share a program ܒGitHub ܥܡ ܗܠܝܢ ܚܘܠܩ̈ܐ ܘܠܘܢܩܐ #p= ܠܦܪܘܓܪܡܐ ܕܟܕܝܠ ܡܠܝ܀ ܠܐ ܡܬܢܕܥ ܚܕ ܥܕܕܚܦ ܐܢܬ ܥܠ Open: ܐܝܩܘܪܐ ܦܬܚ ܒܛܒܠܐ ܚܕܬܐ, ܠܫܚܠܦܐ ܐܘ ܠܡܚܩܐ. ܡܕܝܪܢܐ ܩܒܠ ܗ ܒܐܘܬܐ ܕܦܘܕܕܕܕܕܐ, ܘworkflow ܥܒܕ ܠܗ ܠܒܕ ܠܗ ܒܐܘܬܐ ܕܡܘܣܦ ܦܪܘܓܪܡܐ ܠܓܠܪܝܐ."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"ܦܬܚ ܐܝܩܘܪ Share a program ܒGitHub ܥܡ ܗܠܝܢ ܚܘܠܩ̈ܐ ܘܠܘܢܩܐ #p= ܠܦܪܘܓܪܡܐ ܕܟܕܝܠ ܡܠܝ܀ ܠܐ ܡܬܢܕܥ ܚܕ ܥܕܕܚܦ ܐܢܬ ܥܠ Open: ܐܝܩܘܪܐ ܦܬܚ ܒܛܒܠܐ ܚܕܬܐ, ܠܫܚܠܦܐ ܐܘ ܠܡܚܩܐ. ܡܕܝܪܢܐ ܩܒܠ ܗ ܒܐܘܬܐ ܕܦܘܕܕܕܕܕܐ, ܘworkflow ܥܒܕ ܠܗ ܠܒܕ ܠܗ ܒܐܘܬܐ ܕܡܘܣܦ ܦܪܘܓܪܡܐ ܠܓܠܪܝܐ.",
+"Start a program":"ܐܒܦܐ ܦܡܘܓܪܡܐ",
+"Three ways in. Whatever you make is kept in this browser as you work.":"ܬܡܠ ܕܡܗا ܕܦ ܦܡܖܘܢܐ. ܡܐܕ ܦܘܣܦܡܐ, ܦܪܕܦܫܡܐ ܒܫܦܦܡܐ ܒܲܦܘܣܪܐ ܢܥܪܦܐ.",
+"Describe it":"ܦܘرܪܐ",
+"Start from an example":"ܒبدا ܥن مثال",
+"Open a file":"ܦܬܚ فيلا",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"فيل بلوكات محفوظ من هذا الصفحة (.json), أو Python مصدر (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"كل جمعة 18:00, جد أحسن ساعتين هذا الأسبوج لتجفف الملابس, وأرسلها علي Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"عندما تفتح الباب, أشعل مصباح المدخل, وأرسل لي رسالة على Telegram",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"كل صباح 8:00, لخص بريدي غير المقروء, وأرسل لي الثلاثة الأهم على Telegram"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

@@ -1255,7 +1255,16 @@
 "Author":"कर्ता",
 "Open the share form on GitHub":"GitHub-majjhe śaṃsana-phālamaṃ उद्घाटय",
 "Fill in the title, a description, a tip and your name first.":"प्रथमं् शीर्षकं्, वर्णनं्, उपदेशं् च तव नाम पूरय.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"इमं् Share अ प्रोग्रम् इस्सुए GitHub-majjhe फालेत्, एतेषु क्षेत्रेषु च #प्= सं्बन्धः् प्रोग्रम्मेण सह पूर्णः्. Open इत्येतद् यावत् न फाल्यते तावत् किञ्चित् न प्रेष्यते: इस्सुए nava-ṭāb-majjhe विव्ṛतः्, सं्शोधनाय वा अपाकरणाय वा. सं्रक्षकः् लेखिकया स्वीकरोति, वइवस्थिकं् च तत् पुल्ल् रेquएस्त् इति करोति यत् प्रोग्रम्मे चित्रागारेण सह युक्तं् भवति."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"इमं् Share अ प्रोग्रम् इस्सुए GitHub-majjhe फालेत्, एतेषु क्षेत्रेषु च #प्= सं्बन्धः् प्रोग्रम्मेण सह पूर्णः्. Open इत्येतद् यावत् न फाल्यते तावत् किञ्चित् न प्रेष्यते: इस्सुए nava-ṭāb-majjhe विव्ṛतः्, सं्शोधनाय वा अपाकरणाय वा. सं्रक्षकः् लेखिकया स्वीकरोति, वइवस्थिकं् च तत् पुल्ल् रेquएस्त् इति करोति यत् प्रोग्रम्मे चित्रागारेण सह युक्तं् भवति.",
+"Start a program":"कार्यक्रमं् प्रारम्भे",
+"Three ways in. Whatever you make is kept in this browser as you work.":"त्रयस् उपायाः्. यत् किञ्चित् करोसि तत् अत्र ब्राह्मणे रक्ष्यते यावत् त्वं् करोसि.",
+"Describe it":"वर्णय",
+"Start from an example":"उदाहरणात् प्रारम्भे",
+"Open a file":"कोशम् उद्घाटय",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"अस्मिन् प्ṛष्ठे सं्रक्षितः् खण्डः् कोशः् (.ज्सोन्), वा निर्यातः् Python (.प्य्, .ziप्).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"प्रतिशुक्रवासरे 18 वादने, अस्मिन् सप्तअहन्ते वस्त्राणि शोषयितुं् द्वी बेस्तउ घण्टे शोध, तां् च Telegram इति मह्यम् प्रेषय",
+"When the front door opens, turn on the porch light and send me a Telegram message":"यदा द्वारम् उद्घाट्यते, आरङ्गस्य प्रकाशं् प्रज्वालत, च मह्यम् Telegram इति सन्देस्हां् प्रेषय",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिमारम् 8 वादने, मे अपथितं् ईमेल् सं्क्षिप्य त्रीणि प्रधानतमानि Telegram इति मह्यम् प्रेषय"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

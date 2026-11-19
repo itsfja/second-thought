@@ -1253,7 +1253,16 @@
 "Author":"著者",
 "Open the share form on GitHub":"開 GitHub 之分享牘",
 "Fill in the title, a description, a tip and your name first.":"先填題、述、訣與君名。",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"開 Share a program 之 GitHub 議題，諸欄與程序之 #p= 連結皆已填訖。未按「開」則無所發：議題啟於新籤，可刊可棄。維護者以標籤納之，工作流轉之為增程序於圖庫之合請。"
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"開 Share a program 之 GitHub 議題，諸欄與程序之 #p= 連結皆已填訖。未按「開」則無所發：議題啟於新籤，可刊可棄。維護者以標籤納之，工作流轉之為增程序於圖庫之合請。",
+"Start a program":"始作程序",
+"Three ways in. Whatever you make is kept in this browser as you work.":"三途以始。子之所作，存乎此器，工時猶在。",
+"Describe it":"述之",
+"Start from an example":"自例而始",
+"Open a file":"啟牘",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"此頁所存之塊牘（.json），或所出之 Python（.py, .zip）。",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"每週五酉時，覓本週末晾衣之吉時二刻，以電訊報我",
+"When the front door opens, turn on the porch light and send me a Telegram message":"戶闥既啟，燃門廊之燈，以電訊報我",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"每日卯時，綜未覽之郵，擇其要者三，以電訊報我"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},

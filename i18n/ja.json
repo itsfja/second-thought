@@ -1998,7 +1998,16 @@
   "Author": "作者",
   "Open the share form on GitHub": "GitHub の共有フォームを開く",
   "Fill in the title, a description, a tip and your name first.": "まずタイトル、説明、ヒント、あなたの名前を入力してください。",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "これらの項目とプログラムへの #p= リンクが埋め込まれた Share a program の GitHub issue を開きます。開くを押すまで何も送信されません。issue は新しいタブで開き、編集も破棄もできます。メンテナーがラベルで承認すると、ワークフローがそれをギャラリーにプログラムを追加するプルリクエストに変えます。"
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "これらの項目とプログラムへの #p= リンクが埋め込まれた Share a program の GitHub issue を開きます。開くを押すまで何も送信されません。issue は新しいタブで開き、編集も破棄もできます。メンテナーがラベルで承認すると、ワークフローがそれをギャラリーにプログラムを追加するプルリクエストに変えます。",
+  "Start a program": "プログラムを始める",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "3つの始め方。作ったものはこのブラウザに保存されます。",
+  "Describe it": "説明する",
+  "Start from an example": "例から始める",
+  "Open a file": "ファイルを開く",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "このページから保存したブロックファイル（.json）、またはエクスポートした Python（.py, .zip）。",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "毎週金曜18時、今週末に洗濯物を乾かすのに最適な2時間を見つけて Telegram で送って",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "玄関のドアが開いたら、ポーチの照明をつけて Telegram でメッセージを送って",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "毎朝8時、未読メールを要約して、重要なものを3件 Telegram で送って"
  },
  "examples": {
   "review": {

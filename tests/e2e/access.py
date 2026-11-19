@@ -40,6 +40,23 @@ async def access_tests():
         check(not problems, f"axe-core finds no serious problems on the page as it opens {problems or ''}")
         lang = await pg.evaluate("document.documentElement.lang")
         check(lang.split("-")[0] == "en", f"the page says what language it's in ({lang})")
+
+        # The first screen (#443): a fresh browser sees it, it's keyboard- and screen-reader-usable, and choosing
+        # one of the three ways in lands in the editor with a program.
+        check(await pg.evaluate("!document.getElementById('first').hidden"), "a fresh browser sees the first screen")
+        problems = await axe_problems(pg)
+        check(not problems, f"axe-core finds no serious problems on the first screen {problems or ''}")
+        check(await pg.evaluate("document.getElementById('first').contains(document.activeElement)"),
+              "the focus starts inside the first screen")
+        starters = await pg.eval_on_selector_all("#first-starters button", "e => e.length")
+        examples = await pg.eval_on_selector_all("#first-examples button", "e => e.map(b => b.textContent)")
+        check(starters == 3 and len(examples) == 6, f"three sentences to click, six examples to start from ({examples})")
+        await pg.focus("#first-examples button")
+        await pg.keyboard.press("Enter")
+        await pg.wait_for_timeout(400)
+        n_first = await pg.evaluate("Blockly.getMainWorkspace().getAllBlocks(false).length")
+        check(await pg.evaluate("document.getElementById('first').hidden") and n_first > 0,
+              f"keyboard: Enter on an example hides the first screen and lands in the editor with a program ({n_first} blocks)")
         for toggle in ("ex-toggle", "io-export", "lib-toggle", "mem-toggle", "ha-toggle", "bk-toggle", "keys-toggle"):
             await pg.click("#" + toggle)
             await pg.wait_for_timeout(200)

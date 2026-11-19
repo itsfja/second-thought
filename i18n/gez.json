@@ -1999,7 +1999,16 @@
   "Author": "ትሰfi",
   "Open the share form on GitHub": "ስሀሬ foርም GiትHuብ ዌዴ opeን",
   "Fill in the title, a description, a tip and your name first.": "fiርስትነሜ ሲሜ, ኔgeር, መስተዎክ, ሲሜክ fiልል",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "GiትHuብ Sሀሬ a pሮgረም iስሱe ዬቴዌየል, fieልድስነ #p= ሊንክ ሌ pሮgረም ዬቴዌየል, aሊሌቤም. ቤቱ Opeን cሊcክ ዪቴዌሪብኩ aሊሌቤም, iስሱe ኔው ተብ ዬቴዌየል, eዲት ሌዲስcaርድ. መiንተiኔር ለቤል ዪቴቄቤል, ዎርክfሎው puልል ሬቁeስት ዪሆን, pሮgረም ሌ gaልሌርይ ዪዚዝ."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "GiትHuብ Sሀሬ a pሮgረም iስሱe ዬቴዌየል, fieልድስነ #p= ሊንክ ሌ pሮgረም ዬቴዌየል, aሊሌቤም. ቤቱ Opeን cሊcክ ዪቴዌሪብኩ aሊሌቤም, iስሱe ኔው ተብ ዬቴዌየል, eዲት ሌዲስcaርድ. መiንተiኔር ለቤል ዪቴቄቤል, ዎርክfሎው puልል ሬቁeስት ዪሆን, pሮgረም ሌ gaልሌርይ ዪዚዝ.",
+  "Start a program": "pሮgረም ስተርት aረ",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "ትህሬe ወይስ iን, ዪቴዌሪክ, ብሮውሴር ዪሆን, ዎርክ ዪቴዌሪብኩ.",
+  "Describe it": "ኔgeር",
+  "Start from an example": "exaምpሌ ዌዴ ስተርት",
+  "Open a file": "fiሌ ዌዴ opeን",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "ብሎcክ fiሌ page ዌዴ ሰve (.jሶን), oር pይትሆን expoርት (.pይ, .ዚp).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "fሪደይ 6pም, ዌeኬንድ ቤስት ትዎ ሆuርስ ድርይ ወስሂንg fiንድ, ቴሌgረም ሴንድ",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "fሮንት ዶoር opeን, poርcህ ሊgህት oን, ቴሌgረም ሜስሰge ሴንድ",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "ሞርኒንg 8aም, uንሬaድ eመiል ሱምመሪዜ, ትህሬe ሞስት iምpoርተንት ቴሌgረም ሴንድ"
  },
  "examples": {
   "review": {

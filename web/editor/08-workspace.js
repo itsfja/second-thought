@@ -259,8 +259,8 @@
 
   /* What the page kept from last time loads once every button above is set, so a saved program that won't load
      can't stop the page starting (#417). */
-  let saved = null;
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
+  let saved = null, firstVisit = false;
+  try { const raw = localStorage.getItem(STORE_KEY); firstVisit = !raw; if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
   try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
   try { load(saved || EXAMPLES.review()); } catch(e) { try { load(EXAMPLES.review()); } catch(e2) {} }
   ws.addChangeListener(ev => {

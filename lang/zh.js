@@ -1254,7 +1254,16 @@
 "Author":"作者",
 "Open the share form on GitHub":"在 GitHub 上打开分享表单",
 "Fill in the title, a description, a tip and your name first.":"请先填写标题、描述、提示和你的名字。",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"打开一个 Share a program 的 GitHub issue，这些字段和指向程序的 #p= 链接都已填好。点击打开之前不会发送任何内容：issue 会在新标签页中打开，可编辑或丢弃。维护者用一个标签接受后，工作流会把它变成把程序加入图库的拉取请求。"
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"打开一个 Share a program 的 GitHub issue，这些字段和指向程序的 #p= 链接都已填好。点击打开之前不会发送任何内容：issue 会在新标签页中打开，可编辑或丢弃。维护者用一个标签接受后，工作流会把它变成把程序加入图库的拉取请求。",
+"Start a program":"开始一个程序",
+"Three ways in. Whatever you make is kept in this browser as you work.":"三种开始方式。你做的东西会保存在这个浏览器里。",
+"Describe it":"描述它",
+"Start from an example":"从示例开始",
+"Open a file":"打开文件",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"从本页保存的块文件（.json），或导出的 Python（.py, .zip）。",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"每周五下午6点，找出本周末晾干衣服的最佳两个小时，发到我的 Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"前门一打开，就打开门廊灯，并发 Telegram 消息给我",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"每天早上8点，总结我的未读邮件，把最重要的三封通过 Telegram 发给我"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

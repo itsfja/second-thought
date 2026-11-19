@@ -129,7 +129,7 @@ Each new word on the page is thirty translations, so these designs reuse the wor
 
 ### F. The page
 
-**F1. A first screen.** [#443](https://github.com/itsfja/second-thought/issues/443) On a first visit, three ways in: **Describe it** (the plain-English box, large, with three sentences to click), **Start from an example** (six chosen ones, not 238), **Open a file**. Then the editor, with the result on the canvas. Anyone who has a program lands in the editor, as now. This is the successor's "plain-English authoring with blocks as the form you inspect", done in the page that exists.
+**F1. A first screen.** [#443](https://github.com/itsfja/second-thought/issues/443) On a first visit, three ways in: **Describe it** (the plain-English box, large, with three sentences to click), **Start from an example** (six chosen ones, not 238), **Open a file**. Then the editor, with the result on the canvas. Anyone who has a program lands in the editor, as now. This is the successor's "plain-English authoring with blocks as the form you inspect", done in the page that exists. (Done — #443: a browser with nothing kept sees the first screen — Describe it (large box, three sentences to click), Start from an example (six chosen), Open a file — each path lands in the editor with the program on the canvas; a browser with a program kept lands in the editor as before.)
 
 **F2. One row of controls.** [#444](https://github.com/itsfja/second-thought/issues/444)
 
