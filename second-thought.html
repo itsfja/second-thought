@@ -115,6 +115,17 @@ details.menu[open]>summary{border-color:var(--accent)}
 /* Panels are drawers over the canvas (#445): they never move the page, so the program stays where it was. */
 #gallery,#lib,#ha,#mem,#bk,#keys,#io,#share{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
 .gal-tools{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+/* The first screen (#443): a browser with nothing kept yet gets three ways in, over the canvas (the header and
+   the drawers stay above it). */
+#first{position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto;padding:110px 20px 40px}
+.first-box{max-width:1020px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+#first h2{font-family:var(--font-display);font-weight:500;font-size:24px;margin:0}
+#first h3{font-size:14px;font-weight:700;margin:0;color:var(--muted)}
+#first .hint{margin:0;font-size:13px;color:var(--muted)}
+.first-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.first-card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.first-card textarea{width:100%;resize:vertical;font:inherit}
+#first-examples{display:flex;flex-direction:column;gap:6px;align-items:stretch}
 .gal-tools input[type=search]{width:100%}
 .gal-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{border-radius:999px;padding:3px 12px;font-size:13px}
@@ -471,6 +482,30 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
     <button type="button" id="describe-undo" hidden>Undo</button>
   </div>
 </div>
+
+<section id="first" hidden aria-label="Start a program">
+  <div class="first-box">
+    <h2 tabindex="-1">Start a program</h2>
+    <p class="hint">Three ways in. Whatever you make is kept in this browser as you work.</p>
+    <div class="first-grid">
+      <div class="first-card">
+        <h3>Describe it</h3>
+        <textarea id="first-text" rows="4" aria-label="Describe a program"></textarea>
+        <div class="row" id="first-starters"></div>
+        <div class="row"><button type="button" id="first-build" class="primary">Build it</button></div>
+      </div>
+      <div class="first-card">
+        <h3>Start from an example</h3>
+        <div class="col" id="first-examples"></div>
+      </div>
+      <div class="first-card">
+        <h3>Open a file</h3>
+        <p class="hint">A block file saved from this page (.json), or exported Python (.py, .zip).</p>
+        <div class="row"><button type="button" id="first-file">Choose file (.json, .py, .zip)</button></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <main class="main">
   <div class="canvas">
@@ -17406,7 +17441,7 @@ HOW TO MAP CODE
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
   }
-  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #share, #describe-out, main.main";
+  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #share, #first, #describe-out, main.main";
   const PAGE_LATER = "script, style, select, textarea, #blockly, #gal-body, #ex-desc, #status, #lib-where, #mem-where";  // filled in by code
   const PAGE_ATTRS = ["title", "placeholder", "aria-label"];
   const RICH = new Set(["B", "I", "EM", "STRONG", "CODE"]);
@@ -20385,8 +20420,8 @@ HOW TO MAP CODE
 
   /* What the page kept from last time loads once every button above is set, so a saved program that won't load
      can't stop the page starting (#417). */
-  let saved = null;
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
+  let saved = null, firstVisit = false;
+  try { const raw = localStorage.getItem(STORE_KEY); firstVisit = !raw; if (raw) saved = migrateProgram(JSON.parse(raw), localStorage.getItem(STORE_KEY + ":version")).state; } catch(e) {}
   try { programTests = JSON.parse(localStorage.getItem(STORE_KEY + ":tests") || "[]"); if (!Array.isArray(programTests)) programTests = []; } catch(e) { programTests = []; }
   try { load(saved || EXAMPLES.review()); } catch(e) { try { load(EXAMPLES.review()); } catch(e2) {} }
   ws.addChangeListener(ev => {
@@ -26432,6 +26467,50 @@ HOW TO MAP CODE
     startRun(starts, "manual");
   };
 
+// 23-first-screen.js: The first screen (#443). A browser with nothing kept yet (no saved program in localStorage)
+// gets three ways in — Describe it (the plain-English box, large, with three sentences to click), Start from an
+// example (six chosen ones), Open a file — and lands in the editor with the result on the canvas. Anyone who has
+// a program lands in the editor as now: the screen only shows when localStorage holds no program.
+  const FIRST_EXAMPLES = ["review", "brainstorm", "r_web", "a_inbox", "ha_doorbell", "w_judges"];
+  // Literal tr() calls, so the page's words collector (tests/e2e/i18n.py) sees them; this file runs after 02-blocks.js.
+  const FIRST_STARTERS = [
+    tr("Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram"),
+    tr("When the front door opens, turn on the porch light and send me a Telegram message"),
+    tr("Each morning at 8am, summarize my unread email and send me the three most important on Telegram"),
+  ];
+
+  function hideFirst(){ $("first").hidden = true; }
+
+  function showFirst(){
+    const starters = $("first-starters"); starters.innerHTML = "";
+    FIRST_STARTERS.forEach(s => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = s;
+      b.onclick = () => { $("first-text").value = s; $("first-text").focus(); };
+      starters.appendChild(b);
+    });
+    const examples = $("first-examples"); examples.innerHTML = "";
+    FIRST_EXAMPLES.forEach(k => {
+      const e = exampleByKey(k); if (!e) return;
+      const b = document.createElement("button"); b.type = "button"; b.textContent = e.title;
+      b.onclick = () => { $("example").value = k; loadExample(k); hideFirst(); };
+      examples.appendChild(b);
+    });
+    $("first-build").onclick = () => {
+      $("describe-text").value = $("first-text").value;
+      hideFirst();  // the editor and the Build-it result show while Claude works
+      describeProgram(false);
+    };
+    $("first-file").onclick = () => $("io-file").click();  // importing a file hides the screen the same way
+    $("first").hidden = false;
+    $("first").querySelector("h2").focus();
+  }
+
+  // firstVisit comes from 08-workspace.js, read before the default program loads (and autosaves) anything.
+  let settleUntil = 0;
+  if (firstVisit) { showFirst(); settleUntil = Date.now() + 800; }  // the initial load's own events must not hide it
+  // Anything that lands a program on the canvas (an import, say) hides the first screen; from then on the autosave
+  // keeps it, so the editor is the landing.
+  ws.addChangeListener(ev => { if (!ev.isUiEvent && Date.now() > settleUntil) hideFirst(); });
 // 23-gallery-share.js: Offering the program on the canvas to the community gallery (#437). Share… opens a form
 // that shows the card as it will look in Browse examples — with what the program can do worked out from its blocks,
 // as now — and opens a prefilled "Share a program" issue form on GitHub with the #p= link (#436) in it. Nothing is

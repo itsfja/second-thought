@@ -1255,7 +1255,16 @@
 "Author":"𐀛",
 "Open the share form on GitHub":"𐀐 𐀞 𐀅",
 "Fill in the title, a description, a tip and your name first.":"Fill in the title, 𐀀 description, 𐀀 tip and your name first.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opens 𐀀 Share 𐀀 program issue on GitHub with these fields and 𐀀 #p= link 𐀵 the program filled in. Nothing is sent until you press Open: the issue opens in 𐀀 new tab, 𐀵 edit or discard. A maintainer accepts it with 𐀀 label, and 𐀀 workflow turns it into the pull request that adds the program 𐀵 the gallery."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opens 𐀀 Share 𐀀 program issue on GitHub with these fields and 𐀀 #p= link 𐀵 the program filled in. Nothing is sent until you press Open: the issue opens in 𐀀 new tab, 𐀵 edit or discard. A maintainer accepts it with 𐀀 label, and 𐀀 workflow turns it into the pull request that adds the program 𐀵 the gallery.",
+"Start a program":"Start 𐀀 program",
+"Three ways in. Whatever you make is kept in this browser as you work.":"𐀭 𐀜 𐀐",
+"Describe it":"𐀳",
+"Start from an example":"𐀔 𐀠",
+"Open a file":"Open 𐀀 file",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"𐀳 𐀐",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Every Friday at 6pm, find the best 𐁍 hours this weekend 𐀵 dry washing and send it 𐀵 𐀕 on Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"When the front door opens, turn on the porch light and send 𐀕 𐀀 Telegram message",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each morning at 8am, summarize my unread email and send 𐀕 the three most important on Telegram"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

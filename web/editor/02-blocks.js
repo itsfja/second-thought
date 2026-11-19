@@ -34,7 +34,7 @@
     const t = PAGE_T[s] || s;
     return vars ? t.replace(/\{(\w+)\}/g, (m, k) => k in vars ? String(vars[k]) : m) : t;
   }
-  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #share, #describe-out, main.main";
+  const PAGE_ROOTS = "header.bar, #gallery, #lib, #ha, #mem, #bk, #keys, #io, #share, #first, #describe-out, main.main";
   const PAGE_LATER = "script, style, select, textarea, #blockly, #gal-body, #ex-desc, #status, #lib-where, #mem-where";  // filled in by code
   const PAGE_ATTRS = ["title", "placeholder", "aria-label"];
   const RICH = new Set(["B", "I", "EM", "STRONG", "CODE"]);

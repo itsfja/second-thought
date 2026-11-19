@@ -37,4 +37,5 @@ file needn't end where a function does, but it reads better if it does.
 | `21-log-watch-step.js` | Saving the log, the watch panel, step mode and running one script. |
 | `22-search.js` | Finding a block. |
 | `23-gallery-share.js` | Offering a program to the community gallery: the Share… form, its card preview, and the prefilled issue form's address (#437). |
+| `23-first-screen.js` | The first screen for a browser with nothing kept: Describe it, six examples, open a file (#443). |
 | `23-schedules.js` | Schedules and listeners on the page, and the editor's closing line. |

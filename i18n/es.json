@@ -1998,7 +1998,16 @@
   "Author": "Autor",
   "Open the share form on GitHub": "Abrir el formulario de compartir en GitHub",
   "Fill in the title, a description, a tip and your name first.": "Rellena primero el título, una descripción, un consejo y tu nombre.",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Abre una incidencia Share a program en GitHub con estos campos y un enlace #p= al programa ya rellenados. No se envía nada hasta que pulses Abrir: la incidencia se abre en una pestaña nueva, para editarla o descartarla. Un mantenedor la acepta con una etiqueta y un flujo de trabajo la convierte en la pull request que añade el programa a la galería."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Abre una incidencia Share a program en GitHub con estos campos y un enlace #p= al programa ya rellenados. No se envía nada hasta que pulses Abrir: la incidencia se abre en una pestaña nueva, para editarla o descartarla. Un mantenedor la acepta con una etiqueta y un flujo de trabajo la convierte en la pull request que añade el programa a la galería.",
+  "Start a program": "Empezar un programa",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "Tres formas de empezar. Lo que hagas se guarda en este navegador mientras trabajas.",
+  "Describe it": "Descríbelo",
+  "Start from an example": "Empezar desde un ejemplo",
+  "Open a file": "Abrir un archivo",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "Un archivo de bloques guardado desde esta página (.json) o Python exportado (.py, .zip).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Cada viernes a las 18:00, busca las mejores dos horas de este fin de semana para tender la ropa y envíamelo por Telegram",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "Cuando se abra la puerta de entrada, enciende la luz del portal y envíame un mensaje por Telegram",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Cada mañana a las 8:00, resume mi correo sin leer y envíame los tres más importantes por Telegram"
  },
  "examples": {
   "review": {

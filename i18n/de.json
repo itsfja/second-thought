@@ -1998,7 +1998,16 @@
   "Author": "Autor",
   "Open the share form on GitHub": "Das Share-Formular auf GitHub öffnen",
   "Fill in the title, a description, a tip and your name first.": "Füllen Sie zuerst Titel, eine Beschreibung, einen Tipp und Ihren Namen aus.",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Öffnet ein Share a program-Issue auf GitHub, mit diesen Feldern und einem #p=-Link zum Programm bereits ausgefüllt. Es wird nichts gesendet, bis Sie auf Öffnen drücken: Das Issue öffnet sich in einem neuen Tab, zum Bearbeiten oder Verwerfen. Ein Maintainer nimmt es mit einem Label an, und ein Workflow macht daraus die Pull Request, die das Programm zur Galerie hinzufügt."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Öffnet ein Share a program-Issue auf GitHub, mit diesen Feldern und einem #p=-Link zum Programm bereits ausgefüllt. Es wird nichts gesendet, bis Sie auf Öffnen drücken: Das Issue öffnet sich in einem neuen Tab, zum Bearbeiten oder Verwerfen. Ein Maintainer nimmt es mit einem Label an, und ein Workflow macht daraus die Pull Request, die das Programm zur Galerie hinzufügt.",
+  "Start a program": "Ein Programm starten",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "Drei Wege hinein. Was du baust, bleibt in diesem Browser gespeichert, während du arbeitest.",
+  "Describe it": "Beschreibe es",
+  "Start from an example": "Von einem Beispiel starten",
+  "Open a file": "Datei öffnen",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "Eine von dieser Seite gespeicherte Blockdatei (.json) oder exportiertes Python (.py, .zip).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Jeden Freitag um 18 Uhr: Finde die besten zwei Stunden dieses Wochenende zum Wäschetrocknen und schick sie mir auf Telegram",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "Wenn die Haustür aufgeht, schalte das Licht am Eingang an und schick mir eine Telegram-Nachricht",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Jeden Morgen um 8 Uhr: Fasse meine ungelesenen E-Mails zusammen und schick mir die drei wichtigsten auf Telegram"
  },
  "examples": {
   "review": {

@@ -1254,7 +1254,16 @@
 "Author":"कत्ता",
 "Open the share form on GitHub":"GitHub-majjhe भाजनफालमं् विवर",
 "Fill in the title, a description, a tip and your name first.":"पठमं् सीसं्, वण्णनं्, ओवादं् च तव नामं् पूरेहि.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"इमं् Share अ प्रोग्रम् इस्सुए GitHub-majjhe विवरति, एतानि खेत्तानि च #प्= सं्बन्धो प्रोग्रम्मेण सह परिपुण्णो. Open फालेतुं् याव किञ्चि न पेसेति: इस्सुए nava-ṭāb-majjhe विवरं्, सं्सोधनाय वा अपकस्सनाय वा. सं्रक्खको लेखिकाय स्वीकरोति, वइवस्थिकञ्च तं् पुल्ल् रेquएस्त् इति करोति यं् प्रोग्रम्मे गल्लेर्येन सह युक्तं् होति."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"इमं् Share अ प्रोग्रम् इस्सुए GitHub-majjhe विवरति, एतानि खेत्तानि च #प्= सं्बन्धो प्रोग्रम्मेण सह परिपुण्णो. Open फालेतुं् याव किञ्चि न पेसेति: इस्सुए nava-ṭāb-majjhe विवरं्, सं्सोधनाय वा अपकस्सनाय वा. सं्रक्खको लेखिकाय स्वीकरोति, वइवस्थिकञ्च तं् पुल्ल् रेquएस्त् इति करोति यं् प्रोग्रम्मे गल्लेर्येन सह युक्तं् होति.",
+"Start a program":"कार्यकम्मं् पब्बज्ज",
+"Three ways in. Whatever you make is kept in this browser as you work.":"तयो उपाया. यं् किञ्चि करोसि तं् इमस्मिं् ब्राह्मणे रक्खति याव त्वं् करोसि.",
+"Describe it":"वण्णेहि",
+"Start from an example":"उदाहरणेन पब्बज्ज",
+"Open a file":"कोसं् विवर",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"इमस्मिं् प्ṛट्ठे सं्रक्खितो खण्डो कोसो (.ज्सोन्), वा निर्यातो Python (.प्य्, .ziप्).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"प्रतिशुक्रवासरे 18 वादने, इमस्मिं् सप्तअहन्ते वत्थानि सोसेयितुं् द्वे उत्तमा घटियो विचिन, ता च Telegram इति मं् पहिण",
+"When the front door opens, turn on the porch light and send me a Telegram message":"यदा द्वारं् विवरति, आरङ्गस्स पकासं् पज्जल, च मं् Telegram इति सन्देसं् पहिण",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिदिवसा 8 वादने, मम अपथितं् ईमेलं् सं्खिप्प, तत्तानं् तयानं् प्रधानतमानि Telegram इति मं् पहिण"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},

@@ -1998,7 +1998,16 @@
   "Author": "Auctor",
   "Open the share form on GitHub": "Formularium communicandum in GitHub aperire",
   "Fill in the title, a description, a tip and your name first.": "Primum titulum, descriptionem, monitum et nomen tuum exple.",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Issue Share a program in GitHub aperit his campis et vinculo #p= ad programma iam expleto. Nihil mittitur nisi Aperire presseris: issue in nova tabula aperitur, ut edatur aut abiciatur. Curator id label accipit, et workflow id in pull request vertit quod programma galeriae addat."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Issue Share a program in GitHub aperit his campis et vinculo #p= ad programma iam expleto. Nihil mittitur nisi Aperire presseris: issue in nova tabula aperitur, ut edatur aut abiciatur. Curator id label accipit, et workflow id in pull request vertit quod programma galeriae addat.",
+  "Start a program": "Programma incipe",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "Tres viae ad incipiendum. Quodcumque feceris in hoc gestatorio servatur dum laboras.",
+  "Describe it": "Describe",
+  "Start from an example": "Ab exemplo incipe",
+  "Open a file": "Fasciculum aperi",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": " fasciculus notarum ex hac pagina servatus (.json), aut Python exportatum (.py, .zip).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Omni die Veneris hora 18, inveni duas horas huius finis hebdomadis optimas ad pannos siccandos et mihi in Telegram mitte",
+  "When the front door opens, turn on the porch light and send me a Telegram message": "Cum foris aperitur, lucernam in vestibulo accende et mihi nuntium in Telegram mitte",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Quotidie hora 8, email mea non lecta recense et tria gravissima mihi in Telegram mitte"
  },
  "examples": {
   "review": {

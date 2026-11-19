@@ -1988,7 +1988,16 @@
   "Author": "Ahcuiloa",
   "Open the share form on GitHub": "Xiquixpehualtia in tlamachtiliztli ipan GitHub",
   "Fill in the title, a description, a tip and your name first.": "Xicchiuhqui achtopa itoca, itechpa, temachtiliztli ihuan moname.",
-  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Quixpehualtia ce Share a program issue ipan GitHub inin tlahcuilolli ihuan ce #p= tlapexolli ipan in programa oc mofylled. Ahtle motemachtia hasta tiquitzquis Open: in issue quixpehualtia ipan oc ce yancui tab, cualli tlacuilolli o tlacahua. Ce tlayacatl quicualtilia ipan ce tlahcuilolli label, huan workflow quichihua in pull request tlen quipiya programa ipan in galerías."
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Quixpehualtia ce Share a program issue ipan GitHub inin tlahcuilolli ihuan ce #p= tlapexolli ipan in programa oc mofylled. Ahtle motemachtia hasta tiquitzquis Open: in issue quixpehualtia ipan oc ce yancui tab, cualli tlacuilolli o tlacahua. Ce tlayacatl quicualtilia ipan ce tlahcuilolli label, huan workflow quichihua in pull request tlen quipiya programa ipan in galerías.",
+  "Start a program": "Xicpehualti ce programa",
+  "Three ways in. Whatever you make is kept in this browser as you work.": "Yei ways quipiya. Tlen ticchihua mocayotl inin browser mientras tictequitiltia.",
+  "Describe it": "Xicnemachti",
+  "Start from an example": "Xicpehualtia ipan ce tlamachtiliztli",
+  "Open a file": "Xiquixpehualtia ce tlahcuilolli",
+  "A block file saved from this page (.json), or exported Python (.py, .zip).": "Ce tlahcuilolli oBlocks oquizque ipan inin pagina (.json), o Python oquizque (.py, .zip).",
+  "Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram": "Moztlauhqui xicahuitl 6pm, xictemo in omomeh cualli horas inin zaniloyan xicpatlahuazqueh inin Telegram",
+  "When the front door opens, turn on the porch light and send me a Telegram message": " kemah cualli in calli ipan tlaltikpak, xicpizqueh in tlapoyankeh huan xicmahuih in Telegram",
+  "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Moztlauhqui 8am, xicpiya ce tlahcuilolli ahmo ticmachitia huan xicmahuih in yeyi ocachi cualli inin Telegram"
  },
  "examples": {
   "review": {

@@ -1254,7 +1254,16 @@
 "Author":"Συγγραφεύς",
 "Open the share form on GitHub":"Ἄνοιξον τὴν φόρμαν τοῦ διαμοιρασμοῦ ἐν τῷ GitHub",
 "Fill in the title, a description, a tip and your name first.":"Πληροῦ πρῶτον τὸν τίτλον, περιγραφήν, συμβουλήν καὶ τὸ ὄνομά σου.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ἀνοίγει ἕνα issue Share a program ἐν GitHub μετὰ ταύτων τῶν πεδίων καὶ συνδέσμου #p= πρὸς τὸ πρόγραμμα ἤδη πεπληρωμένου. Οὐδὲν ἀποστέλλεται ἕως ἂν πατήσητε Ἄνοιγμα: τὸ issue ἀνοίγνυται ἐν νέᾳ καρτέλᾳ, πρὸς ἐπεξεργασίαν ἢ ἀπόρριψιν. Κύριός τις τὸ δέχεται δι' ἐτικέτας, καὶ ῥοὴ ἐργασίας τὸ μετατρέπει εἰς τὸ pull request ὃ προστίθησι τὸ πρόγραμμα τῇ πινακοθήκῃ."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ἀνοίγει ἕνα issue Share a program ἐν GitHub μετὰ ταύτων τῶν πεδίων καὶ συνδέσμου #p= πρὸς τὸ πρόγραμμα ἤδη πεπληρωμένου. Οὐδὲν ἀποστέλλεται ἕως ἂν πατήσητε Ἄνοιγμα: τὸ issue ἀνοίγνυται ἐν νέᾳ καρτέλᾳ, πρὸς ἐπεξεργασίαν ἢ ἀπόρριψιν. Κύριός τις τὸ δέχεται δι' ἐτικέτας, καὶ ῥοὴ ἐργασίας τὸ μετατρέπει εἰς τὸ pull request ὃ προστίθησι τὸ πρόγραμμα τῇ πινακοθήκῃ.",
+"Start a program":"Ἄρξαι προγράμματος",
+"Three ways in. Whatever you make is kept in this browser as you work.":"Τρεῖς τρόποι ἀρχῆς. Ὅ τι ποιήσῃς φυλάσσεται ἐν τούτῳ τῷ περιηγητῇ ὅσον ἐργάζῃ.",
+"Describe it":"Περιέγραψέ το",
+"Start from an example":"Ἄρξαι ἀπὸ παραδείγματος",
+"Open a file":"Ἄνοιξον ἀρχείου",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"Ἀρχεῖον συρραπτικοῦ ἀποθηκευμένον ἐκ ταύτης τῆς σελίδος (.json), ἢ ἐξαχθέντος Python (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Ἕκαστον Παρασκευῆς ὥραν 18, εὑρέ τας δύο ἀρίστας ὥρας τοῦ σαββατοκύριακου πρὸς τὸ ἀποξηραίνειν τὰ ἱμάτια καὶ ἀπόστειλέ μοι ἐν Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"Ὅταν ἡ θύρα ἀνοίγνυται, ἅψον τὸν φανὸν τῆς στοᾶς καὶ ἀπόστειλέ μοι μήνυμα ἐν Telegram",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"ἑκάστην πρωΐαν ὥραν 8, ἀνακεφαλαίωσι τὰ ἀνάγνωστα μηνύματά μου καὶ ἀπόστειλέ μοι τὰ τρία σπουδαιότερα ἐν Telegram"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

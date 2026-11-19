@@ -1254,7 +1254,16 @@
 "Author":"Auteur",
 "Open the share form on GitHub":"Het deelformulier op GitHub openen",
 "Fill in the title, a description, a tip and your name first.":"Vul eerst de titel, een beschrijving, een tip en je naam in.",
-"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opent een Share a program-issue op GitHub met deze velden en een #p=-link naar het programma al ingevuld. Er wordt niets verstuurd tot je op Openen drukt: het issue opent in een nieuw tabblad, om te bewerken of te verwijderen. Een beheerder accepteert het met een label, en een workflow maakt er de pull request van die het programma aan de galerij toevoegt."
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opent een Share a program-issue op GitHub met deze velden en een #p=-link naar het programma al ingevuld. Er wordt niets verstuurd tot je op Openen drukt: het issue opent in een nieuw tabblad, om te bewerken of te verwijderen. Een beheerder accepteert het met een label, en een workflow maakt er de pull request van die het programma aan de galerij toevoegt.",
+"Start a program":"Een programma starten",
+"Three ways in. Whatever you make is kept in this browser as you work.":"Drie manieren om te beginnen. Wat je maakt blijft in deze browser bewaard terwijl je werkt.",
+"Describe it":"Beschrijf het",
+"Start from an example":"Start vanaf een voorbeeld",
+"Open a file":"Een bestand openen",
+"A block file saved from this page (.json), or exported Python (.py, .zip).":"Een blokbestand opgeslagen vanaf deze pagina (.json), of geëxporteerde Python (.py, .zip).",
+"Every Friday at 6pm, find the best two hours this weekend to dry washing and send it to me on Telegram":"Elke vrijdag om 18:00, vind de beste twee uur van dit weekend om de was te drogen en stuur het me via Telegram",
+"When the front door opens, turn on the porch light and send me a Telegram message":"Als de voordeur opengaat, zet de portieklicht aan en stuur me een Telegram-bericht",
+"Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Elke ochtend om 8:00, vat mijn ongelezen e-mail samen en stuur me de drie belangrijkste via Telegram"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

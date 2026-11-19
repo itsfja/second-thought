@@ -110,6 +110,17 @@ details.menu[open]>summary{border-color:var(--accent)}
 /* Panels are drawers over the canvas (#445): they never move the page, so the program stays where it was. */
 #gallery,#lib,#ha,#mem,#bk,#keys,#io,#share{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
 .gal-tools{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+/* The first screen (#443): a browser with nothing kept yet gets three ways in, over the canvas (the header and
+   the drawers stay above it). */
+#first{position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto;padding:110px 20px 40px}
+.first-box{max-width:1020px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+#first h2{font-family:var(--font-display);font-weight:500;font-size:24px;margin:0}
+#first h3{font-size:14px;font-weight:700;margin:0;color:var(--muted)}
+#first .hint{margin:0;font-size:13px;color:var(--muted)}
+.first-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.first-card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.first-card textarea{width:100%;resize:vertical;font:inherit}
+#first-examples{display:flex;flex-direction:column;gap:6px;align-items:stretch}
 .gal-tools input[type=search]{width:100%}
 .gal-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{border-radius:999px;padding:3px 12px;font-size:13px}

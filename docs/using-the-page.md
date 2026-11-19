@@ -16,6 +16,8 @@
 
 **With no network.** Each [release](https://github.com/itsfja/second-thought/releases/latest) has **second-thought-offline.html**: the page as one file, with Blockly and every language inside. Open it from your disk and it builds, explains and exports programs with no connection at all; it runs them with your own key, as the GitHub Pages copy does, when you're online. Reading PDFs needs the network, as do the fonts for Linear B, cuneiform, hieroglyphs and Coptic.
 
+**First visit.** A browser with no program kept yet opens on a first screen with three ways in: **Describe it** (a large plain-English box, with three example sentences to click), **Start from an example** (six chosen ones), or **Open a file** (a block file saved from the page). Each lands you in the editor with the program on the canvas. Once a program is kept in the browser, the page opens straight into the editor.
+
 Each block is one instruction, like *write a first draft*, *review the draft against …* or *revise to fix the review's problems*. Drag blocks from the categories on the left and click them together. Only blocks under a **when Run is clicked** or **when I receive** hat run, top to bottom; separate scripts run side by side. Click any white slot to type into it. Round slots take values, hexagon slots take yes/no conditions.
 
 The blocks are colour-coded by job:
