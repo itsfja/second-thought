@@ -108,7 +108,7 @@ details.menu[open]>summary{border-color:var(--accent)}
 .bk-sel{max-width:420px}
 .io{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
 /* Panels are drawers over the canvas (#445): they never move the page, so the program stays where it was. */
-#gallery,#lib,#ha,#mem,#bk,#keys,#io{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
+#gallery,#lib,#ha,#mem,#bk,#keys,#io,#share{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(640px,94vw);z-index:10001;margin:0;border:1px solid var(--line);border-inline-end:none;border-radius:0;overflow-y:auto;box-shadow:-14px 0 44px rgba(10,12,25,.28)}
 .gal-tools{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .gal-tools input[type=search]{width:100%}
 .gal-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center}

@@ -1,0 +1,86 @@
+name: gallery-share
+
+# A "Share a program" issue (opened from the page's Share… button, #437) accepted with the gallery-accepted
+# label becomes a pull request: tools/gallery_from_issue.py unpacks the issue's #p= link (#436) into
+# gallery/<name>.json, tools/sync.py rebuilds the page, and the PR closes the issue on merge.
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: gallery-share-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  share:
+    name: Turn the accepted share issue into a PR
+    if: >-
+      github.event.label.name == 'gallery-accepted' &&
+      github.event.issue.pull_request == null &&
+      contains(github.event.issue.body, '#p=')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Make sure the acceptance label exists for the next share
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api "repos/${{ github.repository }}/labels/gallery-accepted" >/dev/null 2>&1 \
+            || gh label create gallery-accepted --description "Accept this share issue: gallery-share turns it into a PR" --color FFD966
+
+      - name: Unpack the link into the gallery file
+        id: share
+        env:
+          EVENT: ${{ github.event_path }}
+        run: |
+          summary=$(python tools/gallery_from_issue.py --event "$EVENT" --write)
+          echo "$summary"
+          echo "summary=$summary" >> "$GITHUB_OUTPUT"
+
+      - name: Rebuild the page and run the gallery's checks
+        run: |
+          python tools/sync.py
+          python -m unittest discover -s tests/unit -p "test_gallery.py"
+
+      - name: Open the pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          SUMMARY: ${{ steps.share.outputs.summary }}
+        run: |
+          set -euo pipefail
+          name=$(jq -r .name <<<"$SUMMARY")
+          title=$(jq -r .title <<<"$SUMMARY")
+          file=$(jq -r .file <<<"$SUMMARY")
+          branch="gallery-share/${name}-${ISSUE}"
+          if gh pr list --repo "${{ github.repository }}" --head "$branch" --json number | jq -e 'length > 0' >/dev/null; then
+            echo "a PR already exists for $branch; leaving the issue as it is"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -A
+          git commit -m "Gallery: $title (share issue #$ISSUE)"$'\n\n'"Co-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          git push -u origin "$branch"
+          cat > /tmp/pr-body.md <<EOF
+          Adds \`$file\` from share issue #$ISSUE (accepted with the gallery-accepted label): the #p= link unpacked by tools/gallery_from_issue.py, and the page rebuilt with tools/sync.py.
+
+          Closes #$ISSUE
+          EOF
+          pr=$(gh pr create --repo "${{ github.repository }}" --head "$branch" --base main \
+                 --title "Gallery: $title (#$ISSUE)" --body-file /tmp/pr-body.md)
+          echo "$pr"
+          gh issue comment "$ISSUE" --repo "${{ github.repository }}" \
+            --body "Accepted — the gallery pull request is opening: $pr"

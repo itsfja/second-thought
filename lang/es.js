@@ -1207,7 +1207,6 @@
 "New":"Nuevo",
 "Import":"Importar",
 "Export":"Exportar",
-"Share":"Compartir",
 "Theme":"Tema",
 "System":"Sistema",
 "Light":"Claro",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Este navegador no puede empaquetar un enlace (sin CompressionStream); copia el archivo de bloques.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Este enlace trae un programa: «{name}» ({n} bloques).{can} Solo se carga si eliges Cargar.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ese enlace está roto: no contiene un programa que esta página pueda leer. No se cargó nada.",
-"This browser can't unpack links (no DecompressionStream).":"Este navegador no puede desempaquetar enlaces (sin DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Este navegador no puede desempaquetar enlaces (sin DecompressionStream).",
+"Share…":"Compartir…",
+"Share this program with the community gallery":"Compartir este programa con la galería comunitaria",
+"Title":"Título",
+"Category":"Categoría",
+"Description":"Descripción",
+"Tip":"Consejo",
+"Author":"Autor",
+"Open the share form on GitHub":"Abrir el formulario de compartir en GitHub",
+"Fill in the title, a description, a tip and your name first.":"Rellena primero el título, una descripción, un consejo y tu nombre.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Abre una incidencia Share a program en GitHub con estos campos y un enlace #p= al programa ya rellenados. No se envía nada hasta que pulses Abrir: la incidencia se abre en una pestaña nueva, para editarla o descartarla. Un mantenedor la acepta con una etiqueta y un flujo de trabajo la convierte en la pull request que añade el programa a la galería."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

@@ -1208,7 +1208,6 @@
 "New":"ᚾᛁᚹᛖ",
 "Import":"ᛁᚾᛒᛖᚱᚪᚾ",
 "Export":"ᚢᛏᛒᛖᚱᚪᚾ",
-"Share":"ᛞᚫᛚᚪᚾ",
 "Theme":"ᚻᛁᚹ",
 "System":"ᛖᚾᛞᛖᚱ",
 "Light":"ᛚᛁᛇᛏ",
@@ -1246,7 +1245,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"ᚦᛖᛋ ᚱᛖᚳᛖᛞᛖᚱᛖ ᚾᛖ ᚳᚪᚾᚾ ᚻᛚᚣᚾᚳ ᛒᛖᚳᛚᚣᛈᛈᚪᚾ (ᚾᚫᛋ CompressionStream); ᚳᚩᛈᛁᚷᛖ ᚦᚩᚾᛖ ᛒᛚᚩᚳᚳᚠᛁᛚᛖ.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"ᚦᛁᛋ ᚻᛚᚣᚾᚳ ᛒᛖᚱᚦ ᛏᚪᚳᚾ: „{name}“ ({n} ᛒᛚᚩᚳᚳᚪ).{can} ᚻᛁᛏ ᛁᛋ ᚷᛖᛚᚫᛞᛖᚾ ᚪᚾᛚᚣ ᚦᚩᚾᚾᛖ ᚦᚢ ᚳᚣᚱᛋᛏ ᚻᛚᚫᛞ.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"ᚦᛁᛋ ᚻᛚᚣᚾᚳ ᛁᛋ ᚷᛖᛒᚱᚩᚳᛖᚾ: ᚻᛖ ᚾᛖ ᛒᛖᚱᚦ ᚾᚪ ᛏᚪᚳᚾ ᚦᛖ ᚦᛁᛋ page ᚳᚪᚾᚾ ᚱᚫᛞᚪᚾ. ᚾᚪᛇᛏ ᚾᚫᛋ ᚷᛖᛚᚫᛞᛖᚾ.",
-"This browser can't unpack links (no DecompressionStream).":"ᚦᛖᛋ ᚱᛖᚳᛖᛞᛖᚱᛖ ᚾᛖ ᚳᚪᚾᚾ ᚻᛚᚣᚾᚳ ᚢᚾᚹᚱᚪᛈᛁᚪᚾ (ᚾᚫᛋ DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"ᚦᛖᛋ ᚱᛖᚳᛖᛞᛖᚱᛖ ᚾᛖ ᚳᚪᚾᚾ ᚻᛚᚣᚾᚳ ᚢᚾᚹᚱᚪᛈᛁᚪᚾ (ᚾᚫᛋ DecompressionStream).",
+"Share…":"ᛞᚫᛚᚪᚾ…",
+"Share this program with the community gallery":"ᛞᚫᛚ ᚦᛁᛋ ᚠᚩᚱᚦᛖᛗᚢᛝ ᛗᛁᛞ ᚦᚫᚱᛖ ᛗᛖᚾᚾᛁᛋᚳᚪᚾ ᚷᚪᛚᛚᛖᚱᚣ",
+"Title":"ᛏᛁᛏᚢᛚ",
+"Category":"ᚠᛚᚩᚳᚳ",
+"Description":"ᚪᚾᛞᚹᛚᛁᛏᚪ",
+"Tip":"ᚱᚫᛞ",
+"Author":"ᚪᚢᚳᛏᚩᚱ",
+"Open the share form on GitHub":"ᚩᛈᛖᚦ ᚦᚫᛏ ᛞᚫᛚᚠᚩᚱᛗ ᚩᚾ GitHub",
+"Fill in the title, a description, a tip and your name first.":"ᚠᚣᛚᛚ ᚫᚱᛖᛋᛏ ᛏᛁᛏᚢᛚ, ᚪᚾᛞᚹᛚᛁᛏᚪᚾ, ᚱᚫᛞ ᚪᚾᛞ ᚦᛁᚾᚾᛖ ᚾᚪᛗᚪᚾ.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"ᚩᛈᛖᚦ ᛋᚻᚪᚱᛖ ᚪ ᛈᚱᚩᚷᚱᚪᛗ issue ᚩᚾ GitHub ᛗᛁᛞ ᚦᛁᛋᛋᚢᛗ ᚠᛖᛚᛞᚢᛗ ᚪᚾᛞ #p= ᛚᛖᚾᚳᚢᛗ ᛏᚩ ᚦᚫᛗ ᚠᚩᚱᚦᛖᛗᚢᛝᛖ, ᚷᛖᚠᚣᛚᛚᛖᛞ. ᚾᚪᚻᚦ ᛁᛋ ᛋᛖᚾᛞ ᚩᚦᚦᛖ ᚦᚢ ᚳᚾᚩᛚᛚᛖᛋᛏ ᚩᛈᛖᚾ: ᚦᚫᛏ issue ᚩᛈᛖᚦ ᛁᚾ ᚾᛁᚹᚢᛗ ᛏᚫᛒᛒᛖ, ᛏᚩ ᚻᚪᛋᚪᛏᛏᚱᚩᚾᚾᛖ ᚩᚦᚦᛖ ᛏᚩ ᚠᚩᚱᛋᛗᛖᛝᚪᚾ. ᚪ ᛗᚪᛁᚾᛏᚪᛁᚾᛖᚱ ᚪᚳᚳᛁᛖᛈᚦ ᚻᛁᛏ ᛗᛁᛞ ᛚᚪᛒᚩᚱᛖ, ᚪᚾᛞ ᚹᚩᚱᛣᚠᛚᚩᚹ ᚹᚣᚱᚳᚦ ᚻᛁᛏ ᛁᚾᛏᚩ ᚦᚫᛏ pull request ᚦᚫᛏ ᛠᚳᚦ ᚦᚫᛏ ᚠᚩᚱᚦᛖᛗᚢᛝ ᛏᚩ ᚦᚫᚱᛖ ᚷᚪᛚᛚᛖᚱᚣ."
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},

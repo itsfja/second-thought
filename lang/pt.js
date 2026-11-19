@@ -1207,7 +1207,6 @@
 "New":"Novo",
 "Import":"Importar",
 "Export":"Exportar",
-"Share":"Partilhar",
 "Theme":"Tema",
 "System":"Sistema",
 "Light":"Claro",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Este navegador não consegue empacotar um link (sem CompressionStream); copie o ficheiro de blocos.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Este link traz um programa: «{name}» ({n} blocos).{can} Só carrega se escolheres Carregar.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Esse link está quebrado: não contém um programa que esta página consiga ler. Nada foi carregado.",
-"This browser can't unpack links (no DecompressionStream).":"Este navegador não consegue desempacotar links (sem DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Este navegador não consegue desempacotar links (sem DecompressionStream).",
+"Share…":"Partilhar…",
+"Share this program with the community gallery":"Partilhar este programa com a galeria da comunidade",
+"Title":"Título",
+"Category":"Categoria",
+"Description":"Descrição",
+"Tip":"Dica",
+"Author":"Autor",
+"Open the share form on GitHub":"Abrir o formulário de partilha no GitHub",
+"Fill in the title, a description, a tip and your name first.":"Preenche primeiro o título, uma descrição, uma dica e o teu nome.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Abre um issue Share a program no GitHub com estes campos e uma ligação #p= para o programa já preenchidos. Nada é enviado até premires Abrir: o issue abre num novo separador, para editar ou descartar. Um mantenedor aceita-o com uma etiqueta e um workflow transforma-o no pull request que adiciona o programa à galeria."
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},

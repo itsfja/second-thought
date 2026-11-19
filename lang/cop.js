@@ -1207,7 +1207,6 @@
 "New":"νέο",
 "Import":"εισαγωγή",
 "Export":"εξαγωγή",
-"Share":"κοινή χρήση",
 "Theme":"θέμα",
 "System":"σύστημα",
 "Light":"φως",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"ⲧϩⲓⲥ ⲓⲥⲛⲧ",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This ⲗⲓⲛⲕ ϭⲁⲣⲣⲓⲉⲥ ⲁ ⲡⲣⲟⲅⲣⲁⲙ: “{name}” ({n} blocks).{can} It ⲗⲟⲁⲇⲥ ⲟⲛⲗⲩ ⲓϥ ⲩⲟⲩ ϭϩⲟⲟⲥⲉ Load.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"That ⲗⲓⲛⲕ ⲓⲥ ⲃⲣⲟⲕⲉⲛ: ⲓⲧ doesn't ϩⲟⲗⲇ ⲁ ⲡⲣⲟⲅⲣⲁⲙ ⲧϩⲓⲥ ⲡⲁⲅⲉ ϭⲁⲛ ⲣⲉⲁⲇ. Nothing was ⲗⲟⲁⲇⲉⲇ.",
-"This browser can't unpack links (no DecompressionStream).":"ⲧϩⲓⲥ ⲓⲥⲛⲧ"
+"This browser can't unpack links (no DecompressionStream).":"ⲧϩⲓⲥ ⲓⲥⲛⲧ",
+"Share…":"κοινή χρήση…",
+"Share this program with the community gallery":"Share ⲧϩⲓⲥ ⲡⲣⲟⲅⲣⲁⲙ with ⲧϩⲉ ϭⲟⲙⲙⲩⲛⲓⲧⲩ ⲅⲁⲗⲗⲉⲣⲩ",
+"Title":"ⲧⲓ",
+"Category":"ⲕⲁ",
+"Description":"ⲛⲉ",
+"Tip":"ⲥⲉ",
+"Author":"ⲁⲩ",
+"Open the share form on GitHub":"Open ⲧϩⲉ ⲥϩⲁⲣⲉ ϥⲟⲣⲙ ⲟⲛ GitHub",
+"Fill in the title, a description, a tip and your name first.":"Fill ⲓⲛ ⲧϩⲉ ⲧⲓⲧⲗⲉ, ⲁ ⲇⲉⲥϭⲣⲓⲡⲧⲓⲟⲛ, ⲁ ⲧⲓⲡ ⲁⲛⲇ ⲩⲟⲩⲣ ⲛⲁⲙⲉ ϥⲓⲣⲥⲧ.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Opens ⲁ Share ⲁ ⲡⲣⲟⲅⲣⲁⲙ ⲓⲥⲥⲩⲉ ⲟⲛ GitHub with ⲧϩⲉⲥⲉ ϥⲓⲉⲗⲇⲥ ⲁⲛⲇ ⲁ #ⲡ= ⲗⲓⲛⲕ ⲧⲟ ⲧϩⲉ ⲡⲣⲟⲅⲣⲁⲙ ϥⲓⲗⲗⲉⲇ ⲓⲛ. Nothing ⲓⲥ ⲥⲉⲛⲧ ⲩⲛⲧⲓⲗ ⲩⲟⲩ ⲡⲣⲉⲥⲥ Open: ⲧϩⲉ ⲓⲥⲥⲩⲉ ⲟⲡⲉⲛⲥ ⲓⲛ ⲁ new ⲧⲁⲃ, ⲧⲟ ⲉⲇⲓⲧ ⲟⲣ ⲇⲓⲥϭⲁⲣⲇ. A ⲙⲁⲓⲛⲧⲁⲓⲛⲉⲣ ⲁϭϭⲉⲡⲧⲥ ⲓⲧ with ⲁ ⲗⲁⲃⲉⲗ, ⲁⲛⲇ ⲁ workflow ⲧⲩⲣⲛⲥ ⲓⲧ ⲓⲛⲧⲟ ⲧϩⲉ ⲡⲩⲗⲗ request ⲧϩⲁⲧ ⲁⲇⲇⲥ ⲧϩⲉ ⲡⲣⲟⲅⲣⲁⲙ ⲧⲟ ⲧϩⲉ ⲅⲁⲗⲗⲉⲣⲩ."
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},

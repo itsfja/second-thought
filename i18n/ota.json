@@ -1942,7 +1942,6 @@
   "New": "جديد",
   "Import": "استيراد",
   "Export": "تصدير",
-  "Share": "مشاركة",
   "Theme": "السمة",
   "System": "النظام",
   "Light": "فاتح",
@@ -1980,7 +1979,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Bu tarayıcı bir bağlantıyı paketleyemez (CompressionStream yok); bunun yerine blok dosyasını kopyala.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Bu bağlantı bir program taşır: «{name}» ({n} blok).{can} Yalnızca Yükle'yi seçersen yüklenir.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Bu bağlantı bozuk: bu sayfanın okuyabileceği bir program içermiyor. Hiçbir şey yüklenmedi.",
-  "This browser can't unpack links (no DecompressionStream).": "Bu tarayıcı bağlantıları açamaz (DecompressionStream yok)."
+  "This browser can't unpack links (no DecompressionStream).": "Bu tarayıcı bağlantıları açamaz (DecompressionStream yok).",
+  "Share…": "مشاركة…",
+  "Share this program with the community gallery": "Bu programı cemaat galerisiyle paylaş",
+  "Title": "Başlık",
+  "Category": "Kategori",
+  "Description": "Açıklama",
+  "Tip": "İpucu",
+  "Author": "Yazar",
+  "Open the share form on GitHub": "GitHub'daki paylaşım formunu aç",
+  "Fill in the title, a description, a tip and your name first.": "Önce başlığı, bir açıklamayı, bir ipucunu ve adını doldur.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Bu alanlar ve programa ait bir #p= bağlantısı önceden doldurulmuş bir GitHub Share a program meselesi açar. Aç'a basana kadar hiçbir şey gönderilmez: ileti yeni bir sekmede açılır, düzenlenebilir veya atılabilir. Bir bakıcı bunu bir etiketle kabul eder ve bir iş akışı onu programa galeriye ekleyen çekme isteğine dönüştürür."
  },
  "examples": {
   "review": {

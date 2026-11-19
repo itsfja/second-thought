@@ -1208,7 +1208,6 @@
 "New":"नव",
 "Import":"आनयन",
 "Export":"निर्याण",
-"Share":"संविभाग",
 "Theme":"रूप",
 "System":"तन्त्र",
 "Light":"प्रकाश",
@@ -1246,7 +1245,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"अयं् प्रेक्षकः् सं्योगं् सं्व्ṛणोति न (CompressionStream नास्ति); block-fāyilaṃ प्रतिलिप.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"अयं् सं्योगः् कार्यं् वहति: «{name}» ({n} khaṇḍāḥ).{can} Load एव चेत् निर्दिस्ह्तं् तदा एव भाव्यते.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"अयं् सं्योगः् भिन्नः्: इदं् पाठं् पठनीयं् कार्यं् न वहति. किञ्चिद् अपि न भावितम्.",
-"This browser can't unpack links (no DecompressionStream).":"अयं् प्रेक्षकः् सं्योगान् मुञ्चति न (DecompressionStream नास्ति)."
+"This browser can't unpack links (no DecompressionStream).":"अयं् प्रेक्षकः् सं्योगान् मुञ्चति न (DecompressionStream नास्ति).",
+"Share…":"संविभाग…",
+"Share this program with the community gallery":"इमं् प्रोग्रम्मे समाजस्य चित्रागारेण सह शं्सय",
+"Title":"शीर्षकम्",
+"Category":"वर्गम्",
+"Description":"वर्णनम्",
+"Tip":"उपदेशम्",
+"Author":"कर्ता",
+"Open the share form on GitHub":"GitHub-majjhe śaṃsana-phālamaṃ उद्घाटय",
+"Fill in the title, a description, a tip and your name first.":"प्रथमं् शीर्षकं्, वर्णनं्, उपदेशं् च तव नाम पूरय.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"इमं् Share अ प्रोग्रम् इस्सुए GitHub-majjhe फालेत्, एतेषु क्षेत्रेषु च #प्= सं्बन्धः् प्रोग्रम्मेण सह पूर्णः्. Open इत्येतद् यावत् न फाल्यते तावत् किञ्चित् न प्रेष्यते: इस्सुए nava-ṭāb-majjhe विव्ṛतः्, सं्शोधनाय वा अपाकरणाय वा. सं्रक्षकः् लेखिकया स्वीकरोति, वइवस्थिकं् च तत् पुल्ल् रेquएस्त् इति करोति यत् प्रोग्रम्मे चित्रागारेण सह युक्तं् भवति."
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

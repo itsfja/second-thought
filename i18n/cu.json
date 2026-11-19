@@ -1941,7 +1941,6 @@
   "New": "Ново",
   "Import": "Импортъ",
   "Export": "Експортъ",
-  "Share": "Общєниѥ",
   "Theme": "Оформлєниѥ",
   "System": "Система",
   "Light": "Свѣтъ",
@@ -1979,7 +1978,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Сей ꙁрителъ не можетъ паковать ссылкꙋ (нѣсть CompressionStream); копирꙋй файлъ блоковъ.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Сїе звѣно носитъ програмꙋ: «{name}» ({n} блокѡвъ).{can} Загрꙋжается токмо ꙗко избереши «Загрꙋзкꙋ».",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Ссылка сїа разорена: не носитъ программы, юже сїа страница можетъ чести. Ничтоже не ꙁагрꙋжено.",
-  "This browser can't unpack links (no DecompressionStream).": "Сей ꙁрителъ не можетъ распаковати звѣна (нѣсть DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "Сей ꙁрителъ не можетъ распаковати звѣна (нѣсть DecompressionStream).",
+  "Share…": "Общєниѥ…",
+  "Share this program with the community gallery": "поделитеся симъ программу галереи общины",
+  "Title": "титул",
+  "Category": "категория",
+  "Description": "описание",
+  "Tip": "совет",
+  "Author": "автор",
+  "Open the share form on GitHub": "открыть форму публикации на GitHub",
+  "Fill in the title, a description, a tip and your name first.": "сначала заполните титул, описание, совет и ваше имя.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "открывает issue Share a program на GitHub с этими полями и ссылкой #p= на программу уже заполненной. ничего не посылается, пока не нажмете «открыть»: issue откроется в новой вкладке, чтобы редактировать или отменить. хранитель принимает его меткой, и рабочий поток превращает его в pull request, который добавляет программу в галерею."
  },
  "examples": {
   "review": {

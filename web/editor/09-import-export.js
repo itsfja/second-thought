@@ -30,12 +30,12 @@
 
   const FORMAT = "reflection-blocks";
   const ioMsg = (id, text, kind) => { const m = $(id); m.textContent = tr(text); m.className = "msg" + (kind ? " " + kind : ""); };
-  const ioToggles = ["io-import", "io-export", "share-prog"];
+  const ioToggles = ["io-import", "io-export"];
   registerDrawer("io", ioToggles, () => { ioMsg("io-export-msg", ""); $("io-export-text").hidden = true; });
   function toggleIo(open){ return toggleDrawer("io", open); }
   $("io-import").onclick = () => { toggleIo(true); $("io-paste").focus(); };
   $("io-export").onclick = () => { toggleIo(true); $("io-copy").focus(); };
-  $("share-prog").onclick = () => { toggleIo(true); $("io-copy").click(); };
+  // Share… opens its own drawer, wired in 23-gallery-share.js (#437).
   let downloads = null;
   const showSaves = d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("log-save").hidden = !d; };
   if (window.claude && window.claude.use) {

@@ -1206,7 +1206,6 @@
 "New":"Yancuic",
 "Import":"Xiccuīca",
 "Export":"Xicchīhua",
-"Share":"Xicpaltia",
 "Theme":"Tlahcuilōlli",
 "System":"Tēmachtīlli",
 "Light":"Tlahuīlli",
@@ -1244,7 +1243,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Inīn tlatequitiliztli ahmo hueli quimpiya in tlālticpactli (ahmo CompressionStream); oc xiccopia in tlamantli tlamantli.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Inīn tlālticpactli quimpiya cē tlamantli: «{name}» ({n} tlamantli).{can} Ōmotlacāhuaz achtōpa ōmotlapehpenilli Load.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Inīn tlālticpactli ōmotlahuelī: ahmo quimpiya cē tlamantli inīn tlamantli hueli quipohua. Ahmo ōmotlacāuh.",
-"This browser can't unpack links (no DecompressionStream).":"Inīn tlatequitiliztli ahmo hueli quixpoloz in tlālticpactli (ahmo DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Inīn tlatequitiliztli ahmo hueli quixpoloz in tlālticpactli (ahmo DecompressionStream).",
+"Share…":"Xicpaltia…",
+"Share this program with the community gallery":"Xicpaltia inin programa ipan in altepetl galerías",
+"Title":"Itoca",
+"Category":"Neucayotl",
+"Description":"Itechpa",
+"Tip":"Temachtiliztli",
+"Author":"Ahcuiloa",
+"Open the share form on GitHub":"Xiquixpehualtia in tlamachtiliztli ipan GitHub",
+"Fill in the title, a description, a tip and your name first.":"Xicchiuhqui achtopa itoca, itechpa, temachtiliztli ihuan moname.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Quixpehualtia ce Share a program issue ipan GitHub inin tlahcuilolli ihuan ce #p= tlapexolli ipan in programa oc mofylled. Ahtle motemachtia hasta tiquitzquis Open: in issue quixpehualtia ipan oc ce yancui tab, cualli tlacuilolli o tlacahua. Ce tlayacatl quicualtilia ipan ce tlahcuilolli label, huan workflow quichihua in pull request tlen quipiya programa ipan in galerías."
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

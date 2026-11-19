@@ -1207,7 +1207,6 @@
 "New":"Νέον",
 "Import":"Εἰσάγειν",
 "Export":"Ἐξάγειν",
-"Share":"Μεταδίδειν",
 "Theme":"Θέμα",
 "System":"Σύστημα",
 "Light":"Φῶς",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Ὁ περιηγητὴς οὗτος οὐ δύναται σύνδεσμον συμπιέζειν (ἄνευ CompressionStream)· ἀντὶ τούτου ἀντίγραψον τὸ ἀρχεῖον τῶν πλίνθων.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Ὁ σύνδεσμος οὗτος φέρει πρόγραμμα: «{name}» ({n} πλίνθοι).{can} Φορτοῦται μόνον ἐὰν ἐπιλέξῃς Φόρτωσιν.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ὁ σύνδεσμος οὗτος ἐστι κατεαγώς: οὐ φέρει πρόγραμμα ὃ ἡ σελὶς αὕτη δύναται ἀναγνῶναι. Οὐδὲν ἐφορτώθη.",
-"This browser can't unpack links (no DecompressionStream).":"Ὁ περιηγητὴς οὗτος οὐ δύναται συνδέσμους ἀποσυμπιέζειν (ἄνευ DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Ὁ περιηγητὴς οὗτος οὐ δύναται συνδέσμους ἀποσυμπιέζειν (ἄνευ DecompressionStream).",
+"Share…":"Μεταδίδειν…",
+"Share this program with the community gallery":"Μεταδώσατε αυτό το πρόγραμμα στην πινακοθήκη της κοινότητας",
+"Title":"Τίτλος",
+"Category":"Κατηγορία",
+"Description":"Περιγραφή",
+"Tip":"Συμβουλή",
+"Author":"Συγγραφεύς",
+"Open the share form on GitHub":"Ἄνοιξον τὴν φόρμαν τοῦ διαμοιρασμοῦ ἐν τῷ GitHub",
+"Fill in the title, a description, a tip and your name first.":"Πληροῦ πρῶτον τὸν τίτλον, περιγραφήν, συμβουλήν καὶ τὸ ὄνομά σου.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ἀνοίγει ἕνα issue Share a program ἐν GitHub μετὰ ταύτων τῶν πεδίων καὶ συνδέσμου #p= πρὸς τὸ πρόγραμμα ἤδη πεπληρωμένου. Οὐδὲν ἀποστέλλεται ἕως ἂν πατήσητε Ἄνοιγμα: τὸ issue ἀνοίγνυται ἐν νέᾳ καρτέλᾳ, πρὸς ἐπεξεργασίαν ἢ ἀπόρριψιν. Κύριός τις τὸ δέχεται δι' ἐτικέτας, καὶ ῥοὴ ἐργασίας τὸ μετατρέπει εἰς τὸ pull request ὃ προστίθησι τὸ πρόγραμμα τῇ πινακοθήκῃ."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

@@ -1951,7 +1951,6 @@
   "New": "Nīwe",
   "Import": "Inberan",
   "Export": "Ūtberan",
-  "Share": "Dǣlan",
   "Theme": "Hīw",
   "System": "Ender",
   "Light": "Līht",
@@ -1989,7 +1988,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Þes recedere ne cann hlync beclyppan (næs CompressionStream); copige þone bloccfile.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Þis hlync berþ tacn: „{name}“ ({n} blocca).{can} Hit is gelæden anly þonne þu cyrst hlæd.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Þis hlync is gebrocen: he ne berþ na tacn þe þis page cann rædan. Naht næs gelæden.",
-  "This browser can't unpack links (no DecompressionStream).": "Þes recedere ne cann hlync unwrapian (næs DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "Þes recedere ne cann hlync unwrapian (næs DecompressionStream).",
+  "Share…": "Dǣlan…",
+  "Share this program with the community gallery": "Dæl þis forðemung mid þære menniscan gallery",
+  "Title": "Titul",
+  "Category": "Flocc",
+  "Description": "Andwlita",
+  "Tip": "Ræd",
+  "Author": "Auctor",
+  "Open the share form on GitHub": "Opeð þæt dælform on GitHub",
+  "Fill in the title, a description, a tip and your name first.": "Fyll ærest titul, andwlitan, ræd and þinne naman.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Opeð Share a program issue on GitHub mid þissum feldum and #p= lencum to þæm forðemunge, gefylled. Nahð is send oþþe þu cnollest Open: þæt issue opeð in niwum tæbbe, to hasattronne oþþe to forsmengan. A maintainer acciepð hit mid labore, and workflow wyrcð hit into þæt pull request þæt eacð þæt forðemung to þære gallery."
  },
  "examples": {
   "review": {

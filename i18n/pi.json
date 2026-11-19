@@ -1942,7 +1942,6 @@
   "New": "नव",
   "Import": "आनय",
   "Export": "बहि",
-  "Share": "संविभज",
   "Theme": "वण्ण",
   "System": "विधि",
   "Light": "ओभास",
@@ -1980,7 +1979,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "अयं् ब्राह्मणो सं्योगं् सं्वत्तेति न (CompressionStream नत्थि); block-fāyilaṃ कोपेति.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "अयं् सं्योगो कम्मं् वहति: «{name}» ({n} khaṇḍā).{can} Load एव चे पिट्ठं् तदा एव होति.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "अयं् सं्योगो भिन्नो: इदं् पठं् पठनीयं् कम्मं् न वहति. किञ्चि न होति.",
-  "This browser can't unpack links (no DecompressionStream).": "अयं् ब्राह्मणो सं्योगे विमोचेति न (DecompressionStream नत्थि)."
+  "This browser can't unpack links (no DecompressionStream).": "अयं् ब्राह्मणो सं्योगे विमोचेति न (DecompressionStream नत्थि).",
+  "Share…": "संविभज…",
+  "Share this program with the community gallery": "इमं् प्रोग्रम्मे samāja-galleryena सह भाजेहि",
+  "Title": "सीसं्",
+  "Category": "वग्गं्",
+  "Description": "वण्णनं्",
+  "Tip": "ओवादं्",
+  "Author": "कत्ता",
+  "Open the share form on GitHub": "GitHub-majjhe भाजनफालमं् विवर",
+  "Fill in the title, a description, a tip and your name first.": "पठमं् सीसं्, वण्णनं्, ओवादं् च तव नामं् पूरेहि.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "इमं् Share अ प्रोग्रम् इस्सुए GitHub-majjhe विवरति, एतानि खेत्तानि च #प्= सं्बन्धो प्रोग्रम्मेण सह परिपुण्णो. Open फालेतुं् याव किञ्चि न पेसेति: इस्सुए nava-ṭāb-majjhe विवरं्, सं्सोधनाय वा अपकस्सनाय वा. सं्रक्खको लेखिकाय स्वीकरोति, वइवस्थिकञ्च तं् पुल्ल् रेquएस्त् इति करोति यं् प्रोग्रम्मे गल्लेर्येन सह युक्तं् होति."
  },
  "examples": {
   "review": {

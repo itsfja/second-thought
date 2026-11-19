@@ -1952,7 +1952,6 @@
   "New": "ܚܕܬܐ",
   "Import": "ܡܥܠܐ",
   "Export": "ܡܦܩܐ",
-  "Share": "ܫܘܬܦܐ",
   "Theme": "ܚܙܘܬܐ",
   "System": "ܛܟܣܐ",
   "Light": "ܢܘܗܪܐ",
@@ -1990,7 +1989,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ܗܢܐ ܡܦܠܫܐ ܠܐ ܡܨܟܚ ܠܩܘܫܪܐ (ܠܝܬ ܠܗ CompressionStream)؛ ܐܬܩܠ ܡܢܗ ܡܠܘܬܐ ܕܚܕܬ̈̈ܐ.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "ܗܢܐ ܩܘܫܪܐ ܫܩܝܠ ܬܟܠܝܬܐ: «{name}» ({n} ܚܕܬ̈̈ܐ).{can} ܡܬܥܒܕ ܚܕ ܥܕ ܕܐܬܠܚܨ ܥܠ ܥܘܢܐ.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "ܗܢܐ ܩܘܫܪܐ ܫܪܝܩ ܗܘܐ: ܠܝܬ ܒܗ ܬܟܠܝܬܐ ܕܗܢܐ ܦܐܓܐ ܡܨܟܚܐ ܠܩܪܝܐ. ܠܐ ܐܬܥܒܕ ܚܕ.",
-  "This browser can't unpack links (no DecompressionStream).": "ܗܢܐ ܡܦܠܫܐ ܠܐ ܡܨܟܚ ܠܦܪܘܦ ܩܘܫܪ̈̈ܐ (ܠܝܬ ܠܗ DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "ܗܢܐ ܡܦܠܫܐ ܠܐ ܡܨܟܚ ܠܦܪܘܦ ܩܘܫܪ̈̈ܐ (ܠܝܬ ܠܗ DecompressionStream).",
+  "Share…": "ܫܘܬܦܐ…",
+  "Share this program with the community gallery": "ܫܬܦ ܗܕܐ ܦܪܘܓܪܡܐ ܥܡ ܓܠܪܝܐ ܕܩܘܡܝܘܬܐ",
+  "Title": "ܥܢܘܐܢܐ",
+  "Category": "ܩܛܓܘܪܝܐ",
+  "Description": "ܬܘܪܝܬܐ",
+  "Tip": "ܡܠܟܬܐ",
+  "Author": "ܟܬܒܐ",
+  "Open the share form on GitHub": "ܦܬܚ ܦܘܪܡܐ ܕܫܒܦܐ ܒGitHub",
+  "Fill in the title, a description, a tip and your name first.": "ܡܠܝ ܒܪܫܝܬ ܥܢܘܐܢܐ, ܬܘܪܝܬܐ, ܡܠܟܬܐ ܘܫܡܟ.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "ܦܬܚ ܐܝܩܘܪ Share a program ܒGitHub ܥܡ ܗܠܝܢ ܚܘܠܩ̈ܐ ܘܠܘܢܩܐ #p= ܠܦܪܘܓܪܡܐ ܕܟܕܝܠ ܡܠܝ܀ ܠܐ ܡܬܢܕܥ ܚܕ ܥܕܕܚܦ ܐܢܬ ܥܠ Open: ܐܝܩܘܪܐ ܦܬܚ ܒܛܒܠܐ ܚܕܬܐ, ܠܫܚܠܦܐ ܐܘ ܠܡܚܩܐ. ܡܕܝܪܢܐ ܩܒܠ ܗ ܒܐܘܬܐ ܕܦܘܕܕܕܕܕܐ, ܘworkflow ܥܒܕ ܠܗ ܠܒܕ ܠܗ ܒܐܘܬܐ ܕܡܘܣܦ ܦܪܘܓܪܡܐ ܠܓܠܪܝܐ."
  },
  "examples": {
   "review": {

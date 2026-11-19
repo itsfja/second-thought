@@ -1207,7 +1207,6 @@
 "New":"Nouveau",
 "Import":"Importer",
 "Export":"Exporter",
-"Share":"Partager",
 "Theme":"Thème",
 "System":"Système",
 "Light":"Clair",
@@ -1245,7 +1244,17 @@
 "This browser can't pack a link (no CompressionStream); copy the block file instead.":"Ce navigateur ne peut pas compacter de lien (pas de CompressionStream) ; copiez le fichier de blocs plutôt.",
 "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Ce lien contient un programme : « {name} » ({n} blocs).{can} Il ne se charge que si vous choisissez Charger.",
 "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ce lien est cassé : il ne contient pas de programme que cette page puisse lire. Rien n'a été chargé.",
-"This browser can't unpack links (no DecompressionStream).":"Ce navigateur ne peut pas déballer les liens (pas de DecompressionStream)."
+"This browser can't unpack links (no DecompressionStream).":"Ce navigateur ne peut pas déballer les liens (pas de DecompressionStream).",
+"Share…":"Partager…",
+"Share this program with the community gallery":"Partager ce programme avec la galerie communautaire",
+"Title":"Titre",
+"Category":"Catégorie",
+"Description":"Description",
+"Tip":"Astuce",
+"Author":"Auteur",
+"Open the share form on GitHub":"Ouvrir le formulaire de partage sur GitHub",
+"Fill in the title, a description, a tip and your name first.":"Remplissez d'abord le titre, une description, une astuce et votre nom.",
+"Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.":"Ouvre un ticket Share a program sur GitHub avec ces champs et un lien #p= vers le programme déjà remplis. Rien n'est envoyé avant d'appuyer sur Ouvrir : le ticket s'ouvre dans un nouvel onglet, à modifier ou supprimer. Un mainteneur l'accepte avec une étiquette, et un workflow en fait la pull request qui ajoute le programme à la galerie."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

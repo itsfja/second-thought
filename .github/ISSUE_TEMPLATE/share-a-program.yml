@@ -1,0 +1,78 @@
+name: Share a program
+description: Offer a program for the community gallery — no git needed. The page's Share… button fills this in for you.
+title: "Share a program: "
+labels: [gallery]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing a program! A maintainer reads this, checks the program against the description —
+        what it can do is worked out from its blocks, and shown on its card — and adds the **gallery-accepted**
+        label. A workflow then opens the pull request that adds it to the gallery, and this issue closes when
+        that merges. You can edit anything before submitting.
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: A short name, up to 40 characters.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Where the page groups it.
+      options:
+        - Community: GitHub
+        - Community: code and data
+        - Community: news
+        - Community: money
+        - Community: calendar and email
+        - Community: home and baking
+        - Community: teaching
+        - Community: odds and ends
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What it does, in a sentence or two, up to 300 characters. If it sends messages or controls devices, say so here.
+    validations:
+      required: true
+  - type: textarea
+    id: tip
+    attributes:
+      label: Tip
+      description: One thing to try or change first, up to 200 characters.
+    validations:
+      required: true
+  - type: input
+    id: author
+    attributes:
+      label: Author
+      description: Your name or GitHub name, up to 40 characters.
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: File name
+      description: Lowercase words joined by -, like bake-day-timeline — used for gallery/<name>.json.
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime
+      description: The runtime the program was made with (the Import / export panel says which).
+    validations:
+      required: true
+  - type: textarea
+    id: link
+    attributes:
+      label: Program link
+      description: The #p= link from the page's Share… form — the whole address, #p= and all.
+      placeholder: https://itsfja.github.io/second-thought/#p=…
+    validations:
+      required: true

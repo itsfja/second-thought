@@ -1951,7 +1951,6 @@
   "New": "新規",
   "Import": "インポート",
   "Export": "エクスポート",
-  "Share": "共有",
   "Theme": "テーマ",
   "System": "システム",
   "Light": "ライト",
@@ -1989,7 +1988,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "このブラウザはリンクを圧縮できません(CompressionStream がないため)。代わりにブロックファイルをコピーしてください。",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "このリンクにはプログラムが入っています:「{name}」(ブロック {n} 個)。{can} 読み込むを選んだときだけ読み込まれます。",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "そのリンクは壊れています:このページで読めるプログラムが入っていません。何も読み込まれませんでした。",
-  "This browser can't unpack links (no DecompressionStream).": "このブラウザはリンクを展開できません(DecompressionStream がありません)。"
+  "This browser can't unpack links (no DecompressionStream).": "このブラウザはリンクを展開できません(DecompressionStream がありません)。",
+  "Share…": "共有…",
+  "Share this program with the community gallery": "このプログラムをコミュニティギャラリーに共有",
+  "Title": "タイトル",
+  "Category": "カテゴリー",
+  "Description": "説明",
+  "Tip": "ヒント",
+  "Author": "作者",
+  "Open the share form on GitHub": "GitHub の共有フォームを開く",
+  "Fill in the title, a description, a tip and your name first.": "まずタイトル、説明、ヒント、あなたの名前を入力してください。",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "これらの項目とプログラムへの #p= リンクが埋め込まれた Share a program の GitHub issue を開きます。開くを押すまで何も送信されません。issue は新しいタブで開き、編集も破棄もできます。メンテナーがラベルで承認すると、ワークフローがそれをギャラリーにプログラムを追加するプルリクエストに変えます。"
  },
  "examples": {
   "review": {

@@ -1943,7 +1943,6 @@
   "New": "ܚܕܬܐ",
   "Import": "ܡܥܠ",
   "Export": "ܡܦܩ",
-  "Share": "ܫܬܦ",
   "Theme": "ܚܙܘܬ",
   "System": "ܬܟܣ",
   "Light": "ܢܘܪ",
@@ -1981,7 +1980,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ܬܗܝܣ ܐܝܣܢܬ",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "This ܠܝܢܟ carries ܐ ܦܪܘܓܪܡ: “{name}” ({n} blocks).{can} It ܠܘܕܣ ܐܘܢܠܝ if ܝܘܘ choose Load.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "That ܠܝܢܟ ܐܝܣ ܒܪܘܟܢ: ܐܝܬ ܕܘܣܢ'ܬ ܗܘܠܕ ܐ ܦܪܘܓܪܡ ܬܗܝܣ ܦܓ can ܪܕ. Nothing ܘܣ ܠܘܕܕ.",
-  "This browser can't unpack links (no DecompressionStream).": "ܬܗܝܣ ܐܝܣܢܬ"
+  "This browser can't unpack links (no DecompressionStream).": "ܬܗܝܣ ܐܝܣܢܬ",
+  "Share…": "ܫܬܦ…",
+  "Share this program with the community gallery": "Share ܬܗܝܣ ܦܪܘܓܪܡ ܘܝܬܗ ܬܗ community ܓܠܪܝ",
+  "Title": "ܬܝ",
+  "Category": "ܟ",
+  "Description": "ܢ",
+  "Tip": "ܣ",
+  "Author": "ܐܘ",
+  "Open the share form on GitHub": "Open ܬܗ ܣܗܪ form ܐܘܢ GitHub",
+  "Fill in the title, a description, a tip and your name first.": "Fill ܐܝܢ ܬܗ ܬܝܬܠ, ܐ description, ܐ ܬܝܦ ܐܢܕ ܝܘܘܪ ܢܡ first.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Opens ܐ Share ܐ ܦܪܘܓܪܡ ܐܝܣܘ ܐܘܢ GitHub ܘܝܬܗ ܬܗܣ fields ܐܢܕ ܐ #ܦ= ܠܝܢܟ ܬܘ ܬܗ ܦܪܘܓܪܡ filled ܐܝܢ. Nothing ܐܝܣ ܣܢܬ ܐܘܢܬܝܠ ܝܘܘ ܦܪܣ Open: ܬܗ ܐܝܣܘ ܐܘܦܢܣ ܐܝܢ ܐ ܢܘ ܬܒ, ܬܘ ܐܕܝܬ ܐܘܪ discard. A ܡܝܢܬܝܢܪ accepts ܐܝܬ ܘܝܬܗ ܐ ܠܒܠ, ܐܢܕ ܐ workflow ܬܘܪܢܣ ܐܝܬ ܐܝܢܬܘ ܬܗ ܦܘܠ ܪܩܘܣܬ ܬܗܬ ܐܕܣ ܬܗ ܦܪܘܓܪܡ ܬܘ ܬܗ ܓܠܪܝ."
  },
  "examples": {
   "review": {

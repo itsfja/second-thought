@@ -1951,7 +1951,6 @@
   "New": "Nuovo",
   "Import": "Importa",
   "Export": "Esporta",
-  "Share": "Condividi",
   "Theme": "Tema",
   "System": "Sistema",
   "Light": "Chiaro",
@@ -1989,7 +1988,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Questo browser non può comprimere un link (senza CompressionStream); copia invece il file dei blocchi.",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Questo link contiene un programma: «{name}» ({n} blocchi).{can} Si carica solo se scegli Carica.",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Quel link è rotto: non contiene un programma che questa pagina possa leggere. Non è stato caricato nulla.",
-  "This browser can't unpack links (no DecompressionStream).": "Questo browser non può decomprimere i link (senza DecompressionStream)."
+  "This browser can't unpack links (no DecompressionStream).": "Questo browser non può decomprimere i link (senza DecompressionStream).",
+  "Share…": "Condividi…",
+  "Share this program with the community gallery": "Condividi questo programma con la galleria della community",
+  "Title": "Titolo",
+  "Category": "Categoria",
+  "Description": "Descrizione",
+  "Tip": "Suggerimento",
+  "Author": "Autore",
+  "Open the share form on GitHub": "Apri il modulo di condivisione su GitHub",
+  "Fill in the title, a description, a tip and your name first.": "Compila prima titolo, una descrizione, un suggerimento e il tuo nome.",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "Apre una segnalazione Share a program su GitHub con questi campi e un collegamento #p= al programma già compilati. Niente viene inviato finché non premi Apri: la segnalazione si apre in una nuova scheda, da modificare o eliminare. Un maintainer la accetta con un'etichetta e un workflow la trasforma nella pull request che aggiunge il programma alla galleria."
  },
  "examples": {
   "review": {

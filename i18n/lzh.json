@@ -1941,7 +1941,6 @@
   "New": "新製",
   "Import": "匯入",
   "Export": "匯出",
-  "Share": "分享",
   "Theme": "外觀",
   "System": "系統",
   "Light": "明",
@@ -1979,7 +1978,17 @@
   "This browser can't pack a link (no CompressionStream); copy the block file instead.": "此器不能裹鏈(無 CompressionStream)；宜鈔塊冊。",
   "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "此鏈攜一程式:「{name}」({n} 塊)。{can} 唯擇「載」乃載。",
   "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "此鏈已破:內無此頁所能讀之程式。未有所載。",
-  "This browser can't unpack links (no DecompressionStream).": "此器不能解鏈(無 DecompressionStream)。"
+  "This browser can't unpack links (no DecompressionStream).": "此器不能解鏈(無 DecompressionStream)。",
+  "Share…": "分享…",
+  "Share this program with the community gallery": "以此程序共諸社群圖庫",
+  "Title": "題",
+  "Category": "類",
+  "Description": "述",
+  "Tip": "訣",
+  "Author": "著者",
+  "Open the share form on GitHub": "開 GitHub 之分享牘",
+  "Fill in the title, a description, a tip and your name first.": "先填題、述、訣與君名。",
+  "Opens a Share a program issue on GitHub with these fields and a #p= link to the program filled in. Nothing is sent until you press Open: the issue opens in a new tab, to edit or discard. A maintainer accepts it with a label, and a workflow turns it into the pull request that adds the program to the gallery.": "開 Share a program 之 GitHub 議題，諸欄與程序之 #p= 連結皆已填訖。未按「開」則無所發：議題啟於新籤，可刊可棄。維護者以標籤納之，工作流轉之為增程序於圖庫之合請。"
  },
  "examples": {
   "review": {
