@@ -1982,7 +1982,14 @@
   "Add to the rules": "regulis addere",
   "Just send back": "modo remitte",
   "New rule": "nova regula",
-  "Why not? In one sentence, as a rule": "cur non? una sententia, velut regula"
+  "Why not? In one sentence, as a rule": "cur non? una sententia, velut regula",
+  "Copy link": "Copiare vinculum",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "Vinculum copiatus. Aperta pagina hoc programma offertur; nihil oneratur nisi onerare elegeris.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "Copiare hic non licet, ita vinculum infra selectum est. Preme Ctrl+C (vel Cmd+C).",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Hic navigatrum vinculum comprimere non potest (sine CompressionStream); fasciculum programmatum potius copia.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Hoc vinculum programma fert: “{name}” ({n} blocca).{can} Oneratur tantum si onerare elegeris.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Hoc vinculum fractum est: nullum programma continet quod haec pagina legere possit. Nihil oneratum est.",
+  "This browser can't unpack links (no DecompressionStream).": "Hic navigatrum vincula decomprimere non potest (sine DecompressionStream)."
  },
  "examples": {
   "review": {

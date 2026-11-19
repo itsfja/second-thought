@@ -1983,7 +1983,14 @@
   "Add to the rules": "नियमेभ्यह्ः् प्रयोजय",
   "Just send back": "केवलं् प्रत्यादेशय",
   "New rule": "नवः् नियमः्",
-  "Why not? In one sentence, as a rule": "किं् न? एकेन वाक्येन, नियमरूपेण"
+  "Why not? In one sentence, as a rule": "किं् न? एकेन वाक्येन, नियमरूपेण",
+  "Copy link": "saṃyoga-pratilip",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "सं्योगः् प्रतिलिप्तः्. आविस्करणे इदं् कार्यं् प्रस्तूयते; Load न क्ल्ṛप्तम् यावत् न भाव्यते.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "अत्र प्रतिलिपिर् न अनुमन्यते, अतो 'त्र सं्योगः् निर्दिस्ह्तः्. Ctrl+C (वा Cmd+C) म्ṛदु.",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "अयं् प्रेक्षकः् सं्योगं् सं्व्ṛणोति न (CompressionStream नास्ति); block-fāyilaṃ प्रतिलिप.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "अयं् सं्योगः् कार्यं् वहति: «{name}» ({n} khaṇḍāḥ).{can} Load एव चेत् निर्दिस्ह्तं् तदा एव भाव्यते.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "अयं् सं्योगः् भिन्नः्: इदं् पाठं् पठनीयं् कार्यं् न वहति. किञ्चिद् अपि न भावितम्.",
+  "This browser can't unpack links (no DecompressionStream).": "अयं् प्रेक्षकः् सं्योगान् मुञ्चति न (DecompressionStream नास्ति)."
  },
  "examples": {
   "review": {

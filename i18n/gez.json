@@ -1983,7 +1983,14 @@
   "Add to the rules": "ለ ሴተ geበረ",
   "Just send back": "የሌ geበረ ቢcሀ",
   "New rule": "aለga ሴተ",
-  "Why not? In one sentence, as a rule": "ሚኒም ሌለ? ቤ aንድ ዊስት'a, ስወ ሴተ"
+  "Why not? In one sentence, as a rule": "ሚኒም ሌለ? ቤ aንድ ዊስት'a, ስወ ሴተ",
+  "Copy link": "ሊንክ copi",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "ሊንክ copiዬ, pሮgረም ዬቴዌየል, Loaድ cሊcክ ዪቴዌሪብኩ aሊሌቤም",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "copይ aሊሌቤም, ሊንክ ዬቴሴቴ, Cትርል+C (Cምድ+C)",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "ብሮውሴር ሊንክ pacክ aሊሌቤም (CoምpሬስሲoንSትሬaም aሌም), ብሎcክ fiሌ copi",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "ሊንክ pሮgረም {name} ({n} ብሎcክስ) ዪዘል, {can} Loaድ cሊcክ ዪቴዌሪብኩ aሊሌቤም",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "ሊንክ ቢርቴ, pሮgረም aዪቴዌሪም, ኖትሂንg ሎaዴድ",
+  "This browser can't unpack links (no DecompressionStream).": "ብሮውሴር ሊንክ uንpacክ aሊሌቤም (DecoምpሬስሲoንSትሬaም aሌም)"
  },
  "examples": {
   "review": {

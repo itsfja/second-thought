@@ -1238,7 +1238,14 @@
 "Add to the rules":"προσθήναι τοὶς κανόνοσι",
 "Just send back":"ἁπλῶς αποστείλον",
 "New rule":"νέος κανών",
-"Why not? In one sentence, as a rule":"τί οὐ; μιῃς φράσει, ὡς κανόνι"
+"Why not? In one sentence, as a rule":"τί οὐ; μιῃς φράσει, ὡς κανόνι",
+"Copy link":"Ἀντιγραφή συνδέσμου",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Ὁ σύνδεσμος ἀντεγράφη. Κατὰ τὸ ἄνοιγμα προσφέρεται τὸ πρόγραμμα· οὐδὲν φορτοῦται πρὶν ἢ ἐπιλέξῃς Φόρτωσιν.",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Ἡ ἀντιγραφὴ οὐκ ἐπιτρέπεται ἐνθάδε, διὸ ὁ σύνδεσμος κάτω ἐπελέγη. Πίεσον Ctrl+C (ἢ Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Ὁ περιηγητὴς οὗτος οὐ δύναται σύνδεσμον συμπιέζειν (ἄνευ CompressionStream)· ἀντὶ τούτου ἀντίγραψον τὸ ἀρχεῖον τῶν πλίνθων.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Ὁ σύνδεσμος οὗτος φέρει πρόγραμμα: «{name}» ({n} πλίνθοι).{can} Φορτοῦται μόνον ἐὰν ἐπιλέξῃς Φόρτωσιν.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ὁ σύνδεσμος οὗτος ἐστι κατεαγώς: οὐ φέρει πρόγραμμα ὃ ἡ σελὶς αὕτη δύναται ἀναγνῶναι. Οὐδὲν ἐφορτώθη.",
+"This browser can't unpack links (no DecompressionStream).":"Ὁ περιηγητὴς οὗτος οὐ δύναται συνδέσμους ἀποσυμπιέζειν (ἄνευ DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

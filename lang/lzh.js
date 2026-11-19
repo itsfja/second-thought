@@ -1237,7 +1237,14 @@
 "Add to the rules":"增於規",
 "Just send back":"徑送還",
 "New rule":"新規",
-"Why not? In one sentence, as a rule":"何不可？一語為規"
+"Why not? In one sentence, as a rule":"何不可？一語為規",
+"Copy link":"鈔鏈",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"鏈已鈔。啟之則獻此程式；未擇「載」則不載。",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"此間不可鈔，故鏈已擇於下。按 Ctrl+C(或 Cmd+C)。",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"此器不能裹鏈(無 CompressionStream)；宜鈔塊冊。",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"此鏈攜一程式:「{name}」({n} 塊)。{can} 唯擇「載」乃載。",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"此鏈已破:內無此頁所能讀之程式。未有所載。",
+"This browser can't unpack links (no DecompressionStream).":"此器不能解鏈(無 DecompressionStream)。"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},

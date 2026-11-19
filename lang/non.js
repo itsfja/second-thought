@@ -1238,7 +1238,14 @@
 "Add to the rules":"bæta við reglurnar",
 "Just send back":"bara senda til baka",
 "New rule":"ný regla",
-"Why not? In one sentence, as a rule":"hvers vegna ekki? í einni setningu, sem regla"
+"Why not? In one sentence, as a rule":"hvers vegna ekki? í einni setningu, sem regla",
+"Copy link":"Afrita tengil",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Tengill afritaður. Við opnun er þessi áætlun boðin; ekkert hleðst fyrr en smellt er á Hlaða.",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Afritun er ekki leyfð hér, svo tengillinn er valinn hér fyrir neðan. Ýttu á Ctrl+C (eða Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Þessi vafri getur ekki pakkað tengli (ekkert CompressionStream); afritaðu blokkarskrána í staðinn.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Þessi tengill ber forrit: „{name}“ ({n} blokkir).{can} Það hleðst aðeins ef þú velur Hlaða.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Þessi tengill er bilaður: hann inniheldur ekkert forrit sem þessi síða getur lesið. Ekkert var hlaðið.",
+"This browser can't unpack links (no DecompressionStream).":"Þessi vafri getur ekki opnað tengla (ekkert DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

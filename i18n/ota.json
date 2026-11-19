@@ -1973,7 +1973,14 @@
   "Add to the rules": "Kurallara ekle",
   "Just send back": "Yalnızca geri gönder",
   "New rule": "Yeni kural",
-  "Why not? In one sentence, as a rule": "Neden olmasın? Tek cümleyle, kural olarak"
+  "Why not? In one sentence, as a rule": "Neden olmasın? Tek cümleyle, kural olarak",
+  "Copy link": "Bağlantıyı kopyala",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "Bağlantı kopyalandı. Açıldığında bu program sunulur; Yükle'ye tıklanana kadar hiçbir şey yüklenmez.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "Burada kopyalamaya izin yok, bu yüzden bağlantı aşağıda seçili. Ctrl+C (veya Cmd+C) tuşlarına bas.",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Bu tarayıcı bir bağlantıyı paketleyemez (CompressionStream yok); bunun yerine blok dosyasını kopyala.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Bu bağlantı bir program taşır: «{name}» ({n} blok).{can} Yalnızca Yükle'yi seçersen yüklenir.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Bu bağlantı bozuk: bu sayfanın okuyabileceği bir program içermiyor. Hiçbir şey yüklenmedi.",
+  "This browser can't unpack links (no DecompressionStream).": "Bu tarayıcı bağlantıları açamaz (DecompressionStream yok)."
  },
  "examples": {
   "review": {

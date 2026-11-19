@@ -1238,7 +1238,14 @@
 "Add to the rules":"Añadir a las reglas",
 "Just send back":"Solo devolver",
 "New rule":"Nueva regla",
-"Why not? In one sentence, as a rule":"¿Por qué no? En una frase, como regla"
+"Why not? In one sentence, as a rule":"¿Por qué no? En una frase, como regla",
+"Copy link":"Copiar enlace",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Enlace copiado. Al abrirlo se ofrece este programa; no se carga hasta que se pulse Cargar.",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Copiar no está permitido aquí, así que el enlace está seleccionado abajo. Pulsa Ctrl+C (o Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Este navegador no puede empaquetar un enlace (sin CompressionStream); copia el archivo de bloques.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Este enlace trae un programa: «{name}» ({n} bloques).{can} Solo se carga si eliges Cargar.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ese enlace está roto: no contiene un programa que esta página pueda leer. No se cargó nada.",
+"This browser can't unpack links (no DecompressionStream).":"Este navegador no puede desempaquetar enlaces (sin DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

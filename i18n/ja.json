@@ -1982,7 +1982,14 @@
   "Add to the rules": "ルールに追加",
   "Just send back": "そのまま差り戻す",
   "New rule": "新しいルール",
-  "Why not? In one sentence, as a rule": "なぜですか？ルールとして一文で"
+  "Why not? In one sentence, as a rule": "なぜですか？ルールとして一文で",
+  "Copy link": "リンクをコピー",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "リンクをコピーしました。開くとこのプログラムが提案されます。読み込むを選ぶまで何も読み込まれません。",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "ここではコピーできないため、リンクが下で選択されています。Ctrl+C(または Cmd+C)を押してください。",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "このブラウザはリンクを圧縮できません(CompressionStream がないため)。代わりにブロックファイルをコピーしてください。",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "このリンクにはプログラムが入っています:「{name}」(ブロック {n} 個)。{can} 読み込むを選んだときだけ読み込まれます。",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "そのリンクは壊れています:このページで読めるプログラムが入っていません。何も読み込まれませんでした。",
+  "This browser can't unpack links (no DecompressionStream).": "このブラウザはリンクを展開できません(DecompressionStream がありません)。"
  },
  "examples": {
   "review": {

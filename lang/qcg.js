@@ -1238,7 +1238,14 @@
 "Add to the rules":"ⱂⱃⰻⰱⰰⰲⰻⱅⰻ ⰽⱏ ⰸⰰⰽⱁⱀⰰⰿⱏ",
 "Just send back":"ⱅⱁⰾⱐⰽⱁ ⱁⱅⱁⱄⰾⰰⱅⰻ ⱀⰰⰸⰰⰴⱏ",
 "New rule":"ⱀⱁⰲⱏ ⰸⰰⰽⱁⱀⱏ",
-"Why not? In one sentence, as a rule":"ⱂⱁⱍⰵⰿⱆ ⱀⱑⱅⱏ? ⱉⰴⰻⱀⱏⰿⱏ ⱂⱃⰵⰴⰾⱁⰶⰵⱀⰹⰵⰿⱏ, ⱑⰽⱁ ⰸⰰⰽⱁⱀⱏ"
+"Why not? In one sentence, as a rule":"ⱂⱁⱍⰵⰿⱆ ⱀⱑⱅⱏ? ⱉⰴⰻⱀⱏⰿⱏ ⱂⱃⰵⰴⰾⱁⰶⰵⱀⰹⰵⰿⱏ, ⱑⰽⱁ ⰸⰰⰽⱁⱀⱏ",
+"Copy link":"Ⱄⰽⱁⱂⰻⱃⱆⰻ ⱄⱄⱏⰹⰾⰽⱆ",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"Ⱄⱄⱏⰹⰾⰽⰰ ⱄⰽⱁⱂⰻⱃⱁⰲⰰⱀⰰ. Ⱂⱃⰻ ⱉⱅⰲⱃⱏⰹⱅⰹⰻ ⱂⱃⰵⰴⰾⰰⰳⰰⰵⱅⱄⱑ ⱄⰹⰰ ⱂⱃⱁⰳⱃⰰⰿⰿⰰ; ⱀⰻⱍⱅⱁⰶⰵ ⱀⰵ ⰸⰰⰳⱃⱆⰶⰰⰵⱅⱄⱑ, ⱑⰽⱁ ⰽⰾⰻⰽⱀⱆⱅ ⱀⰰ «Ⰸⰰⰳⱃⱆⰸⰻⱅⱐ».",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Ⰽⱁⱂⰹⰰ ⰸⰴⱑⱄⱐ ⱀⰵ ⱂⱁⰸⰲⱁⰾⰵⱀⰰ, ⱑⰽⱁ ⰶⰵ ⱄⱄⱏⰹⰾⰽⰰ ⰻⰸⰱⱃⰰⱀⰰ ⱀⰻⰶⱑ. Ⱀⰰⰶⰿⰻ Ctrl+C (ⰻⰾⰻ Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"Ⱄⰵⰻ ⰸⱃⰻⱅⰵⰾⱏ ⱀⰵ ⰿⱁⰶⰵⱅⱏ ⱂⰰⰽⱁⰲⰰⱅⱐ ⱄⱄⱏⰹⰾⰽⱆ (ⱀⱑⱄⱅⱐ CompressionStream); ⰽⱁⱂⰻⱃⱆⰻ ⱇⰰⰻⰾⱏ ⰱⰾⱁⰽⱁⰲⱏ.",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"Ⱄⰹⰵ ⰸⰲⱑⱀⱁ ⱀⱁⱄⰻⱅⱏ ⱂⱃⱁⰳⱃⰰⰿⱆ: «{name}» ({n} ⰱⰾⱁⰽⱉⰲⱏ).{can} Ⰸⰰⰳⱃⱆⰶⰰⰵⱅⱄⱑ ⱅⱁⰽⰿⱁ ⱑⰽⱁ ⰻⰸⰱⰵⱃⰵⱎⰻ «Ⰸⰰⰳⱃⱆⰸⰽⱆ».",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"Ⱄⱄⱏⰹⰾⰽⰰ ⱄⰹⰰ ⱃⰰⰸⱁⱃⰵⱀⰰ: ⱀⰵ ⱀⱁⱄⰻⱅⱏ ⱂⱃⱁⰳⱃⰰⰿⰿⱏⰹ, ⱓⰶⰵ ⱄⰹⰰ ⱄⱅⱃⰰⱀⰻⱌⰰ ⰿⱁⰶⰵⱅⱏ ⱍⰵⱄⱅⰻ. Ⱀⰻⱍⱅⱁⰶⰵ ⱀⰵ ⰸⰰⰳⱃⱆⰶⰵⱀⱁ.",
+"This browser can't unpack links (no DecompressionStream).":"Ⱄⰵⰻ ⰸⱃⰻⱅⰵⰾⱏ ⱀⰵ ⰿⱁⰶⰵⱅⱏ ⱃⰰⱄⱂⰰⰽⱁⰲⰰⱅⰻ ⰸⰲⱑⱀⰰ (ⱀⱑⱄⱅⱐ DecompressionStream)."
 },
 "examples":{
 "review":{"title":"Ⱉⰱⱈⱁⰶⰴⰵⱀⰹⰵ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ","desc":"Claude ⱂⰻⱎⰵⱅⱏ ⱉ autolyse, ⰻⱄⱂⱏⰹⱅⱆⰵⱅⱏ ⱂⱁ ⱂⱃⰰⰲⰻⰾⰰⰿⱏ ⱅⰲⱁⰻⰿⱏ, ⰻ ⰻⱄⱂⱃⰰⰲⰾⱑⰵⱅⱏ ⱀⰵⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⰲⱎⰵⰵ, ⰴⱁ 3 ⰽⱃⰰⱅⱏ.","tip":"Ⱂⱃⰵⰿⱑⱀⰻ ⰴⱑⰾⱁ ⰲⱏ ⱄⰻⱀⰵⰿⱏ ⰸⰲⱑⱀⱑ ⰻ ⱂⱃⰰⰲⰻⰾⰰ ⰲⱏ ⰱⰰⰳⱃⱔⱀⱁⰿⱏ."},

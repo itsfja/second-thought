@@ -1238,7 +1238,14 @@
 "Add to the rules":"šumma 𒇻 add rule",
 "Just send back":"šumma 𒇻 just back",
 "New rule":"šumma 𒇻 new rule",
-"Why not? In one sentence, as a rule":"šumma 𒇻 why not one line"
+"Why not? In one sentence, as a rule":"šumma 𒇻 why not one line",
+"Copy link":"𒊓 𒆠",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"𒊓 no 𒆠",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Copy isn't allowed here, so the link 𒄑 selected below. Press Ctrl+C (or Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"this isnt",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This link carries 𒀀 program: “{name}” ({n} blocks).{can} It loads only if you choose Load.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"That link 𒄑 broken: 𒀉 doesn't hold 𒀀 program this page can read. Nothing was loaded.",
+"This browser can't unpack links (no DecompressionStream).":"this isnt"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},

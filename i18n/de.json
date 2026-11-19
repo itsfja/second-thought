@@ -1982,7 +1982,14 @@
   "Add to the rules": "Zu den Regeln hinzufügen",
   "Just send back": "Einfach zurücksenden",
   "New rule": "Neue Regel",
-  "Why not? In one sentence, as a rule": "Warum nicht? In einem Satz, als Regel"
+  "Why not? In one sentence, as a rule": "Warum nicht? In einem Satz, als Regel",
+  "Copy link": "Link kopieren",
+  "Link copied. Opening it offers this program; nothing loads until Load is clicked.": "Link kopiert. Beim Öffnen wird dieses Programm angeboten; geladen wird erst, wenn auf Laden geklickt wird.",
+  "Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).": "Kopieren ist hier nicht erlaubt, daher ist der Link unten ausgewählt. Drücken Sie Strg+C (oder Cmd+C).",
+  "This browser can't pack a link (no CompressionStream); copy the block file instead.": "Dieser Browser kann keinen Link packen (kein CompressionStream); kopieren Sie stattdessen die Blockdatei.",
+  "This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.": "Dieser Link enthält ein Programm: „{name}“ ({n} Blöcke).{can} Es lädt erst, wenn Sie Laden wählen.",
+  "That link is broken: it doesn't hold a program this page can read. Nothing was loaded.": "Dieser Link ist kaputt: Er enthält kein Programm, das diese Seite lesen kann. Es wurde nichts geladen.",
+  "This browser can't unpack links (no DecompressionStream).": "Dieser Browser kann Links nicht entpacken (kein DecompressionStream)."
  },
  "examples": {
   "review": {

@@ -1238,7 +1238,14 @@
 "Add to the rules":"𓈖𓆑𓂋𓅱 𓅓𓄿𓂝",
 "Just send back":"𓂝𓎛 𓄿𓂝",
 "New rule":"𓈖𓆑𓂋𓅱 𓅓𓄿𓂝 𓂝𓎛",
-"Why not? In one sentence, as a rule":"𓂝𓎛 𓇋𓂋 𓋴𓂝"
+"Why not? In one sentence, as a rule":"𓂝𓎛 𓇋𓂋 𓋴𓂝",
+"Copy link":"sa ke",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"sa no ke",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Copy isn't allowed here, so the link 𓇋𓋴 selected below. Press Ctrl+C (or Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"𓏏𓉔𓇋𓋴 𓇋𓋴𓈖𓏏",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This link carries a program: “{name}” ({n} blocks).{can} It loads only 𓇋𓆑 you choose Load.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"That link 𓇋𓋴 broken: 𓇋𓏏 doesn't hold a program 𓏏𓉔𓇋𓋴 page can read. Nothing was loaded.",
+"This browser can't unpack links (no DecompressionStream).":"𓏏𓉔𓇋𓋴 𓇋𓋴𓈖𓏏"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},

@@ -1238,7 +1238,14 @@
 "Add to the rules":"𐍂𐌴𐌲𐍉𐌻 𐍃𐍉𐌺𐌾𐌰",
 "Just send back":"𐌽𐌹𐌸 𐌸𐌿𐌸 𐍃𐌴𐌽𐌳𐌰𐌽 𐌰𐍆𐍄",
 "New rule":"𐌽𐌹𐌿𐌾𐌹𐍃 𐍂𐌴𐌲𐍉𐌻",
-"Why not? In one sentence, as a rule":"𐌷𐍅𐌰 𐌽𐌹𐍃𐍄? 𐌰𐌹𐌽 𐌻𐌹𐍆, 𐍃𐍅𐌰 𐍂𐌴𐌲𐍉𐌻"
+"Why not? In one sentence, as a rule":"𐌷𐍅𐌰 𐌽𐌹𐍃𐍄? 𐌰𐌹𐌽 𐌻𐌹𐍆, 𐍃𐍅𐌰 𐍂𐌴𐌲𐍉𐌻",
+"Copy link":"𐍃𐌰 𐌺𐌴",
+"Link copied. Opening it offers this program; nothing loads until Load is clicked.":"𐍃𐌰 𐌽𐍉 𐌺𐌴",
+"Copy isn't allowed here, so the link is selected below. Press Ctrl+C (or Cmd+C).":"Copy isn't 𐌰𐌻𐌻𐍉𐍅𐌴𐌳 𐌷𐌴𐍂𐌴, 𐍃𐍉 𐍄𐌷𐌴 𐌻𐌹𐌽𐌺 𐌹𐍃 selected 𐌱𐌴𐌻𐍉𐍅. Press Ctrl+C (𐍉𐍂 Cmd+C).",
+"This browser can't pack a link (no CompressionStream); copy the block file instead.":"𐍄𐌷𐌹𐍃 𐌹𐍃𐌽𐍄",
+"This link carries a program: “{name}” ({n} blocks).{can} It loads only if you choose Load.":"This 𐌻𐌹𐌽𐌺 carries 𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼: “{name}” ({n} blocks).{can} It 𐌻𐍉𐌰𐌳𐍃 only 𐌹𐍆 you choose Load.",
+"That link is broken: it doesn't hold a program this page can read. Nothing was loaded.":"That 𐌻𐌹𐌽𐌺 𐌹𐍃 𐌱𐍂𐍉𐌺𐌴𐌽: 𐌹𐍄 doesn't 𐌷𐍉𐌻𐌳 𐌰 𐍀𐍂𐍉𐌲𐍂𐌰𐌼 𐍄𐌷𐌹𐍃 𐍀𐌰𐌲𐌴 can 𐍂𐌴𐌰𐌳. Nothing 𐍅𐌰𐍃 𐌻𐍉𐌰𐌳𐌴𐌳.",
+"This browser can't unpack links (no DecompressionStream).":"𐍄𐌷𐌹𐍃 𐌹𐍃𐌽𐍄"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},

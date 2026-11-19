@@ -69,7 +69,7 @@ The **Community** groups, straight after Writing and Research, hold programs oth
 
 ## Saving programs
 
-Open **Program → My programs**, type a name and press **Save**; open the same panel and press **Open** to get it back. To keep a copy as a file, use **Program → Export**, and to share one, **Program → Share**.
+Open **Program → My programs**, type a name and press **Save**; open the same panel and press **Open** to get it back. To keep a copy as a file, use **Program → Export**, and to share one, **Program → Share**. On the GitHub Pages copy, **Copy link** in **Program → Import / export** puts a `#p=` link to the program on the clipboard — paste it anywhere. Opening that link in a fresh browser offers the program (its name, how many blocks it has, and what it can do) and loads it only when you choose **Load**; a broken or too-new link says so and loads nothing.
 
 A saved program can be a block, too. Put **run program "my program" with …** inside another program. The saved program runs, then hands back its result. Inside it, **message value** holds whatever you gave it. It has its own draft and its own result, so it can't interfere with yours.
 
