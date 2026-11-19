@@ -1,0 +1,287 @@
+{
+ "format": "reflection-blocks",
+ "version": 1,
+ "name": "power-cut-ready",
+ "gallery": {
+  "title": "Power cut ready?",
+  "category": "home",
+  "description": "Each evening, reads your Tesla Powerwall's figures, checks tonight's severe weather warnings, and sends a Telegram message on whether the house is ready for a power cut. If a storm warning applies, it offers to raise the reserve to 100% — asking first. Otherwise it only reads.",
+  "tip": "Needs a Powerwall, Powerwall 2 or Powerwall+ (the Powerwall 3 has no local web API) and the gateway's customer password. Change the town in the weather check to yours.",
+  "author": "itsfja",
+  "runtime": "3.0.0"
+ },
+ "program": {
+  "blocks": {
+   "languageVersion": 0,
+   "blocks": [
+    {
+     "type": "rb_start",
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "storm"
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 30,
+     "y": 30
+    },
+    {
+     "type": "rb_when_time",
+     "fields": {
+      "HOUR": 18,
+      "MINUTE": 0,
+      "DAYS": "every"
+     },
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "storm"
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 550,
+     "y": 30
+    },
+    {
+     "type": "rb_receive",
+     "fields": {
+      "MSG": "storm"
+     },
+     "next": {
+      "block": {
+       "type": "variables_set",
+       "fields": {
+        "VAR": {
+         "id": "g_figures"
+        }
+       },
+       "inputs": {
+        "VALUE": {
+         "block": {
+          "type": "rb_powerwall_now"
+         }
+        }
+       },
+       "next": {
+        "block": {
+         "type": "rb_agent",
+         "fields": {
+          "PLAN": false
+         },
+         "inputs": {
+          "GOAL": {
+           "shadow": {
+            "type": "rb_longtext",
+            "fields": {
+             "TEXT": "Search the web for tonight's severe weather warnings for London, UK: wind, storm or flood warnings that apply tonight. Say plainly which warnings apply tonight, in under 60 words, or say 'no warnings tonight'."
+            }
+           }
+          },
+          "STEPS": {
+           "shadow": {
+            "type": "math_number",
+            "fields": {
+             "NUM": 4
+            }
+           }
+          },
+          "TOOLS": {
+           "block": {
+            "type": "rb_agent_builtin",
+            "fields": {
+             "KIND": "web"
+            }
+           }
+          }
+         },
+         "next": {
+          "block": {
+           "type": "variables_set",
+           "fields": {
+            "VAR": {
+             "id": "g_warn"
+            }
+           },
+           "inputs": {
+            "VALUE": {
+             "block": {
+              "type": "rb_draft"
+             }
+            }
+           },
+           "next": {
+            "block": {
+             "type": "variables_set",
+             "fields": {
+              "VAR": {
+               "id": "g_summary"
+              }
+             },
+             "inputs": {
+              "VALUE": {
+               "block": {
+                "type": "rb_ask",
+                "inputs": {
+                 "TEXT": {
+                  "block": {
+                   "type": "text_join",
+                   "inputs": {
+                    "ADD0": {
+                     "shadow": {
+                      "type": "rb_longtext",
+                      "fields": {
+                       "TEXT": "Here are my Tesla Powerwall's figures and a check of tonight's weather warnings. In under 100 words: whether the house is ready for a power cut (enough charge, a sensible reserve), and what to do if not. If a severe weather warning applies tonight, start your reply with the word STORM on a line of its own.\n\nFigures:\n"
+                      }
+                     }
+                    },
+                    "ADD1": {
+                     "block": {
+                      "type": "variables_get",
+                      "fields": {
+                       "VAR": {
+                        "id": "g_figures"
+                       }
+                      }
+                     }
+                    },
+                    "ADD2": {
+                     "shadow": {
+                      "type": "rb_longtext",
+                      "fields": {
+                       "TEXT": "\n\nWeather check:\n"
+                      }
+                     }
+                    },
+                    "ADD3": {
+                     "block": {
+                      "type": "variables_get",
+                      "fields": {
+                       "VAR": {
+                        "id": "g_warn"
+                       }
+                      }
+                     }
+                    }
+                   },
+                   "extraState": {
+                    "itemCount": 4
+                   }
+                  }
+                 }
+                }
+               }
+              }
+             },
+             "next": {
+              "block": {
+               "type": "controls_if",
+               "inputs": {
+                "IF0": {
+                 "block": {
+                  "type": "rb_contains",
+                  "inputs": {
+                   "A": {
+                    "block": {
+                     "type": "variables_get",
+                     "fields": {
+                      "VAR": {
+                       "id": "g_summary"
+                      }
+                     }
+                    }
+                   },
+                   "B": {
+                    "shadow": {
+                     "type": "text",
+                     "fields": {
+                      "TEXT": "STORM"
+                     }
+                    }
+                   }
+                  }
+                 }
+                },
+                "DO0": {
+                 "block": {
+                  "type": "rb_powerwall_reserve",
+                  "inputs": {
+                   "N": {
+                    "shadow": {
+                     "type": "math_number",
+                     "fields": {
+                      "NUM": 100
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+               },
+               "next": {
+                "block": {
+                 "type": "rb_tg_send",
+                 "inputs": {
+                  "TEXT": {
+                   "block": {
+                    "type": "variables_get",
+                    "fields": {
+                     "VAR": {
+                      "id": "g_summary"
+                     }
+                    }
+                   }
+                  }
+                 },
+                 "next": {
+                  "block": {
+                   "type": "rb_finish_with",
+                   "inputs": {
+                    "TEXT": {
+                     "block": {
+                      "type": "variables_get",
+                      "fields": {
+                       "VAR": {
+                        "id": "g_summary"
+                       }
+                      }
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 30,
+     "y": 290
+    }
+   ]
+  }
+ }
+}

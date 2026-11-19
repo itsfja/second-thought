@@ -797,6 +797,7 @@
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
   }
+  // sync:connections-page-begin
   /* Powerwall on the page (#362): a sample Powerwall. Exported Python reads your own through the gateway's local
      API, and the reserve change always asks. Matches the runtime's powerwall_ methods and tests/fake_powerwall.py. */
   const pwSample = () => { connNote("Powerwall"); return CONN.powerwall || {}; };
@@ -819,6 +820,7 @@
     addStep("Powerwall", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
+  // sync:connections-page-end
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){
     const ws = str(words).toLowerCase().split(/\s+/).filter(Boolean);

@@ -336,6 +336,7 @@ UNIFI_CERT_SHA256 =
 
 As with MikroTik, the console's certificate is its own: run `--doctor` once and it shows the fingerprint to pin. `UNIFI_SITE` picks a site other than the first. The key itself could do more than read (restart a device, block a client), but Second Thought only ever sends the reads in `unifi_free`; keep the key for this program alone.
 
+<!-- sync:connections-docs-begin -->
 ## Powerwall
 
 The red **Powerwall** blocks read a Tesla Powerwall, Powerwall 2 or Powerwall+ through the gateway's local API, and one block changes the backup reserve after asking.
@@ -355,6 +356,7 @@ POWERWALL_PASSWORD = H4rd!
 ```
 
 `--doctor` checks both settings, reports the battery, the reserve and the grid, and shows the certificate fingerprint. Login happens once and the token is kept.
+<!-- sync:connections-docs-end -->
 
 ## Solax
 

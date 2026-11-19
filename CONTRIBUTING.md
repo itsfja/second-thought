@@ -54,6 +54,8 @@ So:
   (Kraken, #262).
 - **Swapping a built-in connection for an MCP server** needs a reason that outweighs both points above, and it keeps the
   asking rules the built-in one had.
+- **Adding one** is one folder in `connections/` and a `python tools/sync.py` run — [connections/README.md](connections/README.md)
+  lists its parts and what sync assembles from them (#455).
 
 ## The rules
 

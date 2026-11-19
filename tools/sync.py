@@ -15,7 +15,11 @@ GitHub, Telegram, email and calendar (samples/connections.json) are embedded ins
 
 Each translation is too big to embed them all, so each i18n/<language>.json is also written as lang/<language>.js,
 which the page loads for the chosen language only. Publish the lang/ folder with the page, as its supporting files.
-Edit those files (not python/runtime.py, which is rebuilt), then run:
+
+Each connection (a service a program can talk to) has its own folder, connections/<name>/, and this tool puts
+connectors.py, the package's other modules, the editor's files, the example ini, docs/connections.md, the samples
+file, the tests' stand-in services and the gallery together from them (#455). Edit a file in connections/, not the
+spliced region in the shared file, then run:
 
     python tools/sync.py           # rebuild python/runtime.py, lang/*.js, tools/blocks.json and write everything into second-thought.html
     python tools/sync.py --check   # exit 1 if any of them is out of date (used by the tests)
@@ -70,6 +74,96 @@ BLOCKS_FILE = ROOT / "tools" / "blocks.json"
 GUIDE = ROOT / "prompts" / "convert-guide.txt"
 GUIDE_BEGIN = "<!-- sync:blocks-begin -->"
 GUIDE_END = "<!-- sync:blocks-end -->"
+
+# ----- connections/<name>/ (#455): one folder per connection, assembled into the shared files -----
+# A connection's folder holds its own pieces as part files; each part is spliced into a marked region of its target
+# (a `# sync:connections-<key>-begin` / `-end` pair, in the comment style of the target's own kind), or copied or
+# merged as below. The region's content is rewritten from connections/*/<part> in folder-name order, so the
+# output is stable and --check still guards it. See connections/README.md.
+CONNECTIONS = ROOT / "connections"
+SAMPLES = ROOT / "samples" / "connections.json"
+SPLICE_PARTS = {
+    "runtime.py": (PACKAGE / "connectors.py", "runtime"),          # its reads and actions (the Connections methods)
+    "imports.py": (PACKAGE / "connectors.py", "imports"),          # names it imports from .core
+    "safety.py": (PACKAGE / "core.py", "safety"),                  # its SAFETY lines
+    "fns.py": (PACKAGE / "core.py", "fns"),                        # its helper functions
+    "capabilities-act.py": (PACKAGE / "core.py", "capabilities-act"),    # its acting CAPABILITIES line
+    "capabilities-read.py": (PACKAGE / "core.py", "capabilities-read"),  # its reading CAPABILITIES line
+    "known.py": (PACKAGE / "settings.py", "known"),                # its non-secret setting names
+    "secret.py": (PACKAGE / "settings.py", "secret"),              # its secret setting names
+    "check.py": (PACKAGE / "doctor.py", "check"),                  # its --doctor check
+    "settingsmap.py": (PACKAGE / "doctor.py", "settingsmap"),      # its label in --doctor's settings table
+    "example.ini": (ROOT / "second-thought.example.ini", "ini"),  # its section of the example ini
+    "hues.js": (EDITOR / "01-theme.js", "hues"),                   # its colour
+    "styles.js": (EDITOR / "01-theme.js", "styles"),               # its block style
+    "caps.js": (EDITOR / "02-blocks.js", "caps"),                  # its CAP_BLOCKS lines
+    "defs.js": (EDITOR / "02-blocks.js", "defs"),                  # its block definitions
+    "toolbox.js": (EDITOR / "03-toolbox.js", "toolbox"),           # its palette category
+    "need.js": (EDITOR / "10-python-export.js", "need"),           # its line in settingsFor
+    "ini.js": (EDITOR / "10-python-export.js", "ini"),             # its [section] in the exported ini
+    "pyread.js": (EDITOR / "10-python-export.js", "pyread"),       # its read blocks' Python
+    "pyact.js": (EDITOR / "10-python-export.js", "pyact"),         # its action blocks' Python
+    "page.js": (EDITOR / "18-connections.js", "page"),             # its page sample and page-side functions
+    "iread.js": (EDITOR / "19-interpreter.js", "iread"),           # its read cases
+    "iact.js": (EDITOR / "19-interpreter.js", "iact"),             # its action cases
+    "docs.md": (ROOT / "docs" / "connections.md", "docs"),         # its docs section
+}
+
+
+def _marker(target: pathlib.Path, key: str, which: str) -> str:
+    """The begin/end marker line for a region, in the target's own comment style."""
+    if target.suffix == ".md":
+        return f"<!-- sync:connections-{key}-{which} -->"
+    if target.suffix == ".ini":
+        return f"; sync:connections-{key}-{which}"
+    if target.suffix == ".js":
+        return f"// sync:connections-{key}-{which}"
+    return f"# sync:connections-{key}-{which}"
+
+
+def connection_files() -> dict:
+    """Every file assembled from connections/*/, as {path: text}: spliced parts, the merged samples file, and the
+    copied stand-in service, unit tests and gallery programs. Nothing is written here; main() compares and writes."""
+    out = {}
+    folders = sorted((p for p in CONNECTIONS.iterdir() if p.is_dir()), key=lambda p: p.name) if CONNECTIONS.is_dir() else []
+    regions = {}
+    for folder in folders:
+        for part, (target, key) in SPLICE_PARTS.items():
+            p = folder / part
+            if p.is_file():
+                regions.setdefault((target, key), []).append(p.read_text(encoding="utf-8").strip("\n"))
+    by_target = {}
+    for (target, key), parts in regions.items():
+        by_target.setdefault(target, []).append((key, parts))
+    for target, items in by_target.items():
+        text = target.read_text(encoding="utf-8") if target.is_file() else ""
+        for key, parts in items:  # a target can hold several regions (e.g. two in 02-blocks.js)
+            begin = re.compile(rf"^[ \t]*{re.escape(_marker(target, key, 'begin'))}[ \t]*$", re.M).search(text)
+            end = re.compile(rf"^[ \t]*{re.escape(_marker(target, key, 'end'))}[ \t]*$", re.M).search(text, begin.end() if begin else 0)
+            if not begin or not end:
+                sys.exit(f"{target.relative_to(ROOT)} needs a '{_marker(target, key, 'begin')}' and '{_marker(target, key, 'end')}' "
+                         f"pair on their own lines; add them, then run sync again.")
+            body = "".join(part + "\n" for part in parts)
+            text = text[:begin.end()] + "\n" + body + text[end.start():]
+        out[target] = text
+    if SAMPLES.is_file():
+        data = json.loads(SAMPLES.read_text(encoding="utf-8"))
+        for folder in folders:  # a connection's sample.json becomes its key in the shared samples file
+            p = folder / "sample.json"
+            if p.is_file():
+                data[folder.name] = json.loads(p.read_text(encoding="utf-8"))
+        out[SAMPLES] = json.dumps(data, ensure_ascii=False, indent=1) + "\n"
+    for folder in folders:  # its stand-in service, its unit tests, its gallery programs
+        for part, dest in (("fake.py", ROOT / "tests" / f"fake_{folder.name}.py"),
+                           ("test.py", ROOT / "tests" / "unit" / f"test_{folder.name}.py")):
+            p = folder / part
+            if p.is_file():
+                out[dest] = p.read_text(encoding="utf-8")
+        gdir = folder / "gallery"
+        if gdir.is_dir():
+            for gp in sorted(gdir.glob("*.json")):
+                out[GALLERY / gp.name] = gp.read_text(encoding="utf-8")
+    return out
 
 
 def editor_js() -> str:
@@ -654,6 +748,15 @@ def build(page: str, runtime: str = None) -> str:
 def main() -> int:
     if "--sri" in sys.argv:
         return sri_refresh()
+    check = "--check" in sys.argv
+    conn = connection_files()
+    conn_stale = sorted(p for p, t in conn.items() if not p.is_file() or p.read_text(encoding="utf-8") != t)
+    if not check:
+        for p in conn_stale:
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(conn[p], encoding="utf-8")
+        if conn_stale:
+            print("From connections/: updated " + ", ".join(str(p.relative_to(ROOT)) for p in conn_stale))
     runtime = bundle()
     current_rt = RUNTIME.read_text(encoding="utf-8") if RUNTIME.is_file() else ""
     current = PAGE.read_text(encoding="utf-8")
@@ -665,8 +768,10 @@ def main() -> int:
     guide_current = GUIDE.read_text(encoding="utf-8")
     stale = sorted(set(LANG.glob("*.js")) - set(langs))
     old_langs = sorted(path for path, text in langs.items() if not path.is_file() or path.read_text(encoding="utf-8") != text)
-    if "--check" in sys.argv:
+    if check:
         bad = []
+        if conn_stale:
+            bad.append("connections/ is out of date (" + ", ".join(p.name if p.parent == CONNECTIONS else str(p.relative_to(ROOT)) for p in conn_stale) + ")")
         if runtime != current_rt:
             bad.append("python/runtime.py doesn't match python/second_thought/ (edit the package, not runtime.py)")
         if updated != current:
@@ -680,7 +785,7 @@ def main() -> int:
         if bad:
             print("; ".join(bad) + ". Run: python tools/sync.py")
             return 1
-        print("python/runtime.py, lang/, second-thought.html, tools/blocks.json and prompts/convert-guide.txt are in sync.")
+        print("connections/, python/runtime.py, lang/, second-thought.html, tools/blocks.json and prompts/convert-guide.txt are in sync.")
         return 0
     changed = []
     if runtime != current_rt:
