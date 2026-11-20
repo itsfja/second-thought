@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Þis program mæg: {things}",
 "asks first":"biddet ærest",
 "Connections":"Gebindu",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Wyrce her þa þegnas þe þes calc brýtt. Hīe ætīewað in þǣre floccunge þǣre conneccunga; gif þū hlǣdest forscrife þe brýtt ānne, is hēo onwyrned swā."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Wyrce her þa þegnas þe þes calc brýtt. Hīe ætīewað in þǣre floccunge þǣre conneccunga; gif þū hlǣdest forscrife þe brýtt ānne, is hēo onwyrned swā.",
+"Review loop":"endurscyddinges hring",
+"{n} problems":"{n} sorga",
+"Revision, round {n}":"ednytting, hweol {n}",
+"Fixing: {problems}":"rihtung: {problems}"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

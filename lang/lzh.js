@@ -1266,7 +1266,11 @@
 "This program can: {things}":"此程序能為：{things}",
 "asks first":"先問",
 "Connections":"諸連",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"於此啟諸機關之所用者，現於「連接」之類；載一程式而用其一，亦自啟之。"
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"於此啟諸機關之所用者，現於「連接」之類；載一程式而用其一，亦自啟之。",
+"Review loop":"審閱之環",
+"{n} problems":"{n} 患",
+"Revision, round {n}":"改訂，第 {n} 輪",
+"Fixing: {problems}":"正之：{problems}"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},

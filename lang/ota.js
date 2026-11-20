@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Bu program şunları yapabilir: {things}",
 "asks first":"önce sorar",
 "Connections":"اتصاللر",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Burada bu ḥāsibün ḳullandüğı ḥizmetleri açun. Bağlantılar ṣınıflamasında görünrler; bunlardan biriyle bir programma ḳullanan yüklenince o da açılır."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Burada bu ḥāsibün ḳullandüğı ḥizmetleri açun. Bağlantılar ṣınıflamasında görünrler; bunlardan biriyle bir programma ḳullanan yüklenince o da açılır.",
+"Review loop":"حلقة مراجعة",
+"{n} problems":"{n} مشكلات",
+"Revision, round {n}":"تصحيح، جولة {n}",
+"Fixing: {problems}":"تصحيح: {problems}"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},

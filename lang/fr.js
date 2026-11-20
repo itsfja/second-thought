@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Ce programme peut : {things}",
 "asks first":"demande d'abord",
 "Connections":"Connexions",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Activez ici les services que cet ordinateur utilise. Ils apparaissent dans la catégorie Connexions ; charger un programme qui en utilise un l'active aussi."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Activez ici les services que cet ordinateur utilise. Ils apparaissent dans la catégorie Connexions ; charger un programme qui en utilise un l'active aussi.",
+"Review loop":"Boucle de relecture",
+"{n} problems":"{n} problèmes",
+"Revision, round {n}":"Révision, tour {n}",
+"Fixing: {problems}":"Correction : {problems}"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

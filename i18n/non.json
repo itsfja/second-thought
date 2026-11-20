@@ -2011,7 +2011,11 @@
   "This program can: {things}": "Þetta forrit má: {things}",
   "asks first": "spyr fyrst",
   "Connections": "Sambǫnd",
-  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Kveð þú á hér þjónustur er þessi tölva nýtir. Þær sjást í flokknum Tengingar; ef þú hleðr forrit sem nýtir eina, kveikist sú líka."
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Kveð þú á hér þjónustur er þessi tölva nýtir. Þær sjást í flokknum Tengingar; ef þú hleðr forrit sem nýtir eina, kveikist sú líka.",
+  "Review loop": "lykkja endurskoðunar",
+  "{n} problems": "{n} vandamál",
+  "Revision, round {n}": "endurbót, umferð {n}",
+  "Fixing: {problems}": "lagar: {problems}"
  },
  "examples": {
   "review": {

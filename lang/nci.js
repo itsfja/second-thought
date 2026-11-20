@@ -1266,7 +1266,11 @@
 "This program can: {things}":"Inin programa hueli: {things}",
 "asks first":"achto tlahtlauhtia",
 "Connections":"Tlahtōlōhtli",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Xiquinpehualti nican in tlatequipaniliztli inin tlatqui quicui inin tlalticpacayo; hueli mo nextia ipan in tlahtolli Connectiones; hueli ticcuitia ce tlen nelli quicui ce, no xiquinpehualti."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Xiquinpehualti nican in tlatequipaniliztli inin tlatqui quicui inin tlalticpacayo; hueli mo nextia ipan in tlahtolli Connectiones; hueli ticcuitia ce tlen nelli quicui ce, no xiquinpehualti.",
+"Review loop":"nemachtiliztli",
+"{n} problems":"{n} cualantli",
+"Revision, round {n}":"yancui tlacuiloliztli {n}",
+"Fixing: {problems}":"tlacualtilia: {problems}"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

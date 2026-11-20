@@ -1267,7 +1267,11 @@
 "This program can: {things}":"このプログラムができること: {things}",
 "asks first":"まず確認します",
 "Connections":"連携",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"このコンピューターが使うサービスをここでオンにします。オンにしたサービスは「接続」カテゴリーに表示されます。サービスを使うプログラムを読み込むと、それも自動でオンになります。"
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"このコンピューターが使うサービスをここでオンにします。オンにしたサービスは「接続」カテゴリーに表示されます。サービスを使うプログラムを読み込むと、それも自動でオンになります。",
+"Review loop":"レビューのループ",
+"{n} problems":"問題 {n} 件",
+"Revision, round {n}":"改訂、ラウンド {n}",
+"Fixing: {problems}":"修正: {problems}"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

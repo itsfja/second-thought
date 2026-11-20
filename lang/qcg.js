@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Ⱄⰹⰻ ⱂⱃⱁⰳⱃⰰⰿⰿⰰ ⰿⱁⰶⰵⱅⱏ: {things}",
 "asks first":"ⱄⱏⱂⱃⱏⰲⰰ ⰲⱏⱂⱃⰰⱎⰰⰵⱅⱏ",
 "Connections":"Ⱄⱁⰵⰴⰻⱀⰵⱀⰹⱔ",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ⰲⰽⰾⱓⱍⰻⱅⰵ ⰸⰴⱑⱄⱐ ⱄⰾⱆⰶⰱⱏⰹ, ⱑⰶⰵ ⱂⱁⰾⰸⱆⰵⱅⱏ ⱄⰵⰻ ⰽⱁⰿⱂⱓⱅⰵⱃⱏ. Ⱉⱀⱑ ⱑⰲⱔⱅⱄⱔ ⰲⱏ ⰽⰰⱅⰵⰳⱁⱃⰹⰻ ⱄⰲⱔⰸⰵⰻ; ⱑⰶⰵ ⱂⱃⱁⰳⱃⰰⰿⰿⰰ ⱂⱁⰾⰸⱆⰵⱅⱏ ⰵⰴⰻⱀⱁⱓ, ⰻ ⱅⰰ ⰲⰽⰾⱓⱍⰰⰵⱅⱄⱔ."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ⰲⰽⰾⱓⱍⰻⱅⰵ ⰸⰴⱑⱄⱐ ⱄⰾⱆⰶⰱⱏⰹ, ⱑⰶⰵ ⱂⱁⰾⰸⱆⰵⱅⱏ ⱄⰵⰻ ⰽⱁⰿⱂⱓⱅⰵⱃⱏ. Ⱉⱀⱑ ⱑⰲⱔⱅⱄⱔ ⰲⱏ ⰽⰰⱅⰵⰳⱁⱃⰹⰻ ⱄⰲⱔⰸⰵⰻ; ⱑⰶⰵ ⱂⱃⱁⰳⱃⰰⰿⰿⰰ ⱂⱁⰾⰸⱆⰵⱅⱏ ⰵⰴⰻⱀⱁⱓ, ⰻ ⱅⰰ ⰲⰽⰾⱓⱍⰰⰵⱅⱄⱔ.",
+"Review loop":"ⱂⰵⱅⰾⱑ ⱂⱃⱏⱄⰿⱁⱅⱃⰰ",
+"{n} problems":"{n} ⱂⱃⱁⰱⰾⱑⰿⱏ",
+"Revision, round {n}":"ⰻⱄⱂⱃⰰⰲⰾⰵⱀⰹⰵ, ⰽⱃⱆⰳⱏ {n}",
+"Fixing: {problems}":"ⰻⱄⱂⱃⰰⰲⰾⰵⱀⰹⰵ: {problems}"
 },
 "examples":{
 "review":{"title":"Ⱉⰱⱈⱁⰶⰴⰵⱀⰹⰵ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ","desc":"Claude ⱂⰻⱎⰵⱅⱏ ⱉ autolyse, ⰻⱄⱂⱏⰹⱅⱆⰵⱅⱏ ⱂⱁ ⱂⱃⰰⰲⰻⰾⰰⰿⱏ ⱅⰲⱁⰻⰿⱏ, ⰻ ⰻⱄⱂⱃⰰⰲⰾⱑⰵⱅⱏ ⱀⰵⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⰲⱎⰵⰵ, ⰴⱁ 3 ⰽⱃⰰⱅⱏ.","tip":"Ⱂⱃⰵⰿⱑⱀⰻ ⰴⱑⰾⱁ ⰲⱏ ⱄⰻⱀⰵⰿⱏ ⰸⰲⱑⱀⱑ ⰻ ⱂⱃⰰⰲⰻⰾⰰ ⰲⱏ ⰱⰰⰳⱃⱔⱀⱁⰿⱏ."},

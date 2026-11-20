@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Dit programma kan: {things}",
 "asks first":"vraagt eerst",
 "Connections":"Verbindingen",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Zet hier de diensten aan die deze computer gebruikt. Ze verschijnen in de categorie Verbindingen; een programma laden dat er een gebruikt, zet die ook aan."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Zet hier de diensten aan die deze computer gebruikt. Ze verschijnen in de categorie Verbindingen; een programma laden dat er een gebruikt, zet die ook aan.",
+"Review loop":"Beoordelingslus",
+"{n} problems":"{n} problemen",
+"Revision, round {n}":"Herziening, ronde {n}",
+"Fixing: {problems}":"Verbeteren: {problems}"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

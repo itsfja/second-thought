@@ -177,6 +177,16 @@ async def new_feature_page_tests(pg):
           "the log shows the rules by round as a table")
     check("Earlier rounds" not in prompts[0] and "Earlier rounds of this review found" in prompts[1] and "- fix clear\n- fix short" in prompts[1]
           and "- fix clear\n- fix short\n- fix titled" in prompts[3], "each round, the reviewer is shown the problems earlier rounds found")
+    # The review loop's log shows the second thought (#449): a strip of the rounds, and each revision's +/− diff.
+    strip = await pg.eval_on_selector_all(".rounds-strip .round-chip", "els => els.map(e => [e.className, e.textContent])")
+    revs = await pg.eval_on_selector_all(".step .diff", "els => els.map(e => e.textContent)")
+    whys = await pg.eval_on_selector_all(".diff-why", "els => els.map(e => e.textContent)")
+    names = [n for n, _p, _t in steps]
+    check("Review loop" in names and len(strip) == 4 and "Round 1" in strip[0][1] and "2 problems" in strip[0][1]
+          and "warn" in strip[0][0] and "3 problems" in strip[-1][1],
+          f"the loop's log opens with a strip of the rounds, one chip each ({strip})")
+    check(len(revs) == 3 and "− v1" in revs[0] and "+ v2" in revs[0] and all("fix " in w for w in whys),
+          f"each revision is logged as a diff tied to the round's problems ({revs}, {whys})")
     status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear"), ok])
     check(status.startswith("done") and items[0] == "v2" and "Kept the best draft" not in [n for n, *_ in steps], "an approved draft is kept as it is")
     status, steps, items, prompts = await scripted(review_loop_prog(), [nope("clear"), nope("short"), nope("titled"), nope("clear")])
@@ -203,6 +213,27 @@ async def new_feature_page_tests(pg):
     check(status.startswith("done") and len(revises) == 2 and "Don't bring them back" not in revises[0]
           and "Don't bring them back:\n- too long\n\nDraft:" in revises[1], "revise is told which problems earlier rounds fixed, so it doesn't bring them back")
     check("Earlier rounds" not in prompts[-1], "a review outside the loop isn't shown the loop's earlier problems")
+
+    # Results render as Markdown, sanitised (#449): formatting shows, script and unsafe links never do.
+    print("Markdown results (#449)")
+    md_prog = script(add(tx("# Title\n\nSome **bold** and [a link](https://example.com) text.\n\n<script>alert(1)</script> [bad](javascript:alert(1)) <img src=x onerror=alert(1)>")))
+    await load_state(pg, md_prog)
+    await run_program(pg)
+    await pg.wait_for_timeout(300)
+    md_dom = await pg.evaluate("""() => { const el = document.querySelector('.result-text');
+        return { html: el.innerHTML, h1: !!el.querySelector('h1'), strong: !!el.querySelector('strong'),
+                 a: (el.querySelector('a') || {}).getAttribute && el.querySelector('a').getAttribute('href'),
+                 rel: (el.querySelector('a') || { getAttribute: () => null }).getAttribute('rel'),
+                 scripts: el.querySelectorAll('script,img,iframe,svg').length,
+                 handlers: [...el.querySelectorAll('*')].filter(e => [...e.attributes].some(a => /^on/i.test(a.name))).length,
+                 badHref: [...el.querySelectorAll('a')].filter(a => !/^https?:/i.test(a.getAttribute('href'))).length,
+                 text: el.textContent }; }""")
+    check(md_dom["h1"] and md_dom["strong"] and md_dom["a"] == "https://example.com" and "noopener" in md_dom["rel"]
+          and md_dom["scripts"] == 0 and md_dom["handlers"] == 0 and md_dom["badHref"] == 0
+          and "alert(1)" in md_dom["text"] and "javascript:alert(1)" in md_dom["text"],
+          f"the result renders as Markdown (heading, bold, safe link) and injection stays text ({md_dom['html'][:160]})")
+    copy = await pg.eval_on_selector(".result-actions button", "e => e.textContent")
+    check(copy == "Copy as text", f"the raw Markdown can be copied beside the rendered result ({copy!r})")
 
     print("Exact checks in a review (#425)")
     chk_prog = script(blk("rb_set_draft", inputs={"TEXT": tx("one two three four five six")}),

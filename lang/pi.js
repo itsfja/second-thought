@@ -1267,7 +1267,11 @@
 "This program can: {things}":"This प्रोग्रम् चन्: {things}",
 "asks first":"अस्क्स् fiर्स्त्",
 "Connections":"सम्बन्धा",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"इधअ सअमगअनअकओ उपअयउततअ सएVवअ अरअमभअ. तअ सअमयओगएसउ दइससअनतइ; यअम कइनचइ यओजअनअम एकएनअ सएवअयअ उपअयउततअम, तअम पइ अरअमभअतइ."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"इधअ सअमगअनअकओ उपअयउततअ सएVवअ अरअमभअ. तअ सअमयओगएसउ दइससअनतइ; यअम कइनचइ यओजअनअम एकएनअ सएवअयअ उपअयउततअम, तअम पइ अरअमभअतइ.",
+"Review loop":"\\u0938\\u0905\\u092e\\u0908\\u0915\\u0916\\u0906-\\u0935\\u0905\\u091f\\u091f\\u0905\\u092e",
+"{n} problems":"{n} \\u0938\\u0905\\u092e\\u0905\\u0938\\u0938\\u0906",
+"Revision, round {n}":"{n} \\u0935\\u0905\\u091f\\u091f\\u090f \\u0938\\u0905\\u092e\\u0938\\u0913\\u0927\\u0905\\u0928\\u0905\\u092e",
+"Fixing: {problems}":"\\u0938\\u0905\\u092e\\u0938\\u0913\\u0927\\u0905\\u0928\\u0905\\u092e: {problems}"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},

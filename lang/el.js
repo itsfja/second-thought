@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Αυτό το πρόγραμμα μπορεί: {things}",
 "asks first":"ρωτάει πρώτα",
 "Connections":"Συνδέσεις",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ενεργοποίησε εδώ τις υπηρεσίες που χρησιμοποιεί αυτός ο υπολογιστής. Εμφανίζονται στην κατηγορία «Συνδέσεις»· αν φορτώσεις ένα πρόγραμμα που χρησιμοποιεί μία, ενεργοποιείται κι αυτή."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ενεργοποίησε εδώ τις υπηρεσίες που χρησιμοποιεί αυτός ο υπολογιστής. Εμφανίζονται στην κατηγορία «Συνδέσεις»· αν φορτώσεις ένα πρόγραμμα που χρησιμοποιεί μία, ενεργοποιείται κι αυτή.",
+"Review loop":"Βρόχος αναθεώρησης",
+"{n} problems":"{n} προβλήματα",
+"Revision, round {n}":"Αναθεώρηση, γύρος {n}",
+"Fixing: {problems}":"Διόρθωση: {problems}"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

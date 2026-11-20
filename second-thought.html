@@ -94,6 +94,27 @@ details.menu[open]>summary{border-color:var(--accent)}
 .pic-cap{font-size:12px;color:var(--muted);margin-top:4px}
 .result .step-body{display:flex;flex-direction:column;gap:10px}
 .result-text{white-space:pre-wrap;overflow-wrap:anywhere}
+/* Results rendered as Markdown (#449): headings, lists, tables, quotes, code and links, all from escaped text. */
+.result-text.md{white-space:normal}
+.result-text.md p{margin:0 0 8px}
+.result-text.md h1,.result-text.md h2,.result-text.md h3,.result-text.md h4{margin:10px 0 6px;font-size:15px}
+.result-text.md h1{font-size:18px}
+.result-text.md ul,.result-text.md ol{margin:0 0 8px;padding-inline-start:22px}
+.result-text.md blockquote{margin:0 0 8px;padding-inline-start:10px;border-inline-start:3px solid var(--line);color:var(--muted)}
+.result-text.md code{background:var(--run-bg);border-radius:4px;padding:1px 4px;font-size:12px}
+.result-text.md pre{background:var(--run-bg);border-radius:8px;padding:8px;overflow-x:auto;margin:0 0 8px}
+.result-text.md pre code{background:none;padding:0}
+.result-text.md table{border-collapse:collapse;margin:0 0 8px}
+.result-text.md th,.result-text.md td{border:1px solid var(--line);padding:4px 8px;text-align:start}
+.result-text.md a{color:var(--accent)}
+/* The review loop's rounds as a strip, and each revision's +/− diff (#449). */
+.rounds-strip{display:flex;flex-wrap:wrap;gap:6px}
+.round-chip{font-size:12px;padding:2px 9px;border-radius:999px;background:var(--warn-bg);color:var(--warn)}
+.round-chip.ok{background:var(--ok-bg);color:var(--ok)}
+.diff{font-family:ui-monospace,monospace;font-size:12px;display:flex;flex-direction:column;gap:2px}
+.diff-why{font-size:12px;color:var(--muted);margin-bottom:4px}
+.diff-add{color:var(--ok)}
+.diff-del{color:var(--bad);text-decoration:line-through}
 .result-actions{flex-wrap:wrap}
 .pickfile{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .pickfile:focus-visible + .filebtn{outline:2px solid var(--accent);outline-offset:2px}
@@ -26001,6 +26022,9 @@ HOW TO MAP CODE
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
         run.reflect = { earlier:[], best:null, round:0, same:0, lastUnmet:[], rounds:[], table:null };
+        // the rounds as a strip at the top of the loop's log entry (#449)
+        const strip = addStep(tr("Review loop"), {});
+        const stripEl = document.createElement("div"); stripEl.className = "rounds-strip"; strip.body.appendChild(stripEl);
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
@@ -26009,6 +26033,7 @@ HOW TO MAP CODE
             if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
             run.reflect.table.table(rulesTableRows(run.reflect));
             run.reflect.table.done(tr("met {n} of {total}", { n:run.reflect.rounds[run.reflect.rounds.length - 1].verdicts.filter(v => v.met).length, total:(run.reflect.best || {}).total || 0 }), "ok");
+            renderRoundsStrip(stripEl, run.reflect);
             if (approved) break;
             if (round > max) {
               step.done("failed, out of rounds", "bad"); run.outOfRounds = true;
@@ -26026,9 +26051,29 @@ HOW TO MAP CODE
               addStep("Review stuck", { text:tr("The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.") }).done("stuck", "warn");
               break;
             }
+            const draftBefore = run.draft;
             if ((await body(b, "FIX", tc)) === "break") break;
+            // what the revision changed, as a +/− diff tied to this round's problems (#449)
+            if (run.draft !== draftBefore) {
+              const rstep = addStep(tr("Revision, round {n}", { n:run.reflect.round }), {});
+              if (run.problems.length) {
+                const why = document.createElement("div"); why.className = "diff-why";
+                why.textContent = tr("Fixing: {problems}", { problems:run.problems.join("; ") });
+                rstep.body.appendChild(why);
+              }
+              const dl = document.createElement("div"); dl.className = "diff";
+              diffLines(draftBefore, run.draft).forEach(d => {
+                if (d.type === "same") return;
+                const row = document.createElement("div");
+                row.className = "diff-" + d.type;
+                row.textContent = (d.type === "add" ? "+ " : "− ") + d.text;
+                dl.appendChild(row);
+              });
+              rstep.body.appendChild(dl);
+              rstep.done(tr("revised"), "ok");
+            }
           }
-        } finally { run.reflect = before; }
+        } finally { strip.done(run.approved ? tr("approved") : tr("needs work"), run.approved ? "ok" : "warn"); run.reflect = before; }
         break;
       }
       case "rb_ask_me": { run.answer = await askPerson(str(await input(b, tc, "TEXT"))); break; }
@@ -26203,10 +26248,10 @@ HOW TO MAP CODE
     const body = el.querySelector(".step-body"), actions = el.querySelector(".result-actions");
     items.forEach((it, i) => {
       if (isImg(it)) { const im = document.createElement("img"); im.src = it.url; im.alt = it.name; im.className = "pic"; body.appendChild(im); }
-      else { const p = document.createElement("div"); p.className = "result-text"; p.textContent = it; body.appendChild(p); }
+      else { const p = document.createElement("div"); p.className = "result-text md"; renderMarkdownInto(p, it); body.appendChild(p); }  // Markdown, sanitised (#449)
     });
     if (text) {
-      const copy = document.createElement("button"); copy.type = "button"; copy.textContent = pics.length ? "Copy text" : "Copy result";
+      const copy = document.createElement("button"); copy.type = "button"; copy.textContent = tr("Copy as text");  // the raw Markdown beside the rendered result (#449)
       copy.onclick = async () => {
         try { await navigator.clipboard.writeText(text); copy.textContent = tr("Copied"); }
         catch(e) { const r = document.createRange(); r.selectNodeContents(body); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); copy.textContent = tr("Selected, press Ctrl+C"); }
@@ -26788,6 +26833,120 @@ HOW TO MAP CODE
     };
   }
   wireShare();
+  // 23-review-log.js: the run log's second thought (#449) — the review loop's rounds as a strip, what each revision
+  // changed as a +/− diff, and results rendered as Markdown, safely.
+  /* ---------- Markdown in results, rendered safely ----------
+     markdownHtml turns model text into HTML where every character of the model's text is escaped before anything
+     else, so the only tags in the output are the ones this function emits; links keep only http(s) addresses. The
+     tests feed it script and link injection. */
+  function escapeHtml(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function markdownInline(raw){
+    let s = String(raw == null ? "" : raw);
+    const stash = [];
+    const keep = html => { stash.push(html); return "\u0000" + (stash.length - 1) + "\u0000"; };
+    // links [text](url): only http/https addresses become anchors; anything else is shown as written
+    s = s.replace(/\[([^\]]*)\]\(([^)\s]*)(?:\s+["'][^"']*["'])?\)/g, (m, text, url) => {
+      if (!/^https?:\/\//i.test(url)) return escapeHtml(m);
+      return keep('<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' + markdownInline(text) + "</a>");
+    });
+    // code spans `...` (no inline markdown inside them)
+    s = s.replace(/`([^`]+)`/g, (m, c) => keep("<code>" + escapeHtml(c) + "</code>"));
+    s = escapeHtml(s);
+    s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
+    s = s.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+    // stashed html survives escaping (\u0000 is not escaped) and goes back in last
+    s = s.replace(/\u0000(\d+)\u0000/g, (m, i) => stash[+i]);
+    return s;
+  }
+  function markdownHtml(text){
+    const lines = String(text == null ? "" : text).replace(/\r\n?/g, "\n").split("\n");
+    const out = [];
+    let para = [], i = 0;
+    // the "\n" after <br>/<p> is a text node: it collapses in rendering (white-space:normal) but keeps textContent
+    // identical to the raw Markdown, so Copy-as-text and the tests see the same text either way
+    const flushPara = () => { if (para.length) { out.push("<p>" + para.map(markdownInline).join("<br>\n") + "</p>"); para = []; } };
+    while (i < lines.length) {
+      const line = lines[i];
+      if (/^\s*```/.test(line)) {  // fenced code block
+        flushPara();
+        const buf = []; i++;
+        while (i < lines.length && !/^\s*```/.test(lines[i])) { buf.push(lines[i]); i++; }
+        i++;
+        out.push("<pre><code>" + escapeHtml(buf.join("\n")) + "</code></pre>");
+        continue;
+      }
+      const h = /^(#{1,6})\s+(.*)$/.exec(line);
+      if (h) { flushPara(); out.push("<h" + h[1].length + ">" + markdownInline(h[2]) + "</h" + h[1].length + ">"); i++; continue; }
+      if (/^\s*>\s?/.test(line)) {  // blockquote
+        flushPara();
+        const buf = [];
+        while (i < lines.length && /^\s*>\s?/.test(lines[i])) { buf.push(lines[i].replace(/^\s*>\s?/, "")); i++; }
+        out.push("<blockquote>" + markdownHtml(buf.join("\n")) + "</blockquote>");
+        continue;
+      }
+      if (/^\s*\|.*\|\s*$/.test(line) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {  // table
+        flushPara();
+        const cells = l => l.trim().replace(/^\||\|$/g, "").split("|");
+        const head = cells(line);
+        i += 2;
+        const rows = [];
+        while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) { rows.push(cells(lines[i])); i++; }
+        out.push("<table><thead><tr>" + head.map(c => "<th>" + markdownInline(c.trim()) + "</th>").join("") + "</tr></thead><tbody>" +
+          rows.map(r => "<tr>" + r.map(c => "<td>" + markdownInline(c.trim()) + "</td>").join("") + "</tr>").join("") + "</tbody></table>");
+        continue;
+      }
+      if (/^\s*(?:[-*+]|\d+\.)\s+/.test(line)) {  // list
+        flushPara();
+        const ol = /^\s*\d+\./.test(line);
+        const items = [];
+        while (i < lines.length && /^\s*(?:[-*+]|\d+\.)\s+/.test(lines[i])) { items.push(lines[i].replace(/^\s*(?:[-*+]|\d+\.)\s+/, "")); i++; }
+        out.push("<" + (ol ? "ol" : "ul") + ">" + items.map(x => "<li>" + markdownInline(x) + "</li>").join("") + "</" + (ol ? "ol" : "ul") + ">");
+        continue;
+      }
+      if (/^\s*$/.test(line)) { flushPara(); i++; continue; }
+      para.push(line); i++;
+    }
+    flushPara();
+    return out.join("\n\n");  // blank line between blocks, so textContent keeps the raw newlines
+  }
+  function renderMarkdownInto(el, text){ el.innerHTML = markdownHtml(text); }  // safe: all model text was escaped
+  window.__markdownHtml = markdownHtml;
+
+  /* ---------- What each revision changed: a line diff (#449) ---------- */
+  function diffLines(a, b){
+    const split = s => { const l = String(s == null ? "" : s).split("\n"); return l.length === 1 && l[0] === "" ? [] : l; };
+    const A = split(a), B = split(b);
+    const n = A.length, m = B.length;
+    if (n * m > 250000)  // too big for the table: show it as removed then added
+      return A.map(t => ({ type:"del", text:t })).concat(B.map(t => ({ type:"add", text:t })));
+    const dp = Array.from({ length:n + 1 }, () => new Uint32Array(m + 1));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+      dp[i][j] = A[i] === B[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    const out = [];
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { out.push({ type:"same", text:A[i] }); i++; j++; }
+      else if (dp[i + 1][j] >= dp[i][j + 1]) { out.push({ type:"del", text:A[i] }); i++; }
+      else { out.push({ type:"add", text:B[j] }); j++; }
+    }
+    while (i < n) out.push({ type:"del", text:A[i++] });
+    while (j < m) out.push({ type:"add", text:B[j++] });
+    return out;
+  }
+  window.__diffLines = diffLines;
+
+  /* ---------- The review loop's rounds as a strip (#449) ---------- */
+  function renderRoundsStrip(el, loop){
+    el.innerHTML = "";
+    (loop.rounds || []).forEach(r => {
+      const total = r.verdicts.length, met = r.verdicts.filter(v => v.met).length;
+      const chip = document.createElement("span");
+      chip.className = "round-chip " + (met === total ? "ok" : "warn");
+      chip.textContent = tr("Round {n}", { n:r.round }) + " · " + (met === total ? tr("approved") : tr("{n} problems", { n:total - met }));
+      el.appendChild(chip);
+    });
+  }
   // 23-schedules.js: Schedules and listeners on the page, and the editor's closing line.
   /* ---------- Schedules ---------- */
   const sched = { armed:false, timer:null, lastFired:new Map(), nextEvery:new Map(), wake:null };

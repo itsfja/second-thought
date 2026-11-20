@@ -1266,7 +1266,11 @@
 "This program can: {things}":"Сїи программа можєтъ: {things}",
 "asks first":"съпръва въпрашаѥтъ",
 "Connections":"Соединенїѧ",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Включите здѣсь службы, ꙗже ползꙋетъ сей компютеръ. Ѡнѣ ꙗвѧтсѧ въ категорїи свѧзєй; ꙗже программа ползꙋетъ єдиною, и та включаєтсѧ."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Включите здѣсь службы, ꙗже ползꙋетъ сей компютеръ. Ѡнѣ ꙗвѧтсѧ въ категорїи свѧзєй; ꙗже программа ползꙋетъ єдиною, и та включаєтсѧ.",
+"Review loop":"петлѣ пръсмотра",
+"{n} problems":"{n} проблѣмъ",
+"Revision, round {n}":"исправленїє, кругъ {n}",
+"Fixing: {problems}":"исправленіє: {problems}"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},
