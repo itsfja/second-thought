@@ -39,6 +39,13 @@ async def offline_tests():
             blocks = await pg.evaluate("document.querySelectorAll('.blocklyDraggable').length")
             check(blocks > 0 and await pg.is_visible("#offsite"), f"it opens from disk with no network, blocks on the canvas, saying runs need a key ({blocks} blocks)")
 
+            # The three typefaces are inside the file as data: URIs and load with no network (#453)
+            faces = await pg.evaluate("""async () => { await document.fonts.ready;
+                return ['Atkinson Hyperlegible', 'Bricolage Grotesque', 'JetBrains Mono'].map(f => document.fonts.check('16px "' + f + '"')); }""")
+            font_fetches = [u for u in fetched if "fonts.g" in u]
+            check(all(faces) and not font_fetches,
+                  f"its own typefaces are inside the file and load with no network (faces {faces}, fetched {font_fetches[:2]})")
+
             await load_state(pg, script(add(val(blk("rb_ask", inputs={"TEXT": tx("What rhymes with rye?")})))))
             await pg.click("#io-export")
             await pg.fill("#io-name", "offline-test")

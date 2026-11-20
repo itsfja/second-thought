@@ -14,7 +14,7 @@
 
 **A copy on your own computer.** Clone the repository and serve its folder, for instance `python -m http.server` in it, then open `http://localhost:8000/second-thought.html`. It works like the GitHub Pages copy, but with no limit on which addresses it may call, so the **Address** box can point anywhere, such as a server at work.
 
-**With no network.** Each [release](https://github.com/itsfja/second-thought/releases/latest) has **second-thought-offline.html**: the page as one file, with Blockly and every language inside. Open it from your disk and it builds, explains and exports programs with no connection at all; it runs them with your own key, as the GitHub Pages copy does, when you're online. Reading PDFs needs the network, as do the fonts for Linear B, cuneiform, hieroglyphs and Coptic.
+**With no network.** Each [release](https://github.com/itsfja/second-thought/releases/latest) has **second-thought-offline.html**: the page as one file, with Blockly and every language inside. Open it from your disk and it builds, explains and exports programs with no connection at all; it runs them with your own key, as the GitHub Pages copy does, when you're online. Its three typefaces are inside the file, as they are on the GitHub Pages copy; reading PDFs needs the network, as do the fonts for Linear B, cuneiform, hieroglyphs and Coptic.
 
 **First visit.** A browser with no program kept yet opens on a first screen with three ways in: **Describe it** (a large plain-English box, with three example sentences to click), **Start from an example** (six chosen ones), or **Open a file** (a block file saved from the page). Each lands you in the editor with the program on the canvas. Once a program is kept in the browser, the page opens straight into the editor.
 

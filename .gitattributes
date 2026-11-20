@@ -6,3 +6,4 @@ i18n/*.json merge=i18n
 lang/*.js merge=generated linguist-generated
 python/runtime.py merge=generated linguist-generated
 docs/words/*.md merge=generated linguist-generated
+web/fonts/*.woff2 binary

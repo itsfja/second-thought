@@ -11,6 +11,11 @@ places the page loads libraries from, and the page's own inline scripts (by thei
 connections only to this site, api.anthropic.com, the model services that speak OpenAI's chat format and a model
 server on this computer (each key goes only to its own service, #321), and cdnjs (the PDF worker's bytes are fetched to
 be checked against their fingerprint before it runs, #310), so nothing else the page loads could send a key anywhere.
+
+The three typefaces come from the site itself, not Google Fonts (#453): web/fonts/ goes beside the page as fonts/,
+and the page's Google Fonts <link> tags become a link to fonts/fonts.css (the CSP's font-src 'self' allows it; the
+Google hosts stay in the policy for the script languages' fonts, which the page still loads from there). The font
+files are pinned by SHA-384 in tools/fonts.sha384.json and a changed copy is refused. claude.ai keeps Google Fonts.
 """
 import base64
 import hashlib
@@ -18,6 +23,9 @@ import pathlib
 import re
 import shutil
 import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import fonts as fonts_tool  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 HEAD = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
@@ -50,8 +58,8 @@ def csp(page):
         "default-src 'self'",
         f"script-src 'self' {LIBRARIES} {hashes}",
         f"worker-src 'self' blob: {LIBRARIES}",
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Blockly writes its own styles
-        "font-src 'self' https://fonts.gstatic.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # Blockly writes its own styles; the script languages' fonts
+        "font-src 'self' https://fonts.gstatic.com",  # 'self': the page's own typefaces in fonts/ (#453); gstatic: the script fonts'
         "img-src 'self' data: blob: https://static.blockly.com",  # Blockly's sprites (Blockly 13's media path)
         # cdnjs: the PDF worker's bytes, fetched to check them (#310); the services: your own keys for them (#321)
         f"connect-src 'self' {API} {' '.join(service_hosts(page))} {LOCAL} https://cdnjs.cloudflare.com",
@@ -67,9 +75,17 @@ def build(out):
         shutil.rmtree(out)
     (out / "lang").mkdir(parents=True)
     page = (ROOT / "second-thought.html").read_text(encoding="utf-8")
+    bad = fonts_tool.check()
+    if bad:
+        sys.exit("web/fonts has a file that isn't pinned or doesn't match tools/fonts.sha384.json: "
+                 + ", ".join(bad) + " (run python tools/fonts.py --refresh)")
+    page = fonts_tool.swap_google_fonts(page, '<link rel="stylesheet" href="fonts/fonts.css">')  # the typefaces from the site (#453)
     (out / "index.html").write_text(HEAD.replace("{csp}", csp(page)) + page + TAIL, encoding="utf-8")
     for f in sorted((ROOT / "lang").glob("*.js")):
         shutil.copy(f, out / "lang" / f.name)
+    (out / "fonts").mkdir()
+    for f in sorted((ROOT / "web" / "fonts").iterdir()):
+        shutil.copy(f, out / "fonts" / f.name)
     (out / ".nojekyll").write_text("", encoding="utf-8")  # serve the files as they are
     return out
 
@@ -78,4 +94,5 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit("Usage: python tools/pages.py <folder>")
     done = build(sys.argv[1])
-    print(f"Built {done}: index.html and {len(list((done / 'lang').glob('*.js')))} language files.")
+    print(f"Built {done}: index.html, {len(list((done / 'lang').glob('*.js')))} language files and "
+          f"{len(list((done / 'fonts').iterdir()))} typeface files.")

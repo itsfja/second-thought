@@ -51,10 +51,12 @@ async def pages_tests():
               f"tools/pages.py builds index.html as a whole document, with every language beside it ({len(langs)})")
 
         calls, api = [], {"status": 200, "reply": None}
+        fetched = []  # every request, to check where the typefaces came from (#453)
         svc_calls, svc = [], {"status": 200, "reply": None}
 
         async def serve(r):
             u = r.request.url
+            fetched.append(u)
             if u in ("https://api.mistral.ai/v1/chat/completions", "http://localhost:11434/v1/chat/completions"):
                 # a stand-in for a service that speaks OpenAI's chat format and allows browsers (#321)
                 cors = {"access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "POST"}
@@ -86,7 +88,8 @@ async def pages_tests():
                 rel = u[len("http://pages.test/"):].split("?")[0].split("#")[0] or "index.html"
                 path = site / rel
                 if path.is_file():
-                    kind = "text/html" if rel.endswith(".html") else "application/javascript"
+                    kind = {".html": "text/html", ".js": "application/javascript",
+                            ".css": "text/css", ".woff2": "font/woff2"}.get(path.suffix, "application/octet-stream")
                     return await r.fulfill(path=str(path), content_type=kind)
                 return await r.fulfill(status=404, body="")
             return await route(r)  # Blockly and the fonts, as for the page on claude.ai
@@ -107,6 +110,17 @@ async def pages_tests():
             href = await pg.get_attribute("#offsite-link", "href")
             check("can't run them with Claude" in text and href == "https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN",
                   f"with no Claude, it says what it can do here, and links to the page on claude.ai ({text[:90]})")
+
+            # The typefaces come from the site itself, not Google Fonts (#453)
+            faces = await pg.evaluate("""async () => { await document.fonts.ready;
+                return ['Atkinson Hyperlegible', 'Bricolage Grotesque', 'JetBrains Mono'].map(f => document.fonts.check('16px "' + f + '"')); }""")
+            local_fonts = [u for u in fetched if u.startswith("http://pages.test/fonts/")]
+            google_main = [u for u in fetched if "fonts.g" in u and re.search(r"css2\?family=(Bricolage|Atkinson|JetBrains)", u)]
+            check(all(faces) and '<link rel="stylesheet" href="fonts/fonts.css">' in index
+                  and "css2?family=Bricolage" not in index and "font-src 'self'" in policy and not google_main
+                  and any(u.endswith("fonts.css") for u in local_fonts) and any(u.endswith(".woff2") for u in local_fonts),
+                  f"the copy serves its own typefaces from fonts/ and the page loads them (faces {faces}); "
+                  f"{len(local_fonts)} local font files, Google only for the main fonts if at all ({google_main[:2]})")
 
             await pg.click("#io-export")
             await pg.fill("#io-name", "pages-test")
