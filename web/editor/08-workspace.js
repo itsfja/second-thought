@@ -223,7 +223,7 @@
     if (!e.target.closest("details.menu")) document.querySelectorAll("details.menu[open]").forEach(d => { d.open = false; });
   });
   $("new-prog").onclick = () => { setTests([]); load({ blocks: { languageVersion: 0, blocks: [blk("rb_start")] } }); };
-  // The theme choice in Settings (#444): System follows the computer; Light and Dark override it, and the
+  // The theme choice in Settings (#444, #452): System follows the computer; Light and Dark override it, and the
   // choice is kept. Setting data-theme rethemes the blocks too (the observer below).
   (function themePicker(){
     const sel = $("theme");
@@ -244,6 +244,7 @@
   const retheme = () => ws.setTheme(makeTheme(isDark()));
   mq.addEventListener && mq.addEventListener("change", retheme);
   new MutationObserver(retheme).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
+  retheme(); // a kept choice set data-theme above, before the observer existed: start Blockly on it too (#452)
   window.addEventListener("resize", () => Blockly.svgResize(ws));
 
   /* ---------- Building with the keyboard ---------- */

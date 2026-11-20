@@ -45,6 +45,8 @@ There are more categories down the left side of the screen. Fifteen of them are 
 
 **Backups.** In **Settings**, the **Model** menu picks the main model, and **Backups** lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
 
+**Light and dark.** In **Settings**, the **Theme** menu offers **Light**, **Dark** and **System** (same as your computer). The page and the blocks change at once, **System** follows your computer live, and the choice is kept in the browser.
+
 ## What a program can do
 
 ![Write a first draft, review it against your rules, revise to fix the problems and review again; when it's approved, or out of rounds, finish with the best draft](../screenshots/review-loop.svg)

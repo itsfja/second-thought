@@ -1109,6 +1109,13 @@ async def phone_palette_tests():
         await browser.close()
 
 
+async def theme_tests():
+    """A light/dark switch in Settings (#452): Light / Dark / System applies at once, re-themes Blockly at once,
+    System follows the computer live, and the choice is kept across a reload."""
+    print("Light / dark switch (#452)")
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        pg = await browser.new_page(viewport={"width": 1280, "height": 720})
 async def phone_run_tests():
     """On a phone at 390×844, a program runs and its questions are answered without the block editor (#450): the
     program shows as a read-only outline, Run is large, "Edit blocks" opens the editor, and no visible button is
@@ -1123,6 +1130,42 @@ async def phone_run_tests():
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
+        await pg.evaluate("() => { document.getElementById('first').hidden = true; }")
+        state = """() => ({ attr: document.documentElement.getAttribute('data-theme'),
+            sel: document.getElementById('theme').value,
+            blockly: Blockly.getMainWorkspace().getTheme().name,
+            bg: getComputedStyle(document.body).backgroundColor })"""
+        pick = """v => { const s = document.getElementById('theme'); s.value = v; s.dispatchEvent(new Event('change')); }"""
+        s0 = await pg.evaluate(state)
+        check(s0["sel"] == "" and s0["attr"] is None and s0["blockly"] == "rb-light",
+              f"by default the switch is System and the page follows the computer (light here): {s0}")
+        await pg.evaluate(pick, "dark")
+        await pg.wait_for_timeout(250)
+        s1 = await pg.evaluate(state)
+        check(s1["attr"] == "dark" and s1["sel"] == "dark" and s1["blockly"] == "rb-dark" and s1["bg"] != s0["bg"],
+              f"choosing Dark sets data-theme at once and re-themes Blockly at once: {s1}")
+        await pg.reload()
+        await pg.wait_for_timeout(1500)
+        await pg.evaluate("() => { document.getElementById('first').hidden = true; }")
+        s2 = await pg.evaluate(state)
+        check(s2["sel"] == "dark" and s2["attr"] == "dark" and s2["blockly"] == "rb-dark",
+              f"the choice is kept across a reload, and Blockly starts dark too, not only after a change: {s2}")
+        await pg.emulate_media(color_scheme="dark")
+        await pg.evaluate(pick, "light")
+        await pg.wait_for_timeout(250)
+        s3 = await pg.evaluate(state)
+        check(s3["attr"] == "light" and s3["blockly"] == "rb-light",
+              f"Light overrides a dark computer at once: {s3}")
+        await pg.evaluate(pick, "")
+        await pg.wait_for_timeout(250)
+        s4 = await pg.evaluate(state)
+        check(s4["attr"] is None and s4["blockly"] == "rb-dark",
+              f"System follows the computer (dark here) at once: {s4}")
+        await pg.emulate_media(color_scheme="light")
+        await pg.wait_for_timeout(250)
+        s5 = await pg.evaluate(state)
+        check(s5["attr"] is None and s5["blockly"] == "rb-light",
+              f"and follows it back to light without touching the switch: {s5}")
         await pg.evaluate("() => { document.getElementById('first').hidden = true; }")  # the editor path is under test
         await load_state(pg, script(blk("rb_ask_me", inputs={"TEXT": tx("What should I write about?")}), add(val(blk("rb_answer")))))
         await pg.wait_for_timeout(400)
