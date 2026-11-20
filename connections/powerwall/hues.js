@@ -1,1 +1,1 @@
-    powerwall:"#C8102E",
+    powerwall:"#C2185B",
