@@ -76,8 +76,8 @@
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
-             // sync:connections-need-end
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
+             // sync:connections-need-end
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
@@ -170,10 +170,6 @@
       "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
       "; stopped or rebooted, like your Home Assistant or domain controller.",
       "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
-    if (need.unifi) out.push("", "[unifi]",
-      "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
-      "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
-      "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -210,6 +206,10 @@
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    if (need.unifi) out.push("", "[unifi]",
+      "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
+      "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
+      "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     // sync:connections-ini-end
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
@@ -553,8 +553,6 @@
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
         case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
-        case "rb_unifi_clients": return "(await R.unifi_clients())";
-        case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-begin
         case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_pihole_summary": return "(await R.pihole_summary())";
@@ -565,6 +563,8 @@
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_solax_now": return "(await R.solax_now())";
+        case "rb_unifi_clients": return "(await R.unifi_clients())";
+        case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-end
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";

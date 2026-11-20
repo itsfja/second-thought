@@ -92,8 +92,6 @@ SAFETY = {
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
-    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
-    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
     # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
     # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
     # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
@@ -128,7 +126,6 @@ SAFETY = {
     "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
-    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-begin
     # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
     # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
@@ -152,6 +149,9 @@ SAFETY = {
     # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
     "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
     "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
+    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
+    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-end
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -303,6 +303,10 @@ def sabnzbd_call(method, mode):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
+def unifi_allowed(method, path):
+    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
 
 
@@ -378,12 +382,6 @@ def unraid_call(method, query):
         if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
-
-
-def unifi_allowed(method, path):
-    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 
 
 def same_problem(a, b):
@@ -920,7 +918,6 @@ CAPABILITIES = [
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
-    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
@@ -932,6 +929,7 @@ CAPABILITIES = [
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),

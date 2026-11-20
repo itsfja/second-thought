@@ -340,8 +340,6 @@
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
       case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
-      case "rb_unifi_clients": return unifiClients();
-      case "rb_unifi_devices": return unifiDevices();
       // sync:connections-iread-begin
       case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_pihole_summary": return piholeSummary();
@@ -352,6 +350,8 @@
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_solax_now": return solaxNow();
+      case "rb_unifi_clients": return unifiClients();
+      case "rb_unifi_devices": return unifiDevices();
       // sync:connections-iread-end
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
