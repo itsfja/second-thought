@@ -13,6 +13,8 @@ learn by trial and error.
   first; then Francis publishes the GitHub release on main. The Release workflow refuses a tag whose runtime says
   another version, and then `--update-runtime` has nothing to download. If that happens, the tag has to be deleted
   and made again on main (deleting the release alone leaves the tag where it was).
+- Remake the pictures with the release (#454): `python tools/record_demo.py && python tools/record_docs.py` (after
+  `bash tests/setup.sh`; needs ffmpeg and mmdc on the PATH), and commit the new `screenshots/` with the release PR.
 - The language issues (#129–139, `priority:8`) are under way again (Francis, November 2026): Classical Chinese (#129), Classical Syriac (#130), Church Slavonic (#132), Ottoman Turkish (#133), Pali (#134), Classical Nahuatl (#135), Sumerian (#137), Hittite (#138) and Gothic (#139) are done.
 - Never commit `second-thought.ini` or keys. Real-key checks (`tools/smoke_test.py`) cost money: Francis runs them,
   or says to.
