@@ -22,13 +22,13 @@ Each block is one instruction, like *write a first draft*, *review the draft aga
 
 The blocks are colour-coded by job:
 
-- **Yellow** starts things. **when Run is clicked** goes at the top.
+- **Amber** starts things. **when Run is clicked** goes at the top. Every colour is chosen so its white label reaches 4.5:1 contrast, and every connection — Home Assistant, Docker, Plex and the rest — is the same pink family, so the colours say what a block is for.
 - **Orange** repeats or chooses.
 - **Blue** asks Claude to write.
 - **Purple** asks Claude to check the writing.
 - **Teal** asks *you* a question and waits for your answer.
 - **Olive** makes an [agent](agent.md#the-agent), a helper that decides its own steps. Its tools are a darker olive, in their own **Tools** category.
-- **Pink**, under **Connections**, talks to Telegram, email, your calendar and news feeds.
+- **Pink**, under **Connections**, talks to Telegram, email, your calendar, news feeds and every turned-on service.
 - **Green** shows the result.
 
 There are more categories down the left side of the screen. Fifteen of them are one service each — Home Assistant, Docker, Plex and the rest — and they show only when turned on: **Settings → Connections** lists them with a checkbox, and a service's category appears inside **Connections** on the left. Loading a program that uses a service turns it on too, and *Find a block* and *Describe a program* still reach every block whether it is on or not.

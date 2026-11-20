@@ -14,7 +14,7 @@ file needn't end where a function does, but it reads better if it does.
 | File | What it holds |
 |---|---|
 | `00-start.js` | The editor's opening: shared limits and small helpers ($, STORE_KEY, MAX_*). Every file below runs inside the same function, so names declared in one are seen by the rest. |
-| `01-theme.js` | Colours and Blockly's theme. |
+| `01-theme.js` | Colours and Blockly's theme. Every colour in `HUES` passes 4.5:1 with a white label (tests/editor/hues.test.cjs), and all connections share the one `conn` pink (#447). |
 | `02-blocks.js` | Every block's definition, and the long-text field. |
 | `03-toolbox.js` | The block palette (toolbox) and its categories; the one-service categories carry a `service` id and only show when turned on in Settings (#446). |
 | `04-examples.js` | Building example programs: the helpers the example library uses. |
