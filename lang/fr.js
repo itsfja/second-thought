@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Quand la porte d'entrée s'ouvre, allume la lampe du porche et envoie-moi un message Telegram",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Chaque matin à 8h, résume mes e-mails non lus et envoie-moi les trois plus importants sur Telegram",
 "This program can: {things}":"Ce programme peut : {things}",
-"asks first":"demande d'abord"
+"asks first":"demande d'abord",
+"Connections":"Connexions",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Activez ici les services que cet ordinateur utilise. Ils apparaissent dans la catégorie Connexions ; charger un programme qui en utilise un l'active aussi."
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

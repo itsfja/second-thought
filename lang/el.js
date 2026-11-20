@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Όταν ανοίγει η εξώπορτα, άναψε το φως της εισόδου και στείλε μου μήνυμα στο Telegram",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Κάθε πρωί στις 8πμ, κάνε περίληψη των αδιάβαστων email μου και στείλε μου τα τρία πιο σημαντικά στο Telegram",
 "This program can: {things}":"Αυτό το πρόγραμμα μπορεί: {things}",
-"asks first":"ρωτάει πρώτα"
+"asks first":"ρωτάει πρώτα",
+"Connections":"Συνδέσεις",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ενεργοποίησε εδώ τις υπηρεσίες που χρησιμοποιεί αυτός ο υπολογιστής. Εμφανίζονται στην κατηγορία «Συνδέσεις»· αν φορτώσεις ένα πρόγραμμα που χρησιμοποιεί μία, ενεργοποιείται κι αυτή."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

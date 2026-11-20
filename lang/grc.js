@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Ὅταν ἡ θύρα ἀνοίγνυται, ἅψον τὸν φανὸν τῆς στοᾶς καὶ ἀπόστειλέ μοι μήνυμα ἐν Telegram",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"ἑκάστην πρωΐαν ὥραν 8, ἀνακεφαλαίωσι τὰ ἀνάγνωστα μηνύματά μου καὶ ἀπόστειλέ μοι τὰ τρία σπουδαιότερα ἐν Telegram",
 "This program can: {things}":"Τόδε τὸ πρόγραμμα δύναται: {things}",
-"asks first":"πρῶτον ἐρωτᾷ"
+"asks first":"πρῶτον ἐρωτᾷ",
+"Connections":"Δεσμοί",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ἅπτεν ἐνθάδε τῶν ὑπηρεσιῶν αἷς χρῆται ὁ ὑπολογιστής. Αὗται φαίνονται ἐν τῇ κατηγορίᾳ τῶν συνδέσεων· προγράμματος δὲ φορτιζομένου μιᾶς ἐξ αὐτῶν, ἐκείνη ἅπτεται."
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

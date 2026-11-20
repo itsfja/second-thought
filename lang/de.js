@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Wenn die Haustür aufgeht, schalte das Licht am Eingang an und schick mir eine Telegram-Nachricht",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Jeden Morgen um 8 Uhr: Fasse meine ungelesenen E-Mails zusammen und schick mir die drei wichtigsten auf Telegram",
 "This program can: {things}":"Dieses Programm kann: {things}",
-"asks first":"fragt zuerst"
+"asks first":"fragt zuerst",
+"Connections":"Verbindungen",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Schalte hier die Dienste ein, die dieser Computer nutzt. Sie erscheinen in der Kategorie Verbindungen; ein Programm, das einen nutzt, schaltet ihn beim Laden automatisch ein."
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

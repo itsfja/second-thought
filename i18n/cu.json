@@ -1999,7 +1999,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "когда дверь отврывается, вожги светиль на крыльце, и пошли мне сообщение въ Telegram",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "каждое утро въ 8 часовъ, собери непрочтенные письма, и пошли мне три важнейши въ Telegram",
   "This program can: {things}": "Сїи программа можєтъ: {things}",
-  "asks first": "съпръва въпрашаѥтъ"
+  "asks first": "съпръва въпрашаѥтъ",
+  "Connections": "Соединенїѧ",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Включите здѣсь службы, ꙗже ползꙋетъ сей компютеръ. Ѡнѣ ꙗвѧтсѧ въ категорїи свѧзєй; ꙗже программа ползꙋетъ єдиною, и та включаєтсѧ."
  },
  "examples": {
   "review": {

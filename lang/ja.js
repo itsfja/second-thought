@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"玄関のドアが開いたら、ポーチの照明をつけて Telegram でメッセージを送って",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"毎朝8時、未読メールを要約して、重要なものを3件 Telegram で送って",
 "This program can: {things}":"このプログラムができること: {things}",
-"asks first":"まず確認します"
+"asks first":"まず確認します",
+"Connections":"連携",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"このコンピューターが使うサービスをここでオンにします。オンにしたサービスは「接続」カテゴリーに表示されます。サービスを使うプログラムを読み込むと、それも自動でオンになります。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

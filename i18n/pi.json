@@ -2000,7 +2000,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "यदा द्वारं् विवरति, आरङ्गस्स पकासं् पज्जल, च मं् Telegram इति सन्देसं् पहिण",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "प्रतिदिवसा 8 वादने, मम अपथितं् ईमेलं् सं्खिप्प, तत्तानं् तयानं् प्रधानतमानि Telegram इति मं् पहिण",
   "This program can: {things}": "This प्रोग्रम् चन्: {things}",
-  "asks first": "अस्क्स् fiर्स्त्"
+  "asks first": "अस्क्स् fiर्स्त्",
+  "Connections": "सम्बन्धा",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "इधअ सअमगअनअकओ उपअयउततअ सएVवअ अरअमभअ. तअ सअमयओगएसउ दइससअनतइ; यअम कइनचइ यओजअनअम एकएनअ सएवअयअ उपअयउततअम, तअम पइ अरअमभअतइ."
  },
  "examples": {
   "review": {

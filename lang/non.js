@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Þegar útidyra opnast, kveiktu á útiljósinu og sendu mér skilaboð á Telegram",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Á hverjum morgni klukkan 8, samantektu ólesin tölvupóstinn minn og sendu mér þrjú mikilvægustu á Telegram",
 "This program can: {things}":"Þetta forrit má: {things}",
-"asks first":"spyr fyrst"
+"asks first":"spyr fyrst",
+"Connections":"Sambǫnd",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Kveð þú á hér þjónustur er þessi tölva nýtir. Þær sjást í flokknum Tengingar; ef þú hleðr forrit sem nýtir eina, kveikist sú líka."
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

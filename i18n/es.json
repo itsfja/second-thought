@@ -2009,7 +2009,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "Cuando se abra la puerta de entrada, enciende la luz del portal y envíame un mensaje por Telegram",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Cada mañana a las 8:00, resume mi correo sin leer y envíame los tres más importantes por Telegram",
   "This program can: {things}": "Este programa puede: {things}",
-  "asks first": "pregunta primero"
+  "asks first": "pregunta primero",
+  "Connections": "Conexiones",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Activa aquí los servicios que usa este ordenador. Aparecen en la categoría Conexiones; al cargar un programa que usa uno, también se activa."
  },
  "examples": {
   "review": {

@@ -1,7 +1,7 @@
   // 08-workspace.js: The Blockly workspace: injecting it, saving and loading, the autosave.
   /* ---------- Workspace ---------- */
   const ws = Blockly.inject("blockly", {
-    toolbox:localizeToolbox(toolbox), renderer:"zelos", theme:makeTheme(isDark()),
+    toolbox:localizeToolbox(visibleToolbox()), renderer:"zelos", theme:makeTheme(isDark()),
     grid:{ spacing:24, length:2, colour:isDark() ? "#2A2E40" : "#E4E7F0", snap:true },
     zoom:{ controls:false, wheel:true, startScale:0.8, maxScale:2, minScale:0.35 },
     trashcan:false, sounds:false, move:{ scrollbars:true, drag:true, wheel:false },
@@ -18,7 +18,7 @@
     if (ws.RTL) { state = JSON.parse(JSON.stringify(state)); shiftX(state, ws.getWidth() - RTL_EDGE); }
     Blockly.serialization.workspaces.load(state, ws);
   }
-  function load(state){ ws.clear(); loadWs(state); ws.scrollCenter && ws.scroll(0, 0); }
+  function load(state){ ws.clear(); loadWs(state); ws.scrollCenter && ws.scroll(0, 0); enableServicesInWorkspace(); }
   // Blocks are measured as they're drawn; a language's own font may arrive after that, so measure them again once it has.
   if (window.ST_I18N && window.ST_I18N.font && document.fonts && document.fonts.load)
     // A letter of the language's own name is in its script, so the font is loaded for that script, whichever it is.

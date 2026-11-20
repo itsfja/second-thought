@@ -1266,7 +1266,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"यदा द्वारम् उद्घाट्यते, आरङ्गस्य प्रकाशं् प्रज्वालत, च मह्यम् Telegram इति सन्देस्हां् प्रेषय",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"प्रतिमारम् 8 वादने, मे अपथितं् ईमेल् सं्क्षिप्य त्रीणि प्रधानतमानि Telegram इति मह्यम् प्रेषय",
 "This program can: {things}":"This प्रोग्रम् चन्: {things}",
-"asks first":"अस्क्स् fiर्स्त्"
+"asks first":"अस्क्स् fiर्स्त्",
+"Connections":"सम्बन्धाः",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"अतरअ सअमगअनअकअह उपअयउकतअम सएवअह अरअमभअ. तअ सअमयओगएसउ दअरसयअतए; यअम कइमचइत यओजअनअम एकएनअ सएवअयअ उपअयउकतअम, तअत अपइ अरअमभअतए."
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

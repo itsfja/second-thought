@@ -2000,7 +2000,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "Ön kapı açılınca sahanlık ışığını yak ve bana Telegram mesajı gönder",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Her sabah 08:00'de, okunmamış e-postalarımı özetle ve en önemli üç tanesini Telegram'dan gönder",
   "This program can: {things}": "Bu program şunları yapabilir: {things}",
-  "asks first": "önce sorar"
+  "asks first": "önce sorar",
+  "Connections": "اتصاللر",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Burada bu ḥāsibün ḳullandüğı ḥizmetleri açun. Bağlantılar ṣınıflamasında görünrler; bunlardan biriyle bir programma ḳullanan yüklenince o da açılır."
  },
  "examples": {
   "review": {

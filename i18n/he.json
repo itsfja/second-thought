@@ -2010,7 +2010,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "כשהדלת החיצון נפתחת, הפעל את האור במרכה, ושלח לי הודעה בטלגרם",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "כל בוקר ב-8:00, סכום את הדואר שלא נקרא בדואר, ושלח לי את השלוש החשובים בטלגרם",
   "This program can: {things}": "התוכנית יכולה: {things}",
-  "asks first": "שואלת קודם"
+  "asks first": "שואלת קודם",
+  "Connections": "חיבורים",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "הפעילו כאן את השירותים שהמחשב הזה משתמש בהם. הם מופיעים בקטגוריית החיבורים; טעינת תוכנית שמשתמשת באחד מדליקה גם"
  },
  "examples": {
   "review": {

@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"When þe front dor openeth, turn on þe porch liȝt and send me a Telegram message",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each morn at 8am, summe up my unred email and send me þe þre most heuy on Telegram",
 "This program can: {things}":"This program may: {things}",
-"asks first":"asketh first"
+"asks first":"asketh first",
+"Connections":"Knottes",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Turneth on here þe servyces þat this computour useth. Þey aperen in þe categorie of Connecciouns; whan þou lokiest a programme þat useth oon, it is turned on also."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

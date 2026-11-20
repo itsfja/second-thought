@@ -1266,7 +1266,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"fሮንት ዶoር opeን, poርcህ ሊgህት oን, ቴሌgረም ሜስሰge ሴንድ",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"ሞርኒንg 8aም, uንሬaድ eመiል ሱምመሪዜ, ትህሬe ሞስት iምpoርተንት ቴሌgረም ሴንድ",
 "This program can: {things}":"Tሂስ pሮgረም caን: {things}",
-"asks first":"aስክስ fiርስት"
+"asks first":"aስክስ fiርስት",
+"Connections":"ተራክቦታት",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Turn 𐠃𐠊 𐠃𐠓𐠁 𐠠𐠁𐠦𐠁𐠂𐠉𐠁𐠠 𐠃𐠓𐠂𐠠 𐠉𐠃𐠘𐠙𐠄𐠃𐠁𐠦 𐠄𐠠𐠁𐠠. They 𐠀𐠙𐠙𐠁𐠀𐠦 𐠂𐠊 𐠃𐠓𐠁 Connections 𐠉𐠀𐠃𐠁𐠌𐠃𐠦𐠅; 𐠇𐠃𐠀𐠕𐠂𐠊𐠌 𐠀 𐠙𐠦𐠃𐠌𐠦𐠀𐠘 𐠃𐠓𐠀𐠃 𐠄𐠠𐠁𐠠 𐠃𐠊𐠁 𐠃𐠄𐠦𐠊𐠠 𐠂𐠃 𐠃𐠊 𐠃𐠃𐠃."
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},
