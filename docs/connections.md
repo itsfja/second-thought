@@ -203,24 +203,6 @@ UNRAID_API_KEY = your-key
 
 If Unraid is behind HTTPS with a certificate this computer doesn't trust, `UNRAID_CERT_SHA256` pins it, as for MikroTik and UniFi (`--doctor` shows the fingerprint). `--doctor` says Unraid's version and the array's state.
 
-## NZBGeek
-
-The purple **NZBGeek** blocks search the Usenet indexer through its Newznab API, and can fetch one NZB file, always asking first:
-
-- **search NZBGeek for**: each release the indexer has for those words, with title, id, size_mb, grabs, posted (when it was posted) and group. The run log says how many were found. It only reads: nothing is ever downloaded.
-- **fetch the NZB for** asks you every time, even when nothing else does, then saves the one file as `<id>.nzb`. With nobody there to say yes (a schedule, GitHub Actions), it doesn't run; `approve_by = telegram` asks on your phone instead. It never hands anything to a downloader: the file is saved, that's all.
-
-Nothing else is ever sent: no account changes, no VIP time, nothing that touches payment (`nzbgeek_free` and `nzbgeek_asks` in `SAFETY`). On the page these blocks use a **sample search**: two releases of the same film. The gallery program **Missing, searched** pairs the search with the Radarr wanted list and only reads.
-
-**Using your own NZBGeek.** Set its API key (My Account, API key):
-
-```
-[nzbgeek]
-NZBGEEK_API_KEY = your-key
-```
-
-The API address is `https://api.nzbgeek.info`; `NZBGEEK_URL` overrides it if that ever moves. `--doctor` says NZBGeek's version and its days of retention.
-
 ## Plex and Tautulli
 
 The gold **Plex** blocks read your Plex media server through the X-Plex-Token API the apps use, and Tautulli adds the history and the watch-time stats. **scan a Plex library** and **stop a stream** always ask first:
@@ -295,6 +277,23 @@ UNIFI_CERT_SHA256 =
 As with MikroTik, the console's certificate is its own: run `--doctor` once and it shows the fingerprint to pin. `UNIFI_SITE` picks a site other than the first. The key itself could do more than read (restart a device, block a client), but Second Thought only ever sends the reads in `unifi_free`; keep the key for this program alone.
 
 <!-- sync:connections-docs-begin -->
+## NZBGeek
+
+The purple **NZBGeek** blocks search the Usenet indexer through its Newznab API, and can fetch one NZB file, always asking first:
+
+- **search NZBGeek for**: each release the indexer has for those words, with title, id, size_mb, grabs, posted (when it was posted) and group. The run log says how many were found. It only reads: nothing is ever downloaded.
+- **fetch the NZB for** asks you every time, even when nothing else does, then saves the one file as `<id>.nzb`. With nobody there to say yes (a schedule, GitHub Actions), it doesn't run; `approve_by = telegram` asks on your phone instead. It never hands anything to a downloader: the file is saved, that's all.
+
+Nothing else is ever sent: no account changes, no VIP time, nothing that touches payment (`nzbgeek_free` and `nzbgeek_asks` in `SAFETY`). On the page these blocks use a **sample search**: two releases of the same film. The gallery program **Missing, searched** pairs the search with the Radarr wanted list and only reads.
+
+**Using your own NZBGeek.** Set its API key (My Account, API key):
+
+```
+[nzbgeek]
+NZBGEEK_API_KEY = your-key
+```
+
+The API address is `https://api.nzbgeek.info`; `NZBGEEK_URL` overrides it if that ever moves. `--doctor` says NZBGeek's version and its days of retention.
 ## Pi-hole
 
 The red **Pi-hole** blocks read your Pi-hole through its v6 API, and can turn blocking off and on and change its lists, always asking first:

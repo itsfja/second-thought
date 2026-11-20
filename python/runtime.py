@@ -93,8 +93,9 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
+    "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
@@ -166,12 +167,13 @@ KEYCHAIN_NAMES = (
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
+    "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
     "POWERWALL_PASSWORD",
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
     # sync:connections-secret-end
-    "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1188,11 +1190,6 @@ SAFETY = {
     "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
                     ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
                     ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
-    # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
-    # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
-    # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
-    "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
-    "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
     # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
     # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
@@ -1205,6 +1202,11 @@ SAFETY = {
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-begin
+    # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
+    # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
+    # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
+    "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
+    "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
     # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
     # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
     # settings.
@@ -1341,6 +1343,15 @@ def coinbase_money(method, path):
 
 
 # sync:connections-fns-begin
+def nzbgeek_call(method, query):
+    """"free" for one of NZBGeek's Newznab reads (a search, or t=caps), "asks" for the one fetch (t=get, an NZB
+    file, with a paid account's key), and None for anything else, which is never sent (#400). The query is read as
+    a whole: a search that smuggles t=get is refused, and so is a fetch that smuggles a search."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["nzbgeek_" + kind]):
+            return kind
+    return None
 def pihole_call(method, path):
     """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
     signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
@@ -1426,17 +1437,6 @@ def tautulli_call(method, query):
     method, query = to_str(method).strip().upper(), to_str(query).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, query) for m, p in SAFETY["tautulli_" + kind]):
-            return kind
-    return None
-
-
-def nzbgeek_call(method, query):
-    """"free" for one of NZBGeek's Newznab reads (a search, or t=caps), "asks" for the one fetch (t=get, an NZB
-    file, with a paid account's key), and None for anything else, which is never sent (#400). The query is read as
-    a whole: a search that smuggles t=get is refused, and so is a fetch that smuggles a search."""
-    method, query = to_str(method).strip().upper(), to_str(query).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, query) for m, p in SAFETY["nzbgeek_" + kind]):
             return kind
     return None
 
@@ -1981,9 +1981,9 @@ CAPABILITIES = [
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
-    ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
@@ -1997,9 +1997,9 @@ CAPABILITIES = [
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
-    ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
@@ -4549,83 +4549,6 @@ class Connections:
         self.log(tr("Unraid"), what, tr("done"))
         return True
 
-    # NZBGeek (#400)
-    # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
-    # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,
-    # with a paid account's key) always asks, live, and never runs with nobody there. Nothing else is ever sent: no
-    # account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
-    NZBGEEK_URL = "https://api.nzbgeek.info"
-
-    async def _nzbgeek(self, params, approved=False):
-        """One GET to NZBGeek's /api, gated by nzbgeek_call: a search or t=caps goes without asking, the one fetch
-        only after a live yes, and anything else is never sent."""
-        kind = nzbgeek_call("GET", urllib.parse.urlencode(params))
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.",
-                              what="GET /api?" + urllib.parse.urlencode({k: v for k, v in params.items() if k != "apikey"}), who="NZBGeek"))
-        key = os.environ.get("NZBGEEK_API_KEY", "").strip()
-        if not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.",
-                              who="NZBGeek", url_setting="NZBGEEK_URL", key_setting="NZBGEEK_API_KEY", where_keys=WHERE_KEYS))
-        url = (os.environ.get("NZBGEEK_URL", "").strip() or self.NZBGEEK_URL).rstrip("/")
-        status, raw = await self._pinned("NZBGeek", url, "NZBGEEK_CERT_SHA256", "GET",
-                                        "/api?" + urllib.parse.urlencode(dict(params, apikey=key)), {})
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who="NZBGeek"))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who="NZBGeek", why=self._said(status, raw)))
-        return raw
-
-    @staticmethod
-    def _nzbgeek_attrs(item):
-        """A release's Newznab attributes, whatever shape the answer gives them: name to value."""
-        out = {}
-        for a in (item.get("newznab:attr") or []) if isinstance(item, dict) else []:
-            a = a.get("@attributes") if isinstance(a, dict) and "@attributes" in a else a
-            if isinstance(a, dict) and a.get("name") is not None:
-                out[to_str(a.get("name"))] = to_str(a.get("value"))
-        return out
-
-    async def nzbgeek_search(self, query):
-        """What the indexer has for these words: a list of records — title, id, size_mb, grabs, posted (when it was
-        posted) and group. It only reads: nothing is ever downloaded."""
-        q = to_str(query).strip()
-        raw = await self._nzbgeek({"t": "search", "q": q, "o": "json"})
-        answer = json.loads(raw) if raw.strip() else {}
-        items = ((answer.get("channel") or {}).get("item")) or []
-        if isinstance(items, dict):
-            items = [items]
-        out = []
-        for item in items:
-            if not isinstance(item, dict):
-                continue
-            a = self._nzbgeek_attrs(item)
-            out.append({"title": to_str(item.get("title")),
-                        "id": to_str(item.get("guid")).rsplit("/", 1)[-1] if item.get("guid") else "",
-                        "size_mb": self._cents(num(a.get("size")) / 1048576) if a.get("size") else "",
-                        "grabs": num(a.get("grabs")) if a.get("grabs") else "",
-                        "posted": (a.get("usenetdate") or to_str(item.get("pubDate")))[:16],
-                        "group": a.get("group", "")})
-        lines = "\n".join(f"{r['title']} ({r['size_mb']} MB)" if r["size_mb"] else r["title"] for r in out)
-        self.log(tr("NZBGeek search for {q}", q=q), lines or tr("(nothing)"), tr("{n} found", n=len(out)))
-        return out
-
-    async def nzbgeek_fetch(self, ident):
-        """Fetches one NZB file and saves it as <id>.nzb, after asking you, every time. Gives back True if it was
-        done. It never hands anything to a downloader: the file is saved, that's all."""
-        n = to_str(ident).strip().rsplit("/", 1)[-1]
-        if not n:
-            raise RunError(tr("Which one? Give a release's id, from the search."))
-        what = tr("fetch the NZB for {id} from NZBGeek", id=n)
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        raw = await self._nzbgeek({"t": "get", "id": n}, approved=True)
-        await self.save_file(raw, n, "nzb")
-        self.log(tr("NZBGeek"), what, tr("done"))
-        return True
-
     # Plex and Tautulli (#402)
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
     # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
@@ -5128,6 +5051,82 @@ class Connections:
         return [f"{to_str(r.get('time'))} {to_str(r.get('topics'))}: {to_str(r.get('message'))}" for r in rows]
 
     # sync:connections-runtime-begin
+    # NZBGeek (#400)
+    # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
+    # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,
+    # with a paid account's key) always asks, live, and never runs with nobody there. Nothing else is ever sent: no
+    # account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
+    NZBGEEK_URL = "https://api.nzbgeek.info"
+
+    async def _nzbgeek(self, params, approved=False):
+        """One GET to NZBGeek's /api, gated by nzbgeek_call: a search or t=caps goes without asking, the one fetch
+        only after a live yes, and anything else is never sent."""
+        kind = nzbgeek_call("GET", urllib.parse.urlencode(params))
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.",
+                              what="GET /api?" + urllib.parse.urlencode({k: v for k, v in params.items() if k != "apikey"}), who="NZBGeek"))
+        key = os.environ.get("NZBGEEK_API_KEY", "").strip()
+        if not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its API key, in NZBGeek under My Account, API key.",
+                              who="NZBGeek", url_setting="NZBGEEK_URL", key_setting="NZBGEEK_API_KEY", where_keys=WHERE_KEYS))
+        url = (os.environ.get("NZBGEEK_URL", "").strip() or self.NZBGEEK_URL).rstrip("/")
+        status, raw = await self._pinned("NZBGeek", url, "NZBGEEK_CERT_SHA256", "GET",
+                                        "/api?" + urllib.parse.urlencode(dict(params, apikey=key)), {})
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who="NZBGeek"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="NZBGeek", why=self._said(status, raw)))
+        return raw
+
+    @staticmethod
+    def _nzbgeek_attrs(item):
+        """A release's Newznab attributes, whatever shape the answer gives them: name to value."""
+        out = {}
+        for a in (item.get("newznab:attr") or []) if isinstance(item, dict) else []:
+            a = a.get("@attributes") if isinstance(a, dict) and "@attributes" in a else a
+            if isinstance(a, dict) and a.get("name") is not None:
+                out[to_str(a.get("name"))] = to_str(a.get("value"))
+        return out
+
+    async def nzbgeek_search(self, query):
+        """What the indexer has for these words: a list of records — title, id, size_mb, grabs, posted (when it was
+        posted) and group. It only reads: nothing is ever downloaded."""
+        q = to_str(query).strip()
+        raw = await self._nzbgeek({"t": "search", "q": q, "o": "json"})
+        answer = json.loads(raw) if raw.strip() else {}
+        items = ((answer.get("channel") or {}).get("item")) or []
+        if isinstance(items, dict):
+            items = [items]
+        out = []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            a = self._nzbgeek_attrs(item)
+            out.append({"title": to_str(item.get("title")),
+                        "id": to_str(item.get("guid")).rsplit("/", 1)[-1] if item.get("guid") else "",
+                        "size_mb": self._cents(num(a.get("size")) / 1048576) if a.get("size") else "",
+                        "grabs": num(a.get("grabs")) if a.get("grabs") else "",
+                        "posted": (a.get("usenetdate") or to_str(item.get("pubDate")))[:16],
+                        "group": a.get("group", "")})
+        lines = "\n".join(f"{r['title']} ({r['size_mb']} MB)" if r["size_mb"] else r["title"] for r in out)
+        self.log(tr("NZBGeek search for {q}", q=q), lines or tr("(nothing)"), tr("{n} found", n=len(out)))
+        return out
+
+    async def nzbgeek_fetch(self, ident):
+        """Fetches one NZB file and saves it as <id>.nzb, after asking you, every time. Gives back True if it was
+        done. It never hands anything to a downloader: the file is saved, that's all."""
+        n = to_str(ident).strip().rsplit("/", 1)[-1]
+        if not n:
+            raise RunError(tr("Which one? Give a release's id, from the search."))
+        what = tr("fetch the NZB for {id} from NZBGeek", id=n)
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        raw = await self._nzbgeek({"t": "get", "id": n}, approved=True)
+        await self.save_file(raw, n, "nzb")
+        self.log(tr("NZBGeek"), what, tr("done"))
+        return True
     # Pi-hole (#401)
     # Pi-hole's REST API (v6 and later): PIHOLE_URL (like http://pi.hole) and PIHOLE_PASSWORD (the web interface's
     # password). Each run signs in once (POST /api/auth) and carries the session id; the stats and the blocking
@@ -7983,6 +7982,16 @@ class Doctor:
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
         # sync:connections-check-begin
+        if has("nzbgeek_read", "nzbgeek_fetch"):
+            async def nzbgeek():
+                raw = await self._nzbgeek({"t": "caps", "o": "json"})
+                caps = (json.loads(raw) if raw.strip() else {}).get("caps") or {}
+                server = (caps.get("server") or {}).get("@attributes") or {}
+                ret = caps.get("retention")
+                days = num((ret or {}).get("@attributes", {}).get("days")) if isinstance(ret, dict) else num(ret)
+                return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
+                    + ", " + tr("{n} days of retention", n=days or "?")
+            out.append(("NZBGeek", nzbgeek))
         if has("pihole_read", "pihole_control"):
             async def pihole():
                 s = await self._pihole("GET", "/api/stats/summary")
@@ -8060,16 +8069,6 @@ class Doctor:
                 return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
-        if has("nzbgeek_read", "nzbgeek_fetch"):
-            async def nzbgeek():
-                raw = await self._nzbgeek({"t": "caps", "o": "json"})
-                caps = (json.loads(raw) if raw.strip() else {}).get("caps") or {}
-                server = (caps.get("server") or {}).get("@attributes") or {}
-                ret = caps.get("retention")
-                days = num((ret or {}).get("@attributes", {}).get("days")) if isinstance(ret, dict) else num(ret)
-                return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
-                    + ", " + tr("{n} days of retention", n=days or "?")
-            out.append(("NZBGeek", nzbgeek))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -8417,8 +8416,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
                 "SABnzbd": "SABNZBD_URL",
