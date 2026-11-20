@@ -160,6 +160,9 @@
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},
     // sync:connections-toolbox-begin
+    { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
+      B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
+    ]},
     { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", service:"nzbgeek", contents:[
       B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
     ]},
@@ -175,9 +178,6 @@
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     // sync:connections-toolbox-end
-    { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
-      B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
-    ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
     ]}

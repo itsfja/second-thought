@@ -20,6 +20,7 @@ by the tests) fails if they are out of date.
 | `capabilities-act.py` / `capabilities-read.py` | `core.py`, regions `capabilities-act` / `capabilities-read`: its acting / reading `CAPABILITIES` line |
 | `known.py` / `secret.py` | `python/second_thought/settings.py`, regions `known` / `secret`: its setting names |
 | `check.py` | `python/second_thought/doctor.py`, region `check`: its `--doctor` check |
+| `check-helper.py` | `python/second_thought/doctor.py`, region `check-helper`: its `--doctor` helper method, when the check is its own method |
 | `settingsmap.py` | `doctor.py`, region `settingsmap`: its label in `--doctor`'s settings table |
 | `example.ini` | `second-thought.example.ini`, region `ini`: its section |
 | `hues.js` / `styles.js` | `web/editor/01-theme.js`, regions `hues` / `styles`: its colour and block style |
@@ -49,4 +50,4 @@ in `samples/connections.json`) by hand — sync does not prune.
 `docs/connections.md`'s table of contents at the top is still a hand-written list of the sections; add the new
 connection's line there.
 
-`powerwall/`, `pihole/`, `solax/`, `sabnzbd/`, `nzbgeek/` and `unifi/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.
+`powerwall/`, `pihole/`, `solax/`, `sabnzbd/`, `nzbgeek/`, `unifi/` and `mikrotik/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.

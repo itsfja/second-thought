@@ -69,8 +69,8 @@
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
-             mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              // sync:connections-need-begin
+             mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
@@ -170,12 +170,12 @@
       "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
       "; stopped or rebooted, like your Home Assistant or domain controller.",
       "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
+    // sync:connections-ini-begin
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
       "; router's certificate fingerprint to pin.",
       "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
-    // sync:connections-ini-begin
     if (need.nzbgeek) out.push("", "[nzbgeek]",
       "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
       "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
@@ -554,6 +554,10 @@
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
         case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         // sync:connections-pyread-begin
+        case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
+        case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
+        case "rb_mikrotik_health": return "(await R.mikrotik_health())";
+        case "rb_mikrotik_log": return "(await R.mikrotik_log(" + I("N", "20") + "))";
         case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_pihole_summary": return "(await R.pihole_summary())";
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
@@ -566,10 +570,6 @@
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-end
-        case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
-        case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
-        case "rb_mikrotik_health": return "(await R.mikrotik_health())";
-        case "rb_mikrotik_log": return "(await R.mikrotik_log(" + I("N", "20") + "))";
         case "rb_coinbase_value": return "(await R.coinbase_value())";
         case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
         case "rb_coinbase_candles": return "(await R.coinbase_candles(" + pyStr(b.getFieldValue("SIZE")) + ", " + I("PRODUCT", '""') + ", " + I("N", "7") + "))";

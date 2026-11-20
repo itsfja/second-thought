@@ -92,6 +92,7 @@ SPLICE_PARTS = {
     "known.py": (PACKAGE / "settings.py", "known"),                # its non-secret setting names
     "secret.py": (PACKAGE / "settings.py", "secret"),              # its secret setting names
     "check.py": (PACKAGE / "doctor.py", "check"),                  # its --doctor check
+    "check-helper.py": (PACKAGE / "doctor.py", "check-helper"),     # its --doctor helper method, when the check is its own method
     "settingsmap.py": (PACKAGE / "doctor.py", "settingsmap"),      # its label in --doctor's settings table
     "example.ini": (ROOT / "second-thought.example.ini", "ini"),  # its section of the example ini
     "hues.js": (EDITOR / "01-theme.js", "hues"),                   # its colour

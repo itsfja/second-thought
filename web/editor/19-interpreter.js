@@ -341,6 +341,10 @@
       case "rb_proxmox_storage": return proxmoxStorage();
       case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       // sync:connections-iread-begin
+      case "rb_mikrotik_ports": return mikrotikPorts();
+      case "rb_mikrotik_sfp": return mikrotikSfp();
+      case "rb_mikrotik_health": return mikrotikHealth();
+      case "rb_mikrotik_log": return mikrotikLog(await input(b, tc, "N", 20));
       case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_pihole_summary": return piholeSummary();
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
@@ -353,10 +357,6 @@
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       // sync:connections-iread-end
-      case "rb_mikrotik_ports": return mikrotikPorts();
-      case "rb_mikrotik_sfp": return mikrotikSfp();
-      case "rb_mikrotik_health": return mikrotikHealth();
-      case "rb_mikrotik_log": return mikrotikLog(await input(b, tc, "N", 20));
       case "rb_coinbase_value": return coinbaseValue();
       case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
       case "rb_coinbase_candles": return coinbaseCandles(b.getFieldValue("SIZE"), await input(b, tc, "PRODUCT"), await input(b, tc, "N", 7));
