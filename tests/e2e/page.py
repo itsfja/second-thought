@@ -278,7 +278,7 @@ async def page_tests():
         print("Drawers over the canvas (#445)")
         base = await pg.evaluate("JSON.stringify(document.querySelector('.canvas').getBoundingClientRect())")
         for btn, panel in [("#ex-toggle", "#gallery"), ("#io-export", "#io"), ("#lib-toggle", "#lib"), ("#mem-toggle", "#mem"),
-                           ("#ha-toggle", "#ha"), ("#bk-toggle", "#bk"), ("#keys-toggle", "#keys"), ("#share-prog", "#share")]:
+                           ("#ha-toggle", "#ha"), ("#bk-toggle", "#bk"), ("#keys-toggle", "#keys"), ("#conn-toggle", "#conn"), ("#share-prog", "#share")]:
             await pg.click(btn)
             await pg.wait_for_timeout(250)
             r = await pg.evaluate("""([panel, base]) => ({ same: JSON.stringify(document.querySelector('.canvas').getBoundingClientRect()) === base,
@@ -531,6 +531,68 @@ async def page_tests():
         marks3 = await pg.evaluate(MARKS_JS)
         check("only uses your models" in line3 and not any(m["want"] or m["got"] for m in marks3) and len(marks3) > 0,
               f"a model-only program says so and carries no marks ({line3!r}, {len(marks3)} blocks)")
+
+        # The Connections list in Settings (#446): a fresh page shows the core categories plus Connections, the
+        # one-service categories nest inside Connections only when turned on, loading a program that uses a service
+        # turns it on, and Find a block still reaches every block. On a fresh browser, so earlier example loads in
+        # this test don't turn services on already.
+        print("Connections in Settings (#446)")
+        pgF = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        pgF.on("pageerror", lambda e: errors.append(str(e)))
+        await pgF.route("**/*", route)
+        await pgF.add_init_script(MOCK)
+        await pgF.goto("http://test/")
+        await pgF.wait_for_timeout(1500)
+        VIS = """() => { const tb = window.__visibleToolbox(); const conn = tb.contents.find(c => c.name === "Connections");
+            return { top: tb.contents.filter(c => c.kind === "category").map(c => c.name),
+                     conn: (conn.contents || []).filter(c => c.kind === "category").map(c => c.name),
+                     enabled: window.__services().enabled }; }"""
+        vis = await pgF.evaluate(VIS)
+        check(len(vis["top"]) == 22 and "Connections" in vis["top"] and "Home Assistant" not in vis["top"]
+              and vis["conn"] == [] and vis["enabled"] == [],
+              f"a fresh page shows the {len(vis['top'])} core categories plus Connections, no service nested ({vis['top'][:4]}…)")
+        await pgF.click("#conn-toggle")
+        await pgF.wait_for_timeout(250)
+        items = await pgF.eval_on_selector_all("#conn-list .conn-item", "els => els.map(e => [e.querySelector('input').dataset.service, e.querySelector('span').textContent])")
+        check(len(items) == 15 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
+              f"the Connections drawer lists all 15 services by their category names ({len(items)}: {items[:3]}…)")
+        await pgF.check("#conn-list input[data-service=ha]")
+        await pgF.wait_for_timeout(300)
+        vis = await pgF.evaluate(VIS)
+        live = await pgF.evaluate("""() => { const items = Blockly.getMainWorkspace().getToolbox().getToolboxItems();
+            const name = i => i.getName ? i.getName() : null;
+            const top = items.filter(i => { const p = i.getParent && i.getParent(); return !p || !name(p); }).map(name).filter(Boolean);
+            const ha = items.find(i => name(i) === "Home Assistant");
+            return { top, haParent: ha && ha.getParent() ? name(ha.getParent()) : null }; }""")
+        check(vis["conn"] == ["Home Assistant"] and vis["enabled"] == ["ha"] and len(vis["top"]) == 22
+              and len(live["top"]) == 22 and "Home Assistant" not in live["top"] and live["haParent"] == "Connections",
+              f"turning Home Assistant on nests it inside Connections in the live toolbox too ({vis['conn']}; live top-level: {len(live['top'])}, HA's parent: {live['haParent']})")
+        await pgF.keyboard.press("Escape")
+        await pgF.reload()
+        await pgF.wait_for_timeout(1500)
+        vis = await pgF.evaluate(VIS)
+        check(vis["enabled"] == ["ha"] and vis["conn"] == ["Home Assistant"],
+              f"the turned-on service is kept across a reload ({vis['enabled']})")
+        # loading a program that uses a service turns it on: the gallery's dns-check uses Pi-hole
+        await pgF.click("#ex-toggle")
+        await pgF.wait_for_timeout(300)
+        await pgF.fill("#gal-search", "dns")
+        await pgF.wait_for_timeout(300)
+        card = await pgF.query_selector(".gal-card[data-key='g_dns_check'] button")
+        check(card is not None, "the gallery search finds the dns-check program")
+        await card.click()
+        await pgF.wait_for_timeout(500)
+        vis = await pgF.evaluate(VIS)
+        check("pihole" in vis["enabled"] and "Pi-hole" in vis["conn"] and vis["enabled"] == ["ha", "pihole"],
+              f"loading a program that uses Pi-hole turns it on ({vis['enabled']}; nested: {vis['conn']})")
+        # Find a block still reaches a service that is off (Proxmox)
+        await pgF.fill("#block-search", "proxmox")
+        await pgF.wait_for_timeout(300)
+        found = await pgF.evaluate("Blockly.getMainWorkspace().getToolbox().getFlyout().getWorkspace().getTopBlocks(false).length")
+        check(found >= 1 and "proxmox" not in vis["enabled"],
+              f"'proxmox' still finds {found} blocks although Proxmox is off")
+        await pgF.press("#block-search", "Escape")
+        await pgF.close()
 
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()

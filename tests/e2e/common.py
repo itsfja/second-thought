@@ -152,7 +152,7 @@ _GUARD = """el => { if (!el) return;
   if (el.closest('main.main')) {  // the target is behind an open drawer or the first screen: close it first
     const first = document.getElementById('first');
     if (first && !first.hidden) first.hidden = true;
-    if (document.querySelector('#gallery:not([hidden]),#lib:not([hidden]),#ha:not([hidden]),#mem:not([hidden]),#bk:not([hidden]),#keys:not([hidden]),#io:not([hidden]),#share:not([hidden])'))
+    if (document.querySelector('#gallery:not([hidden]),#lib:not([hidden]),#ha:not([hidden]),#mem:not([hidden]),#bk:not([hidden]),#keys:not([hidden]),#conn:not([hidden]),#io:not([hidden]),#share:not([hidden])'))
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })); } }"""
 
 

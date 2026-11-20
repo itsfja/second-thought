@@ -2001,7 +2001,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "When ܬܗ front ܕܘܘܪ ܐܘܦܢܣ, ܬܘܪܢ ܐܘܢ ܬܗ porch ܠܝܓܗܬ ܐܢܕ ܣܢܕ ܡ ܐ Telegram ܡܣܓ",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Each ܡܘܪܢܝܢܓ ܐܬ 8am, ܣܘܡܪܝܙ ܡܝ ܐܘܢܪܕ ܐܡܝܠ ܐܢܕ ܣܢܕ ܡ ܬܗ ܬܗܪ ܡܘܣܬ ܐܝܡܦܘܪܬܢܬ ܐܘܢ Telegram",
   "This program can: {things}": "This ܦܪܘܓܪܡ can: {things}",
-  "asks first": "ܐܣܟܣ first"
+  "asks first": "ܐܣܟܣ first",
+  "Connections": "ܥܠܩܬܐ",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn ܐܘܢ ܬܗ services ܬܗܝܣ computer ܐܘܣܣ. They ܐܦܪ ܐܝܢ ܬܗ Connections category; ܠܘܕܝܢܓ ܐ ܦܪܘܓܪܡ ܬܗܬ ܐܘܣܣ ܐܘܢ ܬܘܪܢܣ ܐܝܬ ܐܘܢ ܬܘܘ."
  },
  "examples": {
   "review": {

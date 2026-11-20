@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Quando si apre la porta d'ingresso, accendi la luce del portico e mandami un messaggio su Telegram",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Ogni mattina alle 8, riassumi le mie email non lette e mandami le tre più importanti su Telegram",
 "This program can: {things}":"Questo programma può: {things}",
-"asks first":"chiede prima"
+"asks first":"chiede prima",
+"Connections":"Connessioni",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Attiva qui i servizi che questo computer usa. Compaiono nella categoria Connessioni; caricare un programma che ne usa uno lo attiva anche."
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

@@ -1999,7 +1999,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "戶闥既啟，燃門廊之燈，以電訊報我",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "每日卯時，綜未覽之郵，擇其要者三，以電訊報我",
   "This program can: {things}": "此程序能為：{things}",
-  "asks first": "先問"
+  "asks first": "先問",
+  "Connections": "諸連",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "於此啟諸機關之所用者，現於「連接」之類；載一程式而用其一，亦自啟之。"
  },
  "examples": {
   "review": {

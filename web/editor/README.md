@@ -16,7 +16,7 @@ file needn't end where a function does, but it reads better if it does.
 | `00-start.js` | The editor's opening: shared limits and small helpers ($, STORE_KEY, MAX_*). Every file below runs inside the same function, so names declared in one are seen by the rest. |
 | `01-theme.js` | Colours and Blockly's theme. |
 | `02-blocks.js` | Every block's definition, and the long-text field. |
-| `03-toolbox.js` | The block palette (toolbox) and its categories. |
+| `03-toolbox.js` | The block palette (toolbox) and its categories; the one-service categories carry a `service` id and only show when turned on in Settings (#446). |
 | `04-examples.js` | Building example programs: the helpers the example library uses. |
 | `05-home-assistant.js` | Home Assistant on the page: the sample house, its blocks' behaviour and the safety rules (SAFETY, copied in by tools/sync.py). |
 | `06-example-library.js` | The example library, Home Assistant examples included. |
@@ -39,4 +39,5 @@ file needn't end where a function does, but it reads better if it does.
 | `23-gallery-share.js` | Offering a program to the community gallery: the Share… form, its card preview, and the prefilled issue form's address (#437). |
 | `23-first-screen.js` | The first screen for a browser with nothing kept: Describe it, six examples, open a file (#443). |
 | `23-acts.js` | What the program can act on before Run: the line under the controls and the mark on acting blocks (#448). |
+| `23-connections.js` | The Connections list in Settings: the checkboxes that turn a service's palette category on and off (#446). |
 | `23-schedules.js` | Schedules and listeners on the page, and the editor's closing line. |

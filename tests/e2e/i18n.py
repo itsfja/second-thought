@@ -58,8 +58,10 @@ def blockly_english():
 
 def same_export(files):
     """An export's files with what differs between any two exports taken out: the date, the blocks' random ids, the
-    note an example opens with (a comment on its first block, written in the page's language), and the words the
-    program prints in that language (EXPORT_LANGUAGE and EXPORT_WORDS, and the language line in its settings)."""
+    note an example opens with (a comment on its first block, written in the page's language), the blocks' x and y
+    (the toolbox's width follows its widest category label, so a font arriving late moves it and, on a right-to-left
+    page, shifts the saved positions a few pixels — layout, not program), and the words the program prints in that
+    language (EXPORT_LANGUAGE and EXPORT_WORDS, and the language line in its settings)."""
     out = {}
     for k, v in files.items():
         v = "\n".join(l for l in v.split("\n") if "Exported from Second Thought on" not in l and not l.startswith(("; language = en", "; language: ")))  # the line and its note (#338)
@@ -68,7 +70,7 @@ def same_export(files):
             code, rest = v.split(PY_MARK, 1)
             b64 = "".join(l[2:] for l in rest.split("# BLOCKS:", 1)[1].split("\n") if l.startswith("# "))
             blocks = json.loads(base64.b64decode(b64).decode("utf-8"))
-            strip = lambda o: {k_: strip(x) for k_, x in o.items() if k_ not in ("id", "icons")} if isinstance(o, dict) else [strip(x) for x in o] if isinstance(o, list) else o  # noqa: E731
+            strip = lambda o: {k_: strip(x) for k_, x in o.items() if k_ not in ("id", "icons", "x", "y")} if isinstance(o, dict) else [strip(x) for x in o] if isinstance(o, list) else o  # noqa: E731
             v = (code, strip(blocks))
         out[k] = v
     return out

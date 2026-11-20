@@ -1264,7 +1264,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":" kemah cualli in calli ipan tlaltikpak, xicpizqueh in tlapoyankeh huan xicmahuih in Telegram",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Moztlauhqui 8am, xicpiya ce tlahcuilolli ahmo ticmachitia huan xicmahuih in yeyi ocachi cualli inin Telegram",
 "This program can: {things}":"Inin programa hueli: {things}",
-"asks first":"achto tlahtlauhtia"
+"asks first":"achto tlahtlauhtia",
+"Connections":"Tlahtōlōhtli",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Xiquinpehualti nican in tlatequipaniliztli inin tlatqui quicui inin tlalticpacayo; hueli mo nextia ipan in tlahtolli Connectiones; hueli ticcuitia ce tlen nelli quicui ce, no xiquinpehualti."
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

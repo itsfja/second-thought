@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"When ⲧϩⲉ ϥⲣⲟⲛⲧ ⲇⲟⲟⲣ ⲟⲡⲉⲛⲥ, ⲧⲩⲣⲛ ⲟⲛ ⲧϩⲉ ⲡⲟⲣϭϩ ⲗⲓⲅϩⲧ ⲁⲛⲇ ⲥⲉⲛⲇ ⲙⲉ ⲁ Telegram ⲙⲉⲥⲥⲁⲅⲉ",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Each ⲙⲟⲣⲛⲓⲛⲅ ⲁⲧ 8am, ⲥⲩⲙⲙⲁⲣⲓⲍⲉ ⲙⲩ ⲩⲛⲣⲉⲁⲇ ⲉⲙⲁⲓⲗ ⲁⲛⲇ ⲥⲉⲛⲇ ⲙⲉ ⲧϩⲉ ⲧϩⲣⲉⲉ ⲙⲟⲥⲧ ⲓⲙⲡⲟⲣⲧⲁⲛⲧ ⲟⲛ Telegram",
 "This program can: {things}":"This ⲡⲣⲟⲅⲣⲁⲙ ϭⲁⲛ: {things}",
-"asks first":"ⲁⲥⲕⲥ ϥⲓⲣⲥⲧ"
+"asks first":"ⲁⲥⲕⲥ ϥⲓⲣⲥⲧ",
+"Connections":"ϩⲱⲧⲣ",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Turn ⲟⲛ ⲧϩⲉ services ⲧϩⲓⲥ ϭⲟⲙⲡⲩⲧⲉⲣ ⲩⲥⲉⲥ. They ⲁⲡⲡⲉⲁⲣ ⲓⲛ ⲧϩⲉ Connections ϭⲁⲧⲉⲅⲟⲣⲩ; ⲗⲟⲁⲇⲓⲛⲅ ⲁ ⲡⲣⲟⲅⲣⲁⲙ ⲧϩⲁⲧ ⲩⲥⲉⲥ ⲟⲛⲉ ⲧⲩⲣⲛⲥ ⲓⲧ ⲟⲛ ⲧⲟⲟ."
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},

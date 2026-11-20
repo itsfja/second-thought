@@ -1265,7 +1265,9 @@
 "When the front door opens, turn on the porch light and send me a Telegram message":"Cum foris aperitur, lucernam in vestibulo accende et mihi nuntium in Telegram mitte",
 "Each morning at 8am, summarize my unread email and send me the three most important on Telegram":"Quotidie hora 8, email mea non lecta recense et tria gravissima mihi in Telegram mitte",
 "This program can: {things}":"Hoc programma potest: {things}",
-"asks first":"primum rogat"
+"asks first":"primum rogat",
+"Connections":"Conexiones",
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Hic accende seruitia quibus hic computatrum utitur. In categoria Connexionum parentur; programma quod aliqua earum utitur, etiam accenditur."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

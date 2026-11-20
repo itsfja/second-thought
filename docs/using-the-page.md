@@ -31,7 +31,7 @@ The blocks are colour-coded by job:
 - **Pink**, under **Connections**, talks to Telegram, email, your calendar and news feeds.
 - **Green** shows the result.
 
-There are more categories down the left side of the screen.
+There are more categories down the left side of the screen. Fifteen of them are one service each — Home Assistant, Docker, Plex and the rest — and they show only when turned on: **Settings → Connections** lists them with a checkbox, and a service's category appears inside **Connections** on the left. Loading a program that uses a service turns it on too, and *Find a block* and *Describe a program* still reach every block whether it is on or not.
 
 **What the program can do.** Under the row of controls, a line always says what the program on the canvas can do, worked out from its blocks — *This program can: send email (asks first) · read your email and read your calendars* — and it changes as you add and remove blocks. Screen readers announce it. Every block that sends, changes or spends also carries a small shape in its corner: a **triangle** when that form asks you first, a **diamond** for the no-asking forms (the agent tools marked *no asking*). A shape, not a colour, so it reads in any theme and to anyone.
 

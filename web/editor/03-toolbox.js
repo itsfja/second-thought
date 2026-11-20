@@ -120,7 +120,7 @@
       B("rb_img_score", { CRITERIA:L("clear, appealing, easy to read at small size") }),
       B("rb_img_show"), B("rb_img_save")
     ]},
-    { kind:"category", name:"Home Assistant", categorystyle:"ha", contents:[
+    { kind:"category", name:"Home Assistant", categorystyle:"ha", service:"ha", contents:[
       B("rb_ha_when"), B("rb_ha_trigger"), B("rb_ha_event_when"), B("rb_event"),
       B("rb_ha_state", { ENTITY:K("sensor.living_room_temperature") }), B("rb_ha_attr", { ATTR:K("current_temperature"), ENTITY:K("climate.living_room") }),
       B("rb_ha_summary", { TEXT:K("temperature") }), B("rb_ha_find", { TEXT:K("light") }),
@@ -129,57 +129,116 @@
       B("rb_ha_notify", { TARGET:K("persistent_notification"), TEXT:L("The back door is still open.") }),
       B("rb_ha_speak", { TEXT:L("Good morning!"), PLAYER:K("media_player.kitchen_speaker") })
     ]},
-    { kind:"category", name:"Homey", categorystyle:"homey", contents:[
+    { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
       B("rb_homey_when"), B("rb_event"),
       B("rb_homey_find", { TEXT:K("light") }), B("rb_homey_value", { CAPABILITY:K("measure_temperature"), DEVICE:K("Proofing box") }),
       B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
       B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
     ]},
-    { kind:"category", name:"Coinbase", categorystyle:"coinbase", contents:[
+    { kind:"category", name:"Coinbase", categorystyle:"coinbase", service:"coinbase", contents:[
       B("rb_coinbase_balances"), B("rb_coinbase_value"), B("rb_coinbase_price", { PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
-    { kind:"category", name:"Docker", categorystyle:"docker", contents:[
+    { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
     ]},
-    { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", contents:[
+    { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", service:"sabnzbd", contents:[
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
-    { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", contents:[
+    { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
     ]},
-    { kind:"category", name:"Unraid", categorystyle:"unraid", contents:[
+    { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
       B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
       B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
     ]},
-    { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", contents:[
+    { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", service:"nzbgeek", contents:[
       B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
     ]},
-    { kind:"category", name:"Pi-hole", categorystyle:"pihole", contents:[
+    { kind:"category", name:"Pi-hole", categorystyle:"pihole", service:"pihole", contents:[
       B("rb_pihole_summary"), B("rb_pihole_top_domains", { N:N(5) }), B("rb_pihole_top_clients", { N:N(5) }),
       B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
       B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
     ]},
-    { kind:"category", name:"Plex", categorystyle:"plex", contents:[
+    { kind:"category", name:"Plex", categorystyle:"plex", service:"plex", contents:[
       B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
       B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
     ]},
-    { kind:"category", name:"Proxmox", categorystyle:"proxmox", contents:[
+    { kind:"category", name:"Proxmox", categorystyle:"proxmox", service:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},
-    { kind:"category", name:"UniFi", categorystyle:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
-    { kind:"category", name:"Solax", categorystyle:"solax", contents:[ B("rb_solax_now") ]},
+    { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
+    { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
     // sync:connections-toolbox-begin
-    { kind:"category", name:"Powerwall", categorystyle:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
+    { kind:"category", name:"Powerwall", categorystyle:"powerwall", service:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
     // sync:connections-toolbox-end
-    { kind:"category", name:"MikroTik", categorystyle:"mikrotik", contents:[
+    { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
     ]}
   ]};
+
+  /* ---------- The Connections list in Settings (#446) ----------
+     The palette has 37 categories, but fifteen of them are one service each. Those categories carry a `service`
+     id, and only the turned-on ones show, as sections inside the Connections category; the rest of the palette is
+     always there, and Find a block and Describe a program still reach every block (they read this same full
+     toolbox, not the one the workspace shows). The turned-on services are kept in the browser, and loading a
+     program that uses one turns it on (see load() in 08-workspace.js). */
+  const CONN_KEY = "second-thought-connections";
+  // The categories that are a single service, in palette order: { kind:"category", name, categorystyle, service, contents }.
+  function serviceCats(){ return toolbox.contents.filter(c => c.kind === "category" && c.service); }
+  // Block type -> the service its category belongs to. A block also listed in a core category (rb_event is in
+  // Connections, Home Assistant and Homey) belongs to no service: those categories are always shown anyway.
+  function serviceOfBlockType(){
+    const core = new Set();
+    toolbox.contents.forEach(c => { if (c.kind === "category" && !c.service) (c.contents || []).forEach(e => { if (e.kind === "block") core.add(e.type); }); });
+    const m = {};
+    serviceCats().forEach(c => (c.contents || []).forEach(e => { if (e.kind === "block" && !core.has(e.type)) m[e.type] = c.service; }));
+    return m;
+  }
+  // The agent's ready-made tools that use one of these services (the rest use the always-shown Connections blocks).
+  const KIND_SERVICE = { homey_read:"homey", homey_act:"homey", homey_act_free:"homey", ha_read:"ha", ha_act:"ha", ha_act_free:"ha" };
+  function serviceOfBlock(b){
+    if (!b) return null;
+    if (b.type === "rb_agent_builtin") return KIND_SERVICE[String(b.getFieldValue("KIND") || "")] || null;
+    return serviceOfBlockType()[b.type] || null;
+  }
+  function enabledServices(){
+    let a;
+    try { a = JSON.parse(localStorage.getItem(CONN_KEY) || "[]"); } catch(e) { return new Set(); }
+    if (!Array.isArray(a)) return new Set();
+    const ids = new Set(serviceCats().map(c => c.service));
+    return new Set(a.filter(x => ids.has(x)));
+  }
+  function saveEnabled(set){ try { localStorage.setItem(CONN_KEY, JSON.stringify([...set])); } catch(e) {} }
+  // The toolbox the workspace shows: the full palette with the service categories moved into Connections when on.
+  function visibleToolbox(){
+    const enabled = enabledServices(), svcs = serviceCats();
+    return { kind:"categoryToolbox", contents:toolbox.contents.map(c => {
+      if (c.kind !== "category") return c;
+      if (c.service) return null;
+      if (c.name !== "Connections") return c;
+      const extra = svcs.filter(s => enabled.has(s.service))
+        .map(s => ({ kind:"category", name:s.name, categorystyle:s.categorystyle, service:s.service, contents:s.contents }));
+      return Object.assign({}, c, { contents:(c.contents || []).concat(extra) });
+    }).filter(Boolean) };
+  }
+  function applyToolbox(){ try { ws.updateToolbox(localizeToolbox(visibleToolbox())); } catch(e) {} }
+  // Turn on every service the program on the canvas uses; called after each load(). Returns the newly enabled ids.
+  function enableServicesInWorkspace(){
+    const need = new Set();
+    (ws.getAllBlocks(false) || []).forEach(b => { const s = serviceOfBlock(b); if (s) need.add(s); });
+    if (!need.size) return [];
+    const en = enabledServices(), fresh = [];
+    need.forEach(s => { if (!en.has(s)) { en.add(s); fresh.push(s); } });
+    if (fresh.length) { saveEnabled(en); applyToolbox(); }
+    return fresh;
+  }
+  window.__services = () => ({ enabled:[...enabledServices()].sort(), cats:serviceCats().map(c => ({ id:c.service, name:c.name, blocks:(c.contents || []).filter(e => e.kind === "block").map(e => e.type) })) });
+  window.__visibleToolbox = () => visibleToolbox();
 

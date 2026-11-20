@@ -2009,7 +2009,9 @@
   "When the front door opens, turn on the porch light and send me a Telegram message": "Hwen þe front dor openaþ, turn on þe porch leo and send me a Telegram message",
   "Each morning at 8am, summarize my unread email and send me the three most important on Telegram": "Ælc morgen at 8am, Šea my unred email and send me þe þre heafodlicust on Telegram",
   "This program can: {things}": "Þis program mæg: {things}",
-  "asks first": "biddet ærest"
+  "asks first": "biddet ærest",
+  "Connections": "Gebindu",
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Wyrce her þa þegnas þe þes calc brýtt. Hīe ætīewað in þǣre floccunge þǣre conneccunga; gif þū hlǣdest forscrife þe brýtt ānne, is hēo onwyrned swā."
  },
  "examples": {
   "review": {
