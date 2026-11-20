@@ -71,6 +71,7 @@
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              // sync:connections-need-begin
+             nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
@@ -81,7 +82,6 @@
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
-             nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
@@ -154,10 +154,6 @@
       "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
       "; else is ever sent.",
       "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
-    if (need.nzbgeek) out.push("", "[nzbgeek]",
-      "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
-      "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
-      "NZBGEEK_API_KEY = ", "; NZBGEEK_URL = ", "; NZBGEEK_CERT_SHA256 = ");
     if (need.plex) out.push("", "[plex]",
       "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
       "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
@@ -184,6 +180,10 @@
       "; router's certificate fingerprint to pin.",
       "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
     // sync:connections-ini-begin
+    if (need.nzbgeek) out.push("", "[nzbgeek]",
+      "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
+      "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
+      "NZBGEEK_API_KEY = ", "; NZBGEEK_URL = ", "; NZBGEEK_CERT_SHA256 = ");
     if (need.pihole) out.push("", "[pihole]",
       "; Your Pi-hole (v6 or later), through its REST API: its address and its web interface's password. The blocks",
       "; read the stats and the top lists; blocking and the allow and deny lists ask first, and nothing else is",
@@ -543,7 +543,6 @@
         case "rb_unraid_shares": return "(await R.unraid_shares())";
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
-        case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_plex_server": return "(await R.plex_server())";
         case "rb_plex_libraries": return "(await R.plex_libraries())";
         case "rb_plex_sessions": return "(await R.plex_sessions())";
@@ -557,6 +556,7 @@
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-begin
+        case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_pihole_summary": return "(await R.pihole_summary())";
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
@@ -720,11 +720,11 @@
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
-        case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           // sync:connections-pyact-begin
+        case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
         case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;

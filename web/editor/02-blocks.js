@@ -156,7 +156,6 @@
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
-    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
     rb_plex_server:"plex_read", rb_plex_libraries:"plex_read", rb_plex_sessions:"plex_read", rb_plex_recent:"plex_read",
     rb_tautulli_history:"plex_read", rb_tautulli_watchtime:"plex_read", rb_plex_scan:"plex_control", rb_plex_stop:"plex_control",
     rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
@@ -167,6 +166,7 @@
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     // sync:connections-caps-begin
+    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
     rb_pihole_summary:"pihole_read", rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
     rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
     rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control",
@@ -577,11 +577,6 @@
       { style:"unraid", inputsInline:true, tooltip:"Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
     S("rb_unraid_parity", "check Unraid's parity", [],
       { style:"unraid", tooltip:"Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks." }),
-    /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
-    V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
-      tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),
-    S("rb_nzbgeek_fetch", "fetch the NZB for %1", [val("ID")],
-      { style:"nzbgeek", inputsInline:true, tooltip:"Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches." }),
     /* Plex and Tautulli (#402): reads, and changes that always ask */
     V("rb_plex_server", "Plex server", [], null, { style:"plex",
       tooltip:"One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server." }),
@@ -616,6 +611,11 @@
     V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     // sync:connections-defs-begin
+    /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
+    V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
+      tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),
+    S("rb_nzbgeek_fetch", "fetch the NZB for %1", [val("ID")],
+      { style:"nzbgeek", inputsInline:true, tooltip:"Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches." }),
     /* Pi-hole (#401): reads, and changes that always ask */
     V("rb_pihole_summary", "Pi-hole summary", [], null, { style:"pihole",
       tooltip:"One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking (whether blocking is on). Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. On this page it uses a sample Pi-hole." }),

@@ -273,6 +273,16 @@ class Doctor:
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
         # sync:connections-check-begin
+        if has("nzbgeek_read", "nzbgeek_fetch"):
+            async def nzbgeek():
+                raw = await self._nzbgeek({"t": "caps", "o": "json"})
+                caps = (json.loads(raw) if raw.strip() else {}).get("caps") or {}
+                server = (caps.get("server") or {}).get("@attributes") or {}
+                ret = caps.get("retention")
+                days = num((ret or {}).get("@attributes", {}).get("days")) if isinstance(ret, dict) else num(ret)
+                return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
+                    + ", " + tr("{n} days of retention", n=days or "?")
+            out.append(("NZBGeek", nzbgeek))
         if has("pihole_read", "pihole_control"):
             async def pihole():
                 s = await self._pihole("GET", "/api/stats/summary")
@@ -350,16 +360,6 @@ class Doctor:
                 return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
-        if has("nzbgeek_read", "nzbgeek_fetch"):
-            async def nzbgeek():
-                raw = await self._nzbgeek({"t": "caps", "o": "json"})
-                caps = (json.loads(raw) if raw.strip() else {}).get("caps") or {}
-                server = (caps.get("server") or {}).get("@attributes") or {}
-                ret = caps.get("retention")
-                days = num((ret or {}).get("@attributes", {}).get("days")) if isinstance(ret, dict) else num(ret)
-                return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
-                    + ", " + tr("{n} days of retention", n=days or "?")
-            out.append(("NZBGeek", nzbgeek))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -707,8 +707,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
                 "SABnzbd": "SABNZBD_URL",

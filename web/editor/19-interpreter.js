@@ -330,7 +330,6 @@
       case "rb_unraid_shares": return unraidShares();
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
-      case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_plex_server": return plexServer();
       case "rb_plex_libraries": return plexLibraries();
       case "rb_plex_sessions": return plexSessions();
@@ -344,6 +343,7 @@
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       // sync:connections-iread-begin
+      case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_pihole_summary": return piholeSummary();
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
@@ -1114,11 +1114,11 @@
       case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;
-      case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       // sync:connections-iact-begin
+      case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;
       case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
