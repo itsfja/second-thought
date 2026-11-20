@@ -77,14 +77,14 @@ RUN = """C:\\Users\\you\\review-loop>run.bat
 ▸ Review  [needs work]
     - Doesn't say why bakers use it.
     - Jargon: 'enzymes' and 'gluten' aren't explained for a beginner.
-    · Claude, quick (budget) · 2.1 s · 655 in, 61 out
+    · Claude, balanced (standard) · 2.1 s · 655 in, 61 out
 
 ▸ Revise to fix the problems  [revised]
     Autolyse is a rest you give flour and water before adding the salt and starter…
     · Claude, balanced (standard) · 7.4 s · 1,020 in, 341 out
 
 ▸ Review  [approved]
-    · Claude, quick (budget) · 1.9 s · 702 in, 12 out
+    · Claude, balanced (standard) · 1.9 s · 702 in, 12 out
 
 ============================================================
 RESULT
@@ -95,12 +95,12 @@ Done · 4 model calls · Claude: 2,789 tokens in, 700 out · about £0.01 at lis
 """
 DOCTOR = """C:\\Users\\you\\wallet-health-check>python wallet-health-check.py --doctor
 
-Checking wallet-health-check.py (runtime 3.11.0, Python 3.14.6).
+Checking wallet-health-check.py (runtime 3.13.0, Python 3.14.6).
 Only reading: nothing is sent, posted, switched or charged.
 
   ok    Python: 3.14.6
   ok    Currency: GBP, at the ECB rate of 2026-11-06 (1 US dollar = £0.75)
-  ok    Runtime: 3.11.0 is the latest
+  ok    Runtime: 3.13.0 is the latest
   ok    Settings: read C:\\Users\\you\\second-thought.ini + C:\\Users\\you\\wallet-health-check\\second-thought.ini
   ok    Keys: ANTHROPIC_API_KEY (C:\\Users\\you\\second-thought.ini), EMAIL_PASSWORD (the keychain)
   ok    Package anthropic: 2.3.0
@@ -181,6 +181,7 @@ async def page_shots():
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
+        await pg.evaluate("() => { document.getElementById('first').hidden = true; }")  # the pictures show the editor (#443)
         for name, toggle in (("examples", "#ex-toggle"), ("export", "#io-export"), ("home-assistant", "#ha-toggle")):
             await pg.click(toggle)
             await pg.wait_for_timeout(700)

@@ -62,6 +62,7 @@ async def record(frames: pathlib.Path):
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
+        await pg.evaluate("() => { document.getElementById('first').hidden = true; }")  # the pictures show the editor (#443)
         await pg.screenshot(path=str(OUT / "editor.png"))
         await shot(pg, 6)
         await pg.hover("#run")
@@ -73,12 +74,15 @@ async def record(frames: pathlib.Path):
             if n > 20 and await pg.is_disabled("#stop"):
                 break
         await shot(pg, 10)
-        await pg.hover("text=Import / export")
+        await pg.click("#menu-program summary")
+        await pg.wait_for_timeout(300)
         await shot(pg, 3)
-        await pg.click("text=Import / export")
+        await pg.hover("#io-export")
+        await shot(pg, 2)
+        await pg.click("#io-export")
         await pg.wait_for_timeout(600)
         await shot(pg, 4)
-        await pg.hover("text=Save Python (.zip)")
+        await pg.hover("#io-py-save")
         await shot(pg, 14)
         await browser.close()
 
@@ -107,6 +111,7 @@ async def card():
         await pg.add_init_script(MOCK)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
+        await pg.evaluate("() => { document.getElementById('first').hidden = true; }")  # the pictures show the editor (#443)
         await pg.click("#run")
         for _ in range(160):
             await pg.wait_for_timeout(250)

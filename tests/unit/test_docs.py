@@ -120,6 +120,22 @@ class DesignNotes(unittest.TestCase):
         for note in ("CONTRIBUTING.md", "CLAUDE.md", "MISTRAL.md"):
             self.assertIn("docs/design.md", (ROOT / note).read_text(encoding="utf-8"),
                           f"{note} links docs/design.md")
+class RecordedPictures(unittest.TestCase):
+    def test_terminal_picture_matches_the_default_run(self):
+        """The scripted terminal run in tools/record_docs.py (#454): every model line uses one price band — the review
+        on a cheaper model than the draft only happens when a program is told to (the reviewer setting) — and the
+        --doctor picture names the current runtime."""
+        from second_thought.settings import RUNTIME_VERSION
+        src = (ROOT / "tools" / "record_docs.py").read_text(encoding="utf-8")
+        def block(name):
+            start = src.index(name + ' = """') + len(name) + 4
+            return src[start:src.index('"""', start)]
+        bands = re.findall(r"Claude, [^(]+\((\w+)\)", block("RUN"))
+        self.assertTrue(bands and len(set(bands)) == 1,
+                        f"the terminal run's model lines share one price band (the default: review uses the draft's model): {bands}")
+        doctor = block("DOCTOR")
+        self.assertIn(f"runtime {RUNTIME_VERSION}", doctor,
+                      f"the --doctor picture names the current runtime {RUNTIME_VERSION}")
 
 
 if __name__ == "__main__":
