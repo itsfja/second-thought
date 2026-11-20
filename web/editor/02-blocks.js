@@ -167,11 +167,11 @@
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
-    rb_solax_now:"solax_read",
     // sync:connections-caps-begin
     rb_pihole_summary:"pihole_read", rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
     rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
     rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control",
+    rb_solax_now:"solax_read",
     // sync:connections-caps-end
   };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
@@ -623,9 +623,6 @@
       tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
     V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
-    /* Solax (#361): read only, from SolaxCloud */
-    V("rb_solax_now", "Solax figures", [], null, { style:"solax",
-      tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
     // sync:connections-defs-begin
     /* Pi-hole (#401): reads, and changes that always ask */
     V("rb_pihole_summary", "Pi-hole summary", [], null, { style:"pihole",
@@ -647,6 +644,9 @@
       tooltip:"A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall." }),
     S("rb_powerwall_reserve", "set Powerwall backup reserve to %1 %", [val("N")], { style:"powerwall", inputsInline:true,
       tooltip:"Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes." }),
+    /* Solax (#361): read only, from SolaxCloud */
+    V("rb_solax_now", "Solax figures", [], null, { style:"solax",
+      tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
     // sync:connections-defs-end
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",

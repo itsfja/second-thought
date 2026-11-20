@@ -1,1 +1,1 @@
-                "Powerwall": "POWERWALL_URL"
+                "Powerwall": "POWERWALL_URL",

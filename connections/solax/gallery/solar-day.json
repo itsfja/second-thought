@@ -1,0 +1,222 @@
+{
+ "format": "reflection-blocks",
+ "version": 1,
+ "name": "solar-day",
+ "gallery": {
+  "title": "How did the sun do today?",
+  "category": "home",
+  "description": "Each evening, reads the day's figures from your Solax inverter through SolaxCloud — generation, battery charge, import and export — and sends a Telegram message on how the day went, how it compares with yesterday, and one suggestion for tomorrow, like running the dishwasher at noon. It only reads.",
+  "tip": "Needs a free token from the API page of SolaxCloud and the dongle's Registration No. The first evening has no yesterday to compare with; from the second on it does.",
+  "author": "itsfja",
+  "runtime": "3.0.0"
+ },
+ "program": {
+  "blocks": {
+   "languageVersion": 0,
+   "blocks": [
+    {
+     "type": "rb_start",
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "solar"
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 30,
+     "y": 30
+    },
+    {
+     "type": "rb_when_time",
+     "fields": {
+      "HOUR": 18,
+      "MINUTE": 0,
+      "DAYS": "every"
+     },
+     "next": {
+      "block": {
+       "type": "rb_broadcast_wait",
+       "inputs": {
+        "MSG": {
+         "shadow": {
+          "type": "text",
+          "fields": {
+           "TEXT": "solar"
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 550,
+     "y": 30
+    },
+    {
+     "type": "rb_receive",
+     "fields": {
+      "MSG": "solar"
+     },
+     "next": {
+      "block": {
+       "type": "variables_set",
+       "fields": {
+        "VAR": {
+         "id": "g_figures"
+        }
+       },
+       "inputs": {
+        "VALUE": {
+         "block": {
+          "type": "rb_solax_now"
+         }
+        }
+       },
+       "next": {
+        "block": {
+         "type": "variables_set",
+         "fields": {
+          "VAR": {
+           "id": "g_summary"
+          }
+         },
+         "inputs": {
+          "VALUE": {
+           "block": {
+            "type": "rb_ask",
+            "inputs": {
+             "TEXT": {
+              "block": {
+               "type": "text_join",
+               "inputs": {
+                "ADD0": {
+                 "shadow": {
+                  "type": "rb_longtext",
+                  "fields": {
+                   "TEXT": "Here are my Solax inverter's figures for today (SolaxCloud updates them about every five minutes, so this is the evening as it stands). In under 120 words, say how the day went: how much was generated, whether the battery is comfortably full for the evening, and how the import and export look. Then one line comparing it with yesterday's figures, if there are any, and one suggestion for tomorrow, like running the dishwasher at noon.\n\nFigures now:\n"
+                  }
+                 }
+                },
+                "ADD1": {
+                 "block": {
+                  "type": "variables_get",
+                  "fields": {
+                   "VAR": {
+                    "id": "g_figures"
+                   }
+                  }
+                 }
+                },
+                "ADD2": {
+                 "shadow": {
+                  "type": "rb_longtext",
+                  "fields": {
+                   "TEXT": "\n\nYesterday's figures (empty the first day):\n"
+                  }
+                 }
+                },
+                "ADD3": {
+                 "block": {
+                  "type": "rb_mem_get",
+                  "inputs": {
+                   "NAME": {
+                    "shadow": {
+                     "type": "text",
+                     "fields": {
+                      "TEXT": "Solax figures yesterday"
+                     }
+                    }
+                   }
+                  }
+                 }
+                }
+               },
+               "extraState": {
+                "itemCount": 4
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       },
+       "next": {
+        "block": {
+         "type": "rb_mem_set",
+         "fields": {
+          "KIND": "permanent"
+         },
+         "inputs": {
+          "NAME": {
+           "shadow": {
+            "type": "text",
+            "fields": {
+             "TEXT": "Solax figures yesterday"
+            }
+           }
+          },
+          "VALUE": {
+           "block": {
+            "type": "variables_get",
+            "fields": {
+             "VAR": {
+              "id": "g_figures"
+             }
+            }
+           }
+          }
+         },
+         "next": {
+          "block": {
+           "type": "rb_tg_send",
+           "inputs": {
+            "TEXT": {
+             "block": {
+              "type": "variables_get",
+              "fields": {
+               "VAR": {
+                "id": "g_summary"
+               }
+              }
+             }
+            }
+           },
+           "next": {
+            "block": {
+             "type": "rb_finish_with",
+             "inputs": {
+              "TEXT": {
+               "block": {
+                "type": "variables_get",
+                "fields": {
+                 "VAR": {
+                  "id": "g_summary"
+                 }
+                }
+               }
+              }
+             }
+            }
+           }
+          }
+         }
+        }
+       }
+      }
+     },
+     "x": 30,
+     "y": 290
+    }
+   ]
+  }
+ }
+}
