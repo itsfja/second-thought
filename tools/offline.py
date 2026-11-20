@@ -6,8 +6,9 @@ release by the Release workflow.
 Blockly, its multiline field, Blockly's words for each language and every language file of the page go inside the
 file, each library checked against its fingerprint in tools/sri.json first, so a changed copy is refused. Off claude.ai
 the page needs your own key to run programs (#293, #321), as on GitHub Pages, and it carries the same
-Content-Security-Policy. The PDF reader still loads from its CDN when a program reads a PDF, so offline that's the one
-thing it can't do; fonts for scripts many computers lack (Linear B, cuneiform) also come from the web.
+Content-Security-Policy. The page's three typefaces go inside too, as data: URIs (#453), so the policy's font-src
+adds data:. The PDF reader still loads from its CDN when a program reads a PDF, so offline that's the one thing it
+can't do; fonts for scripts many computers lack (Linear B, cuneiform) also come from the web.
 """
 import base64
 import hashlib
@@ -17,6 +18,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
+import fonts as fonts_tool  # noqa: E402
 import pages  # noqa: E402
 import sync  # noqa: E402
 
@@ -59,8 +61,11 @@ def build(out):
     page = page.replace(marker, "\n".join(parts) + "\n" + marker)
     if re.search(r'^<script src="https://', page, re.M):
         sys.exit("A library is still loaded from the CDN; tools/offline.py needs to put it inside too.")
+    # The three typefaces inside as data: URIs (#453), their files pinned in tools/fonts.sha384.json and refused if changed
+    page = fonts_tool.swap_google_fonts(page, "<style>\n" + fonts_tool.css(inline=True) + "</style>")
     out = pathlib.Path(out)
-    out.write_text(pages.HEAD.replace("{csp}", pages.csp(page)) + page + pages.TAIL, encoding="utf-8")
+    policy = pages.csp(page).replace("font-src 'self'", "font-src 'self' data:")
+    out.write_text(pages.HEAD.replace("{csp}", policy) + page + pages.TAIL, encoding="utf-8")
     return out
 
 
