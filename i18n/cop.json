@@ -2002,7 +2002,11 @@
   "This program can: {things}": "This ⲡⲣⲟⲅⲣⲁⲙ ϭⲁⲛ: {things}",
   "asks first": "ⲁⲥⲕⲥ ϥⲓⲣⲥⲧ",
   "Connections": "ϩⲱⲧⲣ",
-  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn ⲟⲛ ⲧϩⲉ services ⲧϩⲓⲥ ϭⲟⲙⲡⲩⲧⲉⲣ ⲩⲥⲉⲥ. They ⲁⲡⲡⲉⲁⲣ ⲓⲛ ⲧϩⲉ Connections ϭⲁⲧⲉⲅⲟⲣⲩ; ⲗⲟⲁⲇⲓⲛⲅ ⲁ ⲡⲣⲟⲅⲣⲁⲙ ⲧϩⲁⲧ ⲩⲥⲉⲥ ⲟⲛⲉ ⲧⲩⲣⲛⲥ ⲓⲧ ⲟⲛ ⲧⲟⲟ."
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn ⲟⲛ ⲧϩⲉ services ⲧϩⲓⲥ ϭⲟⲙⲡⲩⲧⲉⲣ ⲩⲥⲉⲥ. They ⲁⲡⲡⲉⲁⲣ ⲓⲛ ⲧϩⲉ Connections ϭⲁⲧⲉⲅⲟⲣⲩ; ⲗⲟⲁⲇⲓⲛⲅ ⲁ ⲡⲣⲟⲅⲣⲁⲙ ⲧϩⲁⲧ ⲩⲥⲉⲥ ⲟⲛⲉ ⲧⲩⲣⲛⲥ ⲓⲧ ⲟⲛ ⲧⲟⲟ.",
+  "Review loop": "ⲥⲁ ⲛⲩ ⲕⲓ",
+  "{n} problems": "{n} ⲥⲁ ⲛⲩ",
+  "Revision, round {n}": "{n} ⲥⲁ ⲛⲩ",
+  "Fixing: {problems}": "ⲛⲩ {problems}"
  },
  "examples": {
   "review": {

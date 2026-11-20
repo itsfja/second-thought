@@ -1268,7 +1268,11 @@
 "This program can: {things}":"התוכנית יכולה: {things}",
 "asks first":"שואלת קודם",
 "Connections":"חיבורים",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"הפעילו כאן את השירותים שהמחשב הזה משתמש בהם. הם מופיעים בקטגוריית החיבורים; טעינת תוכנית שמשתמשת באחד מדליקה גם"
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"הפעילו כאן את השירותים שהמחשב הזה משתמש בהם. הם מופיעים בקטגוריית החיבורים; טעינת תוכנית שמשתמשת באחד מדליקה גם",
+"Review loop":"לולאת ביקורת",
+"{n} problems":"{n} בעיות",
+"Revision, round {n}":"תיקון, סיבוב {n}",
+"Fixing: {problems}":"מתקן: {problems}"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

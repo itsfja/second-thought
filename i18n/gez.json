@@ -2012,7 +2012,11 @@
   "This program can: {things}": "Tሂስ pሮgረም caን: {things}",
   "asks first": "aስክስ fiርስት",
   "Connections": "ተራክቦታት",
-  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn 𐠃𐠊 𐠃𐠓𐠁 𐠠𐠁𐠦𐠁𐠂𐠉𐠁𐠠 𐠃𐠓𐠂𐠠 𐠉𐠃𐠘𐠙𐠄𐠃𐠁𐠦 𐠄𐠠𐠁𐠠. They 𐠀𐠙𐠙𐠁𐠀𐠦 𐠂𐠊 𐠃𐠓𐠁 Connections 𐠉𐠀𐠃𐠁𐠌𐠃𐠦𐠅; 𐠇𐠃𐠀𐠕𐠂𐠊𐠌 𐠀 𐠙𐠦𐠃𐠌𐠦𐠀𐠘 𐠃𐠓𐠀𐠃 𐠄𐠠𐠁𐠠 𐠃𐠊𐠁 𐠃𐠄𐠦𐠊𐠠 𐠂𐠃 𐠃𐠊 𐠃𐠃𐠃."
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn 𐠃𐠊 𐠃𐠓𐠁 𐠠𐠁𐠦𐠁𐠂𐠉𐠁𐠠 𐠃𐠓𐠂𐠠 𐠉𐠃𐠘𐠙𐠄𐠃𐠁𐠦 𐠄𐠠𐠁𐠠. They 𐠀𐠙𐠙𐠁𐠀𐠦 𐠂𐠊 𐠃𐠓𐠁 Connections 𐠉𐠀𐠃𐠁𐠌𐠃𐠦𐠅; 𐠇𐠃𐠀𐠕𐠂𐠊𐠌 𐠀 𐠙𐠦𐠃𐠌𐠦𐠀𐠘 𐠃𐠓𐠀𐠃 𐠄𐠠𐠁𐠠 𐠃𐠊𐠁 𐠃𐠄𐠦𐠊𐠠 𐠂𐠃 𐠃𐠊 𐠃𐠃𐠃.",
+  "Review loop": "Review 𐠇𐠃𐠃𐠙",
+  "{n} problems": "{n} 𐠙𐠦𐠃𐠁𐠇𐠁𐠘𐠠",
+  "Revision, round {n}": "Revision, 𐠦𐠃𐠄𐠊𐠕 {n}",
+  "Fixing: {problems}": "Fixing: {problems}"
  },
  "examples": {
   "review": {

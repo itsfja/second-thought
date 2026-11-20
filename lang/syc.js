@@ -1268,7 +1268,11 @@
 "This program can: {things}":"This ܦܪܘܓܪܡ can: {things}",
 "asks first":"ܐܣܟܣ first",
 "Connections":"ܥܠܩܬܐ",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Turn ܐܘܢ ܬܗ services ܬܗܝܣ computer ܐܘܣܣ. They ܐܦܪ ܐܝܢ ܬܗ Connections category; ܠܘܕܝܢܓ ܐ ܦܪܘܓܪܡ ܬܗܬ ܐܘܣܣ ܐܘܢ ܬܘܪܢܣ ܐܝܬ ܐܘܢ ܬܘܘ."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Turn ܐܘܢ ܬܗ services ܬܗܝܣ computer ܐܘܣܣ. They ܐܦܪ ܐܝܢ ܬܗ Connections category; ܠܘܕܝܢܓ ܐ ܦܪܘܓܪܡ ܬܗܬ ܐܘܣܣ ܐܘܢ ܬܘܪܢܣ ܐܝܬ ܐܘܢ ܬܘܘ.",
+"Review loop":"ܣ ܢܘ ܟܝ",
+"{n} problems":"{n} ܣ ܢܘ",
+"Revision, round {n}":"{n} ܣ ܢܘ",
+"Fixing: {problems}":"ܢܘ {problems}"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},

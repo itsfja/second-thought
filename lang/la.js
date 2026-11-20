@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Hoc programma potest: {things}",
 "asks first":"primum rogat",
 "Connections":"Conexiones",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Hic accende seruitia quibus hic computatrum utitur. In categoria Connexionum parentur; programma quod aliqua earum utitur, etiam accenditur."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Hic accende seruitia quibus hic computatrum utitur. In categoria Connexionum parentur; programma quod aliqua earum utitur, etiam accenditur.",
+"Review loop":"circulus revisionis",
+"{n} problems":"{n} problemata",
+"Revision, round {n}":"emendatio, circuitu {n}",
+"Fixing: {problems}":"emendatio: {problems}"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

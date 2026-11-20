@@ -1268,7 +1268,11 @@
 "This program can: {things}":"This प्रोग्रम् चन्: {things}",
 "asks first":"अस्क्स् fiर्स्त्",
 "Connections":"सम्बन्धाः",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"अतरअ सअमगअनअकअह उपअयउकतअम सएवअह अरअमभअ. तअ सअमयओगएसउ दअरसयअतए; यअम कइमचइत यओजअनअम एकएनअ सएवअयअ उपअयउकतअम, तअत अपइ अरअमभअतए."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"अतरअ सअमगअनअकअह उपअयउकतअम सएवअह अरअमभअ. तअ सअमयओगएसउ दअरसयअतए; यअम कइमचइत यओजअनअम एकएनअ सएवअयअ उपअयउकतअम, तअत अपइ अरअमभअतए.",
+"Review loop":"\\u0938\\u0905\\u092e\\u0908\\u0915\\u0936\\u0905-\\u091a\\u0905\\u0915\\u0930\\u0905\\u092e",
+"{n} problems":"{n} \\u0938\\u0905\\u092e\\u0905\\u0938\\u092f\\u0906\\u0939",
+"Revision, round {n}":"{n} \\u091a\\u0905\\u0915\\u0930\\u090f \\u0938\\u0905\\u092e\\u0938\\u0915\\u0905\\u0930\\u0905\\u0923\\u0905\\u092e",
+"Fixing: {problems}":"\\u0938\\u0905\\u092e\\u0938\\u0915\\u0905\\u0930\\u0905\\u0923\\u0905\\u092e: {problems}"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

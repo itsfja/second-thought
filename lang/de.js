@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Dieses Programm kann: {things}",
 "asks first":"fragt zuerst",
 "Connections":"Verbindungen",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Schalte hier die Dienste ein, die dieser Computer nutzt. Sie erscheinen in der Kategorie Verbindungen; ein Programm, das einen nutzt, schaltet ihn beim Laden automatisch ein."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Schalte hier die Dienste ein, die dieser Computer nutzt. Sie erscheinen in der Kategorie Verbindungen; ein Programm, das einen nutzt, schaltet ihn beim Laden automatisch ein.",
+"Review loop":"Prüfschleife",
+"{n} problems":"{n} Probleme",
+"Revision, round {n}":"Überarbeitung, Runde {n}",
+"Fixing: {problems}":"Korrigiert: {problems}"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

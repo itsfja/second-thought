@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Este programa pode: {things}",
 "asks first":"pergunta primeiro",
 "Connections":"Ligações",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ative aqui os serviços que este computador usa. Eles aparecem na categoria Ligações; ao carregar um programa que usa um, ele também é ativado."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ative aqui os serviços que este computador usa. Eles aparecem na categoria Ligações; ao carregar um programa que usa um, ele também é ativado.",
+"Review loop":"Ciclo de revisão",
+"{n} problems":"{n} problemas",
+"Revision, round {n}":"Revisão, rodada {n}",
+"Fixing: {problems}":"Corrigindo: {problems}"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},

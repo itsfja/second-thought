@@ -1267,7 +1267,11 @@
 "This program can: {things}":"Τόδε τὸ πρόγραμμα δύναται: {things}",
 "asks first":"πρῶτον ἐρωτᾷ",
 "Connections":"Δεσμοί",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ἅπτεν ἐνθάδε τῶν ὑπηρεσιῶν αἷς χρῆται ὁ ὑπολογιστής. Αὗται φαίνονται ἐν τῇ κατηγορίᾳ τῶν συνδέσεων· προγράμματος δὲ φορτιζομένου μιᾶς ἐξ αὐτῶν, ἐκείνη ἅπτεται."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"Ἅπτεν ἐνθάδε τῶν ὑπηρεσιῶν αἷς χρῆται ὁ ὑπολογιστής. Αὗται φαίνονται ἐν τῇ κατηγορίᾳ τῶν συνδέσεων· προγράμματος δὲ φορτιζομένου μιᾶς ἐξ αὐτῶν, ἐκείνη ἅπτεται.",
+"Review loop":"βρόχος ἀναθεωρήσεως",
+"{n} problems":"{n} προβλήματα",
+"Revision, round {n}":"ἀναθεώρησις, γύρος {n}",
+"Fixing: {problems}":"διόρθωσις: {problems}"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

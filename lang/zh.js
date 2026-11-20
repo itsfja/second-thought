@@ -1267,7 +1267,11 @@
 "This program can: {things}":"此程序可以：{things}",
 "asks first":"先询问",
 "Connections":"连接",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"在此开启这台电脑使用的服务。开启的服务会显示在“连接”分类里；加载使用某个服务的程序时，也会自动开启。"
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"在此开启这台电脑使用的服务。开启的服务会显示在“连接”分类里；加载使用某个服务的程序时，也会自动开启。",
+"Review loop":"审查循环",
+"{n} problems":"{n} 个问题",
+"Revision, round {n}":"修订，第 {n} 轮",
+"Fixing: {problems}":"正在修正：{problems}"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

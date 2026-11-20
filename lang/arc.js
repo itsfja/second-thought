@@ -1268,7 +1268,11 @@
 "This program can: {things}":"ܗܢܐ ܦܪܘܓܪܡܐ ܝܟܠ: {things}",
 "asks first":"ܫܐܠ ܩܕܡ",
 "Connections":"קשרין",
-"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"ܐܦܥܠ ܗܪܟܐ ܬܘܟ̈ܠܝܬܐ ܕܐܫܬܡܫ ܗܢܐ ܡܚܫܒܢܐ. ܡܬܚܙܝܢ ܒܩܛܓܘܪܝܐ ܕܩܘܫܪ̈ܐ; ܡܛܥܢ ܬܘܟ̈ܠܬܐ ܕܐܫܬܡܫ ܒܚܕܬܐ ܐܦܥܠ ܗܘ."
+"Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.":"ܐܦܥܠ ܗܪܟܐ ܬܘܟ̈ܠܝܬܐ ܕܐܫܬܡܫ ܗܢܐ ܡܚܫܒܢܐ. ܡܬܚܙܝܢ ܒܩܛܓܘܪܝܐ ܕܩܘܫܪ̈ܐ; ܡܛܥܢ ܬܘܟ̈ܠܬܐ ܕܐܫܬܡܫ ܒܚܕܬܐ ܐܦܥܠ ܗܘ.",
+"Review loop":"ܥܖܪܐ ܣܘܦܓܐ",
+"{n} problems":"{n} ܒܥܘܪ̈ܐ",
+"Revision, round {n}":"ܫܘܥܠܦܐ ܒܥܖܪܐ {n}",
+"Fixing: {problems}":"ܪܩܘܠܐ: {problems}"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

@@ -1032,6 +1032,9 @@
         const max = Math.max(1, Math.min(6, Math.round(num(await input(b, tc, "ROUNDS", 3))) || 3));
         const before = run.reflect;
         run.reflect = { earlier:[], best:null, round:0, same:0, lastUnmet:[], rounds:[], table:null };
+        // the rounds as a strip at the top of the loop's log entry (#449)
+        const strip = addStep(tr("Review loop"), {});
+        const stripEl = document.createElement("div"); stripEl.className = "rounds-strip"; strip.body.appendChild(stripEl);
         try {
           for (let round = 1; round <= max + 1; round++) {
             mark(b);
@@ -1040,6 +1043,7 @@
             if (!run.reflect.table) run.reflect.table = addStep(tr("Rules by round"), {});
             run.reflect.table.table(rulesTableRows(run.reflect));
             run.reflect.table.done(tr("met {n} of {total}", { n:run.reflect.rounds[run.reflect.rounds.length - 1].verdicts.filter(v => v.met).length, total:(run.reflect.best || {}).total || 0 }), "ok");
+            renderRoundsStrip(stripEl, run.reflect);
             if (approved) break;
             if (round > max) {
               step.done("failed, out of rounds", "bad"); run.outOfRounds = true;
@@ -1057,9 +1061,29 @@
               addStep("Review stuck", { text:tr("The same rule failed in two rounds running, so revising can't fix it. The program may need something it wasn't given, such as a web page, a file or a fact: give it that (in the task, say, or through an agent that can read web pages), then run again.") }).done("stuck", "warn");
               break;
             }
+            const draftBefore = run.draft;
             if ((await body(b, "FIX", tc)) === "break") break;
+            // what the revision changed, as a +/− diff tied to this round's problems (#449)
+            if (run.draft !== draftBefore) {
+              const rstep = addStep(tr("Revision, round {n}", { n:run.reflect.round }), {});
+              if (run.problems.length) {
+                const why = document.createElement("div"); why.className = "diff-why";
+                why.textContent = tr("Fixing: {problems}", { problems:run.problems.join("; ") });
+                rstep.body.appendChild(why);
+              }
+              const dl = document.createElement("div"); dl.className = "diff";
+              diffLines(draftBefore, run.draft).forEach(d => {
+                if (d.type === "same") return;
+                const row = document.createElement("div");
+                row.className = "diff-" + d.type;
+                row.textContent = (d.type === "add" ? "+ " : "− ") + d.text;
+                dl.appendChild(row);
+              });
+              rstep.body.appendChild(dl);
+              rstep.done(tr("revised"), "ok");
+            }
           }
-        } finally { run.reflect = before; }
+        } finally { strip.done(run.approved ? tr("approved") : tr("needs work"), run.approved ? "ok" : "warn"); run.reflect = before; }
         break;
       }
       case "rb_ask_me": { run.answer = await askPerson(str(await input(b, tc, "TEXT"))); break; }
@@ -1234,10 +1258,10 @@
     const body = el.querySelector(".step-body"), actions = el.querySelector(".result-actions");
     items.forEach((it, i) => {
       if (isImg(it)) { const im = document.createElement("img"); im.src = it.url; im.alt = it.name; im.className = "pic"; body.appendChild(im); }
-      else { const p = document.createElement("div"); p.className = "result-text"; p.textContent = it; body.appendChild(p); }
+      else { const p = document.createElement("div"); p.className = "result-text md"; renderMarkdownInto(p, it); body.appendChild(p); }  // Markdown, sanitised (#449)
     });
     if (text) {
-      const copy = document.createElement("button"); copy.type = "button"; copy.textContent = pics.length ? "Copy text" : "Copy result";
+      const copy = document.createElement("button"); copy.type = "button"; copy.textContent = tr("Copy as text");  // the raw Markdown beside the rendered result (#449)
       copy.onclick = async () => {
         try { await navigator.clipboard.writeText(text); copy.textContent = tr("Copied"); }
         catch(e) { const r = document.createRange(); r.selectNodeContents(body); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); copy.textContent = tr("Selected, press Ctrl+C"); }

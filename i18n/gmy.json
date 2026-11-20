@@ -2012,7 +2012,11 @@
   "This program can: {things}": "𐀭 𐀐 {things}",
   "asks first": "𐀭",
   "Connections": "𐀆𐀰𐀗",
-  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn on the services this computer uses. They appear in the Connections category; loading 𐀀 program that uses one turns it on too."
+  "Turn on the services this computer uses. They appear in the Connections category; loading a program that uses one turns it on too.": "Turn on the services this computer uses. They appear in the Connections category; loading 𐀀 program that uses one turns it on too.",
+  "Review loop": "𐀭 𐀝 𐀑",
+  "{n} problems": "{n} 𐀭 𐀝",
+  "Revision, round {n}": "{n} 𐀭 𐀝",
+  "Fixing: {problems}": "𐀝 {problems}"
  },
  "examples": {
   "review": {
