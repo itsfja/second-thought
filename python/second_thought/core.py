@@ -128,14 +128,6 @@ SAFETY = {
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
     "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
     "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
-    # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
-    # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
-    # settings.
-    "pihole_free": [["GET", r"^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"],
-                    ["POST", r"^/api/auth$"]],
-    "pihole_asks": [["POST", r"^/api/dns/blocking$"],
-                    ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
-                    ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
     # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
     # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
@@ -148,6 +140,14 @@ SAFETY = {
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-begin
+    # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
+    # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
+    # settings.
+    "pihole_free": [["GET", r"^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"],
+                    ["POST", r"^/api/auth$"]],
+    "pihole_asks": [["POST", r"^/api/dns/blocking$"],
+                    ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
+                    ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
@@ -271,6 +271,15 @@ def coinbase_money(method, path):
 
 
 # sync:connections-fns-begin
+def pihole_call(method, path):
+    """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
+    signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
+    deny list), and None for anything else, which is never sent (#401)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
+            return kind
+    return None
 def powerwall_allowed(method, path, approved=False):
     """True for one of the few Tesla gateway calls the runtime makes (#362): the reads in powerwall_free, and the
     backup reserve change in powerwall_asks, only after the person's yes."""
@@ -328,16 +337,6 @@ def arr_call(method, path):
             return kind
     return None
 
-
-def pihole_call(method, path):
-    """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
-    signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
-    deny list), and None for anything else, which is never sent (#401)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
-            return kind
-    return None
 
 
 def plex_call(method, path):
@@ -916,8 +915,8 @@ CAPABILITIES = [
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
-    ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -932,9 +931,9 @@ CAPABILITIES = [
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
-    ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     # sync:connections-capabilities-read-begin
+    ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),

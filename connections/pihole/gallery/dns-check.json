@@ -1,0 +1,505 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "dns-check",
+  "gallery": {
+    "title": "DNS check",
+    "category": "home",
+    "description": "Each morning, reads your Pi-hole: today's queries and blocked share, the most-blocked domain, and whether blocking is on, and sends you a Telegram message, with a warning if blocking is off. It only reads: nothing is disabled or enabled.",
+    "tip": "Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. Change 1 to report more blocked domains.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_summary",
+        "name": "summary"
+      },
+      {
+        "id": "g_top",
+        "name": "top"
+      },
+      {
+        "id": "g_one",
+        "name": "one"
+      },
+      {
+        "id": "g_report",
+        "name": "report"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 8,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "check"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_summary"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_pihole_summary"
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_top"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_pihole_top_domains",
+                        "inputs": {
+                          "N": {
+                            "shadow": {
+                              "type": "math_number",
+                              "fields": {
+                                "NUM": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_report"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "text_join",
+                            "inputs": {
+                              "ADD0": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": "Pi-hole overnight: "
+                                  }
+                                }
+                              },
+                              "ADD1": {
+                                "block": {
+                                  "type": "rb_rec_get",
+                                  "inputs": {
+                                    "KEY": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "queries"
+                                        }
+                                      }
+                                    },
+                                    "REC": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_summary"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD2": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": " queries, "
+                                  }
+                                }
+                              },
+                              "ADD3": {
+                                "block": {
+                                  "type": "rb_rec_get",
+                                  "inputs": {
+                                    "KEY": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "blocked"
+                                        }
+                                      }
+                                    },
+                                    "REC": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_summary"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD4": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": " blocked ("
+                                  }
+                                }
+                              },
+                              "ADD5": {
+                                "block": {
+                                  "type": "rb_rec_get",
+                                  "inputs": {
+                                    "KEY": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "blocked_pct"
+                                        }
+                                      }
+                                    },
+                                    "REC": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_summary"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "ADD6": {
+                                "shadow": {
+                                  "type": "rb_longtext",
+                                  "fields": {
+                                    "TEXT": " %)"
+                                  }
+                                }
+                              }
+                            },
+                            "extraState": {
+                              "itemCount": 7
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "controls_forEach",
+                          "fields": {
+                            "VAR": {
+                              "id": "g_one"
+                            }
+                          },
+                          "inputs": {
+                            "LIST": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_top"
+                                  }
+                                }
+                              }
+                            },
+                            "DO": {
+                              "block": {
+                                "type": "variables_set",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_report"
+                                  }
+                                },
+                                "inputs": {
+                                  "VALUE": {
+                                    "block": {
+                                      "type": "text_join",
+                                      "inputs": {
+                                        "ADD0": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_report"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD1": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "\nMost blocked: "
+                                            }
+                                          }
+                                        },
+                                        "ADD2": {
+                                          "block": {
+                                            "type": "rb_rec_get",
+                                            "inputs": {
+                                              "KEY": {
+                                                "shadow": {
+                                                  "type": "text",
+                                                  "fields": {
+                                                    "TEXT": "domain"
+                                                  }
+                                                }
+                                              },
+                                              "REC": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_one"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD3": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": " ("
+                                            }
+                                          }
+                                        },
+                                        "ADD4": {
+                                          "block": {
+                                            "type": "rb_rec_get",
+                                            "inputs": {
+                                              "KEY": {
+                                                "shadow": {
+                                                  "type": "text",
+                                                  "fields": {
+                                                    "TEXT": "count"
+                                                  }
+                                                }
+                                              },
+                                              "REC": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_one"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD5": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": " times)"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "extraState": {
+                                        "itemCount": 6
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "controls_if",
+                              "inputs": {
+                                "IF0": {
+                                  "block": {
+                                    "type": "logic_negate",
+                                    "inputs": {
+                                      "BOOL": {
+                                        "block": {
+                                          "type": "rb_rec_get",
+                                          "inputs": {
+                                            "KEY": {
+                                              "shadow": {
+                                                "type": "text",
+                                                "fields": {
+                                                  "TEXT": "blocking"
+                                                }
+                                              }
+                                            },
+                                            "REC": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_summary"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "DO0": {
+                                  "block": {
+                                    "type": "variables_set",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_report"
+                                      }
+                                    },
+                                    "inputs": {
+                                      "VALUE": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_report"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "\nWarning: Pi-hole's blocking is off!"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 2
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_tg_send",
+                                  "inputs": {
+                                    "TEXT": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_report"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "rb_finish_with",
+                                      "inputs": {
+                                        "TEXT": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_report"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 190
+        }
+      ]
+    }
+  }
+}

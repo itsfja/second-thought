@@ -157,11 +157,6 @@
     { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", service:"nzbgeek", contents:[
       B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
     ]},
-    { kind:"category", name:"Pi-hole", categorystyle:"pihole", service:"pihole", contents:[
-      B("rb_pihole_summary"), B("rb_pihole_top_domains", { N:N(5) }), B("rb_pihole_top_clients", { N:N(5) }),
-      B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
-      B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
-    ]},
     { kind:"category", name:"Plex", categorystyle:"plex", service:"plex", contents:[
       B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
@@ -173,6 +168,11 @@
     { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
     // sync:connections-toolbox-begin
+    { kind:"category", name:"Pi-hole", categorystyle:"pihole", service:"pihole", contents:[
+      B("rb_pihole_summary"), B("rb_pihole_top_domains", { N:N(5) }), B("rb_pihole_top_clients", { N:N(5) }),
+      B("rb_pihole_blocking", { N:N(60) }), B("rb_pihole_enable"),
+      B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
+    ]},
     { kind:"category", name:"Powerwall", categorystyle:"powerwall", service:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
     // sync:connections-toolbox-end
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[

@@ -93,8 +93,9 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PIHOLE_URL", "PIHOLE_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID", "SOLAX_SN", "SOLAX_API_URL",
     # sync:connections-known-begin
+    "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
@@ -163,9 +164,10 @@ KEYCHAIN_NAMES = (
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY", "SOLAX_TOKEN_ID",
     # sync:connections-secret-begin
+    "PIHOLE_PASSWORD",
     "POWERWALL_PASSWORD",
     # sync:connections-secret-end
-    "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PIHOLE_PASSWORD", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1192,14 +1194,6 @@ SAFETY = {
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
     "nzbgeek_free": [["GET", r"^(?!.*(^|&)t=get(&|$))t=(search|tvsearch|movie|caps)(&|$)"]],
     "nzbgeek_asks": [["GET", r"^(?!.*(^|&)t=(search|tvsearch|movie|caps)(&|$))t=get&id=[^&]+$"]],
-    # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
-    # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
-    # settings.
-    "pihole_free": [["GET", r"^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"],
-                    ["POST", r"^/api/auth$"]],
-    "pihole_asks": [["POST", r"^/api/dns/blocking$"],
-                    ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
-                    ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
     # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
     # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
@@ -1212,6 +1206,14 @@ SAFETY = {
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-begin
+    # Pi-hole's REST API, v6 and later (#401): the reads the runtime makes, signing in first, and the few changes it
+    # may make after a live yes. Nothing else is ever sent: no upstream DNS, no DHCP, no web password, no network
+    # settings.
+    "pihole_free": [["GET", r"^/api/(stats/summary|stats/top_domains|stats/top_clients|dns/blocking)$"],
+                    ["POST", r"^/api/auth$"]],
+    "pihole_asks": [["POST", r"^/api/dns/blocking$"],
+                    ["POST", r"^/api/domains/(allowlist|denylist)/exact$"],
+                    ["DELETE", r"^/api/domains/(allowlist|denylist)/exact$"]],
     # Tesla's Powerwall gateway (#362): the reads the runtime makes, and the one thing it may change after a yes. Nothing
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
@@ -1335,6 +1337,15 @@ def coinbase_money(method, path):
 
 
 # sync:connections-fns-begin
+def pihole_call(method, path):
+    """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
+    signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
+    deny list), and None for anything else, which is never sent (#401)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
+            return kind
+    return None
 def powerwall_allowed(method, path, approved=False):
     """True for one of the few Tesla gateway calls the runtime makes (#362): the reads in powerwall_free, and the
     backup reserve change in powerwall_asks, only after the person's yes."""
@@ -1392,16 +1403,6 @@ def arr_call(method, path):
             return kind
     return None
 
-
-def pihole_call(method, path):
-    """"free" for one of the Pi-hole calls the runtime makes without asking (the stats, the blocking status, and
-    signing in), "asks" for the few changes that need a live yes (blocking on and off, a domain on the allow or
-    deny list), and None for anything else, which is never sent (#401)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["pihole_" + kind]):
-            return kind
-    return None
 
 
 def plex_call(method, path):
@@ -1980,8 +1981,8 @@ CAPABILITIES = [
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
-    ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -1996,9 +1997,9 @@ CAPABILITIES = [
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
-    ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     # sync:connections-capabilities-read-begin
+    ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
@@ -4704,133 +4705,6 @@ class Connections:
         self.log(tr("NZBGeek"), what, tr("done"))
         return True
 
-    # Pi-hole (#401)
-    # Pi-hole's REST API (v6 and later): PIHOLE_URL (like http://pi.hole) and PIHOLE_PASSWORD (the web interface's
-    # password). Each run signs in once (POST /api/auth) and carries the session id; the stats and the blocking
-    # status are reads (pihole_free); disabling or enabling blocking, and adding or removing a domain on the allow
-    # or deny list (pihole_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: no
-    # upstream DNS, no DHCP, no web password, no network settings. PIHOLE_CERT_SHA256 pins a certificate this
-    # computer doesn't trust.
-    async def _pihole_auth(self):
-        """Signs in once and keeps the session id for the run."""
-        if getattr(self, "_pihole_sid", None):
-            return self._pihole_sid
-        url = os.environ.get("PIHOLE_URL", "").strip()
-        password = os.environ.get("PIHOLE_PASSWORD", "").strip()
-        if not url or not password:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.",
-                              who="Pi-hole", url_setting="PIHOLE_URL", key_setting="PIHOLE_PASSWORD", where_keys=WHERE_KEYS))
-        status, raw = await self._pinned("Pi-hole", url, "PIHOLE_CERT_SHA256", "POST", "/api/auth",
-                                         {"Content-Type": "application/json"}, {"password": password})
-        answer = json.loads(raw) if raw.strip() else {}
-        session = (answer.get("session") or {}) if isinstance(answer, dict) else {}
-        if status >= 400 or not session.get("sid"):
-            raise RunError(tr("The {who} refused its password.", who="Pi-hole"))
-        self._pihole_sid = session["sid"]
-        return self._pihole_sid
-
-    async def _pihole(self, method, path, body=None, approved=False, reauth=True, query=None):
-        """One request to Pi-hole's API, signed in and gated by pihole_call: the stats and the blocking status go
-        without asking, the few changes only after a live yes, and anything else is never sent. The query string is
-        kept out of the gate: it only ever narrows a read."""
-        kind = pihole_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who="Pi-hole"))
-        sid = await self._pihole_auth()
-        whole = path + (("?" + urllib.parse.urlencode(query)) if query else "")
-        status, raw = await self._pinned("Pi-hole", os.environ.get("PIHOLE_URL", "").strip(), "PIHOLE_CERT_SHA256",
-                                        method, whole, {"X-FTL-SID": sid}, body)
-        if status == 401 and reauth:  # the session ran out: sign in again and try once more
-            self._pihole_sid = None
-            return await self._pihole(method, path, body, approved, reauth=False, query=query)
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who="Pi-hole", why=self._said(status, raw)))
-        answer = json.loads(raw) if raw.strip() else {}
-        if isinstance(answer, dict) and answer.get("error"):
-            raise RunError(tr("{who}: {why}.", who="Pi-hole", why=_short(to_str((answer["error"] or {}).get("message") or ""), 120)))
-        return answer
-
-    async def pihole_summary(self):
-        """One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the
-        blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking
-        (whether blocking is on)."""
-        s = await self._pihole("GET", "/api/stats/summary")
-        blocking = await self._pihole("GET", "/api/dns/blocking")
-        q = (s.get("queries") or {})
-        out = {"queries": num(q.get("total")), "blocked": num(q.get("blocked")),
-               "blocked_pct": num(q.get("percent")),
-               "gravity": num((s.get("gravity") or {}).get("domains")),
-               "clients": num((s.get("clients") or {}).get("total")),
-               "blocking": bool((blocking or {}).get("blocking"))}
-        on = out["blocking"]
-        self.log(tr("Pi-hole summary"),
-                 tr("{queries} queries, {blocked} blocked ({blocked_pct} %)", **out) + ", "
-                 + (tr("blocking on") if on else tr("blocking off")))
-        return out
-
-    async def pihole_top_domains(self, count=5):
-        """The most-blocked domains: a list of records — domain and count (how many times it was blocked)."""
-        d = await self._pihole("GET", "/api/stats/top_domains", query={"blocked": "true", "count": str(num(count) or 5)})
-        rows = d.get("domains") or []
-        out = [{"domain": to_str(r.get("domain")), "count": num(r.get("count"))} for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{r['domain']}: {r['count']}" for r in out)
-        self.log(tr("Pi-hole top blocked domains"), lines or tr("(nothing)"), tr("{n} domains", n=len(out)))
-        return out
-
-    async def pihole_top_clients(self, count=5):
-        """The devices that asked the most: a list of records — name, ip and count (how many queries)."""
-        c = await self._pihole("GET", "/api/stats/top_clients", query={"count": str(num(count) or 5)})
-        rows = c.get("clients") or []
-        out = [{"name": to_str(r.get("name") or r.get("ip")), "ip": to_str(r.get("ip")), "count": num(r.get("count"))}
-               for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{r['name']}: {r['count']}" for r in out)
-        self.log(tr("Pi-hole top clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
-        return out
-
-    async def pihole_blocking(self, seconds):
-        """Disables blocking for that many seconds, after asking you, every time. Gives back True if it was done."""
-        n = num(seconds)
-        if not n or n <= 0:
-            raise RunError(tr("For how long? Give the seconds blocking should be off, like 60."))
-        what = tr("disable Pi-hole's blocking for {n} seconds", n=n)
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._pihole("POST", "/api/dns/blocking", {"blocking": False, "timer": n}, approved=True)
-        self.log(tr("Pi-hole"), what, tr("done"))
-        return True
-
-    async def pihole_enable(self):
-        """Turns blocking back on, after asking you, every time. Gives back True if it was done."""
-        what = tr("enable Pi-hole's blocking")
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._pihole("POST", "/api/dns/blocking", {"blocking": True}, approved=True)
-        self.log(tr("Pi-hole"), what, tr("done"))
-        return True
-
-    async def pihole_list(self, which, action, domain):
-        """Puts a domain on Pi-hole's allow or deny list, or takes it off, after asking you, every time. Gives back
-        True if it was done."""
-        w, a, d = to_str(which).strip().lower(), to_str(action).strip().lower(), to_str(domain).strip().lower()
-        if w not in ("allow", "deny") or a not in ("add", "remove") or not d:
-            raise RunError(tr("Which list (allow or deny), add or remove, and which domain?"))
-        what = tr("{action} {domain} on Pi-hole's {which} list", action=a, domain=d, which=w)
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        path = f"/api/domains/{w}list/exact"
-        if a == "add":
-            await self._pihole("POST", path, {"domain": d, "comment": tr("added by Second Thought")}, approved=True)
-        else:
-            await self._pihole("DELETE", path, {"domain": [d]}, approved=True)
-        self.log(tr("Pi-hole"), what, tr("done"))
-        return True
-
     # Plex and Tautulli (#402)
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
     # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
@@ -5404,6 +5278,132 @@ class Connections:
         return out
 
     # sync:connections-runtime-begin
+    # Pi-hole (#401)
+    # Pi-hole's REST API (v6 and later): PIHOLE_URL (like http://pi.hole) and PIHOLE_PASSWORD (the web interface's
+    # password). Each run signs in once (POST /api/auth) and carries the session id; the stats and the blocking
+    # status are reads (pihole_free); disabling or enabling blocking, and adding or removing a domain on the allow
+    # or deny list (pihole_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: no
+    # upstream DNS, no DHCP, no web password, no network settings. PIHOLE_CERT_SHA256 pins a certificate this
+    # computer doesn't trust.
+    async def _pihole_auth(self):
+        """Signs in once and keeps the session id for the run."""
+        if getattr(self, "_pihole_sid", None):
+            return self._pihole_sid
+        url = os.environ.get("PIHOLE_URL", "").strip()
+        password = os.environ.get("PIHOLE_PASSWORD", "").strip()
+        if not url or not password:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://pi.hole) and its web interface's password.",
+                              who="Pi-hole", url_setting="PIHOLE_URL", key_setting="PIHOLE_PASSWORD", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Pi-hole", url, "PIHOLE_CERT_SHA256", "POST", "/api/auth",
+                                         {"Content-Type": "application/json"}, {"password": password})
+        answer = json.loads(raw) if raw.strip() else {}
+        session = (answer.get("session") or {}) if isinstance(answer, dict) else {}
+        if status >= 400 or not session.get("sid"):
+            raise RunError(tr("The {who} refused its password.", who="Pi-hole"))
+        self._pihole_sid = session["sid"]
+        return self._pihole_sid
+
+    async def _pihole(self, method, path, body=None, approved=False, reauth=True, query=None):
+        """One request to Pi-hole's API, signed in and gated by pihole_call: the stats and the blocking status go
+        without asking, the few changes only after a live yes, and anything else is never sent. The query string is
+        kept out of the gate: it only ever narrows a read."""
+        kind = pihole_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who="Pi-hole"))
+        sid = await self._pihole_auth()
+        whole = path + (("?" + urllib.parse.urlencode(query)) if query else "")
+        status, raw = await self._pinned("Pi-hole", os.environ.get("PIHOLE_URL", "").strip(), "PIHOLE_CERT_SHA256",
+                                        method, whole, {"X-FTL-SID": sid}, body)
+        if status == 401 and reauth:  # the session ran out: sign in again and try once more
+            self._pihole_sid = None
+            return await self._pihole(method, path, body, approved, reauth=False, query=query)
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Pi-hole", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        if isinstance(answer, dict) and answer.get("error"):
+            raise RunError(tr("{who}: {why}.", who="Pi-hole", why=_short(to_str((answer["error"] or {}).get("message") or ""), 120)))
+        return answer
+
+    async def pihole_summary(self):
+        """One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the
+        blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking
+        (whether blocking is on)."""
+        s = await self._pihole("GET", "/api/stats/summary")
+        blocking = await self._pihole("GET", "/api/dns/blocking")
+        q = (s.get("queries") or {})
+        out = {"queries": num(q.get("total")), "blocked": num(q.get("blocked")),
+               "blocked_pct": num(q.get("percent")),
+               "gravity": num((s.get("gravity") or {}).get("domains")),
+               "clients": num((s.get("clients") or {}).get("total")),
+               "blocking": bool((blocking or {}).get("blocking"))}
+        on = out["blocking"]
+        self.log(tr("Pi-hole summary"),
+                 tr("{queries} queries, {blocked} blocked ({blocked_pct} %)", **out) + ", "
+                 + (tr("blocking on") if on else tr("blocking off")))
+        return out
+
+    async def pihole_top_domains(self, count=5):
+        """The most-blocked domains: a list of records — domain and count (how many times it was blocked)."""
+        d = await self._pihole("GET", "/api/stats/top_domains", query={"blocked": "true", "count": str(num(count) or 5)})
+        rows = d.get("domains") or []
+        out = [{"domain": to_str(r.get("domain")), "count": num(r.get("count"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['domain']}: {r['count']}" for r in out)
+        self.log(tr("Pi-hole top blocked domains"), lines or tr("(nothing)"), tr("{n} domains", n=len(out)))
+        return out
+
+    async def pihole_top_clients(self, count=5):
+        """The devices that asked the most: a list of records — name, ip and count (how many queries)."""
+        c = await self._pihole("GET", "/api/stats/top_clients", query={"count": str(num(count) or 5)})
+        rows = c.get("clients") or []
+        out = [{"name": to_str(r.get("name") or r.get("ip")), "ip": to_str(r.get("ip")), "count": num(r.get("count"))}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['count']}" for r in out)
+        self.log(tr("Pi-hole top clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
+        return out
+
+    async def pihole_blocking(self, seconds):
+        """Disables blocking for that many seconds, after asking you, every time. Gives back True if it was done."""
+        n = num(seconds)
+        if not n or n <= 0:
+            raise RunError(tr("For how long? Give the seconds blocking should be off, like 60."))
+        what = tr("disable Pi-hole's blocking for {n} seconds", n=n)
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._pihole("POST", "/api/dns/blocking", {"blocking": False, "timer": n}, approved=True)
+        self.log(tr("Pi-hole"), what, tr("done"))
+        return True
+
+    async def pihole_enable(self):
+        """Turns blocking back on, after asking you, every time. Gives back True if it was done."""
+        what = tr("enable Pi-hole's blocking")
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._pihole("POST", "/api/dns/blocking", {"blocking": True}, approved=True)
+        self.log(tr("Pi-hole"), what, tr("done"))
+        return True
+
+    async def pihole_list(self, which, action, domain):
+        """Puts a domain on Pi-hole's allow or deny list, or takes it off, after asking you, every time. Gives back
+        True if it was done."""
+        w, a, d = to_str(which).strip().lower(), to_str(action).strip().lower(), to_str(domain).strip().lower()
+        if w not in ("allow", "deny") or a not in ("add", "remove") or not d:
+            raise RunError(tr("Which list (allow or deny), add or remove, and which domain?"))
+        what = tr("{action} {domain} on Pi-hole's {which} list", action=a, domain=d, which=w)
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        path = f"/api/domains/{w}list/exact"
+        if a == "add":
+            await self._pihole("POST", path, {"domain": d, "comment": tr("added by Second Thought")}, approved=True)
+        else:
+            await self._pihole("DELETE", path, {"domain": [d]}, approved=True)
+        self.log(tr("Pi-hole"), what, tr("done"))
+        return True
     # Powerwall (#362)
     # Tesla's local gateway API (the one the gateway's web portal uses), for a Powerwall, Powerwall 2 or Powerwall+ on
     # your network: POWERWALL_URL (the gateway's address, like https://192.168.1.50) and POWERWALL_PASSWORD, the
@@ -7987,6 +7987,12 @@ class Doctor:
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
         # sync:connections-check-begin
+        if has("pihole_read", "pihole_control"):
+            async def pihole():
+                s = await self._pihole("GET", "/api/stats/summary")
+                q = (s.get("queries") or {})
+                return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
+            out.append(("Pi-hole", pihole))
         if has("powerwall_read", "powerwall_control"):
             async def powerwall():
                 base = os.environ.get("POWERWALL_URL", "").strip()
@@ -8063,12 +8069,6 @@ class Doctor:
                 return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
                     + ", " + tr("{n} days of retention", n=days or "?")
             out.append(("NZBGeek", nzbgeek))
-        if has("pihole_read", "pihole_control"):
-            async def pihole():
-                s = await self._pihole("GET", "/api/stats/summary")
-                q = (s.get("queries") or {})
-                return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
-            out.append(("Pi-hole", pihole))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -8416,8 +8416,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID",
                 # sync:connections-settingsmap-begin
+                "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL"
                 # sync:connections-settingsmap-end
 }.get(area)
