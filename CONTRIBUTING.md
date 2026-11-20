@@ -80,6 +80,9 @@ So:
 
 4. **One change per pull request**, on its own branch, linked to its issue (`Closes #123`).
 
+5. **Page changes follow the design notes.** Colours, typefaces, corners, layout and words come from
+   [docs/design.md](docs/design.md); new page words go through `tr("…")` and into `i18n/` for every language.
+
 
 **Merging translation files.** Pull requests that add words usually add them at the end of the same sections of
 `i18n/*.json`, which git calls a conflict. Run this once in your clone, and git merges those files key by key instead,
@@ -213,6 +216,7 @@ and `--doctor` (with your keys removed). For anything security-related, see [SEC
 | `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
 | `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |
 | `docs/ladybird-book.md` | The picture book. |
+| `docs/design.md` | The page's tokens, layout rules and voice. |
 | `CHANGELOG.md` | What changed in each runtime version. |
 | `CONTRIBUTING.md`, `SECURITY.md` | How to contribute; how to report a security problem, and what an exported program can and can't do. |
 

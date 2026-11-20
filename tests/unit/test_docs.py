@@ -112,5 +112,15 @@ class Links(unittest.TestCase):
                                  + (": " + "; ".join(broken[:12]) if broken else ""))
 
 
+class DesignNotes(unittest.TestCase):
+    def test_design_md_exists_and_is_linked_from_the_notes(self):
+        """The design notes (#451): docs/design.md exists, and CONTRIBUTING.md and both helpers' notes link it."""
+        design = ROOT / "docs" / "design.md"
+        self.assertTrue(design.exists(), "docs/design.md exists")
+        for note in ("CONTRIBUTING.md", "CLAUDE.md", "MISTRAL.md"):
+            self.assertIn("docs/design.md", (ROOT / note).read_text(encoding="utf-8"),
+                          f"{note} links docs/design.md")
+
+
 if __name__ == "__main__":
     unittest.main()
