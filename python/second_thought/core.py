@@ -105,11 +105,6 @@ SAFETY = {
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
-    # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
-    # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
-    # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
-    "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
-    "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -152,6 +147,11 @@ SAFETY = {
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
     "powerwall_asks": [["POST", r"^/api/operation$"]],
+    # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
+    # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
+    # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
+    "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
+    "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
     # sync:connections-safety-end
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -286,6 +286,14 @@ def powerwall_allowed(method, path, approved=False):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
         or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
+def sabnzbd_call(method, mode):
+    """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
+    and None for anything else, which is never sent (#397)."""
+    method, mode = to_str(method).strip().upper(), to_str(mode).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
+            return kind
+    return None
 # sync:connections-fns-end
 
 
@@ -314,15 +322,6 @@ def docker_call(method, path):
             return kind
     return None
 
-
-def sabnzbd_call(method, mode):
-    """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
-    and None for anything else, which is never sent (#397)."""
-    method, mode = to_str(method).strip().upper(), to_str(mode).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
-            return kind
-    return None
 
 
 ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
@@ -910,7 +909,6 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
-    ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -918,6 +916,7 @@ CAPABILITIES = [
     # sync:connections-capabilities-act-begin
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
+    ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -926,7 +925,6 @@ CAPABILITIES = [
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
-    ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
@@ -934,6 +932,7 @@ CAPABILITIES = [
     # sync:connections-capabilities-read-begin
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
+    ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),

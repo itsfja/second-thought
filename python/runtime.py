@@ -93,10 +93,11 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "SABNZBD_URL", "SABNZBD_CERT_SHA256", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "NZBGEEK_URL", "NZBGEEK_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
+    "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
@@ -167,9 +168,10 @@ KEYCHAIN_NAMES = (
     # sync:connections-secret-begin
     "PIHOLE_PASSWORD",
     "POWERWALL_PASSWORD",
+    "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
     # sync:connections-secret-end
-    "SABNZBD_API_KEY", "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "NZBGEEK_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1173,11 +1175,6 @@ SAFETY = {
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
-    # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
-    # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
-    # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
-    "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
-    "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -1220,6 +1217,11 @@ SAFETY = {
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
     "powerwall_asks": [["POST", r"^/api/operation$"]],
+    # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
+    # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
+    # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
+    "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
+    "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
     # sync:connections-safety-end
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -1354,6 +1356,14 @@ def powerwall_allowed(method, path, approved=False):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
         or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
+def sabnzbd_call(method, mode):
+    """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
+    and None for anything else, which is never sent (#397)."""
+    method, mode = to_str(method).strip().upper(), to_str(mode).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
+            return kind
+    return None
 # sync:connections-fns-end
 
 
@@ -1382,15 +1392,6 @@ def docker_call(method, path):
             return kind
     return None
 
-
-def sabnzbd_call(method, mode):
-    """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
-    and None for anything else, which is never sent (#397)."""
-    method, mode = to_str(method).strip().upper(), to_str(mode).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
-            return kind
-    return None
 
 
 ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
@@ -1978,7 +1979,6 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
-    ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -1986,6 +1986,7 @@ CAPABILITIES = [
     # sync:connections-capabilities-act-begin
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
+    ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -1994,7 +1995,6 @@ CAPABILITIES = [
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
-    ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
@@ -2002,6 +2002,7 @@ CAPABILITIES = [
     # sync:connections-capabilities-read-begin
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
+    ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
@@ -4346,88 +4347,6 @@ class Connections:
         self.log(tr("Docker"), what, tr("done"))
         return True
 
-    # SABnzbd (#397)
-    # SABnzbd's API: SABNZBD_URL (like http://sabnzbd:8080) and SABNZBD_API_KEY, the full API key (Config, General,
-    # API Key), not the NZB key. Reads are the modes in SAFETY["sabnzbd_free"]; pause and resume (sabnzbd_asks) always
-    # ask, live, and never run with nobody there; nothing else is ever sent: no adding, deleting or retrying jobs, no
-    # speedlimit, no config, no shutdown. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, as for
-    # MikroTik and UniFi.
-    SABNZBD_PAUSE = ("pause", "resume")
-
-    async def _sabnzbd(self, mode, extra=None, approved=False):
-        kind = sabnzbd_call("GET", mode)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to SABnzbd.", what=mode))
-        base, key = os.environ.get("SABNZBD_URL", "").strip().rstrip("/"), os.environ.get("SABNZBD_API_KEY", "").strip()
-        if not base or not key:
-            raise RunError(tr("SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.", where_keys=WHERE_KEYS))
-        query = {"mode": mode, "output": "json", "apikey": key, **(extra or {})}
-        status, raw = await self._pinned("SABnzbd", base, "SABNZBD_CERT_SHA256", "GET", "/api?" + urllib.parse.urlencode(query), {})
-        said = json.loads(raw) if raw.strip() else {}
-        if status >= 400 or (isinstance(said, dict) and said.get("status") is False):
-            why = to_str(said.get("error")) if isinstance(said, dict) else ""
-            raise RunError(tr("SABnzbd: {why}.", why=why or self._said(status, raw)))
-        return said
-
-    async def sabnzbd_queue(self):
-        """What's in the queue now: a list of records, one for each job — name, size_mb, left_mb, percent, eta (time
-        left, like 0:12:34) and status (Downloading, Queued, Paused). The log step says whether the whole queue is
-        paused and how fast it's going."""
-        q = (await self._sabnzbd("queue")).get("queue") or {}
-        out = [{"name": to_str(s.get("filename")), "size_mb": self._cents(num(s.get("mb"))), "left_mb": self._cents(num(s.get("mbleft"))),
-                "percent": self._cents(num(s.get("percentage"))), "eta": to_str(s.get("timeleft")) or "0:00:00",
-                "status": to_str(s.get("status"))} for s in q.get("slots") or [] if isinstance(s, dict)]
-        state = tr("Paused") if to_str(q.get("paused")).lower() == "true" or q.get("paused") is True else tr("Downloading")
-        lines = "\n".join(f"{s['name']}: {s['left_mb']} MB left ({s['percent']}%)" for s in out)
-        self.log(tr("SABnzbd queue"), (state + ", " + tr("{n} MB left", n=self._cents(num(q.get("mbleft"))))) + ("\n" + lines if lines else ""),
-                 tr("{n} in the queue", n=len(out)))
-        return out
-
-    async def sabnzbd_history(self, hours=24):
-        """What finished recently: a list of records, one for each job in the history — name, status (Completed or
-        Failed), size_mb, when it finished and, for a failure, why it failed."""
-        n = max(1, min(500, int(num(hours) or 24)))
-        h = (await self._sabnzbd("history", {"limit": str(n * 10)})).get("history") or {}
-        cutoff = time.time() - n * 3600
-        out = []
-        for s in h.get("slots") or []:
-            if not isinstance(s, dict):
-                continue
-            when = num(s.get("completed"))
-            if when and when < cutoff:
-                continue
-            out.append({"name": to_str(s.get("name")), "status": to_str(s.get("status")), "size_mb": self._cents(num(s.get("bytes")) / 1048576) if s.get("bytes") else "",
-                        "when": datetime.datetime.fromtimestamp(when).strftime("%Y-%m-%d %H:%M") if when else "",
-                        "why": to_str(s.get("fail_message")) if to_str(s.get("status")).lower() == "failed" else ""})
-        out.reverse()  # oldest first, like the queue
-        lines = "\n".join(f"{s['name']}: {s['status']}" for s in out)
-        self.log(tr("SABnzbd history"), lines or tr("(nothing)"), tr("{n} finished", n=len(out)))
-        return out
-
-    async def sabnzbd_diskspace(self):
-        """Each of SABnzbd's folders (the download folder first) and its free space in GB."""
-        rows = (await self._sabnzbd("diskspace")).get("diskspace") or []
-        out = [{"folder": to_str(r[0]), "free_gb": self._cents(num(r[1]))} for r in rows if isinstance(r, list) and len(r) >= 2]
-        lines = "\n".join(f"{d['folder']}: {d['free_gb']} GB free" for d in out)
-        self.log(tr("SABnzbd diskspace"), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
-        return out
-
-    async def sabnzbd_pause(self, action):
-        """Pauses or resumes the whole queue, after asking you, every time. Gives back True if it was done."""
-        action = to_str(action).strip().lower()
-        if action not in self.SABNZBD_PAUSE:
-            raise RunError(tr("SABnzbd can be paused or resumed."))
-        q = (await self._sabnzbd("queue")).get("queue") or {}
-        what = (tr("pause SABnzbd's queue") if action == "pause" else tr("resume SABnzbd's queue")) + \
-            (f" ({self._cents(num(q.get('mbleft')))} MB left, {len(q.get('slots') or [])} in the queue)")
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._sabnzbd("pause" if action == "pause" else "resume", approved=True)
-        self.log(tr("SABnzbd"), what, tr("done"))
-        return True
-
     # Radarr and Sonarr (#398)
     # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
     # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
@@ -5418,6 +5337,87 @@ class Connections:
             return False
         await self._powerwall("POST", "/api/operation", {"backup_reserve_percent": n}, approved=True)
         self.log(tr("Powerwall"), what, tr("done"))
+        return True
+    # SABnzbd (#397)
+    # SABnzbd's API: SABNZBD_URL (like http://sabnzbd:8080) and SABNZBD_API_KEY, the full API key (Config, General,
+    # API Key), not the NZB key. Reads are the modes in SAFETY["sabnzbd_free"]; pause and resume (sabnzbd_asks) always
+    # ask, live, and never run with nobody there; nothing else is ever sent: no adding, deleting or retrying jobs, no
+    # speedlimit, no config, no shutdown. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, as for
+    # MikroTik and UniFi.
+    SABNZBD_PAUSE = ("pause", "resume")
+
+    async def _sabnzbd(self, mode, extra=None, approved=False):
+        kind = sabnzbd_call("GET", mode)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to SABnzbd.", what=mode))
+        base, key = os.environ.get("SABNZBD_URL", "").strip().rstrip("/"), os.environ.get("SABNZBD_API_KEY", "").strip()
+        if not base or not key:
+            raise RunError(tr("SABnzbd needs SABNZBD_URL and SABNZBD_API_KEY {where_keys}: its address (like http://sabnzbd:8080) and the full API key, in SABnzbd under Config, General, API Key.", where_keys=WHERE_KEYS))
+        query = {"mode": mode, "output": "json", "apikey": key, **(extra or {})}
+        status, raw = await self._pinned("SABnzbd", base, "SABNZBD_CERT_SHA256", "GET", "/api?" + urllib.parse.urlencode(query), {})
+        said = json.loads(raw) if raw.strip() else {}
+        if status >= 400 or (isinstance(said, dict) and said.get("status") is False):
+            why = to_str(said.get("error")) if isinstance(said, dict) else ""
+            raise RunError(tr("SABnzbd: {why}.", why=why or self._said(status, raw)))
+        return said
+
+    async def sabnzbd_queue(self):
+        """What's in the queue now: a list of records, one for each job — name, size_mb, left_mb, percent, eta (time
+        left, like 0:12:34) and status (Downloading, Queued, Paused). The log step says whether the whole queue is
+        paused and how fast it's going."""
+        q = (await self._sabnzbd("queue")).get("queue") or {}
+        out = [{"name": to_str(s.get("filename")), "size_mb": self._cents(num(s.get("mb"))), "left_mb": self._cents(num(s.get("mbleft"))),
+                "percent": self._cents(num(s.get("percentage"))), "eta": to_str(s.get("timeleft")) or "0:00:00",
+                "status": to_str(s.get("status"))} for s in q.get("slots") or [] if isinstance(s, dict)]
+        state = tr("Paused") if to_str(q.get("paused")).lower() == "true" or q.get("paused") is True else tr("Downloading")
+        lines = "\n".join(f"{s['name']}: {s['left_mb']} MB left ({s['percent']}%)" for s in out)
+        self.log(tr("SABnzbd queue"), (state + ", " + tr("{n} MB left", n=self._cents(num(q.get("mbleft"))))) + ("\n" + lines if lines else ""),
+                 tr("{n} in the queue", n=len(out)))
+        return out
+
+    async def sabnzbd_history(self, hours=24):
+        """What finished recently: a list of records, one for each job in the history — name, status (Completed or
+        Failed), size_mb, when it finished and, for a failure, why it failed."""
+        n = max(1, min(500, int(num(hours) or 24)))
+        h = (await self._sabnzbd("history", {"limit": str(n * 10)})).get("history") or {}
+        cutoff = time.time() - n * 3600
+        out = []
+        for s in h.get("slots") or []:
+            if not isinstance(s, dict):
+                continue
+            when = num(s.get("completed"))
+            if when and when < cutoff:
+                continue
+            out.append({"name": to_str(s.get("name")), "status": to_str(s.get("status")), "size_mb": self._cents(num(s.get("bytes")) / 1048576) if s.get("bytes") else "",
+                        "when": datetime.datetime.fromtimestamp(when).strftime("%Y-%m-%d %H:%M") if when else "",
+                        "why": to_str(s.get("fail_message")) if to_str(s.get("status")).lower() == "failed" else ""})
+        out.reverse()  # oldest first, like the queue
+        lines = "\n".join(f"{s['name']}: {s['status']}" for s in out)
+        self.log(tr("SABnzbd history"), lines or tr("(nothing)"), tr("{n} finished", n=len(out)))
+        return out
+
+    async def sabnzbd_diskspace(self):
+        """Each of SABnzbd's folders (the download folder first) and its free space in GB."""
+        rows = (await self._sabnzbd("diskspace")).get("diskspace") or []
+        out = [{"folder": to_str(r[0]), "free_gb": self._cents(num(r[1]))} for r in rows if isinstance(r, list) and len(r) >= 2]
+        lines = "\n".join(f"{d['folder']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("SABnzbd diskspace"), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def sabnzbd_pause(self, action):
+        """Pauses or resumes the whole queue, after asking you, every time. Gives back True if it was done."""
+        action = to_str(action).strip().lower()
+        if action not in self.SABNZBD_PAUSE:
+            raise RunError(tr("SABnzbd can be paused or resumed."))
+        q = (await self._sabnzbd("queue")).get("queue") or {}
+        what = (tr("pause SABnzbd's queue") if action == "pause" else tr("resume SABnzbd's queue")) + \
+            (f" ({self._cents(num(q.get('mbleft')))} MB left, {len(q.get('slots') or [])} in the queue)")
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._sabnzbd("pause" if action == "pause" else "resume", approved=True)
+        self.log(tr("SABnzbd"), what, tr("done"))
         return True
     # Solax (#361)
     # SolaxCloud's end-user API (https://www.solaxcloud.com:9443/proxy/api/), read only: SOLAX_TOKEN_ID, free from the
@@ -8000,6 +8000,11 @@ class Doctor:
                 return tr("battery at {pct}%, reserve {reserve}%, grid {grid}", pct=got.get("battery_soc_pct") or "?",
                           reserve=got.get("reserve_pct") or "?", grid=got.get("grid") or "?")
             out.append(("Powerwall", powerwall))
+        if has("sabnzbd_read", "sabnzbd_control"):
+            async def sabnzbd():
+                q = (await self._sabnzbd("queue")).get("queue") or {}
+                return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
+            out.append(("SABnzbd", sabnzbd))
         if has("solax_read"):
             async def solax():
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
@@ -8041,11 +8046,6 @@ class Doctor:
                 n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
                 return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
             out.append(("Docker", docker))
-        if has("sabnzbd_read", "sabnzbd_control"):
-            async def sabnzbd():
-                q = (await self._sabnzbd("queue")).get("queue") or {}
-                return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
-            out.append(("SABnzbd", sabnzbd))
         if has("arr_read", "arr_control"):
             async def arr(which):
                 status = await self._arr(which, "GET", "/api/v3/system/status")
@@ -8417,10 +8417,11 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
+                "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
                 # sync:connections-settingsmap-end
 }.get(area)

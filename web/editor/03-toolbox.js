@@ -144,9 +144,6 @@
     { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
     ]},
-    { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", service:"sabnzbd", contents:[
-      B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
-    ]},
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
     ]},
@@ -173,6 +170,9 @@
       B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
     ]},
     { kind:"category", name:"Powerwall", categorystyle:"powerwall", service:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
+    { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", service:"sabnzbd", contents:[
+      B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
+    ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
     // sync:connections-toolbox-end
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
