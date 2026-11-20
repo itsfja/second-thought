@@ -17,6 +17,8 @@ learn by trial and error.
 - Never commit `second-thought.ini` or keys. Real-key checks (`tools/smoke_test.py`) cost money: Francis runs them,
   or says to.
 - Commit messages and PR bodies say what changed and why, in plain English, ending with the attribution lines.
+- Page and word changes follow [docs/design.md](docs/design.md): the tokens in `web/editor.css`, the layout rules,
+  and the voice (short sentences, plain words, British spelling, what a thing does before how it works).
 
 ## The environment (cloud sessions)
 - **GitHub:** only `gh api` (REST) works: GraphQL (`gh pr`, `gh issue`) is blocked. Open PRs with

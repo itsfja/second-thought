@@ -26,6 +26,8 @@ matches where you're running.
   Co-authored-by: Vibe Nuage Agent <vibe@mistral.ai>
   Co-authored-by: itsfja <itsfja@users.noreply.github.com>
   ```
+- Page and word changes follow [docs/design.md](docs/design.md): the tokens in `web/editor.css`, the layout rules,
+  and the voice (short sentences, plain words, British spelling, what a thing does before how it works).
 ## The environment (Mistral sandbox sessions)
 - **Clone:** the session clones the repo itself (e.g. `gh repo clone itsfja/second-thought -- --depth 1`); there is
   no preselected checkout. Work on a task branch, never directly on main.
