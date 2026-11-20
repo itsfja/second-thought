@@ -1271,7 +1271,10 @@
 "Review loop":"ⲥⲁ ⲛⲩ ⲕⲓ",
 "{n} problems":"{n} ⲥⲁ ⲛⲩ",
 "Revision, round {n}":"{n} ⲥⲁ ⲛⲩ",
-"Fixing: {problems}":"ⲛⲩ {problems}"
+"Fixing: {problems}":"ⲛⲩ {problems}",
+"Edit blocks":"ⲥⲁ ⲛⲩ ⲕⲓ",
+"Show the outline":"ⲥⲁ ⲛⲩ ⲕⲓ",
+"… and more":"ⲥⲁ ⲛⲩ ⲕⲓ"
 },
 "examples":{
 "review":{"title":"ⲡⲕⲱⲧⲉ ⲛⲧⲇⲟⲕⲓⲙⲁⲥⲓⲁ","desc":"Claude ϣⲁϥⲥϩⲁⲓ ⲉⲧⲃⲉ ⲁⲩⲧⲟⲗⲩⲥⲉ, ϣⲁϥⲇⲟⲕⲓⲙⲁⲍⲉ ⲙⲙⲟϥ ⲕⲁⲧⲁ ⲛⲉⲕⲛⲟⲙⲟⲥ, ⲁⲩⲱ ϣⲁϥⲧⲁϩⲟ ⲙⲡⲉⲧϥϩⲉ, ϣⲁⲟⲩⲱϣ 3 ⲛⲥⲟⲡ.","tip":"ϣⲓⲃⲉ ⲙⲡϩⲱⲃ ϩⲛ ⲡⲱⲛⲉ ⲉⲧϩⲏⲛ ⲙⲛ ⲛⲛⲟⲙⲟⲥ ϩⲛ ⲡⲱⲛⲉ ⲉⲧⲕⲏⲙ."},

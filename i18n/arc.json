@@ -2016,7 +2016,10 @@
   "Review loop": "ܥܖܪܐ ܣܘܦܓܐ",
   "{n} problems": "{n} ܒܥܘܪ̈ܐ",
   "Revision, round {n}": "ܫܘܥܠܦܐ ܒܥܖܪܐ {n}",
-  "Fixing: {problems}": "ܪܩܘܠܐ: {problems}"
+  "Fixing: {problems}": "ܪܩܘܠܐ: {problems}",
+  "Edit blocks": "ܥܦܘܟ ܒܠܘܩܐ",
+  "Show the outline": "ܥܘܝ ܫܘܦܪܐ",
+  "… and more": "… ܝܘܪܦ"
  },
  "examples": {
   "review": {

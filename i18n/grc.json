@@ -2015,7 +2015,10 @@
   "Review loop": "βρόχος ἀναθεωρήσεως",
   "{n} problems": "{n} προβλήματα",
   "Revision, round {n}": "ἀναθεώρησις, γύρος {n}",
-  "Fixing: {problems}": "διόρθωσις: {problems}"
+  "Fixing: {problems}": "διόρθωσις: {problems}",
+  "Edit blocks": "ἐπεξεργασία μπλοκ",
+  "Show the outline": "δείξον τό διάγραμμα",
+  "… and more": "… καὶ πλείονα"
  },
  "examples": {
   "review": {

@@ -2015,7 +2015,10 @@
   "Review loop": "circulus revisionis",
   "{n} problems": "{n} problemata",
   "Revision, round {n}": "emendatio, circuitu {n}",
-  "Fixing: {problems}": "emendatio: {problems}"
+  "Fixing: {problems}": "emendatio: {problems}",
+  "Edit blocks": "emendare tessellas",
+  "Show the outline": "ostende lineamenta",
+  "… and more": "… et plura"
  },
  "examples": {
   "review": {

@@ -1270,7 +1270,10 @@
 "Review loop":"審閱之環",
 "{n} problems":"{n} 患",
 "Revision, round {n}":"改訂，第 {n} 輪",
-"Fixing: {problems}":"正之：{problems}"
+"Fixing: {problems}":"正之：{problems}",
+"Edit blocks":"改諸塊",
+"Show the outline":"示其綱要",
+"… and more":"……其餘"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},

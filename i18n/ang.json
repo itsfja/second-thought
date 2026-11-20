@@ -2015,7 +2015,10 @@
   "Review loop": "endurscyddinges hring",
   "{n} problems": "{n} sorga",
   "Revision, round {n}": "ednytting, hweol {n}",
-  "Fixing: {problems}": "rihtung: {problems}"
+  "Fixing: {problems}": "rihtung: {problems}",
+  "Edit blocks": "arwrighta þ΁a bloccan",
+  "Show the outline": "sceawian þa healsunge",
+  "… and more": "… and mā"
  },
  "examples": {
   "review": {

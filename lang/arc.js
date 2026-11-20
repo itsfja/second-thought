@@ -1272,7 +1272,10 @@
 "Review loop":"ܥܖܪܐ ܣܘܦܓܐ",
 "{n} problems":"{n} ܒܥܘܪ̈ܐ",
 "Revision, round {n}":"ܫܘܥܠܦܐ ܒܥܖܪܐ {n}",
-"Fixing: {problems}":"ܪܩܘܠܐ: {problems}"
+"Fixing: {problems}":"ܪܩܘܠܐ: {problems}",
+"Edit blocks":"ܥܦܘܟ ܒܠܘܩܐ",
+"Show the outline":"ܥܘܝ ܫܘܦܪܐ",
+"… and more":"… ܝܘܪܦ"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

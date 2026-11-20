@@ -1271,7 +1271,10 @@
 "Review loop":"Prüfschleife",
 "{n} problems":"{n} Probleme",
 "Revision, round {n}":"Überarbeitung, Runde {n}",
-"Fixing: {problems}":"Korrigiert: {problems}"
+"Fixing: {problems}":"Korrigiert: {problems}",
+"Edit blocks":"Blöcke bearbeiten",
+"Show the outline":"Gliederung zeigen",
+"… and more":"… und mehr"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

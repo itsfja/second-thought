@@ -1272,7 +1272,10 @@
 "Review loop":"ܣ ܢܘ ܟܝ",
 "{n} problems":"{n} ܣ ܢܘ",
 "Revision, round {n}":"{n} ܣ ܢܘ",
-"Fixing: {problems}":"ܢܘ {problems}"
+"Fixing: {problems}":"ܢܘ {problems}",
+"Edit blocks":"ܣ ܢܘ ܟܝ",
+"Show the outline":"ܣ ܢܘ ܟܝ",
+"… and more":"ܣ ܢܘ ܟܝ"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},

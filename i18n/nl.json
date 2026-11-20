@@ -2015,7 +2015,10 @@
   "Review loop": "Beoordelingslus",
   "{n} problems": "{n} problemen",
   "Revision, round {n}": "Herziening, ronde {n}",
-  "Fixing: {problems}": "Verbeteren: {problems}"
+  "Fixing: {problems}": "Verbeteren: {problems}",
+  "Edit blocks": "Blokken bewerken",
+  "Show the outline": "Toon het overzicht",
+  "… and more": "… en meer"
  },
  "examples": {
   "review": {

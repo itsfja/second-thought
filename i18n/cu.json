@@ -2005,7 +2005,10 @@
   "Review loop": "петлѣ пръсмотра",
   "{n} problems": "{n} проблѣмъ",
   "Revision, round {n}": "исправленїє, кругъ {n}",
-  "Fixing: {problems}": "исправленіє: {problems}"
+  "Fixing: {problems}": "исправленіє: {problems}",
+  "Edit blocks": "исправленіє блоковъ",
+  "Show the outline": "покажи содержаніє",
+  "… and more": "… и єщє"
  },
  "examples": {
   "review": {

@@ -1271,7 +1271,10 @@
 "Review loop":"レビューのループ",
 "{n} problems":"問題 {n} 件",
 "Revision, round {n}":"改訂、ラウンド {n}",
-"Fixing: {problems}":"修正: {problems}"
+"Fixing: {problems}":"修正: {problems}",
+"Edit blocks":"ブロックを編集",
+"Show the outline":"アウトラインを表示",
+"… and more":"… その他"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
