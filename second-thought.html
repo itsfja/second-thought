@@ -693,13 +693,14 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
+    "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
@@ -765,13 +766,14 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "UNIFI_API_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY",
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
     "POWERWALL_PASSWORD",
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
+    "UNIFI_API_KEY",
     # sync:connections-secret-end
     "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
@@ -1764,8 +1766,6 @@ SAFETY = {
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
-    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
-    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
     # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
     # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
     # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
@@ -1800,7 +1800,6 @@ SAFETY = {
     "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
-    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-begin
     # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
     # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
@@ -1824,6 +1823,9 @@ SAFETY = {
     # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
     "sabnzbd_free": [["GET", r"^(queue|history|diskspace)$"]],
     "sabnzbd_asks": [["GET", r"^(pause|resume)$"]],
+    # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
+    # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
+    "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-end
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
@@ -1975,6 +1977,10 @@ def sabnzbd_call(method, mode):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
+def unifi_allowed(method, path):
+    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
 
 
@@ -2050,12 +2056,6 @@ def unraid_call(method, query):
         if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
-
-
-def unifi_allowed(method, path):
-    """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 
 
 def same_problem(a, b):
@@ -2592,7 +2592,6 @@ CAPABILITIES = [
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
-    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
@@ -2604,6 +2603,7 @@ CAPABILITIES = [
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
@@ -5442,84 +5442,6 @@ class Connections:
         self.log(tr("Proxmox"), what, tr("done"))
         return True
 
-    # UniFi (#359)
-    # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
-    # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
-    # sent, so nothing is blocked, restarted or reconfigured, whatever the key itself could do. UNIFI_CERT_SHA256 pins
-    # the console's own certificate, as for MikroTik; UNIFI_SITE picks a site other than the first.
-    UNIFI_API = "/proxy/network/integration/v1"
-
-    async def _unifi(self, path, query=None):
-        full = self.UNIFI_API + path
-        if not unifi_allowed("GET", full):
-            raise RunError(tr("Second Thought only reads from UniFi, so it doesn't send {what}.", what=f"GET {full}"))
-        base, key = os.environ.get("UNIFI_URL", "").strip().rstrip("/"), os.environ.get("UNIFI_API_KEY", "").strip()
-        if not base or not key:
-            raise RunError(tr("UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).", where_keys=WHERE_KEYS))
-        status, raw = await self._pinned("UniFi", base, "UNIFI_CERT_SHA256", "GET",
-                                         full + ("?" + urllib.parse.urlencode(query) if query else ""), {"X-API-KEY": key})
-        if status == 401:
-            raise RunError(tr("The UniFi console refused UNIFI_API_KEY."))
-        if status >= 400:
-            raise RunError(tr("UniFi: {why}.", why=self._said(status, raw)))
-        return json.loads(raw) if raw.strip() else {}
-
-    async def _unifi_all(self, path):
-        out, offset = [], 0
-        while True:
-            page = await self._unifi(path, {"offset": offset, "limit": 200})
-            data = page.get("data") or [] if isinstance(page, dict) else []
-            out += [x for x in data if isinstance(x, dict)]
-            offset += len(data)
-            if not data or offset >= int(num(page.get("totalCount")) or 0) or offset >= 5000:
-                return out
-
-    async def _unifi_site(self):
-        sites = await self._unifi_all("/sites")
-        want = os.environ.get("UNIFI_SITE", "").strip().lower()
-        site = next((s for s in sites if want and want in (to_str(s.get("name")).lower(), to_str(s.get("internalReference")).lower())), None) or \
-            next(iter(sites), None)
-        if not site or not re.fullmatch(r"[A-Za-z0-9-]+", to_str(site.get("id"))):
-            raise RunError(tr("UniFi: {why}.", why=tr("not found")))
-        return to_str(site["id"])
-
-    @staticmethod
-    def _unifi_when(t):
-        try:
-            return datetime.datetime.fromisoformat(to_str(t).replace("Z", "+00:00")).astimezone().strftime("%Y-%m-%d %H:%M")
-        except ValueError:
-            return to_str(t)
-
-    async def unifi_clients(self):
-        """Everyone connected: name, mac, ip, type (wired, wireless, vpn), connected (since when) and uplink (the UniFi
-        device it's connected through)."""
-        site = await self._unifi_site()
-        names = {to_str(d.get("id")): to_str(d.get("name")) for d in await self._unifi_all(f"/sites/{site}/devices")}
-        out = [{"name": to_str(c.get("name") or c.get("hostname") or c.get("macAddress")), "mac": to_str(c.get("macAddress")).lower(),
-                "ip": to_str(c.get("ipAddress")), "type": to_str(c.get("type")).lower(), "connected": self._unifi_when(c.get("connectedAt")),
-                "uplink": names.get(to_str(c.get("uplinkDeviceId")), "")} for c in await self._unifi_all(f"/sites/{site}/clients")]
-        lines = "\n".join(f"{c['name']} ({c['ip'] or c['mac']})" for c in out)
-        self.log(tr("UniFi clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
-        return out
-
-    async def unifi_devices(self):
-        """Each UniFi device: name, model, mac, ip, state (online, offline, ...), firmware, update (whether newer
-        firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)."""
-        site = await self._unifi_site()
-        out = []
-        for d in await self._unifi_all(f"/sites/{site}/devices"):
-            rec = {"name": to_str(d.get("name")), "model": to_str(d.get("model")), "mac": to_str(d.get("macAddress")).lower(),
-                   "ip": to_str(d.get("ipAddress")), "state": to_str(d.get("state")).lower(), "firmware": to_str(d.get("firmwareVersion")),
-                   "update": bool(d.get("firmwareUpdatable")), "uptime": "", "cpu": "", "memory": ""}
-            did = to_str(d.get("id"))
-            if rec["state"] == "online" and re.fullmatch(r"[A-Za-z0-9-]+", did):
-                st = await self._unifi(f"/sites/{site}/devices/{did}/statistics/latest")
-                rec.update(uptime=self._cents(num(st.get("uptimeSec")) / 3600) if _num_like(st.get("uptimeSec")) else "",
-                           cpu=num(st.get("cpuUtilizationPct")) if _num_like(st.get("cpuUtilizationPct")) else "",
-                           memory=num(st.get("memoryUtilizationPct")) if _num_like(st.get("memoryUtilizationPct")) else "")
-            out.append(rec)
-        return out
-
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -6087,6 +6009,83 @@ class Connections:
         out = await asyncio.to_thread(self._solax_request)
         self.log(tr("Solax figures"), "\n".join(f"{k}: {v}" for k, v in out.items() if v != ""),
                  tr("from {time}", time=out.get("upload_time") or "?"))
+        return out
+    # UniFi (#359)
+    # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
+    # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
+    # sent, so nothing is blocked, restarted or reconfigured, whatever the key itself could do. UNIFI_CERT_SHA256 pins
+    # the console's own certificate, as for MikroTik; UNIFI_SITE picks a site other than the first.
+    UNIFI_API = "/proxy/network/integration/v1"
+
+    async def _unifi(self, path, query=None):
+        full = self.UNIFI_API + path
+        if not unifi_allowed("GET", full):
+            raise RunError(tr("Second Thought only reads from UniFi, so it doesn't send {what}.", what=f"GET {full}"))
+        base, key = os.environ.get("UNIFI_URL", "").strip().rstrip("/"), os.environ.get("UNIFI_API_KEY", "").strip()
+        if not base or not key:
+            raise RunError(tr("UniFi needs UNIFI_URL and UNIFI_API_KEY {where_keys}: the console's address (like https://192.168.1.1) and an API key from the Network app (Settings, Control Plane, Integrations).", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("UniFi", base, "UNIFI_CERT_SHA256", "GET",
+                                         full + ("?" + urllib.parse.urlencode(query) if query else ""), {"X-API-KEY": key})
+        if status == 401:
+            raise RunError(tr("The UniFi console refused UNIFI_API_KEY."))
+        if status >= 400:
+            raise RunError(tr("UniFi: {why}.", why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def _unifi_all(self, path):
+        out, offset = [], 0
+        while True:
+            page = await self._unifi(path, {"offset": offset, "limit": 200})
+            data = page.get("data") or [] if isinstance(page, dict) else []
+            out += [x for x in data if isinstance(x, dict)]
+            offset += len(data)
+            if not data or offset >= int(num(page.get("totalCount")) or 0) or offset >= 5000:
+                return out
+
+    async def _unifi_site(self):
+        sites = await self._unifi_all("/sites")
+        want = os.environ.get("UNIFI_SITE", "").strip().lower()
+        site = next((s for s in sites if want and want in (to_str(s.get("name")).lower(), to_str(s.get("internalReference")).lower())), None) or \
+            next(iter(sites), None)
+        if not site or not re.fullmatch(r"[A-Za-z0-9-]+", to_str(site.get("id"))):
+            raise RunError(tr("UniFi: {why}.", why=tr("not found")))
+        return to_str(site["id"])
+
+    @staticmethod
+    def _unifi_when(t):
+        try:
+            return datetime.datetime.fromisoformat(to_str(t).replace("Z", "+00:00")).astimezone().strftime("%Y-%m-%d %H:%M")
+        except ValueError:
+            return to_str(t)
+
+    async def unifi_clients(self):
+        """Everyone connected: name, mac, ip, type (wired, wireless, vpn), connected (since when) and uplink (the UniFi
+        device it's connected through)."""
+        site = await self._unifi_site()
+        names = {to_str(d.get("id")): to_str(d.get("name")) for d in await self._unifi_all(f"/sites/{site}/devices")}
+        out = [{"name": to_str(c.get("name") or c.get("hostname") or c.get("macAddress")), "mac": to_str(c.get("macAddress")).lower(),
+                "ip": to_str(c.get("ipAddress")), "type": to_str(c.get("type")).lower(), "connected": self._unifi_when(c.get("connectedAt")),
+                "uplink": names.get(to_str(c.get("uplinkDeviceId")), "")} for c in await self._unifi_all(f"/sites/{site}/clients")]
+        lines = "\n".join(f"{c['name']} ({c['ip'] or c['mac']})" for c in out)
+        self.log(tr("UniFi clients"), lines or tr("(nothing)"), tr("{n} clients", n=len(out)))
+        return out
+
+    async def unifi_devices(self):
+        """Each UniFi device: name, model, mac, ip, state (online, offline, ...), firmware, update (whether newer
+        firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)."""
+        site = await self._unifi_site()
+        out = []
+        for d in await self._unifi_all(f"/sites/{site}/devices"):
+            rec = {"name": to_str(d.get("name")), "model": to_str(d.get("model")), "mac": to_str(d.get("macAddress")).lower(),
+                   "ip": to_str(d.get("ipAddress")), "state": to_str(d.get("state")).lower(), "firmware": to_str(d.get("firmwareVersion")),
+                   "update": bool(d.get("firmwareUpdatable")), "uptime": "", "cpu": "", "memory": ""}
+            did = to_str(d.get("id"))
+            if rec["state"] == "online" and re.fullmatch(r"[A-Za-z0-9-]+", did):
+                st = await self._unifi(f"/sites/{site}/devices/{did}/statistics/latest")
+                rec.update(uptime=self._cents(num(st.get("uptimeSec")) / 3600) if _num_like(st.get("uptimeSec")) else "",
+                           cpu=num(st.get("cpuUtilizationPct")) if _num_like(st.get("cpuUtilizationPct")) else "",
+                           memory=num(st.get("memoryUtilizationPct")) if _num_like(st.get("memoryUtilizationPct")) else "")
+            out.append(rec)
         return out
     # sync:connections-runtime-end
 
@@ -8619,7 +8618,6 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
-        # sync:connections-check-end
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -8632,6 +8630,7 @@ class Doctor:
                 devices = await self._unifi_all(f"/sites/{site}/devices")
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
+        # sync:connections-check-end
         if has("proxmox_read", "proxmox_control"):
             async def proxmox():
                 base = os.environ.get("PROXMOX_URL", "").strip()
@@ -9016,13 +9015,14 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
+                "UniFi": "UNIFI_URL",
                 # sync:connections-settingsmap-end
 }.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
@@ -12026,7 +12026,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
-["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
@@ -12037,6 +12036,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
+["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -12191,12 +12191,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    "^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"
   ]
  ],
- "unifi_free": [
-  [
-   "GET",
-   "^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"
-  ]
- ],
  "nzbgeek_free": [
   [
    "GET",
@@ -12255,6 +12249,12 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "GET",
    "^(pause|resume)$"
+  ]
+ ],
+ "unifi_free": [
+  [
+   "GET",
+   "^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"
   ]
  ],
  "mikrotik_free": [
@@ -17443,13 +17443,14 @@ HOW TO MAP CODE
   const HUES = {
     events:"#936D12", control:"#AF5E19", operators:"#408230", text:"#288167", variables:"#D04121",
     lists:"#C2413B", procedures:"#CB3E71", draft:"#2469F9", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", mikrotik:"#C2185B", unifi:"#C2185B", proxmox:"#C2185B", docker:"#C2185B",
+    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", mikrotik:"#C2185B", proxmox:"#C2185B", docker:"#C2185B",
     // sync:connections-hues-begin
     nzbgeek:"#C2185B",
     pihole:"#C2185B",
     powerwall:"#C2185B",
     sabnzbd:"#C2185B",
     solax:"#C2185B",
+    unifi:"#C2185B",
     // sync:connections-hues-end
     arr:"#C2185B", unraid:"#C2185B", plex:"#C2185B"
   };
@@ -17463,13 +17464,14 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), proxmox:style(HUES.proxmox), docker:style(HUES.docker),
     // sync:connections-styles-begin
     nzbgeek:style(HUES.nzbgeek),
     pihole:style(HUES.pihole),
     powerwall:style(HUES.powerwall),
     sabnzbd:style(HUES.sabnzbd),
     solax:style(HUES.solax),
+    unifi:style(HUES.unifi),
     // sync:connections-styles-end
     arr:style(HUES.arr), unraid:style(HUES.unraid), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
@@ -17653,8 +17655,7 @@ HOW TO MAP CODE
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
-    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
-    rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
+    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",     rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
     rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control", rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
@@ -17677,6 +17678,7 @@ HOW TO MAP CODE
     rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control",
     rb_solax_now:"solax_read",
+    rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
     // sync:connections-caps-end
   };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
@@ -18109,11 +18111,6 @@ HOW TO MAP CODE
       tooltip:"A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user." }),
     S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
       { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),
-    /* UniFi (#359): read only */
-    V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
-      tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
-    V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
-      tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     // sync:connections-defs-begin
     /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
     V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
@@ -18152,6 +18149,11 @@ HOW TO MAP CODE
     /* Solax (#361): read only, from SolaxCloud */
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
+    /* UniFi (#359): read only */
+    V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
+      tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
+    V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
+      tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     // sync:connections-defs-end
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
@@ -18353,7 +18355,6 @@ HOW TO MAP CODE
     { kind:"category", name:"Proxmox", categorystyle:"proxmox", service:"proxmox", contents:[
       B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
     ]},
-    { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     // sync:connections-toolbox-begin
     { kind:"category", name:"NZBGeek", categorystyle:"nzbgeek", service:"nzbgeek", contents:[
       B("rb_nzbgeek_search", { QUERY:T("Everything Everywhere All at Once") }), B("rb_nzbgeek_fetch", { ID:T("e9c515e02346086e3a477a5436d7bc8c") })
@@ -18368,6 +18369,7 @@ HOW TO MAP CODE
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
+    { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     // sync:connections-toolbox-end
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
@@ -21233,8 +21235,8 @@ HOW TO MAP CODE
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
-             // sync:connections-need-end
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
+             // sync:connections-need-end
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
@@ -21327,10 +21329,6 @@ HOW TO MAP CODE
       "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
       "; stopped or rebooted, like your Home Assistant or domain controller.",
       "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
-    if (need.unifi) out.push("", "[unifi]",
-      "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
-      "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
-      "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -21367,6 +21365,10 @@ HOW TO MAP CODE
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    if (need.unifi) out.push("", "[unifi]",
+      "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
+      "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
+      "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     // sync:connections-ini-end
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
@@ -21710,8 +21712,6 @@ HOW TO MAP CODE
         case "rb_proxmox_guests": return "(await R.proxmox_guests())";
         case "rb_proxmox_storage": return "(await R.proxmox_storage())";
         case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
-        case "rb_unifi_clients": return "(await R.unifi_clients())";
-        case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-begin
         case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_pihole_summary": return "(await R.pihole_summary())";
@@ -21722,6 +21722,8 @@ HOW TO MAP CODE
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_solax_now": return "(await R.solax_now())";
+        case "rb_unifi_clients": return "(await R.unifi_clients())";
+        case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-end
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
@@ -24336,28 +24338,6 @@ HOW TO MAP CODE
     addStep("Proxmox", { mono:true, text:what }).done("sample cluster", "ok");
     return true;
   }
-  /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
-     Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
-  const ufSample = () => { connNote("UniFi"); return CONN.unifi || {}; };
-  const ufWhen = t => { const d = new Date(str(t)); return isNaN(d) ? str(t) : d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
-  function unifiClients(){
-    const s = ufSample(), names = Object.fromEntries((s.devices || []).map(d => [str(d.id), str(d.name)]));
-    const out = (s.clients || []).map(c => ({ name:str(c.name || c.hostname || c.macAddress), mac:str(c.macAddress).toLowerCase(), ip:str(c.ipAddress || ""),
-      type:str(c.type).toLowerCase(), connected:ufWhen(c.connectedAt), uplink:names[str(c.uplinkDeviceId)] || "" }));
-    addStep("UniFi clients", { mono:true, text:out.map(c => c.name + " (" + (c.ip || c.mac) + ")").join("\n") || tr("(nothing)") }).done(tr("{n} clients", { n:out.length }), "ok");
-    return out;
-  }
-  function unifiDevices(){
-    const s = ufSample(), stats = s.statistics || {};
-    return (s.devices || []).map(d => {
-      const rec = { name:str(d.name), model:str(d.model), mac:str(d.macAddress).toLowerCase(), ip:str(d.ipAddress || ""), state:str(d.state).toLowerCase(),
-                    firmware:str(d.firmwareVersion || ""), update:!!d.firmwareUpdatable, uptime:"", cpu:"", memory:"" };
-      const st = rec.state === "online" ? stats[str(d.id)] : null;
-      if (st) Object.assign(rec, { uptime:isNumLike(st.uptimeSec) ? cents(num(st.uptimeSec) / 3600) : "", cpu:isNumLike(st.cpuUtilizationPct) ? num(st.cpuUtilizationPct) : "",
-                                    memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
-      return rec;
-    });
-  }
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
   const mtSample = () => { connNote("MikroTik"); return CONN.mikrotik || {}; };
@@ -24518,6 +24498,28 @@ HOW TO MAP CODE
       battery_soc_pct: soc === -1 ? "" : soc, status:solaxStatus(r.inverterStatus), upload_time:str(r.uploadTime || "") };
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
+  }
+  /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
+     Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
+  const ufSample = () => { connNote("UniFi"); return CONN.unifi || {}; };
+  const ufWhen = t => { const d = new Date(str(t)); return isNaN(d) ? str(t) : d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function unifiClients(){
+    const s = ufSample(), names = Object.fromEntries((s.devices || []).map(d => [str(d.id), str(d.name)]));
+    const out = (s.clients || []).map(c => ({ name:str(c.name || c.hostname || c.macAddress), mac:str(c.macAddress).toLowerCase(), ip:str(c.ipAddress || ""),
+      type:str(c.type).toLowerCase(), connected:ufWhen(c.connectedAt), uplink:names[str(c.uplinkDeviceId)] || "" }));
+    addStep("UniFi clients", { mono:true, text:out.map(c => c.name + " (" + (c.ip || c.mac) + ")").join("\n") || tr("(nothing)") }).done(tr("{n} clients", { n:out.length }), "ok");
+    return out;
+  }
+  function unifiDevices(){
+    const s = ufSample(), stats = s.statistics || {};
+    return (s.devices || []).map(d => {
+      const rec = { name:str(d.name), model:str(d.model), mac:str(d.macAddress).toLowerCase(), ip:str(d.ipAddress || ""), state:str(d.state).toLowerCase(),
+                    firmware:str(d.firmwareVersion || ""), update:!!d.firmwareUpdatable, uptime:"", cpu:"", memory:"" };
+      const st = rec.state === "online" ? stats[str(d.id)] : null;
+      if (st) Object.assign(rec, { uptime:isNumLike(st.uptimeSec) ? cents(num(st.uptimeSec) / 3600) : "", cpu:isNumLike(st.cpuUtilizationPct) ? num(st.cpuUtilizationPct) : "",
+                                    memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
+      return rec;
+    });
   }
   // sync:connections-page-end
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
@@ -25359,8 +25361,6 @@ HOW TO MAP CODE
       case "rb_proxmox_guests": return proxmoxGuests();
       case "rb_proxmox_storage": return proxmoxStorage();
       case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
-      case "rb_unifi_clients": return unifiClients();
-      case "rb_unifi_devices": return unifiDevices();
       // sync:connections-iread-begin
       case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_pihole_summary": return piholeSummary();
@@ -25371,6 +25371,8 @@ HOW TO MAP CODE
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_solax_now": return solaxNow();
+      case "rb_unifi_clients": return unifiClients();
+      case "rb_unifi_devices": return unifiDevices();
       // sync:connections-iread-end
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();

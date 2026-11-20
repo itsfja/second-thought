@@ -149,8 +149,7 @@
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
-    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read", rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
-    rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
+    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",     rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
     rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control", rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
@@ -173,6 +172,7 @@
     rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control",
     rb_solax_now:"solax_read",
+    rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
     // sync:connections-caps-end
   };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
@@ -605,11 +605,6 @@
       tooltip:"A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user." }),
     S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
       { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),
-    /* UniFi (#359): read only */
-    V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
-      tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
-    V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
-      tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     // sync:connections-defs-begin
     /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
     V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
@@ -648,6 +643,11 @@
     /* Solax (#361): read only, from SolaxCloud */
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
+    /* UniFi (#359): read only */
+    V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
+      tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
+    V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
+      tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     // sync:connections-defs-end
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",

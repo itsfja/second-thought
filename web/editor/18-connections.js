@@ -637,28 +637,6 @@
     addStep("Proxmox", { mono:true, text:what }).done("sample cluster", "ok");
     return true;
   }
-  /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
-     Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
-  const ufSample = () => { connNote("UniFi"); return CONN.unifi || {}; };
-  const ufWhen = t => { const d = new Date(str(t)); return isNaN(d) ? str(t) : d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
-  function unifiClients(){
-    const s = ufSample(), names = Object.fromEntries((s.devices || []).map(d => [str(d.id), str(d.name)]));
-    const out = (s.clients || []).map(c => ({ name:str(c.name || c.hostname || c.macAddress), mac:str(c.macAddress).toLowerCase(), ip:str(c.ipAddress || ""),
-      type:str(c.type).toLowerCase(), connected:ufWhen(c.connectedAt), uplink:names[str(c.uplinkDeviceId)] || "" }));
-    addStep("UniFi clients", { mono:true, text:out.map(c => c.name + " (" + (c.ip || c.mac) + ")").join("\n") || tr("(nothing)") }).done(tr("{n} clients", { n:out.length }), "ok");
-    return out;
-  }
-  function unifiDevices(){
-    const s = ufSample(), stats = s.statistics || {};
-    return (s.devices || []).map(d => {
-      const rec = { name:str(d.name), model:str(d.model), mac:str(d.macAddress).toLowerCase(), ip:str(d.ipAddress || ""), state:str(d.state).toLowerCase(),
-                    firmware:str(d.firmwareVersion || ""), update:!!d.firmwareUpdatable, uptime:"", cpu:"", memory:"" };
-      const st = rec.state === "online" ? stats[str(d.id)] : null;
-      if (st) Object.assign(rec, { uptime:isNumLike(st.uptimeSec) ? cents(num(st.uptimeSec) / 3600) : "", cpu:isNumLike(st.cpuUtilizationPct) ? num(st.cpuUtilizationPct) : "",
-                                    memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
-      return rec;
-    });
-  }
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
   const mtSample = () => { connNote("MikroTik"); return CONN.mikrotik || {}; };
@@ -819,6 +797,28 @@
       battery_soc_pct: soc === -1 ? "" : soc, status:solaxStatus(r.inverterStatus), upload_time:str(r.uploadTime || "") };
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
+  }
+  /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
+     Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
+  const ufSample = () => { connNote("UniFi"); return CONN.unifi || {}; };
+  const ufWhen = t => { const d = new Date(str(t)); return isNaN(d) ? str(t) : d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function unifiClients(){
+    const s = ufSample(), names = Object.fromEntries((s.devices || []).map(d => [str(d.id), str(d.name)]));
+    const out = (s.clients || []).map(c => ({ name:str(c.name || c.hostname || c.macAddress), mac:str(c.macAddress).toLowerCase(), ip:str(c.ipAddress || ""),
+      type:str(c.type).toLowerCase(), connected:ufWhen(c.connectedAt), uplink:names[str(c.uplinkDeviceId)] || "" }));
+    addStep("UniFi clients", { mono:true, text:out.map(c => c.name + " (" + (c.ip || c.mac) + ")").join("\n") || tr("(nothing)") }).done(tr("{n} clients", { n:out.length }), "ok");
+    return out;
+  }
+  function unifiDevices(){
+    const s = ufSample(), stats = s.statistics || {};
+    return (s.devices || []).map(d => {
+      const rec = { name:str(d.name), model:str(d.model), mac:str(d.macAddress).toLowerCase(), ip:str(d.ipAddress || ""), state:str(d.state).toLowerCase(),
+                    firmware:str(d.firmwareVersion || ""), update:!!d.firmwareUpdatable, uptime:"", cpu:"", memory:"" };
+      const st = rec.state === "online" ? stats[str(d.id)] : null;
+      if (st) Object.assign(rec, { uptime:isNumLike(st.uptimeSec) ? cents(num(st.uptimeSec) / 3600) : "", cpu:isNumLike(st.cpuUtilizationPct) ? num(st.cpuUtilizationPct) : "",
+                                    memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
+      return rec;
+    });
   }
   // sync:connections-page-end
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */

@@ -3,13 +3,14 @@
   const HUES = {
     events:"#936D12", control:"#AF5E19", operators:"#408230", text:"#288167", variables:"#D04121",
     lists:"#C2413B", procedures:"#CB3E71", draft:"#2469F9", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", mikrotik:"#C2185B", unifi:"#C2185B", proxmox:"#C2185B", docker:"#C2185B",
+    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", mikrotik:"#C2185B", proxmox:"#C2185B", docker:"#C2185B",
     // sync:connections-hues-begin
     nzbgeek:"#C2185B",
     pihole:"#C2185B",
     powerwall:"#C2185B",
     sabnzbd:"#C2185B",
     solax:"#C2185B",
+    unifi:"#C2185B",
     // sync:connections-hues-end
     arr:"#C2185B", unraid:"#C2185B", plex:"#C2185B"
   };
@@ -23,13 +24,14 @@
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), unifi:style(HUES.unifi), proxmox:style(HUES.proxmox), docker:style(HUES.docker),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), mikrotik:style(HUES.mikrotik), proxmox:style(HUES.proxmox), docker:style(HUES.docker),
     // sync:connections-styles-begin
     nzbgeek:style(HUES.nzbgeek),
     pihole:style(HUES.pihole),
     powerwall:style(HUES.powerwall),
     sabnzbd:style(HUES.sabnzbd),
     solax:style(HUES.solax),
+    unifi:style(HUES.unifi),
     // sync:connections-styles-end
     arr:style(HUES.arr), unraid:style(HUES.unraid), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
