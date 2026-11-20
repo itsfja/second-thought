@@ -322,9 +322,6 @@
       case "rb_docker_containers": return dockerContainers();
       case "rb_docker_stats": return dockerStats();
       case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
-      case "rb_sabnzbd_queue": return sabnzbdQueue();
-      case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
-      case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
       case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
@@ -351,6 +348,9 @@
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
       case "rb_powerwall_now": return powerwallNow();
+      case "rb_sabnzbd_queue": return sabnzbdQueue();
+      case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
+      case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_solax_now": return solaxNow();
       // sync:connections-iread-end
       case "rb_mikrotik_ports": return mikrotikPorts();
@@ -1110,7 +1110,6 @@
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
-      case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
@@ -1125,6 +1124,7 @@
       case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
       case "rb_pihole_deny": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's deny list"); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
+      case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
       // sync:connections-iact-end
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;

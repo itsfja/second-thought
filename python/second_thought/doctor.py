@@ -290,6 +290,11 @@ class Doctor:
                 return tr("battery at {pct}%, reserve {reserve}%, grid {grid}", pct=got.get("battery_soc_pct") or "?",
                           reserve=got.get("reserve_pct") or "?", grid=got.get("grid") or "?")
             out.append(("Powerwall", powerwall))
+        if has("sabnzbd_read", "sabnzbd_control"):
+            async def sabnzbd():
+                q = (await self._sabnzbd("queue")).get("queue") or {}
+                return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
+            out.append(("SABnzbd", sabnzbd))
         if has("solax_read"):
             async def solax():
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
@@ -331,11 +336,6 @@ class Doctor:
                 n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
                 return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
             out.append(("Docker", docker))
-        if has("sabnzbd_read", "sabnzbd_control"):
-            async def sabnzbd():
-                q = (await self._sabnzbd("queue")).get("queue") or {}
-                return tr("SABnzbd {version}", version=to_str(q.get("version")) or "?") + ", " + tr("{n} in the queue", n=len(q.get("slots") or []))
-            out.append(("SABnzbd", sabnzbd))
         if has("arr_read", "arr_control"):
             async def arr(which):
                 status = await self._arr(which, "GET", "/api/v3/system/status")
@@ -707,10 +707,11 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
+                "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
                 # sync:connections-settingsmap-end
 }.get(area)

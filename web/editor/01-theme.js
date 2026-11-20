@@ -7,9 +7,10 @@
     // sync:connections-hues-begin
     pihole:"#C2185B",
     powerwall:"#C2185B",
+    sabnzbd:"#C2185B",
     solax:"#C2185B",
     // sync:connections-hues-end
-    sabnzbd:"#C2185B", arr:"#C2185B", unraid:"#C2185B", nzbgeek:"#C2185B", plex:"#C2185B"
+    arr:"#C2185B", unraid:"#C2185B", nzbgeek:"#C2185B", plex:"#C2185B"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -25,9 +26,10 @@
     // sync:connections-styles-begin
     pihole:style(HUES.pihole),
     powerwall:style(HUES.powerwall),
+    sabnzbd:style(HUES.sabnzbd),
     solax:style(HUES.solax),
     // sync:connections-styles-end
-    sabnzbd:style(HUES.sabnzbd), arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), plex:style(HUES.plex),
+    arr:style(HUES.arr), unraid:style(HUES.unraid), nzbgeek:style(HUES.nzbgeek), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)

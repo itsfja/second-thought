@@ -1,0 +1,1 @@
+    sabnzbd:style(HUES.sabnzbd),

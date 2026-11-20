@@ -73,12 +73,12 @@
              // sync:connections-need-begin
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
+             sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              // sync:connections-need-end
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
-             sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
@@ -142,10 +142,6 @@
       "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
       "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
       "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
-    if (need.sabnzbd) out.push("", "[sabnzbd]",
-      "; SABnzbd's API: its address and the full API key (in SABnzbd under Config, General, API Key), not the",
-      "; NZB key. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, if it needs one.",
-      "SABNZBD_URL = ", "SABNZBD_API_KEY = ");
     if (need.arr) out.push("", "[radarr]",
       "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
       "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
@@ -203,6 +199,10 @@
       "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
       ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
       ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
+    if (need.sabnzbd) out.push("", "[sabnzbd]",
+      "; SABnzbd's API: its address and the full API key (in SABnzbd under Config, General, API Key), not the",
+      "; NZB key. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, if it needs one.",
+      "SABNZBD_URL = ", "SABNZBD_API_KEY = ");
     if (need.solax) out.push("", "[solax]",
       "; Your Solax inverter, read from SolaxCloud (the inverter's own local API is gone from newer firmware).",
       "; Make a free token on the API page of SolaxCloud, and find the Registration No. on the dongle's label or in the",
@@ -535,9 +535,6 @@
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
-        case "rb_sabnzbd_queue": return "(await R.sabnzbd_queue())";
-        case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
-        case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -564,6 +561,9 @@
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
         case "rb_powerwall_now": return "(await R.powerwall_now())";
+        case "rb_sabnzbd_queue": return "(await R.sabnzbd_queue())";
+        case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
+        case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_solax_now": return "(await R.solax_now())";
         // sync:connections-pyread-end
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
@@ -716,7 +716,6 @@
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
-          case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
@@ -731,6 +730,7 @@
         case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
         case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
+          case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
