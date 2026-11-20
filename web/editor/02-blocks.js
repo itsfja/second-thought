@@ -157,9 +157,7 @@
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
-    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch", rb_pihole_summary:"pihole_read",
-    rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
-    rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
+    rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
     rb_plex_server:"plex_read", rb_plex_libraries:"plex_read", rb_plex_sessions:"plex_read", rb_plex_recent:"plex_read",
     rb_tautulli_history:"plex_read", rb_tautulli_watchtime:"plex_read", rb_plex_scan:"plex_control", rb_plex_stop:"plex_control",
     rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
@@ -171,6 +169,8 @@
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     rb_solax_now:"solax_read",
     // sync:connections-caps-begin
+    rb_pihole_summary:"pihole_read", rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
+    rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
     rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control",
     // sync:connections-caps-end
   };
@@ -590,21 +590,6 @@
       tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),
     S("rb_nzbgeek_fetch", "fetch the NZB for %1", [val("ID")],
       { style:"nzbgeek", inputsInline:true, tooltip:"Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches." }),
-    /* Pi-hole (#401): reads, and changes that always ask */
-    V("rb_pihole_summary", "Pi-hole summary", [], null, { style:"pihole",
-      tooltip:"One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking (whether blocking is on). Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. On this page it uses a sample Pi-hole." }),
-    V("rb_pihole_top_domains", "top %1 blocked domains", [val("N")], "Array", { style:"pihole", inputsInline:true,
-      tooltip:"A list of records, one for each of the most-blocked domains: domain and count (how many times it was blocked). It only reads." }),
-    V("rb_pihole_top_clients", "top %1 clients", [val("N")], "Array", { style:"pihole", inputsInline:true,
-      tooltip:"A list of records, one for each of the devices that asked the most: name, ip and count (how many queries). It only reads." }),
-    S("rb_pihole_blocking", "disable Pi-hole blocking for %1 seconds", [val("N")],
-      { style:"pihole", inputsInline:true, tooltip:"Turns blocking off for that many seconds, then Pi-hole turns it back on itself. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
-    S("rb_pihole_enable", "enable Pi-hole blocking", [],
-      { style:"pihole", tooltip:"Turns blocking back on. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
-    S("rb_pihole_allow", "%1 %2 on Pi-hole's allow list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
-      { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the allow list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
-    S("rb_pihole_deny", "%1 %2 on Pi-hole's deny list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
-      { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the deny list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     /* Plex and Tautulli (#402): reads, and changes that always ask */
     V("rb_plex_server", "Plex server", [], null, { style:"plex",
       tooltip:"One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server." }),
@@ -642,6 +627,21 @@
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
     // sync:connections-defs-begin
+    /* Pi-hole (#401): reads, and changes that always ask */
+    V("rb_pihole_summary", "Pi-hole summary", [], null, { style:"pihole",
+      tooltip:"One record for today: queries (how many DNS queries), blocked (how many were blocked), blocked_pct (the blocked share), gravity (how many domains the lists have), clients (how many devices asked) and blocking (whether blocking is on). Needs PIHOLE_URL and PIHOLE_PASSWORD in second-thought.ini. On this page it uses a sample Pi-hole." }),
+    V("rb_pihole_top_domains", "top %1 blocked domains", [val("N")], "Array", { style:"pihole", inputsInline:true,
+      tooltip:"A list of records, one for each of the most-blocked domains: domain and count (how many times it was blocked). It only reads." }),
+    V("rb_pihole_top_clients", "top %1 clients", [val("N")], "Array", { style:"pihole", inputsInline:true,
+      tooltip:"A list of records, one for each of the devices that asked the most: name, ip and count (how many queries). It only reads." }),
+    S("rb_pihole_blocking", "disable Pi-hole blocking for %1 seconds", [val("N")],
+      { style:"pihole", inputsInline:true, tooltip:"Turns blocking off for that many seconds, then Pi-hole turns it back on itself. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_pihole_enable", "enable Pi-hole blocking", [],
+      { style:"pihole", tooltip:"Turns blocking back on. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_pihole_allow", "%1 %2 on Pi-hole's allow list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
+      { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the allow list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
+    S("rb_pihole_deny", "%1 %2 on Pi-hole's deny list", [{ type:"field_dropdown", name:"ACTION", options:[["add","add"],["remove","remove"]] }, val("DOMAIN")],
+      { style:"pihole", inputsInline:true, tooltip:"Puts a domain on the deny list, or takes it off. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     /* Powerwall (#362): reads, and one change that always asks */
     V("rb_powerwall_now", "Powerwall figures", [], null, { style:"powerwall",
       tooltip:"A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall." }),

@@ -1,0 +1,1 @@
+    pihole:style(HUES.pihole),

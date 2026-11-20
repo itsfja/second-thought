@@ -278,6 +278,12 @@ class Doctor:
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
         # sync:connections-check-begin
+        if has("pihole_read", "pihole_control"):
+            async def pihole():
+                s = await self._pihole("GET", "/api/stats/summary")
+                q = (s.get("queries") or {})
+                return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
+            out.append(("Pi-hole", pihole))
         if has("powerwall_read", "powerwall_control"):
             async def powerwall():
                 base = os.environ.get("POWERWALL_URL", "").strip()
@@ -354,12 +360,6 @@ class Doctor:
                 return tr("NZBGeek {version}", version=to_str(server.get("version")) or "?") \
                     + ", " + tr("{n} days of retention", n=days or "?")
             out.append(("NZBGeek", nzbgeek))
-        if has("pihole_read", "pihole_control"):
-            async def pihole():
-                s = await self._pihole("GET", "/api/stats/summary")
-                q = (s.get("queries") or {})
-                return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
-            out.append(("Pi-hole", pihole))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -707,8 +707,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "UniFi": "UNIFI_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "SABnzbd": "SABNZBD_URL", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "NZBGeek": "NZBGEEK_API_KEY", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY", "Solax": "SOLAX_TOKEN_ID",
                 # sync:connections-settingsmap-begin
+                "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL"
                 # sync:connections-settingsmap-end
 }.get(area)

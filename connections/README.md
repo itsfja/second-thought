@@ -49,4 +49,4 @@ in `samples/connections.json`) by hand — sync does not prune.
 `docs/connections.md`'s table of contents at the top is still a hand-written list of the sections; add the new
 connection's line there.
 
-`powerwall/` is the pattern: moved first (#455).
+`powerwall/` and `pihole/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.
