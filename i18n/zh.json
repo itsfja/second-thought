@@ -2015,7 +2015,10 @@
   "Review loop": "审查循环",
   "{n} problems": "{n} 个问题",
   "Revision, round {n}": "修订，第 {n} 轮",
-  "Fixing: {problems}": "正在修正：{problems}"
+  "Fixing: {problems}": "正在修正：{problems}",
+  "Edit blocks": "编辑积木",
+  "Show the outline": "显示大纲",
+  "… and more": "……更多"
  },
  "examples": {
   "review": {

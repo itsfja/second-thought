@@ -1271,7 +1271,10 @@
 "Review loop":"circulus revisionis",
 "{n} problems":"{n} problemata",
 "Revision, round {n}":"emendatio, circuitu {n}",
-"Fixing: {problems}":"emendatio: {problems}"
+"Fixing: {problems}":"emendatio: {problems}",
+"Edit blocks":"emendare tessellas",
+"Show the outline":"ostende lineamenta",
+"… and more":"… et plura"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

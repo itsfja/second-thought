@@ -1271,7 +1271,10 @@
 "Review loop":"endurscyddinges hring",
 "{n} problems":"{n} sorga",
 "Revision, round {n}":"ednytting, hweol {n}",
-"Fixing: {problems}":"rihtung: {problems}"
+"Fixing: {problems}":"rihtung: {problems}",
+"Edit blocks":"arwrighta þ΁a bloccan",
+"Show the outline":"sceawian þa healsunge",
+"… and more":"… and mā"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

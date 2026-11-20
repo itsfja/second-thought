@@ -1271,7 +1271,10 @@
 "Review loop":"Boucle de relecture",
 "{n} problems":"{n} problèmes",
 "Revision, round {n}":"Révision, tour {n}",
-"Fixing: {problems}":"Correction : {problems}"
+"Fixing: {problems}":"Correction : {problems}",
+"Edit blocks":"Modifier les blocs",
+"Show the outline":"Voir le plan",
+"… and more":"… et plus"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

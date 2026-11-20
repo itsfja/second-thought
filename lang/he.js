@@ -1272,7 +1272,10 @@
 "Review loop":"לולאת ביקורת",
 "{n} problems":"{n} בעיות",
 "Revision, round {n}":"תיקון, סיבוב {n}",
-"Fixing: {problems}":"מתקן: {problems}"
+"Fixing: {problems}":"מתקן: {problems}",
+"Edit blocks":"עריכת בלוקים",
+"Show the outline":"הצג את המתוהה",
+"… and more":"… עוד"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

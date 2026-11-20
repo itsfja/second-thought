@@ -2016,7 +2016,10 @@
   "Review loop": "𐀭 𐀝 𐀑",
   "{n} problems": "{n} 𐀭 𐀝",
   "Revision, round {n}": "{n} 𐀭 𐀝",
-  "Fixing: {problems}": "𐀝 {problems}"
+  "Fixing: {problems}": "𐀝 {problems}",
+  "Edit blocks": "𐀭 𐀝 𐀑",
+  "Show the outline": "𐀭 𐀝 𐀑",
+  "… and more": "𐀭 𐀝 𐀑"
  },
  "examples": {
   "review": {

@@ -2015,7 +2015,10 @@
   "Review loop": "lykkja endurskoðunar",
   "{n} problems": "{n} vandamál",
   "Revision, round {n}": "endurbót, umferð {n}",
-  "Fixing: {problems}": "lagar: {problems}"
+  "Fixing: {problems}": "lagar: {problems}",
+  "Edit blocks": "breyta blokkum",
+  "Show the outline": "sýndu útlínurnar",
+  "… and more": "… og meira"
  },
  "examples": {
   "review": {

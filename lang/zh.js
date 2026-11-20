@@ -1271,7 +1271,10 @@
 "Review loop":"审查循环",
 "{n} problems":"{n} 个问题",
 "Revision, round {n}":"修订，第 {n} 轮",
-"Fixing: {problems}":"正在修正：{problems}"
+"Fixing: {problems}":"正在修正：{problems}",
+"Edit blocks":"编辑积木",
+"Show the outline":"显示大纲",
+"… and more":"……更多"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

@@ -1271,7 +1271,10 @@
 "Review loop":"Ciclo di revisione",
 "{n} problems":"{n} problemi",
 "Revision, round {n}":"Revisione, giro {n}",
-"Fixing: {problems}":"Correzione: {problems}"
+"Fixing: {problems}":"Correzione: {problems}",
+"Edit blocks":"Modifica i blocchi",
+"Show the outline":"Mostra lo schema",
+"… and more":"… e altro"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

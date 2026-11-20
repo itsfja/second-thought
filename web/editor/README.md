@@ -41,4 +41,5 @@ file needn't end where a function does, but it reads better if it does.
 | `23-acts.js` | What the program can act on before Run: the line under the controls and the mark on acting blocks (#448). |
 | `23-connections.js` | The Connections list in Settings: the checkboxes that turn a service's palette category on and off (#446). |
 | `23-review-log.js` | The run log's second thought (#449): the review loop's rounds strip and each revision's diff, and results rendered as sanitised Markdown. |
+| `23-phone.js` | On a phone (#450): the program as a read-only outline with a large Run; "Edit blocks" opens the full editor. |
 | `23-schedules.js` | Schedules and listeners on the page, and the editor's closing line. |

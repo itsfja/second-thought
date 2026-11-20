@@ -30,7 +30,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))  # tests/, so tests/e2e is importable
 from e2e.common import *  # noqa: E402,F401,F403  (tools/record_demo.py uses route, MOCK, VENDOR and step_texts from here)
 from e2e.page import page_tests  # noqa: E402
-from e2e.page_features import phone_palette_tests  # noqa: E402
+from e2e.page_features import phone_palette_tests, phone_run_tests  # noqa: E402
 from e2e.python_export import PROGRAM_TIMES, group_share, python_tests  # noqa: E402
 from e2e.sources import example_ini_check, package_check, sri_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
@@ -181,7 +181,7 @@ def main():
         if exports and not failures:
             save_exports(codes, exports)
     if "page" in areas:
-        for fn in (describe_tests, format_tests, program_test_tests, safety_tests, access_tests, pages_tests, offline_tests, phone_palette_tests):
+        for fn in (describe_tests, format_tests, program_test_tests, safety_tests, access_tests, pages_tests, offline_tests, phone_palette_tests, phone_run_tests):
             with timed(f"page: {fn.__name__}"):
                 asyncio.run(fn())
     if "i18n" in areas:

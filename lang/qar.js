@@ -1272,7 +1272,10 @@
 "Review loop":"ᛖᚾᛞᚢᚱᛋᚳᚣᛞᛞᛁᛝᛖᛋ ᚻᚱᛁᛝ",
 "{n} problems":"{n} ᛋᚩᚱᚷᚪ",
 "Revision, round {n}":"ᛖᛞᚾᚣᛏᛏᛁᛝ, ᚻᚹᛖᚩᛚ {n}",
-"Fixing: {problems}":"ᚱᛁᛇᛏᚢᛝ: {problems}"
+"Fixing: {problems}":"ᚱᛁᛇᛏᚢᛝ: {problems}",
+"Edit blocks":"ᚪᚱᚹᚱᛁᚷᛇᛏᚪ þ΁a ᛒᛚᚩᚳᚳᚪᚾ",
+"Show the outline":"ᛋᚳᛠᚹᛁᚪᚾ ᚦᚪ ᚻᛠᛚᛋᚢᛝᛖ",
+"… and more":"… ᚪᚾᛞ ᛗᚪ"
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},

@@ -224,7 +224,20 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   .blocklyToolboxCategoryLabel{font-size:12px!important}
   .blocklyToolboxCategory{padding-inline-end:4px!important;height:24px!important;line-height:24px!important}
   .blocklyToolbox{max-width:118px}
+  /* Every button at least 44 pixels high on a phone (#450), and Run large. */
+  button,select,summary{min-height:44px}
+  #run{min-height:52px;font-size:17px;padding-inline:26px}
+  /* The program as a read-only outline instead of the block editor (#450); "Edit blocks" swaps them. */
+  #outline-toggle{display:inline-block}
+  body.outline #blockly{display:none}
+  body.outline #block-outline{display:block}
+  #block-outline{position:absolute;inset:0;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;z-index:5}
+  #block-outline h3{font-family:var(--font-display);font-weight:500;font-size:16px;margin:0 0 8px}
+  .outline-script{margin-bottom:10px}
+  .outline-row{font-size:13.5px;padding:3px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+  .outline-row.hat{font-weight:700}
 }
+@media (min-width:601px){#block-outline,#outline-toggle{display:none}}
 .exdesc{margin:0;font-size:13px;color:var(--muted);max-width:110ch;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .exdesc b{color:var(--ink);font-weight:700}
 .gallery{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px;display:flex;flex-direction:column;gap:14px}
@@ -322,6 +335,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 </header>
 <div class="subbar">
   <p id="caps-line" class="caps-line" role="status"></p>
+  <button type="button" id="outline-toggle"></button>
   <p id="ex-desc" class="exdesc"></p>
   <div id="banner" class="banner" hidden></div>
   <div id="offsite" class="banner slim" hidden><span id="offsite-text"></span> <a id="offsite-link" href="https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN" target="_blank" rel="noopener"></a>
@@ -547,6 +561,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
 
 <main class="main">
   <div class="canvas">
+    <div id="block-outline" hidden></div>
     <div class="finder"><label for="block-search" class="sr">Find a block</label><input type="search" id="block-search" placeholder="Find a block…" autocomplete="off"></div>
     <div id="blockly" aria-label="Block editor"></div>
     <p id="keys-where" class="sr">Keyboard help</p>
@@ -26833,6 +26848,68 @@ HOW TO MAP CODE
     };
   }
   wireShare();
+  // 23-phone.js: On a phone (#450): the program shows as a short outline that can't be edited, with a large Run and
+  // the run log; "Edit blocks" opens the full editor. The choice is kept per browser.
+  /* ---------- Phone outline ---------- */
+  const PHONE_MQ = matchMedia("(max-width:600px)");
+  const PHONE_EDIT_KEY = "second-thought-phone-edit";
+  function outlineMode(){
+    let stored = null;
+    try { stored = localStorage.getItem(PHONE_EDIT_KEY); } catch(e) {}
+    return PHONE_MQ.matches && stored !== "1";
+  }
+  function applyOutlineMode(){
+    const on = outlineMode();
+    document.body.classList.toggle("outline", on);
+    $("block-outline").hidden = !on; // [hidden]{display:none!important} would otherwise beat the CSS below
+    const btn = $("outline-toggle");
+    btn.textContent = on ? tr("Edit blocks") : tr("Show the outline");
+    renderOutline();
+    try { Blockly.svgResize(ws); } catch(e) {}
+  }
+  $("outline-toggle").onclick = () => {
+    try {
+      if (outlineMode()) localStorage.setItem(PHONE_EDIT_KEY, "1");
+      else localStorage.removeItem(PHONE_EDIT_KEY);
+    } catch(e) {}
+    applyOutlineMode();
+  };
+  if (PHONE_MQ.addEventListener) PHONE_MQ.addEventListener("change", applyOutlineMode);
+  // The outline: each script as its hat's words and then each block's own words, one per line, capped.
+  function renderOutline(){
+    const el = $("block-outline");
+    if (!el || !outlineMode()) return;
+    el.innerHTML = "";
+    const h = document.createElement("h3");
+    h.textContent = tr("Program");
+    el.appendChild(h);
+    let lines = 0;
+    const cap = 80;
+    for (const top of ws.getTopBlocks(false)) {
+      const script = document.createElement("div");
+      script.className = "outline-script";
+      let b = top, n = 0;
+      while (b && lines < cap) {
+        const row = document.createElement("div");
+        row.className = "outline-row" + (b === top ? " hat" : "");
+        row.textContent = b.toString();
+        script.appendChild(row);
+        lines++; n++;
+        b = b.getNextBlock();
+      }
+      if (b) {
+        const more = document.createElement("div");
+        more.className = "outline-row";
+        more.textContent = tr("… and more");
+        script.appendChild(more);
+      }
+      el.appendChild(script);
+      if (lines >= cap) break;
+    }
+  }
+  ws.addChangeListener(ev => { if (!ev.isUiEvent) renderOutline(); });
+  applyOutlineMode();
+  window.__outline = () => ({ mode: document.body.classList.contains("outline"), text: $("block-outline").innerText });
   // 23-review-log.js: the run log's second thought (#449) — the review loop's rounds as a strip, what each revision
   // changed as a +/− diff, and results rendered as Markdown, safely.
   /* ---------- Markdown in results, rendered safely ----------

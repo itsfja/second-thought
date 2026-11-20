@@ -2015,7 +2015,10 @@
   "Review loop": "Ciclo di revisione",
   "{n} problems": "{n} problemi",
   "Revision, round {n}": "Revisione, giro {n}",
-  "Fixing: {problems}": "Correzione: {problems}"
+  "Fixing: {problems}": "Correzione: {problems}",
+  "Edit blocks": "Modifica i blocchi",
+  "Show the outline": "Mostra lo schema",
+  "… and more": "… e altro"
  },
  "examples": {
   "review": {

@@ -219,7 +219,20 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
   .blocklyToolboxCategoryLabel{font-size:12px!important}
   .blocklyToolboxCategory{padding-inline-end:4px!important;height:24px!important;line-height:24px!important}
   .blocklyToolbox{max-width:118px}
+  /* Every button at least 44 pixels high on a phone (#450), and Run large. */
+  button,select,summary{min-height:44px}
+  #run{min-height:52px;font-size:17px;padding-inline:26px}
+  /* The program as a read-only outline instead of the block editor (#450); "Edit blocks" swaps them. */
+  #outline-toggle{display:inline-block}
+  body.outline #blockly{display:none}
+  body.outline #block-outline{display:block}
+  #block-outline{position:absolute;inset:0;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;z-index:5}
+  #block-outline h3{font-family:var(--font-display);font-weight:500;font-size:16px;margin:0 0 8px}
+  .outline-script{margin-bottom:10px}
+  .outline-row{font-size:13.5px;padding:3px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+  .outline-row.hat{font-weight:700}
 }
+@media (min-width:601px){#block-outline,#outline-toggle{display:none}}
 .exdesc{margin:0;font-size:13px;color:var(--muted);max-width:110ch;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .exdesc b{color:var(--ink);font-weight:700}
 .gallery{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;margin-bottom:12px;display:flex;flex-direction:column;gap:14px}

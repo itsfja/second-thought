@@ -1272,7 +1272,10 @@
 "Review loop":"Review 𐠇𐠃𐠃𐠙",
 "{n} problems":"{n} 𐠙𐠦𐠃𐠁𐠇𐠁𐠘𐠠",
 "Revision, round {n}":"Revision, 𐠦𐠃𐠄𐠊𐠕 {n}",
-"Fixing: {problems}":"Fixing: {problems}"
+"Fixing: {problems}":"Fixing: {problems}",
+"Edit blocks":"Edit 𐠁𐠇𐠃𐠉𐠉𐠠",
+"Show the outline":"Show 𐠃𐠓𐠁 𐠃𐠄𐠃𐠇𐠂𐠊𐠁",
+"… and more":"… 𐠀𐠊𐠕 𐠘𐠃𐠦𐠁"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},

@@ -1271,7 +1271,10 @@
 "Review loop":"Bucle de revisión",
 "{n} problems":"{n} problemas",
 "Revision, round {n}":"Revisión, ronda {n}",
-"Fixing: {problems}":"Corrigiendo: {problems}"
+"Fixing: {problems}":"Corrigiendo: {problems}",
+"Edit blocks":"Editar bloques",
+"Show the outline":"Ver el esquema",
+"… and more":"… y más"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

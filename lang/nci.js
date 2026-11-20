@@ -1270,7 +1270,10 @@
 "Review loop":"nemachtiliztli",
 "{n} problems":"{n} cualantli",
 "Revision, round {n}":"yancui tlacuiloliztli {n}",
-"Fixing: {problems}":"tlacualtilia: {problems}"
+"Fixing: {problems}":"tlacualtilia: {problems}",
+"Edit blocks":"xicpiya in tlapiyaliztli",
+"Show the outline":"xiquittili in tlamachqui",
+"… and more":"… ocachi"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

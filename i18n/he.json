@@ -2016,7 +2016,10 @@
   "Review loop": "לולאת ביקורת",
   "{n} problems": "{n} בעיות",
   "Revision, round {n}": "תיקון, סיבוב {n}",
-  "Fixing: {problems}": "מתקן: {problems}"
+  "Fixing: {problems}": "מתקן: {problems}",
+  "Edit blocks": "עריכת בלוקים",
+  "Show the outline": "הצג את המתוהה",
+  "… and more": "… עוד"
  },
  "examples": {
   "review": {

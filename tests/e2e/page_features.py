@@ -1094,7 +1094,7 @@ async def phone_palette_tests():
         errors = []
         pg.on("pageerror", lambda e: errors.append(str(e)))
         await pg.route("**/*", route)
-        await pg.add_init_script(MOCK)
+        await pg.add_init_script(MOCK + ";try{localStorage.setItem('second-thought-phone-edit','1')}catch(e){}")  # measure the editor, not the outline (#450)
         await pg.goto("http://test/")
         await pg.wait_for_timeout(1500)
         cats = await pg.eval_on_selector_all(".blocklyToolboxCategory", "e => e.length")
@@ -1105,5 +1105,69 @@ async def phone_palette_tests():
             const s = getComputedStyle(c), l = getComputedStyle(c.querySelector('.blocklyToolboxCategoryLabel'));
             return [s.height, s.lineHeight, l.fontSize]; }""")
         check(row == ["24px", "24px", "12px"], f"the phone rules reach Blockly 13's rows and labels (height {row[0]}, line {row[1]}, label {row[2]})")
+        check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
+        await browser.close()
+
+
+async def phone_run_tests():
+    """On a phone at 390×844, a program runs and its questions are answered without the block editor (#450): the
+    program shows as a read-only outline, Run is large, "Edit blocks" opens the editor, and no visible button is
+    under 44 pixels high."""
+    print("Run on a phone (#450)")
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        pg = await browser.new_page(viewport={"width": 390, "height": 844})
+        errors = []
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        await pg.route("**/*", route)
+        await pg.add_init_script(MOCK)
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        await pg.evaluate("() => { document.getElementById('first').hidden = true; }")  # the editor path is under test
+        await load_state(pg, script(blk("rb_ask_me", inputs={"TEXT": tx("What should I write about?")}), add(val(blk("rb_answer")))))
+        await pg.wait_for_timeout(400)
+        out = await pg.evaluate("window.__outline()")
+        editor_shown = await pg.evaluate("() => getComputedStyle(document.getElementById('blockly')).display !== 'none'")
+        outline_shown = await pg.evaluate("() => getComputedStyle(document.getElementById('block-outline')).display !== 'none'")
+        toggle_label = await pg.text_content("#outline-toggle")
+        check(out["mode"] and not editor_shown and outline_shown and "What should I write about?" in out["text"]
+              and toggle_label == "Edit blocks",
+              f"at 390×844 the program shows as a read-only outline (mode={out['mode']}, editor shown={editor_shown}, "
+              f"outline shown={outline_shown}, toggle {toggle_label!r}): {out['text'][:80]!r}…")
+        # run it and answer the question, with no editor on screen
+        await pg.click("#run")
+        await pg.wait_for_selector(".ask textarea")
+        await pg.fill(".ask textarea", "a sourdough note")
+        await pg.click(".ask button.primary")
+        for _ in range(100):
+            await pg.wait_for_timeout(150)
+            if await pg.is_enabled("#run"):
+                break
+        status = await pg.inner_text("#status")
+        items = await pg.eval_on_selector_all(".result-text", "e => e.map(x => x.textContent)")
+        still_outline = await pg.evaluate("() => getComputedStyle(document.getElementById('blockly')).display === 'none'")
+        check(status.startswith("done") and items == ["a sourdough note"] and still_outline,
+              f"the program runs from the outline and the question is answered in the log ({status}, {items})")
+        # every visible button/select/summary is at least 44 px high
+        small = await pg.evaluate("""() => [...document.querySelectorAll('button,select,summary')]
+            .filter(e => e.getBoundingClientRect().height > 0)
+            .map(e => [e.id || e.textContent.trim().slice(0, 24), Math.round(e.getBoundingClientRect().height)])
+            .filter(x => x[1] < 44)""")
+        run_h = await pg.evaluate("() => Math.round(document.getElementById('run').getBoundingClientRect().height)")
+        check(not small and run_h >= 44, f"no visible button is under 44px at 390×844, and Run is {run_h}px ({small[:6]})")
+        # Edit blocks opens the full editor; the choice is kept
+        await pg.click("#outline-toggle")
+        await pg.wait_for_timeout(300)
+        editor_shown = await pg.evaluate("() => getComputedStyle(document.getElementById('blockly')).display !== 'none'")
+        outline_shown = await pg.evaluate("() => getComputedStyle(document.getElementById('block-outline')).display === 'none'")
+        label = await pg.text_content("#outline-toggle")
+        check(editor_shown and outline_shown and label == "Show the outline"
+              and await pg.evaluate("() => localStorage.getItem('second-thought-phone-edit')") == "1",
+              f"'Edit blocks' opens the editor (toggle now {label!r}) and the choice is kept")
+        await pg.click("#outline-toggle")
+        await pg.wait_for_timeout(300)
+        back = await pg.evaluate("window.__outline()")
+        check(back["mode"] and await pg.evaluate("() => getComputedStyle(document.getElementById('blockly')).display === 'none'"),
+              "'Show the outline' goes back to the read-only outline")
         check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
         await browser.close()

@@ -2006,7 +2006,10 @@
   "Review loop": "𐍃𐌰 𐌽𐌿 𐌺𐌹",
   "{n} problems": "{n} 𐍃𐌰 𐌽𐌿",
   "Revision, round {n}": "{n} 𐍃𐌰 𐌽𐌿",
-  "Fixing: {problems}": "𐌽𐌿 {problems}"
+  "Fixing: {problems}": "𐌽𐌿 {problems}",
+  "Edit blocks": "𐍃𐌰 𐌽𐌿 𐌺𐌹",
+  "Show the outline": "𐍃𐌰 𐌽𐌿 𐌺𐌹",
+  "… and more": "𐍃𐌰 𐌽𐌿 𐌺𐌹"
  },
  "examples": {
   "review": {

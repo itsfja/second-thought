@@ -41,6 +41,8 @@ There are more categories down the left side of the screen. Fifteen of them are 
 
 **With the keyboard, or a screen reader.** Every button, menu and panel works with **Tab** and **Enter**. When a run asks you something, the answer box takes the focus and a screen reader reads the question; **Ctrl+Enter** sends a typed answer. New steps in the run log, and the run's status, are read out as they happen. Programs can be built without a mouse too, using Blockly's own keyboard navigation, always on: **Tab** to the block editor, **T** opens the blocks, the arrow keys move, **Enter** adds a block or edits a field, and **M** moves a block. The **?** button by the zoom buttons lists every key. A screen reader reads out each block, field and category as you reach it.
 
+**On a phone.** At phone width the page shows your program as a short outline you can read but not edit — each script's hat, then one line per block — with a large **Run** and the run log, so a program can be run and its questions answered without the block editor. **Edit blocks** opens the full editor when you want it, and the page remembers your choice. Every button is at least 44 pixels high, so nothing is hard to tap.
+
 **Backups.** In **Settings**, the **Model** menu picks the main model, and **Backups** lists spare models: if the main one can't answer (its key is missing, or the service is down), the first backup does that step instead, and the run log says so.
 
 ## What a program can do

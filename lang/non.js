@@ -1271,7 +1271,10 @@
 "Review loop":"lykkja endurskoðunar",
 "{n} problems":"{n} vandamál",
 "Revision, round {n}":"endurbót, umferð {n}",
-"Fixing: {problems}":"lagar: {problems}"
+"Fixing: {problems}":"lagar: {problems}",
+"Edit blocks":"breyta blokkum",
+"Show the outline":"sýndu útlínurnar",
+"… and more":"… og meira"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

@@ -2005,7 +2005,10 @@
   "Review loop": "審閱之環",
   "{n} problems": "{n} 患",
   "Revision, round {n}": "改訂，第 {n} 輪",
-  "Fixing: {problems}": "正之：{problems}"
+  "Fixing: {problems}": "正之：{problems}",
+  "Edit blocks": "改諸塊",
+  "Show the outline": "示其綱要",
+  "… and more": "……其餘"
  },
  "examples": {
   "review": {
