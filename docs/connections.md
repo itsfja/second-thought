@@ -355,8 +355,6 @@ POWERWALL_PASSWORD = H4rd!
 ```
 
 `--doctor` checks both settings, reports the battery, the reserve and the grid, and shows the certificate fingerprint. Login happens once and the token is kept.
-<!-- sync:connections-docs-end -->
-
 ## Solax
 
 The green **Solax** block reads your Solax inverter's figures from SolaxCloud. It only reads: nothing on the inverter is ever changed, and there is nothing to install.
@@ -375,6 +373,7 @@ SOLAX_SN = ABCDEFGHIJ
 ```
 
 `--doctor` checks both settings and reaches the cloud. If your inverter is already in Home Assistant, its sensors can be read today through the Home Assistant connection; Modbus control (charging from the grid, export limits) is not offered, because it costs and earns money and belongs behind the ask-first rules.
+<!-- sync:connections-docs-end -->
 
 ## MikroTik
 

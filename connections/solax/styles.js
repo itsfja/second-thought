@@ -1,0 +1,1 @@
+    solax:style(HUES.solax),

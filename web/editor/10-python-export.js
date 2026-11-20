@@ -70,10 +70,10 @@
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
-             solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              // sync:connections-need-begin
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
+             solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              // sync:connections-need-end
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
@@ -187,13 +187,6 @@
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
       "; router's certificate fingerprint to pin.",
       "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
-    if (need.solax) out.push("", "[solax]",
-      "; Your Solax inverter, read from SolaxCloud (the inverter's own local API is gone from newer firmware).",
-      "; Make a free token on the API page of SolaxCloud, and find the Registration No. on the dongle's label or in the",
-      "; app. The cloud updates about every five minutes, and each read is kept that long, so a run costs few calls.",
-      "; SOLAX_API_URL points at another region's cloud, like the EU one.",
-      "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
-      ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
     // sync:connections-ini-begin
     if (need.pihole) out.push("", "[pihole]",
       "; Your Pi-hole (v6 or later), through its REST API: its address and its web interface's password. The blocks",
@@ -210,6 +203,13 @@
       "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
       ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
       ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
+    if (need.solax) out.push("", "[solax]",
+      "; Your Solax inverter, read from SolaxCloud (the inverter's own local API is gone from newer firmware).",
+      "; Make a free token on the API page of SolaxCloud, and find the Registration No. on the dongle's label or in the",
+      "; app. The cloud updates about every five minutes, and each read is kept that long, so a run costs few calls.",
+      "; SOLAX_API_URL points at another region's cloud, like the EU one.",
+      "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
+      ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
     // sync:connections-ini-end
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
@@ -559,12 +559,12 @@
         case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
-        case "rb_solax_now": return "(await R.solax_now())";
         // sync:connections-pyread-begin
         case "rb_pihole_summary": return "(await R.pihole_summary())";
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
         case "rb_powerwall_now": return "(await R.powerwall_now())";
+        case "rb_solax_now": return "(await R.solax_now())";
         // sync:connections-pyread-end
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";

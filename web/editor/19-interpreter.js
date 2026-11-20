@@ -346,12 +346,12 @@
       case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
-      case "rb_solax_now": return solaxNow();
       // sync:connections-iread-begin
       case "rb_pihole_summary": return piholeSummary();
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
       case "rb_powerwall_now": return powerwallNow();
+      case "rb_solax_now": return solaxNow();
       // sync:connections-iread-end
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();

@@ -1,0 +1,19 @@
+{
+ "note": "A sample Solax inverter for the page and the tests (#361), shaped the way SolaxCloud's end-user API answers: mid-afternoon, making more than the house uses, battery over half full. The fields are the API's own units (yieldtoday in 0.1 kWh, feedinenergy in 0.01 kWh).",
+ "exception": "",
+ "success": true,
+ "result": {
+  "inverterSN": "SJE2024A0123",
+  "sn": "ABCDEFGHIJ",
+  "acpower": "2450",
+  "yieldtoday": "84",
+  "yieldtotal": "4125",
+  "feedinpower": "900",
+  "feedinenergy": "3210",
+  "consumeenergy": "1890",
+  "soc": "62",
+  "inverterType": "10",
+  "inverterStatus": "102",
+  "uploadTime": "2026-11-11 14:05:00"
+ }
+}
