@@ -34,7 +34,7 @@ from e2e.page_features import phone_palette_tests, phone_run_tests, theme_tests 
 from e2e.python_export import PROGRAM_TIMES, group_share, python_tests  # noqa: E402
 from e2e.sources import example_ini_check, package_check, sri_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
-from e2e.gallery import broken_gallery_tests, gallery_smoke_tests, gallery_tests  # noqa: E402
+from e2e.gallery import broken_gallery_tests, changed_gallery_tests, gallery_smoke_tests, gallery_tests  # noqa: E402
 from e2e.actions import actions_tests  # noqa: E402
 from e2e.pages import pages_tests  # noqa: E402
 from e2e.offline import offline_tests  # noqa: E402
@@ -192,6 +192,8 @@ def main():
             asyncio.run(gallery_tests())
             asyncio.run(broken_gallery_tests())
             gallery_smoke_tests()
+            if os.environ.get("RB_GALLERY_FILES"):  # a gallery-only pull request (#457): its programs' run and export
+                asyncio.run(changed_gallery_tests(os.environ["RB_GALLERY_FILES"].split()))
     if "python" in areas:
         with timed("python" + (f" share {share[0]}/{share[1]}" if share else "")):
             python_tests(codes, share)
