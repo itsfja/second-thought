@@ -86,10 +86,10 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_folder_when"),
+     
       B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
+     
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -153,6 +153,10 @@
     { kind:"category", name:"News feeds", categorystyle:"feeds", service:"feeds", contents:[
       B("rb_feed_when"), B("rb_event"),
       B("rb_feed_news", { URL:T("") })
+    ]},
+    { kind:"category", name:"Files and folders", categorystyle:"folder", service:"folder", contents:[
+      B("rb_folder_when"), B("rb_event"),
+      B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") })
     ]},
     { kind:"category", name:"GitHub", categorystyle:"github", service:"github", contents:[
       B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_event")

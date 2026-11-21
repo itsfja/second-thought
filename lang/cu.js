@@ -286,7 +286,8 @@
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
 "News feeds":"News feeds",
-"Web":"Web"
+"Web":"Web",
+"Files and folders":"Files and folders"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",

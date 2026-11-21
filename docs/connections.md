@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Calendar](#calendar) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt) · [News feeds](#news-feeds) · [Web](#web)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Calendar](#calendar) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt) · [News feeds](#news-feeds) · [Web](#web) · [Files and folders](#files-and-folders)
 
 ## Connections
 
@@ -12,14 +12,12 @@ The pink **Connections** blocks work without an agent too.
 
 **Listeners** start a script when something arrives:
 
-- **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
 
 **what arrived** gives what started the script. Every listener gives `text`, which sums it up; each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
 
 **Other blocks:**
 
 - **send Telegram message**, **send Discord message**, **send Slack message** and **send email** send something. The Discord and Slack ones reply in the channel a message came from, or post in your first channel. With **ask me before sending messages and announcements**, they ask you first.
-- **files in folder … matching …** gives a list of the files in a folder, newest first (name, path, modified, size), like every `*.pdf`. It only looks; it doesn't read them.
 
 Try **Morning briefing on Telegram** and **Email me a news digest** under Automation, and the listener examples: **Proofer too warm? (MQTT)**, **When the bread is done (web request)**, **When the flour shop emails**, **Tell me when a feed posts something useful**, **Convert recipes dropped in a folder**, **When someone asks for my review (GitHub)** and **A reminder before each event**. Press Run to try each with something you type. Under Agents, **Agent: check the sensors (MQTT)** looks over your MQTT devices.
 
@@ -168,6 +166,15 @@ On the page these blocks use **sample emails**, and nothing is sent: try **When 
 On the page these blocks use **sample feeds**, and nothing is fetched: try **Tell me when a feed posts something useful**. The listener starts from what's new after the program starts.
 
 **Settings:** `feeds = ` in `second-thought.ini` — the feed addresses (RSS or Atom), separated by spaces. `--doctor` reads your feeds when the program can.
+## Files and folders
+
+- **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
+- **files in folder … matching …** gives a list of the files in a folder, newest first (name, path, modified, size), like every `*.pdf`. It only looks; it doesn't read them.
+- **text of a file I choose** pauses the run so you can pick a PDF, a Word .docx or a text file, and gives back its words; **save … as file …** writes one of the run's outputs. The picture blocks have the same pair: **picture I choose** and **save picture … as …**.
+
+On the page the folder listener uses a **sample file**; exported Python watches a real folder next to the program. The listener starts from what's new after the program starts.
+
+**Settings:** none — folders are paths next to the program (or full paths / `~/…`), and saved files go in the program's outputs folder.
 ## GitHub
 
 The **GitHub** blocks look at your projects and can comment, always asking first:

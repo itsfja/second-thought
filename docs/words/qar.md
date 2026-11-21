@@ -47,6 +47,7 @@ Made by tools/sync.py from i18n/qar.json: edit that, not this.
 - Calendar: ᚳᚪᛚᛖᚾᛞᚪᚱ
 - News feeds: ᚾᛖᚹᛋ feeds
 - Web: ᚹᛖᛒ
+- Files and folders: Files ᚪᚾᛞ ᚠᚩᛚᛞᛖᚱᛋ
 - Tools for the agent: drop them inside an agent block: ᛏᚩᛚ ᚠᚩᚱ ᚦᚩᚾᛖ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ: ᛚᛖᚷᛖ ᚻᛁᛖ ᛁᚾᚾᚪᚾ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ ᛋᛏᚩᚳᚳᛖ
 - Listeners: they run while the exported program runs on schedule: ᚻᛚᚣᛋᛏᛖᚾᛞᚪᛋ: ᚻᛁᛖ ᚣᚱᚾᚪᚦ ᚦᚪ ᚻᚹᛁᛚᛖ ᚦᛖ ᚦᚫᛏ ᚢᛏᚷᛖᛚᚫᛞᛞᛖ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ ᛒᛖ ᛏᛁᛞᛋᛖᛏᚾᛖᛋᛋᛖ ᚣᚱᚾᚦ
 - Read and send: ᚱᚫᛞ ᚪᚾᛞ ᛋᛖᚾᛞ

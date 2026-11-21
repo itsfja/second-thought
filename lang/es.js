@@ -287,7 +287,8 @@
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
 "News feeds":"News feeds",
-"Web":"Web"
+"Web":"Web",
+"Files and folders":"Files and folders"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Herramientas para el agente: suéltalas dentro de un bloque de agente",

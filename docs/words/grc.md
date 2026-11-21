@@ -47,6 +47,7 @@ Made by tools/sync.py from i18n/grc.json: edit that, not this.
 - Calendar: Calendar
 - News feeds: News feeds
 - Web: Web
+- Files and folders: Files and folders
 - Tools for the agent: drop them inside an agent block: Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου
 - Listeners: they run while the exported program runs on schedule: Ἀκροαταί· τρέχουσιν ἐν ᾧ τὸ ἐξαχθὲν πρόγραμμα κατὰ τὰς ὥρας τρέχει
 - Read and send: Ἀνάγνωθι καὶ πέμψον

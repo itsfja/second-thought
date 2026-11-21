@@ -47,6 +47,7 @@ Made by tools/sync.py from i18n/cu.json: edit that, not this.
 - Calendar: Calendar
 - News feeds: News feeds
 - Web: Web
+- Files and folders: Files and folders
 - Listeners: they run while the exported program runs on schedule: Слышатели: текутъ, егда изведенный чинъ течетъ по уроку
 - No blocks match: Никоегоже звѣна подобна
 - Read and send: Чти и посылай

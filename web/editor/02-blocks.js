@@ -145,8 +145,7 @@
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
     
- rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
-    rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
+    rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
@@ -163,6 +162,12 @@
     rb_email_send:"email_send", rb_email_when:"email_read",
     rb_feed_news:"feeds",
     rb_feed_when:"feeds",
+    rb_folder_when:"folder",
+    rb_folder_files:"folder",
+    rb_file_choose:"files_read",
+    rb_img_choose:"files_read",
+    rb_file_save:"files_save",
+    rb_img_save:"files_save",
      rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
@@ -406,9 +411,6 @@
     /* Prompt library */
     V("rb_prompt", "prompt %1", [{ type:"field_input", name:"NAME", text:"my prompt" }], "String", { style:"claude", tooltip:"Text from your prompt library (open Programs to add prompts)." }),
     /* Files and errors */
-    V("rb_file_choose", "text of a file I choose", [], "String", { style:"files", tooltip:"Pauses the run so you can pick a PDF, a Word .docx, or a text file. Gives back the file's text." }),
-    S("rb_file_save", "save %1 as file %2 . %3", [val("VALUE"), val("NAME"), { type:"field_dropdown", name:"EXT", options:[["md","md"],["txt","txt"],["csv","csv"],["json","json"],["html","html"]] }],
-      { style:"files", inputsInline:true, tooltip:"Offers the text as a download. The browser asks you to confirm." }),
     V("rb_result_text", "the result so far", [], "String", { style:"files", tooltip:"Everything added to the result, as text." }),
     { type:"rb_try", message0:"try", message1:"%1", args1:[{ type:"input_statement", name:"DO" }],
       message2:"if it fails", message3:"%1", args3:[{ type:"input_statement", name:"FAIL" }],
@@ -467,11 +469,6 @@
       tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
         "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
-    V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
-      tooltip:"The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files." }),
-    { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks." },
     V("rb_event", "what arrived: %1", [{ type:"field_input", name:"KEY", text:"text" }], null, { style:"conn",
       tooltip:"Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record." }),
     // sync:connections-defs-begin
@@ -534,6 +531,17 @@
     { type:"rb_feed_when", message0:"when there's something new in feed %1", args0:[{ type:"field_input", name:"URL", text:"" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },
+    V("rb_file_choose", "text of a file I choose", [], "String", { style:"files", tooltip:"Pauses the run so you can pick a PDF, a Word .docx, or a text file. Gives back the file's text." }),
+    S("rb_file_save", "save %1 as file %2 . %3", [val("VALUE"), val("NAME"), { type:"field_dropdown", name:"EXT", options:[["md","md"],["txt","txt"],["csv","csv"],["json","json"],["html","html"]] }],
+      { style:"files", inputsInline:true, tooltip:"Offers the text as a download. The browser asks you to confirm." }),
+    V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files." }),
+    { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks." },
+    V("rb_img_choose", "picture I choose", [], "Picture", { style:"pictures", tooltip:"Pauses the run so you can pick a picture (JPEG, PNG, WebP, GIF or SVG)." }),
+    S("rb_img_save", "save picture %1 as %2", [val("IMG"), { type:"field_dropdown", name:"FORMAT", options:[["PNG","png"],["SVG (drawn pictures)","svg"],["original file","orig"]] }],
+      { style:"pictures", inputsInline:true, tooltip:"Offers the picture as a download. The browser asks you to confirm." }),
     { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
     { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
@@ -691,15 +699,12 @@
     V("rb_mem_has", "I remember %1", [val("NAME")], "Boolean", { style:"memory", inputsInline:true }),
     V("rb_mem_names", "names I remember", [], "Array", { style:"memory" }),
     /* Pictures */
-    V("rb_img_choose", "picture I choose", [], "Picture", { style:"pictures", tooltip:"Pauses the run so you can pick a picture (JPEG, PNG, WebP, GIF or SVG)." }),
     V("rb_img_draw", "draw a picture of %1", [val("TEXT")], "Picture", { style:"pictures", inputsInline:true,
       tooltip:"Claude draws an illustration as SVG (flat shapes, diagrams, icons). It can't make photos." }),
     V("rb_img_change", "change picture %1 : %2", [val("IMG"), val("TEXT")], "Picture", { style:"pictures", inputsInline:true,
       tooltip:"Claude redraws the picture with your change. A photo comes back as a new illustration." }),
     V("rb_img_ask", "ask Claude %1 about picture %2", [val("TEXT"), val("IMG")], "String", { style:"pictures", inputsInline:true, tooltip:"Claude looks at the picture and answers." }),
     V("rb_img_score", "score picture %1 out of 10 for %2", [val("IMG"), val("CRITERIA")], "Number", { style:"pictures", inputsInline:true }),
-    S("rb_img_show", "show picture %1", [val("IMG")], { style:"pictures", inputsInline:true }),
-    S("rb_img_save", "save picture %1 as %2", [val("IMG"), { type:"field_dropdown", name:"FORMAT", options:[["PNG","png"],["SVG (drawn pictures)","svg"],["original file","orig"]] }],
-      { style:"pictures", inputsInline:true, tooltip:"Offers the picture as a download. The browser asks you to confirm." })
+    S("rb_img_show", "show picture %1", [val("IMG")], { style:"pictures", inputsInline:true })
   ]);
 
