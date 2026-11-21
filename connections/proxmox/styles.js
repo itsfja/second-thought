@@ -1,0 +1,1 @@
+    proxmox:style(HUES.proxmox),

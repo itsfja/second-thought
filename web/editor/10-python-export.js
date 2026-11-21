@@ -74,11 +74,11 @@
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
+             proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              // sync:connections-need-end
-             proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
@@ -164,12 +164,6 @@
       "; Tautulli, for the history and watch-time blocks and stopping a stream: its address and its API key (Settings,",
       "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
       "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
-    if (need.proxmox) out.push("", "[proxmox]",
-      "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
-      "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
-      "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
-      "; stopped or rebooted, like your Home Assistant or domain controller.",
-      "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
     // sync:connections-ini-begin
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
@@ -195,6 +189,12 @@
       "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
       ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
       ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
+    if (need.proxmox) out.push("", "[proxmox]",
+      "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
+      "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
+      "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
+      "; stopped or rebooted, like your Home Assistant or domain controller.",
+      "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
     if (need.sabnzbd) out.push("", "[sabnzbd]",
       "; SABnzbd's API: its address and the full API key (in SABnzbd under Config, General, API Key), not the",
       "; NZB key. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, if it needs one.",
@@ -549,10 +549,6 @@
         case "rb_plex_recent": return "(await R.plex_recent(" + I("N", "7") + "))";
         case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
         case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
-        case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
-        case "rb_proxmox_guests": return "(await R.proxmox_guests())";
-        case "rb_proxmox_storage": return "(await R.proxmox_storage())";
-        case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         // sync:connections-pyread-begin
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
@@ -563,6 +559,10 @@
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
         case "rb_powerwall_now": return "(await R.powerwall_now())";
+        case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
+        case "rb_proxmox_guests": return "(await R.proxmox_guests())";
+        case "rb_proxmox_storage": return "(await R.proxmox_storage())";
+        case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         case "rb_sabnzbd_queue": return "(await R.sabnzbd_queue())";
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
@@ -722,7 +722,6 @@
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
-          case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           // sync:connections-pyact-begin
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
@@ -730,6 +729,7 @@
         case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
         case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
+          case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;

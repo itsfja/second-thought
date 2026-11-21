@@ -336,10 +336,6 @@
       case "rb_plex_recent": return plexRecent(await input(b, tc, "N"));
       case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
       case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
-      case "rb_proxmox_nodes": return proxmoxNodes();
-      case "rb_proxmox_guests": return proxmoxGuests();
-      case "rb_proxmox_storage": return proxmoxStorage();
-      case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       // sync:connections-iread-begin
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
@@ -350,6 +346,10 @@
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
       case "rb_powerwall_now": return powerwallNow();
+      case "rb_proxmox_nodes": return proxmoxNodes();
+      case "rb_proxmox_guests": return proxmoxGuests();
+      case "rb_proxmox_storage": return proxmoxStorage();
+      case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       case "rb_sabnzbd_queue": return sabnzbdQueue();
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
@@ -1116,7 +1116,6 @@
       case "rb_unraid_parity": await unraidParity(); break;
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
-      case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       // sync:connections-iact-begin
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
@@ -1124,6 +1123,7 @@
       case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
       case "rb_pihole_deny": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's deny list"); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
+      case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
       // sync:connections-iact-end
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

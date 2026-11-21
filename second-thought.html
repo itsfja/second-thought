@@ -693,12 +693,13 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
+    "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT",
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
     "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
@@ -767,12 +768,13 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY",
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "FR24_API_KEY",
     # sync:connections-secret-begin
     "MIKROTIK_PASSWORD",
     "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
     "POWERWALL_PASSWORD",
+    "PROXMOX_TOKEN_SECRET",
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
     "UNIFI_API_KEY",
@@ -1765,12 +1767,6 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
-    # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
-    # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
-    # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
-    # guests it never touches at all.
-    "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
-    "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
     # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
     # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
@@ -1822,6 +1818,12 @@ SAFETY = {
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
     "powerwall_asks": [["POST", r"^/api/operation$"]],
+    # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
+    # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
+    # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
+    # guests it never touches at all.
+    "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
+    "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
     # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
     # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
     # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
@@ -1975,6 +1977,14 @@ def powerwall_allowed(method, path, approved=False):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
         or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
+def proxmox_call(method, path):
+    """"free" for a Proxmox call the runtime makes without asking, "asks" for a power action that needs a live yes,
+    and None for anything else, which is never sent (#357)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
+            return kind
+    return None
 def sabnzbd_call(method, mode):
     """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
     and None for anything else, which is never sent (#397)."""
@@ -1988,16 +1998,6 @@ def unifi_allowed(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
-
-
-def proxmox_call(method, path):
-    """"free" for a Proxmox call the runtime makes without asking, "asks" for a power action that needs a live yes,
-    and None for anything else, which is never sent (#357)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
-            return kind
-    return None
 
 
 def docker_call(method, path):
@@ -2577,7 +2577,6 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
-    ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
@@ -2586,12 +2585,12 @@ CAPABILITIES = [
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
+    ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
-    ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
@@ -2601,6 +2600,7 @@ CAPABILITIES = [
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
+    ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
@@ -5339,109 +5339,6 @@ class Connections:
         self.log(tr("Plex"), what, tr("done"))
         return True
 
-    # Proxmox (#357)
-    # Proxmox VE's REST API, with an API token: PROXMOX_URL (https://pve:8006), PROXMOX_TOKEN_ID (user@pam!name) and
-    # PROXMOX_TOKEN_SECRET. Give the token the PVEAuditor role unless the program starts or stops guests. Reads are the
-    # calls in SAFETY["proxmox_free"]; start, shut down and reboot (proxmox_asks) always ask, live, and never run with
-    # nobody there; nothing else is ever sent. PROXMOX_PROTECT lists VMIDs never started, stopped or rebooted at all.
-    # PROXMOX_CERT_SHA256 pins the node's own certificate, as for MikroTik and UniFi.
-    PROXMOX_POWER = {"start": "start", "shutdown": "shut down", "reboot": "reboot"}
-
-    async def _proxmox(self, method, path, query=None, approved=False):
-        kind = proxmox_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to Proxmox.", what=f"{method} {path}"))
-        base = os.environ.get("PROXMOX_URL", "").strip().rstrip("/")
-        tid, secret = os.environ.get("PROXMOX_TOKEN_ID", "").strip(), os.environ.get("PROXMOX_TOKEN_SECRET", "").strip()
-        if not base or not tid or not secret:
-            raise RunError(tr("Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.", where_keys=WHERE_KEYS))
-        status, raw = await self._pinned("Proxmox", base, "PROXMOX_CERT_SHA256", method, path + ("?" + urllib.parse.urlencode(query) if query else ""),
-                                         {"Authorization": f"PVEAPIToken={tid}={secret}"})
-        if status == 401:
-            raise RunError(tr("Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET."))
-        if status == 403:
-            raise RunError(tr("Proxmox: {why}.", why=tr("the token isn't allowed to do that")))
-        if status >= 400:
-            raise RunError(tr("Proxmox: {why}.", why=self._said(status, raw)))
-        got = json.loads(raw) if raw.strip() else {}
-        return got.get("data") if isinstance(got, dict) else got
-
-    @staticmethod
-    def _pct(used, size):
-        return _clean_num(math.floor(num(used) / num(size) * 1000 + 0.5) / 10) if num(size) else ""
-
-    async def proxmox_nodes(self):
-        """Each node: node, status (online or offline), cpu and memory (%), uptime (hours)."""
-        out = [{"node": to_str(n.get("node")), "status": to_str(n.get("status")), "cpu": _clean_num(math.floor(num(n.get("cpu")) * 1000 + 0.5) / 10),
-                "memory": self._pct(n.get("mem"), n.get("maxmem")), "uptime": self._cents(num(n.get("uptime")) / 3600)}
-               for n in await self._proxmox("GET", "/api2/json/nodes") or [] if isinstance(n, dict)]
-        return sorted(out, key=lambda n: n["node"])
-
-    async def proxmox_guests(self):
-        """Each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours),
-        and for one that's stopped, onboot (whether it should start when the node does)."""
-        out = []
-        for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []:
-            if not isinstance(g, dict) or g.get("template"):
-                continue
-            rec = {"vmid": int(num(g.get("vmid"))), "name": to_str(g.get("name")), "node": to_str(g.get("node")),
-                   "type": "container" if g.get("type") == "lxc" else "vm", "status": to_str(g.get("status")),
-                   "cpu": _clean_num(math.floor(num(g.get("cpu")) * 1000 + 0.5) / 10), "memory": self._pct(g.get("mem"), g.get("maxmem")),
-                   "uptime": self._cents(num(g.get("uptime")) / 3600), "onboot": ""}
-            if rec["status"] == "stopped" and re.fullmatch(r"[A-Za-z0-9.-]+", rec["node"]):
-                cfg = await self._proxmox("GET", f"/api2/json/nodes/{rec['node']}/{g.get('type')}/{rec['vmid']}/config") or {}
-                rec["onboot"] = to_str(cfg.get("onboot")) == "1"
-            out.append(rec)
-        out.sort(key=lambda g: g["vmid"])
-        lines = "\n".join(f"{g['vmid']} {g['name']}: {g['status']}" for g in out)
-        self.log(tr("Proxmox guests"), lines or tr("(nothing)"), tr("{n} guests", n=len(out)))
-        return out
-
-    async def proxmox_storage(self):
-        """Each storage on each node: storage, node, used (%), used_gb, size_gb and status."""
-        out = [{"storage": to_str(s.get("storage")), "node": to_str(s.get("node")), "used": self._pct(s.get("disk"), s.get("maxdisk")),
-                "used_gb": self._cents(num(s.get("disk")) / 1073741824), "size_gb": self._cents(num(s.get("maxdisk")) / 1073741824),
-                "status": to_str(s.get("status"))}
-               for s in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "storage"}) or [] if isinstance(s, dict)]
-        return sorted(out, key=lambda s: (s["node"], s["storage"]))
-
-    async def proxmox_tasks(self, hours=24):
-        """The cluster's tasks from the last few hours, newest first: started, node, type (vzdump is a backup), id (the
-        guest, if any), status (OK, or what went wrong; running if it hasn't finished) and user."""
-        since = time.time() - max(1, min(24 * 31, num(hours) or 24)) * 3600
-        out = []
-        for t in await self._proxmox("GET", "/api2/json/cluster/tasks") or []:
-            if isinstance(t, dict) and num(t.get("starttime")) >= since:
-                out.append({"started": datetime.datetime.fromtimestamp(num(t.get("starttime"))).strftime("%Y-%m-%d %H:%M"), "node": to_str(t.get("node")),
-                            "type": to_str(t.get("type")), "id": to_str(t.get("id")), "status": to_str(t.get("status")) or "running", "user": to_str(t.get("user"))})
-        return sorted(out, key=lambda t: t["started"], reverse=True)
-
-    async def proxmox_power(self, action, vmid):
-        """Starts, shuts down or reboots one guest, by its VMID, after asking you, every time. Never one in
-        PROXMOX_PROTECT. Gives back True if it was done."""
-        action = to_str(action).strip().lower().replace(" ", "")
-        if action not in self.PROXMOX_POWER:
-            raise RunError(tr("A Proxmox guest can be started, shut down or rebooted."))
-        if not _num_like(vmid) or num(vmid) != int(num(vmid)) or num(vmid) < 100:
-            raise RunError(tr("Which Proxmox guest? Give its VMID, like 101."))
-        vmid = int(num(vmid))
-        protected = {int(x) for x in re.findall(r"\d+", os.environ.get("PROXMOX_PROTECT", ""))}
-        if vmid in protected:
-            self.log(tr("Not done"), tr("Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.", vmid=vmid), tr("refused"))
-            return False
-        g = next((g for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []
-                  if isinstance(g, dict) and int(num(g.get("vmid"))) == vmid), None)
-        if not g or not re.fullmatch(r"[A-Za-z0-9.-]+", to_str(g.get("node"))) or g.get("type") not in ("qemu", "lxc"):
-            raise RunError(tr("Proxmox: {why}.", why=tr("not found")))
-        what = f"{self.PROXMOX_POWER[action]} the Proxmox guest {vmid} ({to_str(g.get('name'))}, on {to_str(g.get('node'))}, now {to_str(g.get('status'))})"
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._proxmox("POST", f"/api2/json/nodes/{g['node']}/{g['type']}/{vmid}/status/{action}", approved=True)
-        self.log(tr("Proxmox"), what, tr("done"))
-        return True
-
     # sync:connections-runtime-begin
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
@@ -5857,6 +5754,108 @@ class Connections:
             return False
         await self._powerwall("POST", "/api/operation", {"backup_reserve_percent": n}, approved=True)
         self.log(tr("Powerwall"), what, tr("done"))
+        return True
+    # Proxmox (#357)
+    # Proxmox VE's REST API, with an API token: PROXMOX_URL (https://pve:8006), PROXMOX_TOKEN_ID (user@pam!name) and
+    # PROXMOX_TOKEN_SECRET. Give the token the PVEAuditor role unless the program starts or stops guests. Reads are the
+    # calls in SAFETY["proxmox_free"]; start, shut down and reboot (proxmox_asks) always ask, live, and never run with
+    # nobody there; nothing else is ever sent. PROXMOX_PROTECT lists VMIDs never started, stopped or rebooted at all.
+    # PROXMOX_CERT_SHA256 pins the node's own certificate, as for MikroTik and UniFi.
+    PROXMOX_POWER = {"start": "start", "shutdown": "shut down", "reboot": "reboot"}
+
+    async def _proxmox(self, method, path, query=None, approved=False):
+        kind = proxmox_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to Proxmox.", what=f"{method} {path}"))
+        base = os.environ.get("PROXMOX_URL", "").strip().rstrip("/")
+        tid, secret = os.environ.get("PROXMOX_TOKEN_ID", "").strip(), os.environ.get("PROXMOX_TOKEN_SECRET", "").strip()
+        if not base or not tid or not secret:
+            raise RunError(tr("Proxmox needs PROXMOX_URL, PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET {where_keys}: the address (like https://pve.local:8006) and an API token, from Datacenter, Permissions, API Tokens. Give it the PVEAuditor role unless the program starts or stops guests.", where_keys=WHERE_KEYS))
+        status, raw = await self._pinned("Proxmox", base, "PROXMOX_CERT_SHA256", method, path + ("?" + urllib.parse.urlencode(query) if query else ""),
+                                         {"Authorization": f"PVEAPIToken={tid}={secret}"})
+        if status == 401:
+            raise RunError(tr("Proxmox refused PROXMOX_TOKEN_ID and PROXMOX_TOKEN_SECRET."))
+        if status == 403:
+            raise RunError(tr("Proxmox: {why}.", why=tr("the token isn't allowed to do that")))
+        if status >= 400:
+            raise RunError(tr("Proxmox: {why}.", why=self._said(status, raw)))
+        got = json.loads(raw) if raw.strip() else {}
+        return got.get("data") if isinstance(got, dict) else got
+
+    @staticmethod
+    def _pct(used, size):
+        return _clean_num(math.floor(num(used) / num(size) * 1000 + 0.5) / 10) if num(size) else ""
+
+    async def proxmox_nodes(self):
+        """Each node: node, status (online or offline), cpu and memory (%), uptime (hours)."""
+        out = [{"node": to_str(n.get("node")), "status": to_str(n.get("status")), "cpu": _clean_num(math.floor(num(n.get("cpu")) * 1000 + 0.5) / 10),
+                "memory": self._pct(n.get("mem"), n.get("maxmem")), "uptime": self._cents(num(n.get("uptime")) / 3600)}
+               for n in await self._proxmox("GET", "/api2/json/nodes") or [] if isinstance(n, dict)]
+        return sorted(out, key=lambda n: n["node"])
+
+    async def proxmox_guests(self):
+        """Each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours),
+        and for one that's stopped, onboot (whether it should start when the node does)."""
+        out = []
+        for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []:
+            if not isinstance(g, dict) or g.get("template"):
+                continue
+            rec = {"vmid": int(num(g.get("vmid"))), "name": to_str(g.get("name")), "node": to_str(g.get("node")),
+                   "type": "container" if g.get("type") == "lxc" else "vm", "status": to_str(g.get("status")),
+                   "cpu": _clean_num(math.floor(num(g.get("cpu")) * 1000 + 0.5) / 10), "memory": self._pct(g.get("mem"), g.get("maxmem")),
+                   "uptime": self._cents(num(g.get("uptime")) / 3600), "onboot": ""}
+            if rec["status"] == "stopped" and re.fullmatch(r"[A-Za-z0-9.-]+", rec["node"]):
+                cfg = await self._proxmox("GET", f"/api2/json/nodes/{rec['node']}/{g.get('type')}/{rec['vmid']}/config") or {}
+                rec["onboot"] = to_str(cfg.get("onboot")) == "1"
+            out.append(rec)
+        out.sort(key=lambda g: g["vmid"])
+        lines = "\n".join(f"{g['vmid']} {g['name']}: {g['status']}" for g in out)
+        self.log(tr("Proxmox guests"), lines or tr("(nothing)"), tr("{n} guests", n=len(out)))
+        return out
+
+    async def proxmox_storage(self):
+        """Each storage on each node: storage, node, used (%), used_gb, size_gb and status."""
+        out = [{"storage": to_str(s.get("storage")), "node": to_str(s.get("node")), "used": self._pct(s.get("disk"), s.get("maxdisk")),
+                "used_gb": self._cents(num(s.get("disk")) / 1073741824), "size_gb": self._cents(num(s.get("maxdisk")) / 1073741824),
+                "status": to_str(s.get("status"))}
+               for s in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "storage"}) or [] if isinstance(s, dict)]
+        return sorted(out, key=lambda s: (s["node"], s["storage"]))
+
+    async def proxmox_tasks(self, hours=24):
+        """The cluster's tasks from the last few hours, newest first: started, node, type (vzdump is a backup), id (the
+        guest, if any), status (OK, or what went wrong; running if it hasn't finished) and user."""
+        since = time.time() - max(1, min(24 * 31, num(hours) or 24)) * 3600
+        out = []
+        for t in await self._proxmox("GET", "/api2/json/cluster/tasks") or []:
+            if isinstance(t, dict) and num(t.get("starttime")) >= since:
+                out.append({"started": datetime.datetime.fromtimestamp(num(t.get("starttime"))).strftime("%Y-%m-%d %H:%M"), "node": to_str(t.get("node")),
+                            "type": to_str(t.get("type")), "id": to_str(t.get("id")), "status": to_str(t.get("status")) or "running", "user": to_str(t.get("user"))})
+        return sorted(out, key=lambda t: t["started"], reverse=True)
+
+    async def proxmox_power(self, action, vmid):
+        """Starts, shuts down or reboots one guest, by its VMID, after asking you, every time. Never one in
+        PROXMOX_PROTECT. Gives back True if it was done."""
+        action = to_str(action).strip().lower().replace(" ", "")
+        if action not in self.PROXMOX_POWER:
+            raise RunError(tr("A Proxmox guest can be started, shut down or rebooted."))
+        if not _num_like(vmid) or num(vmid) != int(num(vmid)) or num(vmid) < 100:
+            raise RunError(tr("Which Proxmox guest? Give its VMID, like 101."))
+        vmid = int(num(vmid))
+        protected = {int(x) for x in re.findall(r"\d+", os.environ.get("PROXMOX_PROTECT", ""))}
+        if vmid in protected:
+            self.log(tr("Not done"), tr("Guest {vmid} is in PROXMOX_PROTECT, so Second Thought never starts, stops or reboots it.", vmid=vmid), tr("refused"))
+            return False
+        g = next((g for g in await self._proxmox("GET", "/api2/json/cluster/resources", {"type": "vm"}) or []
+                  if isinstance(g, dict) and int(num(g.get("vmid"))) == vmid), None)
+        if not g or not re.fullmatch(r"[A-Za-z0-9.-]+", to_str(g.get("node"))) or g.get("type") not in ("qemu", "lxc"):
+            raise RunError(tr("Proxmox: {why}.", why=tr("not found")))
+        what = f"{self.PROXMOX_POWER[action]} the Proxmox guest {vmid} ({to_str(g.get('name'))}, on {to_str(g.get('node'))}, now {to_str(g.get('status'))})"
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._proxmox("POST", f"/api2/json/nodes/{g['node']}/{g['type']}/{vmid}/status/{action}", approved=True)
+        self.log(tr("Proxmox"), what, tr("done"))
         return True
     # SABnzbd (#397)
     # SABnzbd's API: SABNZBD_URL (like http://sabnzbd:8080) and SABNZBD_API_KEY, the full API key (Config, General,
@@ -8609,6 +8608,23 @@ class Doctor:
                 return tr("battery at {pct}%, reserve {reserve}%, grid {grid}", pct=got.get("battery_soc_pct") or "?",
                           reserve=got.get("reserve_pct") or "?", grid=got.get("grid") or "?")
             out.append(("Powerwall", powerwall))
+        if has("proxmox_read", "proxmox_control"):
+            async def proxmox():
+                base = os.environ.get("PROXMOX_URL", "").strip()
+                if base and not os.environ.get("PROXMOX_CERT_SHA256", "").strip():
+                    seen = await asyncio.to_thread(self._mt_fingerprint, base if "://" in base else "https://" + base)
+                    if seen:
+                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Proxmox", setting="PROXMOX_CERT_SHA256", seen=seen))
+                version = to_str((await self._proxmox("GET", "/api2/json/version") or {}).get("version"))
+                privs = {p for v in (await self._proxmox("GET", "/api2/json/access/permissions") or {}).values() if isinstance(v, dict) for p, on in v.items() if on}
+                said = tr("Proxmox VE {version}", version=version or "?")
+                if "proxmox_control" in can and "VM.PowerMgmt" not in privs:
+                    raise RunError(said + "; " + tr("the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused."))
+                more = sorted(p for p in privs if not p.endswith(".Audit") and p != "VM.PowerMgmt") + (["VM.PowerMgmt"] if "proxmox_control" not in can and "VM.PowerMgmt" in privs else [])
+                if more:
+                    return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
+                return said
+            out.append(("Proxmox", proxmox))
         if has("sabnzbd_read", "sabnzbd_control"):
             async def sabnzbd():
                 q = (await self._sabnzbd("queue")).get("queue") or {}
@@ -8632,23 +8648,6 @@ class Doctor:
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
         # sync:connections-check-end
-        if has("proxmox_read", "proxmox_control"):
-            async def proxmox():
-                base = os.environ.get("PROXMOX_URL", "").strip()
-                if base and not os.environ.get("PROXMOX_CERT_SHA256", "").strip():
-                    seen = await asyncio.to_thread(self._mt_fingerprint, base if "://" in base else "https://" + base)
-                    if seen:
-                        raise RunError(tr("the router's certificate is its own, so pin it: if {url} is your {who}, put {setting} = {seen} in second-thought.ini.", url=base, who="Proxmox", setting="PROXMOX_CERT_SHA256", seen=seen))
-                version = to_str((await self._proxmox("GET", "/api2/json/version") or {}).get("version"))
-                privs = {p for v in (await self._proxmox("GET", "/api2/json/access/permissions") or {}).values() if isinstance(v, dict) for p, on in v.items() if on}
-                said = tr("Proxmox VE {version}", version=version or "?")
-                if "proxmox_control" in can and "VM.PowerMgmt" not in privs:
-                    raise RunError(said + "; " + tr("the token can't start or stop guests (it needs VM.PowerMgmt), so this program's power blocks would be refused."))
-                more = sorted(p for p in privs if not p.endswith(".Audit") and p != "VM.PowerMgmt") + (["VM.PowerMgmt"] if "proxmox_control" not in can and "VM.PowerMgmt" in privs else [])
-                if more:
-                    return "NOTE", said + "; " + tr("the token can also {what}. Second Thought doesn't need that: the PVEAuditor role is safer.", what=", ".join(more[:6]))
-                return said
-            out.append(("Proxmox", proxmox))
         if has("docker_read", "docker_control"):
             async def docker():
                 version = to_str((await self._docker("GET", "/version")).get("Version"))
@@ -9016,12 +9015,13 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
                 "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
+                "Proxmox": "PROXMOX_URL",
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
                 "UniFi": "UNIFI_URL",
@@ -12015,7 +12015,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
-["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
@@ -12023,11 +12022,11 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
 ["pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
+["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
-["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
@@ -12036,6 +12035,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", false],
 ["pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", false],
 ["powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", false],
+["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
@@ -12095,18 +12095,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/brokerage/orders/preview$"
-  ]
- ],
- "proxmox_free": [
-  [
-   "GET",
-   "^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/config)$"
-  ]
- ],
- "proxmox_asks": [
-  [
-   "POST",
-   "^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/status/(start|shutdown|reboot)$"
   ]
  ],
  "docker_free": [
@@ -12249,6 +12237,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/operation$"
+  ]
+ ],
+ "proxmox_free": [
+  [
+   "GET",
+   "^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/config)$"
+  ]
+ ],
+ "proxmox_asks": [
+  [
+   "POST",
+   "^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\\d+/status/(start|shutdown|reboot)$"
   ]
  ],
  "sabnzbd_free": [
@@ -17445,12 +17445,13 @@ HOW TO MAP CODE
   const HUES = {
     events:"#936D12", control:"#AF5E19", operators:"#408230", text:"#288167", variables:"#D04121",
     lists:"#C2413B", procedures:"#CB3E71", draft:"#2469F9", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", proxmox:"#C2185B", docker:"#C2185B",
+    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", docker:"#C2185B",
     // sync:connections-hues-begin
     mikrotik:"#C2185B",
     nzbgeek:"#C2185B",
     pihole:"#C2185B",
     powerwall:"#C2185B",
+    proxmox:"#C2185B",
     sabnzbd:"#C2185B",
     solax:"#C2185B",
     unifi:"#C2185B",
@@ -17467,12 +17468,13 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), proxmox:style(HUES.proxmox), docker:style(HUES.docker),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), docker:style(HUES.docker),
     // sync:connections-styles-begin
     mikrotik:style(HUES.mikrotik),
     nzbgeek:style(HUES.nzbgeek),
     pihole:style(HUES.pihole),
     powerwall:style(HUES.powerwall),
+    proxmox:style(HUES.proxmox),
     sabnzbd:style(HUES.sabnzbd),
     solax:style(HUES.solax),
     unifi:style(HUES.unifi),
@@ -17658,8 +17660,7 @@ HOW TO MAP CODE
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
-    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",         rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
-    rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
+    rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control", rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
@@ -17680,6 +17681,8 @@ HOW TO MAP CODE
     rb_pihole_summary:"pihole_read", rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
     rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
     rb_powerwall_now:"powerwall_read", rb_powerwall_reserve:"powerwall_control",
+    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",         rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
+    rb_proxmox_power:"proxmox_control",
     rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control",
     rb_solax_now:"solax_read",
@@ -18105,17 +18108,6 @@ HOW TO MAP CODE
       { style:"plex", inputsInline:true, tooltip:"Scans one library for new files. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     S("rb_plex_stop", "stop the %1 stream on Plex", [val("ID")],
       { style:"plex", inputsInline:true, tooltip:"Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
-    /* Proxmox (#357): reads, and power that always asks */
-    V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
-      tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
-    V("rb_proxmox_guests", "Proxmox guests", [], "Array", { style:"proxmox",
-      tooltip:"A list of records, one for each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours), and for one that's stopped, onboot (whether it should start with the node)." }),
-    V("rb_proxmox_storage", "Proxmox storage", [], "Array", { style:"proxmox",
-      tooltip:"A list of records, one for each storage on each node: storage, node, used (%), used_gb, size_gb and status." }),
-    V("rb_proxmox_tasks", "Proxmox tasks of the last %1 hours", [val("N")], "Array", { style:"proxmox", inputsInline:true,
-      tooltip:"A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user." }),
-    S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
-      { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),
     // sync:connections-defs-begin
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
@@ -18151,6 +18143,17 @@ HOW TO MAP CODE
       tooltip:"A record of your Tesla Powerwall's figures: battery_soc_pct (its charge), solar_power_w (making now), battery_power_w (positive is charging), grid_power_w (positive is importing), load_power_w (the house), reserve_pct (the backup reserve it keeps), mode (self_consumption, backup, ...) and grid (connected, or islanded in a power cut). It only reads. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page it uses a sample Powerwall." }),
     S("rb_powerwall_reserve", "set Powerwall backup reserve to %1 %", [val("N")], { style:"powerwall", inputsInline:true,
       tooltip:"Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes." }),
+    /* Proxmox (#357): reads, and power that always asks */
+    V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
+    V("rb_proxmox_guests", "Proxmox guests", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours), and for one that's stopped, onboot (whether it should start with the node)." }),
+    V("rb_proxmox_storage", "Proxmox storage", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each storage on each node: storage, node, used (%), used_gb, size_gb and status." }),
+    V("rb_proxmox_tasks", "Proxmox tasks of the last %1 hours", [val("N")], "Array", { style:"proxmox", inputsInline:true,
+      tooltip:"A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user." }),
+    S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
+      { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),
     /* SABnzbd (#397): reads, and pause and resume that always ask */
     V("rb_sabnzbd_queue", "SABnzbd queue", [], "Array", { style:"sabnzbd",
       tooltip:"A list of records, one for each job in the download queue: name, size_mb, left_mb, percent, eta (time left, like 0:12:34) and status (Downloading, Queued, Paused). On this page it uses a sample queue." }),
@@ -18357,9 +18360,6 @@ HOW TO MAP CODE
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
       B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
     ]},
-    { kind:"category", name:"Proxmox", categorystyle:"proxmox", service:"proxmox", contents:[
-      B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
-    ]},
     // sync:connections-toolbox-begin
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
@@ -18373,6 +18373,9 @@ HOW TO MAP CODE
       B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
     ]},
     { kind:"category", name:"Powerwall", categorystyle:"powerwall", service:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
+    { kind:"category", name:"Proxmox", categorystyle:"proxmox", service:"proxmox", contents:[
+      B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
+    ]},
     { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", service:"sabnzbd", contents:[
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
@@ -21238,11 +21241,11 @@ HOW TO MAP CODE
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              powerwall:blocks.some(b => b.type.startsWith("rb_powerwall_")),
+             proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              // sync:connections-need-end
-             proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
@@ -21328,12 +21331,6 @@ HOW TO MAP CODE
       "; Tautulli, for the history and watch-time blocks and stopping a stream: its address and its API key (Settings,",
       "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
       "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
-    if (need.proxmox) out.push("", "[proxmox]",
-      "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
-      "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
-      "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
-      "; stopped or rebooted, like your Home Assistant or domain controller.",
-      "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
     // sync:connections-ini-begin
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
@@ -21359,6 +21356,12 @@ HOW TO MAP CODE
       "POWERWALL_URL = https://192.168.1.50", "POWERWALL_PASSWORD = ",
       ...note("POWERWALL_EMAIL", "you@example.com", "the email the gateway's login form asks for (anything works)"),
       ...note("POWERWALL_CERT_SHA256", "aa:bb:...", "to pin the gateway's own certificate"));
+    if (need.proxmox) out.push("", "[proxmox]",
+      "; Your Proxmox VE cluster, through its REST API. Make an API token (Datacenter, Permissions, API Tokens) for a user",
+      "; with the PVEAuditor role, or one that may also start and stop guests (VM.PowerMgmt) if the program does. Run",
+      "; --doctor once: it shows the node's certificate fingerprint to pin. PROXMOX_PROTECT lists VMIDs never started,",
+      "; stopped or rebooted, like your Home Assistant or domain controller.",
+      "PROXMOX_URL = https://pve.local:8006", "PROXMOX_TOKEN_ID = ", "PROXMOX_TOKEN_SECRET = ", "PROXMOX_CERT_SHA256 = ", "PROXMOX_PROTECT = ");
     if (need.sabnzbd) out.push("", "[sabnzbd]",
       "; SABnzbd's API: its address and the full API key (in SABnzbd under Config, General, API Key), not the",
       "; NZB key. SABNZBD_CERT_SHA256 pins a certificate this computer doesn't trust, if it needs one.",
@@ -21713,10 +21716,6 @@ HOW TO MAP CODE
         case "rb_plex_recent": return "(await R.plex_recent(" + I("N", "7") + "))";
         case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
         case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
-        case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
-        case "rb_proxmox_guests": return "(await R.proxmox_guests())";
-        case "rb_proxmox_storage": return "(await R.proxmox_storage())";
-        case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         // sync:connections-pyread-begin
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
@@ -21727,6 +21726,10 @@ HOW TO MAP CODE
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
         case "rb_pihole_top_clients": return "(await R.pihole_top_clients(" + I("N", "5") + "))";
         case "rb_powerwall_now": return "(await R.powerwall_now())";
+        case "rb_proxmox_nodes": return "(await R.proxmox_nodes())";
+        case "rb_proxmox_guests": return "(await R.proxmox_guests())";
+        case "rb_proxmox_storage": return "(await R.proxmox_storage())";
+        case "rb_proxmox_tasks": return "(await R.proxmox_tasks(" + I("N", "24") + "))";
         case "rb_sabnzbd_queue": return "(await R.sabnzbd_queue())";
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
@@ -21886,7 +21889,6 @@ HOW TO MAP CODE
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
-          case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           // sync:connections-pyact-begin
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
@@ -21894,6 +21896,7 @@ HOW TO MAP CODE
         case "rb_pihole_allow": E("await R.pihole_list(\"allow\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"ads.example.com\"") + ")"); break;
         case "rb_pihole_deny": E("await R.pihole_list(\"deny\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("DOMAIN", "\"bad.example.com\"") + ")"); break;
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
+          case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
           // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
@@ -24305,44 +24308,6 @@ HOW TO MAP CODE
     addStep("Plex", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
-  /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
-     shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
-  const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
-  const pct10 = (used, size) => num(size) ? Math.round(num(used) / num(size) * 1000) / 10 : "";
-  const pxWhen = secs => { const d = new Date(secs * 1000); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
-  function proxmoxNodes(){
-    return (pxSample().nodes || []).map(n => ({ node:str(n.node), status:str(n.status), cpu:Math.round(num(n.cpu) * 1000) / 10, memory:pct10(n.mem, n.maxmem),
-      uptime:cents(num(n.uptime) / 3600) })).sort((a, b) => a.node < b.node ? -1 : a.node > b.node ? 1 : 0);
-  }
-  function proxmoxGuests(){
-    const out = (pxSample().guests || []).filter(g => !g.template).map(g => ({ vmid:Math.trunc(num(g.vmid)), name:str(g.name), node:str(g.node),
-      type:g.type === "lxc" ? "container" : "vm", status:str(g.status), cpu:Math.round(num(g.cpu) * 1000) / 10, memory:pct10(g.mem, g.maxmem),
-      uptime:cents(num(g.uptime) / 3600), onboot:g.status === "stopped" ? str(g.onboot) === "1" : "" })).sort((a, b) => a.vmid - b.vmid);
-    addStep("Proxmox guests", { mono:true, text:out.map(g => g.vmid + " " + g.name + ": " + g.status).join("\n") || tr("(nothing)") }).done(tr("{n} guests", { n:out.length }), "ok");
-    return out;
-  }
-  function proxmoxStorage(){
-    return (pxSample().storage || []).map(s => ({ storage:str(s.storage), node:str(s.node), used:pct10(s.disk, s.maxdisk), used_gb:cents(num(s.disk) / 1073741824),
-      size_gb:cents(num(s.maxdisk) / 1073741824), status:str(s.status) }))
-      .sort((a, b) => (a.node + "\u0000" + a.storage) < (b.node + "\u0000" + b.storage) ? -1 : 1);
-  }
-  function proxmoxTasks(hours){
-    const now = Math.floor(Date.now() / 1000), span = Math.max(1, Math.min(24 * 31, num(hours) || 24)) * 3600;
-    return (pxSample().tasks || []).filter(t => num(t.ago) <= span).map(t => ({ started:pxWhen(now - num(t.ago)), node:str(t.node), type:str(t.type),
-      id:str(t.id), status:str(t.status) || "running", user:str(t.user) })).sort((a, b) => a.started < b.started ? 1 : a.started > b.started ? -1 : 0);
-  }
-  async function proxmoxPower(action, vmid){
-    const words = { start:"start", shutdown:"shut down", reboot:"reboot" };
-    action = str(action).trim().toLowerCase().replace(/ /g, "");
-    if (!words[action]) fail(tr("A Proxmox guest can be started, shut down or rebooted."));
-    if (!isNumLike(vmid) || num(vmid) !== Math.trunc(num(vmid)) || num(vmid) < 100) fail(tr("Which Proxmox guest? Give its VMID, like 101."));
-    const g = (pxSample().guests || []).find(g => num(g.vmid) === num(vmid));
-    if (!g) fail(tr("Proxmox: {why}.", { why:tr("not found") }));
-    const what = words[action] + " the Proxmox guest " + num(vmid) + " (" + g.name + ", on " + g.node + ", now " + g.status + ")";
-    if (!(await confirmAction(what + " (it always asks)"))) return false;
-    addStep("Proxmox", { mono:true, text:what }).done("sample cluster", "ok");
-    return true;
-  }
   // sync:connections-page-begin
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
@@ -24449,6 +24414,44 @@ HOW TO MAP CODE
     const what = tr("set the Powerwall backup reserve to {n}% (now {old}%)", { n, old });
     if (!(await confirmAction(what + " (it always asks)"))) return false;
     addStep("Powerwall", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
+  /* Proxmox on the page (#357): a sample cluster. Exported Python talks to your cluster's REST API: reads, and start,
+     shut down and reboot after a yes, every time. Matches the runtime's proxmox_ methods and tests/fake_proxmox.py. */
+  const pxSample = () => { connNote("Proxmox"); return CONN.proxmox || {}; };
+  const pct10 = (used, size) => num(size) ? Math.round(num(used) / num(size) * 1000) / 10 : "";
+  const pxWhen = secs => { const d = new Date(secs * 1000); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+  function proxmoxNodes(){
+    return (pxSample().nodes || []).map(n => ({ node:str(n.node), status:str(n.status), cpu:Math.round(num(n.cpu) * 1000) / 10, memory:pct10(n.mem, n.maxmem),
+      uptime:cents(num(n.uptime) / 3600) })).sort((a, b) => a.node < b.node ? -1 : a.node > b.node ? 1 : 0);
+  }
+  function proxmoxGuests(){
+    const out = (pxSample().guests || []).filter(g => !g.template).map(g => ({ vmid:Math.trunc(num(g.vmid)), name:str(g.name), node:str(g.node),
+      type:g.type === "lxc" ? "container" : "vm", status:str(g.status), cpu:Math.round(num(g.cpu) * 1000) / 10, memory:pct10(g.mem, g.maxmem),
+      uptime:cents(num(g.uptime) / 3600), onboot:g.status === "stopped" ? str(g.onboot) === "1" : "" })).sort((a, b) => a.vmid - b.vmid);
+    addStep("Proxmox guests", { mono:true, text:out.map(g => g.vmid + " " + g.name + ": " + g.status).join("\n") || tr("(nothing)") }).done(tr("{n} guests", { n:out.length }), "ok");
+    return out;
+  }
+  function proxmoxStorage(){
+    return (pxSample().storage || []).map(s => ({ storage:str(s.storage), node:str(s.node), used:pct10(s.disk, s.maxdisk), used_gb:cents(num(s.disk) / 1073741824),
+      size_gb:cents(num(s.maxdisk) / 1073741824), status:str(s.status) }))
+      .sort((a, b) => (a.node + "\u0000" + a.storage) < (b.node + "\u0000" + b.storage) ? -1 : 1);
+  }
+  function proxmoxTasks(hours){
+    const now = Math.floor(Date.now() / 1000), span = Math.max(1, Math.min(24 * 31, num(hours) || 24)) * 3600;
+    return (pxSample().tasks || []).filter(t => num(t.ago) <= span).map(t => ({ started:pxWhen(now - num(t.ago)), node:str(t.node), type:str(t.type),
+      id:str(t.id), status:str(t.status) || "running", user:str(t.user) })).sort((a, b) => a.started < b.started ? 1 : a.started > b.started ? -1 : 0);
+  }
+  async function proxmoxPower(action, vmid){
+    const words = { start:"start", shutdown:"shut down", reboot:"reboot" };
+    action = str(action).trim().toLowerCase().replace(/ /g, "");
+    if (!words[action]) fail(tr("A Proxmox guest can be started, shut down or rebooted."));
+    if (!isNumLike(vmid) || num(vmid) !== Math.trunc(num(vmid)) || num(vmid) < 100) fail(tr("Which Proxmox guest? Give its VMID, like 101."));
+    const g = (pxSample().guests || []).find(g => num(g.vmid) === num(vmid));
+    if (!g) fail(tr("Proxmox: {why}.", { why:tr("not found") }));
+    const what = words[action] + " the Proxmox guest " + num(vmid) + " (" + g.name + ", on " + g.node + ", now " + g.status + ")";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Proxmox", { mono:true, text:what }).done("sample cluster", "ok");
     return true;
   }
   /* SABnzbd on the page (#397): a sample queue. Exported Python talks to SABnzbd's API: reads, and pause and
@@ -25362,10 +25365,6 @@ HOW TO MAP CODE
       case "rb_plex_recent": return plexRecent(await input(b, tc, "N"));
       case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
       case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
-      case "rb_proxmox_nodes": return proxmoxNodes();
-      case "rb_proxmox_guests": return proxmoxGuests();
-      case "rb_proxmox_storage": return proxmoxStorage();
-      case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       // sync:connections-iread-begin
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
@@ -25376,6 +25375,10 @@ HOW TO MAP CODE
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
       case "rb_powerwall_now": return powerwallNow();
+      case "rb_proxmox_nodes": return proxmoxNodes();
+      case "rb_proxmox_guests": return proxmoxGuests();
+      case "rb_proxmox_storage": return proxmoxStorage();
+      case "rb_proxmox_tasks": return proxmoxTasks(await input(b, tc, "N", 24));
       case "rb_sabnzbd_queue": return sabnzbdQueue();
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
@@ -26142,7 +26145,6 @@ HOW TO MAP CODE
       case "rb_unraid_parity": await unraidParity(); break;
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
-      case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       // sync:connections-iact-begin
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
@@ -26150,6 +26152,7 @@ HOW TO MAP CODE
       case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
       case "rb_pihole_deny": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's deny list"); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
+      case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
       // sync:connections-iact-end
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;

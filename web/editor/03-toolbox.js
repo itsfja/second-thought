@@ -156,9 +156,6 @@
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
       B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
     ]},
-    { kind:"category", name:"Proxmox", categorystyle:"proxmox", service:"proxmox", contents:[
-      B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
-    ]},
     // sync:connections-toolbox-begin
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
@@ -172,6 +169,9 @@
       B("rb_pihole_allow", { DOMAIN:T("ads.example.com") }), B("rb_pihole_deny", { DOMAIN:T("bad.example.com") })
     ]},
     { kind:"category", name:"Powerwall", categorystyle:"powerwall", service:"powerwall", contents:[ B("rb_powerwall_now"), B("rb_powerwall_reserve", { N:N(100) }) ]},
+    { kind:"category", name:"Proxmox", categorystyle:"proxmox", service:"proxmox", contents:[
+      B("rb_proxmox_nodes"), B("rb_proxmox_guests"), B("rb_proxmox_storage"), B("rb_proxmox_tasks", { N:N(24) }), B("rb_proxmox_power", { VMID:N(104) })
+    ]},
     { kind:"category", name:"SABnzbd", categorystyle:"sabnzbd", service:"sabnzbd", contents:[
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
