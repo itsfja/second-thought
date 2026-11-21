@@ -315,6 +315,11 @@ class Doctor:
                     raise RunError(tr("couldn't sign in to {smtp} to send ({e})", smtp=c['smtp'], e=_short(e, 120))) from None
                 return tr("signed in to {smtp} (nothing was sent)", smtp=c['smtp'])
             out.append(("Email (sending)", mail_out))
+        if has("feeds") and os.environ.get("RB_FEEDS", "").strip():
+            async def feeds():
+                items = await self.feed_items("", 3)
+                return tr("read your feeds ({items} items)", items=len(items))
+            out.append(("News feeds", feeds))
         if has("github_read", "github_comment"):
             async def gh():
                 await self.gh_for_me()
@@ -426,11 +431,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("feeds") and os.environ.get("RB_FEEDS", "").strip():
-            async def feeds():
-                items = await self.feed_items("", 3)
-                return tr("read your feeds ({items} items)", items=len(items))
-            out.append(("News feeds", feeds))
         if has("webhook"):
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():

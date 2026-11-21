@@ -2805,6 +2805,7 @@ CAPABILITIES = [
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("email_read", "read your email", False),
+    ("feeds", "read news feeds", False),
     ("github_read", "look at your GitHub projects", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
@@ -2821,7 +2822,6 @@ CAPABILITIES = [
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
-    ("feeds", "read news feeds", False),
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
@@ -3704,45 +3704,7 @@ class Connections:
         finally:
             ws.close()
 
-    # ----- Connections: news feeds, GitHub, Telegram, email and calendar -----
-    MAX_FEED_ITEMS = 10
-
-    async def feed_items(self, url="", limit=10, trusted=False):
-        """Items from one feed, or from every feed in your settings (feeds = ...) when url is empty."""
-        url = to_str(url).strip()
-        mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
-        urls = [url] if url else mine
-        if not urls:
-            raise RunError(tr("No feed given, and no feeds in your settings. Add  feeds = <addresses>  {where_keys}.", where_keys=WHERE_KEYS))
-        limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
-        out = []
-        for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, trusted or u in mine, "read_feed", 5_000_000)
-            title, items = parse_feed(data)
-            for it in items[:limit]:
-                out.append(dict(it, feed=title or u))
-        return out
-
-    async def feed_records(self, url):
-        """For the 'news from feed' block: a list of records (feed, title, link, date, summary)."""
-        items = await self.feed_items(url)
-        recs = [{"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
-                 "summary": i["summary"]} for i in items]
-        self.log(tr("News: {x}", x=_short(url, 60) or tr("your feeds")), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or tr("(nothing)"),
-                 tr("{recs} items", recs=len(recs)))
-        return recs
-
-    @staticmethod
-    def feed_text(items):
-        lines, feed = [], None
-        for i in items:
-            if i["feed"] != feed:
-                feed = i["feed"]
-                lines.append(("\n" if lines else "") + feed)
-            lines.append(f"- {_when(i['date']) if i['date'] else '(no date)'}  {i['title']}" + (f"\n  {i['link']}" if i["link"] else "")
-                         + (f"\n  {i['summary']}" if i["summary"] else ""))
-        return "\n".join(lines) or "The feed has no items."
-
+    # ----- Connections: GitHub, Telegram, email and calendar -----
     # sync:connections-runtime-begin
     # Radarr and Sonarr (#398)
     # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
@@ -4580,6 +4542,64 @@ class Connections:
             except RunError as e:
                 print(tr("  (Email check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(120))
+    MAX_FEED_ITEMS = 10
+
+    async def feed_items(self, url="", limit=10, trusted=False):
+        """Items from one feed, or from every feed in your settings (feeds = ...) when url is empty."""
+        url = to_str(url).strip()
+        mine = [u for u in re.split(r"[\s,]+", os.environ.get("RB_FEEDS", "")) if u]
+        urls = [url] if url else mine
+        if not urls:
+            raise RunError(tr("No feed given, and no feeds in your settings. Add  feeds = <addresses>  {where_keys}.", where_keys=WHERE_KEYS))
+        limit = max(1, min(50, round_js(num(limit)) or self.MAX_FEED_ITEMS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, trusted or u in mine, "read_feed", 5_000_000)
+            title, items = parse_feed(data)
+            for it in items[:limit]:
+                out.append(dict(it, feed=title or u))
+        return out
+
+    async def feed_records(self, url):
+        """For the 'news from feed' block: a list of records (feed, title, link, date, summary)."""
+        items = await self.feed_items(url)
+        recs = [{"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
+                 "summary": i["summary"]} for i in items]
+        self.log(tr("News: {x}", x=_short(url, 60) or tr("your feeds")), "\n".join(f"{r['date']}  {r['title']}" for r in recs[:12]) or tr("(nothing)"),
+                 tr("{recs} items", recs=len(recs)))
+        return recs
+
+    @staticmethod
+    def feed_text(items):
+        lines, feed = [], None
+        for i in items:
+            if i["feed"] != feed:
+                feed = i["feed"]
+                lines.append(("\n" if lines else "") + feed)
+            lines.append(f"- {_when(i['date']) if i['date'] else '(no date)'}  {i['title']}" + (f"\n  {i['link']}" if i["link"] else "")
+                         + (f"\n  {i['summary']}" if i["summary"] else ""))
+        return "\n".join(lines) or "The feed has no items."
+
+    async def _listen_feed(self, items):
+        seen = {}
+        while True:
+            for url, fn in items:
+                try:
+                    got = await self.feed_items(url, 30, trusted=True)
+                except RunError as e:
+                    print(tr("  (Feed check failed: {e})", e=e), flush=True)
+                    continue
+                keys = {i["link"] or i["title"] for i in got}
+                if url in seen:
+                    for i in reversed(got):  # oldest first
+                        if (i["link"] or i["title"]) not in seen[url]:
+                            rec = {"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
+                                   "summary": i["summary"], "text": f"{i['title']}\n{i['summary']}\n{i['link']}".strip()}
+                            self._fire(fn, rec, tr("New in {feed}", feed=_short(i["feed"], 40)))
+                    seen[url] |= keys
+                else:
+                    seen[url] = keys
+            await asyncio.sleep(self._poll(900))
     # GitHub
     async def _gh(self, path, method="GET", body=None):
         token = os.environ.get("GITHUB_TOKEN", "")
@@ -6497,27 +6517,6 @@ class Connections:
                 m.logout()
             except Exception:  # noqa: BLE001
                 pass
-
-    async def _listen_feed(self, items):
-        seen = {}
-        while True:
-            for url, fn in items:
-                try:
-                    got = await self.feed_items(url, 30, trusted=True)
-                except RunError as e:
-                    print(tr("  (Feed check failed: {e})", e=e), flush=True)
-                    continue
-                keys = {i["link"] or i["title"] for i in got}
-                if url in seen:
-                    for i in reversed(got):  # oldest first
-                        if (i["link"] or i["title"]) not in seen[url]:
-                            rec = {"feed": i["feed"], "title": i["title"], "link": i["link"], "date": _when(i["date"]) if i["date"] else "",
-                                   "summary": i["summary"], "text": f"{i['title']}\n{i['summary']}\n{i['link']}".strip()}
-                            self._fire(fn, rec, tr("New in {feed}", feed=_short(i["feed"], 40)))
-                    seen[url] |= keys
-                else:
-                    seen[url] = keys
-            await asyncio.sleep(self._poll(900))
 
     @staticmethod
     def _folder_path(d):
@@ -8617,6 +8616,11 @@ class Doctor:
                     raise RunError(tr("couldn't sign in to {smtp} to send ({e})", smtp=c['smtp'], e=_short(e, 120))) from None
                 return tr("signed in to {smtp} (nothing was sent)", smtp=c['smtp'])
             out.append(("Email (sending)", mail_out))
+        if has("feeds") and os.environ.get("RB_FEEDS", "").strip():
+            async def feeds():
+                items = await self.feed_items("", 3)
+                return tr("read your feeds ({items} items)", items=len(items))
+            out.append(("News feeds", feeds))
         if has("github_read", "github_comment"):
             async def gh():
                 await self.gh_for_me()
@@ -8728,11 +8732,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("feeds") and os.environ.get("RB_FEEDS", "").strip():
-            async def feeds():
-                items = await self.feed_items("", 3)
-                return tr("read your feeds ({items} items)", items=len(items))
-            out.append(("News feeds", feeds))
         if has("webhook"):
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():
@@ -12042,6 +12041,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["email_read", "read your email", false],
+["feeds", "read news feeds", false],
 ["github_read", "look at your GitHub projects", false],
 ["homey_read", "look at your Homey devices, flows and variables", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
@@ -12057,7 +12057,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["web", "read public web pages and search the web", false],
-["feeds", "read news feeds", false],
 ["ha_read", "look at your Home Assistant devices", false],
 ["folder", "look at the files in a folder, and watch it for new ones", false],
 ["files_read", "read files you choose", false],
@@ -17066,8 +17065,6 @@ Coinbase:
 
 Connections:
   rb_event (KEY): what arrived: %1 — Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record.
-  rb_feed_news (URL): news from feed %1 — The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.  [feeds]
-  rb_feed_when (URL): when there's something new in feed %1 — Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.  [feeds]
   rb_folder_files (FOLDER, MATCH): files in folder %1 matching %2 — The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files.  [folder]
   rb_folder_when (FOLDER): when a file appears in folder %1 — Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks.  [folder]
   rb_page_when (URL): when the web page %1 changes — Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.  [web]
@@ -17181,6 +17178,10 @@ MikroTik:
 NZBGeek:
   rb_nzbgeek_fetch (ID): fetch the NZB for %1 — Fetches one release's NZB file and saves it as <id>.nzb. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. It never hands anything to a downloader: the file is saved, that's all. On this page nothing really fetches.  [nzbgeek_fetch]
   rb_nzbgeek_search (QUERY): search NZBGeek for %1 — A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search.  [nzbgeek_read]
+
+News feeds:
+  rb_feed_news (URL): news from feed %1 — The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.  [feeds]
+  rb_feed_when (URL): when there's something new in feed %1 — Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.  [feeds]
 
 Operators:
   rb_contains (A, B): %1 contains %2 — True if the first text includes the second (ignores case).
@@ -17476,6 +17477,7 @@ HOW TO MAP CODE
     coinbase:"#C2185B",
     docker:"#C2185B",
     email:"#C2185B",
+    feeds:"#C2185B",
     github:"#C2185B",
     homey:"#C2185B",
     mikrotik:"#C2185B",
@@ -17698,8 +17700,8 @@ HOW TO MAP CODE
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
     
-    rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_feed_news:"feeds",
-    rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
+ rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web",
+ rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
@@ -17715,6 +17717,8 @@ HOW TO MAP CODE
     rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control",
     rb_email_send:"email_send", rb_email_when:"email_read",
+    rb_feed_news:"feeds",
+    rb_feed_when:"feeds",
      rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
@@ -18016,16 +18020,11 @@ HOW TO MAP CODE
       tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
         "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
-    V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
-      tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
     V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
       tooltip:"The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files." }),
     { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
-    { type:"rb_feed_when", message0:"when there's something new in feed %1", args0:[{ type:"field_input", name:"URL", text:"" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },
     { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks." },
@@ -18090,6 +18089,11 @@ HOW TO MAP CODE
     { type:"rb_email_when", message0:"when an email arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text." },
+    V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
+    { type:"rb_feed_when", message0:"when there's something new in feed %1", args0:[{ type:"field_input", name:"URL", text:"" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },
     { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
     { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
@@ -18340,10 +18344,10 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_page_when"),
+      B("rb_webhook_when"), B("rb_folder_when"), B("rb_page_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_feed_news", { URL:T("") }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
+      B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -18403,6 +18407,10 @@ HOW TO MAP CODE
     { kind:"category", name:"Email", categorystyle:"email", service:"email", contents:[
       B("rb_email_when"), B("rb_event"),
             B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
+    ]},
+    { kind:"category", name:"News feeds", categorystyle:"feeds", service:"feeds", contents:[
+      B("rb_feed_when"), B("rb_event"),
+      B("rb_feed_news", { URL:T("") })
     ]},
     { kind:"category", name:"GitHub", categorystyle:"github", service:"github", contents:[
       B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_event")
@@ -21299,8 +21307,7 @@ HOW TO MAP CODE
             
             
             
-             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
-             webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
+                          webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
@@ -21312,6 +21319,7 @@ HOW TO MAP CODE
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
+             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
               github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
@@ -21784,6 +21792,7 @@ HOW TO MAP CODE
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
+        case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
@@ -21820,7 +21829,6 @@ HOW TO MAP CODE
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
         // sync:connections-pyread-end
-        case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
         case "rb_web_search": return "(await R.web_search(" + I("TEXT", '""') + "))";
         case "rb_rec_new": return "{}";
@@ -23799,26 +23807,6 @@ HOW TO MAP CODE
     const noun = { "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter", Powerwall:"Powerwall" }[what] ? tr({ "News feeds":"news feeds", GitHub:"GitHub projects", Telegram:"Telegram messages", Discord:"Discord messages", Slack:"Slack messages", Email:"emails", Calendar:"calendar events", MQTT:"MQTT topics", Homey:"Homey devices", Coinbase:"Coinbase account", MikroTik:"MikroTik switch", UniFi:"UniFi network", Proxmox:"Proxmox cluster", Docker:"Docker stack", Solax:"Solax inverter", Powerwall:"Powerwall" }[what]) : what;
     addStep(what, { mono:true, text:tr("This page uses sample {noun}, so nothing real is read or sent. Exported Python uses your own.", { noun }) }).done("sample", "warn");
   }
-  function sampleFeedItems(url, limit){
-    url = str(url).trim(); limit = Math.max(1, Math.min(50, Math.floor(num(limit) + 0.5) || 10));
-    const feeds = CONN.feeds || {}, urls = url ? [url] : Object.keys(feeds);
-    connNote("News feeds");
-    const out = [];
-    urls.forEach(u => {
-      const f = feeds[u];
-      if (!f) fail(tr("This page can't open {u}, so it only has its sample feeds: {feeds}. Exported Python reads any feed.", { u:short(u, 80), feeds:Object.keys(feeds).join(", ") }));
-      f.items.slice().sort((a, b) => a.hours_ago - b.hours_ago).slice(0, limit).forEach(it => out.push({ feed:f.title, title:it.title, link:it.link, date:hoursAgo(it.hours_ago), summary:it.summary }));
-    });
-    return out;
-  }
-  function feedText(items){
-    const lines = []; let feed = null;
-    items.forEach(i => {
-      if (i.feed !== feed) { feed = i.feed; lines.push((lines.length ? "\n" : "") + feed); }
-      lines.push("- " + whenText(i.date) + "  " + i.title + (i.link ? "\n  " + i.link : "") + (i.summary ? "\n  " + i.summary : ""));
-    });
-    return lines.join("\n") || "The feed has no items.";
-  }
   // sync:connections-page-begin
   /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
      reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
@@ -24051,6 +24039,26 @@ HOW TO MAP CODE
     if (!approved && !(await allowed(["messages"], "send an email to " + to + ": " + subject))) return false;
     MAIL(); addStep(tr("Email to {to}", { to }), { text:tr("Subject: {subject}", { subject:subject || tr("(no subject)") }) + "\n\n" + str(body) }).done("sample", "ok");
     return true;
+  }
+  function sampleFeedItems(url, limit){
+    url = str(url).trim(); limit = Math.max(1, Math.min(50, Math.floor(num(limit) + 0.5) || 10));
+    const feeds = CONN.feeds || {}, urls = url ? [url] : Object.keys(feeds);
+    connNote("News feeds");
+    const out = [];
+    urls.forEach(u => {
+      const f = feeds[u];
+      if (!f) fail(tr("This page can't open {u}, so it only has its sample feeds: {feeds}. Exported Python reads any feed.", { u:short(u, 80), feeds:Object.keys(feeds).join(", ") }));
+      f.items.slice().sort((a, b) => a.hours_ago - b.hours_ago).slice(0, limit).forEach(it => out.push({ feed:f.title, title:it.title, link:it.link, date:hoursAgo(it.hours_ago), summary:it.summary }));
+    });
+    return out;
+  }
+  function feedText(items){
+    const lines = []; let feed = null;
+    items.forEach(i => {
+      if (i.feed !== feed) { feed = i.feed; lines.push((lines.length ? "\n" : "") + feed); }
+      lines.push("- " + whenText(i.date) + "  " + i.title + (i.link ? "\n  " + i.link : "") + (i.summary ? "\n  " + i.summary : ""));
+    });
+    return lines.join("\n") || "The feed has no items.";
   }
   const GH = () => { connNote("GitHub"); return CONN.github || { repos:[], pulls:[], issues:[] }; };
   function ghRepo(repo){
@@ -25436,6 +25444,13 @@ HOW TO MAP CODE
       case "rb_docker_containers": return dockerContainers();
       case "rb_docker_stats": return dockerStats();
       case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
+      case "rb_feed_news": {
+        const url = str(await input(b, tc, "URL")).trim();
+        const items = sampleFeedItems(url, 10);
+        const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
+        addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} items", { n:recs.length }), "ok");
+        return recs;
+      }
       case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
       case "rb_homey_find": {
         const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
@@ -25485,13 +25500,6 @@ HOW TO MAP CODE
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
       // sync:connections-iread-end
-      case "rb_feed_news": {
-        const url = str(await input(b, tc, "URL")).trim();
-        const items = sampleFeedItems(url, 10);
-        const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
-        addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} items", { n:recs.length }), "ok");
-        return recs;
-      }
       case "rb_rec_new": return {};
       case "rb_rec_get": { const r = await input(b, tc, "REC"), k = str(await input(b, tc, "KEY")).trim(); if (!isRec(r)) fail(tr("'{k} of' needs a record in its second slot.", { k })); return k in r ? r[k] : ""; }
       case "rb_rec_has": { const r = await input(b, tc, "REC"), k = str(await input(b, tc, "KEY")).trim(); return isRec(r) && k in r; }

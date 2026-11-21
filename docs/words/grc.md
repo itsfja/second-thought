@@ -45,6 +45,7 @@ Made by tools/sync.py from i18n/grc.json: edit that, not this.
 - GitHub: GitHub
 - Discord and Slack: Discord and Slack
 - Calendar: Calendar
+- News feeds: News feeds
 - Tools for the agent: drop them inside an agent block: Ὄργανα τοῦ ἐπιτρόπου· θὲς αὐτὰ ἔσω πλίνθου ἐπιτρόπου
 - Listeners: they run while the exported program runs on schedule: Ἀκροαταί· τρέχουσιν ἐν ᾧ τὸ ἐξαχθὲν πρόγραμμα κατὰ τὰς ὥρας τρέχει
 - Read and send: Ἀνάγνωθι καὶ πέμψον

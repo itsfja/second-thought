@@ -86,10 +86,10 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_page_when"),
+      B("rb_webhook_when"), B("rb_folder_when"), B("rb_page_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_feed_news", { URL:T("") }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
+      B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -149,6 +149,10 @@
     { kind:"category", name:"Email", categorystyle:"email", service:"email", contents:[
       B("rb_email_when"), B("rb_event"),
             B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
+    ]},
+    { kind:"category", name:"News feeds", categorystyle:"feeds", service:"feeds", contents:[
+      B("rb_feed_when"), B("rb_event"),
+      B("rb_feed_news", { URL:T("") })
     ]},
     { kind:"category", name:"GitHub", categorystyle:"github", service:"github", contents:[
       B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_event")
