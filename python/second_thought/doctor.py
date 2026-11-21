@@ -253,11 +253,6 @@ class Doctor:
                 cfg = await self._ha("GET", "/api/config")
                 return f"reached Home Assistant {cfg.get('version', '')}".strip() if isinstance(cfg, dict) else tr("reached")
             out.append(("Home Assistant", ha))
-        if has("homey_read", "homey_act"):
-            async def homey():
-                home = await self._homey_home()
-                return tr("reached: {home} devices", home=len(home))
-            out.append(("Homey", homey))
         # sync:connections-check-begin
         if has("arr_read", "arr_control"):
             async def arr(which):
@@ -285,6 +280,11 @@ class Doctor:
                 n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
                 return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
             out.append(("Docker", docker))
+        if has("homey_read", "homey_act"):
+            async def homey():
+                home = await self._homey_home()
+                return tr("reached: {home} devices", home=len(home))
+            out.append(("Homey", homey))
         if has("mikrotik_read"):
             async def mikrotik():
                 return await self._doctor_mikrotik()
@@ -707,7 +707,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -715,6 +715,7 @@ class Doctor:
                 "Sonarr": "SONARR_URL",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
+                "Homey": "HOMEY_API_KEY",
                 "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",

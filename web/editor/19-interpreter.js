@@ -311,13 +311,6 @@
         if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";
         return key === "" || key === "all" ? Object.assign({}, v) : (key in v ? v[key] : "");
       }
-      case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
-      case "rb_homey_find": {
-        const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
-        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || tr("(nothing)") }).done(tr("{n} devices", { n:recs.length }), "ok");
-        return recs;
-      }
-      case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       // sync:connections-iread-begin
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
@@ -331,6 +324,13 @@
       case "rb_docker_containers": return dockerContainers();
       case "rb_docker_stats": return dockerStats();
       case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
+      case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
+      case "rb_homey_find": {
+        const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
+        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || tr("(nothing)") }).done(tr("{n} devices", { n:recs.length }), "ok");
+        return recs;
+      }
+      case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();
@@ -1104,14 +1104,14 @@
       }
       case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
-      case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
-      case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
-      case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
+      case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
+      case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;

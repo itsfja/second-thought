@@ -129,12 +129,6 @@
       B("rb_ha_notify", { TARGET:K("persistent_notification"), TEXT:L("The back door is still open.") }),
       B("rb_ha_speak", { TEXT:L("Good morning!"), PLAYER:K("media_player.kitchen_speaker") })
     ]},
-    { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
-      B("rb_homey_when"), B("rb_event"),
-      B("rb_homey_find", { TEXT:K("light") }), B("rb_homey_value", { CAPABILITY:K("measure_temperature"), DEVICE:K("Proofing box") }),
-      B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
-      B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
-    ]},
     // sync:connections-toolbox-begin
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
@@ -147,6 +141,12 @@
     ]},
     { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
+    ]},
+    { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
+      B("rb_homey_when"), B("rb_event"),
+      B("rb_homey_find", { TEXT:K("light") }), B("rb_homey_value", { CAPABILITY:K("measure_temperature"), DEVICE:K("Proofing box") }),
+      B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
+      B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
     ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
