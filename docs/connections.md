@@ -109,29 +109,6 @@ HOMEY_URL = http://192.168.1.20:4859
 
 Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server needs nothing of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
 
-## Coinbase
-
-The blue **Coinbase** blocks read your Coinbase account through its Advanced Trade API, and can place orders, always asking first:
-
-- **Coinbase balances** lists each asset in your portfolio, biggest first: asset, amount, value and currency. Values are in your currency (`currency` in `second-thought.ini`).
-- **Coinbase portfolio value** is what the whole portfolio is worth.
-- **price of … on Coinbase** gives a trading pair's latest price, like BTC-GBP's in pounds; choose **24-hour change %** for how much it moved.
-- **Coinbase daily prices of … for the last …** gives a record for each day (or hour): time, open, high, low, close and volume, oldest first.
-- **Coinbase open orders** and **recent fills** list your orders and trades.
-- **preview Coinbase order: buy … of …** says what a market order would come to, without placing it: size, spend, fee, total, slippage and warnings. **Buy** spends an amount of the second currency (50 of BTC-GBP spends £50); **sell** sells an amount of the first (0.01 of BTC-GBP sells 0.01 BTC).
-- **place Coinbase order** and **cancel Coinbase order** move real money. They always ask you first, even when nothing else does, and the question shows the preview's fee and total. With nobody there to say yes (a schedule, GitHub Actions, a program serving as an MCP tool), they don't run; `approve_by = telegram` asks on your phone instead.
-
-Only spot trading pairs are offered, and nothing converts, transfers or withdraws. On the page these blocks use a **sample portfolio**, in pounds, and nothing is bought or sold. Two gallery programs use them: **Weekly crypto round-up** and **Tell me if BTC drops 10%**. Both only read.
-
-**Using your real account.** At [portal.cdp.coinbase.com](https://portal.cdp.coinbase.com), open API Keys and create one. Under its advanced settings choose **ECDSA** (Advanced Trade doesn't take Ed25519 keys), limit it to **one portfolio**, and give it **View** permission only, unless the program places orders (then View and Trade). Never give it Transfer. Save the key file it downloads next to the program, and name it in `second-thought.ini`:
-
-```
-[coinbase]
-COINBASE_KEY_FILE = cdp_api_key.json
-```
-
-Or put the file's contents in `COINBASE_KEY` (in the keychain, say). Each request is signed with the key, which needs `pip install cryptography`; `run.bat` and `run.sh` install it. `--doctor` checks the key, and says if it can trade when the program only reads, or can't when it places orders.
-
 ## Radarr and Sonarr
 
 The green **Radarr and Sonarr** blocks read your movie and TV managers through their API, and can start a search for what's missing, always asking first:
@@ -209,6 +186,28 @@ TAUTULLI_API_KEY = your-key
 The token is the one the apps send (a device's account details show it); the keychain can hold it and Tautulli's key (Settings, API Keys). `--doctor` says Plex's version and its libraries, and Tautulli's play count.
 
 <!-- sync:connections-docs-begin -->
+## Coinbase
+
+The blue **Coinbase** blocks read your Coinbase account through its Advanced Trade API, and can place orders, always asking first:
+
+- **Coinbase balances** lists each asset in your portfolio, biggest first: asset, amount, value and currency. Values are in your currency (`currency` in `second-thought.ini`).
+- **Coinbase portfolio value** is what the whole portfolio is worth.
+- **price of … on Coinbase** gives a trading pair's latest price, like BTC-GBP's in pounds; choose **24-hour change %** for how much it moved.
+- **Coinbase daily prices of … for the last …** gives a record for each day (or hour): time, open, high, low, close and volume, oldest first.
+- **Coinbase open orders** and **recent fills** list your orders and trades.
+- **preview Coinbase order: buy … of …** says what a market order would come to, without placing it: size, spend, fee, total, slippage and warnings. **Buy** spends an amount of the second currency (50 of BTC-GBP spends £50); **sell** sells an amount of the first (0.01 of BTC-GBP sells 0.01 BTC).
+- **place Coinbase order** and **cancel Coinbase order** move real money. They always ask you first, even when nothing else does, and the question shows the preview's fee and total. With nobody there to say yes (a schedule, GitHub Actions, a program serving as an MCP tool), they don't run; `approve_by = telegram` asks on your phone instead.
+
+Only spot trading pairs are offered, and nothing converts, transfers or withdraws. On the page these blocks use a **sample portfolio**, in pounds, and nothing is bought or sold. Two gallery programs use them: **Weekly crypto round-up** and **Tell me if BTC drops 10%**. Both only read.
+
+**Using your real account.** At [portal.cdp.coinbase.com](https://portal.cdp.coinbase.com), open API Keys and create one. Under its advanced settings choose **ECDSA** (Advanced Trade doesn't take Ed25519 keys), limit it to **one portfolio**, and give it **View** permission only, unless the program places orders (then View and Trade). Never give it Transfer. Save the key file it downloads next to the program, and name it in `second-thought.ini`:
+
+```
+[coinbase]
+COINBASE_KEY_FILE = cdp_api_key.json
+```
+
+Or put the file's contents in `COINBASE_KEY` (in the keychain, say). Each request is signed with the key, which needs `pip install cryptography`; `run.bat` and `run.sh` install it. `--doctor` checks the key, and says if it can trade when the program only reads, or can't when it places orders.
 ## Docker
 
 The blue **Docker** blocks read your containers through Docker's Engine API, and can restart, stop and start them, always asking first:
