@@ -62,7 +62,7 @@
             
             
             
-             calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
+            
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
@@ -70,6 +70,7 @@
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              // sync:connections-need-begin
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
+              calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
               discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
               slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
@@ -149,6 +150,10 @@
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
+    if (need.calendar) out.push("", "[calendar]",
+      "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
+      "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
+      "CALENDAR_URL = ");
     if (need.discord) out.push("", "[discord]",
       "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
       "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
@@ -263,10 +268,6 @@
       ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
                         "feeds = "] : []),
       ...note("local_pages", "yes", "let the agent read pages and feeds on your own network too (normally only public ones)"));
-    if (need.calendar) out.push("", "[calendar]",
-      "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
-      "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
-      "CALENDAR_URL = ");
     if (need.webhook) out.push("", "[web requests]",
       "; A long password that every web request must carry: http://127.0.0.1:8765/<address>?key=<this password>",
       "; or in an X-Second-Thought-Key header. Requests without it are refused.",
@@ -537,6 +538,7 @@
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
         case "rb_coinbase_value": return "(await R.coinbase_value())";
         case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
@@ -583,7 +585,6 @@
         case "rb_unraid_vms": return "(await R.unraid_vms())";
         // sync:connections-pyread-end
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
-        case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
         case "rb_web_search": return "(await R.web_search(" + I("TEXT", '""') + "))";
         case "rb_rec_new": return "{}";

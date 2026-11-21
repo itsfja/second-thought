@@ -292,7 +292,7 @@
    "N"
   ],
   "tooltip": "Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text.",
-  "category": "Connections",
+  "category": "Calendar",
   "capability": "calendar"
  },
  {
@@ -302,7 +302,7 @@
    "DAYS"
   ],
   "tooltip": "Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar.",
-  "category": "Connections",
+  "category": "Calendar",
   "capability": "calendar"
  },
  {
