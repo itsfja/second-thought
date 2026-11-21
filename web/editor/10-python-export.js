@@ -59,7 +59,7 @@
     const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
-             github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
+            
              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
@@ -73,6 +73,7 @@
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
+              github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
               mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
@@ -162,6 +163,10 @@
       "; Your address and an app password (not your normal password). Gmail: Google account, Security, App passwords.",
       "; Gmail, iCloud, Yahoo, Fastmail and mailbox.org work out their own servers. For others, fill in the servers too.",
       "EMAIL_ADDRESS = ", "EMAIL_PASSWORD = ", "; EMAIL_IMAP_HOST = ", "; EMAIL_SMTP_HOST = ", "; EMAIL_SMTP_PORT = 465");
+    if (need.github) out.push("", "[github]",
+      "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
+      "; to let the agent comment, pull requests and issues need read and write.",
+      "GITHUB_TOKEN = ");
     if (need.homey) out.push("", "[homey]",
       "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
       "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
@@ -245,10 +250,6 @@
       ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
                         "feeds = "] : []),
       ...note("local_pages", "yes", "let the agent read pages and feeds on your own network too (normally only public ones)"));
-    if (need.github) out.push("", "[github]",
-      "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
-      "; to let the agent comment, pull requests and issues need read and write.",
-      "GITHUB_TOKEN = ");
     if (need.discord) out.push("", "[discord]",
       "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
       "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",

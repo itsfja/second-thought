@@ -141,7 +141,7 @@
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
+    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
@@ -161,6 +161,7 @@
     rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control",
     rb_email_send:"email_send", rb_email_when:"email_read",
+     rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
@@ -486,12 +487,6 @@
     { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks." },
-    { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
-    { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when someone opens an issue in this GitHub project (checked every 5 minutes; pull requests don't count). 'What arrived' gives repo, number, title, body, author, labels, link and text." },
-    { type:"rb_gh_release_when", message0:"when a release is published in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when this GitHub project publishes a release (checked every 15 minutes). 'What arrived' gives repo, tag, name, previous_tag, notes, link and text." },
     { type:"rb_cal_when", message0:"when a calendar event starts in %1 minutes", args0:[{ type:"field_number", name:"N", value:15, min:0, max:1440 }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text." },
@@ -541,6 +536,12 @@
     { type:"rb_email_when", message0:"when an email arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text." },
+    { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
+    { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone opens an issue in this GitHub project (checked every 5 minutes; pull requests don't count). 'What arrived' gives repo, number, title, body, author, labels, link and text." },
+    { type:"rb_gh_release_when", message0:"when a release is published in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when this GitHub project publishes a release (checked every 15 minutes). 'What arrived' gives repo, tag, name, previous_tag, notes, link and text." },
     /* Homey */
     { type:"rb_homey_when", message0:"when Homey device %1 %2 changes", args0:[{ type:"field_input", name:"DEVICE", text:"Washing machine" }, { type:"field_input", name:"CAPABILITY", text:"measure_power" }],
       nextStatement:null, style:"homey_hat",

@@ -1016,7 +1016,8 @@
   "Plex": "Plex",
   "MQTT": "MQTT",
   "Telegram": "Telegram",
-  "Email": "Email"
+  "Email": "Email",
+  "GitHub": "GitHub"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "聽者：所出之程依時而行，則此諸塊行",

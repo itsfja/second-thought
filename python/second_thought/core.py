@@ -288,6 +288,11 @@ def docker_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
             return kind
     return None
+# GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
+# to comment on pull requests it also needs pull request write access).
+GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
+# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
+PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -518,11 +523,6 @@ def ha_sensitive(service, entity="", data=None):
     return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
-# GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
-# to comment on pull requests it also needs pull request write access).
-GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
-# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
-PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 # Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
 # turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
 # Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
@@ -886,7 +886,6 @@ SCHEMAS = {
 CAPABILITIES = [
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
-    ("github_comment", "comment on GitHub, and open and label issues", True),
     ("ha_act", "control your Home Assistant devices", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
@@ -896,6 +895,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("email_send", "send email", True),
+    ("github_comment", "comment on GitHub, and open and label issues", True),
     ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -914,6 +914,7 @@ CAPABILITIES = [
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("email_read", "read your email", False),
+    ("github_read", "look at your GitHub projects", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("mqtt_read", "read MQTT messages", False),
@@ -931,7 +932,6 @@ CAPABILITIES = [
     ("web", "read public web pages and search the web", False),
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
-    ("github_read", "look at your GitHub projects", False),
     ("discord_read", "read your Discord channels", False),
     ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),

@@ -9,6 +9,7 @@
     coinbase:"#C2185B",
     docker:"#C2185B",
     email:"#C2185B",
+    github:"#C2185B",
     homey:"#C2185B",
     mikrotik:"#C2185B",
     mqtt:"#C2185B",

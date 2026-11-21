@@ -1,0 +1,6 @@
+    { type:"rb_gh_when", message0:"when a pull request asks for my review", nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text." },
+    { type:"rb_gh_issue_when", message0:"when a new issue is opened in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone opens an issue in this GitHub project (checked every 5 minutes; pull requests don't count). 'What arrived' gives repo, number, title, body, author, labels, link and text." },
+    { type:"rb_gh_release_when", message0:"when a release is published in %1", args0:[{ type:"field_input", name:"REPO", text:"owner/name" }], nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when this GitHub project publishes a release (checked every 15 minutes). 'What arrived' gives repo, tag, name, previous_tag, notes, link and text." },
