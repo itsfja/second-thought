@@ -31,6 +31,14 @@ class List(unittest.TestCase):
         self.assertEqual((ROOT / "tools" / "blocks.json").read_text(encoding="utf-8"), sync.blocks_json(),
                          "tools/blocks.json is out of date (a block definition changed): run python tools/sync.py")
 
+    def test_reference_is_fresh_and_lists_every_block(self):
+        # docs/blocks.md, the block reference for people (#423).
+        doc = (ROOT / "docs" / "blocks.md").read_text(encoding="utf-8")
+        self.assertEqual(doc, sync.blocks_doc(), "docs/blocks.md is out of date (the block list changed): run python tools/sync.py")
+        listed = set(re.findall(r"<br>`(rb_[a-z0-9_]+)`", doc))
+        self.assertEqual(listed, TYPES, f"docs/blocks.md should list every block once: missing {sorted(TYPES - listed)[:5]}")
+        self.assertEqual(len(re.findall(r"<br>`rb_", doc)), len(TYPES), "each block appears once in docs/blocks.md")
+
     def test_shape(self):
         self.assertGreater(len(BLOCKS), 100, "the list should hold every block the editor defines")
         self.assertEqual(len(TYPES), len(BLOCKS), "every type appears once")

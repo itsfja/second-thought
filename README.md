@@ -77,6 +77,7 @@ It also speaks 34 other languages besides English, from Spanish, Japanese and Cl
 | Page | What's in it |
 |---|---|
 | [Using the page](docs/using-the-page.md) | The blocks, what a program can do, the examples and gallery, saving, languages |
+| [Blocks](docs/blocks.md) | Every block, what it does, what it lets a program do, and whether it asks first |
 | [The agent](docs/agent.md) | Goals and tools, planning, what always asks first |
 | [Connections](docs/connections.md) | Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, MikroTik, UniFi, Proxmox, Docker, SABnzbd, Radarr, Sonarr, Unraid, NZBGeek, Pi-hole, Plex |
 | [MCP tools](docs/mcp.md) | Any MCP server, GitHub, Kraken, Trust Wallet, and your program as a tool |
