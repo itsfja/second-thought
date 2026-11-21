@@ -1284,7 +1284,10 @@
 "Edit blocks":"emendare tessellas",
 "Show the outline":"ostende lineamenta",
 "… and more":"… et plura",
-"Ask a question or share an idea on GitHub":"Quaere aliquid aut consilium communica in GitHub"
+"Ask a question or share an idea on GitHub":"Quaere aliquid aut consilium communica in GitHub",
+"Save for Docker (.zip)":"Serva ad Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip servatum est. Expande, claves tuas in keys.env pone, deinde SETUP.md sequere.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Hoc programma nihil exspectat, itaque in Docker finiretur et iterum atque iterum inciperet. Docker programmati cum horario aut cum lateri 'cum' convenit."
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

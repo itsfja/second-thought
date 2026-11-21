@@ -1285,7 +1285,10 @@
 "Edit blocks":"עריכת בלוקים",
 "Show the outline":"הצג את המתוהה",
 "… and more":"… עוד",
-"Ask a question or share an idea on GitHub":"שאלו שאלה או שתפו רעיון ב־GitHub"
+"Ask a question or share an idea on GitHub":"שאלו שאלה או שתפו רעיון ב־GitHub",
+"Save for Docker (.zip)":"שמירה ל-Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"נשמר {name}-docker.zip. חלץ אותו, שים את המפתחות שלך ב-keys.env, ואז עקוב אחרי SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"התוכנית הזאת לא מחכה לשום דבר, אז ב-Docker היא תסתיים ותתחיל שוב ושוב. Docker מתאים לתוכנית עם לוח זמנים או בלוק 'כאשר'."
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

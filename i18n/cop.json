@@ -2019,7 +2019,10 @@
   "Edit blocks": "ⲥⲁ ⲛⲩ ⲕⲓ",
   "Show the outline": "ⲥⲁ ⲛⲩ ⲕⲓ",
   "… and more": "ⲥⲁ ⲛⲩ ⲕⲓ",
-  "Ask a question or share an idea on GitHub": "ϣⲓⲛⲉ ⲛⲟⲩϩⲱⲃ ⲏ ⲕⲟⲓⲛⲱⲛⲉⲓ ⲛⲛⲟⲩⲙⲉⲉⲩⲉ ϩⲓϫⲛ GitHub"
+  "Ask a question or share an idea on GitHub": "ϣⲓⲛⲉ ⲛⲟⲩϩⲱⲃ ⲏ ⲕⲟⲓⲛⲱⲛⲉⲓ ⲛⲛⲟⲩⲙⲉⲉⲩⲉ ϩⲓϫⲛ GitHub",
+  "Save for Docker (.zip)": "ϩⲁⲣⲉϩ ϩⲱⲥ Docker (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "ⲁϥϩⲁⲣⲉϩ {name}-docker.zip. ⲃⲟⲗϥ ⲉⲃⲟⲗ, ⲕⲱ ⲛⲛⲉⲕϣⲟϣⲧ ϩⲛ keys.env, ⲁⲩⲱ ⲟⲩⲁϩⲕ ⲛⲥⲁ SETUP.md.",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "ⲙⲛ ⲗⲁⲁⲩ ⲛϩⲱⲃ ⲉⲣⲉ ⲡⲉⲓⲟⲣⲅⲁⲛⲟⲛ čⲱϣⲧ ⲉⲃⲟⲗ ϩⲏⲧϥ, ⲉⲧⲃⲉ ⲡⲁⲓ ϩⲛ Docker ⲛⲁⲁϥⲱⲕ ⲁϥⲁⲣⲭⲉⲓ ⲟⲛ ⲟⲛ. Docker ⲙⲡϣⲁ ⲛⲟⲩⲟⲣⲅⲁⲛⲟⲛ ⲙⲛ ⲟⲩⲟⲉⲓϣ ⲏ ⲟⲩⲱⲛⲉ 'ϩⲟⲧⲁⲛ'."
  },
  "examples": {
   "review": {

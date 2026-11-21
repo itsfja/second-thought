@@ -2028,7 +2028,10 @@
   "Edit blocks": "Blöcke bearbeiten",
   "Show the outline": "Gliederung zeigen",
   "… and more": "… und mehr",
-  "Ask a question or share an idea on GitHub": "Stell eine Frage oder teile eine Idee auf GitHub"
+  "Ask a question or share an idea on GitHub": "Stell eine Frage oder teile eine Idee auf GitHub",
+  "Save for Docker (.zip)": "Für Docker speichern (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip gespeichert. Entpacke es, trage deine Schlüssel in keys.env ein und folge dann SETUP.md.",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Dieses Programm wartet auf nichts, also würde es in Docker enden und immer wieder neu starten. Docker passt zu einem Programm mit Zeitplan oder einem „wenn“-Block."
  },
  "examples": {
   "review": {

@@ -2029,7 +2029,10 @@
   "Edit blocks": "Edit 𐠁𐠇𐠃𐠉𐠉𐠠",
   "Show the outline": "Show 𐠃𐠓𐠁 𐠃𐠄𐠃𐠇𐠂𐠊𐠁",
   "… and more": "… 𐠀𐠊𐠕 𐠘𐠃𐠦𐠁",
-  "Ask a question or share an idea on GitHub": "ተሰአል አው አይድዕ ሕሊናከ በ GitHub"
+  "Ask a question or share an idea on GitHub": "ተሰአል አው አይድዕ ሕሊናከ በ GitHub",
+  "Save for Docker (.zip)": "ዕቀብ ለ Docker (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "ተዐቅበ {name}-docker.zip። ፍትሖ፣ ደይ መራኁተከ ውስተ keys.env፣ ወእምዝ ትልዎ ለ SETUP.md።",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "ዝንቱ ሥርዐት ኢይጸንሕ ምንተኒ፣ ወበእንተዝ በ Docker ይፌጽም ወይቀድም ካዕበ ወካዕበ። Docker ይደሉ ለሥርዐት ዘቦ ጊዜ ወአው ኅብረ 'አመ'።"
  },
  "examples": {
   "review": {

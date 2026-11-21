@@ -2028,7 +2028,10 @@
   "Edit blocks": "ἐπεξεργασία μπλοκ",
   "Show the outline": "δείξον τό διάγραμμα",
   "… and more": "… καὶ πλείονα",
-  "Ask a question or share an idea on GitHub": "Ἐρώτησον ἢ γνώμην κοίνωσον ἐν τῷ GitHub"
+  "Ask a question or share an idea on GitHub": "Ἐρώτησον ἢ γνώμην κοίνωσον ἐν τῷ GitHub",
+  "Save for Docker (.zip)": "Σῷσον εἰς Docker (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "Ἐσώθη {name}-docker.zip. Λῦσον αὐτό, θὲς τὰς κλεῖς σου εἰς τὸ keys.env, εἶτα ἕπου τῷ SETUP.md.",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Τοῦτο τὸ πρόγραμμα οὐδὲν περιμένει, ὥστε ἐν τῷ Docker τελευτήσειεν ἂν καὶ αὖθις καὶ αὖθις ἄρξαιτο. Τὸ Docker ἁρμόζει προγράμματι μετὰ τάξεως χρόνων ἢ πλίνθου «ὅταν»."
  },
  "examples": {
   "review": {

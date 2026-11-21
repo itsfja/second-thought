@@ -1284,7 +1284,10 @@
 "Edit blocks":"Επεξεργασία μπλοκ",
 "Show the outline":"Εμφάνιση της επισκόπησης",
 "… and more":"… και άλλα",
-"Ask a question or share an idea on GitHub":"Κάντε μια ερώτηση ή μοιραστείτε μια ιδέα στο GitHub"
+"Ask a question or share an idea on GitHub":"Κάντε μια ερώτηση ή μοιραστείτε μια ιδέα στο GitHub",
+"Save for Docker (.zip)":"Αποθήκευση για Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Αποθηκεύτηκε το {name}-docker.zip. Αποσυμπίεσέ το, βάλε τα κλειδιά σου στο keys.env και ακολούθησε το SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Αυτό το πρόγραμμα δεν περιμένει τίποτα, οπότε στο Docker θα τελείωνε και θα ξεκινούσε ξανά και ξανά. Το Docker ταιριάζει σε πρόγραμμα με χρονοδιάγραμμα ή μπλοκ «όταν»."
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

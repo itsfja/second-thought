@@ -1284,7 +1284,10 @@
 "Edit blocks":"Editar bloques",
 "Show the outline":"Ver el esquema",
 "… and more":"… y más",
-"Ask a question or share an idea on GitHub":"Haz una pregunta o comparte una idea en GitHub"
+"Ask a question or share an idea on GitHub":"Haz una pregunta o comparte una idea en GitHub",
+"Save for Docker (.zip)":"Guardar para Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Guardado {name}-docker.zip. Descomprímelo, pon tus claves en keys.env y sigue SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Este programa no espera nada, así que en Docker terminaría y volvería a empezar una y otra vez. Docker conviene a un programa con horario o con un bloque «cuando»."
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

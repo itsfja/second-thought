@@ -477,6 +477,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
       <button type="button" id="io-py-copy">Copy Python code</button>
       <button type="button" id="io-py-show">Show code</button>
       <button type="button" id="io-gha-save" hidden>Save as GitHub Actions (.zip)</button>
+      <button type="button" id="io-docker-save" hidden>Save for Docker (.zip)</button>
     </div>
     <p class="msg" id="io-export-msg" role="status"></p>
     <textarea id="io-export-text" class="code" readonly hidden aria-label="Exported program"></textarea>
@@ -20764,7 +20765,7 @@ HOW TO MAP CODE
   $("io-export").onclick = () => { toggleIo(true); $("io-copy").focus(); };
   // Share… opens its own drawer, wired in 23-gallery-share.js (#437).
   let downloads = null;
-  const showSaves = d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("log-save").hidden = !d; };
+  const showSaves = d => { downloads = d; $("io-save").hidden = !d; $("io-py-save").hidden = !d; $("io-gha-save").hidden = !d; $("io-docker-save").hidden = !d; $("log-save").hidden = !d; };
   if (window.claude && window.claude.use) {
     window.claude.use("downloads").then(showSaves).catch(() => {});
   } else {
@@ -20823,6 +20824,83 @@ HOW TO MAP CODE
     if (programTests.length) files.push({ name:base + ".tests.json", text:JSON.stringify(programTests, null, 1) + "\n" });
     return files;
   }
+  // ----- Save for Docker (#439): the program, kept running in a container, with its folder as the volume -----
+  const waitsForSomething = () => ws.getTopBlocks(false).some(b => ["rb_when_time", "rb_every", "rb_ha_when"].includes(b.type) || LISTENER_HATS.has(b.type));
+  function dockerFiles(progName, code){
+    if (!waitsForSomething()) throw new Error(tr("This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block."));
+    const base = pyName(), svc = base.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^[^a-z0-9]+/, "") || "program";
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const ini = iniText(progName), acts = programCapabilities().some(c => c[2]), webhook = settingsFor().webhook;
+    // The secrets, for keys.env: everything in [keys], and every key, token, secret and password in the other sections.
+    // Environment variables win over second-thought.ini, so they go there; one the ini leaves as a note stays one here.
+    const secrets = new Map();
+    ini.split(/\r?\n(?=\[)/).forEach(part => {
+      for (const m of part.matchAll(/^(; ?)?([A-Z][A-Z0-9_]+) = /gm))
+        if (part.startsWith("[keys]") || /_(KEY|TOKEN|SECRET|PASSWORD|PASS)$/.test(m[2]))
+          if (!secrets.has(m[2]) || !m[1]) secrets.set(m[2], !m[1]);
+    });
+    const req = exportFiles(progName, code).find(f => f.name === "requirements.txt").text;
+    const dockerfile = ["# " + base + " from Second Thought, in a container. SETUP.md says how to start it.",
+      "FROM python:3.12-slim",
+      "# Time zones, so a schedule's times are your own (TZ in compose.yaml).",
+      "RUN apt-get update && apt-get install -y --no-install-recommends tzdata && rm -rf /var/lib/apt/lists/*",
+      "# What the program needs, installed in the image, so it starts without downloading anything.",
+      "COPY requirements.txt /tmp/requirements.txt",
+      "RUN pip install --no-cache-dir --disable-pip-version-check -r /tmp/requirements.txt && rm /tmp/requirements.txt",
+      "# An ordinary user, not root. compose.yaml runs it as your own user id, so what it writes here is yours.",
+      "RUN useradd --create-home --uid 1000 second-thought",
+      "USER second-thought",
+      "# The program's folder is a volume (compose.yaml): the program, its settings, its memory and what you allowed.",
+      "WORKDIR /program",
+      "ENV PYTHONUNBUFFERED=1",
+      "CMD [\"python\", \"-u\", " + JSON.stringify(base + ".py") + ", \"--schedule\"]", ""].join("\n");
+    const compose = ["# " + base + " from Second Thought, kept running by Docker: docker compose up -d --build. See SETUP.md.",
+      "services:",
+      "  " + svc + ":",
+      "    build: .",
+      "    image: second-thought-" + svc,
+      "    restart: unless-stopped",
+      "    # Your own user id, so the files it writes in this folder are yours. Not 1000? Put UID= and GID= in a .env file.",
+      "    user: \"${UID:-1000}:${GID:-1000}\"",
+      "    env_file: keys.env",
+      "    environment:",
+      "      TZ: " + JSON.stringify(tz),
+      ...(webhook ? ["      WEBHOOK_HOST: \"0.0.0.0\"   # inside the container; the port below is still only this computer's"] : []),
+      "    volumes:",
+      "      - .:/program",
+      "    # host.docker.internal is this computer, for a service running on it (Ollama, Home Assistant): in the",
+      "    # container, localhost is the container itself.",
+      "    extra_hosts:",
+      "      - \"host.docker.internal:host-gateway\"",
+      ...(webhook ? ["    ports:", "      - \"127.0.0.1:8765:8765\"   # web requests; drop 127.0.0.1: to let other computers call it"] : []),
+      ""].join("\n");
+    const keys = ["# " + base + "'s keys, one per line: NAME=value, with no spaces or quotes. Keep this file private.",
+      "# They win over second-thought.ini, whose other settings still apply. A line starting with # is optional.",
+      ...[...secrets].map(([k, needed]) => (needed ? "" : "# ") + k + "="), ""].join("\n");
+    const run = "docker compose run --rm " + svc;
+    const setup = ["# " + base + " in Docker", "",
+      "Docker keeps this program running: it starts again after a crash or a restart, until you stop it.", "",
+      "1. **Keys.** Put them in `keys.env`, one per line: `NAME=value`, with no spaces or quotes. Its other settings are in `second-thought.ini`.",
+      ...(acts ? ["2. **Allow it once.** It can act on the world, so it asks before its first run, and in a container nobody is there to say yes. Run it once by hand and answer `y`:", "",
+        "       " + run + " python " + base + ".py", "",
+        "   The answer is kept in `." + base + ".approved`, in this folder, until the program changes. Or put `approve = no` in `second-thought.ini`, and it never asks: only if you trust everything it reads."]
+        : ["2. **Nothing to allow.** It only reads and writes to you, so it doesn't ask before its first run."]),
+      "3. **Start it:** `docker compose up -d --build`", "",
+      "   - See what it's doing: `docker compose logs -f`",
+      "   - Check its setup: `" + run + " python " + base + ".py --doctor`",
+      "   - Stop it: `docker compose down`", "",
+      "## Good to know", "",
+      "- In the container, `localhost` is the container. For a service on this computer, use `host.docker.internal`, like `LLAMA_BASE_URL = http://host.docker.internal:11434/v1`. A `.local` name (`homeassistant.local`) may not be found from a container: use the machine's IP address instead.",
+      "- It runs as user 1000. If `id -u` says something else, make a file `.env` here with `UID=` and `GID=` (from `id -g`), so the files it writes are yours.",
+      "- Its schedule's times are in " + tz + " (`TZ` in `compose.yaml`).",
+      ...(webhook ? ["- Web requests reach it at `http://127.0.0.1:8765/…` on this computer. To let other computers call it, drop `127.0.0.1:` from `ports` in `compose.yaml`."] : []),
+      "- A new version: replace `" + base + ".py` with the new export, then `docker compose up -d --build`." + (acts ? " If what it can do changed, allow it again (step 2)." : ""), ""].join("\n");
+    return [{ name:base + ".py", text:code }, { name:"second-thought.ini", text:ini }, { name:"requirements.txt", text:req },
+            { name:"Dockerfile", text:dockerfile }, { name:"compose.yaml", text:compose }, { name:"keys.env", text:keys },
+            { name:"SETUP.md", text:setup }, { name:".dockerignore", text:"keys.env\nsecond-thought.ini\n.env\n*.approved\n" },
+            ...(programTests.length ? [{ name:base + ".tests.json", text:JSON.stringify(programTests, null, 1) + "\n" }] : [])];
+  }
+  window.__dockerFiles = () => { try { const n = $("io-name").value.trim() || "my-program"; return dockerFiles(n, toPython(n)); } catch(e) { return { error:e.message }; } };
   window.__zipBase64 = async () => { const b = new Uint8Array(await makeZip(window.__exportFiles()).arrayBuffer()); let t = ""; b.forEach(x => t += String.fromCharCode(x)); return btoa(t); };
   window.__exportFiles = () => exportFiles($("io-name").value.trim() || "my-program", toPython($("io-name").value.trim() || "my-program"));
   // ----- Save as GitHub Actions: the program runs at its scheduled times on GitHub's computers, with no computer of yours on -----
@@ -21063,6 +21141,22 @@ HOW TO MAP CODE
       const files = actionsFiles($("io-name").value.trim() || "my-program", toPython($("io-name").value.trim() || "my-program"));
       const r = await downloads.save({ filename:pyName() + "-actions.zip", data:makeZip(files) });
       ioMsg("io-export-msg", r.status === "saved" ? tr("Saved {name}-actions.zip. Put its files in a private GitHub repository and add the secrets SETUP.md lists; then it runs on schedule.", { name:pyName() }) : "File sent.", "ok");
+    } catch(e) {
+      const code = e && e.code;
+      if (code === "declined") ioMsg("io-export-msg", "Save cancelled.");
+      else if (code === "rate_limited") ioMsg("io-export-msg", "A save prompt is already open. Finish that one first.", "bad");
+      else if (e instanceof Error) ioMsg("io-export-msg", tr("The code couldn't be generated: {problem}", { problem:e.message }), "bad");
+      else ioMsg("io-export-msg", "Saving files isn't available here. Use Copy Python code instead.", "bad");
+    } finally { btn.disabled = false; }
+  };
+  $("io-docker-save").onclick = async () => {
+    if (!downloads) return;
+    const btn = $("io-docker-save"); btn.disabled = true;
+    try {
+      const n = $("io-name").value.trim() || "my-program";
+      if (!waitsForSomething()) { ioMsg("io-export-msg", "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.", "bad"); return; }
+      const r = await downloads.save({ filename:pyName() + "-docker.zip", data:makeZip(dockerFiles(n, toPython(n))) });
+      ioMsg("io-export-msg", r.status === "saved" ? tr("Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.", { name:pyName() }) : "File sent.", "ok");
     } catch(e) {
       const code = e && e.code;
       if (code === "declined") ioMsg("io-export-msg", "Save cancelled.");

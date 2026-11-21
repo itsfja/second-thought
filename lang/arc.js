@@ -1285,7 +1285,10 @@
 "Edit blocks":"ܥܦܘܟ ܒܠܘܩܐ",
 "Show the outline":"ܥܘܝ ܫܘܦܪܐ",
 "… and more":"… ܝܘܪܦ",
-"Ask a question or share an idea on GitHub":"שאל שאלתא או שתף מחשבתא על GitHub"
+"Ask a question or share an idea on GitHub":"שאל שאלתא או שתף מחשבתא על GitHub",
+"Save for Docker (.zip)":"נטר לות Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"אתנטר {name}-docker.zip. שרי יתה, שים מפתחך ב-keys.env, ובתר כן הלך בתר SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"סדורא הדין לא מסכא למדעם, ובכן ב-Docker נשלם ונשרא תוב ותוב. Docker יאה לסדורא דאית לה זבנא או לבנתא 'כד'."
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

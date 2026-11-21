@@ -1284,7 +1284,10 @@
 "Edit blocks":"Blokken bewerken",
 "Show the outline":"Toon het overzicht",
 "… and more":"… en meer",
-"Ask a question or share an idea on GitHub":"Stel een vraag of deel een idee op GitHub"
+"Ask a question or share an idea on GitHub":"Stel een vraag of deel een idee op GitHub",
+"Save for Docker (.zip)":"Opslaan voor Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip opgeslagen. Pak het uit, zet je sleutels in keys.env en volg dan SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Dit programma wacht nergens op, dus in Docker zou het stoppen en steeds opnieuw beginnen. Docker past bij een programma met een schema of een 'wanneer'-blok."
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

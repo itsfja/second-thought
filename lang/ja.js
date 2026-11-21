@@ -1284,7 +1284,10 @@
 "Edit blocks":"ブロックを編集",
 "Show the outline":"アウトラインを表示",
 "… and more":"… その他",
-"Ask a question or share an idea on GitHub":"GitHub で質問やアイデアを投稿する"
+"Ask a question or share an idea on GitHub":"GitHub で質問やアイデアを投稿する",
+"Save for Docker (.zip)":"Docker 用に保存 (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip を保存しました。展開して keys.env にキーを入れ、SETUP.md の手順に従ってください。",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"このプログラムには待つものがないため、Docker では終了と再起動を繰り返します。Docker はスケジュールか「〜のとき」ブロックのあるプログラム向けです。"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

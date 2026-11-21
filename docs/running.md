@@ -66,6 +66,14 @@ To start it automatically:
 
 The zip's own installers cover a computer someone logs in to. On a box nobody logs in to — the one under the stairs — the same jobs want a little more: start at power-on with nobody's session, start again after a crash, and keep the program inside its own folder. Run the program once yourself first and answer its approval question (`y`), or put `approve = no` in `second-thought.ini` if you're sure.
 
+**In Docker.** **Save for Docker (.zip)**, for a program with a schedule or a *when* block, gives the program with a
+`Dockerfile`, a `compose.yaml` and a `SETUP.md`. Put your keys in `keys.env`, allow it once (`docker compose run --rm
+<name> python <name>.py`, and answer `y`; or `approve = no`), then `docker compose up -d --build`. It runs as an
+ordinary user, with its folder as the volume, so its memory and what you allowed are kept there, and Docker starts it
+again after a crash or a restart (`restart: unless-stopped`). In the container, `localhost` is the container: a
+service on the same computer is `host.docker.internal`. A program that takes web requests gets port 8765 on this
+computer only.
+
 **Linux (systemd).** `sh install-service.sh` already installs a unit that starts at boot as you. For the harder-walled shape, put this in `/etc/systemd/system/second-thought-my-program.service` (it's the same unit, with the walls named):
 
 ```ini

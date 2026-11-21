@@ -1284,7 +1284,10 @@
 "Edit blocks":"𐍃𐌰 𐌽𐌿 𐌺𐌹",
 "Show the outline":"𐍃𐌰 𐌽𐌿 𐌺𐌹",
 "… and more":"𐍃𐌰 𐌽𐌿 𐌺𐌹",
-"Ask a question or share an idea on GitHub":"𐍆𐍂𐌰𐌹𐌷𐌽 𐍈𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌲𐌰𐍄𐌴𐌹𐌷 𐍆𐍂𐌰𐌸𐌹 𐌸𐌴𐌹𐌽𐌰𐍄𐌰 𐌰𐌽𐌰 GitHub"
+"Ask a question or share an idea on GitHub":"𐍆𐍂𐌰𐌹𐌷𐌽 𐍈𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌲𐌰𐍄𐌴𐌹𐌷 𐍆𐍂𐌰𐌸𐌹 𐌸𐌴𐌹𐌽𐌰𐍄𐌰 𐌰𐌽𐌰 GitHub",
+"Save for Docker (.zip)":"𐍃𐍅𐌴 Docker 𐍆𐌰𐍃𐍄𐌰𐌹 (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip 𐍆𐌰𐍃𐍄𐌰𐌹𐌸. 𐌰𐌽𐌳𐌱𐌹𐌽𐌳𐌰𐌹𐍃 𐌹𐍄𐌰, 𐌻𐌰𐌲𐌾𐌰𐌹𐍃 𐌻𐌿𐌺𐌰𐌽𐍃 𐌸𐌴𐌹𐌽𐌰𐌽𐍃 𐌹𐌽 keys.env, 𐌾𐌰𐌷 𐌸𐌰𐌸𐍂𐍉𐌷 𐌻𐌰𐌹𐍃𐍄𐌾𐌰𐌹𐍃 SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þ𐌰𐍄𐌰 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐍃 𐌽𐌹 𐌱𐌴𐌹𐌳𐌹𐌸 𐍈𐌹𐍃, 𐍃𐍅𐌰𐌴𐌹 𐌹𐌽 Docker 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰𐌹 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌹. Docker 𐌲𐌰𐌳𐍉𐌱 𐌹𐍃𐍄 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐌹𐌽 𐌼𐌹𐌸 𐌼𐌴𐌻𐌰𐌼 𐌰𐌹𐌸𐌸𐌰𐌿 '𐌸𐌰𐌽' 𐍃𐍄𐌰𐌹𐌽𐌰."
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},

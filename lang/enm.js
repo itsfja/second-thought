@@ -1284,7 +1284,10 @@
 "Edit blocks":"editen þ blokkes",
 "Show the outline":"schewe þ outlyne",
 "… and more":"… and more",
-"Ask a question or share an idea on GitHub":"Aske a questioun or shewe thy thought on GitHub"
+"Ask a question or share an idea on GitHub":"Aske a questioun or shewe thy thought on GitHub",
+"Save for Docker (.zip)":"Save for Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Saved {name}-docker.zip. Unfolde it, put thy keyes in keys.env, and than folwe SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"This devys abideth no thyng, so in Docker it sholde ende and bigynne agayn and agayn. Docker is mete for a devys with an ordinaunce or a 'whan' blok."
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
