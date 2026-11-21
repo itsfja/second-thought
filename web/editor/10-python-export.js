@@ -1013,6 +1013,18 @@
     return lines.join("\n") + "\n";
   }
 
+  // For tools/export.cjs (#441), which runs this code in Node: the Python this page exports for a block file, loaded
+  // as Import loads one (migrated, its tests kept) and exported as Show code exports it. Throws if it won't load.
+  window.__exportBlockFile = (text, name) => {
+    const data = JSON.parse(String(text).replace(/^\uFEFF/, ""));
+    const isOurs = data && data.format === FORMAT;
+    $("io-import-msg").textContent = "";
+    if (!applyProgram(isOurs ? data.program : data, "", false, isOurs ? data.version : 1, isOurs ? data.tests || [] : []))
+      throw new Error($("io-import-msg").textContent || "the program couldn't be loaded");
+    const progName = String(name || (isOurs && data.name) || "").trim() || "my-program";
+    $("io-name").value = progName;
+    return toPython(progName);
+  };
   function readExported(code){
     const norm = String(code).replace(/\r\n?/g, "\n");
     const at = PY_MARKS.map(m => norm.indexOf(m)).filter(i => i >= 0).sort((a, b) => a - b)[0];

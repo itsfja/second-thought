@@ -41,6 +41,13 @@ sh run.sh
 
 The first time, it makes a private `.venv` next to the program and installs into that, so nothing is installed for the whole computer. (On Debian or Ubuntu, if it can't set up Python, run `sudo apt install python3-venv` first.)
 
+**Without the page.** `node tools/export.cjs my-program.json` turns a block file (from **Save blocks**) into the same
+Python the page would export, using the editor's own code, in a clone of this repository. It's handy for exporting a
+program again for a new runtime, or many at once (`node tools/export.cjs gallery/*.json --out-dir out`). It writes
+only the `.py`, not the zip's other files. It needs Node 18 or later, and Blockly: `npm install blockly@13.4.0
+@blockly/field-multilineinput@13.4.0`, or `bash tests/setup.sh`. `--lang`, `--model` and `--backups` do what the
+page's language, Model menu and backups do; `--help` lists them.
+
 ### Running on a schedule
 
 If a program has timed jobs or listeners, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves, and if the program stops with a problem they start it again 30 seconds later.

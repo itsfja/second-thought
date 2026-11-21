@@ -127,7 +127,7 @@ async def page_tests():
 
         print("Python export and import")
         await pg.click("#io-export")
-        codes = {}
+        codes, block_files = {}, {}
         for ex in EXAMPLES:
             await pg.select_option("#example", ex)
             await pg.click("#load")
@@ -135,7 +135,9 @@ async def page_tests():
             await pg.fill("#io-name", ex)
             await pg.click("#io-py-show")
             codes[ex] = (await pg.input_value("#io-export-text"), n)
+            block_files[ex] = await pg.evaluate("window.__blockFile()")
             await pg.click("#io-py-show")
+        export_tool_check(codes, block_files)
         print("Exported zip contents")
         for ex in ("review", "w_judges", "ha_doorbell", "ha_morning"):
             await pg.select_option("#example", ex)
@@ -597,3 +599,38 @@ async def page_tests():
         check(not errors, "no page errors" + ("" if not errors else ": " + "; ".join(errors[:3])))
         await browser.close()
         return codes
+
+
+def export_tool_check(codes, block_files):
+    """tools/export.cjs (#441): for every example and gallery program, the Python it writes from the program's block
+    file is the page's own export, byte for byte."""
+    import shutil
+    import tempfile
+    node = shutil.which("node")
+    if not node:
+        check(False, "tools/export.cjs needs Node on the PATH")
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = pathlib.Path(tmp)
+        (tmp / "in").mkdir()
+        (tmp / "out").mkdir()
+        files = []
+        for ex, text in block_files.items():
+            f = tmp / "in" / (ex + ".json")
+            f.write_text(text, encoding="utf-8")
+            files.append(str(f))
+        run = subprocess.run([node, str(ROOT / "tools" / "export.cjs"), *files, "--out-dir", str(tmp / "out")],
+                             capture_output=True, text=True, timeout=600)
+        differ, missing = [], []
+        for ex, (code, _) in codes.items():
+            out = tmp / "out" / (ex + ".py")
+            if not out.exists():
+                missing.append(ex)
+            elif out.read_text(encoding="utf-8") != code:
+                a, b = out.read_text(encoding="utf-8").split("\n"), code.split("\n")
+                at = next((i for i, (x, y) in enumerate(zip(a, b)) if x != y), min(len(a), len(b)))
+                differ.append(f"{ex} (line {at + 1}: {a[at][:80] if at < len(a) else '(end)'!r} vs the page's {b[at][:80] if at < len(b) else '(end)'!r})")
+        check(run.returncode == 0 and not differ and not missing,
+              f"node tools/export.cjs writes the page's own Python for all {len(codes)} examples and gallery programs, byte for byte"
+              + (f": {run.stderr.strip()[-600:]}" if run.returncode else "")
+              + (f"; missing {missing[:5]}" if missing else "") + (f"; different: {'; '.join(differ[:3])}" if differ else ""))
