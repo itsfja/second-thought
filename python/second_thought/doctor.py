@@ -271,6 +271,12 @@ class Doctor:
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
         # sync:connections-check-begin
+        if has("docker_read", "docker_control"):
+            async def docker():
+                version = to_str((await self._docker("GET", "/version")).get("Version"))
+                n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
+                return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
+            out.append(("Docker", docker))
         if has("mikrotik_read"):
             async def mikrotik():
                 return await self._doctor_mikrotik()
@@ -342,12 +348,6 @@ class Doctor:
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
         # sync:connections-check-end
-        if has("docker_read", "docker_control"):
-            async def docker():
-                version = to_str((await self._docker("GET", "/version")).get("Version"))
-                n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
-                return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
-            out.append(("Docker", docker))
         if has("arr_read", "arr_control"):
             async def arr(which):
                 status = await self._arr(which, "GET", "/api/v3/system/status")
@@ -709,8 +709,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "Docker": "DOCKER_HOST",
                 "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",

@@ -1,0 +1,690 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "is-the-stack-healthy",
+  "gallery": {
+    "title": "Is the stack healthy?",
+    "category": "home",
+    "description": "Each morning, reads your Docker containers and sends you a Telegram message: restarts since yesterday, any unhealthy or stopped, memory against the machine's total, and errors in the latest logs. Each Sunday it says whether the machine needs more memory. It only reads: nothing is restarted.",
+    "tip": "Needs Docker on this computer, or DOCKER_HOST for another one: best a socket proxy that allows only reading containers. See Connections, Docker.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_containers",
+        "name": "containers"
+      },
+      {
+        "id": "g_stats",
+        "name": "stats"
+      },
+      {
+        "id": "g_one",
+        "name": "one"
+      },
+      {
+        "id": "g_logs",
+        "name": "logs"
+      },
+      {
+        "id": "g_report",
+        "name": "report"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 7,
+            "MINUTE": 45,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 18,
+            "MINUTE": 30,
+            "DAYS": "weekends"
+          },
+          "next": {
+            "block": {
+              "type": "controls_if",
+              "inputs": {
+                "IF0": {
+                  "block": {
+                    "type": "logic_compare",
+                    "fields": {
+                      "OP": "EQ"
+                    },
+                    "inputs": {
+                      "A": {
+                        "block": {
+                          "type": "rb_now",
+                          "fields": {
+                            "PART": "weekday"
+                          }
+                        }
+                      },
+                      "B": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "Sunday"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "DO0": {
+                  "block": {
+                    "type": "rb_broadcast_wait",
+                    "inputs": {
+                      "MSG": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "week"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "check"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_containers"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_docker_containers"
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_stats"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_docker_stats"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_logs"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "shadow": {
+                            "type": "text",
+                            "fields": {
+                              "TEXT": ""
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "controls_forEach",
+                          "fields": {
+                            "VAR": {
+                              "id": "g_one"
+                            }
+                          },
+                          "inputs": {
+                            "LIST": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_containers"
+                                  }
+                                }
+                              }
+                            },
+                            "DO": {
+                              "block": {
+                                "type": "variables_set",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_logs"
+                                  }
+                                },
+                                "inputs": {
+                                  "VALUE": {
+                                    "block": {
+                                      "type": "text_join",
+                                      "inputs": {
+                                        "ADD0": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_logs"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD1": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "\n== "
+                                            }
+                                          }
+                                        },
+                                        "ADD2": {
+                                          "block": {
+                                            "type": "rb_rec_get",
+                                            "inputs": {
+                                              "KEY": {
+                                                "shadow": {
+                                                  "type": "text",
+                                                  "fields": {
+                                                    "TEXT": "name"
+                                                  }
+                                                }
+                                              },
+                                              "REC": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_one"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD3": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "\n"
+                                            }
+                                          }
+                                        },
+                                        "ADD4": {
+                                          "block": {
+                                            "type": "rb_docker_logs",
+                                            "inputs": {
+                                              "NAME": {
+                                                "block": {
+                                                  "type": "rb_rec_get",
+                                                  "inputs": {
+                                                    "KEY": {
+                                                      "shadow": {
+                                                        "type": "text",
+                                                        "fields": {
+                                                          "TEXT": "name"
+                                                        }
+                                                      }
+                                                    },
+                                                    "REC": {
+                                                      "block": {
+                                                        "type": "variables_get",
+                                                        "fields": {
+                                                          "VAR": {
+                                                            "id": "g_one"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "N": {
+                                                "shadow": {
+                                                  "type": "math_number",
+                                                  "fields": {
+                                                    "NUM": 20
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "extraState": {
+                                        "itemCount": 5
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "variables_set",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_report"
+                                }
+                              },
+                              "inputs": {
+                                "VALUE": {
+                                  "block": {
+                                    "type": "rb_ask",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "Check my Docker stack in under 120 words. It is now "
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "block": {
+                                                "type": "rb_now",
+                                                "fields": {
+                                                  "PART": "time"
+                                                }
+                                              }
+                                            },
+                                            "ADD2": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": " on "
+                                                }
+                                              }
+                                            },
+                                            "ADD3": {
+                                              "block": {
+                                                "type": "rb_now",
+                                                "fields": {
+                                                  "PART": "date"
+                                                }
+                                              }
+                                            },
+                                            "ADD4": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": ". List any container whose restarts grew since yesterday, any that is unhealthy, restarting or exited, any using over 85% of its memory limit, and how much of the machine's memory they use together (limit_mb is the machine's total for a container with no limit of its own). Then any errors in the log lines from about the last hour, by container, in a few words each. If all is well, say so in one line.\n\nContainers now:\n"
+                                                }
+                                              }
+                                            },
+                                            "ADD5": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_containers"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "ADD6": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "\n\nContainers yesterday (empty the first day):\n"
+                                                }
+                                              }
+                                            },
+                                            "ADD7": {
+                                              "block": {
+                                                "type": "rb_mem_get",
+                                                "inputs": {
+                                                  "NAME": {
+                                                    "shadow": {
+                                                      "type": "text",
+                                                      "fields": {
+                                                        "TEXT": "Docker containers yesterday"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "ADD8": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "\n\nMemory and CPU:\n"
+                                                }
+                                              }
+                                            },
+                                            "ADD9": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_stats"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "ADD10": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "\n\nLatest log lines:"
+                                                }
+                                              }
+                                            },
+                                            "ADD11": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_logs"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 12
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_mem_set",
+                                  "fields": {
+                                    "KIND": "permanent"
+                                  },
+                                  "inputs": {
+                                    "VALUE": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_containers"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "NAME": {
+                                      "shadow": {
+                                        "type": "text",
+                                        "fields": {
+                                          "TEXT": "Docker containers yesterday"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "rb_mem_add",
+                                      "fields": {
+                                        "KIND": "permanent"
+                                      },
+                                      "inputs": {
+                                        "VALUE": {
+                                          "block": {
+                                            "type": "text_join",
+                                            "inputs": {
+                                              "ADD0": {
+                                                "block": {
+                                                  "type": "rb_now",
+                                                  "fields": {
+                                                    "PART": "date"
+                                                  }
+                                                }
+                                              },
+                                              "ADD1": {
+                                                "shadow": {
+                                                  "type": "rb_longtext",
+                                                  "fields": {
+                                                    "TEXT": ": "
+                                                  }
+                                                }
+                                              },
+                                              "ADD2": {
+                                                "block": {
+                                                  "type": "variables_get",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_stats"
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "extraState": {
+                                              "itemCount": 3
+                                            }
+                                          }
+                                        },
+                                        "NAME": {
+                                          "shadow": {
+                                            "type": "text",
+                                            "fields": {
+                                              "TEXT": "Docker memory by day"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "next": {
+                                        "block": {
+                                          "type": "rb_tg_send",
+                                          "inputs": {
+                                            "TEXT": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_report"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "next": {
+                                            "block": {
+                                              "type": "rb_finish_with",
+                                              "inputs": {
+                                                "TEXT": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_report"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 290
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "week"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_report"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_ask",
+                    "inputs": {
+                      "TEXT": {
+                        "block": {
+                          "type": "text_join",
+                          "inputs": {
+                            "ADD0": {
+                              "shadow": {
+                                "type": "rb_longtext",
+                                "fields": {
+                                  "TEXT": "These are my Docker containers' memory and CPU, one line a day, newest last. Going by the last seven days, say in under 100 words how memory moved, which containers grew, and whether the machine needs more memory: yes, no or not yet, with the one number that decides it.\n\n"
+                                }
+                              }
+                            },
+                            "ADD1": {
+                              "block": {
+                                "type": "rb_mem_get",
+                                "inputs": {
+                                  "NAME": {
+                                    "shadow": {
+                                      "type": "text",
+                                      "fields": {
+                                        "TEXT": "Docker memory by day"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "extraState": {
+                            "itemCount": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "rb_tg_send",
+                  "inputs": {
+                    "TEXT": {
+                      "block": {
+                        "type": "variables_get",
+                        "fields": {
+                          "VAR": {
+                            "id": "g_report"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "rb_finish_with",
+                      "inputs": {
+                        "TEXT": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_report"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 550
+        }
+      ]
+    }
+  }
+}
