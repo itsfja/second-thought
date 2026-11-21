@@ -62,7 +62,7 @@
              github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
-             email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
+             calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
@@ -72,6 +72,7 @@
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
+             email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
               mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
@@ -157,6 +158,10 @@
       "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
       "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
       "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
+    if (need.email) out.push("", "[email]",
+      "; Your address and an app password (not your normal password). Gmail: Google account, Security, App passwords.",
+      "; Gmail, iCloud, Yahoo, Fastmail and mailbox.org work out their own servers. For others, fill in the servers too.",
+      "EMAIL_ADDRESS = ", "EMAIL_PASSWORD = ", "; EMAIL_IMAP_HOST = ", "; EMAIL_SMTP_HOST = ", "; EMAIL_SMTP_PORT = 465");
     if (need.homey) out.push("", "[homey]",
       "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
       "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
@@ -255,10 +260,6 @@
       "; then install it and copy the Bot User OAuth Token (xoxb-…). Invite the bot to each channel with /invite.",
       "; The channels it reads and posts in: open the channel's details; the ID is at the bottom. Several can be separated by spaces.",
       "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
-    if (need.email) out.push("", "[email]",
-      "; Your address and an app password (not your normal password). Gmail: Google account, Security, App passwords.",
-      "; Gmail, iCloud, Yahoo, Fastmail and mailbox.org work out their own servers. For others, fill in the servers too.",
-      "EMAIL_ADDRESS = ", "EMAIL_PASSWORD = ", "; EMAIL_IMAP_HOST = ", "; EMAIL_SMTP_HOST = ", "; EMAIL_SMTP_PORT = 465");
     if (need.calendar) out.push("", "[calendar]",
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
@@ -716,6 +717,7 @@
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
+          case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
@@ -735,7 +737,6 @@
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           // sync:connections-pyact-end
-          case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + (b.getFieldValue("UNIT") && b.getFieldValue("UNIT") !== "tokens" ? ", " + pyStr(b.getFieldValue("UNIT")) : "") + ")"); break;
           case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;

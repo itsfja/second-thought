@@ -281,7 +281,8 @@
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
 "MQTT":"MQTT",
-"Telegram":"Telegram"
+"Telegram":"Telegram",
+"Email":"Email"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",

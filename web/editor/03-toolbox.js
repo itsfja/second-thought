@@ -86,12 +86,11 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
       B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
       B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
-      B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -139,6 +138,10 @@
     ]},
     { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
+    ]},
+    { kind:"category", name:"Email", categorystyle:"email", service:"email", contents:[
+      B("rb_email_when"), B("rb_event"),
+            B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
     ]},
     { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
       B("rb_homey_when"), B("rb_event"),

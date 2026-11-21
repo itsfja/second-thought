@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Telegram](#telegram) · [MQTT](#mqtt)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt)
 
 ## Connections
 
@@ -14,7 +14,6 @@ The pink **Connections** blocks work without an agent too.
 
 - **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
 - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
-- **when an email arrives containing …**, checked every 2 minutes.
 - **when there's something new in feed …**, checked every 15 minutes.
 - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
 - **when a pull request asks for my review**, checked every 5 minutes.
@@ -36,7 +35,6 @@ Try **Morning briefing on Telegram** and **Email me a news digest** under Automa
 **Settings.** An exported program's `second-thought.ini` asks only for what it uses:
 
 - **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Read access is enough to look; to comment, it also needs write access to pull requests.
-- **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo, Fastmail and mailbox.org find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
 - **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
 - **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
 - **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
@@ -142,6 +140,17 @@ DOCKER_PROTECT = socket-proxy, homeassistant
 **Put a socket proxy in front.** Docker's socket is root on the machine: anything that can write to it can start a container that owns the host. Second Thought sends only what's listed above, but a proxy makes Docker itself refuse the rest. [docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy) with `CONTAINERS=1` allows reading containers, their memory and logs; the **Docker** check in `--doctor` also needs `VERSION=1`, which is on by default. If the program restarts, stops or starts containers, add `ALLOW_RESTARTS=1` (restart and stop) and `ALLOW_START=1`, and leave `POST` off: with `POST=1` the proxy would allow exec and creating containers too. Point `DOCKER_HOST` at the proxy, and keep the proxy's port off the internet: plain `tcp://` has no password. For Docker on another machine without a proxy, use TLS (`DOCKER_TLS_VERIFY = 1`, with `ca.pem`, `cert.pem` and `key.pem` in `DOCKER_CERT_PATH`). On Windows, set `DOCKER_HOST` to a `tcp://` address: Docker's named pipe isn't supported. `--doctor` says Docker's version and how many containers it sees.
 
 Docker's own MCP Toolkit is a different thing, a gateway to MCP servers that run in containers; an agent can use it as an [MCP server](mcp.md#docker-mcp-toolkit).
+## Email
+
+The **Email** blocks read your inbox and send mail from your address, asking first:
+
+- **when an email arrives containing …**, checked every 2 minutes, runs a script when a new email arrives in your inbox whose sender, subject or words contain this. **what arrived** gives from, subject, body and text.
+- **search my email** (an agent tool) gives the emails of the last days, or those containing words; **read email …** gives one whole email by its id number.
+- **send email to … subject …** sends one. With **ask me before sending messages and announcements**, it asks you first.
+
+On the page these blocks use **sample emails**, and nothing is sent: try **When the flour shop emails** or **Email me a news digest**. The listener starts from what's new after the program starts; emails that arrived while it was off don't start the script.
+
+**Settings:** `[email]` in `second-thought.ini` — `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo, Fastmail and mailbox.org find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST` (and the ports, or `EMAIL_SSL = no` for a plain connection). `--doctor` signs in to read and to send, and says so.
 ## Homey
 
 Second Thought also talks to **Homey Pro**, with its own green blocks under **Homey**:

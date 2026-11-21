@@ -282,7 +282,8 @@
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
 "MQTT":"MQTT",
-"Telegram":"Telegram"
+"Telegram":"Telegram",
+"Email":"Email"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"ᛏᚩᛚ ᚠᚩᚱ ᚦᚩᚾᛖ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ: ᛚᛖᚷᛖ ᚻᛁᛖ ᛁᚾᚾᚪᚾ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ ᛋᛏᚩᚳᚳᛖ",

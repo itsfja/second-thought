@@ -1108,6 +1108,7 @@
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
@@ -1127,7 +1128,6 @@
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;
       // sync:connections-iact-end
-      case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {
         const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
         if (!text.trim()) fail(tr("The 'say' block has nothing to say."));

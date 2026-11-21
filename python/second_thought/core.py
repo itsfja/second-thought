@@ -529,8 +529,6 @@ PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watche
 # chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
 DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
 SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
-# Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
-# worked out for Gmail, iCloud, Yahoo, Fastmail and mailbox.org; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
@@ -886,7 +884,6 @@ SCHEMAS = {
 # program, and writes them into the exported program, which lists them and asks before its first run if any of them
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
-    ("email_send", "send email", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
@@ -898,6 +895,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
+    ("email_send", "send email", True),
     ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -915,6 +913,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
+    ("email_read", "read your email", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("mqtt_read", "read MQTT messages", False),
@@ -930,7 +929,6 @@ CAPABILITIES = [
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
-    ("email_read", "read your email", False),
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
     ("github_read", "look at your GitHub projects", False),

@@ -194,8 +194,6 @@ Connections:
   rb_calendar (DAYS): calendar for the next %1 days — Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar.  [calendar]
   rb_discord_send (TEXT): send Discord message %1 — Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [discord_send]
   rb_discord_when (CONTAINS): when a Discord message arrives containing %1 — Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [discord_read]
-  rb_email_send (TO, SUBJECT, TEXT): send email to %1 subject %2 %3 — Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [email_send]
-  rb_email_when (CONTAINS): when an email arrives containing %1 — Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text.  [email_read]
   rb_event (KEY): what arrived: %1 — Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record.
   rb_feed_news (URL): news from feed %1 — The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.  [feeds]
   rb_feed_when (URL): when there's something new in feed %1 — Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.  [feeds]
@@ -239,6 +237,10 @@ Draft:
   rb_set_draft (TEXT): set draft to %1
   rb_task (TEXT): set task to %1 — Sets what the AI should produce.
   rb_task_get: task
+
+Email:
+  rb_email_send (TO, SUBJECT, TEXT): send email to %1 subject %2 %3 — Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [email_send]
+  rb_email_when (CONTAINS): when an email arrives containing %1 — Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text.  [email_read]
 
 Events:
   rb_broadcast (MSG): broadcast %1 — Starts every 'when I receive' script for this message, then carries straight on.
