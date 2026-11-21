@@ -1,0 +1,411 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "btc-drop-watch",
+  "gallery": {
+    "title": "Tell me if BTC drops 10%",
+    "category": "money",
+    "description": "Every 15 minutes, checks Bitcoin's price on Coinbase and sends you a Telegram message if it has fallen 10% or more in 24 hours, at most once a day. It only reads prices: it places no orders.",
+    "tip": "Needs a Coinbase API key with View permission only (COINBASE_KEY_FILE). Change BTC-GBP to the pair you want, and -10 to the drop that matters to you.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_change",
+        "name": "change"
+      },
+      {
+        "id": "g_price",
+        "name": "price"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_every",
+          "fields": {
+            "N": 15,
+            "UNIT": "m"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "check"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_change"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_coinbase_price",
+                    "fields": {
+                      "WHAT": "change"
+                    },
+                    "inputs": {
+                      "PRODUCT": {
+                        "shadow": {
+                          "type": "text",
+                          "fields": {
+                            "TEXT": "BTC-GBP"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_price"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_coinbase_price",
+                        "fields": {
+                          "WHAT": "price"
+                        },
+                        "inputs": {
+                          "PRODUCT": {
+                            "shadow": {
+                              "type": "text",
+                              "fields": {
+                                "TEXT": "BTC-GBP"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "controls_if",
+                      "inputs": {
+                        "IF0": {
+                          "block": {
+                            "type": "logic_operation",
+                            "fields": {
+                              "OP": "AND"
+                            },
+                            "inputs": {
+                              "A": {
+                                "block": {
+                                  "type": "logic_compare",
+                                  "fields": {
+                                    "OP": "LTE"
+                                  },
+                                  "inputs": {
+                                    "A": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_change"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "B": {
+                                      "block": {
+                                        "type": "math_number",
+                                        "fields": {
+                                          "NUM": -10
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "B": {
+                                "block": {
+                                  "type": "logic_negate",
+                                  "inputs": {
+                                    "BOOL": {
+                                      "block": {
+                                        "type": "rb_mem_has",
+                                        "inputs": {
+                                          "NAME": {
+                                            "shadow": {
+                                              "type": "text",
+                                              "fields": {
+                                                "TEXT": "told about the BTC drop"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "DO0": {
+                          "block": {
+                            "type": "rb_mem_set_for",
+                            "fields": {
+                              "UNIT": "d"
+                            },
+                            "inputs": {
+                              "VALUE": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "sent"
+                                  }
+                                }
+                              },
+                              "NAME": {
+                                "shadow": {
+                                  "type": "text",
+                                  "fields": {
+                                    "TEXT": "told about the BTC drop"
+                                  }
+                                }
+                              },
+                              "N": {
+                                "shadow": {
+                                  "type": "math_number",
+                                  "fields": {
+                                    "NUM": 1
+                                  }
+                                }
+                              }
+                            },
+                            "next": {
+                              "block": {
+                                "type": "rb_tg_send",
+                                "inputs": {
+                                  "TEXT": {
+                                    "block": {
+                                      "type": "text_join",
+                                      "inputs": {
+                                        "ADD0": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "Bitcoin is down "
+                                            }
+                                          }
+                                        },
+                                        "ADD1": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_change"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD2": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": "% in 24 hours on Coinbase: BTC-GBP is "
+                                            }
+                                          }
+                                        },
+                                        "ADD3": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_price"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "ADD4": {
+                                          "shadow": {
+                                            "type": "rb_longtext",
+                                            "fields": {
+                                              "TEXT": " now."
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "extraState": {
+                                        "itemCount": 5
+                                      }
+                                    }
+                                  }
+                                },
+                                "next": {
+                                  "block": {
+                                    "type": "rb_finish_with",
+                                    "inputs": {
+                                      "TEXT": {
+                                        "block": {
+                                          "type": "text_join",
+                                          "inputs": {
+                                            "ADD0": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "Told you: BTC-GBP "
+                                                }
+                                              }
+                                            },
+                                            "ADD1": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_change"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "ADD2": {
+                                              "shadow": {
+                                                "type": "rb_longtext",
+                                                "fields": {
+                                                  "TEXT": "% in 24 hours."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "extraState": {
+                                            "itemCount": 3
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "ELSE": {
+                          "block": {
+                            "type": "rb_finish_with",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "BTC-GBP "
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_change"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "% in 24 hours, at "
+                                        }
+                                      }
+                                    },
+                                    "ADD3": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_price"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD4": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "."
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 5
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "extraState": {
+                        "hasElse": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

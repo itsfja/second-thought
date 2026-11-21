@@ -68,8 +68,8 @@
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
-             coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              // sync:connections-need-begin
+             coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
@@ -159,6 +159,12 @@
       "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
       "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
     // sync:connections-ini-begin
+    if (need.coinbase) out.push("", "[coinbase]",
+      "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
+      "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
+      "; Never give it Transfer. Save the key file it downloads next to the program, and put its name here.",
+      "; Values are in the currency set under [run]. Signing needs:  pip install cryptography",
+      "COINBASE_KEY_FILE = cdp_api_key.json");
     if (need.docker) out.push("", "[docker]",
       "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
       "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
@@ -211,12 +217,6 @@
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
       "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
     // sync:connections-ini-end
-    if (need.coinbase) out.push("", "[coinbase]",
-      "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
-      "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
-      "; Never give it Transfer. Save the key file it downloads next to the program, and put its name here.",
-      "; Values are in the currency set under [run]. Signing needs:  pip install cryptography",
-      "COINBASE_KEY_FILE = cdp_api_key.json");
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
       "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
@@ -531,7 +531,6 @@
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
-        case "rb_coinbase_balances": return "(await R.coinbase_balances())";
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -547,6 +546,12 @@
         case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
         case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
         // sync:connections-pyread-begin
+        case "rb_coinbase_balances": return "(await R.coinbase_balances())";
+        case "rb_coinbase_value": return "(await R.coinbase_value())";
+        case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
+        case "rb_coinbase_candles": return "(await R.coinbase_candles(" + pyStr(b.getFieldValue("SIZE")) + ", " + I("PRODUCT", '""') + ", " + I("N", "7") + "))";
+        case "rb_coinbase_orders": return "(await R.coinbase_orders(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_coinbase_preview": return "(await R.coinbase_preview(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + "))";
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
@@ -570,11 +575,6 @@
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         // sync:connections-pyread-end
-        case "rb_coinbase_value": return "(await R.coinbase_value())";
-        case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
-        case "rb_coinbase_candles": return "(await R.coinbase_candles(" + pyStr(b.getFieldValue("SIZE")) + ", " + I("PRODUCT", '""') + ", " + I("N", "7") + "))";
-        case "rb_coinbase_orders": return "(await R.coinbase_orders(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_coinbase_preview": return "(await R.coinbase_preview(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + "))";
         case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
@@ -713,8 +713,6 @@
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
-          case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
-          case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
@@ -722,6 +720,8 @@
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           // sync:connections-pyact-begin
+          case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
+          case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;

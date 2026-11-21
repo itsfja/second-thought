@@ -85,10 +85,6 @@ SAFETY = {
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
-    # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
-    # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
-    # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
-    "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -113,6 +109,10 @@ SAFETY = {
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     # sync:connections-safety-begin
+    # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
+    # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
+    # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
+    "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
     # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
     # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
@@ -264,13 +264,11 @@ HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
 HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
+# sync:connections-fns-begin
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return not any(m == method and re.match(p, path) for m, p in SAFETY["coinbase_free"])
-
-
-# sync:connections-fns-begin
 def docker_call(method, path):
     """"free" for a Docker call the runtime makes without asking, "asks" for restart, stop and start, which need a live
     yes, and None for anything else, which is never sent (#358)."""
@@ -896,11 +894,11 @@ CAPABILITIES = [
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
@@ -910,11 +908,11 @@ CAPABILITIES = [
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
-    ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
