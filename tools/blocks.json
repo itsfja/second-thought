@@ -641,7 +641,7 @@
    "URL"
   ],
   "tooltip": "The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.",
-  "category": "Connections",
+  "category": "News feeds",
   "capability": "feeds"
  },
  {
@@ -651,7 +651,7 @@
    "URL"
   ],
   "tooltip": "Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.",
-  "category": "Connections",
+  "category": "News feeds",
   "capability": "feeds"
  },
  {

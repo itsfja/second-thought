@@ -284,7 +284,8 @@
 "Telegram":"Telegram",
 "Email":"Email",
 "GitHub":"GitHub",
-"Discord and Slack":"Discord and Slack"
+"Discord and Slack":"Discord and Slack",
+"News feeds":"News feeds"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𓋴𓆓𓅓𓅱: 𓇋𓂋𓋴𓈖 𓐍𓆑𓏏 𓇋𓂋 𓋴𓐍𓂋 𓆓𓄿 𓅓 𓏏𓂋",

@@ -1,0 +1,54 @@
+{
+ "https://example.com/baking/feed": {
+  "title": "The Loaf Letter (sample feed)",
+  "items": [
+   {
+    "title": "Why your rye starter smells of nail varnish",
+    "link": "https://example.com/baking/rye-starter-smell",
+    "hours_ago": 5,
+    "summary": "A sharp, solvent smell usually means a hungry starter. Feed it more often, or at a higher ratio, for a few days."
+   },
+   {
+    "title": "Autumn flour prices: what's changing",
+    "link": "https://example.com/baking/flour-prices",
+    "hours_ago": 30,
+    "summary": "Millers expect strong bread flour to rise slightly after a wet harvest. Stoneground and heritage flours are least affected."
+   },
+   {
+    "title": "Five shaping mistakes and how to fix them",
+    "link": "https://example.com/baking/shaping-mistakes",
+    "hours_ago": 56,
+    "summary": "Too much flour on the bench, not enough tension, and shaping too early are the most common reasons a loaf spreads."
+   },
+   {
+    "title": "Reader question: can I retard bulk in the fridge?",
+    "link": "https://example.com/baking/retard-bulk",
+    "hours_ago": 80,
+    "summary": "Yes, for up to about 12 hours, if the dough has risen around a third first. Expect a tangier loaf."
+   }
+  ]
+ },
+ "https://example.com/tech/feed": {
+  "title": "Small Tools Weekly (sample feed)",
+  "items": [
+   {
+    "title": "Agents that check their own work",
+    "link": "https://example.com/tech/self-checking-agents",
+    "hours_ago": 8,
+    "summary": "A second, independent reviewer catches more mistakes than asking the same model to look again."
+   },
+   {
+    "title": "Home Assistant's autumn release",
+    "link": "https://example.com/tech/ha-autumn-release",
+    "hours_ago": 26,
+    "summary": "New energy dashboards, faster history graphs and better support for Matter locks."
+   },
+   {
+    "title": "Self-hosting on a NUC: a year on",
+    "link": "https://example.com/tech/nuc-year-on",
+    "hours_ago": 70,
+    "summary": "Power use, backups and the one mistake that cost a weekend: no test restores."
+   }
+  ]
+ }
+}

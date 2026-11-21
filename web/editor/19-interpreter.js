@@ -324,6 +324,13 @@
       case "rb_docker_containers": return dockerContainers();
       case "rb_docker_stats": return dockerStats();
       case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
+      case "rb_feed_news": {
+        const url = str(await input(b, tc, "URL")).trim();
+        const items = sampleFeedItems(url, 10);
+        const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
+        addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} items", { n:recs.length }), "ok");
+        return recs;
+      }
       case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
       case "rb_homey_find": {
         const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
@@ -373,13 +380,6 @@
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
       // sync:connections-iread-end
-      case "rb_feed_news": {
-        const url = str(await input(b, tc, "URL")).trim();
-        const items = sampleFeedItems(url, 10);
-        const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
-        addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} items", { n:recs.length }), "ok");
-        return recs;
-      }
       case "rb_calendar": {
         const days = Math.max(1, Math.min(62, Math.floor(num(await input(b, tc, "DAYS", 7)) + 0.5) || 7)), start = parseDay("today");
         const recs = sampleEvents(start, new Date(start.getTime() + days * 86400000)).map(e => ({ day:dayText(e.start), start:e.all_day ? "" : pad2(e.start.getHours()) + ":" + pad2(e.start.getMinutes()),
