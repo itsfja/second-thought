@@ -1,5 +1,5 @@
 # Test dependencies fetched by tests/setup.sh
-tests/vendor/
+tests/vendor
 
 # Python
 __pycache__/
