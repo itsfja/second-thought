@@ -40,6 +40,7 @@ Made by tools/sync.py from i18n/pi.json: edit that, not this.
 - Pi-hole: Pi-hole
 - Plex: Plex
 - MQTT: MQTT
+- Telegram: Telegram
 - Listeners: they run while the exported program runs on schedule: सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति
 - No blocks match: न कोचि खण्डो समेति
 - Read and send: पठ पेसेहि च

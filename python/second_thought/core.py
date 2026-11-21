@@ -352,6 +352,23 @@ def sabnzbd_call(method, mode):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
+_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
+
+# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
+# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
+TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
+TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+
+def markdown_to_telegram(text):
+    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
+    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
+    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
+    return t
 def unifi_allowed(method, path):
     """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -504,10 +521,6 @@ def ha_sensitive(service, entity="", data=None):
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
 # to comment on pull requests it also needs pull request write access).
 GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
-# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
-# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
-TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
-TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
 PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 # Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
@@ -874,7 +887,6 @@ SCHEMAS = {
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
     ("email_send", "send email", True),
-    ("telegram_send", "send Telegram messages", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
@@ -894,6 +906,7 @@ CAPABILITIES = [
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("telegram_send", "send Telegram messages", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -912,6 +925,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("telegram_read", "read your Telegram messages", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
@@ -920,7 +934,6 @@ CAPABILITIES = [
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
     ("github_read", "look at your GitHub projects", False),
-    ("telegram_read", "read your Telegram messages", False),
     ("discord_read", "read your Discord channels", False),
     ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),

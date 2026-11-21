@@ -708,13 +708,14 @@ OTHER_SETTINGS = {
     "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT",
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
+    "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID",
     "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
     "UNRAID_URL", "UNRAID_CERT_SHA256",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
-    "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
+    "SLACK_API_URL", "SLACK_CHANNEL_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
 
@@ -774,7 +775,7 @@ KEYCHAIN_SERVICE = "second-thought"
 KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
-    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
+    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "EMAIL_PASSWORD", "HA_TOKEN", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
@@ -789,6 +790,7 @@ KEYCHAIN_NAMES = (
     "PROXMOX_TOKEN_SECRET",
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
+    "TELEGRAM_BOT_TOKEN",
     "UNIFI_API_KEY",
     "UNRAID_API_KEY",
     # sync:connections-secret-end
@@ -2043,6 +2045,23 @@ def sabnzbd_call(method, mode):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
+_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
+
+# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
+# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
+TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
+TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+
+def markdown_to_telegram(text):
+    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
+    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
+    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
+    return t
 def unifi_allowed(method, path):
     """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -2195,10 +2214,6 @@ def ha_sensitive(service, entity="", data=None):
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
 # to comment on pull requests it also needs pull request write access).
 GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
-# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
-# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
-TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
-TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
 PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 # Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
@@ -2565,7 +2580,6 @@ SCHEMAS = {
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
     ("email_send", "send email", True),
-    ("telegram_send", "send Telegram messages", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
@@ -2585,6 +2599,7 @@ CAPABILITIES = [
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("telegram_send", "send Telegram messages", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -2603,6 +2618,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("telegram_read", "read your Telegram messages", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
@@ -2611,7 +2627,6 @@ CAPABILITIES = [
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
     ("github_read", "look at your GitHub projects", False),
-    ("telegram_read", "read your Telegram messages", False),
     ("discord_read", "read your Discord channels", False),
     ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
@@ -3165,19 +3180,6 @@ def _proxied_get(url, headers, limit, what, proxy):
 
 # Models write Markdown (**bold**, *italics*, `code`, [links](https://…), # headings). Telegram and Slack each have
 # their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
-_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
-
-
-def markdown_to_telegram(text):
-    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
-    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
-    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
-    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
-    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
-    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
-    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
-    return t
 
 
 def markdown_to_slack(text):
@@ -3932,137 +3934,6 @@ class Connections:
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
         self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
         return True
-
-    # Telegram
-    def _tg_chats(self):
-        return [c for c in re.split(r"[\s,]+", os.environ.get("TELEGRAM_CHAT_ID", "")) if c]
-
-    async def _tg(self, method, params=None, wait=0):
-        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-        if not token:
-            raise RunError(tr("Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).", where_keys=WHERE_KEYS))
-        req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
-                                     headers={"Content-Type": "application/json"})
-
-        def go():
-            try:
-                with urllib.request.urlopen(req, timeout=wait + 20) as r:
-                    data = json.loads(r.read())
-            except urllib.error.HTTPError as e:
-                try:
-                    data = json.loads(e.read())
-                except ValueError:
-                    data = {"description": f"Telegram answered {e.code}"}
-            except urllib.error.URLError as e:
-                raise RunError(tr("Couldn't reach Telegram ({reason}).", reason=e.reason)) from None
-            if not data.get("ok"):
-                raise RunError(tr("Telegram: {x}.", x=to_str(data.get("description") or tr("it said no"))))
-            return data.get("result")
-        return await asyncio.to_thread(go)
-
-    def _tg_load(self):
-        try:
-            with open(TELEGRAM_FILE, encoding="utf-8") as f:
-                return json.load(f)
-        except (OSError, ValueError):
-            return {"offset": 0, "messages": []}
-
-    async def tg_fetch(self, wait=0):
-        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
-        One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
-        async with self._lock("telegram"):  # one Telegram fetch at a time
-            return await self._tg_fetch(wait)
-
-    async def _tg_fetch(self, wait):
-        offset = self._tg_load().get("offset", 0)
-        updates = await self._tg("getUpdates", {"offset": offset, "timeout": wait,
-                                                "allowed_updates": ["message", "channel_post"]}, wait)
-        mine, new, top = self._tg_chats(), [], offset
-        for u in updates or []:
-            top = max(top, u["update_id"] + 1)
-            m = u.get("message") or u.get("channel_post") or {}
-            if "text" not in m and "caption" not in m:
-                continue
-            chat = m.get("chat", {})
-            if str(chat.get("id")) not in mine:
-                print(tr("  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)", x=chat.get('id'), where_keys=WHERE_KEYS), flush=True)
-                continue
-            who = m.get("from", {})
-            new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
-                        or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
-                        "date": m.get("date", 0), "update_id": u["update_id"]})
-        # Another program sharing this bot may have saved messages while this one waited on Telegram. Read the file again
-        # under the lock and add to what's there, skipping any message it already has, instead of writing over it.
-        try:
-            with _locked(TELEGRAM_FILE):
-                store = self._tg_load()
-                have = {m.get("update_id") for m in store.get("messages", []) if m.get("update_id") is not None}
-                fresh = [m for m in new if m["update_id"] not in have]
-                store["offset"] = max(store.get("offset", 0), top)
-                store["messages"] = (store.get("messages", []) + fresh)[-2000:]
-                _write_json(TELEGRAM_FILE, store)
-            new = fresh
-        except OSError:
-            pass
-        return new
-
-    async def tg_search(self, text="", limit=20):
-        if not getattr(self, "_tg_polling", False):
-            await self.tg_fetch()
-        words = to_str(text).lower().split()
-        found = [m for m in sorted(self._tg_load().get("messages", []), key=lambda m: -m.get("date", 0)) if all(w in m["text"].lower() for w in words)][:max(1, min(50, round_js(num(limit)) or 20))]
-        return "\n".join(f"{_when(datetime.datetime.fromtimestamp(m['date']))} · {m['sender']}: {_short(m['text'], 300)}" for m in found) \
-            or ("No messages found" + (f" with “{text}”" if words else "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.")
-
-    async def tg_send(self, text, chat="", approved=False):
-        text = to_str(text).strip()
-        if not text:
-            raise RunError(tr("A Telegram message needs some text."))
-        trig = MESSAGE_VALUE.get()
-        chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
-        if not chat:
-            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
-        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
-            return False
-        for i in range(0, len(text), 4000):
-            part = text[i:i + 4000]
-            try:
-                await self._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(part), "parse_mode": "HTML"})
-            except RunError as e:
-                if "parse" not in str(e).lower():  # only formatting Telegram can't read: then it goes as plain text
-                    raise
-                await self._tg("sendMessage", {"chat_id": chat, "text": part})
-        self.log(tr("Telegram message sent"), text, tr("sent"))
-        return True
-
-    @staticmethod
-    def telegram_message(part="text"):
-        v = MESSAGE_VALUE.get()
-        if not isinstance(v, dict) or "text" not in v:
-            return ""
-        return {"text": v["text"], "sender": v.get("sender", ""), "chat": v.get("chat_name") or v.get("chat", "")}.get(part, v["text"])
-
-    async def _tg_watch(self, watches):
-        """Long-polls Telegram and starts 'when a Telegram message arrives' scripts."""
-        self._tg_polling = True
-        started, busy = time.time() - 60, None
-        while True:
-            try:
-                new = await self.tg_fetch(wait=25)
-            except RunError as e:
-                print(tr("  (Telegram check failed: {e})", e=str(e)), flush=True)
-                await asyncio.sleep(15)
-                continue
-            for m in new:
-                if m["date"] < started:
-                    continue  # sent while the program wasn't running: kept for searching, not acted on
-                for contains, fn in watches:
-                    if contains.strip().lower() not in ("", "anything") and contains.strip().lower() not in m["text"].lower():
-                        continue
-                    if busy and not busy.done():
-                        self.start_script(fn, m)
-                    else:
-                        busy = asyncio.ensure_future(self.run([(fn, m)], tr("Telegram message")))
 
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
@@ -6000,6 +5871,136 @@ class Connections:
         self.log(tr("Solax figures"), "\n".join(f"{k}: {v}" for k, v in out.items() if v != ""),
                  tr("from {time}", time=out.get("upload_time") or "?"))
         return out
+    # Telegram
+    def _tg_chats(self):
+        return [c for c in re.split(r"[\s,]+", os.environ.get("TELEGRAM_CHAT_ID", "")) if c]
+
+    async def _tg(self, method, params=None, wait=0):
+        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+        if not token:
+            raise RunError(tr("Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).", where_keys=WHERE_KEYS))
+        req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
+                                     headers={"Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=wait + 20) as r:
+                    data = json.loads(r.read())
+            except urllib.error.HTTPError as e:
+                try:
+                    data = json.loads(e.read())
+                except ValueError:
+                    data = {"description": f"Telegram answered {e.code}"}
+            except urllib.error.URLError as e:
+                raise RunError(tr("Couldn't reach Telegram ({reason}).", reason=e.reason)) from None
+            if not data.get("ok"):
+                raise RunError(tr("Telegram: {x}.", x=to_str(data.get("description") or tr("it said no"))))
+            return data.get("result")
+        return await asyncio.to_thread(go)
+
+    def _tg_load(self):
+        try:
+            with open(TELEGRAM_FILE, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            return {"offset": 0, "messages": []}
+
+    async def tg_fetch(self, wait=0):
+        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
+        One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
+        async with self._lock("telegram"):  # one Telegram fetch at a time
+            return await self._tg_fetch(wait)
+
+    async def _tg_fetch(self, wait):
+        offset = self._tg_load().get("offset", 0)
+        updates = await self._tg("getUpdates", {"offset": offset, "timeout": wait,
+                                                "allowed_updates": ["message", "channel_post"]}, wait)
+        mine, new, top = self._tg_chats(), [], offset
+        for u in updates or []:
+            top = max(top, u["update_id"] + 1)
+            m = u.get("message") or u.get("channel_post") or {}
+            if "text" not in m and "caption" not in m:
+                continue
+            chat = m.get("chat", {})
+            if str(chat.get("id")) not in mine:
+                print(tr("  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)", x=chat.get('id'), where_keys=WHERE_KEYS), flush=True)
+                continue
+            who = m.get("from", {})
+            new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
+                        or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
+                        "date": m.get("date", 0), "update_id": u["update_id"]})
+        # Another program sharing this bot may have saved messages while this one waited on Telegram. Read the file again
+        # under the lock and add to what's there, skipping any message it already has, instead of writing over it.
+        try:
+            with _locked(TELEGRAM_FILE):
+                store = self._tg_load()
+                have = {m.get("update_id") for m in store.get("messages", []) if m.get("update_id") is not None}
+                fresh = [m for m in new if m["update_id"] not in have]
+                store["offset"] = max(store.get("offset", 0), top)
+                store["messages"] = (store.get("messages", []) + fresh)[-2000:]
+                _write_json(TELEGRAM_FILE, store)
+            new = fresh
+        except OSError:
+            pass
+        return new
+
+    async def tg_search(self, text="", limit=20):
+        if not getattr(self, "_tg_polling", False):
+            await self.tg_fetch()
+        words = to_str(text).lower().split()
+        found = [m for m in sorted(self._tg_load().get("messages", []), key=lambda m: -m.get("date", 0)) if all(w in m["text"].lower() for w in words)][:max(1, min(50, round_js(num(limit)) or 20))]
+        return "\n".join(f"{_when(datetime.datetime.fromtimestamp(m['date']))} · {m['sender']}: {_short(m['text'], 300)}" for m in found) \
+            or ("No messages found" + (f" with “{text}”" if words else "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.")
+
+    async def tg_send(self, text, chat="", approved=False):
+        text = to_str(text).strip()
+        if not text:
+            raise RunError(tr("A Telegram message needs some text."))
+        trig = MESSAGE_VALUE.get()
+        chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
+        if not chat:
+            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+            return False
+        for i in range(0, len(text), 4000):
+            part = text[i:i + 4000]
+            try:
+                await self._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(part), "parse_mode": "HTML"})
+            except RunError as e:
+                if "parse" not in str(e).lower():  # only formatting Telegram can't read: then it goes as plain text
+                    raise
+                await self._tg("sendMessage", {"chat_id": chat, "text": part})
+        self.log(tr("Telegram message sent"), text, tr("sent"))
+        return True
+
+    @staticmethod
+    def telegram_message(part="text"):
+        v = MESSAGE_VALUE.get()
+        if not isinstance(v, dict) or "text" not in v:
+            return ""
+        return {"text": v["text"], "sender": v.get("sender", ""), "chat": v.get("chat_name") or v.get("chat", "")}.get(part, v["text"])
+
+    async def _tg_watch(self, watches):
+        """Long-polls Telegram and starts 'when a Telegram message arrives' scripts."""
+        self._tg_polling = True
+        started, busy = time.time() - 60, None
+        while True:
+            try:
+                new = await self.tg_fetch(wait=25)
+            except RunError as e:
+                print(tr("  (Telegram check failed: {e})", e=str(e)), flush=True)
+                await asyncio.sleep(15)
+                continue
+            for m in new:
+                if m["date"] < started:
+                    continue  # sent while the program wasn't running: kept for searching, not acted on
+                for contains, fn in watches:
+                    if contains.strip().lower() not in ("", "anything") and contains.strip().lower() not in m["text"].lower():
+                        continue
+                    if busy and not busy.done():
+                        self.start_script(fn, m)
+                    else:
+                        busy = asyncio.ensure_future(self.run([(fn, m)], tr("Telegram message")))
     # UniFi (#359)
     # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
     # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
@@ -8658,6 +8659,13 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
+        if has("telegram_read", "telegram_send"):
+            async def tg():
+                me = await self._tg("getMe")
+                chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
+                                                                      "Telegram program to see your chat number)")
+                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
+            out.append(("Telegram", tg))
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -8677,13 +8685,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("telegram_read", "telegram_send"):
-            async def tg():
-                me = await self._tg("getMe")
-                chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
-                                                                      "Telegram program to see your chat number)")
-                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
-            out.append(("Telegram", tg))
         for svc, name in (("discord", "Discord"), ("slack", "Slack")):
             if has(svc + "_read", svc + "_send"):
                 async def chat(svc=svc):
@@ -9005,7 +9006,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -9024,6 +9025,7 @@ class Doctor:
                 "Proxmox": "PROXMOX_URL",
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
+                 "Telegram": "TELEGRAM_BOT_TOKEN",
                 "UniFi": "UNIFI_URL",
                 "Unraid": "UNRAID_URL",
                 # sync:connections-settingsmap-end
@@ -12005,7 +12007,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 <script type="application/json" id="capabilities">
 [
 ["email_send", "send email", true],
-["telegram_send", "send Telegram messages", true],
 ["discord_send", "send Discord messages", true],
 ["slack_send", "send Slack messages", true],
 ["github_comment", "comment on GitHub, and open and label issues", true],
@@ -12024,6 +12025,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
+["telegram_send", "send Telegram messages", true],
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
@@ -12040,6 +12042,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", false],
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
+["telegram_read", "read your Telegram messages", false],
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["web", "read public web pages and search the web", false],
@@ -12047,7 +12050,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["calendar", "read your calendars", false],
 ["feeds", "read news feeds", false],
 ["github_read", "look at your GitHub projects", false],
-["telegram_read", "read your Telegram messages", false],
 ["discord_read", "read your Discord channels", false],
 ["slack_read", "read your Slack channels", false],
 ["ha_read", "look at your Home Assistant devices", false],
@@ -17068,9 +17070,6 @@ Connections:
   rb_page_when (URL): when the web page %1 changes — Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.  [web]
   rb_slack_send (TEXT): send Slack message %1 — Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [slack_send]
   rb_slack_when (CONTAINS): when a Slack message arrives containing %1 — Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [slack_read]
-  rb_tg_message (PART): Telegram message %1 — The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script.  [telegram_read]
-  rb_tg_send (TEXT): send Telegram message %1 — Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [telegram_send]
-  rb_tg_when (CONTAINS): when a Telegram message arrives containing %1 — Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message.  [telegram_read]
   rb_webhook_when (PATH): when a web request arrives at / %1 — Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address.  [webhook]
 
 Control:
@@ -17256,6 +17255,11 @@ SABnzbd:
 
 Solax:
   rb_solax_now: Solax figures — A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter.  [solax_read]
+
+Telegram:
+  rb_tg_message (PART): Telegram message %1 — The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script.  [telegram_read]
+  rb_tg_send (TEXT): send Telegram message %1 — Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [telegram_send]
+  rb_tg_when (CONTAINS): when a Telegram message arrives containing %1 — Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message.  [telegram_read]
 
 Text:
   rb_longtext (TEXT): %1 — Long text. Press Enter for a new line; lines wrap at 80 characters.
@@ -17463,6 +17467,7 @@ HOW TO MAP CODE
     proxmox:"#C2185B",
     sabnzbd:"#C2185B",
     solax:"#C2185B",
+    telegram:"#C2185B",
     unifi:"#C2185B",
     unraid:"#C2185B",
     // sync:connections-hues-end
@@ -17669,7 +17674,7 @@ HOW TO MAP CODE
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_email_send:"email_send", rb_email_when:"email_read", rb_tg_send:"telegram_send", rb_tg_when:"telegram_read", rb_tg_message:"telegram_read",
+    rb_email_send:"email_send", rb_email_when:"email_read",
     rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
@@ -17705,6 +17710,7 @@ HOW TO MAP CODE
     rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control",
     rb_solax_now:"solax_read",
+     rb_tg_send:"telegram_send", rb_tg_when:"telegram_read", rb_tg_message:"telegram_read",
     rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
     rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
@@ -17988,13 +17994,6 @@ HOW TO MAP CODE
       tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
         "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
-    { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message." },
-    V("rb_tg_message", "Telegram message %1", [{ type:"field_dropdown", name:"PART", options:[["text","text"],["sender","sender"],["chat","chat"]] }], "String",
-      { style:"conn", tooltip:"The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script." }),
-    S("rb_tg_send", "send Telegram message %1", [val("TEXT")], { style:"conn", inputsInline:true,
-      tooltip:"Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
@@ -18171,6 +18170,13 @@ HOW TO MAP CODE
     /* Solax (#361): read only, from SolaxCloud */
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
+    { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    V("rb_tg_message", "Telegram message %1", [{ type:"field_dropdown", name:"PART", options:[["text","text"],["sender","sender"],["chat","chat"]] }], "String",
+      { style:"conn", tooltip:"The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script." }),
+    S("rb_tg_send", "send Telegram message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     /* UniFi (#359): read only */
     V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
@@ -18312,10 +18318,9 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_tg_when"), B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
-      B("rb_event"), B("rb_tg_message"),
+      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
       B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
       B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
       B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
@@ -18401,6 +18406,10 @@ HOW TO MAP CODE
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
+    { kind:"category", name:"Telegram", categorystyle:"telegram", service:"telegram", contents:[
+      B("rb_tg_when"), B("rb_event"), B("rb_tg_message"),
+      B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") })
+    ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
       B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
@@ -21251,7 +21260,7 @@ HOW TO MAP CODE
     const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
-             github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
+             github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
@@ -21274,6 +21283,7 @@ HOW TO MAP CODE
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
+              telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
@@ -21408,6 +21418,11 @@ HOW TO MAP CODE
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    if (need.telegram) out.push("", "[telegram]",
+      "; Make a bot: in Telegram, message @BotFather and send /newbot. It gives you the token.",
+      "; Then send your bot a message and run this program: it says your chat id. Put it below.",
+      "; The bot only listens to, and searches, the chats listed here (anyone can message a bot).",
+      "TELEGRAM_BOT_TOKEN = ", "TELEGRAM_CHAT_ID = ");
     if (need.unifi) out.push("", "[unifi]",
       "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
@@ -21430,11 +21445,6 @@ HOW TO MAP CODE
       "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
       "; to let the agent comment, pull requests and issues need read and write.",
       "GITHUB_TOKEN = ");
-    if (need.telegram) out.push("", "[telegram]",
-      "; Make a bot: in Telegram, message @BotFather and send /newbot. It gives you the token.",
-      "; Then send your bot a message and run this program: it says your chat id. Put it below.",
-      "; The bot only listens to, and searches, the chats listed here (anyone can message a bot).",
-      "TELEGRAM_BOT_TOKEN = ", "TELEGRAM_CHAT_ID = ");
     if (need.discord) out.push("", "[discord]",
       "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
       "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
@@ -21719,7 +21729,6 @@ HOW TO MAP CODE
         case "rb_ha_history": return "(await R.ha_history(" + I("ENTITY", '""') + ", " + I("HOURS", "24") + "))";
         case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
         case "rb_ha_trigger": return "R.ha_trigger()";
-        case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
         // sync:connections-pyread-begin
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -21761,6 +21770,7 @@ HOW TO MAP CODE
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_solax_now": return "(await R.solax_now())";
+        case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_unraid_array": return "(await R.unraid_array())";
@@ -21901,7 +21911,6 @@ HOW TO MAP CODE
           case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
-          case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
           case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
@@ -21922,6 +21931,7 @@ HOW TO MAP CODE
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
+          case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
@@ -23879,19 +23889,6 @@ HOW TO MAP CODE
     GH(); addStep(tr("GitHub comment on {repo} #{n}", { repo, n }), { text }).done("sample", "ok");
     return true;
   }
-  const TG = () => { connNote("Telegram"); return CONN.telegram || { messages:[], chat:"" }; };
-  function tgSearch(text){
-    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), t = TG();
-    const found = t.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
-    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + ": " + short(m.text, 300)).join("\n") ||
-      ("No messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.");
-  }
-  async function tgSend(text, approved){
-    text = str(text).trim(); if (!text) fail(tr("A Telegram message needs some text."));
-    if (!approved && !(await allowed(["messages"], "send a Telegram message: " + short(text, 120)))) return false;
-    const t = TG(); addStep("Telegram → " + (t.chat || tr("your chat")), { text }).done("sample", "ok");
-    return true;
-  }
   /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
   const CHAT_NAME = { discord:"Discord", slack:"Slack" };
   const CHAT = svc => { connNote(CHAT_NAME[svc]); return CONN[svc] || { messages:[], channel:"" }; };
@@ -24477,6 +24474,19 @@ HOW TO MAP CODE
       battery_soc_pct: soc === -1 ? "" : soc, status:solaxStatus(r.inverterStatus), upload_time:str(r.uploadTime || "") };
     addStep("Solax figures", { mono:true, text:Object.entries(out).filter(([, v]) => v !== "").map(([k, v]) => k + ": " + v).join("\n") }).done(tr("from {time}", { time:out.upload_time || "?" }), "ok");
     return out;
+  }
+  const TG = () => { connNote("Telegram"); return CONN.telegram || { messages:[], chat:"" }; };
+  function tgSearch(text){
+    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), t = TG();
+    const found = t.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
+    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + ": " + short(m.text, 300)).join("\n") ||
+      ("No messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.");
+  }
+  async function tgSend(text, approved){
+    text = str(text).trim(); if (!text) fail(tr("A Telegram message needs some text."));
+    if (!approved && !(await allowed(["messages"], "send a Telegram message: " + short(text, 120)))) return false;
+    const t = TG(); addStep("Telegram → " + (t.chat || tr("your chat")), { text }).done("sample", "ok");
+    return true;
   }
   /* UniFi on the page (#359): a sample network. Exported Python reads your console's Network API, and only reads.
      Matches the runtime's unifi_ methods and tests/fake_unifi.py, which serves the same sample. */
@@ -25415,6 +25425,11 @@ HOW TO MAP CODE
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_solax_now": return solaxNow();
+      case "rb_tg_message": {
+        const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
+        if (!m) return "";
+        return { text:m.text, sender:m.sender || "", chat:m.chat || "" }[b.getFieldValue("PART") || "text"];
+      }
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       case "rb_unraid_array": return unraidArray();
@@ -25423,11 +25438,6 @@ HOW TO MAP CODE
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
       // sync:connections-iread-end
-      case "rb_tg_message": {
-        const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
-        if (!m) return "";
-        return { text:m.text, sender:m.sender || "", chat:m.chat || "" }[b.getFieldValue("PART") || "text"];
-      }
       case "rb_feed_news": {
         const url = str(await input(b, tc, "URL")).trim();
         const items = sampleFeedItems(url, 10);
@@ -26157,7 +26167,6 @@ HOW TO MAP CODE
         if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
         haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
       }
-      case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
@@ -26178,6 +26187,7 @@ HOW TO MAP CODE
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
+      case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;

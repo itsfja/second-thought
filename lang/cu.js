@@ -279,7 +279,8 @@
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
-"MQTT":"MQTT"
+"MQTT":"MQTT",
+"Telegram":"Telegram"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Слышатели: текутъ, егда изведенный чинъ течетъ по уроку",

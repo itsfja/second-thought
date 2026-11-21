@@ -21,7 +21,8 @@ from .core import (BUDGET, BUDGET_DOLLARS, BUDGET_MONEY, CAPABILITIES, Finish, H
     MEMORY_FILE, MESSAGE_VALUE, MODEL_OVERRIDE, OUTPUT_DIR, Picture, Retryable, RunError, SCHEMAS, _EXT, _MEDIA,
     _locked, _need_picture, _private_open, _short, _write_json, clean_svg, exact_checks, field_list, num, parse_rules, read_text_file, record_schema, review_verdicts,
     round_js, stuck_rule, to_bool, to_list, to_record, to_str)
-from .connectors import Connections, get_url, markdown_to_telegram
+from .connectors import Connections, get_url
+from .core import markdown_to_telegram
 from .mcp import MCPTools
 from .agent import AgentTools
 from .spending import ACTION_KINDS, Spending, any_allowance, check_plans, reported_lines, usage_text

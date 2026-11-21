@@ -108,13 +108,14 @@ OTHER_SETTINGS = {
     "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT",
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
+    "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID",
     "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
     "UNRAID_URL", "UNRAID_CERT_SHA256",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
     "HA_URL", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
-    "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
+    "SLACK_API_URL", "SLACK_CHANNEL_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
 
@@ -174,7 +175,7 @@ KEYCHAIN_SERVICE = "second-thought"
 KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
-    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
+    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "EMAIL_PASSWORD", "HA_TOKEN", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
@@ -189,6 +190,7 @@ KEYCHAIN_NAMES = (
     "PROXMOX_TOKEN_SECRET",
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
+    "TELEGRAM_BOT_TOKEN",
     "UNIFI_API_KEY",
     "UNRAID_API_KEY",
     # sync:connections-secret-end
@@ -1443,6 +1445,23 @@ def sabnzbd_call(method, mode):
         if any(m == method and re.match(p, mode) for m, p in SAFETY["sabnzbd_" + kind]):
             return kind
     return None
+_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
+
+# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
+# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
+TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
+TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
+
+def markdown_to_telegram(text):
+    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
+    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
+    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
+    return t
 def unifi_allowed(method, path):
     """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1595,10 +1614,6 @@ def ha_sensitive(service, entity="", data=None):
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
 # to comment on pull requests it also needs pull request write access).
 GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
-# Telegram: make a bot by talking to @BotFather in Telegram; it gives you the token. TELEGRAM_CHAT_ID is your own chat
-# with the bot: the bot only listens to, and searches, the chats listed there (anyone can message a bot).
-TELEGRAM_API = os.environ.get("TELEGRAM_API_URL", "https://api.telegram.org").rstrip("/")
-TELEGRAM_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "telegram-messages.json")
 # The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
 PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 # Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
@@ -1965,7 +1980,6 @@ SCHEMAS = {
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
     ("email_send", "send email", True),
-    ("telegram_send", "send Telegram messages", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
@@ -1985,6 +1999,7 @@ CAPABILITIES = [
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("telegram_send", "send Telegram messages", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
@@ -2003,6 +2018,7 @@ CAPABILITIES = [
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
+    ("telegram_read", "read your Telegram messages", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
@@ -2011,7 +2027,6 @@ CAPABILITIES = [
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
     ("github_read", "look at your GitHub projects", False),
-    ("telegram_read", "read your Telegram messages", False),
     ("discord_read", "read your Discord channels", False),
     ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
@@ -2565,19 +2580,6 @@ def _proxied_get(url, headers, limit, what, proxy):
 
 # Models write Markdown (**bold**, *italics*, `code`, [links](https://…), # headings). Telegram and Slack each have
 # their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
-_MD_LINK = re.compile(r"\[([^\]\n]+)\]\((https?://[^\s)]+)\)")
-
-
-def markdown_to_telegram(text):
-    """Telegram's HTML formatting for a model's Markdown. Everything else is escaped, so nothing in it reads as a tag."""
-    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    t = _MD_LINK.sub(lambda m: f'<a href="{m.group(2).replace(chr(34), "&quot;")}">{m.group(1)}</a>', t)
-    t = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", t)
-    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"<b>\1</b>", t, flags=re.M)
-    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"<b>\1</b>", t)
-    t = re.sub(r"__(?=\S)(.+?)(?<=\S)__", r"<b>\1</b>", t)
-    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"<i>\1</i>", t)
-    return t
 
 
 def markdown_to_slack(text):
@@ -3332,137 +3334,6 @@ class Connections:
         await self._gh(f"/repos/{repo}/issues/{n}/comments", "POST", {"body": text})
         self.log(tr("GitHub comment on {repo} #{n}", repo=repo, n=n), text, tr("sent"))
         return True
-
-    # Telegram
-    def _tg_chats(self):
-        return [c for c in re.split(r"[\s,]+", os.environ.get("TELEGRAM_CHAT_ID", "")) if c]
-
-    async def _tg(self, method, params=None, wait=0):
-        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-        if not token:
-            raise RunError(tr("Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).", where_keys=WHERE_KEYS))
-        req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
-                                     headers={"Content-Type": "application/json"})
-
-        def go():
-            try:
-                with urllib.request.urlopen(req, timeout=wait + 20) as r:
-                    data = json.loads(r.read())
-            except urllib.error.HTTPError as e:
-                try:
-                    data = json.loads(e.read())
-                except ValueError:
-                    data = {"description": f"Telegram answered {e.code}"}
-            except urllib.error.URLError as e:
-                raise RunError(tr("Couldn't reach Telegram ({reason}).", reason=e.reason)) from None
-            if not data.get("ok"):
-                raise RunError(tr("Telegram: {x}.", x=to_str(data.get("description") or tr("it said no"))))
-            return data.get("result")
-        return await asyncio.to_thread(go)
-
-    def _tg_load(self):
-        try:
-            with open(TELEGRAM_FILE, encoding="utf-8") as f:
-                return json.load(f)
-        except (OSError, ValueError):
-            return {"offset": 0, "messages": []}
-
-    async def tg_fetch(self, wait=0):
-        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
-        One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
-        async with self._lock("telegram"):  # one Telegram fetch at a time
-            return await self._tg_fetch(wait)
-
-    async def _tg_fetch(self, wait):
-        offset = self._tg_load().get("offset", 0)
-        updates = await self._tg("getUpdates", {"offset": offset, "timeout": wait,
-                                                "allowed_updates": ["message", "channel_post"]}, wait)
-        mine, new, top = self._tg_chats(), [], offset
-        for u in updates or []:
-            top = max(top, u["update_id"] + 1)
-            m = u.get("message") or u.get("channel_post") or {}
-            if "text" not in m and "caption" not in m:
-                continue
-            chat = m.get("chat", {})
-            if str(chat.get("id")) not in mine:
-                print(tr("  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)", x=chat.get('id'), where_keys=WHERE_KEYS), flush=True)
-                continue
-            who = m.get("from", {})
-            new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
-                        or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
-                        "date": m.get("date", 0), "update_id": u["update_id"]})
-        # Another program sharing this bot may have saved messages while this one waited on Telegram. Read the file again
-        # under the lock and add to what's there, skipping any message it already has, instead of writing over it.
-        try:
-            with _locked(TELEGRAM_FILE):
-                store = self._tg_load()
-                have = {m.get("update_id") for m in store.get("messages", []) if m.get("update_id") is not None}
-                fresh = [m for m in new if m["update_id"] not in have]
-                store["offset"] = max(store.get("offset", 0), top)
-                store["messages"] = (store.get("messages", []) + fresh)[-2000:]
-                _write_json(TELEGRAM_FILE, store)
-            new = fresh
-        except OSError:
-            pass
-        return new
-
-    async def tg_search(self, text="", limit=20):
-        if not getattr(self, "_tg_polling", False):
-            await self.tg_fetch()
-        words = to_str(text).lower().split()
-        found = [m for m in sorted(self._tg_load().get("messages", []), key=lambda m: -m.get("date", 0)) if all(w in m["text"].lower() for w in words)][:max(1, min(50, round_js(num(limit)) or 20))]
-        return "\n".join(f"{_when(datetime.datetime.fromtimestamp(m['date']))} · {m['sender']}: {_short(m['text'], 300)}" for m in found) \
-            or ("No messages found" + (f" with “{text}”" if words else "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.")
-
-    async def tg_send(self, text, chat="", approved=False):
-        text = to_str(text).strip()
-        if not text:
-            raise RunError(tr("A Telegram message needs some text."))
-        trig = MESSAGE_VALUE.get()
-        chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
-        if not chat:
-            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
-        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
-            return False
-        for i in range(0, len(text), 4000):
-            part = text[i:i + 4000]
-            try:
-                await self._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(part), "parse_mode": "HTML"})
-            except RunError as e:
-                if "parse" not in str(e).lower():  # only formatting Telegram can't read: then it goes as plain text
-                    raise
-                await self._tg("sendMessage", {"chat_id": chat, "text": part})
-        self.log(tr("Telegram message sent"), text, tr("sent"))
-        return True
-
-    @staticmethod
-    def telegram_message(part="text"):
-        v = MESSAGE_VALUE.get()
-        if not isinstance(v, dict) or "text" not in v:
-            return ""
-        return {"text": v["text"], "sender": v.get("sender", ""), "chat": v.get("chat_name") or v.get("chat", "")}.get(part, v["text"])
-
-    async def _tg_watch(self, watches):
-        """Long-polls Telegram and starts 'when a Telegram message arrives' scripts."""
-        self._tg_polling = True
-        started, busy = time.time() - 60, None
-        while True:
-            try:
-                new = await self.tg_fetch(wait=25)
-            except RunError as e:
-                print(tr("  (Telegram check failed: {e})", e=str(e)), flush=True)
-                await asyncio.sleep(15)
-                continue
-            for m in new:
-                if m["date"] < started:
-                    continue  # sent while the program wasn't running: kept for searching, not acted on
-                for contains, fn in watches:
-                    if contains.strip().lower() not in ("", "anything") and contains.strip().lower() not in m["text"].lower():
-                        continue
-                    if busy and not busy.done():
-                        self.start_script(fn, m)
-                    else:
-                        busy = asyncio.ensure_future(self.run([(fn, m)], tr("Telegram message")))
 
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
@@ -5400,6 +5271,136 @@ class Connections:
         self.log(tr("Solax figures"), "\n".join(f"{k}: {v}" for k, v in out.items() if v != ""),
                  tr("from {time}", time=out.get("upload_time") or "?"))
         return out
+    # Telegram
+    def _tg_chats(self):
+        return [c for c in re.split(r"[\s,]+", os.environ.get("TELEGRAM_CHAT_ID", "")) if c]
+
+    async def _tg(self, method, params=None, wait=0):
+        token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+        if not token:
+            raise RunError(tr("Telegram needs a bot: set TELEGRAM_BOT_TOKEN {where_keys} (message @BotFather in Telegram to make one).", where_keys=WHERE_KEYS))
+        req = urllib.request.Request(f"{TELEGRAM_API}/bot{token}/{method}", data=json.dumps(params or {}).encode(),
+                                     headers={"Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=wait + 20) as r:
+                    data = json.loads(r.read())
+            except urllib.error.HTTPError as e:
+                try:
+                    data = json.loads(e.read())
+                except ValueError:
+                    data = {"description": f"Telegram answered {e.code}"}
+            except urllib.error.URLError as e:
+                raise RunError(tr("Couldn't reach Telegram ({reason}).", reason=e.reason)) from None
+            if not data.get("ok"):
+                raise RunError(tr("Telegram: {x}.", x=to_str(data.get("description") or tr("it said no"))))
+            return data.get("result")
+        return await asyncio.to_thread(go)
+
+    def _tg_load(self):
+        try:
+            with open(TELEGRAM_FILE, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            return {"offset": 0, "messages": []}
+
+    async def tg_fetch(self, wait=0):
+        """Collects new messages to the bot, keeps those from your chats (TELEGRAM_CHAT_ID), and gives back the new ones.
+        One at a time: two scripts fetching at once would read the same messages twice, or lose one."""
+        async with self._lock("telegram"):  # one Telegram fetch at a time
+            return await self._tg_fetch(wait)
+
+    async def _tg_fetch(self, wait):
+        offset = self._tg_load().get("offset", 0)
+        updates = await self._tg("getUpdates", {"offset": offset, "timeout": wait,
+                                                "allowed_updates": ["message", "channel_post"]}, wait)
+        mine, new, top = self._tg_chats(), [], offset
+        for u in updates or []:
+            top = max(top, u["update_id"] + 1)
+            m = u.get("message") or u.get("channel_post") or {}
+            if "text" not in m and "caption" not in m:
+                continue
+            chat = m.get("chat", {})
+            if str(chat.get("id")) not in mine:
+                print(tr("  (A Telegram message from chat {x} was ignored. To let this program use that chat, set TELEGRAM_CHAT_ID = {x} {where_keys}.)", x=chat.get('id'), where_keys=WHERE_KEYS), flush=True)
+                continue
+            who = m.get("from", {})
+            new.append({"text": m.get("text") or m.get("caption", ""), "sender": " ".join(x for x in (who.get("first_name"), who.get("last_name")) if x)
+                        or chat.get("title", ""), "chat": str(chat.get("id")), "chat_name": chat.get("title") or chat.get("first_name", ""),
+                        "date": m.get("date", 0), "update_id": u["update_id"]})
+        # Another program sharing this bot may have saved messages while this one waited on Telegram. Read the file again
+        # under the lock and add to what's there, skipping any message it already has, instead of writing over it.
+        try:
+            with _locked(TELEGRAM_FILE):
+                store = self._tg_load()
+                have = {m.get("update_id") for m in store.get("messages", []) if m.get("update_id") is not None}
+                fresh = [m for m in new if m["update_id"] not in have]
+                store["offset"] = max(store.get("offset", 0), top)
+                store["messages"] = (store.get("messages", []) + fresh)[-2000:]
+                _write_json(TELEGRAM_FILE, store)
+            new = fresh
+        except OSError:
+            pass
+        return new
+
+    async def tg_search(self, text="", limit=20):
+        if not getattr(self, "_tg_polling", False):
+            await self.tg_fetch()
+        words = to_str(text).lower().split()
+        found = [m for m in sorted(self._tg_load().get("messages", []), key=lambda m: -m.get("date", 0)) if all(w in m["text"].lower() for w in words)][:max(1, min(50, round_js(num(limit)) or 20))]
+        return "\n".join(f"{_when(datetime.datetime.fromtimestamp(m['date']))} · {m['sender']}: {_short(m['text'], 300)}" for m in found) \
+            or ("No messages found" + (f" with “{text}”" if words else "") + ". The bot only sees messages sent to it, from the chats in TELEGRAM_CHAT_ID.")
+
+    async def tg_send(self, text, chat="", approved=False):
+        text = to_str(text).strip()
+        if not text:
+            raise RunError(tr("A Telegram message needs some text."))
+        trig = MESSAGE_VALUE.get()
+        chat = to_str(chat).strip() or (trig.get("chat") if isinstance(trig, dict) and trig.get("chat") else "") or next(iter(self._tg_chats()), "")
+        if not chat:
+            raise RunError(tr("Telegram needs a chat to send to: set TELEGRAM_CHAT_ID {where_keys}. Send your bot a message first; the program then says which chat it came from.", where_keys=WHERE_KEYS))
+        if (not approved or self.dry_run()) and not await self._allowed(["messages"], f"send a Telegram message: {_short(text, 120)}"):
+            return False
+        for i in range(0, len(text), 4000):
+            part = text[i:i + 4000]
+            try:
+                await self._tg("sendMessage", {"chat_id": chat, "text": markdown_to_telegram(part), "parse_mode": "HTML"})
+            except RunError as e:
+                if "parse" not in str(e).lower():  # only formatting Telegram can't read: then it goes as plain text
+                    raise
+                await self._tg("sendMessage", {"chat_id": chat, "text": part})
+        self.log(tr("Telegram message sent"), text, tr("sent"))
+        return True
+
+    @staticmethod
+    def telegram_message(part="text"):
+        v = MESSAGE_VALUE.get()
+        if not isinstance(v, dict) or "text" not in v:
+            return ""
+        return {"text": v["text"], "sender": v.get("sender", ""), "chat": v.get("chat_name") or v.get("chat", "")}.get(part, v["text"])
+
+    async def _tg_watch(self, watches):
+        """Long-polls Telegram and starts 'when a Telegram message arrives' scripts."""
+        self._tg_polling = True
+        started, busy = time.time() - 60, None
+        while True:
+            try:
+                new = await self.tg_fetch(wait=25)
+            except RunError as e:
+                print(tr("  (Telegram check failed: {e})", e=str(e)), flush=True)
+                await asyncio.sleep(15)
+                continue
+            for m in new:
+                if m["date"] < started:
+                    continue  # sent while the program wasn't running: kept for searching, not acted on
+                for contains, fn in watches:
+                    if contains.strip().lower() not in ("", "anything") and contains.strip().lower() not in m["text"].lower():
+                        continue
+                    if busy and not busy.done():
+                        self.start_script(fn, m)
+                    else:
+                        busy = asyncio.ensure_future(self.run([(fn, m)], tr("Telegram message")))
     # UniFi (#359)
     # The Network API on a UniFi OS console (a Cloud Gateway, a Dream Machine): UNIFI_URL and UNIFI_API_KEY, a key made
     # in the Network app under Settings, Control Plane, Integrations. Only the reads in SAFETY["unifi_free"] are ever
@@ -8058,6 +8059,13 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
+        if has("telegram_read", "telegram_send"):
+            async def tg():
+                me = await self._tg("getMe")
+                chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
+                                                                      "Telegram program to see your chat number)")
+                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
+            out.append(("Telegram", tg))
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -8077,13 +8085,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("telegram_read", "telegram_send"):
-            async def tg():
-                me = await self._tg("getMe")
-                chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
-                                                                      "Telegram program to see your chat number)")
-                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
-            out.append(("Telegram", tg))
         for svc, name in (("discord", "Discord"), ("slack", "Slack")):
             if has(svc + "_read", svc + "_send"):
                 async def chat(svc=svc):
@@ -8405,7 +8406,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -8424,6 +8425,7 @@ class Doctor:
                 "Proxmox": "PROXMOX_URL",
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
+                 "Telegram": "TELEGRAM_BOT_TOKEN",
                 "UniFi": "UNIFI_URL",
                 "Unraid": "UNRAID_URL",
                 # sync:connections-settingsmap-end

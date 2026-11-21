@@ -59,7 +59,7 @@
     const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
-             github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]), telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
+             github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
@@ -82,6 +82,7 @@
              proxmox:blocks.some(b => b.type.startsWith("rb_proxmox_")),
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
+              telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
@@ -216,6 +217,11 @@
       "; SOLAX_API_URL points at another region's cloud, like the EU one.",
       "SOLAX_TOKEN_ID = ", "SOLAX_SN = ",
       ...note("SOLAX_API_URL", "https://www.eu.solaxcloud.com:9443/proxy/api/getRealtimeInfo.do", "to read from another region's SolaxCloud"));
+    if (need.telegram) out.push("", "[telegram]",
+      "; Make a bot: in Telegram, message @BotFather and send /newbot. It gives you the token.",
+      "; Then send your bot a message and run this program: it says your chat id. Put it below.",
+      "; The bot only listens to, and searches, the chats listed here (anyone can message a bot).",
+      "TELEGRAM_BOT_TOKEN = ", "TELEGRAM_CHAT_ID = ");
     if (need.unifi) out.push("", "[unifi]",
       "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
@@ -238,11 +244,6 @@
       "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
       "; to let the agent comment, pull requests and issues need read and write.",
       "GITHUB_TOKEN = ");
-    if (need.telegram) out.push("", "[telegram]",
-      "; Make a bot: in Telegram, message @BotFather and send /newbot. It gives you the token.",
-      "; Then send your bot a message and run this program: it says your chat id. Put it below.",
-      "; The bot only listens to, and searches, the chats listed here (anyone can message a bot).",
-      "TELEGRAM_BOT_TOKEN = ", "TELEGRAM_CHAT_ID = ");
     if (need.discord) out.push("", "[discord]",
       "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
       "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
@@ -527,7 +528,6 @@
         case "rb_ha_history": return "(await R.ha_history(" + I("ENTITY", '""') + ", " + I("HOURS", "24") + "))";
         case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
         case "rb_ha_trigger": return "R.ha_trigger()";
-        case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
         // sync:connections-pyread-begin
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -569,6 +569,7 @@
         case "rb_sabnzbd_history": return "(await R.sabnzbd_history(" + I("N", "24") + "))";
         case "rb_sabnzbd_diskspace": return "(await R.sabnzbd_diskspace())";
         case "rb_solax_now": return "(await R.solax_now())";
+        case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
         case "rb_unraid_array": return "(await R.unraid_array())";
@@ -709,7 +710,6 @@
           case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
-          case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
           case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
@@ -730,6 +730,7 @@
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
+          case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;

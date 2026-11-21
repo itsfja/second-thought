@@ -360,6 +360,11 @@
       case "rb_sabnzbd_history": return sabnzbdHistory(await input(b, tc, "N", 24));
       case "rb_sabnzbd_diskspace": return sabnzbdDiskspace();
       case "rb_solax_now": return solaxNow();
+      case "rb_tg_message": {
+        const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
+        if (!m) return "";
+        return { text:m.text, sender:m.sender || "", chat:m.chat || "" }[b.getFieldValue("PART") || "text"];
+      }
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
       case "rb_unraid_array": return unraidArray();
@@ -368,11 +373,6 @@
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
       // sync:connections-iread-end
-      case "rb_tg_message": {
-        const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
-        if (!m) return "";
-        return { text:m.text, sender:m.sender || "", chat:m.chat || "" }[b.getFieldValue("PART") || "text"];
-      }
       case "rb_feed_news": {
         const url = str(await input(b, tc, "URL")).trim();
         const items = sampleFeedItems(url, 10);
@@ -1102,7 +1102,6 @@
         if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
         haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
       }
-      case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
@@ -1123,6 +1122,7 @@
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
+      case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;

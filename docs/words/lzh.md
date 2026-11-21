@@ -40,6 +40,7 @@ Made by tools/sync.py from i18n/lzh.json: edit that, not this.
 - Pi-hole: Pi-hole
 - Plex: Plex
 - MQTT: MQTT
+- Telegram: Telegram
 - Listeners: they run while the exported program runs on schedule: 聽者：所出之程依時而行，則此諸塊行
 - No blocks match: 無塊相合
 - Read and send: 讀與發

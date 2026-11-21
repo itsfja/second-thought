@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [MQTT](#mqtt)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Telegram](#telegram) · [MQTT](#mqtt)
 
 ## Connections
 
@@ -12,7 +12,6 @@ The pink **Connections** blocks work without an agent too.
 
 **Listeners** start a script when something arrives:
 
-- **when a Telegram message arrives**, for messages to your bot.
 - **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
 - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
 - **when an email arrives containing …**, checked every 2 minutes.
@@ -37,7 +36,6 @@ Try **Morning briefing on Telegram** and **Email me a news digest** under Automa
 **Settings.** An exported program's `second-thought.ini` asks only for what it uses:
 
 - **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Read access is enough to look; to comment, it also needs write access to pull requests.
-- **Telegram:** in Telegram, message **@BotFather** and send `/newbot`. It gives you `TELEGRAM_BOT_TOKEN`. Then message your bot and run the program: it tells you your chat number for `TELEGRAM_CHAT_ID`. Anyone can message a bot, so it only listens to, and searches, the chats you list there. A bot only sees messages sent to it, so it can't search your other chats.
 - **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo, Fastmail and mailbox.org find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
 - **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
 - **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
@@ -352,6 +350,18 @@ SOLAX_SN = ABCDEFGHIJ
 ```
 
 `--doctor` checks both settings and reaches the cloud. If your inverter is already in Home Assistant, its sensors can be read today through the Home Assistant connection; Modbus control (charging from the grid, export limits) is not offered, because it costs and earns money and belongs behind the ask-first rules.
+## Telegram
+
+The **Telegram** blocks read the messages sent to your bot and send messages back, asking first:
+
+- **when a Telegram message arrives containing …**, for messages to your bot. Only messages from your own chats count (`TELEGRAM_CHAT_ID`); anyone can message a bot, so the bot only sees the chats you list. In exported Python it listens all the time; on the page, right-click it and choose **Run this script** to try it with a sample message.
+- **Telegram message …** gives the message that started the script: its words, who sent it, or the chat. Empty outside a Telegram script.
+- **search my Telegram messages** (an agent tool) gives the newest messages, or those containing words.
+- **send Telegram message …** sends one: back to the chat a message came from, or to your first chat. With **ask me before sending messages and announcements**, it asks you first.
+
+On the page these blocks use **sample messages**, and nothing is sent: try **Morning briefing on Telegram** under Automation. Telegram messages are kept for searching even while no program runs.
+
+**Settings:** `[telegram]` in `second-thought.ini` — in Telegram, message **@BotFather** and send `/newbot`; it gives you `TELEGRAM_BOT_TOKEN`. Then message your bot and run the program: it tells you your chat number for `TELEGRAM_CHAT_ID`. Anyone can message a bot, so it only listens to, and searches, the chats you list there. A bot only sees messages sent to it, so it can't search your other chats. `--doctor` says the bot's name when the program can read or send.
 ## UniFi
 
 The teal **UniFi** blocks read your UniFi network through the Network API on a UniFi OS console (a Cloud Gateway or a Dream Machine). They only read: nothing is blocked, reconnected, restarted or reconfigured, and the firewall, VLANs and WiFi are never touched.
