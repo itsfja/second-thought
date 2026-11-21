@@ -2029,7 +2029,10 @@
   "Edit blocks": "\\u0916\\u0905\\u0902\\u0921\\u0906\\u0928 \\u0938\\u0905\\u092e\\u092a\\u0906\\u0926\\u0905\\u092f\\u0905",
   "Show the outline": "\\u0930\\u090f\\u0916\\u0906~\\u0917\\u0915\\u0905\\u0923\\u0905\\u0902 \\u0926\\u0905\\u0930z\\u0905\\u092f\\u0905",
   "… and more": "… \\u0905\\u0927\\u0907\\u0915\\u0905\\u092e",
-  "Ask a question or share an idea on GitHub": "GitHub इत्यत्र प्रश्नं पृच्छ विचारं वा कथय"
+  "Ask a question or share an idea on GitHub": "GitHub इत्यत्र प्रश्नं पृच्छ विचारं वा कथय",
+  "Save for Docker (.zip)": "Docker कृते रक्ष (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip रक्षितम्। तत् उद्घाट्य कुञ्चिकाः keys.env इत्यत्र स्थापय, ततः SETUP.md अनुसर।",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "अयं कार्यक्रमः किमपि न प्रतीक्षते, अतः Docker मध्ये समाप्य पुनः पुनः आरभेत। Docker कालयोजनायुक्ताय 'यदा'-खण्डयुक्ताय वा कार्यक्रमाय उचितम्।"
  },
  "examples": {
   "review": {

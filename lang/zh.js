@@ -1284,7 +1284,10 @@
 "Edit blocks":"编辑积木",
 "Show the outline":"显示大纲",
 "… and more":"……更多",
-"Ask a question or share an idea on GitHub":"在 GitHub 上提问或分享想法"
+"Ask a question or share an idea on GitHub":"在 GitHub 上提问或分享想法",
+"Save for Docker (.zip)":"保存为 Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"已保存 {name}-docker.zip。解压后把密钥填进 keys.env，然后按 SETUP.md 操作。",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"这个程序没有要等待的事，在 Docker 里会结束又一再重启。Docker 适合带有时间表或“当……时”积木的程序。"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

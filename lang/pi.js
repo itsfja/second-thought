@@ -1284,7 +1284,10 @@
 "Edit blocks":"\\u0916\\u0905\\u0923\\u0921\\u090f \\u0938\\u0905\\u092e\\u092a\\u0906\\u0926\\u090f\\u0924\\u0907",
 "Show the outline":"\\u0930\\u090f\\u0916\\u0906~\\u0915\\u0905\\u0923\\u0905\\u0902 \\u0926\\u0905\\u0938\\u0938\\u090f\\u0924\\u0907",
 "… and more":"… \\u0905\\u0927\\u0907\\u0915\\u0905\\u0902",
-"Ask a question or share an idea on GitHub":"GitHub-ए पञ्हं पुच्छ, अथ वा मतिं आचिक्ख"
+"Ask a question or share an idea on GitHub":"GitHub-ए पञ्हं पुच्छ, अथ वा मतिं आचिक्ख",
+"Save for Docker (.zip)":"Docker-अत्थाय रक्ख (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip रक्खितं। तं विवरित्वा कुञ्चिकायो keys.env-मध्ये ठपेहि, ततो SETUP.md अनुगच्छ।",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"इमं किच्चक्कमं किञ्चि न आगमेति, तस्मा Docker-मध्ये निट्ठहित्वा पुनप्पुनं आरभेय्य। Docker कालयोजनावतो 'यदा'-खण्डवतो वा किच्चक्कमस्स युत्तं।"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},

@@ -1284,7 +1284,10 @@
 "Edit blocks":"arwrighta þ΁a bloccan",
 "Show the outline":"sceawian þa healsunge",
 "… and more":"… and mā",
-"Ask a question or share an idea on GitHub":"Āxa āne frignunge oþþe dǣl þīnne geþanc on GitHub"
+"Ask a question or share an idea on GitHub":"Āxa āne frignunge oþþe dǣl þīnne geþanc on GitHub",
+"Save for Docker (.zip)":"Heald for Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip is gehealden. Unfeald hit, sete þīne cǣgas on keys.env, and folga þonne SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þis forescrift ne bīdeþ nānes þinges, swā on Docker hit geendode and eft and eft onginne. Docker gerīseþ forescrifte mid tīdsetnesse oþþe 'þonne' stāne."
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

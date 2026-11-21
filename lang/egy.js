@@ -1284,7 +1284,10 @@
 "Edit blocks":"𓎡𓇋 𓂋𓇋 𓏏𓇋",
 "Show the outline":"𓎡𓇋 𓂋𓇋 𓏏𓇋",
 "… and more":"𓎡𓇋 𓂋𓇋 𓏏𓇋",
-"Ask a question or share an idea on GitHub":"𓈖𓆓 𓐍𓏏 𓂋𓊪𓅱 𓂧𓇋 𓋴𓐍𓂋 𓎛𓂋 GitHub"
+"Ask a question or share an idea on GitHub":"𓈖𓆓 𓐍𓏏 𓂋𓊪𓅱 𓂧𓇋 𓋴𓐍𓂋 𓎛𓂋 GitHub",
+"Save for Docker (.zip)":"𓋴𓄿𓅱 𓅓 Docker (𓊃𓇋𓊪)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"𓋴𓄿𓅱 {name}-docker.zip. 𓅱𓎛𓂝 𓋴𓅱, 𓂋𓂧𓇋 𓐍𓏏𓅓𓅱𓎡 𓅓 keys.env, 𓐍𓂋 𓈙𓅓𓋴 SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"𓈖𓈖 𓋴𓐍𓂋 𓊪𓈖 𓎛𓂋 𓋴𓆓𓂋 𓈖 𓐍𓏏, 𓐍𓂋 𓅓 Docker 𓂝𓎛𓂝𓆑 𓎛𓂋 𓎡𓅓 𓎛𓂋 𓈙𓄿𓂝 𓅓 𓅱𓎛𓅓 𓅓 𓅱𓎛𓅓 Docker 𓅓𓏏𓂋 𓈖 𓋴𓐍𓂋 𓎛𓈖𓂝 𓏏𓂋 𓂋𓊪𓅱 𓇋𓈖𓂋 'ḫft'."
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},

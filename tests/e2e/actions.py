@@ -287,3 +287,72 @@ async def paste_gallery(pg, name):
     await paste(pg, (ROOT / "gallery" / f"{name}.json").read_text(encoding="utf-8"))
     await pg.click("#io-load-paste")
     await pg.click("#io-export")
+
+
+async def docker_tests():
+    """Save for Docker (#439): which programs it's for, and the files: the Dockerfile, compose.yaml, keys.env and
+    SETUP.md. Docker itself isn't run here; the zip was checked by hand once, on a scheduled gallery program."""
+    import yaml
+    print("Save for Docker")
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        ctx = await browser.new_context(viewport={"width": 1400, "height": 1000}, timezone_id="Europe/London")
+        pg = await ctx.new_page()
+        errors = []
+        pg.on("pageerror", lambda e: errors.append(str(e)))
+        await pg.route("**/*", route)
+        await pg.add_init_script(MOCK)
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        check(await pg.evaluate("!!document.getElementById('io-docker-save')"), "Import / export has a Save for Docker (.zip) button")
+
+        await load_state(pg, script(add(tx("once"))))
+        got = await pg.evaluate("window.__dockerFiles()")
+        check(isinstance(got, dict) and "nothing to wait for" in got.get("error", ""),
+              f"a program with nothing to wait for isn't saved for Docker, and says why ({got.get('error') if isinstance(got, dict) else got})")
+
+        await pg.select_option("#example", "ha_morning")
+        await pg.click("#load")
+        await pg.click("#io-export")
+        await pg.fill("#io-name", "ha_morning")
+        files = {f["name"]: f["text"] for f in await pg.evaluate("window.__dockerFiles()")}
+        plain = {f["name"]: f["text"] for f in await pg.evaluate("window.__exportFiles()")}
+        check({"ha_morning.py", "second-thought.ini", "requirements.txt", "Dockerfile", "compose.yaml", "keys.env", "SETUP.md", ".dockerignore"} <= set(files),
+              f"the Docker zip holds the program, its settings, the Dockerfile, compose.yaml, keys.env and SETUP.md ({sorted(files)})")
+        check(files["ha_morning.py"] == plain["ha_morning.py"] and files["requirements.txt"] == plain["requirements.txt"],
+              "its program and requirements are the ordinary export's")
+        df = files["Dockerfile"]
+        check(df.startswith("# ha_morning") and "\nFROM python:3" in df and "\nUSER second-thought" in df and "useradd" in df
+              and 'CMD ["python", "-u", "ha_morning.py", "--schedule"]' in df and "pip install --no-cache-dir" in df and "tzdata" in df,
+              "the Dockerfile installs what the program needs and runs it on its schedule, as an ordinary user, with time zones")
+        compose = yaml.safe_load(files["compose.yaml"])
+        svc = compose["services"]["ha_morning"]
+        check(svc["restart"] == "unless-stopped" and svc["env_file"] == "keys.env" and svc["volumes"] == [".:/program"]
+              and svc["user"] == "${UID:-1000}:${GID:-1000}" and svc["environment"]["TZ"] == "Europe/London"
+              and "host.docker.internal:host-gateway" in svc["extra_hosts"] and "ports" not in svc,
+              f"compose.yaml restarts it unless stopped, with the keys from keys.env, the folder as the volume, your user and time zone ({svc})")
+        keys = [line for line in files["keys.env"].splitlines() if line and not line.startswith("#")]
+        check("ANTHROPIC_API_KEY=" in keys and "HA_TOKEN=" in keys and all(re.fullmatch(r"[A-Z][A-Z0-9_]*=", k) for k in keys),
+              f"keys.env lists the program's keys, one NAME= a line ({keys})")
+        setup = files["SETUP.md"]
+        check("docker compose run --rm ha_morning python ha_morning.py" in setup and ".ha_morning.approved" in setup
+              and "approve = no" in setup and "docker compose up -d --build" in setup and "--doctor" in setup and "host.docker.internal" in setup,
+              "SETUP.md says how to allow it once (or approve = no), start it, watch it and check it")
+        check("keys.env" in files[".dockerignore"] and "second-thought.ini" in files[".dockerignore"],
+              "the keys stay out of the image (.dockerignore)")
+
+        hook = {"type": "rb_webhook_when", "fields": {"PATH": "bake-done"}, "x": 20, "y": 20, "next": {"block": add(tx("hi"))}}
+        await load_state(pg, program(hook))
+        await pg.fill("#io-name", "Bake done!")
+        files = {f["name"]: f["text"] for f in await pg.evaluate("window.__dockerFiles()")}
+        svc = yaml.safe_load(files["compose.yaml"])["services"]["bake-done"]
+        check(svc.get("ports") == ["127.0.0.1:8765:8765"] and svc["environment"].get("WEBHOOK_HOST") == "0.0.0.0" and "Bake-done.py" in files
+              and "\nWEBHOOK_SECRET=" in files["keys.env"] and "Allow it once" in files["SETUP.md"] and "drop `127.0.0.1:`" in files["SETUP.md"],
+              f"a program that takes web requests gets its port on this computer only, its secret in keys.env, and a name compose accepts ({svc}; {files['keys.env']!r})")
+
+        await load_state(pg, program({"type": "rb_every", "fields": {"N": 30, "UNIT": "m"}, "x": 20, "y": 20, "next": {"block": add(tx("hi"))}}))
+        files = {f["name"]: f["text"] for f in await pg.evaluate("window.__dockerFiles()")}
+        check("Nothing to allow" in files["SETUP.md"] and "approved" not in files["SETUP.md"],
+              "a program that only reads and writes to you needs nothing allowed, and SETUP.md says so")
+        check(not errors, "no page errors saving for Docker" + (f": {errors[:2]}" if errors else ""))
+        await browser.close()

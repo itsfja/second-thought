@@ -2029,7 +2029,10 @@
   "Edit blocks": "ᛒᚱᛅᚢᛏᛅ ᛒᛚᚢᚴᚢᛘ",
   "Show the outline": "ᛋᚢᚾᛏᚢ ᚢᛏᛚᛁᚾᚢᚱᚾᛅᛦ",
   "… and more": "… ᚢᚴ ᛘᛅᛁᚱᛅ",
-  "Ask a question or share an idea on GitHub": "ᛋᛒᚢᚱ ᛋᛒᚢᚱᚾᛁᚴᛅᛦ ᛁᚦᛅ ᛋᛁᚴ ᚱᛅᚦ ᚦᛁᚾ ᚬ GitHub"
+  "Ask a question or share an idea on GitHub": "ᛋᛒᚢᚱ ᛋᛒᚢᚱᚾᛁᚴᛅᛦ ᛁᚦᛅ ᛋᛁᚴ ᚱᛅᚦ ᚦᛁᚾ ᚬ GitHub",
+  "Save for Docker (.zip)": "ᚴᛅᚢᛘᛅ ᚠᚢᚱᛁᛦ Docker (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip ᚴᛅᚢᛘᛏ. ᛚᛅᚢᛋ ᚦᛅᛏ ᚢᛒ, ᛋᛁᛏ ᛚᚢᚴᛚᛅ ᚦᛁᚾᛅ ᛁ keys.env, ᚢᚴ ᚠᚢᛚᚴ ᛋᛁᚦᛅᚾ SETUP.md.",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "ᚦᛁᛏᛅ ᚠᚢᚱᛁᛏ ᛒᛁᚦᚱ ᛅᛁᚾᛋᚴᛁᛋ, ᛋᚢᛅ ᛅᛏ ᛁ Docker ᛘᚢᚾᛏᛁ ᚦᛅᛏ ᛁᚾᛏᛅ ᚢᚴ ᛒᚢᚱᛁᛅ ᛅᛒᛏᚱ ᚢᚴ ᛅᛒᛏᚱ. Docker ᚼᛅᚠᛁᛦ ᚠᚢᚱᛁᛏᛁ ᛘᛁᚦ ᛏᛁᚦᛅᛋᚴᚱᛅ ᛁᚦᛅ 'ᚦᛅ ᛁᚱ' ᚴᚢᛒᛁ."
  },
  "examples": {
   "review": {

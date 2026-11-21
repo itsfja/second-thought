@@ -1283,7 +1283,10 @@
 "Edit blocks":"xicpiya in tlapiyaliztli",
 "Show the outline":"xiquittili in tlamachqui",
 "… and more":"… ocachi",
-"Ask a question or share an idea on GitHub":"Xitlahtlani nozo xiquitoa motlalnamiquiliz ipan GitHub"
+"Ask a question or share an idea on GitHub":"Xitlahtlani nozo xiquitoa motlalnamiquiliz ipan GitHub",
+"Save for Docker (.zip)":"Xicpiya ic Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Ōmopix {name}-docker.zip. Xiquixtli, xictlālli motlatlapōlōni ipan keys.env, niman xictoca SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Inīn tlatēcpantli ahtlei quichiya, ic ipan Docker tlamizquia ihuān occeppa occeppa pēhuazquia. Docker quinamiqui ce tlatēcpantli ica tōnalpōhualli anozo ce 'ihcuāc' tlatzacualli."
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

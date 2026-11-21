@@ -35,7 +35,7 @@ from e2e.python_export import PROGRAM_TIMES, group_share, python_tests  # noqa: 
 from e2e.sources import example_ini_check, package_check, sri_check  # noqa: E402
 from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import broken_gallery_tests, changed_gallery_tests, gallery_smoke_tests, gallery_tests  # noqa: E402
-from e2e.actions import actions_tests  # noqa: E402
+from e2e.actions import actions_tests, docker_tests  # noqa: E402
 from e2e.pages import pages_tests  # noqa: E402
 from e2e.offline import offline_tests  # noqa: E402
 from e2e.describe import describe_tests  # noqa: E402
@@ -200,6 +200,8 @@ def main():
         if not share or group_share("listeners", share[1]) == share[0]:
             with timed("python: actions_tests"):
                 asyncio.run(actions_tests())
+            with timed("python: docker_tests"):
+                asyncio.run(docker_tests())
     print_times(sorted(PROGRAM_TIMES.items(), key=lambda kv: -kv[1])[:5])
     print()
     if failures:

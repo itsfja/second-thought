@@ -2018,7 +2018,10 @@
   "Edit blocks": "исправленіє блоковъ",
   "Show the outline": "покажи содержаніє",
   "… and more": "… и єщє",
-  "Ask a question or share an idea on GitHub": "Вопроси или повѣждь мысль твою на GitHub"
+  "Ask a question or share an idea on GitHub": "Вопроси или повѣждь мысль твою на GitHub",
+  "Save for Docker (.zip)": "Сохрани для Docker (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "Сохраненъ {name}-docker.zip. Разрѣши его, положи ключи твоя въ keys.env, и тогда послѣдуй SETUP.md.",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Сей чинъ ничесоже ожидаетъ, тѣмже въ Docker скончалъ бы ся и паки и паки начиналъ. Docker подобаетъ чину со урокомъ или со кирпичемъ «егда»."
  },
  "examples": {
   "review": {

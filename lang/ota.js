@@ -1284,7 +1284,10 @@
 "Edit blocks":"تحرير الكتل",
 "Show the outline":"أظهر المسودة",
 "… and more":"… والمزيد",
-"Ask a question or share an idea on GitHub":"GitHub اوزرنده بر سؤال صور یاخود بر فكر بیلدیر"
+"Ask a question or share an idea on GitHub":"GitHub اوزرنده بر سؤال صور یاخود بر فكر بیلدیر",
+"Save for Docker (.zip)":"Docker ایچون حفظ ایت (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip حفظ ایدیلدی. آچ، آنختارلریڭی keys.env ایچنه قوی، صوڭره SETUP.md ه اویغون حرکت ایت.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"بو پروغرام هیچ بر شی بكلەمز، بو سببله Docker ایچنده بیتر و تكرار تكرار باشلاردی. Docker زمانلاماسی یاخود 'وقتا كه' بلوغی اولان پروغرامه یاقیشیر."
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},

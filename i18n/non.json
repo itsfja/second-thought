@@ -2028,7 +2028,10 @@
   "Edit blocks": "breyta blokkum",
   "Show the outline": "sýndu útlínurnar",
   "… and more": "… og meira",
-  "Ask a question or share an idea on GitHub": "Spyr spurningar eða seg ráð þín á GitHub"
+  "Ask a question or share an idea on GitHub": "Spyr spurningar eða seg ráð þín á GitHub",
+  "Save for Docker (.zip)": "Geyma fyrir Docker (.zip)",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip geymt. Leys þat upp, set lykla þína í keys.env, ok fylg síðan SETUP.md.",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Þetta forrit bíðr einskis, svá at í Docker myndi þat enda ok byrja aptr ok aptr. Docker hæfir forriti með tíðaskrá eða 'þá er' kubbi."
  },
  "examples": {
   "review": {

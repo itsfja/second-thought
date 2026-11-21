@@ -2018,7 +2018,10 @@
   "Edit blocks": "改諸塊",
   "Show the outline": "示其綱要",
   "… and more": "……其餘",
-  "Ask a question or share an idea on GitHub": "於 GitHub 問疑獻策"
+  "Ask a question or share an idea on GitHub": "於 GitHub 問疑獻策",
+  "Save for Docker (.zip)": "存為 Docker（.zip）",
+  "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "已存 {name}-docker.zip。解之，置鑰於 keys.env，乃從 SETUP.md。",
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "此程無所待，於 Docker 中將終而復始，無已。Docker 宜於有時表或「當」之塊者。"
  },
  "examples": {
   "review": {

@@ -1285,7 +1285,10 @@
 "Edit blocks":"ܣ ܢܘ ܟܝ",
 "Show the outline":"ܣ ܢܘ ܟܝ",
 "… and more":"ܣ ܢܘ ܟܝ",
-"Ask a question or share an idea on GitHub":"ܫܐܠ ܫܐܠܬܐ ܐܘ ܫܘܬܦܗ ܡܚܫܒܬܐ ܥܠ GitHub"
+"Ask a question or share an idea on GitHub":"ܫܐܠ ܫܐܠܬܐ ܐܘ ܫܘܬܦܗ ܡܚܫܒܬܐ ܥܠ GitHub",
+"Save for Docker (.zip)":"ܢܛܘܪ ܐܟ Docker (.zip)",
+"Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip ܐܬܢܛܪ. ܫܪܝ, ܣܝܡ ܩܠܝܕܟ ܥܠ keys.env, ܘܒܬܪ ܗܕܐ ܐܙܠ ܒܬܪ SETUP.md.",
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ܗܢܐ ܚܫܘܒܐ ܠܐ ܡܣܟܐ ܠܡܕܡ, ܘܡܬܘܠ ܗܢܐ ܒ Docker ܫܠܡ ܘܫܪܐ ܬܘܒ ܘܬܘܒ. Docker ܝܐܐ ܠܚܫܘܒܐ ܕܐܝܬ ܠܗ ܙܒܢܐ ܐܘ ܠܒܢܬܐ 'ܟܕ'."
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
