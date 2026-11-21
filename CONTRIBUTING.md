@@ -135,6 +135,13 @@ failure names its part. The Python checks that aren't per-program come in groups
 tests/e2e/python_export.py, with how long each takes), spread over the three shares, and the exported programs fill them
 up, so each share takes about as long as the others (`share_of` balances them).
 
+A pull request runs the parts its change touches (`tools/ci_scope.py`, #457): only Markdown skips the end-to-end
+parts; only translations run the sources and translation checks; only gallery programs run those and the gallery
+checks, with each changed program loaded, run on the page, exported with `tools/export.cjs` and checked with
+`--doctor`. Anything else runs everything. The parts with nothing to do still report, so they pass in seconds. A push
+to main, the nightly run (03:17 UTC) and **Run workflow** always run everything. Locally,
+`RB_GALLERY_FILES="rye-rain.json" python tests/run_tests.py gallery` runs the gallery-only checks for one program.
+
 `ruff check` (after `pip install ruff`) looks for unused and undefined names and likely bugs, as CI does (`ruff.toml`).
 `tests/unit/test_fuzz.py` feeds the parsers that read outside input thousands of broken inputs from a fixed seed;
 `FUZZ_ROUNDS=50000 python -m unittest test_fuzz` in `tests/unit` tries harder.

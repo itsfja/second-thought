@@ -187,3 +187,49 @@ def gallery_smoke_tests():
         text = report.read_text(encoding="utf-8")
         check(r.returncode == 0 and "| rain-window | skipped |" in text and "needs Claude (ANTHROPIC_API_KEY)" in text,
               "a program for a service with no key is skipped, naming the key it needs")
+
+
+async def changed_gallery_tests(names):
+    """For a pull request that changes only gallery programs (#457): each one it changes is loaded and run on the page,
+    exported with tools/export.cjs, and its Python checked with --doctor, without the full page run. CI names the files
+    in RB_GALLERY_FILES; the full suite, on main and each night, runs and exports every program as before."""
+    import shutil
+    import tempfile
+    files = [ROOT / "gallery" / n for n in names if (ROOT / "gallery" / n).is_file()]
+    print(f"The gallery programs this change touches ({len(files)})")
+    if not files:
+        return
+    node = shutil.which("node")
+    check(bool(node), "tools/export.cjs needs Node on the PATH")
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        pg = await browser.new_page(viewport={"width": 1400, "height": 1000})
+        await pg.route("**/*", route)
+        await pg.add_init_script(MOCK)
+        await pg.goto("http://test/")
+        await pg.wait_for_timeout(1500)
+        for f in files:
+            key = "g_" + f.stem.replace("-", "_")
+            await pg.select_option("#example", key)
+            await pg.click("#load")
+            status = await run_program(pg)
+            check(status.startswith("done"), f"{f.name}: runs on the page ({status})")
+        await browser.close()
+    if not node:
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        run = subprocess.run([node, str(ROOT / "tools" / "export.cjs"), *map(str, files), "--out-dir", tmp],
+                             capture_output=True, text=True, timeout=300)
+        check(run.returncode == 0, "tools/export.cjs exports them" + ("" if run.returncode == 0 else f": {run.stderr.strip()[-300:]}"))
+        env = {k: v for k, v in os.environ.items() if not (k.endswith(("_API_KEY", "_TOKEN", "_SECRET", "_PASSWORD")) or k == "HF_TOKEN")}
+        env.pop("GITHUB_ACTIONS", None)
+        for f in files:
+            name = json.loads(f.read_text(encoding="utf-8")).get("name") or f.stem
+            prog = pathlib.Path(tmp) / (re.sub(r"\s+", "-", re.sub(r"[^\w\- ]+", "", name.strip())) + ".py")
+            if not prog.exists():
+                check(False, f"{f.name}: exported as {prog.name}")
+                continue
+            r = subprocess.run([sys.executable, "-u", str(prog), "--doctor"], env=env, cwd=tmp, capture_output=True,
+                               encoding="utf-8", errors="replace", timeout=120)
+            check(r.returncode == 1 and "  FAIL  Claude: no key." in r.stdout and "Traceback" not in r.stderr,
+                  f"{f.name}: its exported Python's --doctor runs to the end, and with no keys says so (exit {r.returncode}): {(r.stderr or r.stdout)[-300:]!r}")

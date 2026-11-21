@@ -5,15 +5,22 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: "17 3 * * *"   # every night: the whole suite, whatever changed (#457)
+  workflow_dispatch:       # Run workflow, by hand: the whole suite too
 
 jobs:
-  # Whether a pull request changes anything but Markdown. The end-to-end jobs (the slow ones) are skipped when it
-  # doesn't; the unit tests always run, since they read README.md, CHANGELOG.md and gallery/README.md, and check the
-  # docs' counts and links (tests/unit/test_docs.py, #419).
+  # What a pull request's checks need to run, from the files it changes (tools/ci_scope.py, #457): docs (Markdown only:
+  # the end-to-end parts don't run; the unit tests, which read the docs and check their counts and links, always do,
+  # #419), words (translations: the sources and translation checks), gallery (community programs: those, the gallery
+  # checks, and each changed program loaded, run, exported and checked) or all. A push to main, the nightly run and a
+  # run by hand are always all. Every part still reports, so its check is there to require.
   changes:
     runs-on: ubuntu-latest
     outputs:
       code: ${{ steps.diff.outputs.code }}
+      scope: ${{ steps.diff.outputs.scope }}
+      gallery: ${{ steps.diff.outputs.gallery }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -21,10 +28,16 @@ jobs:
       - id: diff
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" != "pull_request" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
-          other=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -v '\.md$' || true)
-          echo "Changed, not Markdown: ${other:-none}"
-          echo "code=$([ -n "$other" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"; echo "scope=all" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          base="origin/${{ github.base_ref }}"
+          git diff --name-only "$base...HEAD" > changed.txt
+          scope=$(python3 tools/ci_scope.py scope --base "$base" < changed.txt)
+          echo "Changed:"; sed 's/^/  /' changed.txt; echo "Scope: $scope"
+          echo "scope=$scope" >> "$GITHUB_OUTPUT"
+          echo "code=$([ "$scope" != docs ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "gallery=$([ "$scope" = gallery ] && python3 tools/ci_scope.py gallery < changed.txt)" >> "$GITHUB_OUTPUT"
 
   lint:
     # Ruff: unused and undefined names and likely bugs in the runtime's parts and the tools (ruff.toml, #313). Seconds.
@@ -99,9 +112,13 @@ jobs:
         run: python tools/sync.py --check
 
       - name: Run tests
+        env:
+          RB_GALLERY_FILES: ${{ needs.changes.outputs.gallery }}
         run: |
+          areas=$(python tools/ci_scope.py part "${{ matrix.areas }}" "${{ needs.changes.outputs.scope }}")
+          if [ -z "$areas" ]; then echo "Nothing here for a ${{ needs.changes.outputs.scope }} change (tools/ci_scope.py); the nightly run covers it."; exit 0; fi
           bash tests/setup.sh
-          python tests/run_tests.py ${{ matrix.areas }}
+          python tests/run_tests.py $areas
 
   windows:
     needs: changes
@@ -124,9 +141,12 @@ jobs:
         shell: bash
         env:
           PYTHONUTF8: "0"
+          RB_GALLERY_FILES: ${{ needs.changes.outputs.gallery }}
         run: |
+          areas=$(python tools/ci_scope.py part "${{ matrix.areas }}" "${{ needs.changes.outputs.scope }}")
+          if [ -z "$areas" ]; then echo "Nothing here for a ${{ needs.changes.outputs.scope }} change (tools/ci_scope.py); the nightly run covers it."; exit 0; fi
           set +e
-          { bash tests/setup.sh && python tests/run_tests.py ${{ matrix.areas }}; } > test-output.txt 2>&1
+          { bash tests/setup.sh && python tests/run_tests.py $areas; } > test-output.txt 2>&1
           status=$?
           cat test-output.txt
           if [ $status -ne 0 ]; then
