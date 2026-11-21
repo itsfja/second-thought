@@ -100,6 +100,7 @@ OTHER_SETTINGS = {
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
     "HOMEY_URL",
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
+    "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME",
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256",
@@ -112,7 +113,7 @@ OTHER_SETTINGS = {
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
-    "HA_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
+    "HA_URL", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
@@ -174,12 +175,13 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
+    "EMAIL_PASSWORD", "HA_TOKEN", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
     "COINBASE_KEY",
     "HOMEY_API_KEY",
     "MIKROTIK_PASSWORD",
+    "MQTT_PASSWORD",
     "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
     "PLEX_TOKEN", "TAUTULLI_API_KEY",
@@ -1194,6 +1196,10 @@ SAFETY = {
     # the network with it, and nothing here is worth that.
     "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
                       ["POST", r"^/rest/interface/ethernet/monitor$"]],
+    # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
+    "mqtt_unlock": r"\b(unlock|open|disarm)",
+    # MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
+    # MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
     # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
     # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
@@ -1255,8 +1261,6 @@ SAFETY = {
     # Home Assistant services an agent can't run without asking, even with 'control devices (no asking)': they run
     # scripts, scenes or automations, or press buttons, and so could do anything, unlocking included.
     "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
-    # MQTT messages an agent can't publish without asking (matched in the topic and message, any case).
-    "mqtt_unlock": r"\b(unlock|open|disarm)",
     # An address in what the agent was given or read (#304): whole addresses are compared, never a piece of one. Ends in
     # . , ; : ! ? and a ) that closes nothing are punctuation, not part of the address.
     "agent_seen_address": r"https?://[^\s\"'<>\[\]{}]+",
@@ -1605,8 +1609,6 @@ DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").r
 SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
 # worked out for Gmail, iCloud, Yahoo, Fastmail and mailbox.org; for anything else set EMAIL_IMAP_HOST and EMAIL_SMTP_HOST.
-# MQTT: MQTT_HOST is your broker (for example homeassistant.local, if it runs Mosquitto), with MQTT_USERNAME and
-# MQTT_PASSWORD if it needs them. MQTT_TLS = yes for an encrypted connection (port 8883). Needs  pip install paho-mqtt.
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
@@ -1968,7 +1970,6 @@ CAPABILITIES = [
     ("slack_send", "send Slack messages", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
     ("ha_act", "control your Home Assistant devices", True),
-    ("mqtt_publish", "publish MQTT messages", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
@@ -1977,6 +1978,7 @@ CAPABILITIES = [
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("homey_act", "control your Homey devices and start Homey flows", True),
+    ("mqtt_publish", "publish MQTT messages", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
@@ -1993,6 +1995,7 @@ CAPABILITIES = [
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
+    ("mqtt_read", "read MQTT messages", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
@@ -2012,7 +2015,6 @@ CAPABILITIES = [
     ("discord_read", "read your Discord channels", False),
     ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
-    ("mqtt_read", "read MQTT messages", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
     ("files_save", "save files in its outputs folder", False),
@@ -4553,6 +4555,123 @@ class Connections:
         n = max(1, min(500, int(num(count) or 20)))
         rows = [r for r in await self._mikrotik("GET", "/rest/log") if isinstance(r, dict)][-n:]
         return [f"{to_str(r.get('time'))} {to_str(r.get('topics'))}: {to_str(r.get('message'))}" for r in rows]
+    # MQTT
+    def _mqtt_new(self, on_message=None, topics=()):
+        """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
+        try:
+            import paho.mqtt.client as mqtt
+        except ImportError:
+            raise RunError(tr("MQTT needs the paho-mqtt package: pip install paho-mqtt")) from None
+        host = os.environ.get("MQTT_HOST", "").strip()
+        if not host:
+            raise RunError(tr("MQTT needs MQTT_HOST {where_keys}: your broker's address, like homeassistant.local.", where_keys=WHERE_KEYS))
+        tls = os.environ.get("MQTT_TLS", "").strip().lower() in ("1", "yes", "true", "on")
+        port = int(os.environ.get("MQTT_PORT") or (8883 if tls else 1883))
+        c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        if os.environ.get("MQTT_USERNAME"):
+            c.username_pw_set(os.environ["MQTT_USERNAME"], os.environ.get("MQTT_PASSWORD") or None)
+        if tls:
+            c.tls_set()
+        ready, result = threading.Event(), {}
+
+        def on_connect(client, userdata, flags, reason_code, properties):
+            result["rc"] = reason_code
+            if not reason_code.is_failure:
+                for t in topics:
+                    client.subscribe(t, qos=0)
+            ready.set()
+        c.on_connect = on_connect
+        if on_message:
+            c.on_message = on_message
+        try:
+            c.connect(host, port, keepalive=60)
+        except OSError as e:
+            raise RunError(tr("Couldn't reach the MQTT broker at {host}:{port} ({e}).", host=host, port=port, e=e)) from None
+        c.loop_start()
+        if not ready.wait(10) or result["rc"].is_failure:
+            c.loop_stop()
+            raise RunError(tr("The MQTT broker at {host}:{port} refused the connection ({rc}). Check MQTT_USERNAME and MQTT_PASSWORD.", host=host, port=port, rc=result["rc"])
+                           if "rc" in result else tr("The MQTT broker at {host}:{port} didn't answer.", host=host, port=port))
+        return c
+
+    @staticmethod
+    def _mqtt_payload(topic, raw):
+        """An MQTT message as a record: its topic and text, plus the fields of a JSON message (like zigbee2mqtt's)."""
+        text = raw.decode("utf-8", "replace") if isinstance(raw, (bytes, bytearray)) else to_str(raw)
+        rec = {"topic": topic, "text": text}
+        try:
+            j = json.loads(text)
+        except ValueError:
+            j = None
+        if isinstance(j, dict):
+            for k, v in j.items():
+                rec.setdefault(str(k), json.dumps(v) if isinstance(v, (dict, list)) else v)
+        return rec
+
+    @staticmethod
+    def _mqtt_topic(topic, publishing=False):
+        topic = to_str(topic).strip()
+        if not topic:
+            raise RunError(tr("MQTT needs a topic, like home/kitchen/temperature."))
+        if publishing and ("+" in topic or "#" in topic):
+            raise RunError(tr("You can't publish to a topic with + or # in it: those only work for listening."))
+        return topic
+
+    async def mqtt_read(self, topic, wait=2.0):
+        """The latest messages on a topic (+ and # allowed): {topic: text}. Retained messages arrive straight away."""
+        topic, got = self._mqtt_topic(topic), {}
+
+        def on_message(client, userdata, msg):
+            if len(got) < 200:
+                got[msg.topic] = self._mqtt_payload(msg.topic, msg.payload)["text"]
+        c = await asyncio.to_thread(self._mqtt_new, on_message, [topic])
+        try:
+            await asyncio.sleep(wait)
+        finally:
+            c.loop_stop()
+            c.disconnect()
+        return got
+
+    async def mqtt_value(self, topic):
+        """For the 'latest MQTT message' block: the text, or a record of topic -> text for a topic with + or #."""
+        got = await self.mqtt_read(topic)
+        topic = to_str(topic).strip()
+        if "+" not in topic and "#" not in topic:
+            v = got.get(topic, "")
+            self.log(tr("MQTT {topic}", topic=topic), v or tr("(no message yet: only messages the broker keeps show up straight away)"), tr("read"))
+            return v
+        self.log(tr("MQTT {topic}", topic=topic), "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or tr("(nothing)"), tr("{got} topics", got=len(got)))
+        return got
+
+    async def mqtt_publish(self, topic, text, retain=False, approved=False):
+        topic, text = self._mqtt_topic(topic, True), to_str(text)
+        if (not approved or self.dry_run()) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
+            return False
+        c = await asyncio.to_thread(self._mqtt_new)
+        try:
+            info = c.publish(topic, text, qos=1, retain=bool(retain))
+            await asyncio.to_thread(info.wait_for_publish, 10)
+        finally:
+            c.loop_stop()
+            c.disconnect()
+        self.log(tr("MQTT → {topic}", topic=topic), text + ("  " + tr("(kept by the broker)") if retain else ""), tr("published"))
+        return True
+
+    async def _listen_mqtt(self, items):
+        import paho.mqtt.client as mqtt
+        loop = asyncio.get_running_loop()
+
+        def on_message(client, userdata, msg):
+            if msg.retain:
+                return  # a kept message is an old value, not something that has just arrived
+            payload = self._mqtt_payload(msg.topic, msg.payload)
+            for sub_, fn in items:
+                if mqtt.topic_matches_sub(sub_, msg.topic):
+                    loop.call_soon_threadsafe(self._fire, fn, dict(payload), "MQTT " + msg.topic)
+        await asyncio.to_thread(self._mqtt_new, on_message, sorted({self._mqtt_topic(t) for t, _ in items}))
+        print(tr("Listening for MQTT messages on {x}.", x=", ".join(sorted({t for t, _ in items}))), flush=True)
+        while True:
+            await asyncio.sleep(3600)
     # NZBGeek (#400)
     # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
     # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,
@@ -5478,108 +5597,6 @@ class Connections:
         return True
     # sync:connections-runtime-end
 
-    # MQTT
-    def _mqtt_new(self, on_message=None, topics=()):
-        """A connected MQTT client, running in the background. Subscribes (again after a reconnect) to these topics."""
-        try:
-            import paho.mqtt.client as mqtt
-        except ImportError:
-            raise RunError(tr("MQTT needs the paho-mqtt package: pip install paho-mqtt")) from None
-        host = os.environ.get("MQTT_HOST", "").strip()
-        if not host:
-            raise RunError(tr("MQTT needs MQTT_HOST {where_keys}: your broker's address, like homeassistant.local.", where_keys=WHERE_KEYS))
-        tls = os.environ.get("MQTT_TLS", "").strip().lower() in ("1", "yes", "true", "on")
-        port = int(os.environ.get("MQTT_PORT") or (8883 if tls else 1883))
-        c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-        if os.environ.get("MQTT_USERNAME"):
-            c.username_pw_set(os.environ["MQTT_USERNAME"], os.environ.get("MQTT_PASSWORD") or None)
-        if tls:
-            c.tls_set()
-        ready, result = threading.Event(), {}
-
-        def on_connect(client, userdata, flags, reason_code, properties):
-            result["rc"] = reason_code
-            if not reason_code.is_failure:
-                for t in topics:
-                    client.subscribe(t, qos=0)
-            ready.set()
-        c.on_connect = on_connect
-        if on_message:
-            c.on_message = on_message
-        try:
-            c.connect(host, port, keepalive=60)
-        except OSError as e:
-            raise RunError(tr("Couldn't reach the MQTT broker at {host}:{port} ({e}).", host=host, port=port, e=e)) from None
-        c.loop_start()
-        if not ready.wait(10) or result["rc"].is_failure:
-            c.loop_stop()
-            raise RunError(tr("The MQTT broker at {host}:{port} refused the connection ({rc}). Check MQTT_USERNAME and MQTT_PASSWORD.", host=host, port=port, rc=result["rc"])
-                           if "rc" in result else tr("The MQTT broker at {host}:{port} didn't answer.", host=host, port=port))
-        return c
-
-    @staticmethod
-    def _mqtt_payload(topic, raw):
-        """An MQTT message as a record: its topic and text, plus the fields of a JSON message (like zigbee2mqtt's)."""
-        text = raw.decode("utf-8", "replace") if isinstance(raw, (bytes, bytearray)) else to_str(raw)
-        rec = {"topic": topic, "text": text}
-        try:
-            j = json.loads(text)
-        except ValueError:
-            j = None
-        if isinstance(j, dict):
-            for k, v in j.items():
-                rec.setdefault(str(k), json.dumps(v) if isinstance(v, (dict, list)) else v)
-        return rec
-
-    @staticmethod
-    def _mqtt_topic(topic, publishing=False):
-        topic = to_str(topic).strip()
-        if not topic:
-            raise RunError(tr("MQTT needs a topic, like home/kitchen/temperature."))
-        if publishing and ("+" in topic or "#" in topic):
-            raise RunError(tr("You can't publish to a topic with + or # in it: those only work for listening."))
-        return topic
-
-    async def mqtt_read(self, topic, wait=2.0):
-        """The latest messages on a topic (+ and # allowed): {topic: text}. Retained messages arrive straight away."""
-        topic, got = self._mqtt_topic(topic), {}
-
-        def on_message(client, userdata, msg):
-            if len(got) < 200:
-                got[msg.topic] = self._mqtt_payload(msg.topic, msg.payload)["text"]
-        c = await asyncio.to_thread(self._mqtt_new, on_message, [topic])
-        try:
-            await asyncio.sleep(wait)
-        finally:
-            c.loop_stop()
-            c.disconnect()
-        return got
-
-    async def mqtt_value(self, topic):
-        """For the 'latest MQTT message' block: the text, or a record of topic -> text for a topic with + or #."""
-        got = await self.mqtt_read(topic)
-        topic = to_str(topic).strip()
-        if "+" not in topic and "#" not in topic:
-            v = got.get(topic, "")
-            self.log(tr("MQTT {topic}", topic=topic), v or tr("(no message yet: only messages the broker keeps show up straight away)"), tr("read"))
-            return v
-        self.log(tr("MQTT {topic}", topic=topic), "\n".join(f"{k}: {_short(v, 80)}" for k, v in sorted(got.items())) or tr("(nothing)"), tr("{got} topics", got=len(got)))
-        return got
-
-    async def mqtt_publish(self, topic, text, retain=False, approved=False):
-        topic, text = self._mqtt_topic(topic, True), to_str(text)
-        if (not approved or self.dry_run()) and not await self._allowed(["ha", "messages"], f"publish to MQTT {topic}: {_short(text, 120)}"):
-            return False
-        c = await asyncio.to_thread(self._mqtt_new)
-        try:
-            info = c.publish(topic, text, qos=1, retain=bool(retain))
-            await asyncio.to_thread(info.wait_for_publish, 10)
-        finally:
-            c.loop_stop()
-            c.disconnect()
-        self.log(tr("MQTT → {topic}", topic=topic), text + ("  " + tr("(kept by the broker)") if retain else ""), tr("published"))
-        return True
-
     # ----- Listeners: scripts that start when something arrives -----
     # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
     # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
@@ -5636,22 +5653,6 @@ class Connections:
             except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
                 print(tr("  ({x}: {x2} Trying again in a minute.)", x=self.LISTEN_NAMES.get(kind, kind), x2=self._describe(e)), flush=True)
                 await asyncio.sleep(self._poll(60))
-
-    async def _listen_mqtt(self, items):
-        import paho.mqtt.client as mqtt
-        loop = asyncio.get_running_loop()
-
-        def on_message(client, userdata, msg):
-            if msg.retain:
-                return  # a kept message is an old value, not something that has just arrived
-            payload = self._mqtt_payload(msg.topic, msg.payload)
-            for sub_, fn in items:
-                if mqtt.topic_matches_sub(sub_, msg.topic):
-                    loop.call_soon_threadsafe(self._fire, fn, dict(payload), "MQTT " + msg.topic)
-        await asyncio.to_thread(self._mqtt_new, on_message, sorted({self._mqtt_topic(t) for t, _ in items}))
-        print(tr("Listening for MQTT messages on {x}.", x=", ".join(sorted({t for t, _ in items}))), flush=True)
-        while True:
-            await asyncio.sleep(3600)
 
     async def _listen_webhook(self, items):
         import hmac
@@ -7986,6 +7987,11 @@ class Doctor:
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
+        if has("mqtt_read", "mqtt_publish"):
+            async def mqtt():
+                await self.mqtt_read("second-thought/doctor", 1.0)
+                return tr("connected to the broker")
+            out.append(("MQTT", mqtt))
         if has("nzbgeek_read", "nzbgeek_fetch"):
             async def nzbgeek():
                 raw = await self._nzbgeek({"t": "caps", "o": "json"})
@@ -8071,11 +8077,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("mqtt_read", "mqtt_publish"):
-            async def mqtt():
-                await self.mqtt_read("second-thought/doctor", 1.0)
-                return tr("connected to the broker")
-            out.append(("MQTT", mqtt))
         if has("telegram_read", "telegram_send"):
             async def tg():
                 me = await self._tg("getMe")
@@ -8404,7 +8405,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -8414,6 +8415,7 @@ class Doctor:
                 "Docker": "DOCKER_HOST",
                 "Homey": "HOMEY_API_KEY",
                 "MikroTik": "MIKROTIK_URL",
+                "MQTT": "MQTT_HOST",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Plex": "PLEX_URL PLEX_TOKEN",

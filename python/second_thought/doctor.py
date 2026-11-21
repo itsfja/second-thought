@@ -289,6 +289,11 @@ class Doctor:
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
+        if has("mqtt_read", "mqtt_publish"):
+            async def mqtt():
+                await self.mqtt_read("second-thought/doctor", 1.0)
+                return tr("connected to the broker")
+            out.append(("MQTT", mqtt))
         if has("nzbgeek_read", "nzbgeek_fetch"):
             async def nzbgeek():
                 raw = await self._nzbgeek({"t": "caps", "o": "json"})
@@ -374,11 +379,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("mqtt_read", "mqtt_publish"):
-            async def mqtt():
-                await self.mqtt_read("second-thought/doctor", 1.0)
-                return tr("connected to the broker")
-            out.append(("MQTT", mqtt))
         if has("telegram_read", "telegram_send"):
             async def tg():
                 me = await self._tg("getMe")
@@ -707,7 +707,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -717,6 +717,7 @@ class Doctor:
                 "Docker": "DOCKER_HOST",
                 "Homey": "HOMEY_API_KEY",
                 "MikroTik": "MIKROTIK_URL",
+                "MQTT": "MQTT_HOST",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Plex": "PLEX_URL PLEX_TOKEN",

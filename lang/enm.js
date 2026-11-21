@@ -279,7 +279,8 @@
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
-"Plex":"Plex"
+"Plex":"Plex",
+"MQTT":"MQTT"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tooles for the procuratour: lay hem withinne a procuratoures blok",

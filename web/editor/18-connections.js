@@ -236,31 +236,6 @@
     return slots.length ? "Free on " + dayText(start) + ":\n" + slots.map(([x, y]) => "  " + hm(x) + "–" + hm(y)).join("\n")
       : "No free time of " + (Math.floor(num(minutes) + 0.5) || 30) + " minutes on " + dayText(start) + " between " + (from || "09:00") + " and " + (to || "17:30") + ".";
   }
-  /* MQTT on the page: sample topics. */
-  const MQTT = () => { connNote("MQTT"); return CONN.mqtt || { topics:{} }; };
-  function mqttTopic(topic, publishing){
-    topic = str(topic).trim();
-    if (!topic) fail(tr("MQTT needs a topic, like home/kitchen/temperature."));
-    if (publishing && /[+#]/.test(topic)) fail(tr("You can't publish to a topic with + or # in it: those only work for listening."));
-    return topic;
-  }
-  function mqttMatches(sub, topic){
-    const a = sub.split("/"), b = topic.split("/");
-    for (let i = 0; i < a.length; i++) { if (a[i] === "#") return true; if (i >= b.length || (a[i] !== "+" && a[i] !== b[i])) return false; }
-    return a.length === b.length;
-  }
-  function mqttRead(topic){ topic = mqttTopic(topic); const got = {}; Object.entries(MQTT().topics || {}).forEach(([t, v]) => { if (mqttMatches(topic, t)) got[t] = v; }); return got; }
-  async function mqttPublish(topic, text, retain, approved){
-    topic = mqttTopic(topic, true); text = str(text);
-    if (!approved && !(await allowed(["ha", "messages"], "publish to MQTT " + topic + ": " + short(text, 120)))) return false;
-    MQTT(); addStep("MQTT → " + topic, { text:text + (retain ? "  " + tr("(kept by the broker)") : "") }).done("sample", "ok");
-    return true;
-  }
-  function mqttRecord(topic, text){
-    const rec = { topic, text };
-    try { const j = JSON.parse(text); if (j && typeof j === "object" && !Array.isArray(j)) Object.entries(j).forEach(([k, v]) => { if (!(k in rec)) rec[k] = v && typeof v === "object" ? JSON.stringify(v) : v; }); } catch(e) {}
-    return rec;
-  }
   // sync:connections-page-begin
   /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
      reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
@@ -525,6 +500,31 @@
   function mikrotikLog(count){
     const n = Math.max(1, Math.min(500, Math.trunc(num(count)) || 20));
     return (mtSample().log || []).slice(-n).map(r => str(r.time) + " " + str(r.topics) + ": " + str(r.message));
+  }
+  /* MQTT on the page: sample topics. */
+  const MQTT = () => { connNote("MQTT"); return CONN.mqtt || { topics:{} }; };
+  function mqttTopic(topic, publishing){
+    topic = str(topic).trim();
+    if (!topic) fail(tr("MQTT needs a topic, like home/kitchen/temperature."));
+    if (publishing && /[+#]/.test(topic)) fail(tr("You can't publish to a topic with + or # in it: those only work for listening."));
+    return topic;
+  }
+  function mqttMatches(sub, topic){
+    const a = sub.split("/"), b = topic.split("/");
+    for (let i = 0; i < a.length; i++) { if (a[i] === "#") return true; if (i >= b.length || (a[i] !== "+" && a[i] !== b[i])) return false; }
+    return a.length === b.length;
+  }
+  function mqttRead(topic){ topic = mqttTopic(topic); const got = {}; Object.entries(MQTT().topics || {}).forEach(([t, v]) => { if (mqttMatches(topic, t)) got[t] = v; }); return got; }
+  async function mqttPublish(topic, text, retain, approved){
+    topic = mqttTopic(topic, true); text = str(text);
+    if (!approved && !(await allowed(["ha", "messages"], "publish to MQTT " + topic + ": " + short(text, 120)))) return false;
+    MQTT(); addStep("MQTT → " + topic, { text:text + (retain ? "  " + tr("(kept by the broker)") : "") }).done("sample", "ok");
+    return true;
+  }
+  function mqttRecord(topic, text){
+    const rec = { topic, text };
+    try { const j = JSON.parse(text); if (j && typeof j === "object" && !Array.isArray(j)) Object.entries(j).forEach(([k, v]) => { if (!(k in rec)) rec[k] = v && typeof v === "object" ? JSON.stringify(v) : v; }); } catch(e) {}
+    return rec;
   }
   /* NZBGeek on the page (#400): a sample search. Exported Python talks to its Newznab API: a search that only
      reads, and a fetch that always asks. */

@@ -1013,7 +1013,8 @@
   "Unraid": "Unraid",
   "NZBGeek": "NZBGeek",
   "Pi-hole": "Pi-hole",
-  "Plex": "Plex"
+  "Plex": "Plex",
+  "MQTT": "MQTT"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "聽者：所出之程依時而行，則此諸塊行",

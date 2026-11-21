@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [MQTT](#mqtt)
 
 ## Connections
 
@@ -14,7 +14,6 @@ The pink **Connections** blocks work without an agent too.
 
 - **when a Telegram message arrives**, for messages to your bot.
 - **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
-- **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`.
 - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
 - **when an email arrives containing …**, checked every 2 minutes.
 - **when there's something new in feed …**, checked every 15 minutes.
@@ -28,7 +27,6 @@ The pink **Connections** blocks work without an agent too.
 
 **Other blocks:**
 
-- **latest MQTT message on …** reads a topic, and **publish MQTT … to topic …** sends one. With **ask me before any smart home action**, publishing asks you first.
 - **send Telegram message**, **send Discord message**, **send Slack message** and **send email** send something. The Discord and Slack ones reply in the channel a message came from, or post in your first channel. With **ask me before sending messages and announcements**, they ask you first.
 - **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
 - **calendar for the next … days** gives a list of your events.
@@ -43,7 +41,6 @@ Try **Morning briefing on Telegram** and **Email me a news digest** under Automa
 - **Email:** `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo, Fastmail and mailbox.org find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST`.
 - **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
 - **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
-- **MQTT:** `MQTT_HOST`, your broker's address (for Mosquitto in Home Assistant, that's your Home Assistant), plus `MQTT_USERNAME` and `MQTT_PASSWORD` if it needs them. `MQTT_TLS = yes` makes it encrypted. It needs the paho-mqtt library, which run.bat and run.sh install.
 - **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
 
 The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. To let the agent read pages on your own network, add `local_pages = yes`.
@@ -199,6 +196,17 @@ MIKROTIK_CERT_SHA256 =
 ```
 
 A router's certificate is usually its own, which your computer doesn't trust. Run `--doctor` once: it shows the certificate's fingerprint, and once you've put it in `MIKROTIK_CERT_SHA256`, the program talks to that router only. `--doctor` also says if the user's group can do more than read.
+## MQTT
+
+The **MQTT** blocks read your broker's topics and publish to them (asking first), and a listener runs a script when a message arrives:
+
+- **when an MQTT message arrives on …**, for a sensor or switch. `+` stands for one level of the topic and `#` for everything below, like `zigbee2mqtt/#`. **what arrived** gives the topic and the text, plus the fields of a JSON message (like zigbee2mqtt's).
+- **latest MQTT message on …** reads a topic. Only messages the broker keeps (retained) show up straight away; with `+` or `#` in the topic, a record of each topic's latest message.
+- **publish MQTT … to topic …** sends one; **keep it** asks the broker to remember it for anyone who listens later. With **ask me before any smart home action** or **sending messages and announcements**, publishing asks you first — and a message that could unlock something always asks, even then.
+
+On the page these blocks use **sample topics** and nothing is sent: try the **Proofer too warm? (MQTT)** listener example, or **Agent: check the sensors (MQTT)**, with something you type.
+
+**Settings:** `[mqtt]` in `second-thought.ini` — `MQTT_HOST`, your broker's address (for Mosquitto in Home Assistant, that's your Home Assistant), plus `MQTT_USERNAME` and `MQTT_PASSWORD` if it needs them. `MQTT_TLS = yes` makes it encrypted (and the port 8883 unless you set one). It needs the paho-mqtt library, which run.bat and run.sh install. `--doctor` reads a topic when the program can.
 ## NZBGeek
 
 The purple **NZBGeek** blocks search the Usenet indexer through its Newznab API, and can fetch one NZB file, always asking first:

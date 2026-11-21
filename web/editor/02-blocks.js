@@ -147,7 +147,6 @@
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
     
-    rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
     rb_feed_when:"feeds", rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -166,6 +165,7 @@
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
     rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",
+    rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
     rb_pihole_summary:"pihole_read", rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
     rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
@@ -485,9 +485,6 @@
       tooltip:"Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar." }),
     S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
       tooltip:"Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
-    { type:"rb_mqtt_when", message0:"when an MQTT message arrives on %1", args0:[{ type:"field_input", name:"TOPIC", text:"home/+/temperature" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when a message arrives on this MQTT topic. + stands for one level and # for everything below, like zigbee2mqtt/#. 'What arrived' gives its topic and text, plus the fields of a JSON message." },
     { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
@@ -515,10 +512,6 @@
       tooltip:"Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page." },
     V("rb_event", "what arrived: %1", [{ type:"field_input", name:"KEY", text:"text" }], null, { style:"conn",
       tooltip:"Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record." }),
-    V("rb_mqtt_read", "latest MQTT message on %1", [val("TOPIC")], null, { style:"conn", inputsInline:true,
-      tooltip:"The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics." }),
-    S("rb_mqtt_publish", "publish MQTT %1 to topic %2 keep it %3", [val("TEXT"), val("TOPIC"), { type:"field_checkbox", name:"RETAIN", checked:false }],
-      { style:"conn", inputsInline:true, tooltip:"Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown." }),
     // sync:connections-defs-begin
     /* Radarr and Sonarr (#398): reads, and a search that always asks */
     V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
@@ -578,6 +571,13 @@
       tooltip:"A record about the router or switch itself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and any other sensors it has." }),
     V("rb_mikrotik_log", "MikroTik log, last %1 lines", [val("N")], "Array", { style:"mikrotik", inputsInline:true,
       tooltip:"The last lines of the router's log, oldest first, each as \"time topics: message\"." }),
+    { type:"rb_mqtt_when", message0:"when an MQTT message arrives on %1", args0:[{ type:"field_input", name:"TOPIC", text:"home/+/temperature" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a message arrives on this MQTT topic. + stands for one level and # for everything below, like zigbee2mqtt/#. 'What arrived' gives its topic and text, plus the fields of a JSON message." },
+    V("rb_mqtt_read", "latest MQTT message on %1", [val("TOPIC")], null, { style:"conn", inputsInline:true,
+      tooltip:"The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics." }),
+    S("rb_mqtt_publish", "publish MQTT %1 to topic %2 keep it %3", [val("TEXT"), val("TOPIC"), { type:"field_checkbox", name:"RETAIN", checked:false }],
+      { style:"conn", inputsInline:true, tooltip:"Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown." }),
     /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
     V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
       tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),

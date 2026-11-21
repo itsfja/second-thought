@@ -279,7 +279,8 @@
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
-"Plex":"Plex"
+"Plex":"Plex",
+"MQTT":"MQTT"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",

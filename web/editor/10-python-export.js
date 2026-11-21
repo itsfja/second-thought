@@ -63,7 +63,7 @@
              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]), calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
-             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]), mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
+             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
@@ -74,6 +74,7 @@
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
+              mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
@@ -166,6 +167,9 @@
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
       "; router's certificate fingerprint to pin.",
       "MIKROTIK_URL = https://192.168.88.1", "MIKROTIK_USER = ", "MIKROTIK_PASSWORD = ", "MIKROTIK_CERT_SHA256 = ");
+    if (need.mqtt) out.push("", "[mqtt]",
+      "; Your MQTT broker, for example Mosquitto in Home Assistant (Settings, Add-ons). Add a username and password if it needs them.",
+      "MQTT_HOST = homeassistant.local", "; MQTT_PORT = 1883", "; MQTT_USERNAME = ", "; MQTT_PASSWORD = ", "; MQTT_TLS = yes   for an encrypted connection (port 8883)");
     if (need.nzbgeek) out.push("", "[nzbgeek]",
       "; NZBGeek, the Usenet indexer, through its Newznab API: its API key (My Account, API key). The search block",
       "; only reads; fetching an NZB asks first, and nothing else is ever sent.",
@@ -258,9 +262,6 @@
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
       "CALENDAR_URL = ");
-    if (need.mqtt) out.push("", "[mqtt]",
-      "; Your MQTT broker, for example Mosquitto in Home Assistant (Settings, Add-ons). Add a username and password if it needs them.",
-      "MQTT_HOST = homeassistant.local", "; MQTT_PORT = 1883", "; MQTT_USERNAME = ", "; MQTT_PASSWORD = ", "; MQTT_TLS = yes   for an encrypted connection (port 8883)");
     if (need.webhook) out.push("", "[web requests]",
       "; A long password that every web request must carry: http://127.0.0.1:8765/<address>?key=<this password>",
       "; or in an X-Second-Thought-Key header. Requests without it are refused.",
@@ -548,6 +549,7 @@
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
         case "rb_mikrotik_log": return "(await R.mikrotik_log(" + I("N", "20") + "))";
+        case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_nzbgeek_search": return "(await R.nzbgeek_search(" + I("QUERY", "\"\"") + "))";
         case "rb_pihole_summary": return "(await R.pihole_summary())";
         case "rb_pihole_top_domains": return "(await R.pihole_top_domains(" + I("N", "5") + "))";
@@ -575,7 +577,6 @@
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
         // sync:connections-pyread-end
-        case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_calendar": return "(await R.calendar_records(" + I("DAYS", "7") + "))";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
@@ -718,6 +719,7 @@
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
+          case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
@@ -732,7 +734,6 @@
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           // sync:connections-pyact-end
-          case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + (b.getFieldValue("UNIT") && b.getFieldValue("UNIT") !== "tokens" ? ", " + pyStr(b.getFieldValue("UNIT")) : "") + ")"); break;

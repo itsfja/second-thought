@@ -39,6 +39,7 @@ Made by tools/sync.py from i18n/nci.json: edit that, not this.
 - NZBGeek: NZBGeek
 - Pi-hole: Pi-hole
 - Plex: Plex
+- MQTT: MQTT
 - Listeners: they run while the exported program runs on schedule: Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli
 - No blocks match: Ahmo mochīhua ce tlaxtlapalli
 - Read and send: Xicpōhua ihuān xictitlani
