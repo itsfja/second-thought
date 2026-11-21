@@ -287,7 +287,8 @@
 "GitHub":"GitHub",
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
-"News feeds":"News feeds"
+"News feeds":"News feeds",
+"Web":"Web"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"प्रतिनिधेः साधनानि: तानि प्रतिनिधिखण्डस्य अन्तः पातय",

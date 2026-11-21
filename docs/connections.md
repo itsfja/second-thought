@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Calendar](#calendar) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt) · [News feeds](#news-feeds)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Calendar](#calendar) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt) · [News feeds](#news-feeds) · [Web](#web)
 
 ## Connections
 
@@ -12,9 +12,7 @@ The pink **Connections** blocks work without an agent too.
 
 **Listeners** start a script when something arrives:
 
-- **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
 - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
-- **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each, so adverts and visitor counters elsewhere on the page don't count. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
 
 **what arrived** gives what started the script. Every listener gives `text`, which sums it up; each block's tooltip lists its other fields, like `subject` for an email or `topic` for MQTT. **Telegram message** gives a Telegram message's words, sender or chat. On the page, right-click a listener and choose **Run this script** to try it with a sample of what arrives. Listeners only listen while the exported program runs on schedule.
 
@@ -27,7 +25,6 @@ Try **Morning briefing on Telegram** and **Email me a news digest** under Automa
 
 **Settings.** An exported program's `second-thought.ini` asks only for what it uses:
 
-- **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
 
 The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. To let the agent read pages on your own network, add `local_pages = yes`.
 
@@ -442,6 +439,17 @@ UNRAID_API_KEY = your-key
 ```
 
 If Unraid is behind HTTPS with a certificate this computer doesn't trust, `UNRAID_CERT_SHA256` pins it, as for MikroTik and UniFi (`--doctor` shows the fingerprint). `--doctor` says Unraid's version and the array's state.
+## Web
+
+Web requests, web search and watching a web page:
+
+- **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; `WEBHOOK_HOST = 0.0.0.0` lets other devices in. **What arrived** gives the text sent, and the fields of JSON or of the address.
+- **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
+- **search the web for …** (under Agents) answers from the model's own knowledge, saying plainly when something may be out of date; exported Python can search live.
+
+On the page the page-watch and web-request listeners use **sample data**. The listener starts from what's new after the program starts.
+
+**Settings:** `[web requests]` in `second-thought.ini` — `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. `feeds = ` (in `[feeds and pages]`) lists your news feeds. `--doctor` checks the port is free when the program can take web requests.
 <!-- sync:connections-docs-end -->
 
 ---

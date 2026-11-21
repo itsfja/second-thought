@@ -286,7 +286,8 @@
 "GitHub":"GitHub",
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
-"News feeds":"News feeds"
+"News feeds":"News feeds",
+"Web":"Web"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",

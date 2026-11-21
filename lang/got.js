@@ -286,7 +286,8 @@
 "GitHub":"GitHub",
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
-"News feeds":"News feeds"
+"News feeds":"News feeds",
+"Web":"Web"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",

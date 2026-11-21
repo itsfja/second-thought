@@ -287,7 +287,8 @@
 "GitHub":"GitHub",
 "Discord and Slack":"Discord ᛅᚾᛏ Slack",
 "Calendar":"ᚴᛅᛚᛁᚾᛏᛅᛦ",
-"News feeds":"ᚾᛁᚢᛋ feeds"
+"News feeds":"ᚾᛁᚢᛋ feeds",
+"Web":"ᚢᛁᛒ"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"ᛏᚢᛚ ᛁᚱᛁᚾᛏᚱᛁᚴᛅ: ᛚᛅᛏ ᚦᛅᚢ ᚠᛅᛚᛅ ᛁᚾ ᛁ ᛁᚱᛁᚾᛏᚱᛁᚴᛅᚴᚢᛒ",

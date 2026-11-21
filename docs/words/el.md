@@ -46,6 +46,7 @@ Made by tools/sync.py from i18n/el.json: edit that, not this.
 - Discord and Slack: Discord and Slack
 - Calendar: Calendar
 - News feeds: News feeds
+- Web: Web
 - Tools for the agent: drop them inside an agent block: Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα
 - Listeners: they run while the exported program runs on schedule: Ακροατές: τρέχουν όσο το εξαγόμενο πρόγραμμα τρέχει με προγραμματισμό
 - Read and send: Ανάγνωση και αποστολή

@@ -820,7 +820,6 @@
     addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
-  // sync:connections-page-end
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
   function pagePart(text, words){
     const ws = str(words).toLowerCase().split(/\s+/).filter(Boolean);
@@ -850,11 +849,12 @@
     flush();
     return out.slice(0, limit).join("\n") + (out.length > limit ? "\n\u2026 and " + (out.length - limit) + " more changed lines" : "");
   }
+  // sync:connections-page-end
   /* What a listener's script gets on the page when you right-click its 'when …' block and choose 'Run this script'. */
   function sampleArrival(b){
     switch (b.type) {
       case "rb_mqtt_when": { const m = (CONN.mqtt || {}).incoming || { topic:"home/test", text:"1" }; return mqttRecord(m.topic, m.text); }
-      case "rb_webhook_when": { const w = (CONN.webhook || {}).incoming || { text:"" }; const rec = mqttRecord("", w.text); delete rec.topic;
+      case "rb_webhook_when": { const w = ((CONN.web || {}).webhook || {}).incoming || { text:"" }; const rec = mqttRecord("", w.text); delete rec.topic;
         return Object.assign({ path:str(b.getFieldValue("PATH")).trim().replace(/^\/+|\/+$/g, "") || w.path, method:w.method || "POST" }, rec); }
       case "rb_email_when": { const m = ((CONN.email || {}).messages || [])[0] || { id:"1", from:"", subject:"", body:"" };
         return { id:m.id, from:m.from, subject:m.subject, body:m.body, text:"From: " + m.from + "\nSubject: " + m.subject + "\n\n" + m.body }; }
@@ -878,7 +878,7 @@
         const hm = d => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
         return { title:e.title, start:hm(e.start), end:hm(e.end), location:e.location, minutes:n, text:e.title + " at " + hm(e.start) + (e.location ? " (" + e.location + ")" : "") }; }
       case "rb_page_when": {
-        const pg = (CONN.page || {}).incoming || { url:"", title:"", before:"", after:"" }, url = str(b.getFieldValue("URL")).trim() || pg.url, words = str(b.getFieldValue("WORDS")).trim();
+        const pg = ((CONN.web || {}).page || {}).incoming || { url:"", title:"", before:"", after:"" }, url = str(b.getFieldValue("URL")).trim() || pg.url, words = str(b.getFieldValue("WORDS")).trim();
         const before = pagePart(pg.before, words), after = pagePart(pg.after, words), changed = pageChanges(before, after), title = pg.title;
         return { url, title, before, after, changed, text:(title || url) + " changed:\n" + changed }; }
       case "rb_discord_when": case "rb_slack_when": { const svc = b.type === "rb_discord_when" ? "discord" : "slack", c = (CONN.chat || {})[svc] || {}, m = c.incoming || { from:"Someone", text:"Hello" };

@@ -119,10 +119,10 @@ OTHER_SETTINGS = {
     "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID",
     "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
     "UNRAID_URL", "UNRAID_CERT_SHA256",
+    "WEBHOOK_HOST", "WEBHOOK_PORT",
     # sync:connections-known-end
     "HA_TTS_ENTITY",
     "HA_URL", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
-    "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
 
@@ -183,7 +183,7 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY",
-    "HA_TOKEN", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
+    "HA_TOKEN", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
      "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
@@ -203,6 +203,7 @@ KEYCHAIN_NAMES = (
     "TELEGRAM_BOT_TOKEN",
     "UNIFI_API_KEY",
     "UNRAID_API_KEY",
+    "WEBHOOK_SECRET",
     # sync:connections-secret-end
     )
 
@@ -1587,8 +1588,6 @@ def docker_call(method, path):
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
 # to comment on pull requests it also needs pull request write access).
 GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
-# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
-PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1683,6 +1682,10 @@ def unraid_call(method, query):
         if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
+# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
+PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
+
+# Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # sync:connections-fns-end
 
 
@@ -1819,7 +1822,6 @@ def ha_sensitive(service, entity="", data=None):
     return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
-# Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
 # Several addresses can be separated by spaces.
@@ -2177,7 +2179,6 @@ CAPABILITIES = [
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("ha_act", "control your Home Assistant devices", True),
-    ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
@@ -2194,6 +2195,7 @@ CAPABILITIES = [
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("telegram_send", "send Telegram messages", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
+    ("webhook", "accept web requests from other computers", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -2220,8 +2222,8 @@ CAPABILITIES = [
     ("telegram_read", "read your Telegram messages", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
-    # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
+    # sync:connections-capabilities-read-end
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
@@ -3256,38 +3258,6 @@ class Connections:
     # Web pages
     PAGE_LINES_AFTER = 2       # with 'only the part containing', each matching line keeps this many lines after it
     MAX_PAGE_KEEP = 200_000    # characters of each page kept to compare with next time
-
-    @staticmethod
-    def page_part(text, words):
-        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
-        words = [w for w in to_str(words).lower().split() if w]
-        if not words:
-            return text
-        lines, keep = text.splitlines(), set()
-        for i, line in enumerate(lines):
-            if all(w in line.lower() for w in words):
-                keep.update(range(i, min(len(lines), i + 1 + Connections.PAGE_LINES_AFTER)))
-        return "\n".join(lines[i] for i in sorted(keep))
-
-    @staticmethod
-    def page_changes(before, after, limit=20):
-        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
-        import difflib
-        a, c, out = before.splitlines(), after.splitlines(), []
-        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
-            if op == "equal":
-                continue
-            gone, new = a[i1:i2], c[j1:j2]
-            for k in range(max(len(gone), len(new))):
-                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
-                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
-        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
-
-    async def _read_page_text(self, url):
-        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
-        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
-        return page_text(_decode(data, ctype), ctype)
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
                          "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
@@ -5758,65 +5728,6 @@ class Connections:
         await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
         self.log(tr("Unraid"), what, tr("done"))
         return True
-    # sync:connections-runtime-end
-
-    # ----- Listeners: scripts that start when something arrives -----
-    # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
-    # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
-    LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
-                    "github": "GitHub", "github_issue": "GitHub issues", "github_release": "GitHub releases", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
-
-    @staticmethod
-    def event(key="text"):
-        v = MESSAGE_VALUE.get()
-        key = to_str(key).strip()
-        if not isinstance(v, dict):
-            return v if key in ("", "text", "all") else ""
-        return dict(v) if key in ("", "all") else v.get(key, "")
-
-    @staticmethod
-    def _poll(seconds):
-        """How often a listener checks. RB_POLL_SECONDS (the tests use it) makes every listener check that often."""
-        try:
-            return max(0.2, float(os.environ["RB_POLL_SECONDS"])) if os.environ.get("RB_POLL_SECONDS") else seconds
-        except ValueError:
-            return seconds
-
-    def _fire(self, fn, payload, label):
-        busy = getattr(self, "_listen_busy", None)
-        if busy and not busy.done():
-            self.start_script(fn, payload)
-        else:
-            self._listen_busy = asyncio.ensure_future(self.run([(fn, payload)], label))
-
-    def _background(self, coro):
-        """Starts a task that runs for as long as the program does, and keeps hold of it: asyncio itself keeps only a
-        weak reference, so a task nobody holds can be collected while it waits, and then it silently stops."""
-        tasks = self.__dict__.setdefault("_background_tasks", set())
-        task = asyncio.ensure_future(coro)
-        tasks.add(task)
-        task.add_done_callback(tasks.discard)
-        return task
-
-    async def _listen(self, listeners):
-        groups = {}
-        for kind, arg, fn in listeners:
-            groups.setdefault(kind, []).append((arg, fn))
-        for kind, items in groups.items():
-            self._background(self._keep_listening(kind, items))
-
-    async def _keep_listening(self, kind, items):
-        runner = getattr(self, "_listen_" + kind)
-        while True:
-            try:
-                await runner(items)
-                return
-            except asyncio.CancelledError:
-                raise
-            except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
-                print(tr("  ({x}: {x2} Trying again in a minute.)", x=self.LISTEN_NAMES.get(kind, kind), x2=self._describe(e)), flush=True)
-                await asyncio.sleep(self._poll(60))
-
     async def _listen_webhook(self, items):
         import hmac
         from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -5886,6 +5797,140 @@ class Connections:
         print(tr("Listening for web requests on port {port}: {x}.", port=port, x=", ".join(f"http://{where}:{port}/{p_}?key=…" for p_ in paths)), flush=True)
         while True:
             await asyncio.sleep(3600)
+
+    @staticmethod
+    def page_part(text, words):
+        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
+        words = [w for w in to_str(words).lower().split() if w]
+        if not words:
+            return text
+        lines, keep = text.splitlines(), set()
+        for i, line in enumerate(lines):
+            if all(w in line.lower() for w in words):
+                keep.update(range(i, min(len(lines), i + 1 + Connections.PAGE_LINES_AFTER)))
+        return "\n".join(lines[i] for i in sorted(keep))
+
+    @staticmethod
+    def page_changes(before, after, limit=20):
+        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
+        import difflib
+        a, c, out = before.splitlines(), after.splitlines(), []
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
+            if op == "equal":
+                continue
+            gone, new = a[i1:i2], c[j1:j2]
+            for k in range(max(len(gone), len(new))):
+                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
+                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
+        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
+
+    async def _read_page_text(self, url):
+        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
+        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
+            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
+        return page_text(_decode(data, ctype), ctype)
+
+    async def _listen_page(self, items):
+        await asyncio.gather(*(self._watch_page(arg, fn) for arg, fn in items))
+
+    async def _watch_page(self, arg, fn):
+        """'when the web page … changes': checks the page every N minutes. The first check only remembers it."""
+        url, words, minutes = (to_str(arg).split("|") + ["", "", ""])[:3]
+        url, words = url.strip(), words.strip()
+        every = max(1, round_js(num(minutes)) or 60) * 60
+        key = url + ("  |  " + words.lower() if words else "")
+        quiet_noted = False
+        print((tr("Watching {url} (the part with “{words}”) for changes, every {n} min.", url=url, words=words, n=every // 60) if words else
+                   tr("Watching {url} for changes, every {n} min.", url=url, n=every // 60)), flush=True)
+        while True:
+            try:
+                title, text = await self._read_page_text(url)
+                now = self.page_part(text, words).strip()[:self.MAX_PAGE_KEEP]
+                if not text.strip() or (words and not now):
+                    if not quiet_noted:
+                        quiet_noted = True
+                        print("  " + (tr("(Page watcher: {url} has no readable words; it may need a browser to show them. It's checked again each time.)", url=_short(url, 80))
+                                     if not text.strip() else tr("(Page watcher: {url} has nothing with “{words}” in it right now. It's checked again each time.)",
+                                                                 url=_short(url, 80), words=words)), flush=True)
+                else:
+                    quiet_noted = False
+                    with _locked(PAGES_FILE):
+                        try:
+                            with open(PAGES_FILE, encoding="utf-8") as f:
+                                seen = json.load(f)
+                        except (OSError, ValueError):
+                            seen = {}
+                        before = (seen.get(key) or {}).get("text")
+                        if before != now:
+                            seen[key] = {"text": now, "checked": int(time.time())}
+                            _write_json(PAGES_FILE, seen)
+                    if before is not None and before != now:
+                        changed = self.page_changes(before, now)
+                        cut = lambda t: t if len(t) <= 2000 else t[:1999] + "…"  # noqa: E731 - keeps the lines, unlike _short
+                        rec = {"url": url, "title": title, "before": cut(before), "after": cut(now), "changed": changed,
+                               "text": f"{title or url} changed:\n{changed}"}
+                        self._fire(fn, rec, tr("Page changed: {page}", page=_short(title or url, 40)))
+            except RunError as e:
+                print(tr("  (Page check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(every))
+    # sync:connections-runtime-end
+
+    # ----- Listeners: scripts that start when something arrives -----
+    # Each 'when …' block below runs while the program runs on schedule (run-on-schedule, or --schedule). What arrived is
+    # a record; 'what arrived' gives one of its fields, and every record has a 'text' field that sums it up.
+    LISTEN_NAMES = {"homey": "Homey", "mqtt": "MQTT", "webhook": "Web request", "email": "Email", "feed": "News feed", "folder": "Folder",
+                    "github": "GitHub", "github_issue": "GitHub issues", "github_release": "GitHub releases", "calendar": "Calendar", "discord": "Discord", "slack": "Slack", "page": "Web page", "ha_event": "Home Assistant events"}
+
+    @staticmethod
+    def event(key="text"):
+        v = MESSAGE_VALUE.get()
+        key = to_str(key).strip()
+        if not isinstance(v, dict):
+            return v if key in ("", "text", "all") else ""
+        return dict(v) if key in ("", "all") else v.get(key, "")
+
+    @staticmethod
+    def _poll(seconds):
+        """How often a listener checks. RB_POLL_SECONDS (the tests use it) makes every listener check that often."""
+        try:
+            return max(0.2, float(os.environ["RB_POLL_SECONDS"])) if os.environ.get("RB_POLL_SECONDS") else seconds
+        except ValueError:
+            return seconds
+
+    def _fire(self, fn, payload, label):
+        busy = getattr(self, "_listen_busy", None)
+        if busy and not busy.done():
+            self.start_script(fn, payload)
+        else:
+            self._listen_busy = asyncio.ensure_future(self.run([(fn, payload)], label))
+
+    def _background(self, coro):
+        """Starts a task that runs for as long as the program does, and keeps hold of it: asyncio itself keeps only a
+        weak reference, so a task nobody holds can be collected while it waits, and then it silently stops."""
+        tasks = self.__dict__.setdefault("_background_tasks", set())
+        task = asyncio.ensure_future(coro)
+        tasks.add(task)
+        task.add_done_callback(tasks.discard)
+        return task
+
+    async def _listen(self, listeners):
+        groups = {}
+        for kind, arg, fn in listeners:
+            groups.setdefault(kind, []).append((arg, fn))
+        for kind, items in groups.items():
+            self._background(self._keep_listening(kind, items))
+
+    async def _keep_listening(self, kind, items):
+        runner = getattr(self, "_listen_" + kind)
+        while True:
+            try:
+                await runner(items)
+                return
+            except asyncio.CancelledError:
+                raise
+            except Exception as e:  # noqa: BLE001 - say what went wrong, then try again
+                print(tr("  ({x}: {x2} Trying again in a minute.)", x=self.LISTEN_NAMES.get(kind, kind), x2=self._describe(e)), flush=True)
+                await asyncio.sleep(self._poll(60))
 
     def _mail_new(self, c, last):
         """Emails that arrived since the last check: (newest id, [records])."""
@@ -5983,50 +6028,6 @@ class Connections:
                     known[d].add(n)
                     self._fire(fn, self._folder_file(path, size), tr("New file: {name}", name=n))
                 known[d] &= names
-
-    async def _listen_page(self, items):
-        await asyncio.gather(*(self._watch_page(arg, fn) for arg, fn in items))
-
-    async def _watch_page(self, arg, fn):
-        """'when the web page … changes': checks the page every N minutes. The first check only remembers it."""
-        url, words, minutes = (to_str(arg).split("|") + ["", "", ""])[:3]
-        url, words = url.strip(), words.strip()
-        every = max(1, round_js(num(minutes)) or 60) * 60
-        key = url + ("  |  " + words.lower() if words else "")
-        quiet_noted = False
-        print((tr("Watching {url} (the part with “{words}”) for changes, every {n} min.", url=url, words=words, n=every // 60) if words else
-                   tr("Watching {url} for changes, every {n} min.", url=url, n=every // 60)), flush=True)
-        while True:
-            try:
-                title, text = await self._read_page_text(url)
-                now = self.page_part(text, words).strip()[:self.MAX_PAGE_KEEP]
-                if not text.strip() or (words and not now):
-                    if not quiet_noted:
-                        quiet_noted = True
-                        print("  " + (tr("(Page watcher: {url} has no readable words; it may need a browser to show them. It's checked again each time.)", url=_short(url, 80))
-                                     if not text.strip() else tr("(Page watcher: {url} has nothing with “{words}” in it right now. It's checked again each time.)",
-                                                                 url=_short(url, 80), words=words)), flush=True)
-                else:
-                    quiet_noted = False
-                    with _locked(PAGES_FILE):
-                        try:
-                            with open(PAGES_FILE, encoding="utf-8") as f:
-                                seen = json.load(f)
-                        except (OSError, ValueError):
-                            seen = {}
-                        before = (seen.get(key) or {}).get("text")
-                        if before != now:
-                            seen[key] = {"text": now, "checked": int(time.time())}
-                            _write_json(PAGES_FILE, seen)
-                    if before is not None and before != now:
-                        changed = self.page_changes(before, now)
-                        cut = lambda t: t if len(t) <= 2000 else t[:1999] + "…"  # noqa: E731 - keeps the lines, unlike _short
-                        rec = {"url": url, "title": title, "before": cut(before), "after": cut(now), "changed": changed,
-                               "text": f"{title or url} changed:\n{changed}"}
-                        self._fire(fn, rec, tr("Page changed: {page}", page=_short(title or url, 40)))
-            except RunError as e:
-                print(tr("  (Page check failed: {e})", e=e), flush=True)
-            await asyncio.sleep(self._poll(every))
 
 
 import atexit  # noqa: E402,F811 - below the line, so python/runtime.py has them too (settings.py doesn't import these)
@@ -8131,7 +8132,6 @@ class Doctor:
                 return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
-        # sync:connections-check-end
         if has("webhook"):
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():
@@ -8178,6 +8178,7 @@ class Doctor:
                     text += " · " + tr("your FR24_API_KEY is set (each call costs credits, so it isn't checked here)")
                 return text
             out.append((f"MCP server “{name}”", server))
+        # sync:connections-check-end
         if has("memory"):
             async def memory():
                 folder = os.path.dirname(os.path.abspath(MEMORY_FILE))
@@ -8409,7 +8410,7 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
+                "News feeds": "RB_FEEDS", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
@@ -8433,6 +8434,7 @@ class Doctor:
                  "Telegram": "TELEGRAM_BOT_TOKEN",
                 "UniFi": "UNIFI_URL",
                 "Unraid": "UNRAID_URL",
+                "Web requests": "WEBHOOK_SECRET",
                 # sync:connections-settingsmap-end
 }.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

@@ -46,6 +46,7 @@ Made by tools/sync.py from i18n/qnr.json: edit that, not this.
 - Discord and Slack: Discord ᛅᚾᛏ Slack
 - Calendar: ᚴᛅᛚᛁᚾᛏᛅᛦ
 - News feeds: ᚾᛁᚢᛋ feeds
+- Web: ᚢᛁᛒ
 - Tools for the agent: drop them inside an agent block: ᛏᚢᛚ ᛁᚱᛁᚾᛏᚱᛁᚴᛅ: ᛚᛅᛏ ᚦᛅᚢ ᚠᛅᛚᛅ ᛁᚾ ᛁ ᛁᚱᛁᚾᛏᚱᛁᚴᛅᚴᚢᛒ
 - Listeners: they run while the exported program runs on schedule: ᚼᛚᚢᛋᛏᛁᚾᛏᚱ: ᚦᛅᛁᛦ ᚴᛅᚢᚱᛅ ᛘᛁᚦᛅᚾ ᚢᛏᚠᛚᚢᛏ ᚠᚢᚱᛁᛏ ᚴᛅᚢᚱᛁᛦ ᛁᛒᛏᛁᛦ ᛏᛁᚦᚢᛘ
 - Read and send: ᛚᛁᛋᛅ ᚢᚴ ᛋᛁᚾᛏᛅ

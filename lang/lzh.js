@@ -285,7 +285,8 @@
 "GitHub":"GitHub",
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
-"News feeds":"News feeds"
+"News feeds":"News feeds",
+"Web":"Web"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"聽者：所出之程依時而行，則此諸塊行",

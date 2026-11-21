@@ -66,35 +66,3 @@
     # Web pages
     PAGE_LINES_AFTER = 2       # with 'only the part containing', each matching line keeps this many lines after it
     MAX_PAGE_KEEP = 200_000    # characters of each page kept to compare with next time
-
-    @staticmethod
-    def page_part(text, words):
-        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
-        words = [w for w in to_str(words).lower().split() if w]
-        if not words:
-            return text
-        lines, keep = text.splitlines(), set()
-        for i, line in enumerate(lines):
-            if all(w in line.lower() for w in words):
-                keep.update(range(i, min(len(lines), i + 1 + Connections.PAGE_LINES_AFTER)))
-        return "\n".join(lines[i] for i in sorted(keep))
-
-    @staticmethod
-    def page_changes(before, after, limit=20):
-        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
-        import difflib
-        a, c, out = before.splitlines(), after.splitlines(), []
-        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
-            if op == "equal":
-                continue
-            gone, new = a[i1:i2], c[j1:j2]
-            for k in range(max(len(gone), len(new))):
-                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
-                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
-        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
-
-    async def _read_page_text(self, url):
-        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
-        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
-        return page_text(_decode(data, ctype), ctype)

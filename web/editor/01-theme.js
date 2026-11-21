@@ -26,6 +26,7 @@
     telegram:"#C2185B",
     unifi:"#C2185B",
     unraid:"#C2185B",
+    web:"#C2185B",
     // sync:connections-hues-end
   };
   function shade(hex, amt){
