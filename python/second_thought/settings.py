@@ -96,9 +96,10 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", 
     # sync:connections-known-begin
     "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
+    "CALENDAR_URL",
      "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     "SLACK_API_URL", "SLACK_CHANNEL_ID",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",

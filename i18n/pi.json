@@ -1019,7 +1019,8 @@
   "Telegram": "Telegram",
   "Email": "Email",
   "GitHub": "GitHub",
-  "Discord and Slack": "Discord and Slack"
+  "Discord and Slack": "Discord and Slack",
+  "Calendar": "Calendar"
  },
  "labels": {
   "Listeners: they run while the exported program runs on schedule": "सोतारो: नीहटे किच्चक्कमे कालयोजनाय चालिते चालियन्ति",

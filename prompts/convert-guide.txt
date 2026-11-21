@@ -179,6 +179,10 @@ Ask Claude:
   rb_set_instructions (TEXT): set instructions for Claude to %1 — Sent with every Claude call after this block, for example a role, tone or house style.
   rb_web_search (TEXT): search the web for %1 — In exported Python this searches the live web. In this page Claude can't browse, so it answers from its own knowledge and the log says so.  [web]
 
+Calendar:
+  rb_cal_when (N): when a calendar event starts in %1 minutes — Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text.  [calendar]
+  rb_calendar (DAYS): calendar for the next %1 days — Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar.  [calendar]
+
 Coinbase:
   rb_coinbase_balances: Coinbase balances — A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio.  [coinbase_read]
   rb_coinbase_cancel (ORDER): cancel Coinbase order %1 — Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there.  [coinbase_trade]
@@ -190,8 +194,6 @@ Coinbase:
   rb_coinbase_value: Coinbase portfolio value — What your Coinbase portfolio is worth, in your currency.  [coinbase_read]
 
 Connections:
-  rb_cal_when (N): when a calendar event starts in %1 minutes — Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text.  [calendar]
-  rb_calendar (DAYS): calendar for the next %1 days — Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar.  [calendar]
   rb_event (KEY): what arrived: %1 — Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record.
   rb_feed_news (URL): news from feed %1 — The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.  [feeds]
   rb_feed_when (URL): when there's something new in feed %1 — Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.  [feeds]

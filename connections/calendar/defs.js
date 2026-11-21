@@ -1,0 +1,5 @@
+    V("rb_calendar", "calendar for the next %1 days", [val("DAYS")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar." }),
+    { type:"rb_cal_when", message0:"when a calendar event starts in %1 minutes", args0:[{ type:"field_number", name:"N", value:15, min:0, max:1440 }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text." },

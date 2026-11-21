@@ -44,6 +44,7 @@ Made by tools/sync.py from i18n/fr.json: edit that, not this.
 - Email: Email
 - GitHub: GitHub
 - Discord and Slack: Discord and Slack
+- Calendar: Calendar
 - Tools for the agent: drop them inside an agent block: Outils pour l'agent : déposez-les dans un bloc agent
 - Listeners: they run while the exported program runs on schedule: Écouteurs : ils tournent pendant que le programme exporté fonctionne en planification
 - Read and send: Lire et envoyer

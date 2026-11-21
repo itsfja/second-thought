@@ -86,10 +86,10 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_page_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
+      B("rb_feed_news", { URL:T("") }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
       B("rb_ask_me", { TEXT:T("What should I write about?") }), B("rb_answer"), B("rb_approve"), B("rb_choose"), B("rb_ask_first")
@@ -128,6 +128,10 @@
     // sync:connections-toolbox-begin
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
+    ]},
+    { kind:"category", name:"Calendar", categorystyle:"calendar", service:"calendar", contents:[
+      B("rb_cal_when"), B("rb_event"),
+      B("rb_calendar", { DAYS:N(7) })
     ]},
     { kind:"category", name:"Discord and Slack", categorystyle:"chat", service:"chat", contents:[
       B("rb_discord_when"), B("rb_slack_when"), B("rb_event"),

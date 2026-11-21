@@ -283,7 +283,8 @@
 "Telegram":"Telegram",
 "Email":"Email",
 "GitHub":"GitHub",
-"Discord and Slack":"Discord and Slack"
+"Discord and Slack":"Discord and Slack",
+"Calendar":"Calendar"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",

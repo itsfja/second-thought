@@ -315,6 +315,13 @@
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
       case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
+      case "rb_calendar": {
+        const days = Math.max(1, Math.min(62, Math.floor(num(await input(b, tc, "DAYS", 7)) + 0.5) || 7)), start = parseDay("today");
+        const recs = sampleEvents(start, new Date(start.getTime() + days * 86400000)).map(e => ({ day:dayText(e.start), start:e.all_day ? "" : pad2(e.start.getHours()) + ":" + pad2(e.start.getMinutes()),
+          end:e.all_day ? "" : pad2(e.end.getHours()) + ":" + pad2(e.end.getMinutes()), title:e.title, location:e.location }));
+        addStep("Calendar", { mono:true, text:recs.map(r => r.day + " " + (r.start || tr("all day")) + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} events", { n:recs.length }), "ok");
+        return recs;
+      }
       case "rb_coinbase_balances": return coinbaseBalances();
       case "rb_coinbase_value": return coinbaseValue();
       case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
@@ -378,13 +385,6 @@
         const items = sampleFeedItems(url, 10);
         const recs = items.map(i => ({ feed:i.feed, title:i.title, link:i.link, date:whenText(i.date), summary:i.summary }));
         addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} items", { n:recs.length }), "ok");
-        return recs;
-      }
-      case "rb_calendar": {
-        const days = Math.max(1, Math.min(62, Math.floor(num(await input(b, tc, "DAYS", 7)) + 0.5) || 7)), start = parseDay("today");
-        const recs = sampleEvents(start, new Date(start.getTime() + days * 86400000)).map(e => ({ day:dayText(e.start), start:e.all_day ? "" : pad2(e.start.getHours()) + ":" + pad2(e.start.getMinutes()),
-          end:e.all_day ? "" : pad2(e.end.getHours()) + ":" + pad2(e.end.getMinutes()), title:e.title, location:e.location }));
-        addStep("Calendar", { mono:true, text:recs.map(r => r.day + " " + (r.start || tr("all day")) + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} events", { n:recs.length }), "ok");
         return recs;
       }
       case "rb_rec_new": return {};
