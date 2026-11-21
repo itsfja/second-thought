@@ -17,11 +17,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
-from .core import (SAFETY, coinbase_money, mikrotik_allowed, proxmox_call, docker_call, arr_call, ARR_SEARCH, unraid_call, plex_call, tautulli_call, DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
+from .core import (SAFETY, coinbase_money, proxmox_call, docker_call, arr_call, ARR_SEARCH, unraid_call, plex_call, tautulli_call, DISCORD_API, GITHUB_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
     Picture, Retryable, RunError, _clean_num, SLACK_API, TELEGRAM_API, TELEGRAM_FILE, WEEKDAYS, _WebSocket, _locked, _num_like,
     _short, _write_json, ha_sensitive, num, read_text_file, round_js, to_str, _MEDIA)
 from .core import (
     # sync:connections-imports-begin
+    mikrotik_allowed,
     nzbgeek_call,
     pihole_call,
     powerwall_allowed,
@@ -2454,6 +2455,7 @@ class Connections:
         self.log(tr("Proxmox"), what, tr("done"))
         return True
 
+    # sync:connections-runtime-begin
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -2583,8 +2585,6 @@ class Connections:
         n = max(1, min(500, int(num(count) or 20)))
         rows = [r for r in await self._mikrotik("GET", "/rest/log") if isinstance(r, dict)][-n:]
         return [f"{to_str(r.get('time'))} {to_str(r.get('topics'))}: {to_str(r.get('message'))}" for r in rows]
-
-    # sync:connections-runtime-begin
     # NZBGeek (#400)
     # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
     # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,

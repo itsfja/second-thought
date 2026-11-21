@@ -637,6 +637,7 @@
     addStep("Proxmox", { mono:true, text:what }).done("sample cluster", "ok");
     return true;
   }
+  // sync:connections-page-begin
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
   const mtSample = () => { connNote("MikroTik"); return CONN.mikrotik || {}; };
@@ -672,7 +673,6 @@
     const n = Math.max(1, Math.min(500, Math.trunc(num(count)) || 20));
     return (mtSample().log || []).slice(-n).map(r => str(r.time) + " " + str(r.topics) + ": " + str(r.message));
   }
-  // sync:connections-page-begin
   /* NZBGeek on the page (#400): a sample search. Exported Python talks to its Newznab API: a search that only
      reads, and a fetch that always asks. */
   const nzbgeekSample = () => { connNote("NZBGeek"); return (CONN.nzbgeek || {})["search"] || []; };

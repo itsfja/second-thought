@@ -148,8 +148,7 @@
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
-    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade", rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
-    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",     rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
+    rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",         rb_proxmox_nodes:"proxmox_read", rb_proxmox_guests:"proxmox_read", rb_proxmox_storage:"proxmox_read", rb_proxmox_tasks:"proxmox_read",
     rb_proxmox_power:"proxmox_control", rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control", rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
@@ -165,6 +164,8 @@
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     // sync:connections-caps-begin
+    rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
+    rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",
     rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
     rb_pihole_summary:"pihole_read", rb_pihole_top_domains:"pihole_read", rb_pihole_top_clients:"pihole_read", rb_pihole_blocking:"pihole_control",
     rb_pihole_enable:"pihole_control", rb_pihole_allow:"pihole_control", rb_pihole_deny:"pihole_control",
@@ -606,6 +607,15 @@
     S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
       { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),
     // sync:connections-defs-begin
+    /* MikroTik (#360): read only */
+    V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
+      tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
+    V("rb_mikrotik_sfp", "MikroTik SFP modules", [], "Array", { style:"mikrotik",
+      tooltip:"A list of records, one for each SFP module plugged in: port, module, temperature (°C), rx_power and tx_power (dBm)." }),
+    V("rb_mikrotik_health", "MikroTik health", [], null, { style:"mikrotik",
+      tooltip:"A record about the router or switch itself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and any other sensors it has." }),
+    V("rb_mikrotik_log", "MikroTik log, last %1 lines", [val("N")], "Array", { style:"mikrotik", inputsInline:true,
+      tooltip:"The last lines of the router's log, oldest first, each as \"time topics: message\"." }),
     /* NZBGeek (#400): a search that only reads, and a fetch that always asks */
     V("rb_nzbgeek_search", "search NZBGeek for %1", [val("QUERY")], "Array", { style:"nzbgeek",
       tooltip:"A list of records, one for each release the indexer has for these words: title, id, size_mb, grabs, posted (when it was posted) and group. It only reads: nothing is ever downloaded. Needs NZBGEEK_API_KEY in second-thought.ini. On this page it uses a sample search." }),
@@ -649,15 +659,6 @@
     V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
     // sync:connections-defs-end
-    /* MikroTik (#360): read only */
-    V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
-      tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
-    V("rb_mikrotik_sfp", "MikroTik SFP modules", [], "Array", { style:"mikrotik",
-      tooltip:"A list of records, one for each SFP module plugged in: port, module, temperature (°C), rx_power and tx_power (dBm)." }),
-    V("rb_mikrotik_health", "MikroTik health", [], null, { style:"mikrotik",
-      tooltip:"A record about the router or switch itself: board, version, uptime, cpu_load (%), free_memory (MB), temperature (°C), and any other sensors it has." }),
-    V("rb_mikrotik_log", "MikroTik log, last %1 lines", [val("N")], "Array", { style:"mikrotik", inputsInline:true,
-      tooltip:"The last lines of the router's log, oldest first, each as \"time topics: message\"." }),
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),

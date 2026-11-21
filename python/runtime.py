@@ -93,8 +93,9 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
+    "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
@@ -166,8 +167,9 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "MIKROTIK_PASSWORD", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY",
+    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "COINBASE_KEY", "PROXMOX_TOKEN_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
+    "MIKROTIK_PASSWORD",
     "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
     "POWERWALL_PASSWORD",
@@ -1163,9 +1165,6 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
-    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
-    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
-    # the network with it, and nothing here is worth that.
     # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
     # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
     # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
@@ -1201,6 +1200,11 @@ SAFETY = {
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     # sync:connections-safety-begin
+    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
+    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
+    # the network with it, and nothing here is worth that.
+    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
+                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
     # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
@@ -1227,8 +1231,6 @@ SAFETY = {
     # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-end
-    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
-                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -1345,6 +1347,10 @@ def coinbase_money(method, path):
 
 
 # sync:connections-fns-begin
+def mikrotik_allowed(method, path):
+    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 def nzbgeek_call(method, query):
     """"free" for one of NZBGeek's Newznab reads (a search, or t=caps), "asks" for the one fetch (t=get, an NZB
     file, with a paid account's key), and None for anything else, which is never sent (#400). The query is read as
@@ -1382,12 +1388,6 @@ def unifi_allowed(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
-
-
-def mikrotik_allowed(method, path):
-    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 
 
 def proxmox_call(method, path):
@@ -1991,13 +1991,13 @@ CAPABILITIES = [
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
-    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
@@ -4842,6 +4842,7 @@ class Connections:
         self.log(tr("Proxmox"), what, tr("done"))
         return True
 
+    # sync:connections-runtime-begin
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -4971,8 +4972,6 @@ class Connections:
         n = max(1, min(500, int(num(count) or 20)))
         rows = [r for r in await self._mikrotik("GET", "/rest/log") if isinstance(r, dict)][-n:]
         return [f"{to_str(r.get('time'))} {to_str(r.get('topics'))}: {to_str(r.get('message'))}" for r in rows]
-
-    # sync:connections-runtime-begin
     # NZBGeek (#400)
     # NZBGeek's Newznab API: NZBGEEK_API_KEY (My Account, API key) and, if it ever moves, NZBGEEK_URL (the default is
     # https://api.nzbgeek.info). The searches and t=caps are reads (nzbgeek_free); the one fetch (t=get, an NZB file,
@@ -7909,6 +7908,7 @@ class Doctor:
         tiers = [getattr(self, "primary", None)] + list(getattr(self, "backups", None) or [])
         return [t for t in tiers if isinstance(t, str) and t]
 
+    # sync:connections-check-helper-begin
     async def _doctor_mikrotik(self):
         """The MikroTik check (#360): reachable, the certificate pinned, and an account that can only read."""
         base = os.environ.get("MIKROTIK_URL", "").strip()
@@ -7928,6 +7928,7 @@ class Doctor:
         if extra:
             return "NOTE", said + "; " + tr("the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.", group=group, what=", ".join(extra))
         return said
+    # sync:connections-check-helper-end
 
     @staticmethod
     def _mt_fingerprint(base):
@@ -7976,11 +7977,11 @@ class Doctor:
                     return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
+        # sync:connections-check-begin
         if has("mikrotik_read"):
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
-        # sync:connections-check-begin
         if has("nzbgeek_read", "nzbgeek_fetch"):
             async def nzbgeek():
                 raw = await self._nzbgeek({"t": "caps", "o": "json"})
@@ -8415,8 +8416,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",

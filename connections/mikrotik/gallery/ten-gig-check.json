@@ -1,0 +1,271 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "ten-gig-check",
+  "gallery": {
+    "title": "Is the 10Gb link at 10Gb?",
+    "category": "home",
+    "description": "Each morning, reads your MikroTik switch's ports and SFP modules and sends you a Telegram message if a port came up slower than it should, its errors or drops grew since yesterday, or a module runs hot or its light is weak. It only reads: nothing on the switch changes.",
+    "tip": "Needs MIKROTIK_URL, a read-only MIKROTIK_USER and MIKROTIK_PASSWORD, and MIKROTIK_CERT_SHA256 (--doctor shows it). Change the expected speeds to match your ports.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_ports",
+        "name": "ports"
+      },
+      {
+        "id": "g_modules",
+        "name": "modules"
+      },
+      {
+        "id": "g_report",
+        "name": "report"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 8,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "check"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_ports"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_mikrotik_ports"
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_modules"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_mikrotik_sfp"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_report"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_ask",
+                            "inputs": {
+                              "TEXT": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "Check my MikroTik switch. Every sfp-sfpplus port that is running should be at 10Gbps; ether ports at 1Gbps. Say, in under 100 words: any port slower than it should be, any port whose errors or drops grew since yesterday, and any module above 60 °C or with rx_power below -10 dBm. If all is well, say so in one line.\n\nPorts now:\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_ports"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\n\nPorts yesterday (empty the first day):\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD3": {
+                                      "block": {
+                                        "type": "rb_mem_get",
+                                        "inputs": {
+                                          "NAME": {
+                                            "shadow": {
+                                              "type": "text",
+                                              "fields": {
+                                                "TEXT": "MikroTik ports yesterday"
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD4": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\n\nSFP modules:\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD5": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_modules"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 6
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_mem_set",
+                          "fields": {
+                            "KIND": "permanent"
+                          },
+                          "inputs": {
+                            "VALUE": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_ports"
+                                  }
+                                }
+                              }
+                            },
+                            "NAME": {
+                              "shadow": {
+                                "type": "text",
+                                "fields": {
+                                  "TEXT": "MikroTik ports yesterday"
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_tg_send",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_report"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "rb_finish_with",
+                                  "inputs": {
+                                    "TEXT": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_report"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 290
+        }
+      ]
+    }
+  }
+}

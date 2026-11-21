@@ -89,9 +89,6 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
-    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
-    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
-    # the network with it, and nothing here is worth that.
     # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
     # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
     # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
@@ -127,6 +124,11 @@ SAFETY = {
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     # sync:connections-safety-begin
+    # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
+    # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
+    # the network with it, and nothing here is worth that.
+    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
+                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # NZBGeek's Newznab API (#400): one GET to /api, so the gate reads the query. The searches and t=caps are reads;
     # the one fetch (t=get, an NZB file, with a paid account's key) always asks, live. Nothing else is ever sent:
     # no account changes, no VIP time, no payments, and a search that smuggles t=get is refused.
@@ -153,8 +155,6 @@ SAFETY = {
     # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
     # sync:connections-safety-end
-    "mikrotik_free": [["GET", r"^/rest/(interface|system/resource|system/health|log|user|user/group)$"],
-                      ["POST", r"^/rest/interface/ethernet/monitor$"]],
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
     # Tools that let an agent see private things. An agent with any of them can't read a page or feed whose address it
@@ -271,6 +271,10 @@ def coinbase_money(method, path):
 
 
 # sync:connections-fns-begin
+def mikrotik_allowed(method, path):
+    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 def nzbgeek_call(method, query):
     """"free" for one of NZBGeek's Newznab reads (a search, or t=caps), "asks" for the one fetch (t=get, an NZB
     file, with a paid account's key), and None for anything else, which is never sent (#400). The query is read as
@@ -308,12 +312,6 @@ def unifi_allowed(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
-
-
-def mikrotik_allowed(method, path):
-    """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    return any(m == method and re.match(p, path) for m, p in SAFETY["mikrotik_free"])
 
 
 def proxmox_call(method, path):
@@ -917,13 +915,13 @@ CAPABILITIES = [
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
-    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),

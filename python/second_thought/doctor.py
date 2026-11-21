@@ -201,6 +201,7 @@ class Doctor:
         tiers = [getattr(self, "primary", None)] + list(getattr(self, "backups", None) or [])
         return [t for t in tiers if isinstance(t, str) and t]
 
+    # sync:connections-check-helper-begin
     async def _doctor_mikrotik(self):
         """The MikroTik check (#360): reachable, the certificate pinned, and an account that can only read."""
         base = os.environ.get("MIKROTIK_URL", "").strip()
@@ -220,6 +221,7 @@ class Doctor:
         if extra:
             return "NOTE", said + "; " + tr("the account's group ({group}) can also {what}. Second Thought only reads, so a group with just read, api and rest-api is safer.", group=group, what=", ".join(extra))
         return said
+    # sync:connections-check-helper-end
 
     @staticmethod
     def _mt_fingerprint(base):
@@ -268,11 +270,11 @@ class Doctor:
                     return "NOTE", tr("the key works and can trade, but this program only reads: a View-only key is safer.")
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
+        # sync:connections-check-begin
         if has("mikrotik_read"):
             async def mikrotik():
                 return await self._doctor_mikrotik()
             out.append(("MikroTik", mikrotik))
-        # sync:connections-check-begin
         if has("nzbgeek_read", "nzbgeek_fetch"):
             async def nzbgeek():
                 raw = await self._nzbgeek({"t": "caps", "o": "json"})
@@ -707,8 +709,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "MikroTik": "MIKROTIK_URL", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Proxmox": "PROXMOX_URL", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
                 "Powerwall": "POWERWALL_URL",
