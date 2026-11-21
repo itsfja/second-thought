@@ -1,0 +1,11 @@
+    /* Proxmox (#357): reads, and power that always asks */
+    V("rb_proxmox_nodes", "Proxmox nodes", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each node in your Proxmox cluster: node, status, cpu and memory (%), uptime (hours). On this page it uses a sample cluster." }),
+    V("rb_proxmox_guests", "Proxmox guests", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each VM and container: vmid, name, node, type (vm or container), status, cpu and memory (%), uptime (hours), and for one that's stopped, onboot (whether it should start with the node)." }),
+    V("rb_proxmox_storage", "Proxmox storage", [], "Array", { style:"proxmox",
+      tooltip:"A list of records, one for each storage on each node: storage, node, used (%), used_gb, size_gb and status." }),
+    V("rb_proxmox_tasks", "Proxmox tasks of the last %1 hours", [val("N")], "Array", { style:"proxmox", inputsInline:true,
+      tooltip:"A list of records, newest first: started, node, type (vzdump is a backup), id (the guest), status (OK, or what went wrong) and user." }),
+    S("rb_proxmox_power", "%1 Proxmox guest %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["shut down","shutdown"],["reboot","reboot"]] }, val("VMID")],
+      { style:"proxmox", inputsInline:true, tooltip:"Starts, shuts down or reboots one VM or container, by its VMID. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Guests listed in PROXMOX_PROTECT are never touched. Needs a token with VM.PowerMgmt. On this page nothing really starts or stops." }),

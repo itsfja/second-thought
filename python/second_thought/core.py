@@ -89,12 +89,6 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
-    # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
-    # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
-    # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
-    # guests it never touches at all.
-    "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
-    "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
     # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
     # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
@@ -146,6 +140,12 @@ SAFETY = {
     # else is ever sent: no firmware, no storm watch, no operation mode, no grid charging or export setting.
     "powerwall_free": [["GET", r"^/api/(meters/aggregates|system_status/soe|system_status/grid_status|operation)$"]],
     "powerwall_asks": [["POST", r"^/api/operation$"]],
+    # Proxmox VE's REST API (#357): the reads the runtime makes, and the power actions it may make after a yes. Nothing
+    # else is ever sent: no destroying, no snapshots rolled back, no commands run in a guest, no storage, permissions or
+    # firewall changes. A power action always asks, live, and never runs with nobody there; PROXMOX_PROTECT lists
+    # guests it never touches at all.
+    "proxmox_free": [["GET", r"^/api2/json/(version|nodes|cluster/resources|cluster/tasks|access/permissions|nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/config)$"]],
+    "proxmox_asks": [["POST", r"^/api2/json/nodes/[A-Za-z0-9.-]+/(qemu|lxc)/\d+/status/(start|shutdown|reboot)$"]],
     # SABnzbd's API (#397): one endpoint whose mode says what's asked for, so the gate matches the mode. The reads the
     # runtime makes, and pause and resume, which need a live yes. Nothing else is ever sent: no adding or deleting jobs,
     # no retry, no speedlimit, no config, no shutdown, and nothing that touches servers or categories.
@@ -299,6 +299,14 @@ def powerwall_allowed(method, path, approved=False):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_free"]) \
         or (approved and any(m == method and re.match(p, path) for m, p in SAFETY["powerwall_asks"]))
+def proxmox_call(method, path):
+    """"free" for a Proxmox call the runtime makes without asking, "asks" for a power action that needs a live yes,
+    and None for anything else, which is never sent (#357)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
+            return kind
+    return None
 def sabnzbd_call(method, mode):
     """"free" for a SABnzbd call the runtime makes without asking, "asks" for pause and resume, which need a live yes,
     and None for anything else, which is never sent (#397)."""
@@ -312,16 +320,6 @@ def unifi_allowed(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
-
-
-def proxmox_call(method, path):
-    """"free" for a Proxmox call the runtime makes without asking, "asks" for a power action that needs a live yes,
-    and None for anything else, which is never sent (#357)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["proxmox_" + kind]):
-            return kind
-    return None
 
 
 def docker_call(method, path):
@@ -901,7 +899,6 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
-    ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
@@ -910,12 +907,12 @@ CAPABILITIES = [
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
+    ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
-    ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
@@ -925,6 +922,7 @@ CAPABILITIES = [
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
     ("powerwall_read", "read your Powerwall's figures: battery charge, solar, grid import and export, and the reserve it keeps", False),
+    ("proxmox_read", "read your Proxmox cluster: nodes, guests, storage and tasks", False),
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
