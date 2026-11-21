@@ -1,0 +1,248 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "wanted-list-check",
+  "gallery": {
+    "title": "Wanted list check",
+    "category": "home",
+    "description": "Each morning, reads your Radarr wanted list and sends you a Telegram message with every movie that has no file yet. It only reads: nothing is searched, added or renamed.",
+    "tip": "Needs RADARR_URL and RADARR_API_KEY (Settings, General, API Key). Change radarr to sonarr to check the TV wanted list instead.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_missing",
+        "name": "missing"
+      },
+      {
+        "id": "g_one",
+        "name": "one"
+      },
+      {
+        "id": "g_report",
+        "name": "report"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 8,
+            "MINUTE": 0,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "check"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_missing"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_arr_missing",
+                    "fields": {
+                      "WHICH": "radarr"
+                    }
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_report"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "shadow": {
+                        "type": "text",
+                        "fields": {
+                          "TEXT": "Radarr wanted list:"
+                        }
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "controls_forEach",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_one"
+                        }
+                      },
+                      "inputs": {
+                        "LIST": {
+                          "block": {
+                            "type": "variables_get",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_missing"
+                              }
+                            }
+                          }
+                        },
+                        "DO": {
+                          "block": {
+                            "type": "variables_set",
+                            "fields": {
+                              "VAR": {
+                                "id": "g_report"
+                              }
+                            },
+                            "inputs": {
+                              "VALUE": {
+                                "block": {
+                                  "type": "text_join",
+                                  "inputs": {
+                                    "ADD0": {
+                                      "block": {
+                                        "type": "variables_get",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_report"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "ADD1": {
+                                      "shadow": {
+                                        "type": "rb_longtext",
+                                        "fields": {
+                                          "TEXT": "\n"
+                                        }
+                                      }
+                                    },
+                                    "ADD2": {
+                                      "block": {
+                                        "type": "rb_rec_get",
+                                        "inputs": {
+                                          "KEY": {
+                                            "shadow": {
+                                              "type": "text",
+                                              "fields": {
+                                                "TEXT": "title"
+                                              }
+                                            }
+                                          },
+                                          "REC": {
+                                            "block": {
+                                              "type": "variables_get",
+                                              "fields": {
+                                                "VAR": {
+                                                  "id": "g_one"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "extraState": {
+                                    "itemCount": 3
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "rb_tg_send",
+                          "inputs": {
+                            "TEXT": {
+                              "block": {
+                                "type": "variables_get",
+                                "fields": {
+                                  "VAR": {
+                                    "id": "g_report"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "rb_finish_with",
+                              "inputs": {
+                                "TEXT": {
+                                  "block": {
+                                    "type": "variables_get",
+                                    "fields": {
+                                      "VAR": {
+                                        "id": "g_report"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 190
+        }
+      ]
+    }
+  }
+}

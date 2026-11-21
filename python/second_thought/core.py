@@ -85,6 +85,7 @@ SAFETY = {
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
+    # sync:connections-safety-begin
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -100,7 +101,6 @@ SAFETY = {
     "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
-    # sync:connections-safety-begin
     # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
@@ -265,6 +265,15 @@ HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
 # sync:connections-fns-begin
+ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
+def arr_call(method, path):
+    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
+    needs a live yes, and None for anything else, which is never sent (#398)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -277,10 +286,6 @@ def docker_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
             return kind
     return None
-
-
-
-ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -339,17 +344,6 @@ def unraid_call(method, query):
             return kind
     return None
 # sync:connections-fns-end
-
-
-def arr_call(method, path):
-    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
-    needs a live yes, and None for anything else, which is never sent (#398)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
-            return kind
-    return None
-
 
 
 def plex_call(method, path):
@@ -892,9 +886,9 @@ CAPABILITIES = [
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -906,9 +900,9 @@ CAPABILITIES = [
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
-    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),

@@ -93,8 +93,9 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
+    "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
@@ -173,6 +174,7 @@ KEYCHAIN_NAMES = (
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
+    "RADARR_API_KEY", "SONARR_API_KEY",
     "COINBASE_KEY",
     "MIKROTIK_PASSWORD",
     "NZBGEEK_API_KEY",
@@ -184,7 +186,7 @@ KEYCHAIN_NAMES = (
     "UNIFI_API_KEY",
     "UNRAID_API_KEY",
     # sync:connections-secret-end
-    "RADARR_API_KEY", "SONARR_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1168,6 +1170,7 @@ SAFETY = {
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
+    # sync:connections-safety-begin
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -1183,7 +1186,6 @@ SAFETY = {
     "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
-    # sync:connections-safety-begin
     # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
@@ -1348,6 +1350,15 @@ HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
 # sync:connections-fns-begin
+ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
+def arr_call(method, path):
+    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
+    needs a live yes, and None for anything else, which is never sent (#398)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1360,10 +1371,6 @@ def docker_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
             return kind
     return None
-
-
-
-ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1422,17 +1429,6 @@ def unraid_call(method, query):
             return kind
     return None
 # sync:connections-fns-end
-
-
-def arr_call(method, path):
-    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
-    needs a live yes, and None for anything else, which is never sent (#398)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
-            return kind
-    return None
-
 
 
 def plex_call(method, path):
@@ -1975,9 +1971,9 @@ CAPABILITIES = [
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -1989,9 +1985,9 @@ CAPABILITIES = [
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
-    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
@@ -3983,89 +3979,6 @@ class Connections:
                 print(tr("  (Homey check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(10))
 
-    # Radarr and Sonarr (#398)
-    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
-    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
-    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
-    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
-    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
-    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
-                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
-
-    @staticmethod
-    def _arr_which(which):
-        w = to_str(which).strip().lower()
-        if w not in Connections.ARR_URLS:
-            raise RunError(tr("Which one? Radarr or Sonarr."))
-        return w
-
-    async def _arr(self, which, method, path, query=None, body=None, approved=False):
-        w = self._arr_which(which)
-        kind = arr_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
-        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
-        who = self.ARR_URLS[w][3]
-        if not url or not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
-                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
-        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
-        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who=who))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
-        return json.loads(raw) if raw.strip() else {}
-
-    async def arr_queue(self, which):
-        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
-        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
-        w = self._arr_which(which)
-        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
-                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
-                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
-                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
-                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
-        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
-        return out
-
-    async def arr_missing(self, which):
-        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
-        was added) and id."""
-        w = self._arr_which(which)
-        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
-        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
-        return out
-
-    async def arr_diskspace(self, which):
-        """Each of its folders: path, label, free_gb and total_gb."""
-        w = self._arr_which(which)
-        rows = await self._arr(w, "GET", "/api/v3/diskspace")
-        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
-                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
-                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
-               for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
-        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
-        return out
-
-    async def arr_search(self, which):
-        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
-        was done."""
-        w = self._arr_which(which)
-        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
-        self.log(w.capitalize(), what, tr("done"))
-        return True
-
     # Plex and Tautulli (#402)
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
     # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
@@ -4257,6 +4170,88 @@ class Connections:
         return True
 
     # sync:connections-runtime-begin
+    # Radarr and Sonarr (#398)
+    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
+    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
+    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
+    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
+    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
+    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
+                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
+
+    @staticmethod
+    def _arr_which(which):
+        w = to_str(which).strip().lower()
+        if w not in Connections.ARR_URLS:
+            raise RunError(tr("Which one? Radarr or Sonarr."))
+        return w
+
+    async def _arr(self, which, method, path, query=None, body=None, approved=False):
+        w = self._arr_which(which)
+        kind = arr_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
+        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
+        who = self.ARR_URLS[w][3]
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
+                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who=who))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def arr_queue(self, which):
+        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
+        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
+        w = self._arr_which(which)
+        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
+                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
+                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
+                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
+                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
+        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
+        return out
+
+    async def arr_missing(self, which):
+        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
+        was added) and id."""
+        w = self._arr_which(which)
+        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
+        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
+        return out
+
+    async def arr_diskspace(self, which):
+        """Each of its folders: path, label, free_gb and total_gb."""
+        w = self._arr_which(which)
+        rows = await self._arr(w, "GET", "/api/v3/diskspace")
+        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
+                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
+                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def arr_search(self, which):
+        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
+        was done."""
+        w = self._arr_which(which)
+        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
+        self.log(w.capitalize(), what, tr("done"))
+        return True
     # Coinbase (#371)
     # Coinbase's Advanced Trade API, with a CDP API key: COINBASE_KEY_FILE is the key file you download when you make
     # one at portal.cdp.coinbase.com (or COINBASE_KEY, that file's contents, say from the keychain). Make it View only,
@@ -7961,6 +7956,14 @@ class Doctor:
                 return tr("reached: {home} devices", home=len(home))
             out.append(("Homey", homey))
         # sync:connections-check-begin
+        if has("arr_read", "arr_control"):
+            async def arr(which):
+                status = await self._arr(which, "GET", "/api/v3/system/status")
+                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
+                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
+                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
+            out.append(("Radarr", lambda: arr("radarr")))
+            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("coinbase_read", "coinbase_trade"):
             async def coinbase():
                 perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
@@ -8056,14 +8059,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("arr_read", "arr_control"):
-            async def arr(which):
-                status = await self._arr(which, "GET", "/api/v3/system/status")
-                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
-                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
-                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
-            out.append(("Radarr", lambda: arr("radarr")))
-            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -8411,8 +8406,10 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "Radarr": "RADARR_URL",
+                "Sonarr": "SONARR_URL",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "MikroTik": "MIKROTIK_URL",

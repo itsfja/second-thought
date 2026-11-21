@@ -69,6 +69,7 @@
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              // sync:connections-need-begin
+             arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
@@ -81,7 +82,6 @@
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
-             arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
@@ -136,12 +136,6 @@
       "; credits, so give the program a budget or a step limit to keep a run cheap.",
       "FR24_API_KEY = ",
       ...note("MCP_FLIGHTRADAR24", "npx -y @flightradar24/fr24api-mcp", "to start the server your own way"));
-    if (need.arr) out.push("", "[radarr]",
-      "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
-      "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
-      "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
-      "; Sonarr, the same: its address and API key (Settings, General, API Key).",
-      "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
     if (need.plex) out.push("", "[plex]",
       "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
       "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
@@ -153,6 +147,12 @@
       "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
       "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
     // sync:connections-ini-begin
+    if (need.arr) out.push("", "[radarr]",
+      "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
+      "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
+      "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
+      "; Sonarr, the same: its address and API key (Settings, General, API Key).",
+      "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -531,9 +531,6 @@
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
-        case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_plex_server": return "(await R.plex_server())";
         case "rb_plex_libraries": return "(await R.plex_libraries())";
         case "rb_plex_sessions": return "(await R.plex_sessions())";
@@ -541,6 +538,9 @@
         case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
         case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
         // sync:connections-pyread-begin
+        case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
         case "rb_coinbase_value": return "(await R.coinbase_value())";
         case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
@@ -713,10 +713,10 @@
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
-          case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           // sync:connections-pyact-begin
+          case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
