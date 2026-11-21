@@ -141,7 +141,6 @@
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
@@ -155,6 +154,7 @@
     // sync:connections-caps-begin
     rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control",
+    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read",
     rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",
@@ -462,16 +462,6 @@
       tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
         "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
-    { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
-    { type:"rb_slack_when", message0:"when a Slack message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
-    S("rb_discord_send", "send Discord message %1", [val("TEXT")], { style:"conn", inputsInline:true,
-      tooltip:"Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
-    S("rb_slack_send", "send Slack message %1", [val("TEXT")], { style:"conn", inputsInline:true,
-      tooltip:"Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
       tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
     V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
@@ -506,6 +496,16 @@
       tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
     S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
       { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
+    { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    { type:"rb_slack_when", message0:"when a Slack message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    S("rb_discord_send", "send Discord message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    S("rb_slack_send", "send Slack message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     /* Coinbase (#371) */
     V("rb_coinbase_balances", "Coinbase balances", [], "Array", { style:"coinbase",
       tooltip:"A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio." }),

@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt)
 
 ## Connections
 
@@ -12,7 +12,6 @@ The pink **Connections** blocks work without an agent too.
 
 **Listeners** start a script when something arrives:
 
-- **when a Discord message arrives** and **when a Slack message arrives**, for messages in your channels, checked every 10 seconds. Only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count. Discord needs the bot's *Message Content Intent* turned on.
 - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
 - **when there's something new in feed …**, checked every 15 minutes.
 - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
@@ -93,6 +92,17 @@ SONARR_API_KEY = your-key
 ```
 
 Either one works on its own; the blocks you use decide which is called. If Radarr or Sonarr is behind HTTPS with a certificate this computer doesn't trust, `RADARR_CERT_SHA256` or `SONARR_CERT_SHA256` pins it, as for MikroTik and UniFi (`--doctor` shows the fingerprint). `--doctor` says each one's version and how many jobs are in the queue.
+## Discord and Slack
+
+The **Discord and Slack** blocks read your channels and post in them, asking first. They share one shape: only the channels in `DISCORD_CHANNEL_ID` or `SLACK_CHANNEL_ID` count, because anyone in a server or workspace can post; the bot's own messages never count.
+
+- **when a Discord message arrives** and **when a Slack message arrives**, checked every 10 seconds, run a script when someone posts in one of your channels (type 'anything', or words the message must contain). **what arrived** gives text, sender and channel. Discord needs the bot's *Message Content Intent* turned on.
+- **send Discord message** and **send Slack message** post back in the channel a message came from, or in your first channel. With **ask me before sending messages and announcements**, they ask you first.
+- The agent's **search Discord / search Slack** and **send Discord / send Slack** tools do the same from an agent; sending always asks first.
+
+On the page these blocks use **sample channels**, and nothing is posted: try the **Discord questions?** listener example. The listeners start from what's new after the program starts.
+
+**Settings:** `[discord]` and `[slack]` in `second-thought.ini` — a bot token for each (Discord Developer Portal, your application, Bot, Reset Token, with the Message Content intent on and the bot invited to the server; api.slack.com/apps, OAuth & Permissions, scopes channels:history, groups:history, chat:write, bot invited to each channel), and the channel ids. `--doctor` reads your channels when the program can.
 ## Coinbase
 
 The blue **Coinbase** blocks read your Coinbase account through its Advanced Trade API, and can place orders, always asking first:

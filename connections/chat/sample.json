@@ -1,0 +1,50 @@
+{
+ "discord": {
+  "channel": "#baking (sample server)",
+  "messages": [
+   {
+    "from": "crumb_shot",
+    "text": "Anyone tried the new spelt from the mill? Mine came out dense.",
+    "hours_ago": 1
+   },
+   {
+    "from": "night_loaf",
+    "text": "Bake-along is Sunday at 10, bring your rye starter",
+    "hours_ago": 6
+   },
+   {
+    "from": "You",
+    "text": "Reminder: bake-along recipe is pinned",
+    "hours_ago": 30
+   }
+  ],
+  "incoming": {
+   "from": "crumb_shot",
+   "text": "What hydration should a first rye loaf be?"
+  }
+ },
+ "slack": {
+  "channel": "#kitchen (sample workspace)",
+  "messages": [
+   {
+    "from": "Sam",
+    "text": "Oven's free from 2pm if you want it",
+    "hours_ago": 2
+   },
+   {
+    "from": "Alex",
+    "text": "Who took the last of the rye flour?",
+    "hours_ago": 4
+   },
+   {
+    "from": "You",
+    "text": "Ordering flour on Friday",
+    "hours_ago": 26
+   }
+  ],
+  "incoming": {
+   "from": "Sam",
+   "text": "Can I borrow the proving baskets tomorrow?"
+  }
+ }
+}

@@ -1102,9 +1102,9 @@
         if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
         haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
       }
-      case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
+      case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;

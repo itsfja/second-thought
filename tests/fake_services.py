@@ -369,11 +369,14 @@ def start():
         m = dict({"type": "message", "ts": f"{1700000000 + ids[0]}.000100", "text": text, "user": user}, **({"bot_id": user, "subtype": "bot_message"} if bot else {}))
         log["slack"].setdefault(channel, []).append(m)
         return m
-    for m in reversed(data["discord"]["messages"]):
+    chat = data.get("chat") or {}  # discord/slack samples live under "chat" since connections/chat/
+    disc = chat.get("discord") or data.get("discord") or {}
+    slack = chat.get("slack") or data.get("slack") or {}
+    for m in reversed(disc.get("messages", [])):
         discord_add(DISCORD_CHANNEL, m["text"], m["from"])
     discord_add(DISCORD_CHANNEL, "Bot's own earlier post", "SecondThought", bot=True)  # newest message at start is a bot's
     discord_add("999", "Someone else's channel: bake-along cancelled", "stranger")
-    for m in reversed(data["slack"]["messages"]):
+    for m in reversed(slack.get("messages", [])):
         slack_add(SLACK_CHANNEL, m["text"], m["from"])
     slack_add("C999", "Other channel: oven broken", "stranger")
     log["discord_add"], log["slack_add"] = discord_add, slack_add

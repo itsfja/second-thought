@@ -43,6 +43,7 @@ Made by tools/sync.py from i18n/la.json: edit that, not this.
 - Telegram: Telegram
 - Email: Email
 - GitHub: GitHub
+- Discord and Slack: Discord and Slack
 - Tools for the agent: drop them inside an agent block: Instrumenta procuratoris: intra laterem procuratoris pone
 - Listeners: they run while the exported program runs on schedule: Auscultatores: currunt dum programma exportatum ex horario currit
 - Read and send: Lege et mitte

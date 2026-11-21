@@ -283,7 +283,8 @@
 "MQTT":"MQTT",
 "Telegram":"Telegram",
 "Email":"Email",
-"GitHub":"GitHub"
+"GitHub":"GitHub",
+"Discord and Slack":"Discord and Slack"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر",

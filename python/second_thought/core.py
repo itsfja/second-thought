@@ -276,6 +276,21 @@ def arr_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
             return kind
     return None
+# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
+# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
+# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
+# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
+DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
+SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
+
+def markdown_to_slack(text):
+    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
+    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
+    return t
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -523,12 +538,6 @@ def ha_sensitive(service, entity="", data=None):
     return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
-# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
-# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
-# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
-# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
-DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
-SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
@@ -884,14 +893,14 @@ SCHEMAS = {
 # program, and writes them into the exported program, which lists them and asks before its first run if any of them
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
+    # sync:connections-capabilities-act-begin
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("ha_act", "control your Home Assistant devices", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    # sync:connections-capabilities-act-begin
-    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("email_send", "send email", True),
@@ -911,6 +920,8 @@ CAPABILITIES = [
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     # sync:connections-capabilities-read-begin
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
+    ("discord_read", "read your Discord channels", False),
+    ("slack_read", "read your Slack channels", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("email_read", "read your email", False),
@@ -932,8 +943,6 @@ CAPABILITIES = [
     ("web", "read public web pages and search the web", False),
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
-    ("discord_read", "read your Discord channels", False),
-    ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
