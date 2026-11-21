@@ -304,6 +304,11 @@ class Doctor:
                     raise RunError(tr("couldn't sign in to {smtp} to send ({e})", smtp=c['smtp'], e=_short(e, 120))) from None
                 return tr("signed in to {smtp} (nothing was sent)", smtp=c['smtp'])
             out.append(("Email (sending)", mail_out))
+        if has("github_read", "github_comment"):
+            async def gh():
+                await self.gh_for_me()
+                return tr("read your pull requests")
+            out.append(("GitHub", gh))
         if has("homey_read", "homey_act"):
             async def homey():
                 home = await self._homey_home()
@@ -416,11 +421,6 @@ class Doctor:
                     await self.chat_search(svc, "", 5)
                     return tr("read your channels")
                 out.append((name, chat))
-        if has("github_read", "github_comment"):
-            async def gh():
-                await self.gh_for_me()
-                return tr("read your pull requests")
-            out.append(("GitHub", gh))
         if has("calendar"):
             async def cal():
                 lines = await self.calendar_text("today", 7)
@@ -708,7 +708,7 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "GitHub": "GITHUB_TOKEN",
+                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
@@ -716,6 +716,7 @@ class Doctor:
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "Email (reading)": "EMAIL_ADDRESS",
+                 "GitHub": "GITHUB_TOKEN",
                 "Homey": "HOMEY_API_KEY",
                 "MikroTik": "MIKROTIK_URL",
                 "MQTT": "MQTT_HOST",

@@ -11,8 +11,8 @@ const cats = () => page.__visibleToolbox().contents.filter(c => c.kind === "cate
 const topNames = () => cats().map(c => c.name);
 const connCat = () => cats().find(c => c.name === "Connections");
 
-test("the palette has 40 categories, eighteen of them a single service", () => {
-  assert.equal(plain(services.cats).length, 18);
+test("the palette has 41 categories, nineteen of them a single service", () => {
+  assert.equal(plain(services.cats).length, 19);
   for (const s of plain(services.cats)) {
     assert.ok(s.id && s.name && s.blocks.length > 0, JSON.stringify(s).slice(0, 80));
   }

@@ -283,7 +283,8 @@
 "Plex":"Plex",
 "MQTT":"MQTT",
 "Telegram":"Telegram",
-"Email":"Email"
+"Email":"Email",
+"GitHub":"GitHub"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",

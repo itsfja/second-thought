@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt)
 
 ## Connections
 
@@ -16,8 +16,6 @@ The pink **Connections** blocks work without an agent too.
 - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
 - **when there's something new in feed …**, checked every 15 minutes.
 - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
-- **when a pull request asks for my review**, checked every 5 minutes.
-- **when a new issue is opened in** `owner/name`, checked every 5 minutes (pull requests don't count), and **when a release is published in** `owner/name`, checked every 15 minutes. **what arrived** gives the issue's `number`, `title`, `body`, `author` and `labels`, or the release's `tag`, `name`, `previous_tag` and `notes`.
 - **when a calendar event starts in … minutes**, for reminders.
 - **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each, so adverts and visitor counters elsewhere on the page don't count. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
 
@@ -34,7 +32,6 @@ Try **Morning briefing on Telegram** and **Email me a news digest** under Automa
 
 **Settings.** An exported program's `second-thought.ini` asks only for what it uses:
 
-- **GitHub:** `GITHUB_TOKEN`, from github.com/settings/tokens. Read access is enough to look; to comment, it also needs write access to pull requests.
 - **Calendar:** `CALENDAR_URL`, your calendar's private iCal address. In Google Calendar it's under Settings, your calendar, **Secret address in iCal format**. It can read your calendar, but not add to it.
 - **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
 - **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
@@ -151,6 +148,16 @@ The **Email** blocks read your inbox and send mail from your address, asking fir
 On the page these blocks use **sample emails**, and nothing is sent: try **When the flour shop emails** or **Email me a news digest**. The listener starts from what's new after the program starts; emails that arrived while it was off don't start the script.
 
 **Settings:** `[email]` in `second-thought.ini` — `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo, Fastmail and mailbox.org find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST` (and the ports, or `EMAIL_SSL = no` for a plain connection). `--doctor` signs in to read and to send, and says so.
+## GitHub
+
+The **GitHub** blocks look at your projects and can comment, always asking first:
+
+- **when a pull request asks for my review**, checked every 5 minutes. **when a new issue is opened in** `owner/name`, checked every 5 minutes (pull requests don't count). **when a release is published in** `owner/name`, checked every 15 minutes. **what arrived** gives the pull request's or issue's `repo`, `number`, `title`, `user` or `author`, `link` and `text` (plus `body` and `labels` for an issue; `tag`, `name`, `previous_tag` and `notes` for a release).
+- The agent's **GitHub** tools read your repositories, search them, read a pull request, list its branches and commits, and comment on a pull request or open and label an issue — commenting always asks you first, even when nothing else does.
+
+On the page these blocks use **sample projects**, and nothing is posted: try **When someone asks for my review (GitHub)**. The listeners start from what's new after the program starts; pull requests and issues that arrived while it was off don't start the script.
+
+**Settings:** `[github]` in `second-thought.ini` — `GITHUB_TOKEN`, from github.com/settings/tokens. Read access is enough to look; to comment, it also needs write access to pull requests. `--doctor` reads your pull requests when the program can.
 ## Homey
 
 Second Thought also talks to **Homey Pro**, with its own green blocks under **Homey**:

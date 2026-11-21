@@ -722,7 +722,7 @@
    "REPO"
   ],
   "tooltip": "Runs the blocks below when someone opens an issue in this GitHub project (checked every 5 minutes; pull requests don't count). 'What arrived' gives repo, number, title, body, author, labels, link and text.",
-  "category": "Connections",
+  "category": "GitHub",
   "capability": "github_read"
  },
  {
@@ -732,7 +732,7 @@
    "REPO"
   ],
   "tooltip": "Runs the blocks below when this GitHub project publishes a release (checked every 15 minutes). 'What arrived' gives repo, tag, name, previous_tag, notes, link and text.",
-  "category": "Connections",
+  "category": "GitHub",
   "capability": "github_read"
  },
  {
@@ -740,7 +740,7 @@
   "words": "when a pull request asks for my review",
   "slots": [],
   "tooltip": "Runs the blocks below when someone asks you to review a GitHub pull request (checked every 5 minutes). 'What arrived' gives repo, number, title, user, link and text.",
-  "category": "Connections",
+  "category": "GitHub",
   "capability": "github_read"
  },
  {

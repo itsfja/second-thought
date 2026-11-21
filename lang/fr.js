@@ -282,7 +282,8 @@
 "Plex":"Plex",
 "MQTT":"MQTT",
 "Telegram":"Telegram",
-"Email":"Email"
+"Email":"Email",
+"GitHub":"GitHub"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Outils pour l'agent : déposez-les dans un bloc agent",

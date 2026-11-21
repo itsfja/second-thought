@@ -281,7 +281,8 @@
 "Plex":"Plex",
 "MQTT":"MQTT",
 "Telegram":"Telegram",
-"Email":"Email"
+"Email":"Email",
+"GitHub":"GitHub"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"Tlacaquiniqueh: mochīhuah in īquac in tlaquīxtīlli tlatēcpantli mochīhua ipan tōnalpōhualli",

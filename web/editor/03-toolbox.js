@@ -86,7 +86,7 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_cal_when"), B("rb_page_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
       B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
@@ -142,6 +142,9 @@
     { kind:"category", name:"Email", categorystyle:"email", service:"email", contents:[
       B("rb_email_when"), B("rb_event"),
             B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
+    ]},
+    { kind:"category", name:"GitHub", categorystyle:"github", service:"github", contents:[
+      B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_event")
     ]},
     { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
       B("rb_homey_when"), B("rb_event"),
