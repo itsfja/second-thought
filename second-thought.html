@@ -698,6 +698,7 @@ OTHER_SETTINGS = {
     "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
+    "HOMEY_URL",
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
@@ -711,7 +712,7 @@ OTHER_SETTINGS = {
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
-    "HA_URL", "HOMEY_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
+    "HA_URL", "MQTT_HOST", "MQTT_PORT", "MQTT_TLS", "MQTT_USERNAME", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
     "SLACK_API_URL", "SLACK_CHANNEL_ID", "TELEGRAM_API_URL", "TELEGRAM_CHAT_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
@@ -773,10 +774,11 @@ KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
-    "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
+    "EMAIL_PASSWORD", "HA_TOKEN", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
     "COINBASE_KEY",
+    "HOMEY_API_KEY",
     "MIKROTIK_PASSWORD",
     "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
@@ -1770,8 +1772,6 @@ SAFETY = {
     # Targets other than entities (in a service call's data, or its "target"): with the generic services above, we can't
     # see which devices they reach, so they ask too (#303). So does entity_id "all", or no target at all.
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
-    # Homey changes that unlock, open or disarm: [capability, value].
-    "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
     # sync:connections-safety-begin
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
@@ -1787,6 +1787,8 @@ SAFETY = {
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
+    # Homey changes that unlock, open or disarm: [capability, value].
+    "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
@@ -2566,7 +2568,6 @@ CAPABILITIES = [
     ("slack_send", "send Slack messages", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
     ("ha_act", "control your Home Assistant devices", True),
-    ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
@@ -2575,6 +2576,7 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
+    ("homey_act", "control your Homey devices and start Homey flows", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
@@ -2589,6 +2591,7 @@ CAPABILITIES = [
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
+    ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
@@ -2609,7 +2612,6 @@ CAPABILITIES = [
     ("discord_read", "read your Discord channels", False),
     ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
-    ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mqtt_read", "read MQTT messages", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
@@ -4382,203 +4384,6 @@ class Connections:
         return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
             else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
 
-    # Homey
-    # Homey Pro's local Web API: HOMEY_URL is its address on your network (a Homey Self-Hosted Server serves the same
-    # API on port 4859, so add :4859; devices on a Homey Bridge show up through it), HOMEY_API_KEY a key from the Homey Web App
-    # (Settings, API Keys). Give the key the permissions your program needs: devices (view, and control to switch
-    # things), flows (view and start), Logic (view, and edit to set variables).
-    HOMEY_SENSITIVE = {tuple(x) for x in SAFETY["homey_sensitive"]}  # unlocking, opening and disarming: SAFETY in core.py
-
-    async def _homey(self, method, path, body=None):
-        url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()
-        if not url or not key:
-            raise RunError(tr("Homey needs HOMEY_URL and HOMEY_API_KEY {where_keys}. Make a key in the Homey Web App: Settings, API Keys.", where_keys=WHERE_KEYS))
-        if not re.match(r"^https?://", url):
-            url = "http://" + url
-        req = urllib.request.Request(url + "/api/manager" + path, method=method, data=json.dumps(body).encode() if body is not None else None,
-                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
-
-        def go():
-            try:
-                with urllib.request.urlopen(req, timeout=20) as r:
-                    raw = r.read()
-                    return json.loads(raw) if raw.strip() else None
-            except urllib.error.HTTPError as e:
-                why = {401: "the API key was refused. Check HOMEY_API_KEY", 403: "the API key isn't allowed to do that. Give it more permissions in the Homey Web App",
-                       404: "not found"}.get(e.code, f"Homey answered {e.code}")
-                raise RunError(tr("Homey: {why}.", why=why)) from None
-            except urllib.error.URLError as e:
-                hint = "" if urllib.parse.urlparse(url).port else " For a Homey Self-Hosted Server, add its port: :4859."
-                raise RunError(tr("Couldn't reach Homey at {url} ({reason}).{hint}", url=url, reason=e.reason, hint=hint)) from None
-        return await asyncio.to_thread(go)
-
-    async def _homey_home(self):
-        """Every device, with its zone's name."""
-        devices = await self._homey("GET", "/devices/device/")
-        try:
-            zones = {k: v.get("name", "") for k, v in (await self._homey("GET", "/zones/zone/")).items()}
-        except RunError:
-            zones = {}
-        out = []
-        for d in (devices or {}).values():
-            caps = {k: c.get("value") for k, c in (d.get("capabilitiesObj") or {}).items()}
-            zone = d.get("zone")
-            zone = zones.get(zone if isinstance(zone, str) else (zone or {}).get("id"), "") or (zone.get("name", "") if isinstance(zone, dict) else "")
-            out.append({"id": d.get("id"), "name": d.get("name", ""), "zone": zone, "class": d.get("class", ""), "caps": caps})
-        out.sort(key=lambda x: (x["zone"], x["name"]))
-        return out
-
-    @staticmethod
-    def _homey_show(v):
-        return "on" if v is True else "off" if v is False else "-" if v is None else to_str(v)
-
-    def _homey_line(self, d):
-        return f"{d['name']} ({d['zone'] or 'no zone'}, {d['class']}): " + ", ".join(f"{k}={self._homey_show(v)}" for k, v in d["caps"].items())
-
-    async def _homey_device(self, name):
-        """A device by its name (or id). An exact name wins; otherwise one device whose name contains the words."""
-        name = to_str(name).strip()
-        if not name:
-            raise RunError(tr("Which Homey device? Give its name, like Kitchen light."))
-        home = await self._homey_home()
-        exact = [d for d in home if d["name"].lower() == name.lower() or d["id"] == name]
-        if exact:
-            return exact[0]
-        some = [d for d in home if all(w in d["name"].lower() for w in name.lower().split())]
-        if len(some) == 1:
-            return some[0]
-        raise RunError(tr("There's no Homey device called “{name}”.", name=name) + (" " + tr("Did you mean: {names}?", names=", ".join(d["name"] for d in some[:6])) if some else ""))
-
-    async def homey_find(self, text="*"):
-        """Records (name, zone, class, and each capability) for devices whose name, zone or class contain every word."""
-        words = [w for w in to_str(text).lower().split() if w != "*"]
-        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
-        return [dict({"name": d["name"], "zone": d["zone"], "class": d["class"]}, **{k: self._homey_show(v) if isinstance(v, bool) else v for k, v in d["caps"].items()})
-                for d in found]
-
-    async def homey_find_text(self, text="*"):
-        words = [w for w in to_str(text).lower().split() if w != "*"]
-        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
-        return "\n".join(self._homey_line(d) for d in found) or f"No Homey devices match “{to_str(text).strip()}”."
-
-    async def homey_value(self, capability, device):
-        d = await self._homey_device(device)
-        cap = to_str(capability).strip()
-        if cap not in d["caps"]:
-            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
-        v = d["caps"][cap]
-        return self._homey_show(v) if isinstance(v, bool) else v
-
-    @staticmethod
-    def _homey_value_for(old, value):
-        """Turns 'on', 'yes', '50' and so on into the kind of value the capability holds."""
-        v = value
-        if isinstance(old, bool) or (isinstance(v, str) and v.strip().lower() in ("on", "off", "true", "false", "yes", "no")):
-            if isinstance(v, str):
-                t = v.strip().lower()
-                if t not in ("on", "off", "true", "false", "yes", "no", "1", "0"):
-                    raise RunError(tr("“{value}” isn't on or off.", value=value))
-                return t in ("on", "true", "yes", "1")
-            return bool(v)
-        if isinstance(old, (int, float)):
-            if not _num_like(v):
-                raise RunError(tr("“{value}” isn't a number.", value=value))
-            return num(v)
-        return to_str(v) if not isinstance(v, (int, float, bool)) else v
-
-    async def homey_set(self, device, capability, value, approved=False):
-        d = await self._homey_device(device)
-        cap = to_str(capability).strip()
-        if cap not in d["caps"]:
-            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
-        v = self._homey_value_for(d["caps"][cap], value)
-        what = f"set {d['name']} {cap} to {self._homey_show(v)}"
-        if (cap, v) in self.HOMEY_SENSITIVE and not self.dry_run():  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
-            if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
-                return False
-        elif (not approved or self.dry_run()) and not await self._allowed(["ha"], what):
-            return False
-        await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
-        self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
-        return True
-
-    async def _homey_flows(self):
-        flows = []
-        for path, adv in (("/flow/flow/", False), ("/flow/advancedflow/", True)):
-            try:
-                for f in (await self._homey("GET", path) or {}).values():
-                    flows.append({"id": f.get("id"), "name": f.get("name", ""), "advanced": adv, "enabled": f.get("enabled", True),
-                                  "triggerable": f.get("triggerable", True)})
-            except RunError:
-                if not adv:
-                    raise
-        return flows
-
-    async def homey_flows_text(self):
-        return "\n".join(f"{f['name']}" + (" (advanced)" if f["advanced"] else "") + ("" if f["enabled"] else " (turned off)")
-                         for f in sorted(await self._homey_flows(), key=lambda f: f["name"].lower())) or "No flows."
-
-    async def homey_run_flow(self, name, approved=False):
-        name = to_str(name).strip()
-        flows = await self._homey_flows()
-        f = next((x for x in flows if x["name"].lower() == name.lower()), None) or \
-            (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
-        if not f:
-            raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
-        if (not approved or self.dry_run()) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
-            return False
-        await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
-        self.log(tr("Homey flow started"), f["name"], tr("started"))
-        return True
-
-    async def _homey_var(self, name):
-        name = to_str(name).strip()
-        vs = list((await self._homey("GET", "/logic/variable/") or {}).values())
-        v = next((x for x in vs if x.get("name", "").lower() == name.lower()), None)
-        if not v:
-            raise RunError(tr("There's no Homey variable called “{name}”.", name=name) + (" " + tr("Its variables are: {names}", names=", ".join(x.get("name", "") for x in vs[:12])) if vs else ""))
-        return v
-
-    async def homey_variable(self, name):
-        return (await self._homey_var(name)).get("value", "")
-
-    async def homey_set_variable(self, name, value, approved=False):
-        v = await self._homey_var(name)
-        old = v.get("value")
-        new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
-        if (not approved or self.dry_run()) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
-            return False
-        await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
-        self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
-        return True
-
-    async def _listen_homey(self, items):
-        """'when Homey device … changes': checks every 10 seconds and starts the script when a value changes."""
-        before = None
-        print(tr("Watching Homey devices for changes."), flush=True)
-        while True:
-            try:
-                home = await self._homey_home()
-                now = {(d["name"], k): (v, d) for d in home for k, v in d["caps"].items()}
-                if before is not None:
-                    for (dname, cap), (v, d) in now.items():
-                        if (dname, cap) not in before or before[(dname, cap)][0] == v:
-                            continue
-                        old = before[(dname, cap)][0]
-                        for arg, fn in items:
-                            want_dev, _, want_cap = to_str(arg).partition("|")
-                            want_cap = want_cap.strip().lower()
-                            if want_dev.strip().lower() not in (dname.lower(), d["id"]) or want_cap not in ("", "anything", cap.lower()):
-                                continue
-                            rec = {"device": dname, "zone": d["zone"], "capability": cap, "from": self._homey_show(old) if isinstance(old, bool) else old,
-                                   "to": self._homey_show(v) if isinstance(v, bool) else v,
-                                   "text": f"{dname} {cap}: {self._homey_show(old)} → {self._homey_show(v)}"}
-                            self._fire(fn, rec, f"Homey: {dname} {cap}")
-                before = now
-            except RunError as e:
-                print(tr("  (Homey check failed: {e})", e=e), flush=True)
-            await asyncio.sleep(self._poll(10))
-
     # sync:connections-runtime-begin
     # Radarr and Sonarr (#398)
     # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
@@ -5023,6 +4828,202 @@ class Connections:
         await self._docker("POST", f"/containers/{name}/{action}", approved=True)
         self.log(tr("Docker"), what, tr("done"))
         return True
+    # Homey
+    # Homey Pro's local Web API: HOMEY_URL is its address on your network (a Homey Self-Hosted Server serves the same
+    # API on port 4859, so add :4859; devices on a Homey Bridge show up through it), HOMEY_API_KEY a key from the Homey Web App
+    # (Settings, API Keys). Give the key the permissions your program needs: devices (view, and control to switch
+    # things), flows (view and start), Logic (view, and edit to set variables).
+    HOMEY_SENSITIVE = {tuple(x) for x in SAFETY["homey_sensitive"]}  # unlocking, opening and disarming: SAFETY in core.py
+
+    async def _homey(self, method, path, body=None):
+        url, key = os.environ.get("HOMEY_URL", "").strip().rstrip("/"), os.environ.get("HOMEY_API_KEY", "").strip()
+        if not url or not key:
+            raise RunError(tr("Homey needs HOMEY_URL and HOMEY_API_KEY {where_keys}. Make a key in the Homey Web App: Settings, API Keys.", where_keys=WHERE_KEYS))
+        if not re.match(r"^https?://", url):
+            url = "http://" + url
+        req = urllib.request.Request(url + "/api/manager" + path, method=method, data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+
+        def go():
+            try:
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    raw = r.read()
+                    return json.loads(raw) if raw.strip() else None
+            except urllib.error.HTTPError as e:
+                why = {401: "the API key was refused. Check HOMEY_API_KEY", 403: "the API key isn't allowed to do that. Give it more permissions in the Homey Web App",
+                       404: "not found"}.get(e.code, f"Homey answered {e.code}")
+                raise RunError(tr("Homey: {why}.", why=why)) from None
+            except urllib.error.URLError as e:
+                hint = "" if urllib.parse.urlparse(url).port else " For a Homey Self-Hosted Server, add its port: :4859."
+                raise RunError(tr("Couldn't reach Homey at {url} ({reason}).{hint}", url=url, reason=e.reason, hint=hint)) from None
+        return await asyncio.to_thread(go)
+
+    async def _homey_home(self):
+        """Every device, with its zone's name."""
+        devices = await self._homey("GET", "/devices/device/")
+        try:
+            zones = {k: v.get("name", "") for k, v in (await self._homey("GET", "/zones/zone/")).items()}
+        except RunError:
+            zones = {}
+        out = []
+        for d in (devices or {}).values():
+            caps = {k: c.get("value") for k, c in (d.get("capabilitiesObj") or {}).items()}
+            zone = d.get("zone")
+            zone = zones.get(zone if isinstance(zone, str) else (zone or {}).get("id"), "") or (zone.get("name", "") if isinstance(zone, dict) else "")
+            out.append({"id": d.get("id"), "name": d.get("name", ""), "zone": zone, "class": d.get("class", ""), "caps": caps})
+        out.sort(key=lambda x: (x["zone"], x["name"]))
+        return out
+
+    @staticmethod
+    def _homey_show(v):
+        return "on" if v is True else "off" if v is False else "-" if v is None else to_str(v)
+
+    def _homey_line(self, d):
+        return f"{d['name']} ({d['zone'] or 'no zone'}, {d['class']}): " + ", ".join(f"{k}={self._homey_show(v)}" for k, v in d["caps"].items())
+
+    async def _homey_device(self, name):
+        """A device by its name (or id). An exact name wins; otherwise one device whose name contains the words."""
+        name = to_str(name).strip()
+        if not name:
+            raise RunError(tr("Which Homey device? Give its name, like Kitchen light."))
+        home = await self._homey_home()
+        exact = [d for d in home if d["name"].lower() == name.lower() or d["id"] == name]
+        if exact:
+            return exact[0]
+        some = [d for d in home if all(w in d["name"].lower() for w in name.lower().split())]
+        if len(some) == 1:
+            return some[0]
+        raise RunError(tr("There's no Homey device called “{name}”.", name=name) + (" " + tr("Did you mean: {names}?", names=", ".join(d["name"] for d in some[:6])) if some else ""))
+
+    async def homey_find(self, text="*"):
+        """Records (name, zone, class, and each capability) for devices whose name, zone or class contain every word."""
+        words = [w for w in to_str(text).lower().split() if w != "*"]
+        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
+        return [dict({"name": d["name"], "zone": d["zone"], "class": d["class"]}, **{k: self._homey_show(v) if isinstance(v, bool) else v for k, v in d["caps"].items()})
+                for d in found]
+
+    async def homey_find_text(self, text="*"):
+        words = [w for w in to_str(text).lower().split() if w != "*"]
+        found = [d for d in await self._homey_home() if all(w in f"{d['name']} {d['zone']} {d['class']}".lower() for w in words)]
+        return "\n".join(self._homey_line(d) for d in found) or f"No Homey devices match “{to_str(text).strip()}”."
+
+    async def homey_value(self, capability, device):
+        d = await self._homey_device(device)
+        cap = to_str(capability).strip()
+        if cap not in d["caps"]:
+            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
+        v = d["caps"][cap]
+        return self._homey_show(v) if isinstance(v, bool) else v
+
+    @staticmethod
+    def _homey_value_for(old, value):
+        """Turns 'on', 'yes', '50' and so on into the kind of value the capability holds."""
+        v = value
+        if isinstance(old, bool) or (isinstance(v, str) and v.strip().lower() in ("on", "off", "true", "false", "yes", "no")):
+            if isinstance(v, str):
+                t = v.strip().lower()
+                if t not in ("on", "off", "true", "false", "yes", "no", "1", "0"):
+                    raise RunError(tr("“{value}” isn't on or off.", value=value))
+                return t in ("on", "true", "yes", "1")
+            return bool(v)
+        if isinstance(old, (int, float)):
+            if not _num_like(v):
+                raise RunError(tr("“{value}” isn't a number.", value=value))
+            return num(v)
+        return to_str(v) if not isinstance(v, (int, float, bool)) else v
+
+    async def homey_set(self, device, capability, value, approved=False):
+        d = await self._homey_device(device)
+        cap = to_str(capability).strip()
+        if cap not in d["caps"]:
+            raise RunError(tr("{name} has no “{cap}”. It has: {x}.", name=d['name'], cap=cap, x=', '.join(d['caps']) or tr('nothing')))
+        v = self._homey_value_for(d["caps"][cap], value)
+        what = f"set {d['name']} {cap} to {self._homey_show(v)}"
+        if (cap, v) in self.HOMEY_SENSITIVE and not self.dry_run():  # unlocking, opening and disarming always ask, unless you've just said yes to this very change
+            if not approved and not await self.confirm(what + " (a safety check: unlocking, opening and disarming always ask)"):
+                return False
+        elif (not approved or self.dry_run()) and not await self._allowed(["ha"], what):
+            return False
+        await self._homey("PUT", f"/devices/device/{urllib.parse.quote(d['id'])}/capability/{urllib.parse.quote(cap)}", {"value": v})
+        self.log(tr("Homey: {name}", name=d["name"]), f"{cap}: {self._homey_show(d['caps'][cap])} → {self._homey_show(v)}", tr("done"))
+        return True
+
+    async def _homey_flows(self):
+        flows = []
+        for path, adv in (("/flow/flow/", False), ("/flow/advancedflow/", True)):
+            try:
+                for f in (await self._homey("GET", path) or {}).values():
+                    flows.append({"id": f.get("id"), "name": f.get("name", ""), "advanced": adv, "enabled": f.get("enabled", True),
+                                  "triggerable": f.get("triggerable", True)})
+            except RunError:
+                if not adv:
+                    raise
+        return flows
+
+    async def homey_flows_text(self):
+        return "\n".join(f"{f['name']}" + (" (advanced)" if f["advanced"] else "") + ("" if f["enabled"] else " (turned off)")
+                         for f in sorted(await self._homey_flows(), key=lambda f: f["name"].lower())) or "No flows."
+
+    async def homey_run_flow(self, name, approved=False):
+        name = to_str(name).strip()
+        flows = await self._homey_flows()
+        f = next((x for x in flows if x["name"].lower() == name.lower()), None) or \
+            (lambda c: c[0] if len(c) == 1 else None)([x for x in flows if name.lower() in x["name"].lower()])
+        if not f:
+            raise RunError(tr("There's no Homey flow called “{name}”.", name=name))
+        if (not approved or self.dry_run()) and not await self._allowed(["ha"], f"start the Homey flow “{f['name']}”"):
+            return False
+        await self._homey("POST", ("/flow/advancedflow/" if f["advanced"] else "/flow/flow/") + urllib.parse.quote(f["id"]) + "/trigger", {})
+        self.log(tr("Homey flow started"), f["name"], tr("started"))
+        return True
+
+    async def _homey_var(self, name):
+        name = to_str(name).strip()
+        vs = list((await self._homey("GET", "/logic/variable/") or {}).values())
+        v = next((x for x in vs if x.get("name", "").lower() == name.lower()), None)
+        if not v:
+            raise RunError(tr("There's no Homey variable called “{name}”.", name=name) + (" " + tr("Its variables are: {names}", names=", ".join(x.get("name", "") for x in vs[:12])) if vs else ""))
+        return v
+
+    async def homey_variable(self, name):
+        return (await self._homey_var(name)).get("value", "")
+
+    async def homey_set_variable(self, name, value, approved=False):
+        v = await self._homey_var(name)
+        old = v.get("value")
+        new = self._homey_value_for(old, value) if v.get("type") in ("boolean", "number") else to_str(value)
+        if (not approved or self.dry_run()) and not await self._allowed(["ha"], f"set the Homey variable “{v['name']}” to {self._homey_show(new)}"):
+            return False
+        await self._homey("PUT", "/logic/variable/" + urllib.parse.quote(v["id"]), {"value": new})
+        self.log(tr("Homey variable {name}", name=v["name"]), f"{self._homey_show(old)} → {self._homey_show(new)}", tr("set"))
+        return True
+
+    async def _listen_homey(self, items):
+        """'when Homey device … changes': checks every 10 seconds and starts the script when a value changes."""
+        before = None
+        print(tr("Watching Homey devices for changes."), flush=True)
+        while True:
+            try:
+                home = await self._homey_home()
+                now = {(d["name"], k): (v, d) for d in home for k, v in d["caps"].items()}
+                if before is not None:
+                    for (dname, cap), (v, d) in now.items():
+                        if (dname, cap) not in before or before[(dname, cap)][0] == v:
+                            continue
+                        old = before[(dname, cap)][0]
+                        for arg, fn in items:
+                            want_dev, _, want_cap = to_str(arg).partition("|")
+                            want_cap = want_cap.strip().lower()
+                            if want_dev.strip().lower() not in (dname.lower(), d["id"]) or want_cap not in ("", "anything", cap.lower()):
+                                continue
+                            rec = {"device": dname, "zone": d["zone"], "capability": cap, "from": self._homey_show(old) if isinstance(old, bool) else old,
+                                   "to": self._homey_show(v) if isinstance(v, bool) else v,
+                                   "text": f"{dname} {cap}: {self._homey_show(old)} → {self._homey_show(v)}"}
+                            self._fire(fn, rec, f"Homey: {dname} {cap}")
+                before = now
+            except RunError as e:
+                print(tr("  (Homey check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(10))
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -8549,11 +8550,6 @@ class Doctor:
                 cfg = await self._ha("GET", "/api/config")
                 return f"reached Home Assistant {cfg.get('version', '')}".strip() if isinstance(cfg, dict) else tr("reached")
             out.append(("Home Assistant", ha))
-        if has("homey_read", "homey_act"):
-            async def homey():
-                home = await self._homey_home()
-                return tr("reached: {home} devices", home=len(home))
-            out.append(("Homey", homey))
         # sync:connections-check-begin
         if has("arr_read", "arr_control"):
             async def arr(which):
@@ -8581,6 +8577,11 @@ class Doctor:
                 n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
                 return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
             out.append(("Docker", docker))
+        if has("homey_read", "homey_act"):
+            async def homey():
+                home = await self._homey_home()
+                return tr("reached: {home} devices", home=len(home))
+            out.append(("Homey", homey))
         if has("mikrotik_read"):
             async def mikrotik():
                 return await self._doctor_mikrotik()
@@ -9003,7 +9004,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -9011,6 +9012,7 @@ class Doctor:
                 "Sonarr": "SONARR_URL",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
+                "Homey": "HOMEY_API_KEY",
                 "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
@@ -12006,7 +12008,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["slack_send", "send Slack messages", true],
 ["github_comment", "comment on GitHub, and open and label issues", true],
 ["ha_act", "control your Home Assistant devices", true],
-["homey_act", "control your Homey devices and start Homey flows", true],
 ["mqtt_publish", "publish MQTT messages", true],
 ["webhook", "accept web requests from other computers", true],
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
@@ -12014,6 +12015,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
+["homey_act", "control your Homey devices and start Homey flows", true],
 ["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
 ["pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", true],
 ["plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", true],
@@ -12026,6 +12028,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
+["homey_read", "look at your Homey devices, flows and variables", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
 ["nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", false],
 ["pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", false],
@@ -12045,7 +12048,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["discord_read", "read your Discord channels", false],
 ["slack_read", "read your Slack channels", false],
 ["ha_read", "look at your Home Assistant devices", false],
-["homey_read", "look at your Homey devices, flows and variables", false],
 ["mqtt_read", "read MQTT messages", false],
 ["folder", "look at the files in a folder, and watch it for new ones", false],
 ["files_read", "read files you choose", false],
@@ -12069,20 +12071,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   "device_id",
   "floor_id",
   "label_id"
- ],
- "homey_sensitive": [
-  [
-   "locked",
-   false
-  ],
-  [
-   "garagedoor_closed",
-   false
-  ],
-  [
-   "homealarm_state",
-   "disarmed"
-  ]
  ],
  "arr_free": [
   [
@@ -12116,6 +12104,20 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"
+  ]
+ ],
+ "homey_sensitive": [
+  [
+   "locked",
+   false
+  ],
+  [
+   "garagedoor_closed",
+   false
+  ],
+  [
+   "homealarm_state",
+   "disarmed"
   ]
  ],
  "mikrotik_free": [
@@ -17442,11 +17444,12 @@ HOW TO MAP CODE
   const HUES = {
     events:"#936D12", control:"#AF5E19", operators:"#408230", text:"#288167", variables:"#D04121",
     lists:"#C2413B", procedures:"#CB3E71", draft:"#2469F9", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", 
+    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", 
     // sync:connections-hues-begin
     arr:"#C2185B",
     coinbase:"#C2185B",
     docker:"#C2185B",
+    homey:"#C2185B",
     mikrotik:"#C2185B",
     nzbgeek:"#C2185B",
     pihole:"#C2185B",
@@ -17469,11 +17472,12 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), 
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), 
     // sync:connections-styles-begin
     arr:style(HUES.arr),
     coinbase:style(HUES.coinbase),
     docker:style(HUES.docker),
+    homey:style(HUES.homey), homey_hat:style(HUES.homey, true),
     mikrotik:style(HUES.mikrotik),
     nzbgeek:style(HUES.nzbgeek),
     pihole:style(HUES.pihole),
@@ -17663,8 +17667,7 @@ HOW TO MAP CODE
     rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
-    rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
-    rb_homey_variable:"homey_read", rb_homey_when:"homey_read", 
+    
     
     rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
     rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web", rb_calendar:"calendar", rb_cal_when:"calendar", rb_feed_news:"feeds",
@@ -17681,6 +17684,8 @@ HOW TO MAP CODE
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",
     rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control",
+    rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
+    rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
     rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",
     rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
@@ -18036,21 +18041,6 @@ HOW TO MAP CODE
       tooltip:"The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics." }),
     S("rb_mqtt_publish", "publish MQTT %1 to topic %2 keep it %3", [val("TEXT"), val("TOPIC"), { type:"field_checkbox", name:"RETAIN", checked:false }],
       { style:"conn", inputsInline:true, tooltip:"Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown." }),
-    /* Homey */
-    { type:"rb_homey_when", message0:"when Homey device %1 %2 changes", args0:[{ type:"field_input", name:"DEVICE", text:"Washing machine" }, { type:"field_input", name:"CAPABILITY", text:"measure_power" }],
-      nextStatement:null, style:"homey_hat",
-      tooltip:"Runs the blocks below when this Homey device's value changes (checked every 10 seconds). Type 'anything' for any of its values. 'What arrived' gives device, zone, capability, from, to and text. On this page, right-click it and choose 'Run this script' to try it." },
-    V("rb_homey_value", "%1 of Homey device %2", [val("CAPABILITY"), val("DEVICE")], null, { style:"homey", inputsInline:true,
-      tooltip:"One value of a Homey device, by the device's name: onoff (on or off), dim (0 to 1), measure_temperature, measure_power and so on. 'Homey devices matching' shows what each device has." }),
-    V("rb_homey_find", "Homey devices matching %1", [val("TEXT")], "Array", { style:"homey", inputsInline:true,
-      tooltip:"A list of records, one for each device whose name, zone or kind contains all these words ('*' for every device): name, zone, class, and each of its values." }),
-    S("rb_homey_set", "set Homey device %1 %2 to %3", [val("DEVICE"), val("CAPABILITY"), val("VALUE")], { style:"homey", inputsInline:true,
-      tooltip:"Sets a value, like onoff to off, dim to 0.5 or target_temperature to 19. 'Ask me before any smart home action' makes it ask first; unlocking, opening and disarming always ask. On this page it changes the sample home." }),
-    S("rb_homey_flow", "run Homey flow %1", [val("NAME")], { style:"homey", inputsInline:true,
-      tooltip:"Starts one of your Homey flows, by its name. A flow can do anything your Homey can, including sending a Homey notification." }),
-    V("rb_homey_variable", "Homey variable %1", [val("NAME")], null, { style:"homey", inputsInline:true, tooltip:"The value of a Homey Logic variable, by its name." }),
-    S("rb_homey_set_variable", "set Homey variable %1 to %2", [val("NAME"), val("VALUE")], { style:"homey", inputsInline:true,
-      tooltip:"Changes a Homey Logic variable, so your flows can use it." }),
     // sync:connections-defs-begin
     /* Radarr and Sonarr (#398): reads, and a search that always asks */
     V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
@@ -18086,6 +18076,21 @@ HOW TO MAP CODE
       tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
     S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
       { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
+    /* Homey */
+    { type:"rb_homey_when", message0:"when Homey device %1 %2 changes", args0:[{ type:"field_input", name:"DEVICE", text:"Washing machine" }, { type:"field_input", name:"CAPABILITY", text:"measure_power" }],
+      nextStatement:null, style:"homey_hat",
+      tooltip:"Runs the blocks below when this Homey device's value changes (checked every 10 seconds). Type 'anything' for any of its values. 'What arrived' gives device, zone, capability, from, to and text. On this page, right-click it and choose 'Run this script' to try it." },
+    V("rb_homey_value", "%1 of Homey device %2", [val("CAPABILITY"), val("DEVICE")], null, { style:"homey", inputsInline:true,
+      tooltip:"One value of a Homey device, by the device's name: onoff (on or off), dim (0 to 1), measure_temperature, measure_power and so on. 'Homey devices matching' shows what each device has." }),
+    V("rb_homey_find", "Homey devices matching %1", [val("TEXT")], "Array", { style:"homey", inputsInline:true,
+      tooltip:"A list of records, one for each device whose name, zone or kind contains all these words ('*' for every device): name, zone, class, and each of its values." }),
+    S("rb_homey_set", "set Homey device %1 %2 to %3", [val("DEVICE"), val("CAPABILITY"), val("VALUE")], { style:"homey", inputsInline:true,
+      tooltip:"Sets a value, like onoff to off, dim to 0.5 or target_temperature to 19. 'Ask me before any smart home action' makes it ask first; unlocking, opening and disarming always ask. On this page it changes the sample home." }),
+    S("rb_homey_flow", "run Homey flow %1", [val("NAME")], { style:"homey", inputsInline:true,
+      tooltip:"Starts one of your Homey flows, by its name. A flow can do anything your Homey can, including sending a Homey notification." }),
+    V("rb_homey_variable", "Homey variable %1", [val("NAME")], null, { style:"homey", inputsInline:true, tooltip:"The value of a Homey Logic variable, by its name." }),
+    S("rb_homey_set_variable", "set Homey variable %1 to %2", [val("NAME"), val("VALUE")], { style:"homey", inputsInline:true,
+      tooltip:"Changes a Homey Logic variable, so your flows can use it." }),
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
@@ -18344,12 +18349,6 @@ HOW TO MAP CODE
       B("rb_ha_notify", { TARGET:K("persistent_notification"), TEXT:L("The back door is still open.") }),
       B("rb_ha_speak", { TEXT:L("Good morning!"), PLAYER:K("media_player.kitchen_speaker") })
     ]},
-    { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
-      B("rb_homey_when"), B("rb_event"),
-      B("rb_homey_find", { TEXT:K("light") }), B("rb_homey_value", { CAPABILITY:K("measure_temperature"), DEVICE:K("Proofing box") }),
-      B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
-      B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
-    ]},
     // sync:connections-toolbox-begin
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
@@ -18362,6 +18361,12 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
       B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
+    ]},
+    { kind:"category", name:"Homey", categorystyle:"homey", service:"homey", contents:[
+      B("rb_homey_when"), B("rb_event"),
+      B("rb_homey_find", { TEXT:K("light") }), B("rb_homey_value", { CAPABILITY:K("measure_temperature"), DEVICE:K("Proofing box") }),
+      B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
+      B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
     ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
@@ -21250,6 +21255,7 @@ HOW TO MAP CODE
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
+             homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
@@ -21261,7 +21267,6 @@ HOW TO MAP CODE
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
-             homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
   function iniText(progName){
@@ -21333,6 +21338,12 @@ HOW TO MAP CODE
       "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
       "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
       "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
+    if (need.homey) out.push("", "[homey]",
+      "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
+      "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
+      "; like http://192.168.1.20:4859. Devices on a Homey Bridge connected to it show up there too.",
+      "; Give the key the permissions the program needs: View devices, Control devices, View and start flows, View and edit Logic.",
+      "HOMEY_URL = http://homey-XXXXXXX.local", "HOMEY_API_KEY = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -21430,12 +21441,6 @@ HOW TO MAP CODE
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
       "CALENDAR_URL = ");
-    if (need.homey) out.push("", "[homey]",
-      "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
-      "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
-      "; like http://192.168.1.20:4859. Devices on a Homey Bridge connected to it show up there too.",
-      "; Give the key the permissions the program needs: View devices, Control devices, View and start flows, View and edit Logic.",
-      "HOMEY_URL = http://homey-XXXXXXX.local", "HOMEY_API_KEY = ");
     if (need.mqtt) out.push("", "[mqtt]",
       "; Your MQTT broker, for example Mosquitto in Home Assistant (Settings, Add-ons). Add a username and password if it needs them.",
       "MQTT_HOST = homeassistant.local", "; MQTT_PORT = 1883", "; MQTT_USERNAME = ", "; MQTT_PASSWORD = ", "; MQTT_TLS = yes   for an encrypted connection (port 8883)");
@@ -21706,9 +21711,6 @@ HOW TO MAP CODE
         case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
-        case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
-        case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
-        case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         // sync:connections-pyread-begin
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -21722,6 +21724,9 @@ HOW TO MAP CODE
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
+        case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
+        case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
+        case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -21888,14 +21893,14 @@ HOW TO MAP CODE
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
           case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
-          case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
-          case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
-          case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
+          case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
+          case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
+          case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
@@ -23981,82 +23986,6 @@ HOW TO MAP CODE
     try { const j = JSON.parse(text); if (j && typeof j === "object" && !Array.isArray(j)) Object.entries(j).forEach(([k, v]) => { if (!(k in rec)) rec[k] = v && typeof v === "object" ? JSON.stringify(v) : v; }); } catch(e) {}
     return rec;
   }
-  /* Homey on the page: a sample home. Exported Python talks to your Homey Pro. Matches the runtime's wording. */
-  const HOMEY = { devices:null };
-  function homeyHome(){
-    connNote("Homey");
-    const h = CONN.homey || { zones:{}, devices:[] };
-    if (!HOMEY.devices) HOMEY.devices = JSON.parse(JSON.stringify(h.devices || []));
-    return HOMEY.devices.map(d => ({ id:d.id, name:d.name, zone:(h.zones || {})[d.zone] || "", class:d.class,
-      caps:Object.fromEntries(Object.entries(d.capabilitiesObj || {}).map(([k, c]) => [k, c.value])) }))
-      .sort((a, b) => (a.zone + "\u0000" + a.name).localeCompare(b.zone + "\u0000" + b.name));
-  }
-  const homeyShow = v => v === true ? "on" : v === false ? "off" : v == null ? "-" : str(v);
-  const homeyLine = d => d.name + " (" + (d.zone || "no zone") + ", " + d.class + "): " + Object.entries(d.caps).map(([k, v]) => k + "=" + homeyShow(v)).join(", ");
-  function homeyDevice(name){
-    name = str(name).trim();
-    if (!name) fail(tr("Which Homey device? Give its name, like Kitchen light."));
-    const home = homeyHome(), exact = home.filter(d => d.name.toLowerCase() === name.toLowerCase() || d.id === name);
-    if (exact.length) return exact[0];
-    const some = home.filter(d => name.toLowerCase().split(/\s+/).every(w => d.name.toLowerCase().includes(w)));
-    if (some.length === 1) return some[0];
-    fail(tr("There's no Homey device called “{name}”.", { name }) + (some.length ? " " + tr("Did you mean: {names}?", { names:some.slice(0, 6).map(d => d.name).join(", ") }) : ""));
-  }
-  const homeyMatch = text => { const words = str(text).toLowerCase().split(/\s+/).filter(w => w && w !== "*");
-    return homeyHome().filter(d => words.every(w => (d.name + " " + d.zone + " " + d.class).toLowerCase().includes(w))); };
-  const homeyFindText = text => homeyMatch(text).map(homeyLine).join("\n") || "No Homey devices match “" + str(text).trim() + "”.";
-  const homeyFind = text => homeyMatch(text).map(d => Object.assign({ name:d.name, zone:d.zone, class:d.class },
-    Object.fromEntries(Object.entries(d.caps).map(([k, v]) => [k, typeof v === "boolean" ? homeyShow(v) : v]))));
-  function homeyValue(cap, device){
-    const d = homeyDevice(device); cap = str(cap).trim();
-    if (!(cap in d.caps)) fail(tr("{device} has no “{cap}”. It has: {caps}.", { device:d.name, cap, caps:Object.keys(d.caps).join(", ") || tr("nothing") }));
-    const v = d.caps[cap]; return typeof v === "boolean" ? homeyShow(v) : v;
-  }
-  function homeyValueFor(old, value){
-    const words = ["on", "off", "true", "false", "yes", "no", "1", "0"];
-    if (typeof old === "boolean" || (typeof value === "string" && words.slice(0, 6).includes(value.trim().toLowerCase()))) {
-      if (typeof value === "string") { const t = value.trim().toLowerCase(); if (!words.includes(t)) fail(tr("“{value}” isn't on or off.", { value })); return ["on", "true", "yes", "1"].includes(t); }
-      return !!value;
-    }
-    if (typeof old === "number") { if (!isNumLike(value)) fail(tr("“{value}” isn't a number.", { value })); return num(value); }
-    return typeof value === "number" || typeof value === "boolean" ? value : str(value);
-  }
-  const HOMEY_SENSITIVE = SAFETY.homey_sensitive;  // unlocking, opening and disarming
-  async function homeySet(device, cap, value, approved){
-    const d = homeyDevice(device); cap = str(cap).trim();
-    if (!(cap in d.caps)) fail(tr("{device} has no “{cap}”. It has: {caps}.", { device:d.name, cap, caps:Object.keys(d.caps).join(", ") || tr("nothing") }));
-    const v = homeyValueFor(d.caps[cap], value), what = "set " + d.name + " " + cap + " to " + homeyShow(v);
-    // Unlocking, opening and disarming always ask, unless you've just said yes to this very change.
-    if (HOMEY_SENSITIVE.some(([c, x]) => c === cap && x === v)) { if (!approved && !(await confirmAction(what + " (a safety check: unlocking, opening and disarming always ask)"))) return false; }
-    else if (!approved && !(await allowed(["ha"], what))) return false;
-    HOMEY.devices.find(x => x.id === d.id).capabilitiesObj[cap].value = v;
-    addStep("Homey: " + d.name, { mono:true, text:cap + ": " + homeyShow(d.caps[cap]) + " → " + homeyShow(v) }).done("sample home", "ok");
-    return true;
-  }
-  const homeyFlows = () => { homeyHome(); return ((CONN.homey || {}).flows || []).slice(); };
-  const homeyFlowsText = () => homeyFlows().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(f => f.name + (f.advanced ? " (advanced)" : "")).join("\n") || "No flows.";
-  async function homeyRunFlow(name, approved){
-    name = str(name).trim();
-    const flows = homeyFlows(), some = flows.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
-    const f = flows.find(x => x.name.toLowerCase() === name.toLowerCase()) || (some.length === 1 ? some[0] : null);
-    if (!f) fail(tr("There's no Homey flow called “{name}”.", { name }));
-    if (!approved && !(await allowed(["ha"], "start the Homey flow “" + f.name + "”"))) return false;
-    addStep("Homey flow started", { mono:true, text:f.name }).done("sample home", "ok");
-    return true;
-  }
-  function homeyVar(name){
-    name = str(name).trim(); homeyHome();
-    const vs = (CONN.homey || {}).variables || [], v = vs.find(x => x.name.toLowerCase() === name.toLowerCase());
-    if (!v) fail(tr("There's no Homey variable called “{name}”.", { name }) + (vs.length ? " " + tr("Its variables are: {names}", { names:vs.slice(0, 12).map(x => x.name).join(", ") }) : ""));
-    return v;
-  }
-  async function homeySetVariable(name, value, approved){
-    const v = homeyVar(name), old = v.value, nv = ["boolean", "number"].includes(v.type) ? homeyValueFor(old, value) : str(value);
-    if (!approved && !(await allowed(["ha"], "set the Homey variable “" + v.name + "” to " + homeyShow(nv)))) return false;
-    v.value = nv;
-    addStep(tr("Homey variable {name}", { name:v.name }), { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
-    return true;
-  }
   // sync:connections-page-begin
   /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
      reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
@@ -24209,6 +24138,82 @@ HOW TO MAP CODE
     const what = action + " the Docker container " + id + " (" + c.image + ", now " + c.state + ")";
     if (!(await confirmAction(what + " (it always asks)"))) return false;
     addStep("Docker", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
+  /* Homey on the page: a sample home. Exported Python talks to your Homey Pro. Matches the runtime's wording. */
+  const HOMEY = { devices:null };
+  function homeyHome(){
+    connNote("Homey");
+    const h = CONN.homey || { zones:{}, devices:[] };
+    if (!HOMEY.devices) HOMEY.devices = JSON.parse(JSON.stringify(h.devices || []));
+    return HOMEY.devices.map(d => ({ id:d.id, name:d.name, zone:(h.zones || {})[d.zone] || "", class:d.class,
+      caps:Object.fromEntries(Object.entries(d.capabilitiesObj || {}).map(([k, c]) => [k, c.value])) }))
+      .sort((a, b) => (a.zone + "\u0000" + a.name).localeCompare(b.zone + "\u0000" + b.name));
+  }
+  const homeyShow = v => v === true ? "on" : v === false ? "off" : v == null ? "-" : str(v);
+  const homeyLine = d => d.name + " (" + (d.zone || "no zone") + ", " + d.class + "): " + Object.entries(d.caps).map(([k, v]) => k + "=" + homeyShow(v)).join(", ");
+  function homeyDevice(name){
+    name = str(name).trim();
+    if (!name) fail(tr("Which Homey device? Give its name, like Kitchen light."));
+    const home = homeyHome(), exact = home.filter(d => d.name.toLowerCase() === name.toLowerCase() || d.id === name);
+    if (exact.length) return exact[0];
+    const some = home.filter(d => name.toLowerCase().split(/\s+/).every(w => d.name.toLowerCase().includes(w)));
+    if (some.length === 1) return some[0];
+    fail(tr("There's no Homey device called “{name}”.", { name }) + (some.length ? " " + tr("Did you mean: {names}?", { names:some.slice(0, 6).map(d => d.name).join(", ") }) : ""));
+  }
+  const homeyMatch = text => { const words = str(text).toLowerCase().split(/\s+/).filter(w => w && w !== "*");
+    return homeyHome().filter(d => words.every(w => (d.name + " " + d.zone + " " + d.class).toLowerCase().includes(w))); };
+  const homeyFindText = text => homeyMatch(text).map(homeyLine).join("\n") || "No Homey devices match “" + str(text).trim() + "”.";
+  const homeyFind = text => homeyMatch(text).map(d => Object.assign({ name:d.name, zone:d.zone, class:d.class },
+    Object.fromEntries(Object.entries(d.caps).map(([k, v]) => [k, typeof v === "boolean" ? homeyShow(v) : v]))));
+  function homeyValue(cap, device){
+    const d = homeyDevice(device); cap = str(cap).trim();
+    if (!(cap in d.caps)) fail(tr("{device} has no “{cap}”. It has: {caps}.", { device:d.name, cap, caps:Object.keys(d.caps).join(", ") || tr("nothing") }));
+    const v = d.caps[cap]; return typeof v === "boolean" ? homeyShow(v) : v;
+  }
+  function homeyValueFor(old, value){
+    const words = ["on", "off", "true", "false", "yes", "no", "1", "0"];
+    if (typeof old === "boolean" || (typeof value === "string" && words.slice(0, 6).includes(value.trim().toLowerCase()))) {
+      if (typeof value === "string") { const t = value.trim().toLowerCase(); if (!words.includes(t)) fail(tr("“{value}” isn't on or off.", { value })); return ["on", "true", "yes", "1"].includes(t); }
+      return !!value;
+    }
+    if (typeof old === "number") { if (!isNumLike(value)) fail(tr("“{value}” isn't a number.", { value })); return num(value); }
+    return typeof value === "number" || typeof value === "boolean" ? value : str(value);
+  }
+  const HOMEY_SENSITIVE = SAFETY.homey_sensitive;  // unlocking, opening and disarming
+  async function homeySet(device, cap, value, approved){
+    const d = homeyDevice(device); cap = str(cap).trim();
+    if (!(cap in d.caps)) fail(tr("{device} has no “{cap}”. It has: {caps}.", { device:d.name, cap, caps:Object.keys(d.caps).join(", ") || tr("nothing") }));
+    const v = homeyValueFor(d.caps[cap], value), what = "set " + d.name + " " + cap + " to " + homeyShow(v);
+    // Unlocking, opening and disarming always ask, unless you've just said yes to this very change.
+    if (HOMEY_SENSITIVE.some(([c, x]) => c === cap && x === v)) { if (!approved && !(await confirmAction(what + " (a safety check: unlocking, opening and disarming always ask)"))) return false; }
+    else if (!approved && !(await allowed(["ha"], what))) return false;
+    HOMEY.devices.find(x => x.id === d.id).capabilitiesObj[cap].value = v;
+    addStep("Homey: " + d.name, { mono:true, text:cap + ": " + homeyShow(d.caps[cap]) + " → " + homeyShow(v) }).done("sample home", "ok");
+    return true;
+  }
+  const homeyFlows = () => { homeyHome(); return ((CONN.homey || {}).flows || []).slice(); };
+  const homeyFlowsText = () => homeyFlows().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(f => f.name + (f.advanced ? " (advanced)" : "")).join("\n") || "No flows.";
+  async function homeyRunFlow(name, approved){
+    name = str(name).trim();
+    const flows = homeyFlows(), some = flows.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
+    const f = flows.find(x => x.name.toLowerCase() === name.toLowerCase()) || (some.length === 1 ? some[0] : null);
+    if (!f) fail(tr("There's no Homey flow called “{name}”.", { name }));
+    if (!approved && !(await allowed(["ha"], "start the Homey flow “" + f.name + "”"))) return false;
+    addStep("Homey flow started", { mono:true, text:f.name }).done("sample home", "ok");
+    return true;
+  }
+  function homeyVar(name){
+    name = str(name).trim(); homeyHome();
+    const vs = (CONN.homey || {}).variables || [], v = vs.find(x => x.name.toLowerCase() === name.toLowerCase());
+    if (!v) fail(tr("There's no Homey variable called “{name}”.", { name }) + (vs.length ? " " + tr("Its variables are: {names}", { names:vs.slice(0, 12).map(x => x.name).join(", ") }) : ""));
+    return v;
+  }
+  async function homeySetVariable(name, value, approved){
+    const v = homeyVar(name), old = v.value, nv = ["boolean", "number"].includes(v.type) ? homeyValueFor(old, value) : str(value);
+    if (!approved && !(await allowed(["ha"], "set the Homey variable “" + v.name + "” to " + homeyShow(nv)))) return false;
+    v.value = nv;
+    addStep(tr("Homey variable {name}", { name:v.name }), { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
     return true;
   }
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
@@ -25351,13 +25356,6 @@ HOW TO MAP CODE
         if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";
         return key === "" || key === "all" ? Object.assign({}, v) : (key in v ? v[key] : "");
       }
-      case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
-      case "rb_homey_find": {
-        const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
-        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || tr("(nothing)") }).done(tr("{n} devices", { n:recs.length }), "ok");
-        return recs;
-      }
-      case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       // sync:connections-iread-begin
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
@@ -25371,6 +25369,13 @@ HOW TO MAP CODE
       case "rb_docker_containers": return dockerContainers();
       case "rb_docker_stats": return dockerStats();
       case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
+      case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
+      case "rb_homey_find": {
+        const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
+        addStep("Homey: " + short(t, 50), { mono:true, text:homeyMatch(t).map(homeyLine).join("\n") || tr("(nothing)") }).done(tr("{n} devices", { n:recs.length }), "ok");
+        return recs;
+      }
+      case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();
@@ -26144,14 +26149,14 @@ HOW TO MAP CODE
       }
       case "rb_tg_send": await tgSend(await input(b, tc, "TEXT"), false); break;
       case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
-      case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
-      case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
-      case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
+      case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
+      case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;

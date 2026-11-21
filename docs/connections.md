@@ -78,37 +78,6 @@ Then run `run-on-schedule.bat` (Windows) or `sh run-on-schedule.sh` (Linux or Ma
 
 `--schedule` keeps it running, so timed jobs and "when it changes" scripts start by themselves. **when Home Assistant event … happens with …** listens on Home Assistant's WebSocket, using the same `HA_URL` and `HA_TOKEN`, so it reacts at once instead of polling. Use it for remote and button presses (`zha_event`, `deconz_event`, `hue_event`), `automation_triggered`, phone notification actions or your own events. Type `anything` for every event. The second box is optional words the event's data must contain, like the remote's name. **what arrived** gives `event_type`, `entity`, `data`, `time`, `text`, and each field of the event's data, like `command`. *Developer tools → Events* in Home Assistant shows what your devices send.
 
-## Homey
-
-Second Thought also talks to **Homey Pro**, with its own green blocks under **Homey**:
-
-- **when Homey device … … changes** starts a script when a device's value changes, like the washing machine's power dropping. **what arrived** says which device, what changed, and from what to what.
-- **… of Homey device …** reads one value, like `measure_temperature` of the Proofing box.
-- **Homey devices matching …** lists devices and everything they report.
-- **set Homey device … … to …** switches something, like `onoff` to `off` or `dim` to `0.5`.
-- **run Homey flow …** starts one of your flows. A flow can do anything your Homey can, like sending a Homey notification.
-- **Homey variable …** and **set Homey variable … to …** read and change your Logic variables, so your flows can use them.
-
-There are agent tools too, under **Tools**: **Homey: look at devices, flows and variables**, and **Homey: control devices and start flows**, which asks you before each change. On the page these blocks use a **sample Homey home**; try the examples under **Homey** in **Browse examples**. The same safety rule applies: unlocking, opening the garage and switching off the alarm always ask you first.
-
-**Using your real Homey.** In the Homey Web App (my.homey.app), open Settings, then API Keys, and make a new key with only the permissions the program needs: view devices, control devices, view and start flows, and view and edit Logic. Put it in `second-thought.ini` with your Homey's address:
-
-```
-[homey]
-HOMEY_URL = http://homey-XXXXXXX.local
-HOMEY_API_KEY = your-api-key
-```
-
-The address is in the Homey app under Settings, General. The computer running the program must be on the same network. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
-
-**Homey Self-Hosted Server** serves the same API on port **4859**, so use the address of the computer it runs on, with `:4859` on the end:
-
-```
-HOMEY_URL = http://192.168.1.20:4859
-```
-
-Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server needs nothing of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
-
 <!-- sync:connections-docs-begin -->
 ## Radarr and Sonarr
 
@@ -178,6 +147,36 @@ DOCKER_PROTECT = socket-proxy, homeassistant
 **Put a socket proxy in front.** Docker's socket is root on the machine: anything that can write to it can start a container that owns the host. Second Thought sends only what's listed above, but a proxy makes Docker itself refuse the rest. [docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy) with `CONTAINERS=1` allows reading containers, their memory and logs; the **Docker** check in `--doctor` also needs `VERSION=1`, which is on by default. If the program restarts, stops or starts containers, add `ALLOW_RESTARTS=1` (restart and stop) and `ALLOW_START=1`, and leave `POST` off: with `POST=1` the proxy would allow exec and creating containers too. Point `DOCKER_HOST` at the proxy, and keep the proxy's port off the internet: plain `tcp://` has no password. For Docker on another machine without a proxy, use TLS (`DOCKER_TLS_VERIFY = 1`, with `ca.pem`, `cert.pem` and `key.pem` in `DOCKER_CERT_PATH`). On Windows, set `DOCKER_HOST` to a `tcp://` address: Docker's named pipe isn't supported. `--doctor` says Docker's version and how many containers it sees.
 
 Docker's own MCP Toolkit is a different thing, a gateway to MCP servers that run in containers; an agent can use it as an [MCP server](mcp.md#docker-mcp-toolkit).
+## Homey
+
+Second Thought also talks to **Homey Pro**, with its own green blocks under **Homey**:
+
+- **when Homey device … … changes** starts a script when a device's value changes, like the washing machine's power dropping. **what arrived** says which device, what changed, and from what to what.
+- **… of Homey device …** reads one value, like `measure_temperature` of the Proofing box.
+- **Homey devices matching …** lists devices and everything they report.
+- **set Homey device … … to …** switches something, like `onoff` to `off` or `dim` to `0.5`.
+- **run Homey flow …** starts one of your flows. A flow can do anything your Homey can, like sending a Homey notification.
+- **Homey variable …** and **set Homey variable … to …** read and change your Logic variables, so your flows can use them.
+
+There are agent tools too, under **Tools**: **Homey: look at devices, flows and variables**, and **Homey: control devices and start flows**, which asks you before each change. On the page these blocks use a **sample Homey home**; try the examples under **Homey** in **Browse examples**. The same safety rule applies: unlocking, opening the garage and switching off the alarm always ask you first.
+
+**Using your real Homey.** In the Homey Web App (my.homey.app), open Settings, then API Keys, and make a new key with only the permissions the program needs: view devices, control devices, view and start flows, and view and edit Logic. Put it in `second-thought.ini` with your Homey's address:
+
+```
+[homey]
+HOMEY_URL = http://homey-XXXXXXX.local
+HOMEY_API_KEY = your-api-key
+```
+
+The address is in the Homey app under Settings, General. The computer running the program must be on the same network. API keys work with Homey Pro (2023 and later) and Homey Pro mini.
+
+**Homey Self-Hosted Server** serves the same API on port **4859**, so use the address of the computer it runs on, with `:4859` on the end:
+
+```
+HOMEY_URL = http://192.168.1.20:4859
+```
+
+Make the API key in the Homey Web App the same way. A **Homey Bridge** connected to a Self-Hosted Server needs nothing of its own: its devices show up through the server. To check it all works, run `python tools/smoke_test.py homey`. It only reads, so nothing is switched.
 ## MikroTik
 
 The brown **MikroTik** blocks read a MikroTik router or switch through RouterOS 7's REST API. They only read: nothing on the switch is ever changed, and there's no reboot. A switch that loses its config takes the network with it.

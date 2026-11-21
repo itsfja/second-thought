@@ -72,6 +72,7 @@
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
+             homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
@@ -83,7 +84,6 @@
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
-             homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
   }
   function iniText(progName){
@@ -155,6 +155,12 @@
       "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
       "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
       "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
+    if (need.homey) out.push("", "[homey]",
+      "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
+      "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
+      "; like http://192.168.1.20:4859. Devices on a Homey Bridge connected to it show up there too.",
+      "; Give the key the permissions the program needs: View devices, Control devices, View and start flows, View and edit Logic.",
+      "HOMEY_URL = http://homey-XXXXXXX.local", "HOMEY_API_KEY = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -252,12 +258,6 @@
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
       "CALENDAR_URL = ");
-    if (need.homey) out.push("", "[homey]",
-      "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
-      "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
-      "; like http://192.168.1.20:4859. Devices on a Homey Bridge connected to it show up there too.",
-      "; Give the key the permissions the program needs: View devices, Control devices, View and start flows, View and edit Logic.",
-      "HOMEY_URL = http://homey-XXXXXXX.local", "HOMEY_API_KEY = ");
     if (need.mqtt) out.push("", "[mqtt]",
       "; Your MQTT broker, for example Mosquitto in Home Assistant (Settings, Add-ons). Add a username and password if it needs them.",
       "MQTT_HOST = homeassistant.local", "; MQTT_PORT = 1883", "; MQTT_USERNAME = ", "; MQTT_PASSWORD = ", "; MQTT_TLS = yes   for an encrypted connection (port 8883)");
@@ -528,9 +528,6 @@
         case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_tg_message": return "R.telegram_message(" + pyStr(F("PART") || "text") + ")";
         case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
-        case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
-        case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
-        case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         // sync:connections-pyread-begin
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -544,6 +541,9 @@
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
+        case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
+        case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
+        case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -710,14 +710,14 @@
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_tg_send": E("await R.tg_send(" + I("TEXT", '""') + ")"); break;
           case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
-          case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
-          case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
-          case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
+          case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
+          case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
+          case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
