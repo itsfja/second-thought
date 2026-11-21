@@ -114,12 +114,20 @@ class Links(unittest.TestCase):
 
 class DesignNotes(unittest.TestCase):
     def test_design_md_exists_and_is_linked_from_the_notes(self):
-        """The design notes (#451): docs/design.md exists, and CONTRIBUTING.md and both helpers' notes link it."""
+        """The design notes (#451): docs/design.md exists, and CONTRIBUTING.md and the helpers' shared notes
+        (AGENTS.md, #458) link it."""
         design = ROOT / "docs" / "design.md"
         self.assertTrue(design.exists(), "docs/design.md exists")
-        for note in ("CONTRIBUTING.md", "CLAUDE.md", "MISTRAL.md"):
+        for note in ("CONTRIBUTING.md", "AGENTS.md"):
             self.assertIn("docs/design.md", (ROOT / note).read_text(encoding="utf-8"),
                           f"{note} links docs/design.md")
+
+    def test_each_helpers_notes_point_to_agents_md(self):
+        """One page of rules for every helper (#458): each tool's own file sends its reader to AGENTS.md first, and
+        new pull requests open with the template."""
+        for note in ("CLAUDE.md", "MISTRAL.md"):
+            self.assertIn("(AGENTS.md)", (ROOT / note).read_text(encoding="utf-8"), f"{note} links AGENTS.md")
+        self.assertTrue((ROOT / ".github" / "pull_request_template.md").exists(), "the pull-request template exists")
 class RecordedPictures(unittest.TestCase):
     def test_terminal_picture_matches_the_default_run(self):
         """The scripted terminal run in tools/record_docs.py (#454): every model line uses one price band — the review

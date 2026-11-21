@@ -219,6 +219,7 @@ and `--doctor` (with your keys removed). For anything security-related, see [SEC
 | `docs/ladybird-book.md` | The picture book. |
 | `docs/design.md` | The page's tokens, layout rules and voice. |
 | `CHANGELOG.md` | What changed in each runtime version. |
+| `AGENTS.md`, `CLAUDE.md`, `MISTRAL.md` | Notes for AI helpers: the shared rules in AGENTS.md, and each tool's own differences in its file. |
 | `CONTRIBUTING.md`, `SECURITY.md` | How to contribute; how to report a security problem, and what an exported program can and can't do. |
 
 The runtime's modules, in the order `tools/sync.py` joins them:
