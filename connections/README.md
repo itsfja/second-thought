@@ -33,6 +33,8 @@ by the tests) fails if they are out of date.
 | `page.js` | `web/editor/18-connections.js`, region `page`: its page sample and page-side functions |
 | `iread.js` / `iact.js` | `web/editor/19-interpreter.js`, regions `iread` / `iact`: its read / action cases |
 | `docs.md` | `docs/connections.md`, region `docs`: its section |
+| `NN-name.js` (a whole editor file, e.g. `ha/05-home-assistant.js`) | joins `web/editor/*.js` at its name's place in the page's one script (and in `tools/blocks.json`) |
+| `sample-house.json` (only `ha/` has one) | embedded in the page as the `#ha-sample` tag |
 | `sample.json` | merged into `samples/connections.json` under the folder's name |
 | `gallery/*.json` | copied to `gallery/<file>.json` |
 | `fake.py` | copied to `tests/fake_<name>.py` (its stand-in service) |
@@ -50,4 +52,4 @@ in `samples/connections.json`) by hand — sync does not prune.
 `docs/connections.md`'s table of contents at the top is still a hand-written list of the sections; add the new
 connection's line there.
 
-`powerwall/`, `pihole/`, `solax/`, `sabnzbd/`, `nzbgeek/`, `unifi/`, `mikrotik/`, `proxmox/`, `docker/`, `coinbase/`, `unraid/`, `arr/`, `plex/`, `homey/`, `mqtt/`, `telegram/`, `email/`, `github/`, `chat/`, `calendar/`, `feeds/`, `web/` and `folder/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.
+`powerwall/`, `pihole/`, `solax/`, `sabnzbd/`, `nzbgeek/`, `unifi/`, `mikrotik/`, `proxmox/`, `docker/`, `coinbase/`, `unraid/`, `arr/`, `plex/`, `homey/`, `mqtt/`, `telegram/`, `email/`, `github/`, `chat/`, `calendar/`, `feeds/`, `web/`, `folder/` and `ha/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.

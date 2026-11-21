@@ -203,7 +203,7 @@ and `--doctor` (with your keys removed). For anything security-related, see [SEC
 | `python/second_thought/` | The runtime that comes with every exported program, as a package of ten modules (below). |
 | `python/runtime.py` | The same runtime joined into one file, which every exported program gets a copy of. `tools/sync.py` builds it, so don't edit it by hand. |
 | `prompts/convert-guide.txt` | The instructions Claude reads when it turns Python back into blocks. |
-| `ha/sample-house.json` | The sample house the Home Assistant blocks use on the page. |
+| `connections/ha/sample-house.json` | The sample house the Home Assistant blocks use on the page (embedded by `tools/sync.py`). |
 | `samples/connections.json` | The sample feeds, GitHub projects, Telegram messages, emails and calendar the page uses. |
 | `i18n/` | The page's words in other languages, one file each. |
 | `lang/` | The same, as scripts the page loads for the chosen language only. `tools/sync.py` makes them; publish them with the page. |

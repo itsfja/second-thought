@@ -18,7 +18,7 @@ file needn't end where a function does, but it reads better if it does.
 | `02-blocks.js` | Every block's definition, and the long-text field. |
 | `03-toolbox.js` | The block palette (toolbox) and its categories; the one-service categories carry a `service` id and only show when turned on in Settings (#446). |
 | `04-examples.js` | Building example programs: the helpers the example library uses. |
-| `05-home-assistant.js` | Home Assistant on the page: the sample house, its blocks' behaviour and the safety rules (SAFETY, copied in by tools/sync.py). |
+| `connections/ha/05-home-assistant.js` | Home Assistant on the page, kept as a whole editor file in its connection's folder (`connections/<name>/NN-name.js` joins this list at its name's place): the sample house, its blocks' behaviour and the safety rules (SAFETY, copied in by tools/sync.py). |
 | `06-example-library.js` | The example library, Home Assistant examples included. |
 | `07-format.js` | Block file format versions and their migrations. |
 | `08-workspace.js` | The Blockly workspace: injecting it, saving and loading, the autosave. |

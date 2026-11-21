@@ -56,7 +56,7 @@ def _read_frame(sock_file):
 
 
 def start():
-    house = json.loads((ROOT / "ha" / "sample-house.json").read_text(encoding="utf-8"))
+    house = json.loads((ROOT / "connections" / "ha" / "sample-house.json").read_text(encoding="utf-8"))  # copied to tests/fake_ha.py by tools/sync.py
     states = {e["entity_id"]: e for e in house["entities"]}
     picture = (ROOT / "tests" / "fixtures" / "crumb.png").read_bytes()
     calls = []

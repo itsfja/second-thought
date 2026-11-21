@@ -10,7 +10,7 @@ The page is published as one HTML file, so the editor's own styles and code (web
 in the order of their names), that
 runtime, its list of model services (SERVICES
 in python/second_thought/providers.py, as JSON), what programs can do (CAPABILITIES in core.py), a list of the languages in i18n/*.json, the code-conversion prompt
-(prompts/convert-guide.txt), the community gallery's programs (gallery/*.json), the Home Assistant sample house (ha/sample-house.json) and the sample feeds,
+(prompts/convert-guide.txt), the community gallery's programs (gallery/*.json), the Home Assistant sample house (connections/ha/sample-house.json) and the sample feeds,
 GitHub, Telegram, email and calendar (samples/connections.json) are embedded inside it.
 
 Each translation is too big to embed them all, so each i18n/<language>.json is also written as lang/<language>.js,
@@ -167,11 +167,27 @@ def connection_files() -> dict:
     return out
 
 
-def editor_js() -> str:
-    """web/editor/*.js, joined in order."""
+def ha_sample() -> pathlib.Path:
+    """The Home Assistant sample house: connections/ha/sample-house.json (moved there by #455), or ha/ before that."""
+    moved = CONNECTIONS / "ha" / "sample-house.json"
+    return moved if moved.is_file() else ROOT / "ha" / "sample-house.json"
+
+
+def editor_files() -> list:
+    """web/editor/*.js plus any whole editor file a connection holds (connections/<name>/<NN-name>.js,
+    e.g. ha's 05-home-assistant.js), sorted by file name so each joins at its name's place."""
     files = sorted(EDITOR.glob("*.js"))
+    if CONNECTIONS.is_dir():
+        for folder in sorted(p for p in CONNECTIONS.iterdir() if p.is_dir()):
+            files.extend(folder.glob("[0-9][0-9]-*.js"))
     if not files:
         sys.exit("web/editor/ has no .js files: the editor's code lives there.")
+    return sorted(files, key=lambda p: p.name)
+
+
+def editor_js() -> str:
+    """The editor's code, one script as in the page: editor_files() joined in order."""
+    files = editor_files()
     texts = []
     for path in files:
         text = path.read_text(encoding="utf-8")
@@ -191,7 +207,7 @@ PARTS = [
     ('<script type="application/json" id="sri">\n', SRI),
     ('<script type="application/json" id="community-gallery">\n', GALLERY),
     ('<script type="text/plain" id="convert-guide">\n', GUIDE),
-    ('<script type="application/json" id="ha-sample">\n', ROOT / "ha" / "sample-house.json"),
+    ('<script type="application/json" id="ha-sample">\n', ha_sample()),
     ('<script type="application/json" id="connections-sample">\n', ROOT / "samples" / "connections.json"),
     # The editor itself: its styles and its code. Edit these files, not the copies in the page.
     ('<style id="editor-css">\n', ROOT / "web" / "editor.css"),
@@ -592,9 +608,10 @@ def _block_entry(value, where):
 
 
 def block_definitions() -> list:
-    """Every block defined through defineBlocks([...]) in web/editor/*.js, as (type, words, slots, tooltip), sorted by type."""
+    """Every block defined through defineBlocks([...]) in the editor's files (editor_files(): web/editor/*.js and any
+    connections/<name>/<NN-name>.js), as (type, words, slots, tooltip), sorted by type."""
     entries, seen = [], set()
-    for path in sorted(EDITOR.glob("*.js")):
+    for path in editor_files():
         text = path.read_text(encoding="utf-8")
         for m in re.finditer(r"\bdefineBlocks\(\[", text):
             js = _JsReader(text, m.end() - 1)

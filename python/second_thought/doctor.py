@@ -247,12 +247,6 @@ class Doctor:
         """(area, coroutine giving the detail) for each connection the program uses. Every one only reads."""
         has = lambda *ids: any(i in can for i in ids)  # noqa: E731
         out = []
-        if has("ha_read", "ha_act"):
-            async def ha():
-                await self._ha("GET", "/api/")
-                cfg = await self._ha("GET", "/api/config")
-                return f"reached Home Assistant {cfg.get('version', '')}".strip() if isinstance(cfg, dict) else tr("reached")
-            out.append(("Home Assistant", ha))
         # sync:connections-check-begin
         if has("arr_read", "arr_control"):
             async def arr(which):
@@ -333,6 +327,12 @@ class Doctor:
                 await self.gh_for_me()
                 return tr("read your pull requests")
             out.append(("GitHub", gh))
+        if has("ha_read", "ha_act"):
+            async def ha():
+                await self._ha("GET", "/api/")
+                cfg = await self._ha("GET", "/api/config")
+                return f"reached Home Assistant {cfg.get('version', '')}".strip() if isinstance(cfg, dict) else tr("reached")
+            out.append(("Home Assistant", ha))
         if has("homey_read", "homey_act"):
             async def homey():
                 home = await self._homey_home()
@@ -707,7 +707,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN",
+        need = {
                 "News feeds": "RB_FEEDS", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
@@ -718,6 +718,7 @@ class Doctor:
                 "Docker": "DOCKER_HOST",
                 "Email (reading)": "EMAIL_ADDRESS",
                  "GitHub": "GITHUB_TOKEN",
+                "Home Assistant": "HA_TOKEN",
                 "Homey": "HOMEY_API_KEY",
                 "MikroTik": "MIKROTIK_URL",
                 "MQTT": "MQTT_HOST",
