@@ -262,6 +262,11 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
+        if has("calendar"):
+            async def cal():
+                lines = await self.calendar_text("today", 7)
+                return tr("read the next 7 days ({x} lines)", x=len(to_str(lines).splitlines()))
+            out.append(("Calendar", cal))
         for svc, name in (("discord", "Discord"), ("slack", "Slack")):
             if has(svc + "_read", svc + "_send"):
                 async def chat(svc=svc):
@@ -421,11 +426,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("calendar"):
-            async def cal():
-                lines = await self.calendar_text("today", 7)
-                return tr("read the next 7 days ({x} lines)", x=len(to_str(lines).splitlines()))
-            out.append(("Calendar", cal))
         if has("feeds") and os.environ.get("RB_FEEDS", "").strip():
             async def feeds():
                 items = await self.feed_items("", 3)
@@ -708,10 +708,11 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
+                "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
+                "Calendar": "CALENDAR_URL",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",

@@ -24,6 +24,10 @@ from .core import (
     # sync:connections-imports-begin
     arr_call,
     ARR_SEARCH,
+    calendar_events,
+    event_line,
+    free_slots,
+    parse_day,
     DISCORD_API,
     SLACK_API,
     markdown_to_slack,
@@ -320,183 +324,6 @@ def parse_feed(raw):
 
 # ----- Calendars (iCal) -----
 
-def _ics_lines(text):
-    out = []
-    for line in to_str(text).replace("\r\n", "\n").replace("\r", "\n").split("\n"):
-        if line[:1] in (" ", "\t") and out:
-            out[-1] += line[1:]
-        elif line:
-            out.append(line)
-    return out
-
-
-def _ics_unescape(v):
-    return re.sub(r"\\([\\,;nN])", lambda m: "\n" if m.group(1) in "nN" else m.group(1), v)
-
-
-def _ics_time(value, params):
-    """'20261010T090000Z' or with TZID -> a local datetime; '20261010' -> (date, True) for all-day."""
-    v = value.strip()
-    if re.fullmatch(r"\d{8}", v) or params.get("VALUE") == "DATE":
-        return datetime.datetime.strptime(v[:8], "%Y%m%d"), True
-    d = datetime.datetime.strptime(v[:15], "%Y%m%dT%H%M%S")
-    if v.endswith("Z"):
-        return d.replace(tzinfo=datetime.timezone.utc).astimezone().replace(tzinfo=None), False
-    tz = params.get("TZID")
-    if tz:
-        try:
-            from zoneinfo import ZoneInfo
-            return d.replace(tzinfo=ZoneInfo(tz.strip('"'))).astimezone().replace(tzinfo=None), False
-        except Exception:  # noqa: BLE001 - an unknown time zone: treat it as local time
-            pass
-    return d, False
-
-
-_ICS_DAYS = {"MO": 0, "TU": 1, "WE": 2, "TH": 3, "FR": 4, "SA": 5, "SU": 6}
-
-
-def _ics_repeats(start, rule, until_view):
-    """Start times of a repeating event, up to the end of the view. Handles DAILY, WEEKLY (with BYDAY), MONTHLY, YEARLY,
-    INTERVAL, COUNT and UNTIL: what calendars use for nearly every repeating event."""
-    r = dict(part.split("=", 1) for part in rule.split(";") if "=" in part)
-    freq, step = r.get("FREQ", ""), max(1, int(r["INTERVAL"]) if r.get("INTERVAL", "").isdigit() else 1)  # a broken one: every time (#313)
-    count = int(r["COUNT"]) if r.get("COUNT", "").isdigit() else None
-    until = _ics_time(r["UNTIL"], {})[0] if r.get("UNTIL") else None
-    if until is not None and len(r["UNTIL"]) == 8:
-        until += datetime.timedelta(days=1) - datetime.timedelta(seconds=1)
-    days = [_ICS_DAYS[d[-2:]] for d in r.get("BYDAY", "").split(",") if d[-2:] in _ICS_DAYS]
-    out, n, i = [], 0, 0
-    while i < 3000:
-        if freq == "DAILY":
-            batch = [start + datetime.timedelta(days=i * step)]
-        elif freq == "WEEKLY":
-            week = start - datetime.timedelta(days=start.weekday()) + datetime.timedelta(weeks=i * step)
-            batch = sorted(week + datetime.timedelta(days=d) for d in (days or [start.weekday()]))
-            batch = [b for b in batch if b >= start]
-        elif freq in ("MONTHLY", "YEARLY"):
-            months = i * step * (12 if freq == "YEARLY" else 1)
-            y, m = start.year + (start.month - 1 + months) // 12, (start.month - 1 + months) % 12 + 1
-            try:
-                batch = [start.replace(year=y, month=m)]
-            except ValueError:  # the 31st in a short month: skipped, as calendars do
-                batch = []
-        else:
-            return [start]
-        for b in batch:
-            if (until and b > until) or (count is not None and n >= count) or b > until_view:
-                return out
-            out.append(b)
-            n += 1
-        i += 1
-    return out
-
-
-def calendar_events(text, start, end):
-    """Events between start and end, from iCal text, as {start, end, all_day, title, location}, in time order."""
-    events, moved, cur = [], set(), None
-    for line in _ics_lines(text):
-        if line == "BEGIN:VEVENT":
-            cur = {}
-            continue
-        if line == "END:VEVENT":
-            if cur is not None:
-                events.append(cur)
-            cur = None
-            continue
-        if cur is None or ":" not in line:
-            continue
-        head, value = line.split(":", 1)
-        name, *ps = head.split(";")
-        params = dict(x.split("=", 1) for x in ps if "=" in x)
-        name = name.upper()
-        if name in ("DTSTART", "DTEND", "RECURRENCE-ID"):
-            try:
-                cur[name] = _ics_time(value, params)
-            except (ValueError, OverflowError):
-                pass
-        elif name == "EXDATE":
-            for v in value.split(","):
-                try:
-                    cur.setdefault("EXDATE", set()).add(_ics_time(v, params)[0])
-                except (ValueError, OverflowError):
-                    pass
-        elif name in ("SUMMARY", "LOCATION", "RRULE", "UID", "STATUS", "DURATION"):
-            cur[name] = _ics_unescape(value) if name in ("SUMMARY", "LOCATION") else value
-    for e in events:
-        if "RECURRENCE-ID" in e:
-            moved.add((e.get("UID"), e["RECURRENCE-ID"][0]))
-    out = []
-    for e in events:
-        if "DTSTART" not in e or e.get("STATUS", "").upper() == "CANCELLED":
-            continue
-        try:
-            s0, all_day = e["DTSTART"]
-            if "DTEND" in e:
-                length = e["DTEND"][0] - s0
-            else:
-                m = re.fullmatch(r"P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?", e.get("DURATION", ""))
-                length = datetime.timedelta(days=int(m.group(1) or 0), hours=int(m.group(2) or 0), minutes=int(m.group(3) or 0)) if m \
-                    else datetime.timedelta(days=1 if all_day else 0)
-            starts = _ics_repeats(s0, e["RRULE"], end) if e.get("RRULE") and "RECURRENCE-ID" not in e else [s0]
-            for st in starts:
-                if st in e.get("EXDATE", ()) or (("RECURRENCE-ID" not in e) and (e.get("UID"), st) in moved):
-                    continue
-                if st + length > start and st < end or (length == datetime.timedelta(0) and start <= st < end):
-                    out.append({"start": st, "end": st + length, "all_day": all_day, "title": e.get("SUMMARY", "(no title)"),
-                                "location": e.get("LOCATION", "")})
-        except (ValueError, OverflowError):  # a broken date or rule: that event is left out, not the whole calendar (#313)
-            continue
-    out.sort(key=lambda x: (x["start"], not x["all_day"]))
-    return out
-
-
-def event_line(e):
-    if e["all_day"]:
-        days = max(1, (e["end"] - e["start"]).days)
-        when = "all day" + (f" ({days} days)" if days > 1 else "")
-    else:
-        when = f"{e['start']:%H:%M}–{e['end']:%H:%M}"
-    return f"{when}  {e['title']}" + (f" ({e['location']})" if e["location"] else "")
-
-
-def free_slots(events, day, frm, to, minutes):
-    """Free stretches of at least this many minutes between frm and to (HH:MM) on day."""
-    def at(hhmm):
-        m = re.fullmatch(r"\s*(\d{1,2})[:.](\d{2})\s*", to_str(hhmm))
-        if not m or int(m.group(1)) > 24 or int(m.group(2)) > 59:
-            raise RunError(tr("“{hhmm}” isn't a time like 09:00.", hhmm=hhmm))
-        return day + datetime.timedelta(hours=int(m.group(1)), minutes=int(m.group(2)))
-    a, b = at(frm), at(to)
-    busy = sorted((max(e["start"], a), min(e["end"], b)) for e in events if not e["all_day"] and e["end"] > a and e["start"] < b)
-    free, t = [], a
-    for s_, e_ in busy:
-        if s_ > t:
-            free.append((t, s_))
-        t = max(t, e_)
-    if b > t:
-        free.append((t, b))
-    need = datetime.timedelta(minutes=max(1, round_js(num(minutes) or 30)))
-    return [(x, y) for x, y in free if y - x >= need]
-
-
-def parse_day(text):
-    """'today', 'tomorrow', a weekday name, or YYYY-MM-DD -> midnight that day."""
-    t = to_str(text).strip().lower()
-    today = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    if t in ("", "today"):
-        return today
-    if t == "tomorrow":
-        return today + datetime.timedelta(days=1)
-    names = [w.lower() for w in WEEKDAYS]
-    if t in names or t[:3] in [n[:3] for n in names]:
-        k = [n[:3] for n in names].index(t[:3])
-        return today + datetime.timedelta(days=(k - today.weekday()) % 7)
-    try:
-        return datetime.datetime.strptime(t, "%Y-%m-%d")
-    except ValueError:
-        raise RunError(tr("“{text}” isn't a day. Use today, tomorrow, a weekday or YYYY-MM-DD.", text=text)) from None
-
-
 class Connections:
     """Home Assistant, the connections (feeds, GitHub, Telegram, email, chat, MQTT, Homey) and listeners. Part of Runtime."""
     # ----- Home Assistant -----
@@ -741,49 +568,6 @@ class Connections:
                          + (f"\n  {i['summary']}" if i["summary"] else ""))
         return "\n".join(lines) or "The feed has no items."
 
-    # Calendar
-    async def _calendar(self, start, end):
-        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
-        if not urls:
-            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
-        out = []
-        for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
-            text = _decode(data, ctype)
-            if "BEGIN:VCALENDAR" not in text[:2000]:
-                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
-            out += calendar_events(text, start, end)
-        out.sort(key=lambda x: (x["start"], not x["all_day"]))
-        return out
-
-    async def calendar_text(self, day="today", days=7):
-        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
-        events = await self._calendar(start, start + datetime.timedelta(days=days))
-        lines, cur = [], None
-        for e in events:
-            d = max(e["start"], start).date()
-            if d != cur:
-                cur = d
-                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
-            lines.append("  " + event_line(e))
-        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
-
-    async def calendar_records(self, days):
-        start = parse_day("today")
-        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
-        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
-                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
-        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
-        return recs
-
-    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
-        start = parse_day(day)
-        events = await self._calendar(start, start + datetime.timedelta(days=1))
-        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
-        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
-        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
-            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
-
     # sync:connections-runtime-begin
     # Radarr and Sonarr (#398)
     # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
@@ -867,6 +651,106 @@ class Connections:
         await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
         self.log(w.capitalize(), what, tr("done"))
         return True
+    # Calendar
+    async def _calendar(self, start, end):
+        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
+        if not urls:
+            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
+            text = _decode(data, ctype)
+            if "BEGIN:VCALENDAR" not in text[:2000]:
+                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
+            out += calendar_events(text, start, end)
+        out.sort(key=lambda x: (x["start"], not x["all_day"]))
+        return out
+
+    async def calendar_text(self, day="today", days=7):
+        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
+        events = await self._calendar(start, start + datetime.timedelta(days=days))
+        lines, cur = [], None
+        for e in events:
+            d = max(e["start"], start).date()
+            if d != cur:
+                cur = d
+                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
+            lines.append("  " + event_line(e))
+        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
+
+    async def calendar_records(self, days):
+        start = parse_day("today")
+        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
+        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
+                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
+        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
+        return recs
+
+    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
+        start = parse_day(day)
+        events = await self._calendar(start, start + datetime.timedelta(days=1))
+        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
+        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
+        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
+            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
+
+    async def _listen_calendar(self, items):
+        fired = set()
+        while True:
+            try:
+                now = datetime.datetime.now()
+                ahead = max(max(0, round_js(num(a))) for a, _ in items)
+                for e in await self._calendar(now, now + datetime.timedelta(minutes=ahead + 1)):
+                    mins = (e["start"] - now).total_seconds() / 60
+                    if e["all_day"] or mins < 0:
+                        continue
+                    for a, fn in items:
+                        key = (e["title"], e["start"], a)
+                        if mins <= max(0, round_js(num(a))) and key not in fired:
+                            fired.add(key)
+                            rec = {"title": e["title"], "start": f"{e['start']:%H:%M}", "end": f"{e['end']:%H:%M}", "location": e["location"],
+                                   "minutes": max(0, round_js(mins)),
+                                   "text": f"{e['title']} at {e['start']:%H:%M}" + (f" ({e['location']})" if e["location"] else "")}
+                            self._fire(fn, rec, tr("Coming up: {title}", title=e["title"]))
+            except RunError as e:
+                print(tr("  (Calendar check failed: {e})", e=e), flush=True)
+            await asyncio.sleep(self._poll(60))
+
+    # Web pages
+    PAGE_LINES_AFTER = 2       # with 'only the part containing', each matching line keeps this many lines after it
+    MAX_PAGE_KEEP = 200_000    # characters of each page kept to compare with next time
+
+    @staticmethod
+    def page_part(text, words):
+        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
+        words = [w for w in to_str(words).lower().split() if w]
+        if not words:
+            return text
+        lines, keep = text.splitlines(), set()
+        for i, line in enumerate(lines):
+            if all(w in line.lower() for w in words):
+                keep.update(range(i, min(len(lines), i + 1 + Connections.PAGE_LINES_AFTER)))
+        return "\n".join(lines[i] for i in sorted(keep))
+
+    @staticmethod
+    def page_changes(before, after, limit=20):
+        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
+        import difflib
+        a, c, out = before.splitlines(), after.splitlines(), []
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
+            if op == "equal":
+                continue
+            gone, new = a[i1:i2], c[j1:j2]
+            for k in range(max(len(gone), len(new))):
+                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
+                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
+        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
+
+    async def _read_page_text(self, url):
+        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
+        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
+            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
+        return page_text(_decode(data, ctype), ctype)
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
                          "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
@@ -3525,64 +3409,6 @@ class Connections:
                     known[d].add(n)
                     self._fire(fn, self._folder_file(path, size), tr("New file: {name}", name=n))
                 known[d] &= names
-
-    async def _listen_calendar(self, items):
-        fired = set()
-        while True:
-            try:
-                now = datetime.datetime.now()
-                ahead = max(max(0, round_js(num(a))) for a, _ in items)
-                for e in await self._calendar(now, now + datetime.timedelta(minutes=ahead + 1)):
-                    mins = (e["start"] - now).total_seconds() / 60
-                    if e["all_day"] or mins < 0:
-                        continue
-                    for a, fn in items:
-                        key = (e["title"], e["start"], a)
-                        if mins <= max(0, round_js(num(a))) and key not in fired:
-                            fired.add(key)
-                            rec = {"title": e["title"], "start": f"{e['start']:%H:%M}", "end": f"{e['end']:%H:%M}", "location": e["location"],
-                                   "minutes": max(0, round_js(mins)),
-                                   "text": f"{e['title']} at {e['start']:%H:%M}" + (f" ({e['location']})" if e["location"] else "")}
-                            self._fire(fn, rec, tr("Coming up: {title}", title=e["title"]))
-            except RunError as e:
-                print(tr("  (Calendar check failed: {e})", e=e), flush=True)
-            await asyncio.sleep(self._poll(60))
-
-    # Web pages
-    PAGE_LINES_AFTER = 2       # with 'only the part containing', each matching line keeps this many lines after it
-    MAX_PAGE_KEEP = 200_000    # characters of each page kept to compare with next time
-
-    @staticmethod
-    def page_part(text, words):
-        """The lines that contain all these words, each with the lines after it; the whole text when words is empty."""
-        words = [w for w in to_str(words).lower().split() if w]
-        if not words:
-            return text
-        lines, keep = text.splitlines(), set()
-        for i, line in enumerate(lines):
-            if all(w in line.lower() for w in words):
-                keep.update(range(i, min(len(lines), i + 1 + Connections.PAGE_LINES_AFTER)))
-        return "\n".join(lines[i] for i in sorted(keep))
-
-    @staticmethod
-    def page_changes(before, after, limit=20):
-        """What changed, line by line: '- old line' then '+ new line', paired where lines were replaced, at most limit lines."""
-        import difflib
-        a, c, out = before.splitlines(), after.splitlines(), []
-        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, c, autojunk=False).get_opcodes():
-            if op == "equal":
-                continue
-            gone, new = a[i1:i2], c[j1:j2]
-            for k in range(max(len(gone), len(new))):
-                out += ["- " + _short(gone[k], 200)] if k < len(gone) and gone[k].strip() else []
-                out += ["+ " + _short(new[k], 200)] if k < len(new) and new[k].strip() else []
-        return "\n".join(out[:limit]) + (f"\n… and {len(out) - limit} more changed lines" if len(out) > limit else "")
-
-    async def _read_page_text(self, url):
-        ctype, data = await asyncio.to_thread(get_url, url, True, "The page watcher", 5_000_000)
-        if not re.search(r"text/|html|xml|json", ctype, re.I) and data[:1] != b"<":
-            raise RunError(tr("{url} isn't a web page or text ({x}).", url=_short(url, 80), x=ctype.split(';')[0] or tr('unknown type')))
-        return page_text(_decode(data, ctype), ctype)
 
     async def _listen_page(self, items):
         await asyncio.gather(*(self._watch_page(arg, fn) for arg, fn in items))

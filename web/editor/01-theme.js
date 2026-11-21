@@ -6,6 +6,7 @@
     you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", 
     // sync:connections-hues-begin
     arr:"#C2185B",
+    calendar:"#C2185B",
     chat:"#C2185B",
     coinbase:"#C2185B",
     docker:"#C2185B",

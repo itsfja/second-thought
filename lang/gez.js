@@ -285,7 +285,8 @@
 "Telegram":"Telegram",
 "Email":"Email",
 "GitHub":"GitHub",
-"Discord and Slack":"Discord and Slack"
+"Discord and Slack":"Discord and Slack",
+"Calendar":"Calendar"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"ንዋያተ ላእክ፡ ደዮሙ ውስተ ግንፋለ ላእክ",

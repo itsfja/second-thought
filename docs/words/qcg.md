@@ -44,6 +44,7 @@ Made by tools/sync.py from i18n/qcg.json: edit that, not this.
 - Email: Email
 - GitHub: GitHub
 - Discord and Slack: Discord and Slack
+- Calendar: Calendar
 - Listeners: they run while the exported program runs on schedule: Ⱄⰾⱏⰹⱎⰰⱅⰵⰾⰻ: ⱅⰵⰽⱆⱅⱏ, ⰵⰳⰴⰰ ⰻⰸⰲⰵⰴⰵⱀⱀⱏⰹⰻ ⱍⰻⱀⱏ ⱅⰵⱍⰵⱅⱏ ⱂⱁ ⱆⱃⱁⰽⱆ
 - No blocks match: Ⱀⰻⰽⱁⰵⰳⱁⰶⰵ ⰸⰲⱑⱀⰰ ⱂⱁⰴⱁⰱⱀⰰ
 - Read and send: Ⱍⱅⰻ ⰻ ⱂⱁⱄⱏⰹⰾⰰⰻ

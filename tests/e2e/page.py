@@ -208,11 +208,11 @@ async def page_tests():
         await pg.click("#io-load-paste")
         await pg.wait_for_timeout(300)
         msg = await pg.text_content("#io-import-msg")
-        check("It can send email. It can also read your email and read your calendars." in msg and "asks you before its first run" in msg,
+        check("It can send email. It can also read your calendars and read your email." in msg and "asks you before its first run" in msg,
               f"importing a program says what it can do, what acts first ({msg[:140]!r}…)")
         head = inbox.split('"""', 2)[1]
-        check("What this program can do:\n  - send email\n  - read your email\n  - read your calendars\n" in head
-              and "asks you before its first run" in head and 'CAN = {"services": ["Claude"], "can": ["email_send", "email_read", "calendar"]}' in inbox
+        check("What this program can do:\n  - send email\n  - read your calendars\n  - read your email\n" in head
+              and "asks you before its first run" in head and 'CAN = {"services": ["Claude"], "can": ["email_send", "calendar", "email_read"]}' in inbox
               and ", can=CAN)" in inbox,
               "the export lists what the program can do in its notes, and hands the list to the runtime")
         await pg.select_option("#example", "brainstorm")
@@ -554,8 +554,8 @@ async def page_tests():
         await pgF.click("#conn-toggle")
         await pgF.wait_for_timeout(250)
         items = await pgF.eval_on_selector_all("#conn-list .conn-item", "els => els.map(e => [e.querySelector('input').dataset.service, e.querySelector('span').textContent])")
-        check(len(items) == 20 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
-              f"the Connections drawer lists all 20 services by their category names ({len(items)}: {items[:3]}…)")
+        check(len(items) == 21 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
+              f"the Connections drawer lists all 21 services by their category names ({len(items)}: {items[:3]}…)")
         await pgF.check("#conn-list input[data-service=ha]")
         await pgF.wait_for_timeout(300)
         vis = await pgF.evaluate(VIS)
