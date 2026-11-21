@@ -63,8 +63,7 @@
             
             
             
-             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
-             webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
+                          webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
@@ -76,6 +75,7 @@
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
+             feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
               github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
@@ -548,6 +548,7 @@
         case "rb_docker_containers": return "(await R.docker_containers())";
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
+        case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
@@ -584,7 +585,6 @@
         case "rb_unraid_containers": return "(await R.unraid_containers())";
         case "rb_unraid_vms": return "(await R.unraid_vms())";
         // sync:connections-pyread-end
-        case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
         case "rb_chat": return "(await R.chat(" + I("NAME", '"chat"') + ", " + I("TEXT", '""') + "))";
         case "rb_web_search": return "(await R.web_search(" + I("TEXT", '""') + "))";
         case "rb_rec_new": return "{}";

@@ -4,7 +4,7 @@
 
 *What programs connect to: Telegram, email, calendars, feeds, web requests, GitHub, Home Assistant, Homey, Coinbase, Docker, SABnzbd, Radarr and Sonarr, Unraid, NZBGeek, Pi-hole, Plex, Proxmox, UniFi, Powerwall, Solax, MikroTik.*
 
-**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Calendar](#calendar) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt)
+**On this page:** [the blocks](#connections) · [Home Assistant](#home-assistant) · [Homey](#homey) · [Coinbase](#coinbase) · [Docker](#docker) · [SABnzbd](#sabnzbd) · [Radarr and Sonarr](#radarr-and-sonarr) · [Unraid](#unraid) · [NZBGeek](#nzbgeek) · [Pi-hole](#pi-hole) · [Plex and Tautulli](#plex-and-tautulli) · [Proxmox](#proxmox) · [UniFi](#unifi) · [Powerwall](#powerwall) · [Solax](#solax) · [MikroTik](#mikrotik) · [Calendar](#calendar) · [Discord and Slack](#discord-and-slack) · [GitHub](#github) · [Email](#email) · [Telegram](#telegram) · [MQTT](#mqtt) · [News feeds](#news-feeds)
 
 ## Connections
 
@@ -13,7 +13,6 @@ The pink **Connections** blocks work without an agent too.
 **Listeners** start a script when something arrives:
 
 - **when a web request arrives at /…**, for Home Assistant automations, IFTTT, or a shortcut on your phone. Every request must carry your `WEBHOOK_SECRET`, or it's refused. Until you set one, the program doesn't listen for web requests at all. By default only the same computer can reach it; see `WEBHOOK_HOST` below to let other devices in.
-- **when there's something new in feed …**, checked every 15 minutes.
 - **when a file appears in folder …**, for scans, downloads or recipes you drop in. It reads the words in PDFs, Word files and text files. For a picture (PNG, JPEG, WebP or GIF), **what arrived: picture** gives the picture itself, for the picture blocks.
 - **when the web page … changes**, for a price, a stock notice, opening times or the council's bin page. Fill in **only the part containing …** (like `Price`) to watch just the lines with those words and the two lines after each, so adverts and visitor counters elsewhere on the page don't count. It checks every 60 minutes unless you say otherwise. The first check only remembers the page. What changed is in `changed`, with `before` and `after`. The last copy of each page is kept in `watched-pages.json`, next to the program, so a restart doesn't count every page as changed. Pages that need a browser to show their words can't be watched.
 
@@ -22,14 +21,12 @@ The pink **Connections** blocks work without an agent too.
 **Other blocks:**
 
 - **send Telegram message**, **send Discord message**, **send Slack message** and **send email** send something. The Discord and Slack ones reply in the channel a message came from, or post in your first channel. With **ask me before sending messages and announcements**, they ask you first.
-- **news from feed** gives a list of the latest items. Leave it empty for your own feeds.
 - **files in folder … matching …** gives a list of the files in a folder, newest first (name, path, modified, size), like every `*.pdf`. It only looks; it doesn't read them.
 
 Try **Morning briefing on Telegram** and **Email me a news digest** under Automation, and the listener examples: **Proofer too warm? (MQTT)**, **When the bread is done (web request)**, **When the flour shop emails**, **Tell me when a feed posts something useful**, **Convert recipes dropped in a folder**, **When someone asks for my review (GitHub)** and **A reminder before each event**. Press Run to try each with something you type. Under Agents, **Agent: check the sensors (MQTT)** looks over your MQTT devices.
 
 **Settings.** An exported program's `second-thought.ini` asks only for what it uses:
 
-- **News feeds:** `feeds = ` and the feed addresses, separated by spaces.
 - **Web requests:** `WEBHOOK_SECRET`, a long password, and `WEBHOOK_PORT` if 8765 is taken. Call `http://127.0.0.1:8765/<address>?key=<your secret>` from the same computer, or put the secret in an `X-Second-Thought-Key` header. The program only listens on this computer unless you add `WEBHOOK_HOST = 0.0.0.0`, which lets Home Assistant on another machine, IFTTT or your phone reach it at `http://<this computer>:8765/…`.
 
 The agent only reads **public** web pages and feeds, never addresses on your own network, in case something it reads tries to steer it there. Your own feeds and calendar address are fine wherever they are. To let the agent read pages on your own network, add `local_pages = yes`.
@@ -166,6 +163,14 @@ The **Email** blocks read your inbox and send mail from your address, asking fir
 On the page these blocks use **sample emails**, and nothing is sent: try **When the flour shop emails** or **Email me a news digest**. The listener starts from what's new after the program starts; emails that arrived while it was off don't start the script.
 
 **Settings:** `[email]` in `second-thought.ini` — `EMAIL_ADDRESS` and an **app password**, not your normal password (in Gmail, it's in your Google account under Security). Gmail, iCloud, Yahoo, Fastmail and mailbox.org find their own mail servers. For anything else, fill in `EMAIL_IMAP_HOST` and `EMAIL_SMTP_HOST` (and the ports, or `EMAIL_SSL = no` for a plain connection). `--doctor` signs in to read and to send, and says so.
+## News feeds
+
+- **when there's something new in feed …**, checked every 15 minutes. Leave the feed empty for your own feeds. **What arrived** gives feed, title, link, date, summary and text.
+- **news from feed …** gives a list of the latest items, newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds.
+
+On the page these blocks use **sample feeds**, and nothing is fetched: try **Tell me when a feed posts something useful**. The listener starts from what's new after the program starts.
+
+**Settings:** `feeds = ` in `second-thought.ini` — the feed addresses (RSS or Atom), separated by spaces. `--doctor` reads your feeds when the program can.
 ## GitHub
 
 The **GitHub** blocks look at your projects and can comment, always asking first:

@@ -285,7 +285,8 @@
 "Email":"Email",
 "GitHub":"GitHub",
 "Discord and Slack":"Discord and Slack",
-"Calendar":"Calendar"
+"Calendar":"Calendar",
+"News feeds":"News feeds"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Herramientas para el agente: suéltalas dentro de un bloque de agente",

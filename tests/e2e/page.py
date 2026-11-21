@@ -554,8 +554,8 @@ async def page_tests():
         await pgF.click("#conn-toggle")
         await pgF.wait_for_timeout(250)
         items = await pgF.eval_on_selector_all("#conn-list .conn-item", "els => els.map(e => [e.querySelector('input').dataset.service, e.querySelector('span').textContent])")
-        check(len(items) == 21 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
-              f"the Connections drawer lists all 21 services by their category names ({len(items)}: {items[:3]}…)")
+        check(len(items) == 22 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
+              f"the Connections drawer lists all 22 services by their category names ({len(items)}: {items[:3]}…)")
         await pgF.check("#conn-list input[data-service=ha]")
         await pgF.wait_for_timeout(300)
         vis = await pgF.evaluate(VIS)

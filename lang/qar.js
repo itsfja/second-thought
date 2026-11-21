@@ -286,7 +286,8 @@
 "Email":"Email",
 "GitHub":"GitHub",
 "Discord and Slack":"Discord ᚪᚾᛞ Slack",
-"Calendar":"ᚳᚪᛚᛖᚾᛞᚪᚱ"
+"Calendar":"ᚳᚪᛚᛖᚾᛞᚪᚱ",
+"News feeds":"ᚾᛖᚹᛋ feeds"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"ᛏᚩᛚ ᚠᚩᚱ ᚦᚩᚾᛖ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ: ᛚᛖᚷᛖ ᚻᛁᛖ ᛁᚾᚾᚪᚾ ᚫᚱᛖᚾᛞᚱᚪᚳᚪᚾ ᛋᛏᚩᚳᚳᛖ",
