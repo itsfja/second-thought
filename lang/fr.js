@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"Correction : {problems}",
 "Edit blocks":"Modifier les blocs",
 "Show the outline":"Voir le plan",
-"… and more":"… et plus"
+"… and more":"… et plus",
+"Ask a question or share an idea on GitHub":"Posez une question ou partagez une idée sur GitHub"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

@@ -1282,7 +1282,8 @@
 "Fixing: {problems}":"исправленіє: {problems}",
 "Edit blocks":"исправленіє блоковъ",
 "Show the outline":"покажи содержаніє",
-"… and more":"… и єщє"
+"… and more":"… и єщє",
+"Ask a question or share an idea on GitHub":"Вопроси или повѣждь мысль твою на GitHub"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},

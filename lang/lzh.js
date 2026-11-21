@@ -1282,7 +1282,8 @@
 "Fixing: {problems}":"正之：{problems}",
 "Edit blocks":"改諸塊",
 "Show the outline":"示其綱要",
-"… and more":"……其餘"
+"… and more":"……其餘",
+"Ask a question or share an idea on GitHub":"於 GitHub 問疑獻策"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},

@@ -1284,7 +1284,8 @@
 "Fixing: {problems}":"ܪܩܘܠܐ: {problems}",
 "Edit blocks":"ܥܦܘܟ ܒܠܘܩܐ",
 "Show the outline":"ܥܘܝ ܫܘܦܪܐ",
-"… and more":"… ܝܘܪܦ"
+"… and more":"… ܝܘܪܦ",
+"Ask a question or share an idea on GitHub":"שאל שאלתא או שתף מחשבתא על GitHub"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

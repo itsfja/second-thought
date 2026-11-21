@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"lagar: {problems}",
 "Edit blocks":"breyta blokkum",
 "Show the outline":"sýndu útlínurnar",
-"… and more":"… og meira"
+"… and more":"… og meira",
+"Ask a question or share an idea on GitHub":"Spyr spurningar eða seg ráð þín á GitHub"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

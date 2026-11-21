@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"Corrigindo: {problems}",
 "Edit blocks":"Editar blocos",
 "Show the outline":"Mostrar o esquema",
-"… and more":"… e mais"
+"… and more":"… e mais",
+"Ask a question or share an idea on GitHub":"Faça uma pergunta ou partilhe uma ideia no GitHub"
 },
 "examples":{
 "review":{"title":"Ciclo de revisão","desc":"O Claude escreve sobre a autólise, verifica o texto segundo as suas regras e corrige o que falhar, até 3 rondas.","tip":"Mude a tarefa no bloco azul e as regras no roxo."},

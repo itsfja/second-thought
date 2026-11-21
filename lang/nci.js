@@ -1282,7 +1282,8 @@
 "Fixing: {problems}":"tlacualtilia: {problems}",
 "Edit blocks":"xicpiya in tlapiyaliztli",
 "Show the outline":"xiquittili in tlamachqui",
-"… and more":"… ocachi"
+"… and more":"… ocachi",
+"Ask a question or share an idea on GitHub":"Xitlahtlani nozo xiquitoa motlalnamiquiliz ipan GitHub"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

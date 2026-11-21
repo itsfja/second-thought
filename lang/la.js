@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"emendatio: {problems}",
 "Edit blocks":"emendare tessellas",
 "Show the outline":"ostende lineamenta",
-"… and more":"… et plura"
+"… and more":"… et plura",
+"Ask a question or share an idea on GitHub":"Quaere aliquid aut consilium communica in GitHub"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

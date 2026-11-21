@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"修正: {problems}",
 "Edit blocks":"ブロックを編集",
 "Show the outline":"アウトラインを表示",
-"… and more":"… その他"
+"… and more":"… その他",
+"Ask a question or share an idea on GitHub":"GitHub で質問やアイデアを投稿する"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},
