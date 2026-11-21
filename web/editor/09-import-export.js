@@ -61,6 +61,7 @@
     return JSON.stringify(Object.assign({ format:FORMAT, version:FORMAT_VERSION, name:$("io-name").value.trim() || "my-program",
       exported:new Date().toISOString(), program:saveWs() }, programTests.length ? { tests:programTests } : {}), null, 2);
   }
+  window.__blockFile = () => exportText();  // for the tests: Save blocks' file, as text
   $("io-save").onclick = async () => {
     if (!downloads) return;
     const btn = $("io-save"); btn.disabled = true;
