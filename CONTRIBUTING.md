@@ -215,6 +215,7 @@ and `--doctor` (with your keys removed). For anything security-related, see [SEC
 | `tools/offline.py` | Builds `second-thought-offline.html`, the page as one file with its libraries and languages inside, which the Release workflow attaches to each release (#314). |
 | `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |
 | `tests/` | Unit tests (`tests/unit/`), and the end-to-end suite (`tests/e2e/`, one file per area, run by `tests/run_tests.py`). |
+| `docs/blocks.md` | Every block, by palette category: what it does, what it lets a program do, whether it asks first. `tools/sync.py` writes it from `tools/blocks.json`. |
 | `docs/ladybird-book.md` | The picture book. |
 | `docs/design.md` | The page's tokens, layout rules and voice. |
 | `CHANGELOG.md` | What changed in each runtime version. |

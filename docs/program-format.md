@@ -1,6 +1,6 @@
 # The program format
 
-[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · **Program format** · [Settings and models](settings.md)
+[← Second Thought](../README.md) · [Using the page](using-the-page.md) · [Blocks](blocks.md) · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · **Program format** · [Settings and models](settings.md)
 
 *A program saved as a file: one format, stated once, so anything that reads one — the page, `--doctor`, a script of your own — knows what it holds.*
 

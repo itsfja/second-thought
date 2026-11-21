@@ -16,12 +16,15 @@ GitHub, Telegram, email and calendar (samples/connections.json) are embedded ins
 Each translation is too big to embed them all, so each i18n/<language>.json is also written as lang/<language>.js,
 which the page loads for the chosen language only. Publish the lang/ folder with the page, as its supporting files.
 
+The block list, tools/blocks.json, is written from the editor's block definitions; the conversion prompt's catalogue and
+docs/blocks.md, the block reference for people (#423), are written from it.
+
 Each connection (a service a program can talk to) has its own folder, connections/<name>/, and this tool puts
 connectors.py, the package's other modules, the editor's files, the example ini, docs/connections.md, the samples
 file, the tests' stand-in services and the gallery together from them (#455). Edit a file in connections/, not the
 spliced region in the shared file, then run:
 
-    python tools/sync.py           # rebuild python/runtime.py, lang/*.js, tools/blocks.json and write everything into second-thought.html
+    python tools/sync.py           # rebuild python/runtime.py, lang/*.js, tools/blocks.json, docs/blocks.md and write everything into second-thought.html
     python tools/sync.py --check   # exit 1 if any of them is out of date (used by the tests)
     python tools/sync.py --sri     # refetch the page's CDN libraries and rewrite tools/sri.json, their fingerprints
 
@@ -74,6 +77,8 @@ BLOCKS_FILE = ROOT / "tools" / "blocks.json"
 GUIDE = ROOT / "prompts" / "convert-guide.txt"
 GUIDE_BEGIN = "<!-- sync:blocks-begin -->"
 GUIDE_END = "<!-- sync:blocks-end -->"
+# The block reference for people, written from the same list, grouped by palette category (#423).
+BLOCKS_DOC = ROOT / "docs" / "blocks.md"
 
 # ----- connections/<name>/ (#455): one folder per connection, assembled into the shared files -----
 # A connection's folder holds its own pieces as part files; each part is spliced into a marked region of its target
@@ -694,6 +699,69 @@ def blocks_json() -> str:
     return json.dumps(entries, ensure_ascii=False, indent=1) + "\n"
 
 
+def blocks_doc() -> str:
+    """docs/blocks.md: every block, grouped by palette category in the palette's order, with what it does (its
+    tooltip), what it lets a program do (its capability) and whether it asks first (#423)."""
+    blocks = json.loads(blocks_json())
+    caps, _ = block_capabilities()
+    defs = (EDITOR / "02-blocks.js").read_text(encoding="utf-8")
+    gives_of = {m.group(1): re.findall(r'"([^"]+)"', m.group(2))
+                for m in re.finditer(r"(rb_\w+):Object\.assign\(.*?gives:\[([^\]]*)\]", defs)}
+    what = {c[0]: (c[1], c[2]) for c in json.loads(capabilities_json())}
+    squash = lambda s: " ".join(str(s).split()).replace("|", "\\|")
+    order = list(dict.fromkeys(toolbox_categories().values()))
+    by_cat = {}
+    for b in blocks:
+        by_cat.setdefault(b["category"] or "Not in the palette", []).append(b)
+    cats = [c for c in order if c in by_cat] + sorted(c for c in by_cat if c not in order)
+
+    def anchor(heading):  # as GitHub makes a heading's anchor
+        return re.sub(r"\s", "-", re.sub(r"[^\w\s-]", "", heading.strip().lower()))
+
+    def shown(b):
+        words = squash(b["words"])
+        for n, slot in enumerate(b["slots"], 1):
+            words = re.sub(rf"%{n}(?!\d)", f"*{slot.lower()}*", words)
+        return words
+
+    def lets(b):
+        cap = b["capability"]
+        if cap:
+            text, acts = what[cap]
+            asks = "every time" if "asking you" in text else "before its first run" if acts else "no"
+            return squash(text), asks
+        if b["type"] == "rb_agent_builtin":
+            return "depends on the tool chosen: each kind declares its own", "depends on the tool"
+        if b["type"] in caps:  # its capability depends on a field: the ones it can give
+            gives = [what[c] for c in gives_of.get(b["type"], ["memory"])]
+            asks = {"every time" if "asking you" in t else "before its first run" if a else "no" for t, a in gives}
+            text = squash(gives[0][0]) if len(gives) == 1 else "depending on its fields, " + "; or ".join(squash(t) for t, _ in gives)
+            if b["type"] not in gives_of:  # rb_mem_set and rb_mem_add: memory only when kept forever
+                text += " (when it keeps them for good)"
+            return text, ("no" if asks == {"no"} else "depends on its fields")
+        return "nothing to declare", "no"
+
+    nav = ("[← Second Thought](../README.md) · [Using the page](using-the-page.md) · **Blocks** · [The agent](agent.md) · "
+           "[Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · "
+           "[Program format](program-format.md) · [Settings and models](settings.md)")
+    lines = ["# Blocks", "", nav, "",
+             f"*Every block on the page — {len(blocks)} of them — grouped as the palette groups them: what each does, "
+             "what it lets a program do, and whether an exported program asks you first.*", "",
+             "<!-- Made by tools/sync.py from tools/blocks.json: edit the blocks in web/editor/, not this. -->", "",
+             "**Asks first:** *every time* means the block asks before each action, even when nothing else asks, and "
+             "doesn't run with nobody there to say yes. *Before its first run* means a program that uses it asks you "
+             "once, the first time it runs. Unlocking, opening and disarming always ask. [The agent](agent.md) has more "
+             "on what always asks.", "",
+             " · ".join(f"[{c}](#{anchor(c)})" for c in cats), ""]
+    for cat in cats:
+        lines += [f"## {cat}", "", "| Block | What it does | Lets a program | Asks first |", "|---|---|---|---|"]
+        for b in by_cat[cat]:
+            text, asks = lets(b)
+            lines.append(f"| {shown(b)}<br>`{b['type']}` | {squash(b['tooltip']) or '—'} | {text} | {asks} |")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def guide_catalogue() -> str:
     """The block catalogue for prompts/convert-guide.txt, generated from the block list: every block, grouped by its
     palette category, as `type (slots): words — tooltip [capability]` (#422)."""
@@ -784,6 +852,8 @@ def main() -> int:
     blocks_current = BLOCKS_FILE.read_text(encoding="utf-8") if BLOCKS_FILE.is_file() else None
     guide = guide_text()
     guide_current = GUIDE.read_text(encoding="utf-8")
+    bdoc = blocks_doc()
+    bdoc_current = BLOCKS_DOC.read_text(encoding="utf-8") if BLOCKS_DOC.is_file() else None
     stale = sorted(set(LANG.glob("*.js")) - set(langs))
     old_langs = sorted(path for path, text in langs.items() if not path.is_file() or path.read_text(encoding="utf-8") != text)
     if check:
@@ -800,10 +870,12 @@ def main() -> int:
             bad.append("tools/blocks.json is out of date (a block definition changed)")
         if guide_current != guide:
             bad.append("prompts/convert-guide.txt is out of date (the block list changed)")
+        if bdoc_current != bdoc:
+            bad.append("docs/blocks.md is out of date (the block list changed)")
         if bad:
             print("; ".join(bad) + ". Run: python tools/sync.py")
             return 1
-        print("connections/, python/runtime.py, lang/, second-thought.html, tools/blocks.json and prompts/convert-guide.txt are in sync.")
+        print("connections/, python/runtime.py, lang/, second-thought.html, tools/blocks.json, prompts/convert-guide.txt and docs/blocks.md are in sync.")
         return 0
     changed = []
     if runtime != current_rt:
@@ -826,6 +898,9 @@ def main() -> int:
     if guide_current != guide:
         GUIDE.write_text(guide, encoding="utf-8")
         changed.append("prompts/convert-guide.txt")
+    if bdoc_current != bdoc:
+        BLOCKS_DOC.write_text(bdoc, encoding="utf-8")
+        changed.append("docs/blocks.md")
     print("Updated " + " and ".join(changed) + "." if changed else "Already in sync.")
     return 0
 
