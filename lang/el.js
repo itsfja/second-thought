@@ -280,7 +280,8 @@
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
-"MQTT":"MQTT"
+"MQTT":"MQTT",
+"Telegram":"Telegram"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Εργαλεία για τον πράκτορα: βάλτε τα μέσα σε μπλοκ πράκτορα",

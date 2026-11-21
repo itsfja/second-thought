@@ -1,0 +1,29 @@
+{
+ "chat": "You (sample chat)",
+ "messages": [
+  {
+   "from": "You",
+   "text": "Remind me to feed the starter at 8 tonight",
+   "hours_ago": 2
+  },
+  {
+   "from": "You",
+   "text": "What temperature should the oven be for a rye loaf?",
+   "hours_ago": 20
+  },
+  {
+   "from": "You",
+   "text": "Ordered 10 kg of strong white flour, arrives Friday",
+   "hours_ago": 50
+  },
+  {
+   "from": "You",
+   "text": "Starter peaked at 6 hours today, kitchen was 23 degrees",
+   "hours_ago": 75
+  }
+ ],
+ "incoming": {
+  "from": "You",
+  "text": "What should I bake this weekend?"
+ }
+}

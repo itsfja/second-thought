@@ -280,7 +280,8 @@
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
-"MQTT":"MQTT"
+"MQTT":"MQTT",
+"Telegram":"Telegram"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𐌷𐌰𐌿𐍃𐌾𐌰𐌽𐌳𐌰𐌽𐍃: 𐍄𐌰𐌿𐌾𐌰𐌽𐌳 𐍃𐍅𐌴𐌸𐌰𐌿𐌷 𐌲𐌰𐍂𐌰𐌹𐌳𐌴𐌹𐌽𐍃 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰 𐌹𐌽 𐌼𐌴𐌻𐌰 𐍄𐌰𐌿𐌾𐌹𐌸",

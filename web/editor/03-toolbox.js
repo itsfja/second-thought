@@ -86,10 +86,9 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_tg_when"), B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
-      B("rb_event"), B("rb_tg_message"),
+      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_email_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_gh_when"), B("rb_gh_issue_when"), B("rb_gh_release_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") }),
       B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
       B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
       B("rb_email_send", { TO:K("someone@example.com"), SUBJECT:T("Bake plan"), TEXT:L("Here's the plan for Saturday.") })
@@ -175,6 +174,10 @@
       B("rb_sabnzbd_queue"), B("rb_sabnzbd_history", { N:N(24) }), B("rb_sabnzbd_diskspace"), B("rb_sabnzbd_pause")
     ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
+    { kind:"category", name:"Telegram", categorystyle:"telegram", service:"telegram", contents:[
+      B("rb_tg_when"), B("rb_event"), B("rb_tg_message"),
+      B("rb_tg_send", { TEXT:L("Your loaf is ready to come out.") })
+    ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
     { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
       B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),

@@ -554,8 +554,8 @@ async def page_tests():
         await pgF.click("#conn-toggle")
         await pgF.wait_for_timeout(250)
         items = await pgF.eval_on_selector_all("#conn-list .conn-item", "els => els.map(e => [e.querySelector('input').dataset.service, e.querySelector('span').textContent])")
-        check(len(items) == 16 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
-              f"the Connections drawer lists all 16 services by their category names ({len(items)}: {items[:3]}…)")
+        check(len(items) == 17 and any(i[0] == "ha" and i[1] == "Home Assistant" for i in items),
+              f"the Connections drawer lists all 17 services by their category names ({len(items)}: {items[:3]}…)")
         await pgF.check("#conn-list input[data-service=ha]")
         await pgF.wait_for_timeout(300)
         vis = await pgF.evaluate(VIS)
@@ -583,7 +583,7 @@ async def page_tests():
         await card.click()
         await pgF.wait_for_timeout(500)
         vis = await pgF.evaluate(VIS)
-        check("pihole" in vis["enabled"] and "Pi-hole" in vis["conn"] and vis["enabled"] == ["ha", "pihole"],
+        check("pihole" in vis["enabled"] and "Pi-hole" in vis["conn"] and vis["enabled"] == ["ha", "pihole", "telegram"],
               f"loading a program that uses Pi-hole turns it on ({vis['enabled']}; nested: {vis['conn']})")
         # Find a block still reaches a service that is off (Proxmox)
         await pgF.fill("#block-search", "proxmox")

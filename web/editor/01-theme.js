@@ -18,6 +18,7 @@
     proxmox:"#C2185B",
     sabnzbd:"#C2185B",
     solax:"#C2185B",
+    telegram:"#C2185B",
     unifi:"#C2185B",
     unraid:"#C2185B",
     // sync:connections-hues-end

@@ -141,7 +141,7 @@
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_email_send:"email_send", rb_email_when:"email_read", rb_tg_send:"telegram_send", rb_tg_when:"telegram_read", rb_tg_message:"telegram_read",
+    rb_email_send:"email_send", rb_email_when:"email_read",
     rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
@@ -177,6 +177,7 @@
     rb_sabnzbd_queue:"sabnzbd_read", rb_sabnzbd_history:"sabnzbd_read",
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control",
     rb_solax_now:"solax_read",
+     rb_tg_send:"telegram_send", rb_tg_when:"telegram_read", rb_tg_message:"telegram_read",
     rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
     rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
@@ -460,13 +461,6 @@
       tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
         "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
-    { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message." },
-    V("rb_tg_message", "Telegram message %1", [{ type:"field_dropdown", name:"PART", options:[["text","text"],["sender","sender"],["chat","chat"]] }], "String",
-      { style:"conn", tooltip:"The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script." }),
-    S("rb_tg_send", "send Telegram message %1", [val("TEXT")], { style:"conn", inputsInline:true,
-      tooltip:"Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
@@ -643,6 +637,13 @@
     /* Solax (#361): read only, from SolaxCloud */
     V("rb_solax_now", "Solax figures", [], null, { style:"solax",
       tooltip:"A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter." }),
+    { type:"rb_tg_when", message0:"when a Telegram message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    V("rb_tg_message", "Telegram message %1", [{ type:"field_dropdown", name:"PART", options:[["text","text"],["sender","sender"],["chat","chat"]] }], "String",
+      { style:"conn", tooltip:"The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script." }),
+    S("rb_tg_send", "send Telegram message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     /* UniFi (#359): read only */
     V("rb_unifi_clients", "UniFi clients", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),

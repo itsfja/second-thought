@@ -207,9 +207,6 @@ Connections:
   rb_page_when (URL): when the web page %1 changes — Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.  [web]
   rb_slack_send (TEXT): send Slack message %1 — Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [slack_send]
   rb_slack_when (CONTAINS): when a Slack message arrives containing %1 — Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [slack_read]
-  rb_tg_message (PART): Telegram message %1 — The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script.  [telegram_read]
-  rb_tg_send (TEXT): send Telegram message %1 — Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [telegram_send]
-  rb_tg_when (CONTAINS): when a Telegram message arrives containing %1 — Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message.  [telegram_read]
   rb_webhook_when (PATH): when a web request arrives at / %1 — Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address.  [webhook]
 
 Control:
@@ -395,6 +392,11 @@ SABnzbd:
 
 Solax:
   rb_solax_now: Solax figures — A record of your Solax inverter's figures, as SolaxCloud last had them (they update about every five minutes): ac_power_w (what it's making now), yield_today_kwh and yield_total_kwh (solar generated), feedin_power_w and feedin_energy_kwh (to the grid), import_energy_kwh (from the grid), battery_soc_pct, status and upload_time. It only reads: nothing on the inverter changes. Needs SOLAX_TOKEN_ID and SOLAX_SN in second-thought.ini. On this page it uses a sample inverter.  [solax_read]
+
+Telegram:
+  rb_tg_message (PART): Telegram message %1 — The Telegram message that started this script: its words, who sent it, or the chat. Empty outside a Telegram script.  [telegram_read]
+  rb_tg_send (TEXT): send Telegram message %1 — Sends a message from your bot: back to the chat a message came from, or to TELEGRAM_CHAT_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [telegram_send]
+  rb_tg_when (CONTAINS): when a Telegram message arrives containing %1 — Runs the blocks below when your bot gets a message (type 'anything', or words the message must contain). Only messages from your own chats count (TELEGRAM_CHAT_ID). In exported Python it listens all the time; on this page, right-click it and choose 'Run this script' to try it with a sample message.  [telegram_read]
 
 Text:
   rb_longtext (TEXT): %1 — Long text. Press Enter for a new line; lines wrap at 80 characters.

@@ -360,6 +360,13 @@ class Doctor:
                 got = await self.solax_now()  # one call: the figures are cached for five minutes after it
                 return tr("reached SolaxCloud: {status}, figures from {time}", status=got.get("status") or "?", time=got.get("upload_time") or "?")
             out.append(("Solax", solax))
+        if has("telegram_read", "telegram_send"):
+            async def tg():
+                me = await self._tg("getMe")
+                chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
+                                                                      "Telegram program to see your chat number)")
+                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
+            out.append(("Telegram", tg))
         if has("unifi_read"):
             async def unifi():
                 base = os.environ.get("UNIFI_URL", "").strip()
@@ -379,13 +386,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("telegram_read", "telegram_send"):
-            async def tg():
-                me = await self._tg("getMe")
-                chat = "" if os.environ.get("TELEGRAM_CHAT_ID") else (" (no TELEGRAM_CHAT_ID yet: message your bot, then run a "
-                                                                      "Telegram program to see your chat number)")
-                return tr("the bot is @{x}{chat}", x=to_str((me or {}).get("username")), chat=chat)
-            out.append(("Telegram", tg))
         for svc, name in (("discord", "Discord"), ("slack", "Slack")):
             if has(svc + "_read", svc + "_send"):
                 async def chat(svc=svc):
@@ -707,7 +707,7 @@ class Doctor:
     @staticmethod
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
-        need = {"Home Assistant": "HA_TOKEN", "Telegram": "TELEGRAM_BOT_TOKEN",
+        need = {"Home Assistant": "HA_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
@@ -726,6 +726,7 @@ class Doctor:
                 "Proxmox": "PROXMOX_URL",
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
+                 "Telegram": "TELEGRAM_BOT_TOKEN",
                 "UniFi": "UNIFI_URL",
                 "Unraid": "UNRAID_URL",
                 # sync:connections-settingsmap-end

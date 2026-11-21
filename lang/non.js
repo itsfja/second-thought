@@ -280,7 +280,8 @@
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
-"MQTT":"MQTT"
+"MQTT":"MQTT",
+"Telegram":"Telegram"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Tól erindreka: lát þau falla inn í erindrekakubb",
