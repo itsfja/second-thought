@@ -148,8 +148,7 @@
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
-    rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
-    rb_docker_power:"docker_control", rb_arr_queue:"arr_read",
+    rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
@@ -163,6 +162,8 @@
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     // sync:connections-caps-begin
+    rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
+    rb_docker_power:"docker_control",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
     rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",
     rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
@@ -544,15 +545,6 @@
       { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
     S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
       tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
-    /* Docker (#358): reads, and restart, stop and start that always ask */
-    V("rb_docker_containers", "Docker containers", [], "Array", { style:"docker",
-      tooltip:"A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack." }),
-    V("rb_docker_stats", "Docker memory and CPU", [], "Array", { style:"docker",
-      tooltip:"A list of records, one for each running container: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a container with no limit) and memory (% of the limit)." }),
-    V("rb_docker_logs", "Docker logs of %1, last %2 lines", [val("NAME"), val("N")], "Array", { style:"docker", inputsInline:true,
-      tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
-    S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
-      { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
     /* Radarr and Sonarr (#398): reads, and a search that always asks */
     V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
       tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
@@ -597,6 +589,15 @@
     S("rb_plex_stop", "stop the %1 stream on Plex", [val("ID")],
       { style:"plex", inputsInline:true, tooltip:"Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     // sync:connections-defs-begin
+    /* Docker (#358): reads, and restart, stop and start that always ask */
+    V("rb_docker_containers", "Docker containers", [], "Array", { style:"docker",
+      tooltip:"A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack." }),
+    V("rb_docker_stats", "Docker memory and CPU", [], "Array", { style:"docker",
+      tooltip:"A list of records, one for each running container: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a container with no limit) and memory (% of the limit)." }),
+    V("rb_docker_logs", "Docker logs of %1, last %2 lines", [val("NAME"), val("N")], "Array", { style:"docker", inputsInline:true,
+      tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
+    S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
+      { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),

@@ -693,8 +693,9 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "COINBASE_API_URL", "COINBASE_KEY_FILE", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
+    "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
@@ -1767,11 +1768,6 @@ SAFETY = {
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
     "coinbase_free": [["GET", r"^/api/v3/brokerage/[A-Za-z0-9_/.-]+$"], ["POST", r"^/api/v3/brokerage/orders/preview$"]],
-    # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
-    # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
-    # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
-    "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
-    "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -1796,6 +1792,11 @@ SAFETY = {
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
     # sync:connections-safety-begin
+    # Docker's Engine API (#358): the reads the runtime makes, and what it may do to a container after a yes. Nothing
+    # else is ever sent: no exec, run, rm, pull or build (each can run anything on the machine as root), and nothing
+    # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
+    "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
+    "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
     # only reads but is a POST. Nothing else is ever sent: no changes, no reboot. A switch that loses its config takes
     # the network with it, and nothing here is worth that.
@@ -1949,6 +1950,18 @@ def coinbase_money(method, path):
 
 
 # sync:connections-fns-begin
+def docker_call(method, path):
+    """"free" for a Docker call the runtime makes without asking, "asks" for restart, stop and start, which need a live
+    yes, and None for anything else, which is never sent (#358)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
+            return kind
+    return None
+
+
+
+ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1998,20 +2011,6 @@ def unifi_allowed(method, path):
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
 # sync:connections-fns-end
-
-
-def docker_call(method, path):
-    """"free" for a Docker call the runtime makes without asking, "asks" for restart, stop and start, which need a live
-    yes, and None for anything else, which is never sent (#358)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
-            return kind
-    return None
-
-
-
-ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
 
 
 def arr_call(method, path):
@@ -2577,11 +2576,11 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
-    ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
     ("pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", True),
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
@@ -2591,11 +2590,11 @@ CAPABILITIES = [
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
-    ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", False),
     ("pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", False),
@@ -4820,133 +4819,6 @@ class Connections:
         self.log(tr("Coinbase order cancelled"), oid, tr("done"))
         return True
 
-    # Docker (#358)
-    # Docker's Engine API: DOCKER_HOST is unix:///var/run/docker.sock (the default, except on Windows) or
-    # tcp://host:2375. The socket is root on that machine, so point DOCKER_HOST at a socket proxy (such as
-    # tecnativa/docker-socket-proxy, allowing CONTAINERS and POST) where you can. With DOCKER_TLS_VERIFY = 1 it uses
-    # TLS, with ca.pem (and cert.pem and key.pem, if there) from DOCKER_CERT_PATH, as the docker command does. Reads
-    # are the calls in SAFETY["docker_free"]; restart, stop and start (docker_asks) always ask, live, and never run
-    # with nobody there; nothing else is ever sent. DOCKER_PROTECT lists containers never restarted, stopped or started.
-    DOCKER_POWER = ("restart", "stop", "start")
-
-    async def _docker(self, method, path, query=None, approved=False, raw=False):
-        kind = docker_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to Docker.", what=f"{method} {path}"))
-        host = os.environ.get("DOCKER_HOST", "").strip() or ("" if os.name == "nt" else "unix:///var/run/docker.sock")
-        if not host or host.startswith("npipe:"):
-            raise RunError(tr("On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported."))
-        u = urllib.parse.urlparse(host if "://" in host else "tcp://" + host)
-        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
-
-        def go():
-            if u.scheme == "unix":
-                import socket
-
-                class Unix(http.client.HTTPConnection):
-                    def connect(self):
-                        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-                        self.sock.settimeout(self.timeout)
-                        self.sock.connect(u.path)
-                conn = Unix("localhost", timeout=30)
-            elif os.environ.get("DOCKER_TLS_VERIFY", "").strip() not in ("", "0") or u.scheme == "https":
-                import ssl
-                certs = os.path.expanduser(os.environ.get("DOCKER_CERT_PATH", "").strip() or "~/.docker")
-                ca = os.path.join(certs, "ca.pem")
-                ctx = ssl.create_default_context(cafile=ca if os.path.isfile(ca) else None)
-                if os.path.isfile(os.path.join(certs, "cert.pem")):
-                    ctx.load_cert_chain(os.path.join(certs, "cert.pem"), os.path.join(certs, "key.pem"))
-                conn = http.client.HTTPSConnection(u.hostname, u.port or 2376, timeout=30, context=ctx)
-            else:
-                conn = http.client.HTTPConnection(u.hostname, u.port or 2375, timeout=30)
-            try:
-                conn.request(method, full, headers={"Accept": "application/json", "Host": "docker"})
-                r = conn.getresponse()
-                return r.status, r.read()
-            except Exception as e:  # noqa: BLE001 - no socket, refused, a certificate: say which
-                raise RunError(tr("Couldn't reach the {who} at {url} ({reason}).", who="Docker engine", url=host, reason=_short(str(e), 120))) from None
-            finally:
-                conn.close()
-        status, body = await asyncio.to_thread(go)
-        if status == 404:
-            raise RunError(tr("Docker: {why}.", why=tr("not found")))
-        if status >= 400 and status != 304:
-            raise RunError(tr("Docker: {why}.", why=self._said(status, body)))
-        if raw:
-            return body
-        return json.loads(body) if body.strip() else {}
-
-    @staticmethod
-    def _docker_name(name):
-        n = to_str(name).strip().lstrip("/")
-        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", n):
-            raise RunError(tr("Which Docker container? Give its name, like sonarr."))
-        return n
-
-    async def docker_containers(self):
-        """Every container, running or not: name, image, state (running, exited, restarting, ...), status (as docker ps
-        says it), health (healthy, unhealthy, starting, or "" with no health check), restarts and started."""
-        async def one(c):
-            name = to_str((c.get("Names") or [""])[0]).lstrip("/")
-            info = await self._docker("GET", f"/containers/{self._docker_name(name)}/json")
-            st = info.get("State") or {}
-            return {"name": name, "image": to_str(c.get("Image")), "state": to_str(c.get("State")), "status": to_str(c.get("Status")),
-                    "health": to_str((st.get("Health") or {}).get("Status")), "restarts": int(num(info.get("RestartCount") or 0)),
-                    "started": to_str(st.get("StartedAt"))[:16].replace("T", " ")}
-        out = list(await asyncio.gather(*(one(c) for c in await self._docker("GET", "/containers/json", {"all": "1"}) if isinstance(c, dict))))
-        out.sort(key=lambda c: c["name"])
-        lines = "\n".join(f"{c['name']}: {c['status']}" for c in out)
-        self.log(tr("Docker containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
-        return out
-
-    async def docker_stats(self):
-        """Each running container's use right now: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a
-        container with no limit) and memory (% of the limit)."""
-        async def one(c):
-            name = to_str((c.get("Names") or [""])[0]).lstrip("/")
-            s = await self._docker("GET", f"/containers/{self._docker_name(name)}/stats", {"stream": "false"})
-            cpu, pre, mem = s.get("cpu_stats") or {}, s.get("precpu_stats") or {}, s.get("memory_stats") or {}
-            d_cpu = num((cpu.get("cpu_usage") or {}).get("total_usage") or 0) - num((pre.get("cpu_usage") or {}).get("total_usage") or 0)
-            d_sys = num(cpu.get("system_cpu_usage") or 0) - num(pre.get("system_cpu_usage") or 0)
-            used = num(mem.get("usage") or 0) - num((mem.get("stats") or {}).get("inactive_file") or 0)
-            limit = num(mem.get("limit") or 0)
-            return {"name": name, "cpu": self._cents(d_cpu / d_sys * num(cpu.get("online_cpus") or 1) * 100) if d_sys > 0 and d_cpu > 0 else 0,
-                    "memory_mb": self._cents(used / 1048576), "limit_mb": self._cents(limit / 1048576), "memory": self._pct(used, limit) if limit else ""}
-        out = list(await asyncio.gather(*(one(c) for c in await self._docker("GET", "/containers/json") if isinstance(c, dict))))
-        return sorted(out, key=lambda c: c["name"])
-
-    async def docker_logs(self, name, count=50):
-        """The last lines a container wrote (its output and its errors together), oldest first."""
-        n = max(1, min(1000, int(num(count) or 50)))
-        body = await self._docker("GET", f"/containers/{self._docker_name(name)}/logs", {"stdout": "1", "stderr": "1", "tail": str(n)}, raw=True)
-        chunks, i = [], 0
-        while len(body) - i >= 8 and body[i] in (0, 1, 2) and body[i + 1:i + 4] == b"\0\0\0":  # framed: kind, three zeros, length
-            size = int.from_bytes(body[i + 4:i + 8], "big")
-            chunks.append(body[i + 8:i + 8 + size])
-            i += 8 + size
-        text = (b"".join(chunks) if chunks and i >= len(body) else body).decode("utf-8", "replace")
-        return [line.rstrip("\r") for line in text.split("\n") if line.strip()][-n:]
-
-    async def docker_power(self, action, name):
-        """Restarts, stops or starts one container, by name, after asking you, every time. Never one in
-        DOCKER_PROTECT. Gives back True if it was done."""
-        action = to_str(action).strip().lower()
-        if action not in self.DOCKER_POWER:
-            raise RunError(tr("A Docker container can be restarted, stopped or started."))
-        name = self._docker_name(name)
-        if name.lower() in {x.strip().lstrip("/").lower() for x in os.environ.get("DOCKER_PROTECT", "").split(",") if x.strip()}:
-            self.log(tr("Not done"), tr("Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.", name=name), tr("refused"))
-            return False
-        info = await self._docker("GET", f"/containers/{name}/json")
-        what = f"{action} the Docker container {name} ({to_str((info.get('Config') or {}).get('Image'))}, now {to_str((info.get('State') or {}).get('Status'))})"
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._docker("POST", f"/containers/{name}/{action}", approved=True)
-        self.log(tr("Docker"), what, tr("done"))
-        return True
-
     # Radarr and Sonarr (#398)
     # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
     # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
@@ -5340,6 +5212,132 @@ class Connections:
         return True
 
     # sync:connections-runtime-begin
+    # Docker (#358)
+    # Docker's Engine API: DOCKER_HOST is unix:///var/run/docker.sock (the default, except on Windows) or
+    # tcp://host:2375. The socket is root on that machine, so point DOCKER_HOST at a socket proxy (such as
+    # tecnativa/docker-socket-proxy, allowing CONTAINERS and POST) where you can. With DOCKER_TLS_VERIFY = 1 it uses
+    # TLS, with ca.pem (and cert.pem and key.pem, if there) from DOCKER_CERT_PATH, as the docker command does. Reads
+    # are the calls in SAFETY["docker_free"]; restart, stop and start (docker_asks) always ask, live, and never run
+    # with nobody there; nothing else is ever sent. DOCKER_PROTECT lists containers never restarted, stopped or started.
+    DOCKER_POWER = ("restart", "stop", "start")
+
+    async def _docker(self, method, path, query=None, approved=False, raw=False):
+        kind = docker_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to Docker.", what=f"{method} {path}"))
+        host = os.environ.get("DOCKER_HOST", "").strip() or ("" if os.name == "nt" else "unix:///var/run/docker.sock")
+        if not host or host.startswith("npipe:"):
+            raise RunError(tr("On Windows, set DOCKER_HOST to a tcp:// address: Docker's named pipe isn't supported."))
+        u = urllib.parse.urlparse(host if "://" in host else "tcp://" + host)
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+
+        def go():
+            if u.scheme == "unix":
+                import socket
+
+                class Unix(http.client.HTTPConnection):
+                    def connect(self):
+                        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+                        self.sock.settimeout(self.timeout)
+                        self.sock.connect(u.path)
+                conn = Unix("localhost", timeout=30)
+            elif os.environ.get("DOCKER_TLS_VERIFY", "").strip() not in ("", "0") or u.scheme == "https":
+                import ssl
+                certs = os.path.expanduser(os.environ.get("DOCKER_CERT_PATH", "").strip() or "~/.docker")
+                ca = os.path.join(certs, "ca.pem")
+                ctx = ssl.create_default_context(cafile=ca if os.path.isfile(ca) else None)
+                if os.path.isfile(os.path.join(certs, "cert.pem")):
+                    ctx.load_cert_chain(os.path.join(certs, "cert.pem"), os.path.join(certs, "key.pem"))
+                conn = http.client.HTTPSConnection(u.hostname, u.port or 2376, timeout=30, context=ctx)
+            else:
+                conn = http.client.HTTPConnection(u.hostname, u.port or 2375, timeout=30)
+            try:
+                conn.request(method, full, headers={"Accept": "application/json", "Host": "docker"})
+                r = conn.getresponse()
+                return r.status, r.read()
+            except Exception as e:  # noqa: BLE001 - no socket, refused, a certificate: say which
+                raise RunError(tr("Couldn't reach the {who} at {url} ({reason}).", who="Docker engine", url=host, reason=_short(str(e), 120))) from None
+            finally:
+                conn.close()
+        status, body = await asyncio.to_thread(go)
+        if status == 404:
+            raise RunError(tr("Docker: {why}.", why=tr("not found")))
+        if status >= 400 and status != 304:
+            raise RunError(tr("Docker: {why}.", why=self._said(status, body)))
+        if raw:
+            return body
+        return json.loads(body) if body.strip() else {}
+
+    @staticmethod
+    def _docker_name(name):
+        n = to_str(name).strip().lstrip("/")
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", n):
+            raise RunError(tr("Which Docker container? Give its name, like sonarr."))
+        return n
+
+    async def docker_containers(self):
+        """Every container, running or not: name, image, state (running, exited, restarting, ...), status (as docker ps
+        says it), health (healthy, unhealthy, starting, or "" with no health check), restarts and started."""
+        async def one(c):
+            name = to_str((c.get("Names") or [""])[0]).lstrip("/")
+            info = await self._docker("GET", f"/containers/{self._docker_name(name)}/json")
+            st = info.get("State") or {}
+            return {"name": name, "image": to_str(c.get("Image")), "state": to_str(c.get("State")), "status": to_str(c.get("Status")),
+                    "health": to_str((st.get("Health") or {}).get("Status")), "restarts": int(num(info.get("RestartCount") or 0)),
+                    "started": to_str(st.get("StartedAt"))[:16].replace("T", " ")}
+        out = list(await asyncio.gather(*(one(c) for c in await self._docker("GET", "/containers/json", {"all": "1"}) if isinstance(c, dict))))
+        out.sort(key=lambda c: c["name"])
+        lines = "\n".join(f"{c['name']}: {c['status']}" for c in out)
+        self.log(tr("Docker containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
+        return out
+
+    async def docker_stats(self):
+        """Each running container's use right now: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a
+        container with no limit) and memory (% of the limit)."""
+        async def one(c):
+            name = to_str((c.get("Names") or [""])[0]).lstrip("/")
+            s = await self._docker("GET", f"/containers/{self._docker_name(name)}/stats", {"stream": "false"})
+            cpu, pre, mem = s.get("cpu_stats") or {}, s.get("precpu_stats") or {}, s.get("memory_stats") or {}
+            d_cpu = num((cpu.get("cpu_usage") or {}).get("total_usage") or 0) - num((pre.get("cpu_usage") or {}).get("total_usage") or 0)
+            d_sys = num(cpu.get("system_cpu_usage") or 0) - num(pre.get("system_cpu_usage") or 0)
+            used = num(mem.get("usage") or 0) - num((mem.get("stats") or {}).get("inactive_file") or 0)
+            limit = num(mem.get("limit") or 0)
+            return {"name": name, "cpu": self._cents(d_cpu / d_sys * num(cpu.get("online_cpus") or 1) * 100) if d_sys > 0 and d_cpu > 0 else 0,
+                    "memory_mb": self._cents(used / 1048576), "limit_mb": self._cents(limit / 1048576), "memory": self._pct(used, limit) if limit else ""}
+        out = list(await asyncio.gather(*(one(c) for c in await self._docker("GET", "/containers/json") if isinstance(c, dict))))
+        return sorted(out, key=lambda c: c["name"])
+
+    async def docker_logs(self, name, count=50):
+        """The last lines a container wrote (its output and its errors together), oldest first."""
+        n = max(1, min(1000, int(num(count) or 50)))
+        body = await self._docker("GET", f"/containers/{self._docker_name(name)}/logs", {"stdout": "1", "stderr": "1", "tail": str(n)}, raw=True)
+        chunks, i = [], 0
+        while len(body) - i >= 8 and body[i] in (0, 1, 2) and body[i + 1:i + 4] == b"\0\0\0":  # framed: kind, three zeros, length
+            size = int.from_bytes(body[i + 4:i + 8], "big")
+            chunks.append(body[i + 8:i + 8 + size])
+            i += 8 + size
+        text = (b"".join(chunks) if chunks and i >= len(body) else body).decode("utf-8", "replace")
+        return [line.rstrip("\r") for line in text.split("\n") if line.strip()][-n:]
+
+    async def docker_power(self, action, name):
+        """Restarts, stops or starts one container, by name, after asking you, every time. Never one in
+        DOCKER_PROTECT. Gives back True if it was done."""
+        action = to_str(action).strip().lower()
+        if action not in self.DOCKER_POWER:
+            raise RunError(tr("A Docker container can be restarted, stopped or started."))
+        name = self._docker_name(name)
+        if name.lower() in {x.strip().lstrip("/").lower() for x in os.environ.get("DOCKER_PROTECT", "").split(",") if x.strip()}:
+            self.log(tr("Not done"), tr("Container {name} is in DOCKER_PROTECT, so Second Thought never restarts, stops or starts it.", name=name), tr("refused"))
+            return False
+        info = await self._docker("GET", f"/containers/{name}/json")
+        what = f"{action} the Docker container {name} ({to_str((info.get('Config') or {}).get('Image'))}, now {to_str((info.get('State') or {}).get('Status'))})"
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._docker("POST", f"/containers/{name}/{action}", approved=True)
+        self.log(tr("Docker"), what, tr("done"))
+        return True
     # MikroTik (#360)
     # RouterOS 7's REST API (the www-ssl service), read only: MIKROTIK_URL, MIKROTIK_USER and MIKROTIK_PASSWORD, for a
     # user in a group with just the read, api and rest-api policies. Only the calls in SAFETY["mikrotik_free"] are ever
@@ -8577,6 +8575,12 @@ class Doctor:
                 return tr("the key works: it can trade (every order asks you first)") if perms.get("can_trade") else tr("the key works, View only")
             out.append(("Coinbase", coinbase))
         # sync:connections-check-begin
+        if has("docker_read", "docker_control"):
+            async def docker():
+                version = to_str((await self._docker("GET", "/version")).get("Version"))
+                n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
+                return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
+            out.append(("Docker", docker))
         if has("mikrotik_read"):
             async def mikrotik():
                 return await self._doctor_mikrotik()
@@ -8648,12 +8652,6 @@ class Doctor:
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
         # sync:connections-check-end
-        if has("docker_read", "docker_control"):
-            async def docker():
-                version = to_str((await self._docker("GET", "/version")).get("Version"))
-                n = len(await self._docker("GET", "/containers/json", {"all": "1"}))
-                return tr("Docker {version}", version=version or "?") + ", " + tr("{n} containers", n=n)
-            out.append(("Docker", docker))
         if has("arr_read", "arr_control"):
             async def arr(which):
                 status = await self._arr(which, "GET", "/api/v3/system/status")
@@ -9015,8 +9013,9 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Docker": "DOCKER_HOST", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "Docker": "DOCKER_HOST",
                 "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
@@ -12015,10 +12014,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
-["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", true],
+["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
 ["pihole_control", "disable and enable your Pi-hole's blocking, and change its allow and deny lists (asking you each time)", true],
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
@@ -12027,10 +12026,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
-["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", false],
+["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
 ["nzbgeek_read", "search NZBGeek, the Usenet indexer, and read what it has: titles, sizes, ages and groups", false],
 ["pihole_read", "read your Pi-hole: today's queries and blocked share, the top blocked domains and clients, and whether blocking is on", false],
@@ -12095,18 +12094,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/brokerage/orders/preview$"
-  ]
- ],
- "docker_free": [
-  [
-   "GET",
-   "^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"
-  ]
- ],
- "docker_asks": [
-  [
-   "POST",
-   "^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"
   ]
  ],
  "arr_free": [
@@ -12179,6 +12166,18 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "GET",
    "^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"
+  ]
+ ],
+ "docker_free": [
+  [
+   "GET",
+   "^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"
+  ]
+ ],
+ "docker_asks": [
+  [
+   "POST",
+   "^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"
   ]
  ],
  "mikrotik_free": [
@@ -17445,8 +17444,9 @@ HOW TO MAP CODE
   const HUES = {
     events:"#936D12", control:"#AF5E19", operators:"#408230", text:"#288167", variables:"#D04121",
     lists:"#C2413B", procedures:"#CB3E71", draft:"#2469F9", claude:"#5B5BD6", review:"#8A55D6",
-    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", docker:"#C2185B",
+    you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", coinbase:"#C2185B", 
     // sync:connections-hues-begin
+    docker:"#C2185B",
     mikrotik:"#C2185B",
     nzbgeek:"#C2185B",
     pihole:"#C2185B",
@@ -17468,8 +17468,9 @@ HOW TO MAP CODE
   const blockStyles = {
     events_hat:style(HUES.events, true), events:style(HUES.events), time:style(HUES.time), control:style(HUES.control), operators:style(HUES.operators), text:style(HUES.text),
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
-    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), docker:style(HUES.docker),
+    agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), coinbase:style(HUES.coinbase), 
     // sync:connections-styles-begin
+    docker:style(HUES.docker),
     mikrotik:style(HUES.mikrotik),
     nzbgeek:style(HUES.nzbgeek),
     pihole:style(HUES.pihole),
@@ -17660,8 +17661,7 @@ HOW TO MAP CODE
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
-    rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
-    rb_docker_power:"docker_control", rb_arr_queue:"arr_read",
+    rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
@@ -17675,6 +17675,8 @@ HOW TO MAP CODE
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     // sync:connections-caps-begin
+    rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
+    rb_docker_power:"docker_control",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
     rb_mikrotik_health:"mikrotik_read", rb_mikrotik_log:"mikrotik_read",
     rb_nzbgeek_search:"nzbgeek_read", rb_nzbgeek_fetch:"nzbgeek_fetch",
@@ -18056,15 +18058,6 @@ HOW TO MAP CODE
       { style:"coinbase", inputsInline:true, tooltip:"Places a real market order, like 'preview Coinbase order'. It previews it first, then always asks you, with the fee and total, even when nothing else asks; with nobody there to say yes, it doesn't run. Needs a key with Trade permission. On this page nothing is bought or sold." }),
     S("rb_coinbase_cancel", "cancel Coinbase order %1", [val("ORDER")], { style:"coinbase", inputsInline:true,
       tooltip:"Cancels one of your open orders, by its id (from 'Coinbase open orders'). It always asks you first, and doesn't run with nobody there." }),
-    /* Docker (#358): reads, and restart, stop and start that always ask */
-    V("rb_docker_containers", "Docker containers", [], "Array", { style:"docker",
-      tooltip:"A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack." }),
-    V("rb_docker_stats", "Docker memory and CPU", [], "Array", { style:"docker",
-      tooltip:"A list of records, one for each running container: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a container with no limit) and memory (% of the limit)." }),
-    V("rb_docker_logs", "Docker logs of %1, last %2 lines", [val("NAME"), val("N")], "Array", { style:"docker", inputsInline:true,
-      tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
-    S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
-      { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
     /* Radarr and Sonarr (#398): reads, and a search that always asks */
     V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
       tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
@@ -18109,6 +18102,15 @@ HOW TO MAP CODE
     S("rb_plex_stop", "stop the %1 stream on Plex", [val("ID")],
       { style:"plex", inputsInline:true, tooltip:"Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     // sync:connections-defs-begin
+    /* Docker (#358): reads, and restart, stop and start that always ask */
+    V("rb_docker_containers", "Docker containers", [], "Array", { style:"docker",
+      tooltip:"A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack." }),
+    V("rb_docker_stats", "Docker memory and CPU", [], "Array", { style:"docker",
+      tooltip:"A list of records, one for each running container: name, cpu (%), memory_mb, limit_mb (the machine's memory, for a container with no limit) and memory (% of the limit)." }),
+    V("rb_docker_logs", "Docker logs of %1, last %2 lines", [val("NAME"), val("N")], "Array", { style:"docker", inputsInline:true,
+      tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
+    S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
+      { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
     /* MikroTik (#360): read only */
     V("rb_mikrotik_ports", "MikroTik ports", [], "Array", { style:"mikrotik",
       tooltip:"A list of records, one for each port on your MikroTik router or switch: port, running, speed (like 10Gbps), errors, drops, link_downs and comment. Errors and drops count from when it last started. It only reads: nothing on the switch changes. On this page it uses a sample switch." }),
@@ -18345,9 +18347,6 @@ HOW TO MAP CODE
       B("rb_coinbase_preview", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }), B("rb_coinbase_order", { AMOUNT:N(50), PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_cancel", { ORDER:K("") })
     ]},
-    { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
-      B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
-    ]},
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
     ]},
@@ -18361,6 +18360,9 @@ HOW TO MAP CODE
       B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
     ]},
     // sync:connections-toolbox-begin
+    { kind:"category", name:"Docker", categorystyle:"docker", service:"docker", contents:[
+      B("rb_docker_containers"), B("rb_docker_stats"), B("rb_docker_logs", { NAME:K("sonarr"), N:N(50) }), B("rb_docker_power", { NAME:K("sonarr") })
+    ]},
     { kind:"category", name:"MikroTik", categorystyle:"mikrotik", service:"mikrotik", contents:[
       B("rb_mikrotik_ports"), B("rb_mikrotik_sfp"), B("rb_mikrotik_health"), B("rb_mikrotik_log", { N:N(20) })
     ]},
@@ -21237,6 +21239,7 @@ HOW TO MAP CODE
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              // sync:connections-need-begin
+             docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
              nzbgeek:blocks.some(b => b.type.startsWith("rb_nzbgeek_")),
              pihole:blocks.some(b => b.type.startsWith("rb_pihole_")),
@@ -21246,7 +21249,6 @@ HOW TO MAP CODE
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              // sync:connections-need-end
-             docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
@@ -21303,12 +21305,6 @@ HOW TO MAP CODE
       "; credits, so give the program a budget or a step limit to keep a run cheap.",
       "FR24_API_KEY = ",
       ...note("MCP_FLIGHTRADAR24", "npx -y @flightradar24/fr24api-mcp", "to start the server your own way"));
-    if (need.docker) out.push("", "[docker]",
-      "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
-      "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
-      "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
-      "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
-      "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
     if (need.arr) out.push("", "[radarr]",
       "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
       "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
@@ -21332,6 +21328,12 @@ HOW TO MAP CODE
       "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
       "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
     // sync:connections-ini-begin
+    if (need.docker) out.push("", "[docker]",
+      "; Docker's Engine API. Left out, it's the socket on this computer (unix:///var/run/docker.sock), which is root on",
+      "; the machine: safer is a socket proxy (tecnativa/docker-socket-proxy with CONTAINERS=1, plus ALLOW_RESTARTS=1 and",
+      "; ALLOW_START=1 only if the program restarts, stops or starts containers), and DOCKER_HOST = tcp://that-machine:2375.",
+      "; DOCKER_PROTECT lists containers never restarted, stopped or started, like the proxy itself.",
+      "; DOCKER_HOST = tcp://docker.local:2375", "DOCKER_PROTECT = ");
     if (need.mikrotik) out.push("", "[mikrotik]",
       "; Your MikroTik router or switch, read through RouterOS 7's REST API (turn on the www-ssl service). Make a group with",
       "; only the read, api and rest-api policies, and a user in it for this program. Run --doctor once: it shows the",
@@ -21699,9 +21701,6 @@ HOW TO MAP CODE
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
-        case "rb_docker_containers": return "(await R.docker_containers())";
-        case "rb_docker_stats": return "(await R.docker_stats())";
-        case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -21717,6 +21716,9 @@ HOW TO MAP CODE
         case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
         case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
         // sync:connections-pyread-begin
+        case "rb_docker_containers": return "(await R.docker_containers())";
+        case "rb_docker_stats": return "(await R.docker_stats())";
+        case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
         case "rb_mikrotik_ports": return "(await R.mikrotik_ports())";
         case "rb_mikrotik_sfp": return "(await R.mikrotik_sfp())";
         case "rb_mikrotik_health": return "(await R.mikrotik_health())";
@@ -21882,7 +21884,6 @@ HOW TO MAP CODE
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
-          case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
         case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
@@ -21890,6 +21891,7 @@ HOW TO MAP CODE
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           // sync:connections-pyact-begin
+          case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
         case "rb_nzbgeek_fetch": E("await R.nzbgeek_fetch(" + I("ID", "\"\"") + ")"); break;
         case "rb_pihole_blocking": E("await R.pihole_blocking(" + I("N", "60") + ")"); break;
         case "rb_pihole_enable": E("await R.pihole_enable()"); break;
@@ -24127,45 +24129,6 @@ HOW TO MAP CODE
     addStep("Coinbase order cancelled", { mono:true, text:id }).done("sample account", "ok");
     return true;
   }
-  /* Docker on the page (#358): a sample stack. Exported Python talks to Docker's Engine API: reads, and restart, stop
-     and start after a yes, every time. Matches the runtime's docker_ methods and tests/fake_docker.py. */
-  const dkSample = () => { connNote("Docker"); return CONN.docker || {}; };
-  const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-  function dkName(name){
-    const n = str(name).trim().replace(/^\/+/, "");
-    if (!/^[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(n)) fail(tr("Which Docker container? Give its name, like sonarr."));
-    return n;
-  }
-  function dockerContainers(){
-    const out = (dkSample().containers || []).map(c => ({ name:str(c.name), image:str(c.image), state:str(c.state), status:str(c.status), health:str(c.health || ""),
-      restarts:Math.trunc(num(c.restarts)), started:str(c.started).slice(0, 16).replace("T", " ") })).sort(byName);
-    addStep("Docker containers", { mono:true, text:out.map(c => c.name + ": " + c.status).join("\n") || tr("(nothing)") }).done(tr("{n} containers", { n:out.length }), "ok");
-    return out;
-  }
-  function dockerStats(){
-    return (dkSample().containers || []).filter(c => c.state === "running" || c.state === "restarting").map(c => {
-      const s = c.stats || {}, cpu = s.cpu_stats || {}, pre = s.precpu_stats || {}, mem = s.memory_stats || {};
-      const dCpu = num((cpu.cpu_usage || {}).total_usage || 0) - num((pre.cpu_usage || {}).total_usage || 0), dSys = num(cpu.system_cpu_usage || 0) - num(pre.system_cpu_usage || 0);
-      const used = num(mem.usage || 0) - num((mem.stats || {}).inactive_file || 0), limit = num(mem.limit || 0);
-      return { name:str(c.name), cpu:dSys > 0 && dCpu > 0 ? cents(dCpu / dSys * num(cpu.online_cpus || 1) * 100) : 0, memory_mb:cents(used / 1048576),
-               limit_mb:cents(limit / 1048576), memory:limit ? pct10(used, limit) : "" };
-    }).sort(byName);
-  }
-  function dockerLogs(name, count){
-    const n = Math.max(1, Math.min(1000, Math.trunc(num(count)) || 50)), s = dkSample(), id = dkName(name);
-    if (!(s.containers || []).some(c => c.name === id)) fail(tr("Docker: {why}.", { why:tr("not found") }));
-    return ((s.logs || {})[id] || []).slice(-n);
-  }
-  async function dockerPower(action, name){
-    action = str(action).trim().toLowerCase();
-    if (!["restart", "stop", "start"].includes(action)) fail(tr("A Docker container can be restarted, stopped or started."));
-    const id = dkName(name), c = (dkSample().containers || []).find(c => c.name === id);
-    if (!c) fail(tr("Docker: {why}.", { why:tr("not found") }));
-    const what = action + " the Docker container " + id + " (" + c.image + ", now " + c.state + ")";
-    if (!(await confirmAction(what + " (it always asks)"))) return false;
-    addStep("Docker", { mono:true, text:what }).done(tr("done"), "ok");
-    return true;
-  }
   /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
      reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
   const arrSample = which => { connNote(which === "sonarr" ? "Sonarr" : "Radarr"); return (CONN.arr || {})[which] || {}; };
@@ -24309,6 +24272,45 @@ HOW TO MAP CODE
     return true;
   }
   // sync:connections-page-begin
+  /* Docker on the page (#358): a sample stack. Exported Python talks to Docker's Engine API: reads, and restart, stop
+     and start after a yes, every time. Matches the runtime's docker_ methods and tests/fake_docker.py. */
+  const dkSample = () => { connNote("Docker"); return CONN.docker || {}; };
+  const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+  function dkName(name){
+    const n = str(name).trim().replace(/^\/+/, "");
+    if (!/^[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(n)) fail(tr("Which Docker container? Give its name, like sonarr."));
+    return n;
+  }
+  function dockerContainers(){
+    const out = (dkSample().containers || []).map(c => ({ name:str(c.name), image:str(c.image), state:str(c.state), status:str(c.status), health:str(c.health || ""),
+      restarts:Math.trunc(num(c.restarts)), started:str(c.started).slice(0, 16).replace("T", " ") })).sort(byName);
+    addStep("Docker containers", { mono:true, text:out.map(c => c.name + ": " + c.status).join("\n") || tr("(nothing)") }).done(tr("{n} containers", { n:out.length }), "ok");
+    return out;
+  }
+  function dockerStats(){
+    return (dkSample().containers || []).filter(c => c.state === "running" || c.state === "restarting").map(c => {
+      const s = c.stats || {}, cpu = s.cpu_stats || {}, pre = s.precpu_stats || {}, mem = s.memory_stats || {};
+      const dCpu = num((cpu.cpu_usage || {}).total_usage || 0) - num((pre.cpu_usage || {}).total_usage || 0), dSys = num(cpu.system_cpu_usage || 0) - num(pre.system_cpu_usage || 0);
+      const used = num(mem.usage || 0) - num((mem.stats || {}).inactive_file || 0), limit = num(mem.limit || 0);
+      return { name:str(c.name), cpu:dSys > 0 && dCpu > 0 ? cents(dCpu / dSys * num(cpu.online_cpus || 1) * 100) : 0, memory_mb:cents(used / 1048576),
+               limit_mb:cents(limit / 1048576), memory:limit ? pct10(used, limit) : "" };
+    }).sort(byName);
+  }
+  function dockerLogs(name, count){
+    const n = Math.max(1, Math.min(1000, Math.trunc(num(count)) || 50)), s = dkSample(), id = dkName(name);
+    if (!(s.containers || []).some(c => c.name === id)) fail(tr("Docker: {why}.", { why:tr("not found") }));
+    return ((s.logs || {})[id] || []).slice(-n);
+  }
+  async function dockerPower(action, name){
+    action = str(action).trim().toLowerCase();
+    if (!["restart", "stop", "start"].includes(action)) fail(tr("A Docker container can be restarted, stopped or started."));
+    const id = dkName(name), c = (dkSample().containers || []).find(c => c.name === id);
+    if (!c) fail(tr("Docker: {why}.", { why:tr("not found") }));
+    const what = action + " the Docker container " + id + " (" + c.image + ", now " + c.state + ")";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Docker", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* MikroTik on the page (#360): a sample switch. Exported Python reads your own through RouterOS's REST API, and
      only reads. Matches the runtime's mikrotik_ methods and tests/fake_mikrotik.py, which serves the same sample. */
   const mtSample = () => { connNote("MikroTik"); return CONN.mikrotik || {}; };
@@ -25348,9 +25350,6 @@ HOW TO MAP CODE
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
       case "rb_coinbase_balances": return coinbaseBalances();
-      case "rb_docker_containers": return dockerContainers();
-      case "rb_docker_stats": return dockerStats();
-      case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
       case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
@@ -25366,6 +25365,9 @@ HOW TO MAP CODE
       case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
       case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
       // sync:connections-iread-begin
+      case "rb_docker_containers": return dockerContainers();
+      case "rb_docker_stats": return dockerStats();
+      case "rb_docker_logs": return dockerLogs(await input(b, tc, "NAME"), await input(b, tc, "N", 50));
       case "rb_mikrotik_ports": return mikrotikPorts();
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();
@@ -26138,7 +26140,6 @@ HOW TO MAP CODE
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
-      case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
@@ -26146,6 +26147,7 @@ HOW TO MAP CODE
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       // sync:connections-iact-begin
+      case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;
