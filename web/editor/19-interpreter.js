@@ -318,12 +318,6 @@
         return recs;
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
-      case "rb_plex_server": return plexServer();
-      case "rb_plex_libraries": return plexLibraries();
-      case "rb_plex_sessions": return plexSessions();
-      case "rb_plex_recent": return plexRecent(await input(b, tc, "N"));
-      case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
-      case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
       // sync:connections-iread-begin
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
@@ -345,6 +339,12 @@
       case "rb_pihole_summary": return piholeSummary();
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
       case "rb_pihole_top_clients": return piholeTopClients(await input(b, tc, "N"));
+      case "rb_plex_server": return plexServer();
+      case "rb_plex_libraries": return plexLibraries();
+      case "rb_plex_sessions": return plexSessions();
+      case "rb_plex_recent": return plexRecent(await input(b, tc, "N"));
+      case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
+      case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
       case "rb_powerwall_now": return powerwallNow();
       case "rb_proxmox_nodes": return proxmoxNodes();
       case "rb_proxmox_guests": return proxmoxGuests();
@@ -1107,8 +1107,6 @@
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
-      case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
-      case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
@@ -1119,6 +1117,8 @@
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;
       case "rb_pihole_allow": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's allow list"); break;
       case "rb_pihole_deny": await piholeAsking(b.getFieldValue("ACTION") + " " + (await input(b, tc, "DOMAIN")) + " on Pi-hole's deny list"); break;
+      case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
+      case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;

@@ -96,7 +96,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
     "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
@@ -104,6 +104,7 @@ OTHER_SETTINGS = {
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
     "NZBGEEK_URL", "NZBGEEK_CERT_SHA256",
     "PIHOLE_URL", "PIHOLE_CERT_SHA256",
+    "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256",
     "POWERWALL_URL", "POWERWALL_EMAIL", "POWERWALL_CERT_SHA256",
     "PROXMOX_URL", "PROXMOX_TOKEN_ID", "PROXMOX_CERT_SHA256", "PROXMOX_PROTECT",
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
@@ -182,6 +183,7 @@ KEYCHAIN_NAMES = (
     "MIKROTIK_PASSWORD",
     "NZBGEEK_API_KEY",
     "PIHOLE_PASSWORD",
+    "PLEX_TOKEN", "TAUTULLI_API_KEY",
     "POWERWALL_PASSWORD",
     "PROXMOX_TOKEN_SECRET",
     "SABNZBD_API_KEY",
@@ -189,7 +191,7 @@ KEYCHAIN_NAMES = (
     "UNIFI_API_KEY",
     "UNRAID_API_KEY",
     # sync:connections-secret-end
-    "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    )
 
 
 def _load_keychain():

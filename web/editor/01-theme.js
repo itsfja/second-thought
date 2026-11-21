@@ -11,6 +11,7 @@
     mikrotik:"#C2185B",
     nzbgeek:"#C2185B",
     pihole:"#C2185B",
+    plex:"#C2185B",
     powerwall:"#C2185B",
     proxmox:"#C2185B",
     sabnzbd:"#C2185B",
@@ -18,7 +19,6 @@
     unifi:"#C2185B",
     unraid:"#C2185B",
     // sync:connections-hues-end
-    plex:"#C2185B"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -38,6 +38,7 @@
     mikrotik:style(HUES.mikrotik),
     nzbgeek:style(HUES.nzbgeek),
     pihole:style(HUES.pihole),
+    plex:style(HUES.plex),
     powerwall:style(HUES.powerwall),
     proxmox:style(HUES.proxmox),
     sabnzbd:style(HUES.sabnzbd),
@@ -45,7 +46,7 @@
     unifi:style(HUES.unifi),
     unraid:style(HUES.unraid),
     // sync:connections-styles-end
-    plex:style(HUES.plex),
+    
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
