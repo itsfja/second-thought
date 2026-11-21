@@ -79,9 +79,9 @@
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
+             unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
-             unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
@@ -142,12 +142,6 @@
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
-    if (need.unraid) out.push("", "[unraid]",
-      "; Your Unraid server, through its own GraphQL API (built into Unraid 7.2 and later, the Unraid Connect plugin",
-      "; before that): its address and an API key (Settings, Management Access, API Keys). The blocks read the array,",
-      "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
-      "; else is ever sent.",
-      "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
     if (need.plex) out.push("", "[plex]",
       "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
       "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
@@ -216,6 +210,12 @@
       "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
       "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
+    if (need.unraid) out.push("", "[unraid]",
+      "; Your Unraid server, through its own GraphQL API (built into Unraid 7.2 and later, the Unraid Connect plugin",
+      "; before that): its address and an API key (Settings, Management Access, API Keys). The blocks read the array,",
+      "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
+      "; else is ever sent.",
+      "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
     // sync:connections-ini-end
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
@@ -534,11 +534,6 @@
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_unraid_array": return "(await R.unraid_array())";
-        case "rb_unraid_disks": return "(await R.unraid_disks())";
-        case "rb_unraid_shares": return "(await R.unraid_shares())";
-        case "rb_unraid_containers": return "(await R.unraid_containers())";
-        case "rb_unraid_vms": return "(await R.unraid_vms())";
         case "rb_plex_server": return "(await R.plex_server())";
         case "rb_plex_libraries": return "(await R.plex_libraries())";
         case "rb_plex_sessions": return "(await R.plex_sessions())";
@@ -574,6 +569,11 @@
         case "rb_solax_now": return "(await R.solax_now())";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
+        case "rb_unraid_array": return "(await R.unraid_array())";
+        case "rb_unraid_disks": return "(await R.unraid_disks())";
+        case "rb_unraid_shares": return "(await R.unraid_shares())";
+        case "rb_unraid_containers": return "(await R.unraid_containers())";
+        case "rb_unraid_vms": return "(await R.unraid_vms())";
         // sync:connections-pyread-end
         case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
@@ -714,9 +714,6 @@
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
-        case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
-        case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
-        case "rb_unraid_parity": E("await R.unraid_parity()"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           // sync:connections-pyact-begin
@@ -731,6 +728,9 @@
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
+        case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
+        case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
+        case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;

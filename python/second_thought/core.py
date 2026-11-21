@@ -90,14 +90,6 @@ SAFETY = {
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
     "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
     "arr_asks": [["POST", r"^/api/v3/command$"]],
-    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
-    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
-    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
-    # containers, plugins, terminal commands) is never sent.
-    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
-    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
-                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
-                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
     # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
     # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
@@ -154,6 +146,14 @@ SAFETY = {
     # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
     # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
+    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
+    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
+    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
+    # containers, plugins, terminal commands) is never sent.
+    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
+    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
+                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
+                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     # sync:connections-safety-end
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
@@ -329,6 +329,15 @@ def unifi_allowed(method, path):
     """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
+def unraid_call(method, query):
+    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
+    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
+    anything else, which is never sent (#399)."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
+            return kind
+    return None
 # sync:connections-fns-end
 
 
@@ -361,17 +370,6 @@ def tautulli_call(method, query):
     method, query = to_str(method).strip().upper(), to_str(query).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, query) for m, p in SAFETY["tautulli_" + kind]):
-            return kind
-    return None
-
-
-def unraid_call(method, query):
-    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
-    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
-    anything else, which is never sent (#399)."""
-    method, query = to_str(method).strip().upper(), to_str(query).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
 
@@ -895,7 +893,6 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
-    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
@@ -905,11 +902,11 @@ CAPABILITIES = [
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
-    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
@@ -922,6 +919,7 @@ CAPABILITIES = [
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
+    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),

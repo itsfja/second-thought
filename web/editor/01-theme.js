@@ -15,8 +15,9 @@
     sabnzbd:"#C2185B",
     solax:"#C2185B",
     unifi:"#C2185B",
+    unraid:"#C2185B",
     // sync:connections-hues-end
-    arr:"#C2185B", unraid:"#C2185B", plex:"#C2185B"
+    arr:"#C2185B", plex:"#C2185B"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -40,8 +41,9 @@
     sabnzbd:style(HUES.sabnzbd),
     solax:style(HUES.solax),
     unifi:style(HUES.unifi),
+    unraid:style(HUES.unraid),
     // sync:connections-styles-end
-    arr:style(HUES.arr), unraid:style(HUES.unraid), plex:style(HUES.plex),
+    arr:style(HUES.arr), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)

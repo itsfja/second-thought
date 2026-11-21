@@ -347,6 +347,12 @@ class Doctor:
                 devices = await self._unifi_all(f"/sites/{site}/devices")
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
+        if has("unraid_read", "unraid_control"):
+            async def unraid():
+                d = await self._unraid("query{vars{version}array{state}}")
+                return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
+                    + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
+            out.append(("Unraid", unraid))
         # sync:connections-check-end
         if has("arr_read", "arr_control"):
             async def arr(which):
@@ -356,12 +362,6 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
-        if has("unraid_read", "unraid_control"):
-            async def unraid():
-                d = await self._unraid("query{vars{version}array{state}}")
-                return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
-                    + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
-            out.append(("Unraid", unraid))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -709,7 +709,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
@@ -721,6 +721,7 @@ class Doctor:
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
                 "UniFi": "UNIFI_URL",
+                "Unraid": "UNRAID_URL",
                 # sync:connections-settingsmap-end
 }.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
