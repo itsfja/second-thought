@@ -34,21 +34,6 @@
     });
     return lines.join("\n") || "The feed has no items.";
   }
-  /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
-  const CHAT_NAME = { discord:"Discord", slack:"Slack" };
-  const CHAT = svc => { connNote(CHAT_NAME[svc]); return CONN[svc] || { messages:[], channel:"" }; };
-  function chatSearch(svc, text){
-    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), c = CHAT(svc);
-    const found = c.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
-    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + " in " + c.channel + ": " + short(m.text, 300)).join("\n") ||
-      ("No " + CHAT_NAME[svc] + " messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". Only the channels in " + svc.toUpperCase() + "_CHANNEL_ID are read.");
-  }
-  async function chatSend(svc, text, approved){
-    text = str(text).trim(); if (!text) fail(tr("A {service} message needs some text.", { service:CHAT_NAME[svc] }));
-    if (!approved && !(await allowed(["messages"], "send a " + CHAT_NAME[svc] + " message: " + short(text, 120)))) return false;
-    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || tr("your channel")), { text }).done("sample", "ok");
-    return true;
-  }
   function parseDay(text){
     const t = str(text).trim().toLowerCase(), today = new Date(); today.setHours(0, 0, 0, 0);
     if (t === "" || t === "today") return today;
@@ -122,6 +107,21 @@
     const what = "search " + who + "'s wanted list for what's missing";
     if (!(await confirmAction(what + " (it always asks)"))) return false;
     addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
+  /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
+  const CHAT_NAME = { discord:"Discord", slack:"Slack" };
+  const CHAT = svc => { connNote(CHAT_NAME[svc]); return (CONN.chat || {})[svc] || { messages:[], channel:"" }; };
+  function chatSearch(svc, text){
+    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), c = CHAT(svc);
+    const found = c.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
+    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + " in " + c.channel + ": " + short(m.text, 300)).join("\n") ||
+      ("No " + CHAT_NAME[svc] + " messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". Only the channels in " + svc.toUpperCase() + "_CHANNEL_ID are read.");
+  }
+  async function chatSend(svc, text, approved){
+    text = str(text).trim(); if (!text) fail(tr("A {service} message needs some text.", { service:CHAT_NAME[svc] }));
+    if (!approved && !(await allowed(["messages"], "send a " + CHAT_NAME[svc] + " message: " + short(text, 120)))) return false;
+    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || tr("your channel")), { text }).done("sample", "ok");
     return true;
   }
   /* Coinbase on the page (#371): a sample portfolio, in pounds. Exported Python talks to Coinbase's Advanced Trade API
@@ -881,7 +881,7 @@
         const pg = (CONN.page || {}).incoming || { url:"", title:"", before:"", after:"" }, url = str(b.getFieldValue("URL")).trim() || pg.url, words = str(b.getFieldValue("WORDS")).trim();
         const before = pagePart(pg.before, words), after = pagePart(pg.after, words), changed = pageChanges(before, after), title = pg.title;
         return { url, title, before, after, changed, text:(title || url) + " changed:\n" + changed }; }
-      case "rb_discord_when": case "rb_slack_when": { const svc = b.type === "rb_discord_when" ? "discord" : "slack", c = CONN[svc] || {}, m = c.incoming || { from:"Someone", text:"Hello" };
+      case "rb_discord_when": case "rb_slack_when": { const svc = b.type === "rb_discord_when" ? "discord" : "slack", c = (CONN.chat || {})[svc] || {}, m = c.incoming || { from:"Someone", text:"Hello" };
         return { service:svc, text:m.text, sender:m.from, channel:c.channel || "", id:"sample" }; }
       case "rb_tg_when": { const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" }; return { text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" }; }
       case "rb_homey_when": { const inc = (CONN.homey || {}).incoming || {}, dev = str(b.getFieldValue("DEVICE")).trim() || inc.device, cap = str(b.getFieldValue("CAPABILITY")).trim();

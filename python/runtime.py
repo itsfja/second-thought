@@ -93,9 +93,11 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL",
     # sync:connections-known-begin
     "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
+     "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "SLACK_API_URL", "SLACK_CHANNEL_ID",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
@@ -119,7 +121,7 @@ OTHER_SETTINGS = {
     # sync:connections-known-end
     "HA_TTS_ENTITY",
     "HA_URL", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
-    "SLACK_API_URL", "SLACK_CHANNEL_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
+    "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
 
@@ -179,10 +181,11 @@ KEYCHAIN_SERVICE = "second-thought"
 KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
-    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
+    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY",
     "HA_TOKEN", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
+     "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "COINBASE_KEY",
     "EMAIL_PASSWORD",
     "GITHUB_TOKEN",
@@ -1375,6 +1378,21 @@ def arr_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
             return kind
     return None
+# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
+# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
+# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
+# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
+DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
+SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
+
+def markdown_to_slack(text):
+    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
+    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
+    return t
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1622,12 +1640,6 @@ def ha_sensitive(service, entity="", data=None):
     return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
-# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
-# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
-# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
-# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
-DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
-SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
@@ -1983,14 +1995,14 @@ SCHEMAS = {
 # program, and writes them into the exported program, which lists them and asks before its first run if any of them
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
+    # sync:connections-capabilities-act-begin
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("ha_act", "control your Home Assistant devices", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    # sync:connections-capabilities-act-begin
-    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("email_send", "send email", True),
@@ -2010,6 +2022,8 @@ CAPABILITIES = [
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     # sync:connections-capabilities-read-begin
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
+    ("discord_read", "read your Discord channels", False),
+    ("slack_read", "read your Slack channels", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("email_read", "read your email", False),
@@ -2031,8 +2045,6 @@ CAPABILITIES = [
     ("web", "read public web pages and search the web", False),
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
-    ("discord_read", "read your Discord channels", False),
-    ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
@@ -2586,15 +2598,6 @@ def _proxied_get(url, headers, limit, what, proxy):
 # their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
 
 
-def markdown_to_slack(text):
-    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
-    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
-    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
-    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
-    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
-    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
-    return t
-
 class _PinnedTunnel(http.client.HTTPSConnection):
     """An https connection through a proxy's tunnel to an exact address, checking the certificate against the name."""
     sni = None
@@ -3140,6 +3143,132 @@ class Connections:
                          + (f"\n  {i['summary']}" if i["summary"] else ""))
         return "\n".join(lines) or "The feed has no items."
 
+    # Calendar
+    async def _calendar(self, start, end):
+        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
+        if not urls:
+            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
+            text = _decode(data, ctype)
+            if "BEGIN:VCALENDAR" not in text[:2000]:
+                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
+            out += calendar_events(text, start, end)
+        out.sort(key=lambda x: (x["start"], not x["all_day"]))
+        return out
+
+    async def calendar_text(self, day="today", days=7):
+        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
+        events = await self._calendar(start, start + datetime.timedelta(days=days))
+        lines, cur = [], None
+        for e in events:
+            d = max(e["start"], start).date()
+            if d != cur:
+                cur = d
+                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
+            lines.append("  " + event_line(e))
+        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
+
+    async def calendar_records(self, days):
+        start = parse_day("today")
+        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
+        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
+                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
+        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
+        return recs
+
+    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
+        start = parse_day(day)
+        events = await self._calendar(start, start + datetime.timedelta(days=1))
+        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
+        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
+        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
+            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
+
+    # sync:connections-runtime-begin
+    # Radarr and Sonarr (#398)
+    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
+    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
+    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
+    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
+    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
+    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
+                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
+
+    @staticmethod
+    def _arr_which(which):
+        w = to_str(which).strip().lower()
+        if w not in Connections.ARR_URLS:
+            raise RunError(tr("Which one? Radarr or Sonarr."))
+        return w
+
+    async def _arr(self, which, method, path, query=None, body=None, approved=False):
+        w = self._arr_which(which)
+        kind = arr_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
+        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
+        who = self.ARR_URLS[w][3]
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
+                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who=who))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def arr_queue(self, which):
+        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
+        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
+        w = self._arr_which(which)
+        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
+                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
+                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
+                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
+                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
+        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
+        return out
+
+    async def arr_missing(self, which):
+        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
+        was added) and id."""
+        w = self._arr_which(which)
+        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
+        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
+        return out
+
+    async def arr_diskspace(self, which):
+        """Each of its folders: path, label, free_gb and total_gb."""
+        w = self._arr_which(which)
+        rows = await self._arr(w, "GET", "/api/v3/diskspace")
+        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
+                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
+                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def arr_search(self, which):
+        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
+        was done."""
+        w = self._arr_which(which)
+        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
+        self.log(w.capitalize(), what, tr("done"))
+        return True
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
                          "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
@@ -3269,133 +3398,6 @@ class Connections:
 
     async def _listen_slack(self, items):
         await self._listen_chat("slack", items)
-
-    # Calendar
-    async def _calendar(self, start, end):
-        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
-        if not urls:
-            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
-        out = []
-        for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
-            text = _decode(data, ctype)
-            if "BEGIN:VCALENDAR" not in text[:2000]:
-                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
-            out += calendar_events(text, start, end)
-        out.sort(key=lambda x: (x["start"], not x["all_day"]))
-        return out
-
-    async def calendar_text(self, day="today", days=7):
-        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
-        events = await self._calendar(start, start + datetime.timedelta(days=days))
-        lines, cur = [], None
-        for e in events:
-            d = max(e["start"], start).date()
-            if d != cur:
-                cur = d
-                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
-            lines.append("  " + event_line(e))
-        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
-
-    async def calendar_records(self, days):
-        start = parse_day("today")
-        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
-        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
-                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
-        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
-        return recs
-
-    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
-        start = parse_day(day)
-        events = await self._calendar(start, start + datetime.timedelta(days=1))
-        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
-        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
-        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
-            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
-
-    # sync:connections-runtime-begin
-    # Radarr and Sonarr (#398)
-    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
-    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
-    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
-    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
-    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
-    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
-                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
-
-    @staticmethod
-    def _arr_which(which):
-        w = to_str(which).strip().lower()
-        if w not in Connections.ARR_URLS:
-            raise RunError(tr("Which one? Radarr or Sonarr."))
-        return w
-
-    async def _arr(self, which, method, path, query=None, body=None, approved=False):
-        w = self._arr_which(which)
-        kind = arr_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
-        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
-        who = self.ARR_URLS[w][3]
-        if not url or not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
-                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
-        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
-        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who=who))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
-        return json.loads(raw) if raw.strip() else {}
-
-    async def arr_queue(self, which):
-        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
-        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
-        w = self._arr_which(which)
-        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
-                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
-                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
-                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
-                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
-        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
-        return out
-
-    async def arr_missing(self, which):
-        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
-        was added) and id."""
-        w = self._arr_which(which)
-        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
-        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
-        return out
-
-    async def arr_diskspace(self, which):
-        """Each of its folders: path, label, free_gb and total_gb."""
-        w = self._arr_which(which)
-        rows = await self._arr(w, "GET", "/api/v3/diskspace")
-        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
-                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
-                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
-               for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
-        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
-        return out
-
-    async def arr_search(self, which):
-        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
-        was done."""
-        w = self._arr_which(which)
-        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
-        self.log(w.capitalize(), what, tr("done"))
-        return True
     # Coinbase (#371)
     # Coinbase's Advanced Trade API, with a CDP API key: COINBASE_KEY_FILE is the key file you download when you make
     # one at portal.cdp.coinbase.com (or COINBASE_KEY, that file's contents, say from the keychain). Make it View only,
@@ -7963,6 +7965,12 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
+        for svc, name in (("discord", "Discord"), ("slack", "Slack")):
+            if has(svc + "_read", svc + "_send"):
+                async def chat(svc=svc):
+                    await self.chat_search(svc, "", 5)
+                    return tr("read your channels")
+                out.append((name, chat))
         if has("coinbase_read", "coinbase_trade"):
             async def coinbase():
                 perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
@@ -8116,12 +8124,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        for svc, name in (("discord", "Discord"), ("slack", "Slack")):
-            if has(svc + "_read", svc + "_send"):
-                async def chat(svc=svc):
-                    await self.chat_search(svc, "", 5)
-                    return tr("read your channels")
-                out.append((name, chat))
         if has("calendar"):
             async def cal():
                 lines = await self.calendar_text("today", 7)
@@ -8409,11 +8411,11 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
+                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "Email (reading)": "EMAIL_ADDRESS",

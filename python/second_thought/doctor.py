@@ -262,6 +262,12 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
+        for svc, name in (("discord", "Discord"), ("slack", "Slack")):
+            if has(svc + "_read", svc + "_send"):
+                async def chat(svc=svc):
+                    await self.chat_search(svc, "", 5)
+                    return tr("read your channels")
+                out.append((name, chat))
         if has("coinbase_read", "coinbase_trade"):
             async def coinbase():
                 perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
@@ -415,12 +421,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        for svc, name in (("discord", "Discord"), ("slack", "Slack")):
-            if has(svc + "_read", svc + "_send"):
-                async def chat(svc=svc):
-                    await self.chat_search(svc, "", 5)
-                    return tr("read your channels")
-                out.append((name, chat))
         if has("calendar"):
             async def cal():
                 lines = await self.calendar_text("today", 7)
@@ -708,11 +708,11 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
+                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "Email (reading)": "EMAIL_ADDRESS",

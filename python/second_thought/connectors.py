@@ -17,13 +17,16 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from .settings import WHERE_KEYS
-from .core import (SAFETY, DISCORD_API, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
-    Picture, Retryable, RunError, _clean_num, SLACK_API, WEEKDAYS, _WebSocket, _locked, _num_like,
+from .core import (SAFETY, HA_TOKEN, HA_TTS_ENTITY, HA_URL, MESSAGE_VALUE, PAGES_FILE,
+    Picture, Retryable, RunError, _clean_num, WEEKDAYS, _WebSocket, _locked, _num_like,
     _short, _write_json, ha_sensitive, num, read_text_file, round_js, to_str, _MEDIA)
 from .core import (
     # sync:connections-imports-begin
     arr_call,
     ARR_SEARCH,
+    DISCORD_API,
+    SLACK_API,
+    markdown_to_slack,
     coinbase_money,
     docker_call,
     GITHUB_API,
@@ -38,7 +41,6 @@ from .core import (
     TELEGRAM_API,
     TELEGRAM_FILE,
     markdown_to_telegram,
-    _MD_LINK,
     unifi_allowed,
     unraid_call,
     # sync:connections-imports-end
@@ -193,15 +195,6 @@ def _proxied_get(url, headers, limit, what, proxy):
 # Models write Markdown (**bold**, *italics*, `code`, [links](https://…), # headings). Telegram and Slack each have
 # their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
 
-
-def markdown_to_slack(text):
-    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
-    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
-    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
-    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
-    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
-    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
-    return t
 
 class _PinnedTunnel(http.client.HTTPSConnection):
     """An https connection through a proxy's tunnel to an exact address, checking the certificate against the name."""
@@ -748,6 +741,132 @@ class Connections:
                          + (f"\n  {i['summary']}" if i["summary"] else ""))
         return "\n".join(lines) or "The feed has no items."
 
+    # Calendar
+    async def _calendar(self, start, end):
+        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
+        if not urls:
+            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
+            text = _decode(data, ctype)
+            if "BEGIN:VCALENDAR" not in text[:2000]:
+                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
+            out += calendar_events(text, start, end)
+        out.sort(key=lambda x: (x["start"], not x["all_day"]))
+        return out
+
+    async def calendar_text(self, day="today", days=7):
+        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
+        events = await self._calendar(start, start + datetime.timedelta(days=days))
+        lines, cur = [], None
+        for e in events:
+            d = max(e["start"], start).date()
+            if d != cur:
+                cur = d
+                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
+            lines.append("  " + event_line(e))
+        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
+
+    async def calendar_records(self, days):
+        start = parse_day("today")
+        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
+        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
+                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
+        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
+        return recs
+
+    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
+        start = parse_day(day)
+        events = await self._calendar(start, start + datetime.timedelta(days=1))
+        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
+        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
+        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
+            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
+
+    # sync:connections-runtime-begin
+    # Radarr and Sonarr (#398)
+    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
+    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
+    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
+    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
+    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
+    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
+                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
+
+    @staticmethod
+    def _arr_which(which):
+        w = to_str(which).strip().lower()
+        if w not in Connections.ARR_URLS:
+            raise RunError(tr("Which one? Radarr or Sonarr."))
+        return w
+
+    async def _arr(self, which, method, path, query=None, body=None, approved=False):
+        w = self._arr_which(which)
+        kind = arr_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
+        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
+        who = self.ARR_URLS[w][3]
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
+                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who=who))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def arr_queue(self, which):
+        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
+        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
+        w = self._arr_which(which)
+        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
+                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
+                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
+                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
+                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
+        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
+        return out
+
+    async def arr_missing(self, which):
+        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
+        was added) and id."""
+        w = self._arr_which(which)
+        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
+        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
+        return out
+
+    async def arr_diskspace(self, which):
+        """Each of its folders: path, label, free_gb and total_gb."""
+        w = self._arr_which(which)
+        rows = await self._arr(w, "GET", "/api/v3/diskspace")
+        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
+                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
+                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def arr_search(self, which):
+        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
+        was done."""
+        w = self._arr_which(which)
+        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
+        self.log(w.capitalize(), what, tr("done"))
+        return True
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
                          "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
@@ -877,133 +996,6 @@ class Connections:
 
     async def _listen_slack(self, items):
         await self._listen_chat("slack", items)
-
-    # Calendar
-    async def _calendar(self, start, end):
-        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
-        if not urls:
-            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
-        out = []
-        for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
-            text = _decode(data, ctype)
-            if "BEGIN:VCALENDAR" not in text[:2000]:
-                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
-            out += calendar_events(text, start, end)
-        out.sort(key=lambda x: (x["start"], not x["all_day"]))
-        return out
-
-    async def calendar_text(self, day="today", days=7):
-        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
-        events = await self._calendar(start, start + datetime.timedelta(days=days))
-        lines, cur = [], None
-        for e in events:
-            d = max(e["start"], start).date()
-            if d != cur:
-                cur = d
-                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
-            lines.append("  " + event_line(e))
-        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
-
-    async def calendar_records(self, days):
-        start = parse_day("today")
-        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
-        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
-                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
-        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
-        return recs
-
-    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
-        start = parse_day(day)
-        events = await self._calendar(start, start + datetime.timedelta(days=1))
-        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
-        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
-        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
-            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
-
-    # sync:connections-runtime-begin
-    # Radarr and Sonarr (#398)
-    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
-    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
-    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
-    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
-    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
-    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
-                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
-
-    @staticmethod
-    def _arr_which(which):
-        w = to_str(which).strip().lower()
-        if w not in Connections.ARR_URLS:
-            raise RunError(tr("Which one? Radarr or Sonarr."))
-        return w
-
-    async def _arr(self, which, method, path, query=None, body=None, approved=False):
-        w = self._arr_which(which)
-        kind = arr_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
-        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
-        who = self.ARR_URLS[w][3]
-        if not url or not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
-                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
-        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
-        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who=who))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
-        return json.loads(raw) if raw.strip() else {}
-
-    async def arr_queue(self, which):
-        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
-        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
-        w = self._arr_which(which)
-        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
-                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
-                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
-                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
-                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
-        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
-        return out
-
-    async def arr_missing(self, which):
-        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
-        was added) and id."""
-        w = self._arr_which(which)
-        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
-        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
-        return out
-
-    async def arr_diskspace(self, which):
-        """Each of its folders: path, label, free_gb and total_gb."""
-        w = self._arr_which(which)
-        rows = await self._arr(w, "GET", "/api/v3/diskspace")
-        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
-                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
-                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
-               for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
-        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
-        return out
-
-    async def arr_search(self, which):
-        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
-        was done."""
-        w = self._arr_which(which)
-        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
-        self.log(w.capitalize(), what, tr("done"))
-        return True
     # Coinbase (#371)
     # Coinbase's Advanced Trade API, with a CDP API key: COINBASE_KEY_FILE is the key file you download when you make
     # one at portal.cdp.coinbase.com (or COINBASE_KEY, that file's contents, say from the keychain). Make it View only,

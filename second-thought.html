@@ -693,9 +693,11 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL",
     # sync:connections-known-begin
     "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
+     "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "SLACK_API_URL", "SLACK_CHANNEL_ID",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
 # Email: your address and an app password (Gmail: Google account, Security, App passwords). The mail servers are
@@ -719,7 +721,7 @@ OTHER_SETTINGS = {
     # sync:connections-known-end
     "HA_TTS_ENTITY",
     "HA_URL", "RB_MEMORY_FILE", "RB_COUNTS_FILE", "RB_POLL_SECONDS",
-    "SLACK_API_URL", "SLACK_CHANNEL_ID", "WEBHOOK_HOST", "WEBHOOK_PORT",
+    "WEBHOOK_HOST", "WEBHOOK_PORT",
     "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "ALL_PROXY", "SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"}
 OTHER_SETTING_PREFIXES = ("MODEL_", "MCP_", "PLAN_")  # a model for a tier, an MCP server, a plan's allowance
 
@@ -779,10 +781,11 @@ KEYCHAIN_SERVICE = "second-thought"
 KEYCHAIN_NAMES = (
     "ANTHROPIC_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "LLAMA_API_KEY", "DEEPSEEK_API_KEY", "XAI_API_KEY", "OPENAI_API_KEY",
     "MISTRAL_API_KEY", "DASHSCOPE_API_KEY", "MOONSHOT_API_KEY", "PERPLEXITY_API_KEY", "HF_TOKEN", "GROQ_API_KEY", "ZAI_API_KEY",
-    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
+    "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY",
     "HA_TOKEN", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
     "RADARR_API_KEY", "SONARR_API_KEY",
+     "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "COINBASE_KEY",
     "EMAIL_PASSWORD",
     "GITHUB_TOKEN",
@@ -1975,6 +1978,21 @@ def arr_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
             return kind
     return None
+# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
+# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
+# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
+# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
+DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
+SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
+
+def markdown_to_slack(text):
+    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
+    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
+    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
+    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
+    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
+    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
+    return t
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -2222,12 +2240,6 @@ def ha_sensitive(service, entity="", data=None):
     return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
-# Discord: a bot token (Discord Developer Portal, your application, Bot, Reset Token) with the Message Content intent
-# turned on, and DISCORD_CHANNEL_ID: the channels it reads and posts in (anyone in a server can post, so only these count).
-# Slack: a bot token (api.slack.com/apps, your app, OAuth & Permissions; scopes channels:history, groups:history,
-# chat:write) and SLACK_CHANNEL_ID, the channels it reads and posts in. Invite the bot to each channel.
-DISCORD_API = os.environ.get("DISCORD_API_URL", "https://discord.com/api/v10").rstrip("/")
-SLACK_API = os.environ.get("SLACK_API_URL", "https://slack.com/api").rstrip("/")
 # Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
@@ -2583,14 +2595,14 @@ SCHEMAS = {
 # program, and writes them into the exported program, which lists them and asks before its first run if any of them
 # acts on the world (the third value). Each is (id, what it lets the program do, whether that acts on the world).
 CAPABILITIES = [
+    # sync:connections-capabilities-act-begin
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("ha_act", "control your Home Assistant devices", True),
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    # sync:connections-capabilities-act-begin
-    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("email_send", "send email", True),
@@ -2610,6 +2622,8 @@ CAPABILITIES = [
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     # sync:connections-capabilities-read-begin
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
+    ("discord_read", "read your Discord channels", False),
+    ("slack_read", "read your Slack channels", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("email_read", "read your email", False),
@@ -2631,8 +2645,6 @@ CAPABILITIES = [
     ("web", "read public web pages and search the web", False),
     ("calendar", "read your calendars", False),
     ("feeds", "read news feeds", False),
-    ("discord_read", "read your Discord channels", False),
-    ("slack_read", "read your Slack channels", False),
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
@@ -3186,15 +3198,6 @@ def _proxied_get(url, headers, limit, what, proxy):
 # their own formatting, so it's turned into theirs before sending; Discord reads Markdown as it is.
 
 
-def markdown_to_slack(text):
-    """Slack's own formatting (*bold*, _italics_, <url|text>) for a model's Markdown."""
-    t = to_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")  # Slack reads these as its own
-    t = _MD_LINK.sub(lambda m: f"<{m.group(2)}|{m.group(1)}>", t)
-    t = re.sub(r"(?<![\w*])\*(?=\S)([^*\n]+?)(?<=\S)\*(?![\w*])", r"_\1_", t)
-    t = re.sub(r"^#{1,6}[ \t]+(.+?)[ \t]*#*$", r"*\1*", t, flags=re.M)
-    t = re.sub(r"\*\*(?=\S)(.+?)(?<=\S)\*\*", r"*\1*", t)
-    return t
-
 class _PinnedTunnel(http.client.HTTPSConnection):
     """An https connection through a proxy's tunnel to an exact address, checking the certificate against the name."""
     sni = None
@@ -3740,6 +3743,132 @@ class Connections:
                          + (f"\n  {i['summary']}" if i["summary"] else ""))
         return "\n".join(lines) or "The feed has no items."
 
+    # Calendar
+    async def _calendar(self, start, end):
+        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
+        if not urls:
+            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
+        out = []
+        for u in urls:
+            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
+            text = _decode(data, ctype)
+            if "BEGIN:VCALENDAR" not in text[:2000]:
+                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
+            out += calendar_events(text, start, end)
+        out.sort(key=lambda x: (x["start"], not x["all_day"]))
+        return out
+
+    async def calendar_text(self, day="today", days=7):
+        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
+        events = await self._calendar(start, start + datetime.timedelta(days=days))
+        lines, cur = [], None
+        for e in events:
+            d = max(e["start"], start).date()
+            if d != cur:
+                cur = d
+                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
+            lines.append("  " + event_line(e))
+        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
+
+    async def calendar_records(self, days):
+        start = parse_day("today")
+        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
+        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
+                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
+        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
+        return recs
+
+    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
+        start = parse_day(day)
+        events = await self._calendar(start, start + datetime.timedelta(days=1))
+        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
+        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
+        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
+            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
+
+    # sync:connections-runtime-begin
+    # Radarr and Sonarr (#398)
+    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
+    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
+    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
+    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
+    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
+    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
+                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
+
+    @staticmethod
+    def _arr_which(which):
+        w = to_str(which).strip().lower()
+        if w not in Connections.ARR_URLS:
+            raise RunError(tr("Which one? Radarr or Sonarr."))
+        return w
+
+    async def _arr(self, which, method, path, query=None, body=None, approved=False):
+        w = self._arr_which(which)
+        kind = arr_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
+        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
+        who = self.ARR_URLS[w][3]
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
+                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who=who))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def arr_queue(self, which):
+        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
+        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
+        w = self._arr_which(which)
+        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
+                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
+                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
+                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
+                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
+        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
+        return out
+
+    async def arr_missing(self, which):
+        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
+        was added) and id."""
+        w = self._arr_which(which)
+        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
+        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
+        return out
+
+    async def arr_diskspace(self, which):
+        """Each of its folders: path, label, free_gb and total_gb."""
+        w = self._arr_which(which)
+        rows = await self._arr(w, "GET", "/api/v3/diskspace")
+        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
+                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
+                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def arr_search(self, which):
+        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
+        was done."""
+        w = self._arr_which(which)
+        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
+        self.log(w.capitalize(), what, tr("done"))
+        return True
     # Discord and Slack: the same shape for both. Only the channels in the settings are read or posted in.
     CHATS = {"discord": {"name": "Discord", "token": "DISCORD_BOT_TOKEN", "channels": "DISCORD_CHANNEL_ID", "limit": 2000,
                          "make": "a bot in the Discord Developer Portal (Applications, your app, Bot), with the Message Content intent on"},
@@ -3869,133 +3998,6 @@ class Connections:
 
     async def _listen_slack(self, items):
         await self._listen_chat("slack", items)
-
-    # Calendar
-    async def _calendar(self, start, end):
-        urls = [u for u in re.split(r"\s+", os.environ.get("CALENDAR_URL", "").strip()) if u]
-        if not urls:
-            raise RunError(tr("The calendar needs CALENDAR_URL {where_keys}: your calendar's private iCal address.", where_keys=WHERE_KEYS))
-        out = []
-        for u in urls:
-            ctype, data = await asyncio.to_thread(get_url, u, True, "The calendar", 20_000_000)
-            text = _decode(data, ctype)
-            if "BEGIN:VCALENDAR" not in text[:2000]:
-                raise RunError(tr("CALENDAR_URL isn't an iCal calendar address (it should end in .ics, or come from 'secret address in iCal format')."))
-            out += calendar_events(text, start, end)
-        out.sort(key=lambda x: (x["start"], not x["all_day"]))
-        return out
-
-    async def calendar_text(self, day="today", days=7):
-        start, days = parse_day(day), max(1, min(62, round_js(num(days)) or 7))
-        events = await self._calendar(start, start + datetime.timedelta(days=days))
-        lines, cur = [], None
-        for e in events:
-            d = max(e["start"], start).date()
-            if d != cur:
-                cur = d
-                lines.append(f"{WEEKDAYS[d.weekday()]} {d:%d %b}:")
-            lines.append("  " + event_line(e))
-        return "\n".join(lines) or f"Nothing in the calendar for the {days} day{'s' if days != 1 else ''} from {start:%a %d %b}."
-
-    async def calendar_records(self, days):
-        start = parse_day("today")
-        events = await self._calendar(start, start + datetime.timedelta(days=max(1, min(62, round_js(num(days)) or 7))))
-        recs = [{"day": f"{WEEKDAYS[e['start'].weekday()]} {e['start']:%d %b}", "start": "" if e["all_day"] else f"{e['start']:%H:%M}",
-                 "end": "" if e["all_day"] else f"{e['end']:%H:%M}", "title": e["title"], "location": e["location"]} for e in events]
-        self.log(tr("Calendar"), "\n".join(f"{r['day']} {r['start'] or tr('all day')}  {r['title']}" for r in recs) or tr("(nothing)"), tr("{recs} events", recs=len(recs)))
-        return recs
-
-    async def free_time(self, day="today", frm="09:00", to="17:30", minutes=60):
-        start = parse_day(day)
-        events = await self._calendar(start, start + datetime.timedelta(days=1))
-        slots = free_slots(events, start, frm or "09:00", to or "17:30", minutes)
-        head = f"{WEEKDAYS[start.weekday()]} {start:%d %b}"
-        return (f"Free on {head}:\n" + "\n".join(f"  {a:%H:%M}–{b:%H:%M}" for a, b in slots)) if slots \
-            else f"No free time of {round_js(num(minutes) or 30)} minutes on {head} between {frm} and {to}."
-
-    # sync:connections-runtime-begin
-    # Radarr and Sonarr (#398)
-    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
-    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
-    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
-    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
-    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
-    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
-                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
-
-    @staticmethod
-    def _arr_which(which):
-        w = to_str(which).strip().lower()
-        if w not in Connections.ARR_URLS:
-            raise RunError(tr("Which one? Radarr or Sonarr."))
-        return w
-
-    async def _arr(self, which, method, path, query=None, body=None, approved=False):
-        w = self._arr_which(which)
-        kind = arr_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
-        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
-        who = self.ARR_URLS[w][3]
-        if not url or not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
-                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
-        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
-        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who=who))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
-        return json.loads(raw) if raw.strip() else {}
-
-    async def arr_queue(self, which):
-        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
-        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
-        w = self._arr_which(which)
-        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
-                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
-                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
-                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
-                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
-        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
-        return out
-
-    async def arr_missing(self, which):
-        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
-        was added) and id."""
-        w = self._arr_which(which)
-        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
-        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
-        return out
-
-    async def arr_diskspace(self, which):
-        """Each of its folders: path, label, free_gb and total_gb."""
-        w = self._arr_which(which)
-        rows = await self._arr(w, "GET", "/api/v3/diskspace")
-        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
-                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
-                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
-               for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
-        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
-        return out
-
-    async def arr_search(self, which):
-        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
-        was done."""
-        w = self._arr_which(which)
-        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
-        self.log(w.capitalize(), what, tr("done"))
-        return True
     # Coinbase (#371)
     # Coinbase's Advanced Trade API, with a CDP API key: COINBASE_KEY_FILE is the key file you download when you make
     # one at portal.cdp.coinbase.com (or COINBASE_KEY, that file's contents, say from the keychain). Make it View only,
@@ -8563,6 +8565,12 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
+        for svc, name in (("discord", "Discord"), ("slack", "Slack")):
+            if has(svc + "_read", svc + "_send"):
+                async def chat(svc=svc):
+                    await self.chat_search(svc, "", 5)
+                    return tr("read your channels")
+                out.append((name, chat))
         if has("coinbase_read", "coinbase_trade"):
             async def coinbase():
                 perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
@@ -8716,12 +8724,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        for svc, name in (("discord", "Discord"), ("slack", "Slack")):
-            if has(svc + "_read", svc + "_send"):
-                async def chat(svc=svc):
-                    await self.chat_search(svc, "", 5)
-                    return tr("read your channels")
-                out.append((name, chat))
         if has("calendar"):
             async def cal():
                 lines = await self.calendar_text("today", 7)
@@ -9009,11 +9011,11 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
+                "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "Email (reading)": "EMAIL_ADDRESS",
@@ -12010,13 +12012,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 </script>
 <script type="application/json" id="capabilities">
 [
+["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["discord_send", "send Discord messages", true],
 ["slack_send", "send Slack messages", true],
 ["ha_act", "control your Home Assistant devices", true],
 ["webhook", "accept web requests from other computers", true],
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
-["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["email_send", "send email", true],
@@ -12034,6 +12036,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
+["discord_read", "read your Discord channels", false],
+["slack_read", "read your Slack channels", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["email_read", "read your email", false],
@@ -12054,8 +12058,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["web", "read public web pages and search the web", false],
 ["calendar", "read your calendars", false],
 ["feeds", "read news feeds", false],
-["discord_read", "read your Discord channels", false],
-["slack_read", "read your Slack channels", false],
 ["ha_read", "look at your Home Assistant devices", false],
 ["folder", "look at the files in a folder, and watch it for new ones", false],
 ["files_read", "read files you choose", false],
@@ -14325,54 +14327,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    "title": "Wholemeal rye flour, 1 kg (sample page)",
    "before": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.40\nIn stock\nVisitors today: 17",
    "after": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.65\nOnly 3 left\nVisitors today: 18"
-  }
- },
- "discord": {
-  "channel": "#baking (sample server)",
-  "messages": [
-   {
-    "from": "crumb_shot",
-    "text": "Anyone tried the new spelt from the mill? Mine came out dense.",
-    "hours_ago": 1
-   },
-   {
-    "from": "night_loaf",
-    "text": "Bake-along is Sunday at 10, bring your rye starter",
-    "hours_ago": 6
-   },
-   {
-    "from": "You",
-    "text": "Reminder: bake-along recipe is pinned",
-    "hours_ago": 30
-   }
-  ],
-  "incoming": {
-   "from": "crumb_shot",
-   "text": "What hydration should a first rye loaf be?"
-  }
- },
- "slack": {
-  "channel": "#kitchen (sample workspace)",
-  "messages": [
-   {
-    "from": "Sam",
-    "text": "Oven's free from 2pm if you want it",
-    "hours_ago": 2
-   },
-   {
-    "from": "Alex",
-    "text": "Who took the last of the rye flour?",
-    "hours_ago": 4
-   },
-   {
-    "from": "You",
-    "text": "Ordering flour on Friday",
-    "hours_ago": 26
-   }
-  ],
-  "incoming": {
-   "from": "Sam",
-   "text": "Can I borrow the proving baskets tomorrow?"
   }
  },
  "coinbase": {
@@ -16861,6 +16815,56 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
    "real_mode": "self_consumption",
    "backup_reserve_percent": "20"
   }
+ },
+ "chat": {
+  "discord": {
+   "channel": "#baking (sample server)",
+   "messages": [
+    {
+     "from": "crumb_shot",
+     "text": "Anyone tried the new spelt from the mill? Mine came out dense.",
+     "hours_ago": 1
+    },
+    {
+     "from": "night_loaf",
+     "text": "Bake-along is Sunday at 10, bring your rye starter",
+     "hours_ago": 6
+    },
+    {
+     "from": "You",
+     "text": "Reminder: bake-along recipe is pinned",
+     "hours_ago": 30
+    }
+   ],
+   "incoming": {
+    "from": "crumb_shot",
+    "text": "What hydration should a first rye loaf be?"
+   }
+  },
+  "slack": {
+   "channel": "#kitchen (sample workspace)",
+   "messages": [
+    {
+     "from": "Sam",
+     "text": "Oven's free from 2pm if you want it",
+     "hours_ago": 2
+    },
+    {
+     "from": "Alex",
+     "text": "Who took the last of the rye flour?",
+     "hours_ago": 4
+    },
+    {
+     "from": "You",
+     "text": "Ordering flour on Friday",
+     "hours_ago": 26
+    }
+   ],
+   "incoming": {
+    "from": "Sam",
+    "text": "Can I borrow the proving baskets tomorrow?"
+   }
+  }
  }
 }
 </script>
@@ -17059,16 +17063,12 @@ Coinbase:
 Connections:
   rb_cal_when (N): when a calendar event starts in %1 minutes — Runs the blocks below this many minutes before each event in your calendar (all-day events don't count). 'What arrived' gives title, start, end, location, minutes and text.  [calendar]
   rb_calendar (DAYS): calendar for the next %1 days — Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar.  [calendar]
-  rb_discord_send (TEXT): send Discord message %1 — Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [discord_send]
-  rb_discord_when (CONTAINS): when a Discord message arrives containing %1 — Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [discord_read]
   rb_event (KEY): what arrived: %1 — Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record.
   rb_feed_news (URL): news from feed %1 — The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds.  [feeds]
   rb_feed_when (URL): when there's something new in feed %1 — Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text.  [feeds]
   rb_folder_files (FOLDER, MATCH): files in folder %1 matching %2 — The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files.  [folder]
   rb_folder_when (FOLDER): when a file appears in folder %1 — Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks.  [folder]
   rb_page_when (URL): when the web page %1 changes — Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.  [web]
-  rb_slack_send (TEXT): send Slack message %1 — Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [slack_send]
-  rb_slack_when (CONTAINS): when a Slack message arrives containing %1 — Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [slack_read]
   rb_webhook_when (PATH): when a web request arrives at / %1 — Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address.  [webhook]
 
 Control:
@@ -17084,6 +17084,12 @@ Control:
   rb_wait_until (COND): wait until %1 — Pause until the condition is true. Checked twice a second, or every 10 seconds if it asks Claude.
   rb_with_any_model (MODEL): with OpenRouter model %1 — Runs just the blocks inside on any model OpenRouter offers. Type its name from openrouter.ai/models, for example mistralai/mistral-small or google/gemma-4-31b-it. openrouter/auto picks one for you. Runs in exported Python (needs OPENROUTER_API_KEY); in this page Claude stands in.
   rb_with_model (TIER): with model %1 — Runs just the blocks inside on this model, then goes back to the model before. Models other than Claude run in exported Python; in this page Claude stands in for them.
+
+Discord and Slack:
+  rb_discord_send (TEXT): send Discord message %1 — Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [discord_send]
+  rb_discord_when (CONTAINS): when a Discord message arrives containing %1 — Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [discord_read]
+  rb_slack_send (TEXT): send Slack message %1 — Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown.  [slack_send]
+  rb_slack_when (CONTAINS): when a Slack message arrives containing %1 — Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message.  [slack_read]
 
 Docker:
   rb_docker_containers: Docker containers — A list of records, one for each container, running or not: name, image, state, status, health (healthy, unhealthy, or empty with no health check), restarts and started. On this page it uses a sample stack.  [docker_read]
@@ -17463,6 +17469,7 @@ HOW TO MAP CODE
     you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", 
     // sync:connections-hues-begin
     arr:"#C2185B",
+    chat:"#C2185B",
     coinbase:"#C2185B",
     docker:"#C2185B",
     email:"#C2185B",
@@ -17684,7 +17691,6 @@ HOW TO MAP CODE
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
@@ -17698,6 +17704,7 @@ HOW TO MAP CODE
     // sync:connections-caps-begin
     rb_arr_queue:"arr_read",
     rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control",
+    rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read",
     rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",
@@ -18005,16 +18012,6 @@ HOW TO MAP CODE
       tooltip:"Gives the agent Flightradar24's own tools: live positions of aircraft (by area, flight number, callsign or registration), flight summaries with take-off and landing, tracks, history back to 2016, and airline and airport details. Every tool only reads. " +
         "Needs Node.js installed, and FR24_API_KEY in second-thought.ini (a paid subscription from fr24api.flightradar24.com; each call costs credits, so a budget or a step limit keeps a run cheap). Only in exported Python." },
     /* Connections */
-    { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
-    { type:"rb_slack_when", message0:"when a Slack message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
-    S("rb_discord_send", "send Discord message %1", [val("TEXT")], { style:"conn", inputsInline:true,
-      tooltip:"Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
-    S("rb_slack_send", "send Slack message %1", [val("TEXT")], { style:"conn", inputsInline:true,
-      tooltip:"Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
       tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
     V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
@@ -18049,6 +18046,16 @@ HOW TO MAP CODE
       tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
     S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
       { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
+    { type:"rb_discord_when", message0:"when a Discord message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone posts in one of your Discord channels (type 'anything', or words the message must contain). Only the channels in DISCORD_CHANNEL_ID count, and the bot's own messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    { type:"rb_slack_when", message0:"when a Slack message arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when someone posts in one of your Slack channels (type 'anything', or words the message must contain). Only the channels in SLACK_CHANNEL_ID count, and bots' messages never do. Checked every 10 seconds. 'What arrived' gives text, sender and channel. On this page, right-click it and choose 'Run this script' to try it with a sample message." },
+    S("rb_discord_send", "send Discord message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Posts in Discord: back in the channel a message came from, or in the first channel in DISCORD_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    S("rb_slack_send", "send Slack message %1", [val("TEXT")], { style:"conn", inputsInline:true,
+      tooltip:"Posts in Slack: back in the channel a message came from, or in the first channel in SLACK_CHANNEL_ID. 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     /* Coinbase (#371) */
     V("rb_coinbase_balances", "Coinbase balances", [], "Array", { style:"coinbase",
       tooltip:"A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio." }),
@@ -18329,10 +18336,9 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_discord_when"), B("rb_slack_when"), B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_cal_when"), B("rb_page_when"),
+      B("rb_webhook_when"), B("rb_feed_when"), B("rb_folder_when"), B("rb_cal_when"), B("rb_page_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
-      B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
       B("rb_feed_news", { URL:T("") }), B("rb_calendar", { DAYS:N(7) }), B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
     ]},
     { kind:"category", name:"You", categorystyle:"you", contents:[
@@ -18372,6 +18378,10 @@ HOW TO MAP CODE
     // sync:connections-toolbox-begin
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
+    ]},
+    { kind:"category", name:"Discord and Slack", categorystyle:"chat", service:"chat", contents:[
+      B("rb_discord_when"), B("rb_slack_when"), B("rb_event"),
+            B("rb_discord_send", { TEXT:L("The bake-along starts in 10 minutes.") }), B("rb_slack_send", { TEXT:L("The oven's free now.") }),
     ]},
     { kind:"category", name:"Coinbase", categorystyle:"coinbase", service:"coinbase", contents:[
       B("rb_coinbase_balances"), B("rb_coinbase_value"), B("rb_coinbase_price", { PRODUCT:K("BTC-GBP") }),
@@ -21278,8 +21288,8 @@ HOW TO MAP CODE
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
             
-             discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
-             slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
+            
+            
              calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
@@ -21288,6 +21298,8 @@ HOW TO MAP CODE
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              // sync:connections-need-begin
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
+              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
+              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
@@ -21365,6 +21377,17 @@ HOW TO MAP CODE
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
+    if (need.discord) out.push("", "[discord]",
+      "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
+      "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
+      "; The channels it reads and posts in: right-click a channel, Copy Channel ID (turn on Developer Mode first).",
+      "; Anyone in a server can post, so only these channels count. Several can be separated by spaces.",
+      "DISCORD_BOT_TOKEN = ", "DISCORD_CHANNEL_ID = ");
+    if (need.slack) out.push("", "[slack]",
+      "; A Slack app (api.slack.com/apps): OAuth & Permissions, bot scopes channels:history, groups:history and chat:write,",
+      "; then install it and copy the Bot User OAuth Token (xoxb-…). Invite the bot to each channel with /invite.",
+      "; The channels it reads and posts in: open the channel's details; the ID is at the bottom. Several can be separated by spaces.",
+      "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -21468,17 +21491,6 @@ HOW TO MAP CODE
       ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
                         "feeds = "] : []),
       ...note("local_pages", "yes", "let the agent read pages and feeds on your own network too (normally only public ones)"));
-    if (need.discord) out.push("", "[discord]",
-      "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
-      "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
-      "; The channels it reads and posts in: right-click a channel, Copy Channel ID (turn on Developer Mode first).",
-      "; Anyone in a server can post, so only these channels count. Several can be separated by spaces.",
-      "DISCORD_BOT_TOKEN = ", "DISCORD_CHANNEL_ID = ");
-    if (need.slack) out.push("", "[slack]",
-      "; A Slack app (api.slack.com/apps): OAuth & Permissions, bot scopes channels:history, groups:history and chat:write,",
-      "; then install it and copy the Bot User OAuth Token (xoxb-…). Invite the bot to each channel with /invite.",
-      "; The channels it reads and posts in: open the channel's details; the ID is at the bottom. Several can be separated by spaces.",
-      "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
     if (need.calendar) out.push("", "[calendar]",
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
@@ -21930,9 +21942,9 @@ HOW TO MAP CODE
           case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
-          case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
+          case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
@@ -23798,21 +23810,6 @@ HOW TO MAP CODE
     });
     return lines.join("\n") || "The feed has no items.";
   }
-  /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
-  const CHAT_NAME = { discord:"Discord", slack:"Slack" };
-  const CHAT = svc => { connNote(CHAT_NAME[svc]); return CONN[svc] || { messages:[], channel:"" }; };
-  function chatSearch(svc, text){
-    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), c = CHAT(svc);
-    const found = c.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
-    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + " in " + c.channel + ": " + short(m.text, 300)).join("\n") ||
-      ("No " + CHAT_NAME[svc] + " messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". Only the channels in " + svc.toUpperCase() + "_CHANNEL_ID are read.");
-  }
-  async function chatSend(svc, text, approved){
-    text = str(text).trim(); if (!text) fail(tr("A {service} message needs some text.", { service:CHAT_NAME[svc] }));
-    if (!approved && !(await allowed(["messages"], "send a " + CHAT_NAME[svc] + " message: " + short(text, 120)))) return false;
-    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || tr("your channel")), { text }).done("sample", "ok");
-    return true;
-  }
   function parseDay(text){
     const t = str(text).trim().toLowerCase(), today = new Date(); today.setHours(0, 0, 0, 0);
     if (t === "" || t === "today") return today;
@@ -23886,6 +23883,21 @@ HOW TO MAP CODE
     const what = "search " + who + "'s wanted list for what's missing";
     if (!(await confirmAction(what + " (it always asks)"))) return false;
     addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
+  /* Discord and Slack on the page: sample channels. Matches the runtime's chat_search and chat_send wording. */
+  const CHAT_NAME = { discord:"Discord", slack:"Slack" };
+  const CHAT = svc => { connNote(CHAT_NAME[svc]); return (CONN.chat || {})[svc] || { messages:[], channel:"" }; };
+  function chatSearch(svc, text){
+    const words = str(text).toLowerCase().split(/\s+/).filter(Boolean), c = CHAT(svc);
+    const found = c.messages.slice().sort((a, b) => a.hours_ago - b.hours_ago).filter(m => words.every(w => m.text.toLowerCase().includes(w))).slice(0, 20);
+    return found.map(m => whenText(hoursAgo(m.hours_ago)) + " · " + m.from + " in " + c.channel + ": " + short(m.text, 300)).join("\n") ||
+      ("No " + CHAT_NAME[svc] + " messages found" + (words.length ? " with “" + str(text).trim() + "”" : "") + ". Only the channels in " + svc.toUpperCase() + "_CHANNEL_ID are read.");
+  }
+  async function chatSend(svc, text, approved){
+    text = str(text).trim(); if (!text) fail(tr("A {service} message needs some text.", { service:CHAT_NAME[svc] }));
+    if (!approved && !(await allowed(["messages"], "send a " + CHAT_NAME[svc] + " message: " + short(text, 120)))) return false;
+    const c = CHAT(svc); addStep(CHAT_NAME[svc] + " → " + (c.channel || tr("your channel")), { text }).done("sample", "ok");
     return true;
   }
   /* Coinbase on the page (#371): a sample portfolio, in pounds. Exported Python talks to Coinbase's Advanced Trade API
@@ -24645,7 +24657,7 @@ HOW TO MAP CODE
         const pg = (CONN.page || {}).incoming || { url:"", title:"", before:"", after:"" }, url = str(b.getFieldValue("URL")).trim() || pg.url, words = str(b.getFieldValue("WORDS")).trim();
         const before = pagePart(pg.before, words), after = pagePart(pg.after, words), changed = pageChanges(before, after), title = pg.title;
         return { url, title, before, after, changed, text:(title || url) + " changed:\n" + changed }; }
-      case "rb_discord_when": case "rb_slack_when": { const svc = b.type === "rb_discord_when" ? "discord" : "slack", c = CONN[svc] || {}, m = c.incoming || { from:"Someone", text:"Hello" };
+      case "rb_discord_when": case "rb_slack_when": { const svc = b.type === "rb_discord_when" ? "discord" : "slack", c = (CONN.chat || {})[svc] || {}, m = c.incoming || { from:"Someone", text:"Hello" };
         return { service:svc, text:m.text, sender:m.from, channel:c.channel || "", id:"sample" }; }
       case "rb_tg_when": { const m = (CONN.telegram || {}).incoming || { from:"You", text:"Hello" }; return { text:m.text, sender:m.from, chat:(CONN.telegram || {}).chat || "" }; }
       case "rb_homey_when": { const inc = (CONN.homey || {}).incoming || {}, dev = str(b.getFieldValue("DEVICE")).trim() || inc.device, cap = str(b.getFieldValue("CAPABILITY")).trim();
@@ -26186,9 +26198,9 @@ HOW TO MAP CODE
         if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
         haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
       }
-      case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
+      case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;

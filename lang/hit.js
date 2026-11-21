@@ -283,7 +283,8 @@
 "MQTT":"MQTT",
 "Telegram":"Telegram",
 "Email":"Email",
-"GitHub":"GitHub"
+"GitHub":"GitHub",
+"Discord and Slack":"Discord and Slack"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"𒅖𒋫𒈠𒀸𒊭𒀭𒋼𒌍: 𒄿𒉿𒀭𒍣 𒆪𒀉𒈠𒀭 𒄑𒄯 𒉺𒊏𒀀 𒁉𒂊𒁕𒀭 𒄿𒈾 𒈨𒂊𒄯 𒄿𒉿𒍣",

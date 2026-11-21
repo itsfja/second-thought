@@ -50,4 +50,4 @@ in `samples/connections.json`) by hand — sync does not prune.
 `docs/connections.md`'s table of contents at the top is still a hand-written list of the sections; add the new
 connection's line there.
 
-`powerwall/`, `pihole/`, `solax/`, `sabnzbd/`, `nzbgeek/`, `unifi/`, `mikrotik/`, `proxmox/`, `docker/`, `coinbase/`, `unraid/`, `arr/`, `plex/`, `homey/`, `mqtt/`, `telegram/`, `email/` and `github/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.
+`powerwall/`, `pihole/`, `solax/`, `sabnzbd/`, `nzbgeek/`, `unifi/`, `mikrotik/`, `proxmox/`, `docker/`, `coinbase/`, `unraid/`, `arr/`, `plex/`, `homey/`, `mqtt/`, `telegram/`, `email/`, `github/` and `chat/` are the patterns: moved first (#455), each with its reference counts unchanged in every shared file.

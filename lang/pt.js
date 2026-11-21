@@ -283,7 +283,8 @@
 "MQTT":"MQTT",
 "Telegram":"Telegram",
 "Email":"Email",
-"GitHub":"GitHub"
+"GitHub":"GitHub",
+"Discord and Slack":"Discord and Slack"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"Ferramentas para o agente: coloque-as dentro de um bloco de agente",

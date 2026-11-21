@@ -284,7 +284,8 @@
 "MQTT":"MQTT",
 "Telegram":"Telegram",
 "Email":"Email",
-"GitHub":"GitHub"
+"GitHub":"GitHub",
+"Discord and Slack":"Discord ᛅᚾᛏ Slack"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"ᛏᚢᛚ ᛁᚱᛁᚾᛏᚱᛁᚴᛅ: ᛚᛅᛏ ᚦᛅᚢ ᚠᛅᛚᛅ ᛁᚾ ᛁ ᛁᚱᛁᚾᛏᚱᛁᚴᛅᚴᚢᛒ",

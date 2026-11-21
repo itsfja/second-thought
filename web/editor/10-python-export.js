@@ -60,8 +60,8 @@
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
     return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
             
-             discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
-             slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
+            
+            
              calendar:has(["rb_calendar", "rb_cal_when"], ["calendar"]),
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
              webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
@@ -70,6 +70,8 @@
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              // sync:connections-need-begin
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
+              discord:has(["rb_discord_when", "rb_discord_send"], ["discord", "discord_send", "discord_send_free"]),
+              slack:has(["rb_slack_when", "rb_slack_send"], ["slack", "slack_send", "slack_send_free"]),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
@@ -147,6 +149,17 @@
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
+    if (need.discord) out.push("", "[discord]",
+      "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
+      "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
+      "; The channels it reads and posts in: right-click a channel, Copy Channel ID (turn on Developer Mode first).",
+      "; Anyone in a server can post, so only these channels count. Several can be separated by spaces.",
+      "DISCORD_BOT_TOKEN = ", "DISCORD_CHANNEL_ID = ");
+    if (need.slack) out.push("", "[slack]",
+      "; A Slack app (api.slack.com/apps): OAuth & Permissions, bot scopes channels:history, groups:history and chat:write,",
+      "; then install it and copy the Bot User OAuth Token (xoxb-…). Invite the bot to each channel with /invite.",
+      "; The channels it reads and posts in: open the channel's details; the ID is at the bottom. Several can be separated by spaces.",
+      "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -250,17 +263,6 @@
       ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
                         "feeds = "] : []),
       ...note("local_pages", "yes", "let the agent read pages and feeds on your own network too (normally only public ones)"));
-    if (need.discord) out.push("", "[discord]",
-      "; A bot: Discord Developer Portal (discord.com/developers), New Application, Bot, Reset Token. Turn on 'Message Content Intent'",
-      "; on the same page, then invite the bot to your server (OAuth2, URL Generator, bot; Read and Send Messages).",
-      "; The channels it reads and posts in: right-click a channel, Copy Channel ID (turn on Developer Mode first).",
-      "; Anyone in a server can post, so only these channels count. Several can be separated by spaces.",
-      "DISCORD_BOT_TOKEN = ", "DISCORD_CHANNEL_ID = ");
-    if (need.slack) out.push("", "[slack]",
-      "; A Slack app (api.slack.com/apps): OAuth & Permissions, bot scopes channels:history, groups:history and chat:write,",
-      "; then install it and copy the Bot User OAuth Token (xoxb-…). Invite the bot to each channel with /invite.",
-      "; The channels it reads and posts in: open the channel's details; the ID is at the bottom. Several can be separated by spaces.",
-      "SLACK_BOT_TOKEN = ", "SLACK_CHANNEL_ID = ");
     if (need.calendar) out.push("", "[calendar]",
       "; Your calendar's private iCal address. Google Calendar: Settings, your calendar, 'Secret address in iCal format'.",
       "; Outlook: Settings, Calendar, Shared calendars, Publish a calendar, ICS link. Several addresses can go on one line.",
@@ -712,9 +714,9 @@
           case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
           case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
-          case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
+          case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
