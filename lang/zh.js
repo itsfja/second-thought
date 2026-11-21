@@ -279,7 +279,8 @@
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
-"Plex":"Plex"
+"Plex":"Plex",
+"MQTT":"MQTT"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"给智能体的工具：把它们放进智能体积木里",

@@ -335,6 +335,12 @@
       case "rb_mikrotik_sfp": return mikrotikSfp();
       case "rb_mikrotik_health": return mikrotikHealth();
       case "rb_mikrotik_log": return mikrotikLog(await input(b, tc, "N", 20));
+      case "rb_mqtt_read": {
+        const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
+        if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || tr("(no message yet: only messages the broker keeps show up straight away)") }).done("read", "ok"); return v; }
+        addStep("MQTT " + topic, { mono:true, text:Object.keys(got).sort().map(k => k + ": " + short(got[k], 80)).join("\n") || tr("(nothing)") }).done(tr("{n} topics", { n:Object.keys(got).length }), "ok");
+        return got;
+      }
       case "rb_nzbgeek_search": return nzbgeekSearch(await input(b, tc, "QUERY"));
       case "rb_pihole_summary": return piholeSummary();
       case "rb_pihole_top_domains": return piholeTopDomains(await input(b, tc, "N"));
@@ -362,12 +368,6 @@
       case "rb_unraid_containers": return unraidContainers();
       case "rb_unraid_vms": return unraidVms();
       // sync:connections-iread-end
-      case "rb_mqtt_read": {
-        const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
-        if (!/[+#]/.test(topic)) { const v = got[topic] || ""; addStep("MQTT " + topic, { mono:true, text:v || tr("(no message yet: only messages the broker keeps show up straight away)") }).done("read", "ok"); return v; }
-        addStep("MQTT " + topic, { mono:true, text:Object.keys(got).sort().map(k => k + ": " + short(got[k], 80)).join("\n") || tr("(nothing)") }).done(tr("{n} topics", { n:Object.keys(got).length }), "ok");
-        return got;
-      }
       case "rb_tg_message": {
         const m = tc.payload && typeof tc.payload === "object" && "text" in tc.payload ? tc.payload : null;
         if (!m) return "";
@@ -1112,6 +1112,7 @@
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
+      case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_nzbgeek_fetch": await nzbgeekFetch(await input(b, tc, "ID")); break;
       case "rb_pihole_blocking": await piholeAsking("disable Pi-hole's blocking for " + (await input(b, tc, "N")) + " seconds"); break;
       case "rb_pihole_enable": await piholeAsking("enable Pi-hole's blocking"); break;
@@ -1126,7 +1127,6 @@
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;
       // sync:connections-iact-end
-      case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
       case "rb_ha_speak": {
         const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();

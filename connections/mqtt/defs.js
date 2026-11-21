@@ -1,0 +1,7 @@
+    { type:"rb_mqtt_when", message0:"when an MQTT message arrives on %1", args0:[{ type:"field_input", name:"TOPIC", text:"home/+/temperature" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a message arrives on this MQTT topic. + stands for one level and # for everything below, like zigbee2mqtt/#. 'What arrived' gives its topic and text, plus the fields of a JSON message." },
+    V("rb_mqtt_read", "latest MQTT message on %1", [val("TOPIC")], null, { style:"conn", inputsInline:true,
+      tooltip:"The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics." }),
+    S("rb_mqtt_publish", "publish MQTT %1 to topic %2 keep it %3", [val("TEXT"), val("TOPIC"), { type:"field_checkbox", name:"RETAIN", checked:false }],
+      { style:"conn", inputsInline:true, tooltip:"Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown." }),

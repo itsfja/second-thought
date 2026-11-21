@@ -280,7 +280,8 @@
 "Unraid":"Unraid",
 "NZBGeek":"NZBGeek",
 "Pi-hole":"Pi-hole",
-"Plex":"Plex"
+"Plex":"Plex",
+"MQTT":"MQTT"
 },
 "labels":{
 "Listeners: they run while the exported program runs on schedule":"ܡܨܝܬܢܐ: ܪܗܛܝܢ ܟܕ ܛܘܟܣܐ ܕܢܦܩ ܪܗܛ ܥܡ ܙܒܢܐ",

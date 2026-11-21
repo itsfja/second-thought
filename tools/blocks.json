@@ -1144,7 +1144,7 @@
    "RETAIN"
   ],
   "tooltip": "Sends a message to your MQTT broker. 'Keep it' asks the broker to remember it for anyone who listens later. 'Ask me before any Home Assistant action' or 'sending messages' makes it ask first. On this page it's only shown.",
-  "category": "Connections",
+  "category": "MQTT",
   "capability": "mqtt_publish"
  },
  {
@@ -1154,7 +1154,7 @@
    "TOPIC"
   ],
   "tooltip": "The latest message on an MQTT topic. Only messages the broker keeps (retained) show up straight away. With + or # in the topic, a record of each topic's latest message. On this page it uses sample topics.",
-  "category": "Connections",
+  "category": "MQTT",
   "capability": "mqtt_read"
  },
  {
@@ -1164,7 +1164,7 @@
    "TOPIC"
   ],
   "tooltip": "Runs the blocks below when a message arrives on this MQTT topic. + stands for one level and # for everything below, like zigbee2mqtt/#. 'What arrived' gives its topic and text, plus the fields of a JSON message.",
-  "category": "Connections",
+  "category": "MQTT",
   "capability": "mqtt_read"
  },
  {

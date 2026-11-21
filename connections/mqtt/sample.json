@@ -1,0 +1,13 @@
+{
+ "topics": {
+  "home/kitchen/temperature": "23.5",
+  "home/proofer/temperature": "26.8",
+  "home/proofer/humidity": "78",
+  "zigbee2mqtt/leak_sensor_sink": "{\"water_leak\": false, \"battery\": 87}",
+  "zigbee2mqtt/oven_plug": "{\"state\": \"OFF\", \"power\": 0}"
+ },
+ "incoming": {
+  "topic": "home/proofer/temperature",
+  "text": "27.4"
+ }
+}

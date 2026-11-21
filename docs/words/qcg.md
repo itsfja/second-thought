@@ -39,6 +39,7 @@ Made by tools/sync.py from i18n/qcg.json: edit that, not this.
 - NZBGeek: NZBGeek
 - Pi-hole: Pi-hole
 - Plex: Plex
+- MQTT: MQTT
 - Listeners: they run while the exported program runs on schedule: Ⱄⰾⱏⰹⱎⰰⱅⰵⰾⰻ: ⱅⰵⰽⱆⱅⱏ, ⰵⰳⰴⰰ ⰻⰸⰲⰵⰴⰵⱀⱀⱏⰹⰻ ⱍⰻⱀⱏ ⱅⰵⱍⰵⱅⱏ ⱂⱁ ⱆⱃⱁⰽⱆ
 - No blocks match: Ⱀⰻⰽⱁⰵⰳⱁⰶⰵ ⰸⰲⱑⱀⰰ ⱂⱁⰴⱁⰱⱀⰰ
 - Read and send: Ⱍⱅⰻ ⰻ ⱂⱁⱄⱏⰹⰾⰰⰻ
