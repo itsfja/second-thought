@@ -41,6 +41,7 @@ Made by tools/sync.py from i18n/gez.json: edit that, not this.
 - Plex: Plex
 - MQTT: MQTT
 - Telegram: Telegram
+- Email: Email
 - Tools for the agent: drop them inside an agent block: ንዋያተ ላእክ፡ ደዮሙ ውስተ ግንፋለ ላእክ
 - Listeners: they run while the exported program runs on schedule: ሰማዕያን፡ ይረውጹ እንዘ ይረውጽ ሥርዐት ዘወፅአ በበጊዜሁ
 - Read and send: አንብብ ወፈኑ

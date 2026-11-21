@@ -581,7 +581,7 @@
    "TEXT"
   ],
   "tooltip": "Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown.",
-  "category": "Connections",
+  "category": "Email",
   "capability": "email_send"
  },
  {
@@ -591,7 +591,7 @@
    "CONTAINS"
   ],
   "tooltip": "Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text.",
-  "category": "Connections",
+  "category": "Email",
   "capability": "email_read"
  },
  {

@@ -141,7 +141,6 @@
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_email_send:"email_send", rb_email_when:"email_read",
     rb_discord_send:"discord_send", rb_discord_when:"discord_read", rb_slack_send:"slack_send", rb_slack_when:"slack_read", rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
     rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
@@ -161,6 +160,7 @@
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",
     rb_docker_containers:"docker_read", rb_docker_stats:"docker_read", rb_docker_logs:"docker_read",
     rb_docker_power:"docker_control",
+    rb_email_send:"email_send", rb_email_when:"email_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",
@@ -477,14 +477,9 @@
       tooltip:"The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files." }),
     V("rb_calendar", "calendar for the next %1 days", [val("DAYS")], "Array", { style:"conn", inputsInline:true,
       tooltip:"Your calendar's events from today, as records: day, start, end, title, location. Exported Python reads CALENDAR_URL (your calendar's private iCal address); this page uses a sample calendar." }),
-    S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
-      tooltip:"Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
     { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
-    { type:"rb_email_when", message0:"when an email arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text." },
     { type:"rb_feed_when", message0:"when there's something new in feed %1", args0:[{ type:"field_input", name:"URL", text:"" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },
@@ -541,6 +536,11 @@
       tooltip:"The last lines a container wrote, its output and its errors together, oldest first." }),
     S("rb_docker_power", "%1 Docker container %2", [{ type:"field_dropdown", name:"ACTION", options:[["restart","restart"],["stop","stop"],["start","start"]] }, val("NAME")],
       { style:"docker", inputsInline:true, tooltip:"Restarts, stops or starts one container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Containers listed in DOCKER_PROTECT are never touched. On this page nothing really restarts." }),
+    S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
+      tooltip:"Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    { type:"rb_email_when", message0:"when an email arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text." },
     /* Homey */
     { type:"rb_homey_when", message0:"when Homey device %1 %2 changes", args0:[{ type:"field_input", name:"DEVICE", text:"Washing machine" }, { type:"field_input", name:"CAPABILITY", text:"measure_power" }],
       nextStatement:null, style:"homey_hat",

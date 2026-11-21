@@ -282,7 +282,8 @@
 "Pi-hole":"Pi-hole",
 "Plex":"Plex",
 "MQTT":"MQTT",
-"Telegram":"Telegram"
+"Telegram":"Telegram",
+"Email":"Email"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"כלים לסוכן: גררו אותם לתוך בלוק סוכן",

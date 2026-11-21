@@ -1,0 +1,5 @@
+    S("rb_email_send", "send email to %1 subject %2 %3", [val("TO"), val("SUBJECT"), val("TEXT")], { style:"conn",
+      tooltip:"Sends an email from your address (EMAIL_ADDRESS and an app password in second-thought.ini). 'Ask me before sending messages' makes it ask first. On this page it's only shown." }),
+    { type:"rb_email_when", message0:"when an email arrives containing %1", args0:[{ type:"field_input", name:"CONTAINS", text:"anything" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when a new email arrives in your inbox (checked every 2 minutes), if its sender, subject or words contain this. 'What arrived' gives from, subject, body and text." },
