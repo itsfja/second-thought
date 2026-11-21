@@ -259,6 +259,14 @@ class Doctor:
                 return tr("reached: {home} devices", home=len(home))
             out.append(("Homey", homey))
         # sync:connections-check-begin
+        if has("arr_read", "arr_control"):
+            async def arr(which):
+                status = await self._arr(which, "GET", "/api/v3/system/status")
+                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
+                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
+                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
+            out.append(("Radarr", lambda: arr("radarr")))
+            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("coinbase_read", "coinbase_trade"):
             async def coinbase():
                 perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
@@ -354,14 +362,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("arr_read", "arr_control"):
-            async def arr(which):
-                status = await self._arr(which, "GET", "/api/v3/system/status")
-                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
-                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
-                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
-            out.append(("Radarr", lambda: arr("radarr")))
-            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -709,8 +709,10 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "Radarr": "RADARR_URL",
+                "Sonarr": "SONARR_URL",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "MikroTik": "MIKROTIK_URL",

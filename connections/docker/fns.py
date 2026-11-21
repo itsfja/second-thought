@@ -7,6 +7,3 @@ def docker_call(method, path):
             return kind
     return None
 
-
-
-ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}

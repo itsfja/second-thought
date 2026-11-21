@@ -693,8 +693,9 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
+    "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256",
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
     "MIKROTIK_URL", "MIKROTIK_USER", "MIKROTIK_CERT_SHA256",
@@ -773,6 +774,7 @@ KEYCHAIN_NAMES = (
     "MINIMAX_API_KEY", "OPENROUTER_API_KEY", "HUGGINGFACE_API_KEY", "KIMI_API_KEY", "QWEN_API_KEY", "ZHIPUAI_API_KEY", "GITHUB_TOKEN", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "SLACK_BOT_TOKEN",
     "EMAIL_PASSWORD", "HA_TOKEN", "HOMEY_API_KEY", "MQTT_PASSWORD", "WEBHOOK_SECRET", "KRAKEN_API_KEY", "KRAKEN_API_SECRET", "FR24_API_KEY",
     # sync:connections-secret-begin
+    "RADARR_API_KEY", "SONARR_API_KEY",
     "COINBASE_KEY",
     "MIKROTIK_PASSWORD",
     "NZBGEEK_API_KEY",
@@ -784,7 +786,7 @@ KEYCHAIN_NAMES = (
     "UNIFI_API_KEY",
     "UNRAID_API_KEY",
     # sync:connections-secret-end
-    "RADARR_API_KEY", "SONARR_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1768,6 +1770,7 @@ SAFETY = {
     "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
+    # sync:connections-safety-begin
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
@@ -1783,7 +1786,6 @@ SAFETY = {
     "plex_asks": [["GET", r"^/library/sections/[0-9]+/refresh$"]],
     "tautulli_free": [["GET", r"^(?!.*(^|&)cmd=terminate_session(&|$))cmd=get_history(&|$)"]],
     "tautulli_asks": [["GET", r"^(?!.*(^|&)cmd=get_history(&|$))cmd=terminate_session&.*session_key=[^&]+(&|$)"]],
-    # sync:connections-safety-begin
     # Coinbase's Advanced Trade API (#371): the calls that run without asking, [method, path]. Reading, and previewing an
     # order. Any other call (placing, editing or cancelling an order, converting, moving funds) can move real money: it
     # always asks, even with (no asking), and never runs with nobody there to ask, like Kraken's money tools (#262).
@@ -1948,6 +1950,15 @@ HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
 
 
 # sync:connections-fns-begin
+ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
+def arr_call(method, path):
+    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
+    needs a live yes, and None for anything else, which is never sent (#398)."""
+    method, path = to_str(method).strip().upper(), to_str(path).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
+            return kind
+    return None
 def coinbase_money(method, path):
     """True for a Coinbase API call that could move real money (#371): anything but reading and previewing an order."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -1960,10 +1971,6 @@ def docker_call(method, path):
         if any(m == method and re.match(p, path) for m, p in SAFETY["docker_" + kind]):
             return kind
     return None
-
-
-
-ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -2022,17 +2029,6 @@ def unraid_call(method, query):
             return kind
     return None
 # sync:connections-fns-end
-
-
-def arr_call(method, path):
-    """"free" for a Radarr or Sonarr call the runtime makes without asking, "asks" for the one search command, which
-    needs a live yes, and None for anything else, which is never sent (#398)."""
-    method, path = to_str(method).strip().upper(), to_str(path).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, path) for m, p in SAFETY["arr_" + kind]):
-            return kind
-    return None
-
 
 
 def plex_call(method, path):
@@ -2575,9 +2571,9 @@ CAPABILITIES = [
     ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
-    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
+    ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -2589,9 +2585,9 @@ CAPABILITIES = [
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
-    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
+    ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
@@ -4583,89 +4579,6 @@ class Connections:
                 print(tr("  (Homey check failed: {e})", e=e), flush=True)
             await asyncio.sleep(self._poll(10))
 
-    # Radarr and Sonarr (#398)
-    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
-    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
-    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
-    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
-    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
-    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
-                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
-
-    @staticmethod
-    def _arr_which(which):
-        w = to_str(which).strip().lower()
-        if w not in Connections.ARR_URLS:
-            raise RunError(tr("Which one? Radarr or Sonarr."))
-        return w
-
-    async def _arr(self, which, method, path, query=None, body=None, approved=False):
-        w = self._arr_which(which)
-        kind = arr_call(method, path)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
-        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
-        who = self.ARR_URLS[w][3]
-        if not url or not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
-                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
-        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
-        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who=who))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
-        return json.loads(raw) if raw.strip() else {}
-
-    async def arr_queue(self, which):
-        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
-        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
-        w = self._arr_which(which)
-        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
-                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
-                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
-                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
-                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
-        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
-        return out
-
-    async def arr_missing(self, which):
-        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
-        was added) and id."""
-        w = self._arr_which(which)
-        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
-        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
-        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
-        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
-        return out
-
-    async def arr_diskspace(self, which):
-        """Each of its folders: path, label, free_gb and total_gb."""
-        w = self._arr_which(which)
-        rows = await self._arr(w, "GET", "/api/v3/diskspace")
-        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
-                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
-                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
-               for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
-        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
-        return out
-
-    async def arr_search(self, which):
-        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
-        was done."""
-        w = self._arr_which(which)
-        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
-        self.log(w.capitalize(), what, tr("done"))
-        return True
-
     # Plex and Tautulli (#402)
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
     # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
@@ -4857,6 +4770,88 @@ class Connections:
         return True
 
     # sync:connections-runtime-begin
+    # Radarr and Sonarr (#398)
+    # The Servarr REST API, the same one both speak: RADARR_URL and RADARR_API_KEY, SONARR_URL and SONARR_API_KEY
+    # (Settings, General, API Key in each). Reads are the paths in SAFETY["arr_free"]; the one search command
+    # (arr_asks, its name checked against ARR_SEARCH) always asks, live, and never runs with nobody there; nothing
+    # else is ever sent: no adding or deleting, no editing profiles or root folders, nothing in the indexer or
+    # download-client settings. RADARR_CERT_SHA256 and SONARR_CERT_SHA256 pin a certificate this computer doesn't trust.
+    ARR_URLS = {"radarr": ("RADARR_URL", "RADARR_API_KEY", "RADARR_CERT_SHA256", "Radarr"),
+                "sonarr": ("SONARR_URL", "SONARR_API_KEY", "SONARR_CERT_SHA256", "Sonarr")}
+
+    @staticmethod
+    def _arr_which(which):
+        w = to_str(which).strip().lower()
+        if w not in Connections.ARR_URLS:
+            raise RunError(tr("Which one? Radarr or Sonarr."))
+        return w
+
+    async def _arr(self, which, method, path, query=None, body=None, approved=False):
+        w = self._arr_which(which)
+        kind = arr_call(method, path)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=f"{method} {path}", who=w.capitalize()))
+        url, key, pin = (os.environ.get(n, "").strip() for n in self.ARR_URLS[w][:3])
+        who = self.ARR_URLS[w][3]
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like http://radarr:7878) and its API key, under Settings, General, API Key.",
+                              who=w.capitalize(), url_setting=self.ARR_URLS[w][0], key_setting=self.ARR_URLS[w][1], where_keys=WHERE_KEYS))
+        full = path + ("?" + urllib.parse.urlencode(query) if query else "")
+        status, raw = await self._pinned(w.capitalize(), url, pin, method, full, {"X-Api-Key": key}, body)
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who=who))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who=who, why=self._said(status, raw)))
+        return json.loads(raw) if raw.strip() else {}
+
+    async def arr_queue(self, which):
+        """What's on its way: a list of records, one for each download in the queue — title, status (Downloading,
+        Importing, Delaying, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34)."""
+        w = self._arr_which(which)
+        q = (await self._arr(w, "GET", "/api/v3/queue", {"page": "1", "pageSize": "100"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "status": to_str(r.get("status")),
+                "size_mb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else "",
+                "left_mb": self._cents(num(r.get("sizeleft")) / 1048576) if r.get("sizeleft") is not None else "",
+                "quality": to_str(((r.get("quality") or {}).get("quality") or {}).get("name") or ""),
+                "eta": to_str(r.get("timeleft"))} for r in q if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']}: {r['status']}" for r in out)
+        self.log(tr("{who} queue", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} downloading", n=len(out)))
+        return out
+
+    async def arr_missing(self, which):
+        """What's still missing: a list of records, one for each movie or episode with no file — title, added (when it
+        was added) and id."""
+        w = self._arr_which(which)
+        m = (await self._arr(w, "GET", "/api/v3/wanted/missing", {"page": "1", "pageSize": "100", "sortKey": "added", "sortDir": "desc"})).get("records") or []
+        out = [{"title": to_str(r.get("title")), "added": to_str(r.get("added"))[:10], "id": num(r.get("id"))} for r in m if isinstance(r, dict)]
+        lines = "\n".join(f"{r['title']} (added {r['added']})" for r in out)
+        self.log(tr("{who} wanted list", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} missing", n=len(out)))
+        return out
+
+    async def arr_diskspace(self, which):
+        """Each of its folders: path, label, free_gb and total_gb."""
+        w = self._arr_which(which)
+        rows = await self._arr(w, "GET", "/api/v3/diskspace")
+        out = [{"path": to_str(r.get("path")), "label": to_str(r.get("label")),
+                "free_gb": self._cents(num(r.get("freeSpace")) / 1073741824) if r.get("freeSpace") else "",
+                "total_gb": self._cents(num(r.get("totalSpace")) / 1073741824) if r.get("totalSpace") else ""}
+               for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{d['label']}: {d['free_gb']} GB free" for d in out)
+        self.log(tr("{who} diskspace", who=w.capitalize()), lines or tr("(nothing)"), tr("{n} folders", n=len(out)))
+        return out
+
+    async def arr_search(self, which):
+        """Searches for everything on the wanted list with no file, after asking you, every time. Gives back True if it
+        was done."""
+        w = self._arr_which(which)
+        what = tr("search {who}'s wanted list for what's missing", who=w.capitalize())
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._arr(w, "POST", "/api/v3/command", body={"name": ARR_SEARCH[w]}, approved=True)
+        self.log(w.capitalize(), what, tr("done"))
+        return True
     # Coinbase (#371)
     # Coinbase's Advanced Trade API, with a CDP API key: COINBASE_KEY_FILE is the key file you download when you make
     # one at portal.cdp.coinbase.com (or COINBASE_KEY, that file's contents, say from the keychain). Make it View only,
@@ -8561,6 +8556,14 @@ class Doctor:
                 return tr("reached: {home} devices", home=len(home))
             out.append(("Homey", homey))
         # sync:connections-check-begin
+        if has("arr_read", "arr_control"):
+            async def arr(which):
+                status = await self._arr(which, "GET", "/api/v3/system/status")
+                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
+                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
+                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
+            out.append(("Radarr", lambda: arr("radarr")))
+            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("coinbase_read", "coinbase_trade"):
             async def coinbase():
                 perms = await self._coinbase("GET", "/api/v3/brokerage/key_permissions")
@@ -8656,14 +8659,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("arr_read", "arr_control"):
-            async def arr(which):
-                status = await self._arr(which, "GET", "/api/v3/system/status")
-                q = await self._arr(which, "GET", "/api/v3/queue", {"page": "1", "pageSize": "1"})
-                return tr("{who} {version}", who=which.capitalize(), version=to_str(status.get("version")) or "?") \
-                    + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
-            out.append(("Radarr", lambda: arr("radarr")))
-            out.append(("Sonarr", lambda: arr("sonarr")))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -9011,8 +9006,10 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
+                "Radarr": "RADARR_URL",
+                "Sonarr": "SONARR_URL",
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
                 "MikroTik": "MIKROTIK_URL",
@@ -12013,8 +12010,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["webhook", "accept web requests from other computers", true],
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
-["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", true],
+["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
 ["nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", true],
@@ -12025,8 +12022,8 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
-["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", false],
+["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
 ["mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", false],
@@ -17446,6 +17443,7 @@ HOW TO MAP CODE
     lists:"#C2413B", procedures:"#CB3E71", draft:"#2469F9", claude:"#5B5BD6", review:"#8A55D6",
     you:"#1A7E90", output:"#26834E", time:"#59778D", pictures:"#B4469E", memory:"#8C5A2B", files:"#556B8D", records:"#367E80", ha:"#C2185B", agent:"#6A7B19", tools:"#837313", conn:"#C2185B", homey:"#C2185B", 
     // sync:connections-hues-begin
+    arr:"#C2185B",
     coinbase:"#C2185B",
     docker:"#C2185B",
     mikrotik:"#C2185B",
@@ -17458,7 +17456,7 @@ HOW TO MAP CODE
     unifi:"#C2185B",
     unraid:"#C2185B",
     // sync:connections-hues-end
-    arr:"#C2185B", plex:"#C2185B"
+    plex:"#C2185B"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -17472,6 +17470,7 @@ HOW TO MAP CODE
     draft:style(HUES.draft), claude:style(HUES.claude), review:style(HUES.review), you:style(HUES.you), output:style(HUES.output), pictures:style(HUES.pictures), memory:style(HUES.memory), files:style(HUES.files), records:style(HUES.records), ha:style(HUES.ha), ha_hat:style(HUES.ha, true),
     agent:style(HUES.agent), tools:style(HUES.tools), conn:style(HUES.conn), conn_hat:style(HUES.conn, true), homey:style(HUES.homey), homey_hat:style(HUES.homey, true), 
     // sync:connections-styles-begin
+    arr:style(HUES.arr),
     coinbase:style(HUES.coinbase),
     docker:style(HUES.docker),
     mikrotik:style(HUES.mikrotik),
@@ -17484,7 +17483,7 @@ HOW TO MAP CODE
     unifi:style(HUES.unifi),
     unraid:style(HUES.unraid),
     // sync:connections-styles-end
-    arr:style(HUES.arr), plex:style(HUES.plex),
+    plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -17664,8 +17663,7 @@ HOW TO MAP CODE
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", 
-    rb_arr_queue:"arr_read",
-    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", 
+    
     rb_plex_server:"plex_read", rb_plex_libraries:"plex_read", rb_plex_sessions:"plex_read", rb_plex_recent:"plex_read",
     rb_tautulli_history:"plex_read", rb_tautulli_watchtime:"plex_read", rb_plex_scan:"plex_control", rb_plex_stop:"plex_control",
     rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
@@ -17676,6 +17674,8 @@ HOW TO MAP CODE
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     // sync:connections-caps-begin
+    rb_arr_queue:"arr_read",
+    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control",
     rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",
@@ -18049,15 +18049,6 @@ HOW TO MAP CODE
     V("rb_homey_variable", "Homey variable %1", [val("NAME")], null, { style:"homey", inputsInline:true, tooltip:"The value of a Homey Logic variable, by its name." }),
     S("rb_homey_set_variable", "set Homey variable %1 to %2", [val("NAME"), val("VALUE")], { style:"homey", inputsInline:true,
       tooltip:"Changes a Homey Logic variable, so your flows can use it." }),
-    /* Radarr and Sonarr (#398): reads, and a search that always asks */
-    V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
-      tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
-    V("rb_arr_missing", "%1 wanted list", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
-      tooltip:"A list of records, one for each movie or episode with no file: title, added (when it was added) and id." }),
-    V("rb_arr_diskspace", "%1 diskspace", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
-      tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
-    S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
-      { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
     /* Plex and Tautulli (#402): reads, and changes that always ask */
     V("rb_plex_server", "Plex server", [], null, { style:"plex",
       tooltip:"One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server." }),
@@ -18076,6 +18067,15 @@ HOW TO MAP CODE
     S("rb_plex_stop", "stop the %1 stream on Plex", [val("ID")],
       { style:"plex", inputsInline:true, tooltip:"Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     // sync:connections-defs-begin
+    /* Radarr and Sonarr (#398): reads, and a search that always asks */
+    V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
+    V("rb_arr_missing", "%1 wanted list", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each movie or episode with no file: title, added (when it was added) and id." }),
+    V("rb_arr_diskspace", "%1 diskspace", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
+    S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
+      { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
     /* Coinbase (#371) */
     V("rb_coinbase_balances", "Coinbase balances", [], "Array", { style:"coinbase",
       tooltip:"A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio." }),
@@ -18348,15 +18348,15 @@ HOW TO MAP CODE
       B("rb_homey_set", { DEVICE:K("Kitchen light"), CAPABILITY:K("onoff"), VALUE:K("off") }), B("rb_homey_flow", { NAME:K("Good night") }),
       B("rb_homey_variable", { NAME:K("Loaves this week") }), B("rb_homey_set_variable", { NAME:K("Loaves this week"), VALUE:N(4) })
     ]},
-    { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
-      B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
-    ]},
     { kind:"category", name:"Plex", categorystyle:"plex", service:"plex", contents:[
       B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
       B("rb_plex_scan", { LIBRARY:T("Films") }), B("rb_plex_stop", { ID:T("abc123") })
     ]},
     // sync:connections-toolbox-begin
+    { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
+      B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
+    ]},
     { kind:"category", name:"Coinbase", categorystyle:"coinbase", service:"coinbase", contents:[
       B("rb_coinbase_balances"), B("rb_coinbase_value"), B("rb_coinbase_price", { PRODUCT:K("BTC-GBP") }),
       B("rb_coinbase_candles", { PRODUCT:K("BTC-GBP"), N:N(7) }), B("rb_coinbase_orders"),
@@ -21245,6 +21245,7 @@ HOW TO MAP CODE
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              // sync:connections-need-begin
+             arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              coinbase:blocks.some(b => b.type.startsWith("rb_coinbase_")),
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
@@ -21257,7 +21258,6 @@ HOW TO MAP CODE
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
-             arr:blocks.some(b => b.type.startsWith("rb_arr_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
@@ -21312,12 +21312,6 @@ HOW TO MAP CODE
       "; credits, so give the program a budget or a step limit to keep a run cheap.",
       "FR24_API_KEY = ",
       ...note("MCP_FLIGHTRADAR24", "npx -y @flightradar24/fr24api-mcp", "to start the server your own way"));
-    if (need.arr) out.push("", "[radarr]",
-      "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
-      "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
-      "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
-      "; Sonarr, the same: its address and API key (Settings, General, API Key).",
-      "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
     if (need.plex) out.push("", "[plex]",
       "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
       "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
@@ -21329,6 +21323,12 @@ HOW TO MAP CODE
       "; API Keys). The history only reads; stopping a stream asks first, and nothing else is ever sent.",
       "TAUTULLI_URL = ", "TAUTULLI_API_KEY = ", "; TAUTULLI_CERT_SHA256 = ");
     // sync:connections-ini-begin
+    if (need.arr) out.push("", "[radarr]",
+      "; Radarr's Servarr API: its address and API key (Settings, General, API Key). The blocks read the queue, the",
+      "; wanted list and disk space; a search asks first, and nothing else is ever sent.",
+      "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
+      "; Sonarr, the same: its address and API key (Settings, General, API Key).",
+      "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
     if (need.coinbase) out.push("", "[coinbase]",
       "; A Coinbase API key: at portal.cdp.coinbase.com, API Keys, Create API key. Choose ECDSA under its advanced settings,",
       "; limit it to one portfolio, and give it View permission only, unless the program places orders (then View and Trade).",
@@ -21707,9 +21707,6 @@ HOW TO MAP CODE
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
-        case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_plex_server": return "(await R.plex_server())";
         case "rb_plex_libraries": return "(await R.plex_libraries())";
         case "rb_plex_sessions": return "(await R.plex_sessions())";
@@ -21717,6 +21714,9 @@ HOW TO MAP CODE
         case "rb_tautulli_history": return "(await R.tautulli_history(" + I("N", "7") + "))";
         case "rb_tautulli_watchtime": return "(await R.tautulli_watchtime(" + I("N", "7") + "))";
         // sync:connections-pyread-begin
+        case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
+        case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_coinbase_balances": return "(await R.coinbase_balances())";
         case "rb_coinbase_value": return "(await R.coinbase_value())";
         case "rb_coinbase_price": return "(await R.coinbase_price(" + pyStr(b.getFieldValue("WHAT")) + ", " + I("PRODUCT", '""') + "))";
@@ -21889,10 +21889,10 @@ HOW TO MAP CODE
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
-          case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           // sync:connections-pyact-begin
+          case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
           case "rb_coinbase_order": E("await R.coinbase_order(" + pyStr(b.getFieldValue("SIDE")) + ", " + I("AMOUNT", "0") + ", " + I("PRODUCT", '""') + ")"); break;
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
@@ -24055,39 +24055,6 @@ HOW TO MAP CODE
     addStep(tr("Homey variable {name}", { name:v.name }), { mono:true, text:homeyShow(old) + " → " + homeyShow(nv) }).done("sample home", "ok");
     return true;
   }
-  /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
-     reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
-  const arrSample = which => { connNote(which === "sonarr" ? "Sonarr" : "Radarr"); return (CONN.arr || {})[which] || {}; };
-  const arrName = which => { const w = str(which).trim().toLowerCase();
-    if (!["radarr", "sonarr"].includes(w)) fail(tr("Which one? Radarr or Sonarr.")); return w; };
-  function arrQueue(which){
-    const w = arrName(which), out = (arrSample(w).queue || []).map(r => ({ title:str(r.title), status:str(r.status),
-      size_mb:r.size ? cents(num(r.size) / 1048576) : "", left_mb:r.sizeleft ? cents(num(r.sizeleft) / 1048576) : "",
-      quality:str(((r.quality || {}).quality || {}).name || ""), eta:str(r.timeleft) }));
-    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " queue", { mono:true, text:out.map(r => r.title + ": " + r.status).join("\n") || tr("(nothing)") })
-      .done(tr("{n} downloading", { n:out.length }), "ok");
-    return out;
-  }
-  function arrMissing(which){
-    const w = arrName(which), out = (arrSample(w).missing || []).map(r => ({ title:str(r.title), added:str(r.added).slice(0, 10), id:Math.trunc(num(r.id)) }));
-    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " wanted list", { mono:true, text:out.map(r => r.title + " (added " + r.added + ")").join("\n") || tr("(nothing)") })
-      .done(tr("{n} missing", { n:out.length }), "ok");
-    return out;
-  }
-  function arrDiskspace(which){
-    const w = arrName(which), out = (arrSample(w).diskspace || []).map(r => ({ path:str(r.path), label:str(r.label),
-      free_gb:r.freeSpace ? cents(num(r.freeSpace) / 1073741824) : "", total_gb:r.totalSpace ? cents(num(r.totalSpace) / 1073741824) : "" }));
-    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " diskspace", { mono:true, text:out.map(d => d.label + ": " + d.free_gb + " GB free").join("\n") || tr("(nothing)") })
-      .done(tr("{n} folders", { n:out.length }), "ok");
-    return out;
-  }
-  async function arrSearch(which){
-    const w = arrName(which), who = w === "sonarr" ? "Sonarr" : "Radarr";
-    const what = "search " + who + "'s wanted list for what's missing";
-    if (!(await confirmAction(what + " (it always asks)"))) return false;
-    addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
-    return true;
-  }
   /* Plex and Tautulli on the page (#402): a sample server. Exported Python talks to your Plex through the
      X-Plex-Token API and to Tautulli: reads, and a library scan and a stream stop after a yes, every time.
      Matches the runtime's plex_ and tautulli_ methods and tests/fake_plex.py. */
@@ -24143,6 +24110,39 @@ HOW TO MAP CODE
     return true;
   }
   // sync:connections-page-begin
+  /* Radarr and Sonarr on the page (#398): a sample queue and wanted list. Exported Python talks to their Servarr API:
+     reads, and a search after a yes, every time. Matches the runtime's arr_ methods and tests/fake_arr.py. */
+  const arrSample = which => { connNote(which === "sonarr" ? "Sonarr" : "Radarr"); return (CONN.arr || {})[which] || {}; };
+  const arrName = which => { const w = str(which).trim().toLowerCase();
+    if (!["radarr", "sonarr"].includes(w)) fail(tr("Which one? Radarr or Sonarr.")); return w; };
+  function arrQueue(which){
+    const w = arrName(which), out = (arrSample(w).queue || []).map(r => ({ title:str(r.title), status:str(r.status),
+      size_mb:r.size ? cents(num(r.size) / 1048576) : "", left_mb:r.sizeleft ? cents(num(r.sizeleft) / 1048576) : "",
+      quality:str(((r.quality || {}).quality || {}).name || ""), eta:str(r.timeleft) }));
+    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " queue", { mono:true, text:out.map(r => r.title + ": " + r.status).join("\n") || tr("(nothing)") })
+      .done(tr("{n} downloading", { n:out.length }), "ok");
+    return out;
+  }
+  function arrMissing(which){
+    const w = arrName(which), out = (arrSample(w).missing || []).map(r => ({ title:str(r.title), added:str(r.added).slice(0, 10), id:Math.trunc(num(r.id)) }));
+    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " wanted list", { mono:true, text:out.map(r => r.title + " (added " + r.added + ")").join("\n") || tr("(nothing)") })
+      .done(tr("{n} missing", { n:out.length }), "ok");
+    return out;
+  }
+  function arrDiskspace(which){
+    const w = arrName(which), out = (arrSample(w).diskspace || []).map(r => ({ path:str(r.path), label:str(r.label),
+      free_gb:r.freeSpace ? cents(num(r.freeSpace) / 1073741824) : "", total_gb:r.totalSpace ? cents(num(r.totalSpace) / 1073741824) : "" }));
+    addStep(str(w === "sonarr" ? "Sonarr" : "Radarr") + " diskspace", { mono:true, text:out.map(d => d.label + ": " + d.free_gb + " GB free").join("\n") || tr("(nothing)") })
+      .done(tr("{n} folders", { n:out.length }), "ok");
+    return out;
+  }
+  async function arrSearch(which){
+    const w = arrName(which), who = w === "sonarr" ? "Sonarr" : "Radarr";
+    const what = "search " + who + "'s wanted list for what's missing";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
   /* Coinbase on the page (#371): a sample portfolio, in pounds. Exported Python talks to Coinbase's Advanced Trade API
      with your key. Matches the runtime's coinbase_ methods (and tests/fake_coinbase.py, which serves the same sample).
      Placing and cancelling orders always ask, even when nothing else does; here nothing is bought or sold. */
@@ -25356,9 +25356,6 @@ HOW TO MAP CODE
         return recs;
       }
       case "rb_homey_variable": return homeyVar(await input(b, tc, "NAME")).value;
-      case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
-      case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
-      case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
       case "rb_plex_server": return plexServer();
       case "rb_plex_libraries": return plexLibraries();
       case "rb_plex_sessions": return plexSessions();
@@ -25366,6 +25363,9 @@ HOW TO MAP CODE
       case "rb_tautulli_history": return tautulliHistory(await input(b, tc, "N"));
       case "rb_tautulli_watchtime": return tautulliWatchtime(await input(b, tc, "N"));
       // sync:connections-iread-begin
+      case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
+      case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
+      case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
       case "rb_coinbase_balances": return coinbaseBalances();
       case "rb_coinbase_value": return coinbaseValue();
       case "rb_coinbase_price": return coinbasePrice(b.getFieldValue("WHAT"), await input(b, tc, "PRODUCT"));
@@ -26145,10 +26145,10 @@ HOW TO MAP CODE
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
-      case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       // sync:connections-iact-begin
+      case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_coinbase_order": await coinbaseOrder(b.getFieldValue("SIDE"), await input(b, tc, "AMOUNT"), await input(b, tc, "PRODUCT")); break;
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;

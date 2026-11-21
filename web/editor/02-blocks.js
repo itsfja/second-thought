@@ -147,8 +147,7 @@
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", 
-    rb_arr_queue:"arr_read",
-    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", 
+    
     rb_plex_server:"plex_read", rb_plex_libraries:"plex_read", rb_plex_sessions:"plex_read", rb_plex_recent:"plex_read",
     rb_tautulli_history:"plex_read", rb_tautulli_watchtime:"plex_read", rb_plex_scan:"plex_control", rb_plex_stop:"plex_control",
     rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
@@ -159,6 +158,8 @@
     rb_agent_kraken:Object.assign(b => b.getFieldValue("MODE") === "live" ? "kraken_trade" : "kraken_read", { gives:["kraken_read", "kraken_trade"] }),
     rb_agent_fr24:Object.assign(b => "flightradar_read", { gives:["flightradar_read"] }),
     // sync:connections-caps-begin
+    rb_arr_queue:"arr_read",
+    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control",
     rb_coinbase_balances:"coinbase_read", rb_coinbase_value:"coinbase_read",
     rb_coinbase_price:"coinbase_read", rb_coinbase_candles:"coinbase_read", rb_coinbase_orders:"coinbase_read", rb_coinbase_preview:"coinbase_read",
     rb_coinbase_order:"coinbase_trade", rb_coinbase_cancel:"coinbase_trade",
@@ -532,15 +533,6 @@
     V("rb_homey_variable", "Homey variable %1", [val("NAME")], null, { style:"homey", inputsInline:true, tooltip:"The value of a Homey Logic variable, by its name." }),
     S("rb_homey_set_variable", "set Homey variable %1 to %2", [val("NAME"), val("VALUE")], { style:"homey", inputsInline:true,
       tooltip:"Changes a Homey Logic variable, so your flows can use it." }),
-    /* Radarr and Sonarr (#398): reads, and a search that always asks */
-    V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
-      tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
-    V("rb_arr_missing", "%1 wanted list", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
-      tooltip:"A list of records, one for each movie or episode with no file: title, added (when it was added) and id." }),
-    V("rb_arr_diskspace", "%1 diskspace", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
-      tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
-    S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
-      { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
     /* Plex and Tautulli (#402): reads, and changes that always ask */
     V("rb_plex_server", "Plex server", [], null, { style:"plex",
       tooltip:"One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server." }),
@@ -559,6 +551,15 @@
     S("rb_plex_stop", "stop the %1 stream on Plex", [val("ID")],
       { style:"plex", inputsInline:true, tooltip:"Stops one stream (Tautulli's terminate). It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really changes." }),
     // sync:connections-defs-begin
+    /* Radarr and Sonarr (#398): reads, and a search that always asks */
+    V("rb_arr_queue", "%1 queue", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each download in the queue: title, status (Downloading, Importing, Failed, ...), size_mb, left_mb, quality and eta (time left, like 0:12:34). On this page it uses a sample queue." }),
+    V("rb_arr_missing", "%1 wanted list", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each movie or episode with no file: title, added (when it was added) and id." }),
+    V("rb_arr_diskspace", "%1 diskspace", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }], "Array", { style:"arr",
+      tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
+    S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
+      { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
     /* Coinbase (#371) */
     V("rb_coinbase_balances", "Coinbase balances", [], "Array", { style:"coinbase",
       tooltip:"A list of records, one for each asset in your Coinbase portfolio, biggest first: asset, amount, value and currency. Values are in your currency (currency in second-thought.ini). On this page it uses a sample portfolio." }),
