@@ -1,0 +1,6 @@
+    rb_folder_when:"folder",
+    rb_folder_files:"folder",
+    rb_file_choose:"files_read",
+    rb_img_choose:"files_read",
+    rb_file_save:"files_save",
+    rb_img_save:"files_save",

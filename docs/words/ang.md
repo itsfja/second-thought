@@ -47,6 +47,7 @@ Made by tools/sync.py from i18n/ang.json: edit that, not this.
 - Calendar: Calendar
 - News feeds: News feeds
 - Web: Web
+- Files and folders: Files and folders
 - Tools for the agent: drop them inside an agent block: Tol for þone ærendracan: lege hie innan ærendracan stocce
 - Listeners: they run while the exported program runs on schedule: Hlystendas: hie yrnaþ þa hwile þe þæt utgelædde forescrift be tidsetnesse yrnþ
 - Read and send: Ræd and send

@@ -11,8 +11,8 @@ const cats = () => page.__visibleToolbox().contents.filter(c => c.kind === "cate
 const topNames = () => cats().map(c => c.name);
 const connCat = () => cats().find(c => c.name === "Connections");
 
-test("the palette has 45 categories, twenty-three of them a single service", () => {
-  assert.equal(plain(services.cats).length, 23);
+test("the palette has 46 categories, twenty-four of them a single service", () => {
+  assert.equal(plain(services.cats).length, 24);
   for (const s of plain(services.cats)) {
     assert.ok(s.id && s.name && s.blocks.length > 0, JSON.stringify(s).slice(0, 80));
   }
@@ -39,7 +39,7 @@ test("turning a service on nests its category inside Connections, and off remove
   const nested = plain(connCat().contents).filter(c => c.kind === "category").map(c => c.name);
   assert.deepEqual(nested, ["Home Assistant", "Plex"]);
   // the service's own blocks (listeners etc.) stay in Connections too
-  assert.ok(plain(connCat().contents).some(e => e.kind === "block" && e.type === "rb_folder_when"));
+  assert.ok(plain(connCat().contents).some(e => e.kind === "block" && e.type === "rb_event"));
   page.localStorage.setItem("second-thought-connections", JSON.stringify(["ha"]));
   assert.deepEqual(plain(connCat().contents.filter(c => c.kind === "category").map(c => c.name)), ["Home Assistant"]);
   // unknown ids in storage are ignored

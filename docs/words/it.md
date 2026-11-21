@@ -47,6 +47,7 @@ Made by tools/sync.py from i18n/it.json: edit that, not this.
 - Calendar: Calendar
 - News feeds: News feeds
 - Web: Web
+- Files and folders: Files and folders
 - Tools for the agent: drop them inside an agent block: Strumenti per l'agente: mettili dentro un blocco agente
 - Listeners: they run while the exported program runs on schedule: Ascoltatori: girano mentre il programma esportato gira secondo pianificazione
 - Read and send: Leggi e invia

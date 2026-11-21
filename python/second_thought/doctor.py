@@ -320,6 +320,14 @@ class Doctor:
                 items = await self.feed_items("", 3)
                 return tr("read your feeds ({items} items)", items=len(items))
             out.append(("News feeds", feeds))
+        if has("files_save"):
+            async def outputs():
+                here = os.path.abspath(OUTPUT_DIR)
+                where = here if os.path.isdir(here) else os.path.dirname(here)
+                if not os.access(where, os.W_OK):
+                    raise RunError(tr("files can't be saved: {where} can't be written to", where=where))
+                return tr("files will be saved in {here}", here=here)
+            out.append(("Saving files", outputs))
         if has("github_read", "github_comment"):
             async def gh():
                 await self.gh_for_me()
@@ -493,14 +501,6 @@ class Doctor:
                     raise RunError(tr("notes can't be saved: {folder} can't be written to", folder=folder))
                 return tr("nothing saved yet; notes will go in {memory_file}", memory_file=MEMORY_FILE)
             out.append(("Memory", memory))
-        if has("files_save"):
-            async def outputs():
-                here = os.path.abspath(OUTPUT_DIR)
-                where = here if os.path.isdir(here) else os.path.dirname(here)
-                if not os.access(where, os.W_OK):
-                    raise RunError(tr("files can't be saved: {where} can't be written to", where=where))
-                return tr("files will be saved in {here}", here=here)
-            out.append(("Saving files", outputs))
         return out
 
     @staticmethod

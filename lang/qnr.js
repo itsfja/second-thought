@@ -288,7 +288,8 @@
 "Discord and Slack":"Discord ᛅᚾᛏ Slack",
 "Calendar":"ᚴᛅᛚᛁᚾᛏᛅᛦ",
 "News feeds":"ᚾᛁᚢᛋ feeds",
-"Web":"ᚢᛁᛒ"
+"Web":"ᚢᛁᛒ",
+"Files and folders":"Files ᛅᚾᛏ ᚠᚢᛚᛏᛁᚱᛋ"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"ᛏᚢᛚ ᛁᚱᛁᚾᛏᚱᛁᚴᛅ: ᛚᛅᛏ ᚦᛅᚢ ᚠᛅᛚᛅ ᛁᚾ ᛁ ᛁᚱᛁᚾᛏᚱᛁᚴᛅᚴᚢᛒ",

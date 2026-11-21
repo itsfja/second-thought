@@ -338,6 +338,17 @@
         addStep(tr("News: {feed}", { feed:short(url, 60) || tr("your feeds") }), { mono:true, text:recs.slice(0, 12).map(r => r.date + "  " + r.title).join("\n") || tr("(nothing)") }).done(tr("{n} items", { n:recs.length }), "ok");
         return recs;
       }
+      case "rb_file_choose": { const f = await chooseTextFile(); run.lastFile = f.name; return f.text; }
+      case "rb_folder_files": {
+        const folder = str(await input(b, tc, "FOLDER", "")).trim() || "inbox", match = str(await input(b, tc, "MATCH", "")).trim() || "*";
+        const re = new RegExp("^" + match.toLowerCase().replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$");
+        const two = n => String(n).padStart(2, "0"), stamp = d => d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()) + " " + two(d.getHours()) + ":" + two(d.getMinutes());
+        return ((CONN.folder || {}).files || []).filter(f => re.test(f.name.toLowerCase())).sort((a, c) => a.days_ago - c.days_ago)
+          .map(f => ({ name:f.name, path:folder + "/" + f.name, modified:stamp(new Date(Date.now() - f.days_ago * 86400000)), size:f.size }));
+      }
+      case "rb_img_choose": {
+        return choosePicture();
+      }
       case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
       case "rb_homey_find": {
         const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
@@ -446,7 +457,6 @@
         if (!e) fail(tr("There's no prompt called \u201c{name}\u201d in your prompt library. Open Programs to add it.", { name }));
         return e.text;
       }
-      case "rb_file_choose": { const f = await chooseTextFile(); run.lastFile = f.name; return f.text; }
       case "rb_result_text": return finalText();
       case "rb_error": return run.lastError || "";
       case "rb_mem_get": { const e = memLive(memKey(str(await input(b, tc, "NAME")))); return e ? (Array.isArray(e.value) ? e.value.slice() : e.value) : ""; }
@@ -456,9 +466,6 @@
         mem.transient.forEach(e => names.push(e.name));
         mem.saved.forEach((e, k) => { if (!mem.transient.has(k) && !(e.expires && e.expires <= now)) names.push(e.name); });
         return names.sort();
-      }
-      case "rb_img_choose": {
-        return choosePicture();
       }
       case "rb_img_draw": {
         const d = str(await input(b, tc, "TEXT")).trim();
@@ -499,13 +506,6 @@
       }
       case "rb_tokens_used": return tokensUsed();
       case "rb_setup_check": return tr("The setup check only runs in exported Python: export this program and run it there to see the report.");
-      case "rb_folder_files": {
-        const folder = str(await input(b, tc, "FOLDER", "")).trim() || "inbox", match = str(await input(b, tc, "MATCH", "")).trim() || "*";
-        const re = new RegExp("^" + match.toLowerCase().replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$");
-        const two = n => String(n).padStart(2, "0"), stamp = d => d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()) + " " + two(d.getHours()) + ":" + two(d.getMinutes());
-        return ((CONN.folder || {}).files || []).filter(f => re.test(f.name.toLowerCase())).sort((a, c) => a.days_ago - c.days_ago)
-          .map(f => ({ name:f.name, path:folder + "/" + f.name, modified:stamp(new Date(Date.now() - f.days_ago * 86400000)), size:f.size }));
-      }
       case "rb_agent_steps": return run.agentTrace.map(r => Object.assign({}, r));
       case "rb_run_program": return runProgram(b.getFieldValue("NAME"), await input(b, tc, "VALUE", ""), tc);
       case "rb_approve": {
@@ -1109,6 +1109,19 @@
       case "rb_coinbase_cancel": await coinbaseCancel(await input(b, tc, "ORDER")); break;
       case "rb_docker_power": await dockerPower(b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;
+      case "rb_file_save": {
+        const v = await input(b, tc, "VALUE"), name = str(await input(b, tc, "NAME")).trim() || "output", ext = b.getFieldValue("EXT") || "md";
+        const st = addStep("Save file", { mono:true, text:tr("Waiting for you to confirm the download…") }); st.done("waiting", "");
+        const msg = await saveTextFile(v, name, ext);
+        st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn");
+        break;
+      }
+      case "rb_img_save": {
+        const pic = needImg(await input(b, tc, "IMG"), "save picture");
+        const st = addStep("Save picture", { mono:true, text:tr("Waiting for you to confirm the download…") }); st.done("waiting", "");
+        const msg = await savePicture(pic, b.getFieldValue("FORMAT") || "png");
+        st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn"); break;
+      }
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
@@ -1145,13 +1158,6 @@
         if (!k) fail(tr("The 'set … of record' block needs a field name."));
         if (!isRec(r)) fail(tr("The 'set {k} of' block needs a record in its middle slot, such as a variable holding 'new record'.", { k }));
         r[k] = v; break;
-      }
-      case "rb_file_save": {
-        const v = await input(b, tc, "VALUE"), name = str(await input(b, tc, "NAME")).trim() || "output", ext = b.getFieldValue("EXT") || "md";
-        const st = addStep("Save file", { mono:true, text:tr("Waiting for you to confirm the download…") }); st.done("waiting", "");
-        const msg = await saveTextFile(v, name, ext);
-        st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn");
-        break;
       }
       case "rb_try": {
         const startIdx = stepsEl.children.length;
@@ -1214,12 +1220,6 @@
       }
       case "rb_mem_forget": { const name = str(await input(b, tc, "NAME")); await memRemove(memKey(name)); addStep(tr("Forgot \u201c{name}\u201d", { name:name.trim() }), { mono:true, text:"" }).done("forgotten", "ok"); break; }
       case "rb_img_show": { const pic = needImg(await input(b, tc, "IMG"), "show picture"); const st = addStep("Picture", { text:"" }); showPictureIn(st, pic); st.done("shown", "ok"); break; }
-      case "rb_img_save": {
-        const pic = needImg(await input(b, tc, "IMG"), "save picture");
-        const st = addStep("Save picture", { mono:true, text:tr("Waiting for you to confirm the download…") }); st.done("waiting", "");
-        const msg = await savePicture(pic, b.getFieldValue("FORMAT") || "png");
-        st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn"); break;
-      }
       case "rb_show": addStep("Current draft", { text:run.draft || tr("(no draft yet)") }).done("shown", "ok"); break;
       case "rb_add_result": {
         const v = await input(b, tc, "TEXT");

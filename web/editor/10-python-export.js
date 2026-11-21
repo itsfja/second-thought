@@ -63,8 +63,7 @@
             
             
             
-                          folder:has(["rb_folder_when"], []),
-             mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
+                                       mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
              // sync:connections-need-begin
@@ -76,6 +75,7 @@
              docker:blocks.some(b => b.type.startsWith("rb_docker_")),
              email:has(["rb_email_send", "rb_email_when"], ["email", "email_send"]),
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
+             folder:has(["rb_folder_when"], []),
               github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
@@ -517,7 +517,6 @@
         case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True, mins=" + MINS() + ", default=" + DEFLT() + "))";  // a no offers the reason as a new rule (#428)
         case "rb_tokens_used": return "R.tokens_used()";
         case "rb_setup_check": return "(await R.setup_check())";
-        case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";
         case "rb_agent_steps": return "R.agent_steps()";
         case "rb_run_program": {
           const name = String(F("NAME") || "").trim();
@@ -526,7 +525,6 @@
         case "rb_choose": return "(await R.choose(" + I("LIST", "[]") + ", mins=" + MINS() + ", default=" + DEFLT() + "))";
         case "rb_timer": return "R.timer()";
         case "rb_now": return "R.now(" + pyStr(F("PART")) + ")";
-        case "rb_img_choose": return "(await R.choose_picture())";
         case "rb_mem_get": return "R.recall(" + I("NAME", '""') + ")";
         case "rb_ha_state": return "(await R.ha_state(" + I("ENTITY", '""') + "))";
         case "rb_ha_attr": return "(await R.ha_attr(" + I("ATTR", '""') + ", " + I("ENTITY", '""') + "))";
@@ -551,6 +549,9 @@
         case "rb_docker_stats": return "(await R.docker_stats())";
         case "rb_docker_logs": return "(await R.docker_logs(" + I("NAME", '""') + ", " + I("N", "50") + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
+        case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";
+        case "rb_img_choose": return "(await R.choose_picture())";
+        case "rb_file_choose": return "(await R.choose_file())";
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
@@ -598,7 +599,6 @@
         case "rb_sort": return "sort_by(" + I("LIST", "[]") + ", " + I("KEY", '""') + ", " + pyStr(F("ORDER") || "desc") + ")";
         case "rb_msg_value": return "R.message_value()";
         case "rb_prompt": return "R.prompt(" + pyStr(String(F("NAME") || "").trim()) + ")";
-        case "rb_file_choose": return "(await R.choose_file())";
         case "rb_result_text": return "R.result_text()";
         case "rb_error": return "R.last_error";
         case "rb_mem_has": return "R.remembers(" + I("NAME", '""') + ")";
@@ -724,6 +724,8 @@
           case "rb_coinbase_cancel": E("await R.coinbase_cancel(" + I("ORDER", '""') + ")"); break;
           case "rb_docker_power": E("await R.docker_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", '""') + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
+          case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
+          case "rb_img_save": E("await R.save_picture(" + I("IMG", "None") + ", " + pyStr(F("FORMAT") || "png") + ")"); break;
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
@@ -743,7 +745,6 @@
         case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
         case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           // sync:connections-pyact-end
-          case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_budget": E("R.set_budget(" + I("TOKENS", "0") + (b.getFieldValue("UNIT") && b.getFieldValue("UNIT") !== "tokens" ? ", " + pyStr(b.getFieldValue("UNIT")) : "") + ")"); break;
           case "rb_agent_tool": case "rb_agent_builtin": case "rb_agent_mcp": case "rb_agent_kraken": break;
           case "rb_agent": {
@@ -798,7 +799,6 @@
           case "rb_mem_add": E("R.remember_add(" + I("VALUE", '""') + ", " + I("NAME", '""') + ", " + pyStr(F("KIND") || "transient") + ")"); break;
           case "rb_mem_forget": E("R.forget(" + I("NAME", '""') + ")"); break;
           case "rb_img_show": E("R.show_picture(" + I("IMG", "None") + ")"); break;
-          case "rb_img_save": E("await R.save_picture(" + I("IMG", "None") + ", " + pyStr(F("FORMAT") || "png") + ")"); break;
           case "rb_show": E("R.show()"); break;
           case "rb_add_result": E("R.add_result(" + I("TEXT", '""') + ")"); break;
           default:

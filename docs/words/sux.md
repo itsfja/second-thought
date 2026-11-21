@@ -47,6 +47,7 @@ Made by tools/sync.py from i18n/sux.json: edit that, not this.
 - Calendar: Calendar
 - News feeds: News feeds
 - Web: Web
+- Files and folders: Files and folders
 - Listeners: they run while the exported program runs on schedule: 𒄑𒌆𒉿𒃻: 𒌓 𒄑𒄯 𒌓𒁺𒀀 𒌓𒃻𒊏 𒀝𒀀 𒀝
 - No blocks match: 𒋞 𒉡𒁲
 - Read and send: 𒋃 𒅇 𒆥𒄄
