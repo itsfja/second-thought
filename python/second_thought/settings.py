@@ -96,7 +96,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
@@ -108,6 +108,7 @@ OTHER_SETTINGS = {
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
     "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
+    "UNRAID_URL", "UNRAID_CERT_SHA256",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
@@ -184,8 +185,9 @@ KEYCHAIN_NAMES = (
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
     "UNIFI_API_KEY",
+    "UNRAID_API_KEY",
     # sync:connections-secret-end
-    "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "RADARR_API_KEY", "SONARR_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():

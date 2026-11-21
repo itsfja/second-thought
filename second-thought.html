@@ -693,7 +693,7 @@ INI_NAMES = []  # (environment key, name as written, where) for each name second
 # The settings the runtime reads besides those above and the model services' (SERVICES' keys, *_BASE_URL and vision
 # models), for --doctor's spelling check (#307). tests/unit/test_private_files.py checks it covers every name read.
 OTHER_SETTINGS = {
-    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "UNRAID_URL", "UNRAID_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
+    "ANTHROPIC_BASE_URL", "ANTHROPIC_WORKSPACE_ID", "GEMINI_BASE_URL", "CALENDAR_URL", "RADARR_URL", "RADARR_CERT_SHA256", "SONARR_URL", "SONARR_CERT_SHA256", "PLEX_URL", "PLEX_CERT_SHA256", "TAUTULLI_URL", "TAUTULLI_CERT_SHA256", "DISCORD_API_URL", "DISCORD_CHANNEL_ID",
     # sync:connections-known-begin
     "COINBASE_API_URL", "COINBASE_KEY_FILE",
     "DOCKER_HOST", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "DOCKER_PROTECT",
@@ -705,6 +705,7 @@ OTHER_SETTINGS = {
     "SABNZBD_URL", "SABNZBD_CERT_SHA256",
     "SOLAX_SN", "SOLAX_API_URL",
     "UNIFI_URL", "UNIFI_CERT_SHA256", "UNIFI_SITE",
+    "UNRAID_URL", "UNRAID_CERT_SHA256",
     # sync:connections-known-end
     "EMAIL_ADDRESS",
     "EMAIL_IMAP_HOST", "EMAIL_IMAP_PORT", "EMAIL_SMTP_HOST", "EMAIL_SMTP_PORT", "EMAIL_SSL", "GITHUB_API_URL", "HA_TTS_ENTITY",
@@ -781,8 +782,9 @@ KEYCHAIN_NAMES = (
     "SABNZBD_API_KEY",
     "SOLAX_TOKEN_ID",
     "UNIFI_API_KEY",
+    "UNRAID_API_KEY",
     # sync:connections-secret-end
-    "RADARR_API_KEY", "SONARR_API_KEY", "UNRAID_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
+    "RADARR_API_KEY", "SONARR_API_KEY", "PLEX_TOKEN", "TAUTULLI_API_KEY")
 
 
 def _load_keychain():
@@ -1771,14 +1773,6 @@ SAFETY = {
     # deleting, no editing profiles or root folders, nothing in the indexer or download-client settings, no refresh.
     "arr_free": [["GET", r"^/api/v3/(queue|wanted/missing|diskspace|system/status)$"]],
     "arr_asks": [["POST", r"^/api/v3/command$"]],
-    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
-    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
-    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
-    # containers, plugins, terminal commands) is never sent.
-    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
-    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
-                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
-                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use) and Tautulli's API (#402). The server, the libraries, the
     # sessions and the newest items are reads; scanning a library always asks, live. Tautulli's gate reads the query as
     # a whole, like NZBGeek's: the history is a read, and the one terminate (a stream stopped) always asks. Nothing else
@@ -1835,6 +1829,14 @@ SAFETY = {
     # UniFi's Network API (#359), the Integration API on a UniFi OS console: the only calls made. Reading clients and
     # devices; nothing that blocks, reconnects or restarts, and nothing near the firewall, VLANs or WiFi.
     "unifi_free": [["GET", r"^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"]],
+    # Unraid's own GraphQL API (#399), all of it one POST to /graphql, so the gate reads the query text: a query is a
+    # read, and only these mutations are ever sent, after a live yes: starting or stopping one container or VM by
+    # name, and a parity read-check. Anything else (stopping the array, adding or removing disks, updating
+    # containers, plugins, terminal commands) is never sent.
+    "unraid_free": [["POST", r"^(?![\s\S]*mutation)\s*(query|\{)"]],
+    "unraid_asks": [["POST", r'^mutation\{docker\{(start|stop)\(id:"container:[^"]+"\)\{id\}\}\}$'],
+                    ["POST", r'^mutation\{vm\{(start|stop)\(id:"vm:[^"]+"\)\}\}$'],
+                    ["POST", r"^mutation\{parity\{start\(correct:false\)\}\}$"]],
     # sync:connections-safety-end
     # Built-in agent tools that ask before each use.
     "agent_asks": ["ha_act", "github_act", "telegram_send", "email_send", "mqtt_act", "homey_act", "discord_send", "slack_send"],
@@ -2010,6 +2012,15 @@ def unifi_allowed(method, path):
     """True for one of the few UniFi Network API calls the runtime makes (#359): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
     return any(m == method and re.match(p, path) for m, p in SAFETY["unifi_free"])
+def unraid_call(method, query):
+    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
+    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
+    anything else, which is never sent (#399)."""
+    method, query = to_str(method).strip().upper(), to_str(query).strip()
+    for kind in ("free", "asks"):
+        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
+            return kind
+    return None
 # sync:connections-fns-end
 
 
@@ -2042,17 +2053,6 @@ def tautulli_call(method, query):
     method, query = to_str(method).strip().upper(), to_str(query).strip()
     for kind in ("free", "asks"):
         if any(m == method and re.match(p, query) for m, p in SAFETY["tautulli_" + kind]):
-            return kind
-    return None
-
-
-def unraid_call(method, query):
-    """"free" for a Unraid GraphQL query the runtime makes without asking (a query is a read), "asks" for the few
-    mutations that need a live yes (starting or stopping one container or VM, a parity read-check), and None for
-    anything else, which is never sent (#399)."""
-    method, query = to_str(method).strip().upper(), to_str(query).strip()
-    for kind in ("free", "asks"):
-        if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
 
@@ -2576,7 +2576,6 @@ CAPABILITIES = [
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
-    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     ("plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", True),
     # sync:connections-capabilities-act-begin
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
@@ -2586,11 +2585,11 @@ CAPABILITIES = [
     ("powerwall_control", "set your Powerwall's backup reserve (asking you each time)", True),
     ("proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", True),
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
+    ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
     ("arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", False),
-    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", False),
     # sync:connections-capabilities-read-begin
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
@@ -2603,6 +2602,7 @@ CAPABILITIES = [
     ("sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", False),
     ("solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
+    ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
     ("email_read", "read your email", False),
@@ -4666,125 +4666,6 @@ class Connections:
         self.log(w.capitalize(), what, tr("done"))
         return True
 
-    # Unraid (#399)
-    # Unraid's own GraphQL API: UNRAID_URL (the server's address, like https://unraid) and UNRAID_API_KEY (Settings,
-    # Management Access, API Keys; built into Unraid 7.2 and later, the Unraid Connect plugin before that). Reads are
-    # the queries in SAFETY["unraid_free"]; starting or stopping one container or VM, and a parity read-check
-    # (unraid_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: the array is never
-    # stopped, no disk is added or removed, no container is updated or removed, no plugin is installed, nothing runs
-    # in a terminal. UNRAID_CERT_SHA256 pins a certificate this computer doesn't trust.
-    UNRAID_STATE = {"STARTED": "STARTED", "STOPPED": "STOPPED"}
-
-    async def _unraid(self, query, approved=False):
-        """One GraphQL request to the server, gated by unraid_call: a query goes without asking, one of the few
-        allowed mutations only after a live yes, and anything else is never sent."""
-        kind = unraid_call("POST", query)
-        if kind is None or (kind == "asks" and not approved):
-            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=query[:80], who="Unraid"))
-        url = os.environ.get("UNRAID_URL", "").strip()
-        key = os.environ.get("UNRAID_API_KEY", "").strip()
-        if not url or not key:
-            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.",
-                              who="Unraid", url_setting="UNRAID_URL", key_setting="UNRAID_API_KEY", where_keys=WHERE_KEYS))
-        base = url if url.endswith("/graphql") else url.rstrip("/") + "/graphql"
-        status, raw = await self._pinned("Unraid", base, "UNRAID_CERT_SHA256", "POST", "", {"x-api-key": key}, {"query": query})
-        if status == 401:
-            raise RunError(tr("The {who} refused its API key.", who="Unraid"))
-        if status >= 400:
-            raise RunError(tr("{who}: {why}.", who="Unraid", why=self._said(status, raw)))
-        answer = json.loads(raw) if raw.strip() else {}
-        if isinstance(answer, dict) and answer.get("errors"):
-            raise RunError(tr("{who}: {why}.", who="Unraid", why=_short(to_str(answer["errors"][0].get("message") if answer["errors"] else ""), 120)))
-        return (answer or {}).get("data") or {}
-
-    async def unraid_array(self):
-        """One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb,
-        total_gb and uptime."""
-        d = await self._unraid("query{array{state capacity{kilobytes{free total}}}info{os{uptime}}}")
-        a = d.get("array") or {}
-        kb = ((a.get("capacity") or {}).get("kilobytes") or {})
-        out = {"state": to_str(a.get("state")), "started": to_str(a.get("state")) == "STARTED",
-               "free_gb": self._cents(num(kb.get("free")) / 1048576) if kb.get("free") else "",
-               "total_gb": self._cents(num(kb.get("total")) / 1048576) if kb.get("total") else "",
-               "uptime": to_str(((d.get("info") or {}).get("os") or {}).get("uptime"))}
-        line = tr("{state}, {free_gb} GB free of {total_gb} GB", **out) if out["free_gb"] else out["state"]
-        self.log(tr("Unraid array"), line)
-        return out
-
-    async def unraid_disks(self):
-        """A list of records, one for each disk in the array, parity first then data then cache: name, type (Parity,
-        Data, Cache), status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb."""
-        d = await self._unraid("query{array{parities{name type status temp numErrors fsSize fsFree}disks{name type status"
-                               " temp numErrors fsSize fsFree}caches{name type status temp numErrors fsSize fsFree}}}")
-        a = d.get("array") or {}
-        rows = [r for kind in ("parities", "disks", "caches") for r in (a.get(kind) or []) if isinstance(r, dict)]
-        out = [{"name": to_str(r.get("name")), "type": to_str(r.get("type")).capitalize(), "status": to_str(r.get("status")),
-                "temp_c": num(r.get("temp")) if r.get("temp") is not None else "",
-                "errors": num(r.get("numErrors")) if r.get("numErrors") is not None else "",
-                "size_gb": self._cents(num(r.get("fsSize")) / 1048576) if r.get("fsSize") else "",
-                "free_gb": self._cents(num(r.get("fsFree")) / 1048576) if r.get("fsFree") else ""} for r in rows]
-        lines = "\n".join(f"{r['name']} ({r['type']})" + (f": {r['temp_c']} °C" if r["temp_c"] != "" else "") for r in out)
-        self.log(tr("Unraid disks"), lines or tr("(nothing)"), tr("{n} disks", n=len(out)))
-        return out
-
-    async def unraid_shares(self):
-        """A list of records, one for each user share: name, free_gb, used_gb and total_gb."""
-        rows = (await self._unraid("query{shares{name free used size}}")).get("shares") or []
-        out = [{"name": to_str(r.get("name")),
-                "free_gb": self._cents(num(r.get("free")) / 1048576) if r.get("free") else "",
-                "used_gb": self._cents(num(r.get("used")) / 1048576) if r.get("used") else "",
-                "total_gb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else ""} for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{r['name']}: {r['free_gb']} GB free" for r in out)
-        self.log(tr("Unraid shares"), lines or tr("(nothing)"), tr("{n} shares", n=len(out)))
-        return out
-
-    async def unraid_containers(self):
-        """A list of records, one for each Docker container: name, state (running, exited, ...), status and
-        auto_start (whether Unraid starts it with the array)."""
-        rows = (await self._unraid("query{dockerContainers{id names state status autoStart}}")).get("dockerContainers") or []
-        out = [{"name": to_str((r.get("names") or [""])[0]), "state": to_str(r.get("state")), "status": to_str(r.get("status")),
-                "auto_start": bool(r.get("autoStart"))} for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
-        self.log(tr("Unraid containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
-        return out
-
-    async def unraid_vms(self):
-        """A list of records, one for each VM: name and state (RUNNING, SHUTOFF, ...)."""
-        rows = ((await self._unraid("query{vms{domains{id name state}}}")).get("vms") or {}).get("domains") or []
-        out = [{"name": to_str(r.get("name")), "state": to_str(r.get("state"))} for r in rows if isinstance(r, dict)]
-        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
-        self.log(tr("Unraid VMs"), lines or tr("(nothing)"), tr("{n} VMs", n=len(out)))
-        return out
-
-    async def unraid_power(self, kind, action, name):
-        """Starts or stops one container or VM, after asking you, every time. Gives back True if it was done."""
-        k, a, n = to_str(kind).strip().lower(), to_str(action).strip().lower(), to_str(name).strip()
-        if k not in ("container", "vm") or a not in ("start", "stop") or not n:
-            raise RunError(tr("Which one, and start or stop?"))
-        who = tr("container") if k == "container" else tr("VM")
-        what = tr("{action} the Unraid {who} {name}", action=a, who=who, name=n)
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        query = 'mutation{docker{' + a + '(id:"container:' + n + '"){id}}}' if k == "container" \
-            else 'mutation{vm{' + a + '(id:"vm:' + n + '")}'
-        await self._unraid(query, approved=True)
-        self.log(tr("Unraid"), what, tr("done"))
-        return True
-
-    async def unraid_parity(self):
-        """Checks the parity disks by reading them (a read-check, no corrections written), after asking you, every
-        time. Gives back True if it was started."""
-        what = tr("check Unraid's parity")
-        if self._skip_action(what):
-            return False
-        if not await self.confirm_live(what):
-            return False
-        await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
-        self.log(tr("Unraid"), what, tr("done"))
-        return True
-
     # Plex and Tautulli (#402)
     # Plex's HTTP API (the X-Plex-Token endpoints the apps use), PLEX_URL (like http://plex:32400) and PLEX_TOKEN (the
     # token the apps send, from a device's account details). The server, the libraries, the sessions and the newest
@@ -6082,6 +5963,124 @@ class Connections:
                            memory=num(st.get("memoryUtilizationPct")) if _num_like(st.get("memoryUtilizationPct")) else "")
             out.append(rec)
         return out
+    # Unraid (#399)
+    # Unraid's own GraphQL API: UNRAID_URL (the server's address, like https://unraid) and UNRAID_API_KEY (Settings,
+    # Management Access, API Keys; built into Unraid 7.2 and later, the Unraid Connect plugin before that). Reads are
+    # the queries in SAFETY["unraid_free"]; starting or stopping one container or VM, and a parity read-check
+    # (unraid_asks) always ask, live, and never run with nobody there. Nothing else is ever sent: the array is never
+    # stopped, no disk is added or removed, no container is updated or removed, no plugin is installed, nothing runs
+    # in a terminal. UNRAID_CERT_SHA256 pins a certificate this computer doesn't trust.
+    UNRAID_STATE = {"STARTED": "STARTED", "STOPPED": "STOPPED"}
+
+    async def _unraid(self, query, approved=False):
+        """One GraphQL request to the server, gated by unraid_call: a query goes without asking, one of the few
+        allowed mutations only after a live yes, and anything else is never sent."""
+        kind = unraid_call("POST", query)
+        if kind is None or (kind == "asks" and not approved):
+            raise RunError(tr("Second Thought doesn't send {what} to {who}.", what=query[:80], who="Unraid"))
+        url = os.environ.get("UNRAID_URL", "").strip()
+        key = os.environ.get("UNRAID_API_KEY", "").strip()
+        if not url or not key:
+            raise RunError(tr("{who} needs {url_setting} and {key_setting} {where_keys}: its address (like https://unraid) and an API key, under Settings, Management Access, API Keys.",
+                              who="Unraid", url_setting="UNRAID_URL", key_setting="UNRAID_API_KEY", where_keys=WHERE_KEYS))
+        base = url if url.endswith("/graphql") else url.rstrip("/") + "/graphql"
+        status, raw = await self._pinned("Unraid", base, "UNRAID_CERT_SHA256", "POST", "", {"x-api-key": key}, {"query": query})
+        if status == 401:
+            raise RunError(tr("The {who} refused its API key.", who="Unraid"))
+        if status >= 400:
+            raise RunError(tr("{who}: {why}.", who="Unraid", why=self._said(status, raw)))
+        answer = json.loads(raw) if raw.strip() else {}
+        if isinstance(answer, dict) and answer.get("errors"):
+            raise RunError(tr("{who}: {why}.", who="Unraid", why=_short(to_str(answer["errors"][0].get("message") if answer["errors"] else ""), 120)))
+        return (answer or {}).get("data") or {}
+
+    async def unraid_array(self):
+        """One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb,
+        total_gb and uptime."""
+        d = await self._unraid("query{array{state capacity{kilobytes{free total}}}info{os{uptime}}}")
+        a = d.get("array") or {}
+        kb = ((a.get("capacity") or {}).get("kilobytes") or {})
+        out = {"state": to_str(a.get("state")), "started": to_str(a.get("state")) == "STARTED",
+               "free_gb": self._cents(num(kb.get("free")) / 1048576) if kb.get("free") else "",
+               "total_gb": self._cents(num(kb.get("total")) / 1048576) if kb.get("total") else "",
+               "uptime": to_str(((d.get("info") or {}).get("os") or {}).get("uptime"))}
+        line = tr("{state}, {free_gb} GB free of {total_gb} GB", **out) if out["free_gb"] else out["state"]
+        self.log(tr("Unraid array"), line)
+        return out
+
+    async def unraid_disks(self):
+        """A list of records, one for each disk in the array, parity first then data then cache: name, type (Parity,
+        Data, Cache), status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb."""
+        d = await self._unraid("query{array{parities{name type status temp numErrors fsSize fsFree}disks{name type status"
+                               " temp numErrors fsSize fsFree}caches{name type status temp numErrors fsSize fsFree}}}")
+        a = d.get("array") or {}
+        rows = [r for kind in ("parities", "disks", "caches") for r in (a.get(kind) or []) if isinstance(r, dict)]
+        out = [{"name": to_str(r.get("name")), "type": to_str(r.get("type")).capitalize(), "status": to_str(r.get("status")),
+                "temp_c": num(r.get("temp")) if r.get("temp") is not None else "",
+                "errors": num(r.get("numErrors")) if r.get("numErrors") is not None else "",
+                "size_gb": self._cents(num(r.get("fsSize")) / 1048576) if r.get("fsSize") else "",
+                "free_gb": self._cents(num(r.get("fsFree")) / 1048576) if r.get("fsFree") else ""} for r in rows]
+        lines = "\n".join(f"{r['name']} ({r['type']})" + (f": {r['temp_c']} °C" if r["temp_c"] != "" else "") for r in out)
+        self.log(tr("Unraid disks"), lines or tr("(nothing)"), tr("{n} disks", n=len(out)))
+        return out
+
+    async def unraid_shares(self):
+        """A list of records, one for each user share: name, free_gb, used_gb and total_gb."""
+        rows = (await self._unraid("query{shares{name free used size}}")).get("shares") or []
+        out = [{"name": to_str(r.get("name")),
+                "free_gb": self._cents(num(r.get("free")) / 1048576) if r.get("free") else "",
+                "used_gb": self._cents(num(r.get("used")) / 1048576) if r.get("used") else "",
+                "total_gb": self._cents(num(r.get("size")) / 1048576) if r.get("size") else ""} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['free_gb']} GB free" for r in out)
+        self.log(tr("Unraid shares"), lines or tr("(nothing)"), tr("{n} shares", n=len(out)))
+        return out
+
+    async def unraid_containers(self):
+        """A list of records, one for each Docker container: name, state (running, exited, ...), status and
+        auto_start (whether Unraid starts it with the array)."""
+        rows = (await self._unraid("query{dockerContainers{id names state status autoStart}}")).get("dockerContainers") or []
+        out = [{"name": to_str((r.get("names") or [""])[0]), "state": to_str(r.get("state")), "status": to_str(r.get("status")),
+                "auto_start": bool(r.get("autoStart"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
+        self.log(tr("Unraid containers"), lines or tr("(nothing)"), tr("{n} containers", n=len(out)))
+        return out
+
+    async def unraid_vms(self):
+        """A list of records, one for each VM: name and state (RUNNING, SHUTOFF, ...)."""
+        rows = ((await self._unraid("query{vms{domains{id name state}}}")).get("vms") or {}).get("domains") or []
+        out = [{"name": to_str(r.get("name")), "state": to_str(r.get("state"))} for r in rows if isinstance(r, dict)]
+        lines = "\n".join(f"{r['name']}: {r['state']}" for r in out)
+        self.log(tr("Unraid VMs"), lines or tr("(nothing)"), tr("{n} VMs", n=len(out)))
+        return out
+
+    async def unraid_power(self, kind, action, name):
+        """Starts or stops one container or VM, after asking you, every time. Gives back True if it was done."""
+        k, a, n = to_str(kind).strip().lower(), to_str(action).strip().lower(), to_str(name).strip()
+        if k not in ("container", "vm") or a not in ("start", "stop") or not n:
+            raise RunError(tr("Which one, and start or stop?"))
+        who = tr("container") if k == "container" else tr("VM")
+        what = tr("{action} the Unraid {who} {name}", action=a, who=who, name=n)
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        query = 'mutation{docker{' + a + '(id:"container:' + n + '"){id}}}' if k == "container" \
+            else 'mutation{vm{' + a + '(id:"vm:' + n + '")}'
+        await self._unraid(query, approved=True)
+        self.log(tr("Unraid"), what, tr("done"))
+        return True
+
+    async def unraid_parity(self):
+        """Checks the parity disks by reading them (a read-check, no corrections written), after asking you, every
+        time. Gives back True if it was started."""
+        what = tr("check Unraid's parity")
+        if self._skip_action(what):
+            return False
+        if not await self.confirm_live(what):
+            return False
+        await self._unraid("mutation{parity{start(correct:false)}}", approved=True)
+        self.log(tr("Unraid"), what, tr("done"))
+        return True
     # sync:connections-runtime-end
 
     # MQTT
@@ -8650,6 +8649,12 @@ class Doctor:
                 devices = await self._unifi_all(f"/sites/{site}/devices")
                 return tr("UniFi Network {version}, {n} devices", version=to_str(info.get("applicationVersion")) or "?", n=len(devices))
             out.append(("UniFi", unifi))
+        if has("unraid_read", "unraid_control"):
+            async def unraid():
+                d = await self._unraid("query{vars{version}array{state}}")
+                return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
+                    + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
+            out.append(("Unraid", unraid))
         # sync:connections-check-end
         if has("arr_read", "arr_control"):
             async def arr(which):
@@ -8659,12 +8664,6 @@ class Doctor:
                     + ", " + tr("{n} in the queue", n=num(q.get("totalRecords") or 0))
             out.append(("Radarr", lambda: arr("radarr")))
             out.append(("Sonarr", lambda: arr("sonarr")))
-        if has("unraid_read", "unraid_control"):
-            async def unraid():
-                d = await self._unraid("query{vars{version}array{state}}")
-                return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
-                    + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
-            out.append(("Unraid", unraid))
         if has("plex_read", "plex_control"):
             async def plex():
                 home = await self._plex("GET", "/")
@@ -9012,7 +9011,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Unraid": "UNRAID_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Radarr": "RADARR_URL", "Sonarr": "SONARR_URL", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 # sync:connections-settingsmap-begin
                 "Coinbase": "COINBASE_KEY_FILE COINBASE_KEY",
                 "Docker": "DOCKER_HOST",
@@ -9024,6 +9023,7 @@ class Doctor:
                 "SABnzbd": "SABNZBD_URL",
                 "Solax": "SOLAX_TOKEN_ID",
                 "UniFi": "UNIFI_URL",
+                "Unraid": "UNRAID_URL",
                 # sync:connections-settingsmap-end
 }.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))
@@ -12014,7 +12014,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", true],
 ["kraken_trade", "trade on your Kraken account with real money (asking you before every order)", true],
 ["arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", true],
-["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["plex_control", "scan a Plex library, and stop a stream on Plex (asking you each time)", true],
 ["coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", true],
 ["docker_control", "restart, stop and start your Docker containers (asking you each time)", true],
@@ -12023,10 +12022,10 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["powerwall_control", "set your Powerwall's backup reserve (asking you each time)", true],
 ["proxmox_control", "start, shut down and reboot your Proxmox guests (asking you each time)", true],
 ["sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", true],
+["unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", true],
 ["kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", false],
 ["flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", false],
 ["arr_read", "read your Radarr and Sonarr: the download queue, the wanted list and disk space", false],
-["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["plex_read", "read your Plex: the server, its libraries, what's playing now and the newest items; and read Tautulli's history and watch-time stats", false],
 ["coinbase_read", "read your Coinbase balances and orders, and market prices", false],
 ["docker_read", "read your Docker containers: their health, memory and logs", false],
@@ -12038,6 +12037,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 ["sabnzbd_read", "read your SABnzbd: the download queue, its history and the download disk's free space", false],
 ["solax_read", "read your Solax inverter's figures from SolaxCloud: solar generation, battery charge, import and export", false],
 ["unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", false],
+["unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", false],
 ["web", "read public web pages and search the web", false],
 ["email_read", "read your email", false],
 ["calendar", "read your calendars", false],
@@ -12096,26 +12096,6 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "POST",
    "^/api/v3/command$"
-  ]
- ],
- "unraid_free": [
-  [
-   "POST",
-   "^(?![\\s\\S]*mutation)\\s*(query|\\{)"
-  ]
- ],
- "unraid_asks": [
-  [
-   "POST",
-   "^mutation\\{docker\\{(start|stop)\\(id:\"container:[^\"]+\"\\)\\{id\\}\\}\\}$"
-  ],
-  [
-   "POST",
-   "^mutation\\{vm\\{(start|stop)\\(id:\"vm:[^\"]+\"\\)\\}\\}$"
-  ],
-  [
-   "POST",
-   "^mutation\\{parity\\{start\\(correct:false\\)\\}\\}$"
   ]
  ],
  "plex_free": [
@@ -12266,6 +12246,26 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
   [
    "GET",
    "^/proxy/network/integration/v1/(info|sites|sites/[A-Za-z0-9-]+/(clients|devices|devices/[A-Za-z0-9-]+/statistics/latest))$"
+  ]
+ ],
+ "unraid_free": [
+  [
+   "POST",
+   "^(?![\\s\\S]*mutation)\\s*(query|\\{)"
+  ]
+ ],
+ "unraid_asks": [
+  [
+   "POST",
+   "^mutation\\{docker\\{(start|stop)\\(id:\"container:[^\"]+\"\\)\\{id\\}\\}\\}$"
+  ],
+  [
+   "POST",
+   "^mutation\\{vm\\{(start|stop)\\(id:\"vm:[^\"]+\"\\)\\}\\}$"
+  ],
+  [
+   "POST",
+   "^mutation\\{parity\\{start\\(correct:false\\)\\}\\}$"
   ]
  ],
  "agent_asks": [
@@ -17456,8 +17456,9 @@ HOW TO MAP CODE
     sabnzbd:"#C2185B",
     solax:"#C2185B",
     unifi:"#C2185B",
+    unraid:"#C2185B",
     // sync:connections-hues-end
-    arr:"#C2185B", unraid:"#C2185B", plex:"#C2185B"
+    arr:"#C2185B", plex:"#C2185B"
   };
   function shade(hex, amt){
     const n = parseInt(hex.slice(1), 16);
@@ -17481,8 +17482,9 @@ HOW TO MAP CODE
     sabnzbd:style(HUES.sabnzbd),
     solax:style(HUES.solax),
     unifi:style(HUES.unifi),
+    unraid:style(HUES.unraid),
     // sync:connections-styles-end
-    arr:style(HUES.arr), unraid:style(HUES.unraid), plex:style(HUES.plex),
+    arr:style(HUES.arr), plex:style(HUES.plex),
     loop_blocks:style(HUES.control), logic_blocks:style(HUES.operators), math_blocks:style(HUES.operators),
     text_blocks:style(HUES.text), list_blocks:style(HUES.lists), variable_blocks:style(HUES.variables),
     variable_dynamic_blocks:style(HUES.variables), procedure_blocks:style(HUES.procedures), hat_blocks:style(HUES.events, true)
@@ -17663,9 +17665,7 @@ HOW TO MAP CODE
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read", 
     rb_arr_queue:"arr_read",
-    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", rb_unraid_array:"unraid_read",
-    rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
-    rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
+    rb_arr_missing:"arr_read", rb_arr_diskspace:"arr_read", rb_arr_search:"arr_control", 
     rb_plex_server:"plex_read", rb_plex_libraries:"plex_read", rb_plex_sessions:"plex_read", rb_plex_recent:"plex_read",
     rb_tautulli_history:"plex_read", rb_tautulli_watchtime:"plex_read", rb_plex_scan:"plex_control", rb_plex_stop:"plex_control",
     rb_mqtt_publish:"mqtt_publish", rb_mqtt_read:"mqtt_read", rb_mqtt_when:"mqtt_read",
@@ -17693,6 +17693,9 @@ HOW TO MAP CODE
     rb_sabnzbd_diskspace:"sabnzbd_read", rb_sabnzbd_pause:"sabnzbd_control",
     rb_solax_now:"solax_read",
     rb_unifi_clients:"unifi_read", rb_unifi_devices:"unifi_read",
+    rb_unraid_array:"unraid_read",
+    rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
+    rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
     // sync:connections-caps-end
   };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
@@ -18055,23 +18058,6 @@ HOW TO MAP CODE
       tooltip:"A list of records, one for each of its folders: path, label, free_gb and total_gb." }),
     S("rb_arr_search", "search %1 for what's missing", [{ type:"field_dropdown", name:"WHICH", options:[["Radarr","radarr"],["Sonarr","sonarr"]] }],
       { style:"arr", inputsInline:true, tooltip:"Searches the whole wanted list for what has no file. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really searches." }),
-    /* Unraid (#399): reads, and power and parity that always ask */
-    V("rb_unraid_array", "Unraid array", [], null, { style:"unraid",
-      tooltip:"One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb, total_gb and uptime. On this page it uses a sample server." }),
-    V("rb_unraid_disks", "Unraid disks", [], "Array", { style:"unraid",
-      tooltip:"A list of records, one for each disk in the array, parity first then data then cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb." }),
-    V("rb_unraid_shares", "Unraid shares", [], "Array", { style:"unraid",
-      tooltip:"A list of records, one for each user share: name, free_gb, used_gb and total_gb." }),
-    V("rb_unraid_containers", "Unraid containers", [], "Array", { style:"unraid",
-      tooltip:"A list of records, one for each Docker container: name, state (running, exited, ...), status and auto_start (whether Unraid starts it with the array)." }),
-    V("rb_unraid_vms", "Unraid VMs", [], "Array", { style:"unraid",
-      tooltip:"A list of records, one for each virtual machine: name and state (RUNNING, SHUTOFF, ...)." }),
-    S("rb_unraid_container_power", "%1 Unraid container %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["stop","stop"]] }, val("NAME")],
-      { style:"unraid", inputsInline:true, tooltip:"Starts or stops one Docker container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
-    S("rb_unraid_vm_power", "%1 Unraid VM %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["stop","stop"]] }, val("NAME")],
-      { style:"unraid", inputsInline:true, tooltip:"Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
-    S("rb_unraid_parity", "check Unraid's parity", [],
-      { style:"unraid", tooltip:"Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks." }),
     /* Plex and Tautulli (#402): reads, and changes that always ask */
     V("rb_plex_server", "Plex server", [], null, { style:"plex",
       tooltip:"One record for the server: name, version and up (it answered, so it's up). Needs PLEX_URL and PLEX_TOKEN in second-thought.ini. On this page it uses a sample server." }),
@@ -18177,6 +18163,23 @@ HOW TO MAP CODE
       tooltip:"A list of records, one for each device connected to your UniFi network: name, mac, ip, type (wired, wireless or vpn), connected (since when) and uplink (the UniFi device it's connected through). It only reads: nothing is blocked or changed. On this page it uses a sample network." }),
     V("rb_unifi_devices", "UniFi devices", [], "Array", { style:"unifi",
       tooltip:"A list of records, one for each UniFi device (gateway, switches, access points): name, model, mac, ip, state, firmware, update (whether newer firmware is waiting), and for one that's online, uptime (hours), cpu and memory (%)." }),
+    /* Unraid (#399): reads, and power and parity that always ask */
+    V("rb_unraid_array", "Unraid array", [], null, { style:"unraid",
+      tooltip:"One record for the array: state (STARTED, STOPPED, ...), started (whether it's started), free_gb, total_gb and uptime. On this page it uses a sample server." }),
+    V("rb_unraid_disks", "Unraid disks", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each disk in the array, parity first then data then cache: name, type, status (DISK_OK, DISK_NP, ...), temp_c, errors, size_gb and free_gb." }),
+    V("rb_unraid_shares", "Unraid shares", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each user share: name, free_gb, used_gb and total_gb." }),
+    V("rb_unraid_containers", "Unraid containers", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each Docker container: name, state (running, exited, ...), status and auto_start (whether Unraid starts it with the array)." }),
+    V("rb_unraid_vms", "Unraid VMs", [], "Array", { style:"unraid",
+      tooltip:"A list of records, one for each virtual machine: name and state (RUNNING, SHUTOFF, ...)." }),
+    S("rb_unraid_container_power", "%1 Unraid container %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["stop","stop"]] }, val("NAME")],
+      { style:"unraid", inputsInline:true, tooltip:"Starts or stops one Docker container, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
+    S("rb_unraid_vm_power", "%1 Unraid VM %2", [{ type:"field_dropdown", name:"ACTION", options:[["start","start"],["stop","stop"]] }, val("NAME")],
+      { style:"unraid", inputsInline:true, tooltip:"Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
+    S("rb_unraid_parity", "check Unraid's parity", [],
+      { style:"unraid", tooltip:"Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks." }),
     // sync:connections-defs-end
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
@@ -18348,10 +18351,6 @@ HOW TO MAP CODE
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
     ]},
-    { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
-      B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
-      B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
-    ]},
     { kind:"category", name:"Plex", categorystyle:"plex", service:"plex", contents:[
       B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
@@ -18387,6 +18386,10 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
+    { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
+      B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
+      B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
+    ]},
     // sync:connections-toolbox-end
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")
@@ -21252,9 +21255,9 @@ HOW TO MAP CODE
              sabnzbd:blocks.some(b => b.type.startsWith("rb_sabnzbd_")),
              solax:blocks.some(b => b.type.startsWith("rb_solax_")),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
+             unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              // sync:connections-need-end
              arr:blocks.some(b => b.type.startsWith("rb_arr_")),
-             unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
              plex:blocks.some(b => b.type.startsWith("rb_plex_") || b.type.startsWith("rb_tautulli_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              pages:has([], ["web"]) };
@@ -21315,12 +21318,6 @@ HOW TO MAP CODE
       "RADARR_URL = ", "RADARR_API_KEY = ", "; RADARR_CERT_SHA256 = ", "", "[sonarr]",
       "; Sonarr, the same: its address and API key (Settings, General, API Key).",
       "SONARR_URL = ", "SONARR_API_KEY = ", "; SONARR_CERT_SHA256 = ");
-    if (need.unraid) out.push("", "[unraid]",
-      "; Your Unraid server, through its own GraphQL API (built into Unraid 7.2 and later, the Unraid Connect plugin",
-      "; before that): its address and an API key (Settings, Management Access, API Keys). The blocks read the array,",
-      "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
-      "; else is ever sent.",
-      "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
     if (need.plex) out.push("", "[plex]",
       "; Your Plex media server, through the X-Plex-Token API the apps use: its address and its token (a device's",
       "; account details show it). The server, libraries, sessions and new items blocks only read; scanning a library",
@@ -21389,6 +21386,12 @@ HOW TO MAP CODE
       "; Your UniFi console (a Cloud Gateway or Dream Machine), read through its Network API. Make a key in the Network app:",
       "; Settings, Control Plane, Integrations. Run --doctor once: it shows the console's certificate fingerprint to pin.",
       "UNIFI_URL = https://192.168.1.1", "UNIFI_API_KEY = ", "UNIFI_CERT_SHA256 = ");
+    if (need.unraid) out.push("", "[unraid]",
+      "; Your Unraid server, through its own GraphQL API (built into Unraid 7.2 and later, the Unraid Connect plugin",
+      "; before that): its address and an API key (Settings, Management Access, API Keys). The blocks read the array,",
+      "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
+      "; else is ever sent.",
+      "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
     // sync:connections-ini-end
     if (need.ha) out.push("", "[home assistant]",
       "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
@@ -21707,11 +21710,6 @@ HOW TO MAP CODE
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_missing": return "(await R.arr_missing(" + pyStr(b.getFieldValue("WHICH")) + "))";
         case "rb_arr_diskspace": return "(await R.arr_diskspace(" + pyStr(b.getFieldValue("WHICH")) + "))";
-        case "rb_unraid_array": return "(await R.unraid_array())";
-        case "rb_unraid_disks": return "(await R.unraid_disks())";
-        case "rb_unraid_shares": return "(await R.unraid_shares())";
-        case "rb_unraid_containers": return "(await R.unraid_containers())";
-        case "rb_unraid_vms": return "(await R.unraid_vms())";
         case "rb_plex_server": return "(await R.plex_server())";
         case "rb_plex_libraries": return "(await R.plex_libraries())";
         case "rb_plex_sessions": return "(await R.plex_sessions())";
@@ -21747,6 +21745,11 @@ HOW TO MAP CODE
         case "rb_solax_now": return "(await R.solax_now())";
         case "rb_unifi_clients": return "(await R.unifi_clients())";
         case "rb_unifi_devices": return "(await R.unifi_devices())";
+        case "rb_unraid_array": return "(await R.unraid_array())";
+        case "rb_unraid_disks": return "(await R.unraid_disks())";
+        case "rb_unraid_shares": return "(await R.unraid_shares())";
+        case "rb_unraid_containers": return "(await R.unraid_containers())";
+        case "rb_unraid_vms": return "(await R.unraid_vms())";
         // sync:connections-pyread-end
         case "rb_mqtt_read": return "(await R.mqtt_value(" + I("TOPIC", '""') + "))";
         case "rb_feed_news": return "(await R.feed_records(" + I("URL", '""') + "))";
@@ -21887,9 +21890,6 @@ HOW TO MAP CODE
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
-        case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
-        case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
-        case "rb_unraid_parity": E("await R.unraid_parity()"); break;
         case "rb_plex_scan": E("await R.plex_scan(" + I("LIBRARY", "\"Films\"") + ")"); break;
         case "rb_plex_stop": E("await R.plex_stop(" + I("ID", "\"abc123\"") + ")"); break;
           // sync:connections-pyact-begin
@@ -21904,6 +21904,9 @@ HOW TO MAP CODE
           case "rb_powerwall_reserve": E("await R.powerwall_reserve(" + I("N", "100") + ")"); break;
           case "rb_proxmox_power": E("await R.proxmox_power(" + pyStr(b.getFieldValue("ACTION")) + ", " + I("VMID", "0") + ")"); break;
           case "rb_sabnzbd_pause": E("await R.sabnzbd_pause(" + pyStr(b.getFieldValue("ACTION")) + ")"); break;
+        case "rb_unraid_container_power": E("await R.unraid_power(\"container\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "plex") + ")"); break;
+        case "rb_unraid_vm_power": E("await R.unraid_power(\"vm\", " + pyStr(b.getFieldValue("ACTION")) + ", " + I("NAME", "windows") + ")"); break;
+        case "rb_unraid_parity": E("await R.unraid_parity()"); break;
           // sync:connections-pyact-end
           case "rb_mqtt_publish": E("await R.mqtt_publish(" + I("TOPIC", '""') + ", " + I("TEXT", '""') + ", " + (F("RETAIN") === "TRUE" ? "True" : "False") + ")"); break;
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
@@ -24085,61 +24088,6 @@ HOW TO MAP CODE
     addStep(who, { mono:true, text:what }).done(tr("done"), "ok");
     return true;
   }
-  /* Unraid on the page (#399): a sample server. Exported Python talks to its GraphQL API: reads, and start, stop
-     and parity that always ask. */
-  const unraidSample = () => { connNote("Unraid"); return CONN.unraid || {}; };
-  function unraidArray(){
-    const s = unraidSample(), a = s.array || {}, kb = (a.capacity || {}).kilobytes || {},
-      out = { state:str(a.state), started:str(a.state) === "STARTED",
-        free_gb:kb.free ? cents(num(kb.free) / 1048576) : "", total_gb:kb.total ? cents(num(kb.total) / 1048576) : "",
-        uptime:str(((s.info || {}).os || {}).uptime) };
-    addStep("Unraid array", { mono:true, text:out.state + (out.free_gb ? ", " + out.free_gb + " GB free of " + out.total_gb + " GB" : "") })
-      .done(tr("done"), "ok");
-    return out;
-  }
-  function unraidDisks(){
-    const a = (unraidSample().array || {}),
-      out = ["parities", "disks", "caches"].flatMap(k => a[k] || []).map(r => ({ name:str(r.name), type:str(r.type).toLowerCase() ===
-        "parity" ? "Parity" : str(r.type).toLowerCase() === "cache" ? "Cache" : "Data", status:str(r.status),
-        temp_c:r.temp === null || r.temp === undefined ? "" : num(r.temp), errors:r.numErrors === null || r.numErrors === undefined ? "" : num(r.numErrors),
-        size_gb:r.fsSize ? cents(num(r.fsSize) / 1048576) : "", free_gb:r.fsFree ? cents(num(r.fsFree) / 1048576) : "" }));
-    addStep("Unraid disks", { mono:true, text:out.map(r => r.name + " (" + r.type + ")" + (r.temp_c === "" ? "" : ": " + r.temp_c + " \u00b0C")).join("\n") || tr("(nothing)") })
-      .done(tr("{n} disks", { n:out.length }), "ok");
-    return out;
-  }
-  function unraidShares(){
-    const out = (unraidSample().shares || []).map(r => ({ name:str(r.name),
-      free_gb:r.free ? cents(num(r.free) / 1048576) : "", used_gb:r.used ? cents(num(r.used) / 1048576) : "",
-      total_gb:r.size ? cents(num(r.size) / 1048576) : "" }));
-    addStep("Unraid shares", { mono:true, text:out.map(r => r.name + ": " + r.free_gb + " GB free").join("\n") || tr("(nothing)") })
-      .done(tr("{n} shares", { n:out.length }), "ok");
-    return out;
-  }
-  function unraidContainers(){
-    const out = (unraidSample().dockerContainers || []).map(r => ({ name:str((r.names || [""])[0]), state:str(r.state),
-      status:str(r.status), auto_start:!!r.autoStart }));
-    addStep("Unraid containers", { mono:true, text:out.map(r => r.name + ": " + r.state).join("\n") || tr("(nothing)") })
-      .done(tr("{n} containers", { n:out.length }), "ok");
-    return out;
-  }
-  function unraidVms(){
-    const out = (((unraidSample().vms || {}).domains) || []).map(r => ({ name:str(r.name), state:str(r.state) }));
-    addStep("Unraid VMs", { mono:true, text:out.map(r => r.name + ": " + r.state).join("\n") || tr("(nothing)") })
-      .done(tr("{n} VMs", { n:out.length }), "ok");
-    return out;
-  }
-  async function unraidPower(kind, action, name){
-    const what = action + " the Unraid " + (kind === "vm" ? "VM " : "container ") + name;
-    if (!(await confirmAction(what + " (it always asks)"))) return false;
-    addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
-    return true;
-  }
-  async function unraidParity(){
-    const what = "check Unraid's parity";
-    if (!(await confirmAction(what + " (it always asks)"))) return false;
-    addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
-    return true;
-  }
   /* Plex and Tautulli on the page (#402): a sample server. Exported Python talks to your Plex through the
      X-Plex-Token API and to Tautulli: reads, and a library scan and a stream stop after a yes, every time.
      Matches the runtime's plex_ and tautulli_ methods and tests/fake_plex.py. */
@@ -24534,6 +24482,61 @@ HOW TO MAP CODE
                                     memory:isNumLike(st.memoryUtilizationPct) ? num(st.memoryUtilizationPct) : "" });
       return rec;
     });
+  }
+  /* Unraid on the page (#399): a sample server. Exported Python talks to its GraphQL API: reads, and start, stop
+     and parity that always ask. */
+  const unraidSample = () => { connNote("Unraid"); return CONN.unraid || {}; };
+  function unraidArray(){
+    const s = unraidSample(), a = s.array || {}, kb = (a.capacity || {}).kilobytes || {},
+      out = { state:str(a.state), started:str(a.state) === "STARTED",
+        free_gb:kb.free ? cents(num(kb.free) / 1048576) : "", total_gb:kb.total ? cents(num(kb.total) / 1048576) : "",
+        uptime:str(((s.info || {}).os || {}).uptime) };
+    addStep("Unraid array", { mono:true, text:out.state + (out.free_gb ? ", " + out.free_gb + " GB free of " + out.total_gb + " GB" : "") })
+      .done(tr("done"), "ok");
+    return out;
+  }
+  function unraidDisks(){
+    const a = (unraidSample().array || {}),
+      out = ["parities", "disks", "caches"].flatMap(k => a[k] || []).map(r => ({ name:str(r.name), type:str(r.type).toLowerCase() ===
+        "parity" ? "Parity" : str(r.type).toLowerCase() === "cache" ? "Cache" : "Data", status:str(r.status),
+        temp_c:r.temp === null || r.temp === undefined ? "" : num(r.temp), errors:r.numErrors === null || r.numErrors === undefined ? "" : num(r.numErrors),
+        size_gb:r.fsSize ? cents(num(r.fsSize) / 1048576) : "", free_gb:r.fsFree ? cents(num(r.fsFree) / 1048576) : "" }));
+    addStep("Unraid disks", { mono:true, text:out.map(r => r.name + " (" + r.type + ")" + (r.temp_c === "" ? "" : ": " + r.temp_c + " \u00b0C")).join("\n") || tr("(nothing)") })
+      .done(tr("{n} disks", { n:out.length }), "ok");
+    return out;
+  }
+  function unraidShares(){
+    const out = (unraidSample().shares || []).map(r => ({ name:str(r.name),
+      free_gb:r.free ? cents(num(r.free) / 1048576) : "", used_gb:r.used ? cents(num(r.used) / 1048576) : "",
+      total_gb:r.size ? cents(num(r.size) / 1048576) : "" }));
+    addStep("Unraid shares", { mono:true, text:out.map(r => r.name + ": " + r.free_gb + " GB free").join("\n") || tr("(nothing)") })
+      .done(tr("{n} shares", { n:out.length }), "ok");
+    return out;
+  }
+  function unraidContainers(){
+    const out = (unraidSample().dockerContainers || []).map(r => ({ name:str((r.names || [""])[0]), state:str(r.state),
+      status:str(r.status), auto_start:!!r.autoStart }));
+    addStep("Unraid containers", { mono:true, text:out.map(r => r.name + ": " + r.state).join("\n") || tr("(nothing)") })
+      .done(tr("{n} containers", { n:out.length }), "ok");
+    return out;
+  }
+  function unraidVms(){
+    const out = (((unraidSample().vms || {}).domains) || []).map(r => ({ name:str(r.name), state:str(r.state) }));
+    addStep("Unraid VMs", { mono:true, text:out.map(r => r.name + ": " + r.state).join("\n") || tr("(nothing)") })
+      .done(tr("{n} VMs", { n:out.length }), "ok");
+    return out;
+  }
+  async function unraidPower(kind, action, name){
+    const what = action + " the Unraid " + (kind === "vm" ? "VM " : "container ") + name;
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
+  }
+  async function unraidParity(){
+    const what = "check Unraid's parity";
+    if (!(await confirmAction(what + " (it always asks)"))) return false;
+    addStep("Unraid", { mono:true, text:what }).done(tr("done"), "ok");
+    return true;
   }
   // sync:connections-page-end
   /* 'when the web page … changes': the part to watch, and what changed. Match the runtime's page_part and page_changes. */
@@ -25356,11 +25359,6 @@ HOW TO MAP CODE
       case "rb_arr_queue": return arrQueue(b.getFieldValue("WHICH"));
       case "rb_arr_missing": return arrMissing(b.getFieldValue("WHICH"));
       case "rb_arr_diskspace": return arrDiskspace(b.getFieldValue("WHICH"));
-      case "rb_unraid_array": return unraidArray();
-      case "rb_unraid_disks": return unraidDisks();
-      case "rb_unraid_shares": return unraidShares();
-      case "rb_unraid_containers": return unraidContainers();
-      case "rb_unraid_vms": return unraidVms();
       case "rb_plex_server": return plexServer();
       case "rb_plex_libraries": return plexLibraries();
       case "rb_plex_sessions": return plexSessions();
@@ -25396,6 +25394,11 @@ HOW TO MAP CODE
       case "rb_solax_now": return solaxNow();
       case "rb_unifi_clients": return unifiClients();
       case "rb_unifi_devices": return unifiDevices();
+      case "rb_unraid_array": return unraidArray();
+      case "rb_unraid_disks": return unraidDisks();
+      case "rb_unraid_shares": return unraidShares();
+      case "rb_unraid_containers": return unraidContainers();
+      case "rb_unraid_vms": return unraidVms();
       // sync:connections-iread-end
       case "rb_mqtt_read": {
         const topic = mqttTopic(await input(b, tc, "TOPIC")), got = mqttRead(topic);
@@ -26143,9 +26146,6 @@ HOW TO MAP CODE
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
-      case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
-      case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
-      case "rb_unraid_parity": await unraidParity(); break;
       case "rb_plex_scan": await plexAsking("scan the " + (await input(b, tc, "LIBRARY")) + " library on Plex"); break;
       case "rb_plex_stop": await plexAsking("stop the " + (await input(b, tc, "ID")) + " stream on Plex"); break;
       // sync:connections-iact-begin
@@ -26160,6 +26160,9 @@ HOW TO MAP CODE
       case "rb_powerwall_reserve": await powerwallReserve(await input(b, tc, "N")); break;
       case "rb_proxmox_power": await proxmoxPower(b.getFieldValue("ACTION"), await input(b, tc, "VMID")); break;
       case "rb_sabnzbd_pause": await sabnzbdPause(b.getFieldValue("ACTION")); break;
+      case "rb_unraid_container_power": await unraidPower("container", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
+      case "rb_unraid_parity": await unraidParity(); break;
       // sync:connections-iact-end
       case "rb_mqtt_publish": await mqttPublish(await input(b, tc, "TOPIC"), await input(b, tc, "TEXT"), b.getFieldValue("RETAIN") === "TRUE", false); break;
       case "rb_email_send": await emailSend(await input(b, tc, "TO"), await input(b, tc, "SUBJECT"), await input(b, tc, "TEXT"), false); break;

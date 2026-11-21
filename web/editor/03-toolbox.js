@@ -138,10 +138,6 @@
     { kind:"category", name:"Radarr and Sonarr", categorystyle:"arr", service:"arr", contents:[
       B("rb_arr_queue"), B("rb_arr_missing"), B("rb_arr_diskspace"), B("rb_arr_search")
     ]},
-    { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
-      B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
-      B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
-    ]},
     { kind:"category", name:"Plex", categorystyle:"plex", service:"plex", contents:[
       B("rb_plex_server"), B("rb_plex_libraries"), B("rb_plex_sessions"),
       B("rb_plex_recent", { N:N(7) }), B("rb_tautulli_history", { N:N(7) }), B("rb_tautulli_watchtime", { N:N(7) }),
@@ -177,6 +173,10 @@
     ]},
     { kind:"category", name:"Solax", categorystyle:"solax", service:"solax", contents:[ B("rb_solax_now") ]},
     { kind:"category", name:"UniFi", categorystyle:"unifi", service:"unifi", contents:[ B("rb_unifi_clients"), B("rb_unifi_devices") ]},
+    { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
+      B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
+      B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
+    ]},
     // sync:connections-toolbox-end
     { kind:"category", name:"Output", categorystyle:"output", contents:[
       B("rb_say", { TEXT:T("Hello") }), B("rb_show"), B("rb_add_result"), B("rb_result"), B("rb_finish_with")

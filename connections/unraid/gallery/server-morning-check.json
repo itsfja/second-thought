@@ -1,0 +1,768 @@
+{
+  "format": "reflection-blocks",
+  "version": 1,
+  "name": "server-morning-check",
+  "gallery": {
+    "title": "Server morning check",
+    "category": "home",
+    "description": "Each morning, reads your Unraid server and sends you a Telegram message: whether the array is started, any disk running hot, and any container or VM that's down. It only reads: nothing is started, stopped or checked.",
+    "tip": "Needs UNRAID_URL and UNRAID_API_KEY (Settings, Management Access, API Keys). Change 45 to warn nearer a disk's limit.",
+    "author": "itsfja",
+    "runtime": "3.0.0"
+  },
+  "program": {
+    "variables": [
+      {
+        "id": "g_array",
+        "name": "array"
+      },
+      {
+        "id": "g_disks",
+        "name": "disks"
+      },
+      {
+        "id": "g_containers",
+        "name": "containers"
+      },
+      {
+        "id": "g_vms",
+        "name": "vms"
+      },
+      {
+        "id": "g_one",
+        "name": "one"
+      },
+      {
+        "id": "g_report",
+        "name": "report"
+      }
+    ],
+    "blocks": {
+      "languageVersion": 0,
+      "blocks": [
+        {
+          "type": "rb_start",
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 30
+        },
+        {
+          "type": "rb_when_time",
+          "fields": {
+            "HOUR": 7,
+            "MINUTE": 30,
+            "DAYS": "every"
+          },
+          "next": {
+            "block": {
+              "type": "rb_broadcast_wait",
+              "inputs": {
+                "MSG": {
+                  "shadow": {
+                    "type": "text",
+                    "fields": {
+                      "TEXT": "check"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 550,
+          "y": 30
+        },
+        {
+          "type": "rb_receive",
+          "fields": {
+            "MSG": "check"
+          },
+          "next": {
+            "block": {
+              "type": "variables_set",
+              "fields": {
+                "VAR": {
+                  "id": "g_array"
+                }
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "rb_unraid_array"
+                  }
+                }
+              },
+              "next": {
+                "block": {
+                  "type": "variables_set",
+                  "fields": {
+                    "VAR": {
+                      "id": "g_disks"
+                    }
+                  },
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "rb_unraid_disks"
+                      }
+                    }
+                  },
+                  "next": {
+                    "block": {
+                      "type": "variables_set",
+                      "fields": {
+                        "VAR": {
+                          "id": "g_containers"
+                        }
+                      },
+                      "inputs": {
+                        "VALUE": {
+                          "block": {
+                            "type": "rb_unraid_containers"
+                          }
+                        }
+                      },
+                      "next": {
+                        "block": {
+                          "type": "variables_set",
+                          "fields": {
+                            "VAR": {
+                              "id": "g_vms"
+                            }
+                          },
+                          "inputs": {
+                            "VALUE": {
+                              "block": {
+                                "type": "rb_unraid_vms"
+                              }
+                            }
+                          },
+                          "next": {
+                            "block": {
+                              "type": "variables_set",
+                              "fields": {
+                                "VAR": {
+                                  "id": "g_report"
+                                }
+                              },
+                              "inputs": {
+                                "VALUE": {
+                                  "shadow": {
+                                    "type": "text",
+                                    "fields": {
+                                      "TEXT": "Unraid morning check:"
+                                    }
+                                  }
+                                }
+                              },
+                              "next": {
+                                "block": {
+                                  "type": "controls_if",
+                                  "inputs": {
+                                    "IF0": {
+                                      "block": {
+                                        "type": "logic_negate",
+                                        "inputs": {
+                                          "BOOL": {
+                                            "block": {
+                                              "type": "rb_rec_get",
+                                              "inputs": {
+                                                "KEY": {
+                                                  "shadow": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                      "TEXT": "started"
+                                                    }
+                                                  }
+                                                },
+                                                "REC": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_array"
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "DO0": {
+                                      "block": {
+                                        "type": "variables_set",
+                                        "fields": {
+                                          "VAR": {
+                                            "id": "g_report"
+                                          }
+                                        },
+                                        "inputs": {
+                                          "VALUE": {
+                                            "block": {
+                                              "type": "text_join",
+                                              "inputs": {
+                                                "ADD0": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_report"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "ADD1": {
+                                                  "shadow": {
+                                                    "type": "rb_longtext",
+                                                    "fields": {
+                                                      "TEXT": "\nthe array is not started"
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "extraState": {
+                                                "itemCount": 2
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "next": {
+                                    "block": {
+                                      "type": "controls_forEach",
+                                      "fields": {
+                                        "VAR": {
+                                          "id": "g_one"
+                                        }
+                                      },
+                                      "inputs": {
+                                        "LIST": {
+                                          "block": {
+                                            "type": "variables_get",
+                                            "fields": {
+                                              "VAR": {
+                                                "id": "g_disks"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "DO": {
+                                          "block": {
+                                            "type": "controls_if",
+                                            "inputs": {
+                                              "IF0": {
+                                                "block": {
+                                                  "type": "logic_compare",
+                                                  "fields": {
+                                                    "OP": "GT"
+                                                  },
+                                                  "inputs": {
+                                                    "A": {
+                                                      "block": {
+                                                        "type": "rb_rec_get",
+                                                        "inputs": {
+                                                          "KEY": {
+                                                            "shadow": {
+                                                              "type": "text",
+                                                              "fields": {
+                                                                "TEXT": "temp_c"
+                                                              }
+                                                            }
+                                                          },
+                                                          "REC": {
+                                                            "block": {
+                                                              "type": "variables_get",
+                                                              "fields": {
+                                                                "VAR": {
+                                                                  "id": "g_one"
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "B": {
+                                                      "shadow": {
+                                                        "type": "math_number",
+                                                        "fields": {
+                                                          "NUM": 45
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "DO0": {
+                                                "block": {
+                                                  "type": "variables_set",
+                                                  "fields": {
+                                                    "VAR": {
+                                                      "id": "g_report"
+                                                    }
+                                                  },
+                                                  "inputs": {
+                                                    "VALUE": {
+                                                      "block": {
+                                                        "type": "text_join",
+                                                        "inputs": {
+                                                          "ADD0": {
+                                                            "block": {
+                                                              "type": "variables_get",
+                                                              "fields": {
+                                                                "VAR": {
+                                                                  "id": "g_report"
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          "ADD1": {
+                                                            "shadow": {
+                                                              "type": "rb_longtext",
+                                                              "fields": {
+                                                                "TEXT": "\n"
+                                                              }
+                                                            }
+                                                          },
+                                                          "ADD2": {
+                                                            "block": {
+                                                              "type": "rb_rec_get",
+                                                              "inputs": {
+                                                                "KEY": {
+                                                                  "shadow": {
+                                                                    "type": "text",
+                                                                    "fields": {
+                                                                      "TEXT": "name"
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "REC": {
+                                                                  "block": {
+                                                                    "type": "variables_get",
+                                                                    "fields": {
+                                                                      "VAR": {
+                                                                        "id": "g_one"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          "ADD3": {
+                                                            "shadow": {
+                                                              "type": "rb_longtext",
+                                                              "fields": {
+                                                                "TEXT": " is hot: "
+                                                              }
+                                                            }
+                                                          },
+                                                          "ADD4": {
+                                                            "block": {
+                                                              "type": "rb_rec_get",
+                                                              "inputs": {
+                                                                "KEY": {
+                                                                  "shadow": {
+                                                                    "type": "text",
+                                                                    "fields": {
+                                                                      "TEXT": "temp_c"
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "REC": {
+                                                                  "block": {
+                                                                    "type": "variables_get",
+                                                                    "fields": {
+                                                                      "VAR": {
+                                                                        "id": "g_one"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          },
+                                                          "ADD5": {
+                                                            "shadow": {
+                                                              "type": "rb_longtext",
+                                                              "fields": {
+                                                                "TEXT": " °C"
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "extraState": {
+                                                          "itemCount": 6
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "next": {
+                                        "block": {
+                                          "type": "controls_forEach",
+                                          "fields": {
+                                            "VAR": {
+                                              "id": "g_one"
+                                            }
+                                          },
+                                          "inputs": {
+                                            "LIST": {
+                                              "block": {
+                                                "type": "variables_get",
+                                                "fields": {
+                                                  "VAR": {
+                                                    "id": "g_containers"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "DO": {
+                                              "block": {
+                                                "type": "controls_if",
+                                                "inputs": {
+                                                  "IF0": {
+                                                    "block": {
+                                                      "type": "logic_compare",
+                                                      "fields": {
+                                                        "OP": "NEQ"
+                                                      },
+                                                      "inputs": {
+                                                        "A": {
+                                                          "block": {
+                                                            "type": "rb_rec_get",
+                                                            "inputs": {
+                                                              "KEY": {
+                                                                "shadow": {
+                                                                  "type": "text",
+                                                                  "fields": {
+                                                                    "TEXT": "state"
+                                                                  }
+                                                                }
+                                                              },
+                                                              "REC": {
+                                                                "block": {
+                                                                  "type": "variables_get",
+                                                                  "fields": {
+                                                                    "VAR": {
+                                                                      "id": "g_one"
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "B": {
+                                                          "shadow": {
+                                                            "type": "text",
+                                                            "fields": {
+                                                              "TEXT": "running"
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "DO0": {
+                                                    "block": {
+                                                      "type": "variables_set",
+                                                      "fields": {
+                                                        "VAR": {
+                                                          "id": "g_report"
+                                                        }
+                                                      },
+                                                      "inputs": {
+                                                        "VALUE": {
+                                                          "block": {
+                                                            "type": "text_join",
+                                                            "inputs": {
+                                                              "ADD0": {
+                                                                "block": {
+                                                                  "type": "variables_get",
+                                                                  "fields": {
+                                                                    "VAR": {
+                                                                      "id": "g_report"
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              "ADD1": {
+                                                                "shadow": {
+                                                                  "type": "rb_longtext",
+                                                                  "fields": {
+                                                                    "TEXT": "\n"
+                                                                  }
+                                                                }
+                                                              },
+                                                              "ADD2": {
+                                                                "block": {
+                                                                  "type": "rb_rec_get",
+                                                                  "inputs": {
+                                                                    "KEY": {
+                                                                      "shadow": {
+                                                                        "type": "text",
+                                                                        "fields": {
+                                                                          "TEXT": "name"
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    "REC": {
+                                                                      "block": {
+                                                                        "type": "variables_get",
+                                                                        "fields": {
+                                                                          "VAR": {
+                                                                            "id": "g_one"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              "ADD3": {
+                                                                "shadow": {
+                                                                  "type": "rb_longtext",
+                                                                  "fields": {
+                                                                    "TEXT": " is down"
+                                                                  }
+                                                                }
+                                                              }
+                                                            },
+                                                            "extraState": {
+                                                              "itemCount": 4
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "next": {
+                                            "block": {
+                                              "type": "controls_forEach",
+                                              "fields": {
+                                                "VAR": {
+                                                  "id": "g_one"
+                                                }
+                                              },
+                                              "inputs": {
+                                                "LIST": {
+                                                  "block": {
+                                                    "type": "variables_get",
+                                                    "fields": {
+                                                      "VAR": {
+                                                        "id": "g_vms"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "DO": {
+                                                  "block": {
+                                                    "type": "controls_if",
+                                                    "inputs": {
+                                                      "IF0": {
+                                                        "block": {
+                                                          "type": "logic_compare",
+                                                          "fields": {
+                                                            "OP": "NEQ"
+                                                          },
+                                                          "inputs": {
+                                                            "A": {
+                                                              "block": {
+                                                                "type": "rb_rec_get",
+                                                                "inputs": {
+                                                                  "KEY": {
+                                                                    "shadow": {
+                                                                      "type": "text",
+                                                                      "fields": {
+                                                                        "TEXT": "state"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "REC": {
+                                                                    "block": {
+                                                                      "type": "variables_get",
+                                                                      "fields": {
+                                                                        "VAR": {
+                                                                          "id": "g_one"
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            },
+                                                            "B": {
+                                                              "shadow": {
+                                                                "type": "text",
+                                                                "fields": {
+                                                                  "TEXT": "RUNNING"
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      },
+                                                      "DO0": {
+                                                        "block": {
+                                                          "type": "variables_set",
+                                                          "fields": {
+                                                            "VAR": {
+                                                              "id": "g_report"
+                                                            }
+                                                          },
+                                                          "inputs": {
+                                                            "VALUE": {
+                                                              "block": {
+                                                                "type": "text_join",
+                                                                "inputs": {
+                                                                  "ADD0": {
+                                                                    "block": {
+                                                                      "type": "variables_get",
+                                                                      "fields": {
+                                                                        "VAR": {
+                                                                          "id": "g_report"
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "ADD1": {
+                                                                    "shadow": {
+                                                                      "type": "rb_longtext",
+                                                                      "fields": {
+                                                                        "TEXT": "\n"
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "ADD2": {
+                                                                    "block": {
+                                                                      "type": "rb_rec_get",
+                                                                      "inputs": {
+                                                                        "KEY": {
+                                                                          "shadow": {
+                                                                            "type": "text",
+                                                                            "fields": {
+                                                                              "TEXT": "name"
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        "REC": {
+                                                                          "block": {
+                                                                            "type": "variables_get",
+                                                                            "fields": {
+                                                                              "VAR": {
+                                                                                "id": "g_one"
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "ADD3": {
+                                                                    "shadow": {
+                                                                      "type": "rb_longtext",
+                                                                      "fields": {
+                                                                        "TEXT": " is down"
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "extraState": {
+                                                                  "itemCount": 4
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              "next": {
+                                                "block": {
+                                                  "type": "rb_tg_send",
+                                                  "inputs": {
+                                                    "TEXT": {
+                                                      "block": {
+                                                        "type": "variables_get",
+                                                        "fields": {
+                                                          "VAR": {
+                                                            "id": "g_report"
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "next": {
+                                                    "block": {
+                                                      "type": "rb_finish_with",
+                                                      "inputs": {
+                                                        "TEXT": {
+                                                          "block": {
+                                                            "type": "variables_get",
+                                                            "fields": {
+                                                              "VAR": {
+                                                                "id": "g_report"
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": 30,
+          "y": 190
+        }
+      ]
+    }
+  }
+}
