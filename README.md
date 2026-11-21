@@ -55,7 +55,7 @@ New to all this? [**The picture book**](docs/ladybird-book.md) is a gentle, Lady
 <tr>
 <td valign="top">
 
-**Over 150 examples and a community gallery.** Writing, research, baking, the house, money, code. Load one, press Run, then make it yours. [More](docs/using-the-page.md#examples-and-the-gallery)
+**Over 150 examples and a community gallery.** Writing, research, baking, the house, money, code. Load one, press Run, then make it yours. Every shared program also has [its own page on the web](https://itsfja.github.io/second-thought/gallery/). [More](docs/using-the-page.md#examples-and-the-gallery)
 
 <img src="screenshots/examples.png" alt="The example browser: cards for Review loop, Interview me then write, Polish an email and more, each with a Load this example button">
 

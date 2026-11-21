@@ -218,7 +218,7 @@ and `--doctor` (with your keys removed). For anything security-related, see [SEC
 | `second-thought.example.ini` | Every setting a program understands, with a note on each. |
 | `tools/sync.py` | Joins the runtime into one file, copies it and the other embedded parts into the page, and writes `lang/`, so they always match. |
 | `tools/smoke_test.py` | Checks the real model services with your own keys. |
-| `tools/pages.py` | Builds the copy of the page for GitHub Pages, which `.github/workflows/pages.yml` publishes with each release. |
+| `tools/pages.py` | Builds the copy of the page for GitHub Pages, which `.github/workflows/pages.yml` publishes with each release, with a page for each gallery program at `gallery/<name>/` (#438): what it does and can do, its blocks as an outline (`tools/gallery_data.cjs`), **Open in the editor** and **Download Python**. |
 | `tools/export.cjs` | Exports a block file to Python without the page, with the editor's own code and the real Blockly in Node (#441). The page tests check it matches the page's export for every example and gallery program, byte for byte. |
 | `tools/offline.py` | Builds `second-thought-offline.html`, the page as one file with its libraries and languages inside, which the Release workflow attaches to each release (#314). |
 | `tools/record_demo.py` | Records `screenshots/demo.gif`, `editor.png` and `social-preview.png` (the picture GitHub shows when the repo is shared) from the page. |

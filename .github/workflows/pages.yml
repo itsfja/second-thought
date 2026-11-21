@@ -1,7 +1,7 @@
 name: Pages
 
 # When a release is published, puts that release's page on GitHub Pages as a second front door (#245): the page and
-# its languages, built by tools/pages.py. Off claude.ai the page can build, try on sample data, explain and export
+# its languages, and a page for each gallery program (#438), built by tools/pages.py. Off claude.ai the page can build, try on sample data, explain and export
 # programs, but not run them with Claude, and it says so. Run workflow publishes main's page now.
 #
 # The repository owner sets two things once:
@@ -35,6 +35,12 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Blockly, for the gallery's pages (#438)
+        # tools/gallery_data.cjs runs the editor's own code to export each gallery program and outline its blocks.
+        run: npm install --no-save --no-package-lock blockly@13.4.0 @blockly/field-multilineinput@13.4.0
       - name: Build the site
         run: python tools/pages.py _site
       - uses: actions/configure-pages@v5
