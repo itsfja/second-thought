@@ -1,0 +1,7 @@
+    { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
+    { type:"rb_page_when", message0:"when the web page %1 changes", args0:[{ type:"field_input", name:"URL", text:"https://example.com/shop/rye-flour" }],
+      message1:"only the part containing %1 checked every %2 minutes", args1:[{ type:"field_input", name:"WORDS", text:"" }, { type:"field_number", name:"N", value:60, min:1, max:1440, precision:1 }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page." },

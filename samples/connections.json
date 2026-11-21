@@ -447,13 +447,6 @@
    "text": "27.4"
   }
  },
- "webhook": {
-  "incoming": {
-   "path": "bake-done",
-   "method": "POST",
-   "text": "{\"loaf\": \"rye\", \"oven\": \"off\", \"core_temperature\": 98}"
-  }
- },
  "folder": {
   "incoming": {
    "name": "grandmas-loaf.txt",
@@ -745,14 +738,6 @@
    "capability": "measure_power",
    "from": 412,
    "to": 3.1
-  }
- },
- "page": {
-  "incoming": {
-   "url": "https://example.com/shop/rye-flour",
-   "title": "Wholemeal rye flour, 1 kg (sample page)",
-   "before": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.40\nIn stock\nVisitors today: 17",
-   "after": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.65\nOnly 3 left\nVisitors today: 18"
   }
  },
  "coinbase": {
@@ -3289,6 +3274,23 @@
    "incoming": {
     "from": "Sam",
     "text": "Can I borrow the proving baskets tomorrow?"
+   }
+  }
+ },
+ "web": {
+  "webhook": {
+   "incoming": {
+    "path": "bake-done",
+    "method": "POST",
+    "text": "{\"loaf\": \"rye\", \"oven\": \"off\", \"core_temperature\": 98}"
+   }
+  },
+  "page": {
+   "incoming": {
+    "url": "https://example.com/shop/rye-flour",
+    "title": "Wholemeal rye flour, 1 kg (sample page)",
+    "before": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.40\nIn stock\nVisitors today: 17",
+    "after": "Wholemeal rye flour, 1 kg\nStoneground in Kent.\nPrice\n£2.65\nOnly 3 left\nVisitors today: 18"
    }
   }
  }

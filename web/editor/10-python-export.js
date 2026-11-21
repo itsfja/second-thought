@@ -63,7 +63,7 @@
             
             
             
-                          webhook:has(["rb_webhook_when"], []), folder:has(["rb_folder_when"], []),
+                          folder:has(["rb_folder_when"], []),
              mcp:[...new Set(blocks.filter(b => b.type === "rb_agent_mcp").map(b => String(b.getFieldValue("SERVER") || "").trim()).filter(Boolean))],
              kraken:blocks.some(b => b.type === "rb_agent_kraken"),
              flightradar24:blocks.some(b => b.type === "rb_agent_fr24"),
@@ -90,6 +90,7 @@
               telegram:has(["rb_tg_when", "rb_tg_send", "rb_tg_message"], ["telegram", "telegram_send", "telegram_send_free"]),
              unifi:blocks.some(b => b.type.startsWith("rb_unifi_")),
              unraid:blocks.some(b => b.type.startsWith("rb_unraid_")),
+             webhook:has(["rb_webhook_when"], []),
              // sync:connections-need-end
              pages:has([], ["web"]) };
   }
@@ -260,20 +261,21 @@
       "; the disks, the shares, the containers and the VMs; start, stop and a parity check ask first, and nothing",
       "; else is ever sent.",
       "UNRAID_URL = ", "UNRAID_API_KEY = ", "; UNRAID_CERT_SHA256 = ");
-    // sync:connections-ini-end
-    if (need.ha) out.push("", "[home assistant]",
-      "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
-      "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
     if (need.feeds || need.pages) out.push("", "[feeds and pages]",
       ...(need.feeds ? ["; Your news feeds (RSS or Atom addresses), separated by spaces. 'News from feed' with nothing in it, and the agent, read these.",
                         "feeds = "] : []),
       ...note("local_pages", "yes", "let the agent read pages and feeds on your own network too (normally only public ones)"));
+
     if (need.webhook) out.push("", "[web requests]",
       "; A long password that every web request must carry: http://127.0.0.1:8765/<address>?key=<this password>",
       "; or in an X-Second-Thought-Key header. Requests without it are refused.",
       "; Only this computer can call it, which is enough for Home Assistant on the same machine. For Home Assistant",
       "; on another machine, IFTTT or your phone, uncomment WEBHOOK_HOST = 0.0.0.0 and call http://<this computer>:8765/...",
       "WEBHOOK_SECRET = ", "; WEBHOOK_PORT = 8765", "; WEBHOOK_HOST = 0.0.0.0");
+    // sync:connections-ini-end
+    if (need.ha) out.push("", "[home assistant]",
+      "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
+      "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
     if (need.llama) out.push("", "[llama]",
       "; Where your Llama server is. This is Ollama on this computer; change it if Llama lives elsewhere.",
       "LLAMA_BASE_URL = http://localhost:11434/v1", "; LLAMA_API_KEY = ");

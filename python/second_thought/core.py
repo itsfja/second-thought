@@ -484,8 +484,6 @@ def docker_call(method, path):
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
 # to comment on pull requests it also needs pull request write access).
 GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
-# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
-PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -580,6 +578,10 @@ def unraid_call(method, query):
         if any(m == method and re.match(p, query) for m, p in SAFETY["unraid_" + kind]):
             return kind
     return None
+# The last text of each page a 'when the web page … changes' block watches, so a restart doesn't count every page as changed.
+PAGES_FILE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "watched-pages.json")
+
+# Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # sync:connections-fns-end
 
 
@@ -716,7 +718,6 @@ def ha_sensitive(service, entity="", data=None):
     return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
-# Web requests: WEBHOOK_SECRET is a password every request must carry (?key=... or an X-Second-Thought-Key header);
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
 # WEBHOOK_HOST = 0.0.0.0, which opens it to every network the computer is on (Home Assistant elsewhere, your phone).
 # Several addresses can be separated by spaces.
@@ -1074,7 +1075,6 @@ CAPABILITIES = [
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
     ("ha_act", "control your Home Assistant devices", True),
-    ("webhook", "accept web requests from other computers", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
@@ -1091,6 +1091,7 @@ CAPABILITIES = [
     ("sabnzbd_control", "pause and resume your SABnzbd downloads (asking you each time)", True),
     ("telegram_send", "send Telegram messages", True),
     ("unraid_control", "start and stop your Unraid's containers and VMs, and check its parity (asking you each time)", True),
+    ("webhook", "accept web requests from other computers", True),
     # sync:connections-capabilities-act-end
     ("kraken_read", "read your Kraken balances and orders, market prices, and trade on paper", False),
     ("flightradar_read", "read Flightradar24's flight data: live and historic positions, summaries, tracks, and airline and airport details", False),
@@ -1117,8 +1118,8 @@ CAPABILITIES = [
     ("telegram_read", "read your Telegram messages", False),
     ("unifi_read", "read your UniFi network: who's connected, and how your UniFi devices are", False),
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
-    # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
+    # sync:connections-capabilities-read-end
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),

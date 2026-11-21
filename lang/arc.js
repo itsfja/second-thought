@@ -287,7 +287,8 @@
 "GitHub":"GitHub",
 "Discord and Slack":"Discord and Slack",
 "Calendar":"Calendar",
-"News feeds":"News feeds"
+"News feeds":"News feeds",
+"Web":"Web"
 },
 "labels":{
 "Tools for the agent: drop them inside an agent block":"מאני שליחא: שדי יתהון בגו לבנת שליחא",

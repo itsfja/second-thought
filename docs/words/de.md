@@ -46,6 +46,7 @@ Made by tools/sync.py from i18n/de.json: edit that, not this.
 - Discord and Slack: Discord and Slack
 - Calendar: Calendar
 - News feeds: News feeds
+- Web: Web
 - Tools for the agent: drop them inside an agent block: Werkzeuge für den Agenten: in einen Agenten-Block ziehen
 - Listeners: they run while the exported program runs on schedule: Zuhörer: Sie laufen, während das exportierte Programm nach Zeitplan läuft
 - Read and send: Lesen und senden

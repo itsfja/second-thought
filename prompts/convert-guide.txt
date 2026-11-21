@@ -197,8 +197,6 @@ Connections:
   rb_event (KEY): what arrived: %1 — Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record.
   rb_folder_files (FOLDER, MATCH): files in folder %1 matching %2 — The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files.  [folder]
   rb_folder_when (FOLDER): when a file appears in folder %1 — Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks.  [folder]
-  rb_page_when (URL): when the web page %1 changes — Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.  [web]
-  rb_webhook_when (PATH): when a web request arrives at / %1 — Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address.  [webhook]
 
 Control:
   rb_budget (TOKENS, UNIT): limit this run to %1 %2 — Before each model call, checks how many tokens this run has used, or what it has spent at the models' list prices. Once it reaches this amount, the run stops. 0 means no limit. In dollars, a model with no known price can't be counted, so the run stops rather than going on with no limit. On this page the counts are estimates; exported Python uses the exact counts.
@@ -440,6 +438,10 @@ Wait & time:
   rb_timer: timer — Seconds since the run started or the timer was reset.
   rb_wait_msg (MSG): wait until I receive %1 — Pause this script until another script broadcasts the message.
   rb_wait_time (HOUR, MINUTE): wait until %1 : %2 — Pause until this time (24-hour clock). If it has passed today, waits until tomorrow.
+
+Web:
+  rb_page_when (URL): when the web page %1 changes — Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page.  [web]
+  rb_webhook_when (PATH): when a web request arrives at / %1 — Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address.  [webhook]
 
 You:
   rb_answer: answer

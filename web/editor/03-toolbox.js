@@ -86,7 +86,7 @@
     ]},
     { kind:"category", name:"Connections", categorystyle:"conn", contents:[
       { kind:"label", text:"Listeners: they run while the exported program runs on schedule" },
-      B("rb_webhook_when"), B("rb_folder_when"), B("rb_page_when"),
+      B("rb_folder_when"),
       B("rb_event"),
       { kind:"label", text:"Read and send" },
       B("rb_folder_files", { FOLDER:K("inbox"), MATCH:K("*.pdf") }),
@@ -199,6 +199,9 @@
     { kind:"category", name:"Unraid", categorystyle:"unraid", service:"unraid", contents:[
       B("rb_unraid_array"), B("rb_unraid_disks"), B("rb_unraid_shares"), B("rb_unraid_containers"), B("rb_unraid_vms"),
       B("rb_unraid_container_power", { NAME:T("plex") }), B("rb_unraid_vm_power", { NAME:T("windows") }), B("rb_unraid_parity")
+    ]},
+    { kind:"category", name:"Web", categorystyle:"web", service:"web", contents:[
+      B("rb_webhook_when"), B("rb_page_when"), B("rb_event")
     ]},
     // sync:connections-toolbox-end
     { kind:"category", name:"Output", categorystyle:"output", contents:[

@@ -430,7 +430,6 @@ class Doctor:
                 return tr("Unraid {version}", version=to_str((d.get("vars") or {}).get("version")) or "?") \
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
-        # sync:connections-check-end
         if has("webhook"):
             async def hook():
                 if not os.environ.get("WEBHOOK_SECRET", "").strip():
@@ -477,6 +476,7 @@ class Doctor:
                     text += " · " + tr("your FR24_API_KEY is set (each call costs credits, so it isn't checked here)")
                 return text
             out.append((f"MCP server “{name}”", server))
+        # sync:connections-check-end
         if has("memory"):
             async def memory():
                 folder = os.path.dirname(os.path.abspath(MEMORY_FILE))
@@ -708,7 +708,7 @@ class Doctor:
     def _doctor_configured(area):
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN",
-                "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
+                "News feeds": "RB_FEEDS", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
@@ -732,6 +732,7 @@ class Doctor:
                  "Telegram": "TELEGRAM_BOT_TOKEN",
                 "UniFi": "UNIFI_URL",
                 "Unraid": "UNRAID_URL",
+                "Web requests": "WEBHOOK_SECRET",
                 # sync:connections-settingsmap-end
 }.get(area)
         return bool(need and any(os.environ.get(n) for n in need.split()))

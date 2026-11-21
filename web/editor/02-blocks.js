@@ -145,7 +145,6 @@
     rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
     
     
- rb_webhook_when:"webhook", rb_web_search:"web", rb_page_when:"web",
  rb_folder_when:"folder", rb_folder_files:"folder", rb_file_choose:"files_read", rb_img_choose:"files_read", rb_file_save:"files_save",
     rb_img_save:"files_save", rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
     rb_mem_names:"memory", rb_mem_forget:"memory", rb_agent_mcp:"mcp",
@@ -186,6 +185,9 @@
     rb_unraid_array:"unraid_read",
     rb_unraid_disks:"unraid_read", rb_unraid_shares:"unraid_read", rb_unraid_containers:"unraid_read", rb_unraid_vms:"unraid_read",
     rb_unraid_container_power:"unraid_control", rb_unraid_vm_power:"unraid_control", rb_unraid_parity:"unraid_control",
+    rb_webhook_when:"webhook",
+    rb_web_search:"web",
+    rb_page_when:"web",
     // sync:connections-caps-end
   };
   const NO_CAPABILITY = ("rb_add_result rb_agent rb_agent_steps rb_agent_tool rb_answer rb_approve rb_ask rb_ask_first rb_ask_list rb_ask_me " +
@@ -467,16 +469,9 @@
     /* Connections */
     V("rb_folder_files", "files in folder %1 matching %2", [val("FOLDER"), val("MATCH")], "Array", { style:"conn", inputsInline:true,
       tooltip:"The files in a folder, newest first, as records: name, path, modified and size. Matching is a pattern like *.pdf; leave it empty for every file. It only looks: it doesn't read them. Exported Python looks in the folder (next to the program, unless you give a full path); this page uses sample files." }),
-    { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
     { type:"rb_folder_when", message0:"when a file appears in folder %1", args0:[{ type:"field_input", name:"FOLDER", text:"inbox" }],
       nextStatement:null, style:"conn_hat",
       tooltip:"Runs the blocks below when a new file lands in this folder (next to the program, unless you give a full path). 'What arrived' gives its name, path, size, and the words in it for a PDF, Word or text file. For a picture, 'picture' gives it to the picture blocks." },
-    { type:"rb_page_when", message0:"when the web page %1 changes", args0:[{ type:"field_input", name:"URL", text:"https://example.com/shop/rye-flour" }],
-      message1:"only the part containing %1 checked every %2 minutes", args1:[{ type:"field_input", name:"WORDS", text:"" }, { type:"field_number", name:"N", value:60, min:1, max:1440, precision:1 }],
-      nextStatement:null, style:"conn_hat",
-      tooltip:"Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page." },
     V("rb_event", "what arrived: %1", [{ type:"field_input", name:"KEY", text:"text" }], null, { style:"conn",
       tooltip:"Inside a 'when … arrives' script: one field of what arrived. Every listener gives 'text', which sums it up; the tooltip on each 'when' block lists its other fields. Leave it empty for the whole record." }),
     // sync:connections-defs-begin
@@ -670,6 +665,13 @@
       { style:"unraid", inputsInline:true, tooltip:"Starts or stops one virtual machine, by its name. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really starts or stops." }),
     S("rb_unraid_parity", "check Unraid's parity", [],
       { style:"unraid", tooltip:"Checks the parity disks by reading them, writing no corrections. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. On this page nothing really checks." }),
+    { type:"rb_webhook_when", message0:"when a web request arrives at / %1", args0:[{ type:"field_input", name:"PATH", text:"bake-done" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when something (Home Assistant, IFTTT, a shortcut on your phone) calls http://<this computer>:8765/bake-done?key=<WEBHOOK_SECRET>. Requests without the key are refused. 'What arrived' gives the text sent, and the fields of JSON or of the address." },
+    { type:"rb_page_when", message0:"when the web page %1 changes", args0:[{ type:"field_input", name:"URL", text:"https://example.com/shop/rye-flour" }],
+      message1:"only the part containing %1 checked every %2 minutes", args1:[{ type:"field_input", name:"WORDS", text:"" }, { type:"field_number", name:"N", value:60, min:1, max:1440, precision:1 }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below when the words on a web page change. Leave 'only the part containing' empty to watch the whole page, or type words (like Price) to watch just the lines with them and the two lines after each, so adverts and counters elsewhere on the page don't count. The first check only remembers the page. 'What arrived' gives url, title, before, after, changed (the lines that changed) and text. Pages that need a browser to show their words can't be watched. On this page, right-click it and choose 'Run this script' to try it with a sample page." },
     // sync:connections-defs-end
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
