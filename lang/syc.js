@@ -1284,7 +1284,8 @@
 "Fixing: {problems}":"ܢܘ {problems}",
 "Edit blocks":"ܣ ܢܘ ܟܝ",
 "Show the outline":"ܣ ܢܘ ܟܝ",
-"… and more":"ܣ ܢܘ ܟܝ"
+"… and more":"ܣ ܢܘ ܟܝ",
+"Ask a question or share an idea on GitHub":"ܫܐܠ ܫܐܠܬܐ ܐܘ ܫܘܬܦܗ ܡܚܫܒܬܐ ܥܠ GitHub"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},

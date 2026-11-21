@@ -1284,7 +1284,8 @@
 "Fixing: {problems}":"ᚱᛁᛇᛏᚢᛝ: {problems}",
 "Edit blocks":"ᚪᚱᚹᚱᛁᚷᛇᛏᚪ þ΁a ᛒᛚᚩᚳᚳᚪᚾ",
 "Show the outline":"ᛋᚳᛠᚹᛁᚪᚾ ᚦᚪ ᚻᛠᛚᛋᚢᛝᛖ",
-"… and more":"… ᚪᚾᛞ ᛗᚪ"
+"… and more":"… ᚪᚾᛞ ᛗᚪ",
+"Ask a question or share an idea on GitHub":"ᚪᛉᚪ ᚪᚾᛖ ᚠᚱᛁᚷᚾᚢᛝᛖ ᚩᚦᚦᛖ ᛞᚫᛚ ᚦᛁᚾᚾᛖ ᚷᛖᚦᚪᚾᚳ ᚩᚾ GitHub"
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},

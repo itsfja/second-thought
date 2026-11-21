@@ -1284,7 +1284,8 @@
 "Fixing: {problems}":"מתקן: {problems}",
 "Edit blocks":"עריכת בלוקים",
 "Show the outline":"הצג את המתוהה",
-"… and more":"… עוד"
+"… and more":"… עוד",
+"Ask a question or share an idea on GitHub":"שאלו שאלה או שתפו רעיון ב־GitHub"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

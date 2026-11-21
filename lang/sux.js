@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"𒉡 {problems}",
 "Edit blocks":"𒊓 𒉡 𒆠",
 "Show the outline":"𒊓 𒉡 𒆠",
-"… and more":"𒊓 𒉡 𒆠"
+"… and more":"𒊓 𒉡 𒆠",
+"Ask a question or share an idea on GitHub":"GitHub 𒆠𒀀 𒇷 𒋻 𒅇 𒅗 𒅗"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},

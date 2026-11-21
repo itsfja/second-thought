@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"正在修正：{problems}",
 "Edit blocks":"编辑积木",
 "Show the outline":"显示大纲",
-"… and more":"……更多"
+"… and more":"……更多",
+"Ask a question or share an idea on GitHub":"在 GitHub 上提问或分享想法"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

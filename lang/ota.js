@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"تصحيح: {problems}",
 "Edit blocks":"تحرير الكتل",
 "Show the outline":"أظهر المسودة",
-"… and more":"… والمزيد"
+"… and more":"… والمزيد",
+"Ask a question or share an idea on GitHub":"GitHub اوزرنده بر سؤال صور یاخود بر فكر بیلدیر"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},

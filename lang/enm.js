@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"amendynge: {problems}",
 "Edit blocks":"editen þ blokkes",
 "Show the outline":"schewe þ outlyne",
-"… and more":"… and more"
+"… and more":"… and more",
+"Ask a question or share an idea on GitHub":"Aske a questioun or shewe thy thought on GitHub"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

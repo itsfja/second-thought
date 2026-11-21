@@ -1283,7 +1283,8 @@
 "Fixing: {problems}":"Korrigiert: {problems}",
 "Edit blocks":"Blöcke bearbeiten",
 "Show the outline":"Gliederung zeigen",
-"… and more":"… und mehr"
+"… and more":"… und mehr",
+"Ask a question or share an idea on GitHub":"Stell eine Frage oder teile eine Idee auf GitHub"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

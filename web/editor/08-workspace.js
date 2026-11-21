@@ -84,6 +84,11 @@
         const note = document.createElement("p"); note.className = "hint";
         note.textContent = tr("Programs other people shared. Each was checked before it was added, and says what it can do, worked out from its blocks. To share one of yours, see gallery/README.md in the Second Thought folder.");
         sec.appendChild(note);
+        // Questions and ideas go to Discussions, so issues stay for work (#440).
+        const talk = document.createElement("p"); talk.className = "hint";
+        const a = document.createElement("a"); a.href = "https://github.com/itsfja/second-thought/discussions"; a.target = "_blank"; a.rel = "noopener";
+        a.textContent = tr("Ask a question or share an idea on GitHub");
+        talk.appendChild(a); sec.appendChild(talk);
       }
       const grid = document.createElement("div"); grid.className = "gal-grid";
       EXAMPLE_LIST.filter(e => e.cat === cat).forEach(e => {

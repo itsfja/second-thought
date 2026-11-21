@@ -1284,7 +1284,8 @@
 "Fixing: {problems}":"Fixing: {problems}",
 "Edit blocks":"Edit 𐠁𐠇𐠃𐠉𐠉𐠠",
 "Show the outline":"Show 𐠃𐠓𐠁 𐠃𐠄𐠃𐠇𐠂𐠊𐠁",
-"… and more":"… 𐠀𐠊𐠕 𐠘𐠃𐠦𐠁"
+"… and more":"… 𐠀𐠊𐠕 𐠘𐠃𐠦𐠁",
+"Ask a question or share an idea on GitHub":"ተሰአል አው አይድዕ ሕሊናከ በ GitHub"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},

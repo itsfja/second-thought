@@ -87,6 +87,8 @@ It also speaks 34 other languages besides English, from Spanish, Japanese and Cl
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How the code fits together, the repository layout, and the tests |
 | [CHANGELOG.md](CHANGELOG.md) · [ROADMAP.md](ROADMAP.md) | What changed in each release, and what's next |
 
+Questions, ideas, or a program to show off? Talk about them in [Discussions](https://github.com/itsfja/second-thought/discussions); issues are for bugs and planned work.
+
 ## Good to know
 
 - Things a program remembers on the page are only visible to you.
