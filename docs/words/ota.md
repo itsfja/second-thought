@@ -44,6 +44,7 @@ Made by tools/sync.py from i18n/ota.json: edit that, not this.
 - Email: Email
 - GitHub: GitHub
 - Discord and Slack: Discord and Slack
+- News feeds: News feeds
 - Listeners: they run while the exported program runs on schedule: دیڭله‌یجیلر: اخراج اولونان پروغرام موعدنده اجرا اولوندقجه اجرا اولونورلر
 - No blocks match: هیچ بر قطعه اویمیور
 - Read and send: اوقو و گوندر

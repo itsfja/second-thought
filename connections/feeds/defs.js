@@ -1,0 +1,5 @@
+    V("rb_feed_news", "news from feed %1", [val("URL")], "Array", { style:"conn", inputsInline:true,
+      tooltip:"The latest items from a news feed (RSS or Atom), newest first, as records: feed, title, link, date, summary. Leave it empty for your own feeds (feeds = … in second-thought.ini). On this page it uses sample feeds." }),
+    { type:"rb_feed_when", message0:"when there's something new in feed %1", args0:[{ type:"field_input", name:"URL", text:"" }],
+      nextStatement:null, style:"conn_hat",
+      tooltip:"Runs the blocks below for each new item in a news feed (checked every 15 minutes). Leave it empty for your own feeds. 'What arrived' gives feed, title, link, date, summary and text." },

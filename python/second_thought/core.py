@@ -925,6 +925,7 @@ CAPABILITIES = [
     ("coinbase_read", "read your Coinbase balances and orders, and market prices", False),
     ("docker_read", "read your Docker containers: their health, memory and logs", False),
     ("email_read", "read your email", False),
+    ("feeds", "read news feeds", False),
     ("github_read", "look at your GitHub projects", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
@@ -942,7 +943,6 @@ CAPABILITIES = [
     # sync:connections-capabilities-read-end
     ("web", "read public web pages and search the web", False),
     ("calendar", "read your calendars", False),
-    ("feeds", "read news feeds", False),
     ("ha_read", "look at your Home Assistant devices", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("files_read", "read files you choose", False),
