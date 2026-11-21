@@ -61,28 +61,11 @@ LOG_DIR = "logs"        # where run logs go when save_log = yes in second-though
 MEMORY_FILE = os.environ.get("RB_MEMORY_FILE") or os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "memory.json")
 
 
-# Home Assistant: the address of your Home Assistant and a long-lived access token
-# (your Home Assistant profile, Security tab, "Long-lived access tokens").
-HA_URL = os.environ.get("HA_URL", "http://homeassistant.local:8123").rstrip("/")
-HA_TOKEN = os.environ.get("HA_TOKEN", "")
-HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
-HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
 # ----- The safety rules: what always asks -----
 # One list, read by exported programs and (copied in by tools/sync.py) by the page, so both ask before the same things.
 # The patterns are regular expressions that mean the same in Python and JavaScript. tests/unit/test_safety.py checks
 # both sides give the same answers.
 SAFETY = {
-    # Home Assistant actions that unlock, open or disarm: they always ask, even with 'control devices (no asking)'. Locks,
-    # covers (garage doors, gates, blinds) and valves: everything but locking, closing and stopping, since toggling or
-    # setting a position can open them too.
-    "ha_sensitive": [r"^lock\.(?!lock$)", r"^cover\.(?!(close_cover|close_cover_tilt|stop_cover|stop_cover_tilt)$)",
-                     r"^valve\.(?!(close_valve|stop_valve)$)", r"^alarm_control_panel\.alarm_disarm$", r"^garage_door\.open"],
-    # homeassistant.turn_on, turn_off and toggle reach any device, so they ask when aimed at one of these.
-    "ha_generic": r"^homeassistant\.(turn_on|turn_off|toggle)$",
-    "ha_sensitive_entity": r"^(lock|cover|valve|alarm_control_panel)\.",
-    # Targets other than entities (in a service call's data, or its "target"): with the generic services above, we can't
-    # see which devices they reach, so they ask too (#303). So does entity_id "all", or no target at all.
-    "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
     # sync:connections-safety-begin
     # Radarr and Sonarr's Servarr API (#398): the reads the runtime makes, and the one command it may send after a yes.
     # The command's name is in the body, checked separately against ARR_SEARCH; nothing else is ever sent: no adding or
@@ -98,6 +81,20 @@ SAFETY = {
     # to do with images, volumes or networks. Restart, stop and start always ask, live, and never run with nobody there.
     "docker_free": [["GET", r"^/(version|containers/json|containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(json|stats|logs))$"]],
     "docker_asks": [["POST", r"^/containers/[A-Za-z0-9][A-Za-z0-9_.-]*/(restart|stop|start)$"]],
+    # Home Assistant actions that unlock, open or disarm: they always ask, even with 'control devices (no asking)'. Locks,
+    # covers (garage doors, gates, blinds) and valves: everything but locking, closing and stopping, since toggling or
+    # setting a position can open them too.
+    "ha_sensitive": [r"^lock\.(?!lock$)", r"^cover\.(?!(close_cover|close_cover_tilt|stop_cover|stop_cover_tilt)$)",
+                     r"^valve\.(?!(close_valve|stop_valve)$)", r"^alarm_control_panel\.alarm_disarm$", r"^garage_door\.open"],
+    # homeassistant.turn_on, turn_off and toggle reach any device, so they ask when aimed at one of these.
+    "ha_generic": r"^homeassistant\.(turn_on|turn_off|toggle)$",
+    "ha_sensitive_entity": r"^(lock|cover|valve|alarm_control_panel)\.",
+    # Targets other than entities (in a service call's data, or its "target"): with the generic services above, we can't
+    # see which devices they reach, so they ask too (#303). So does entity_id "all", or no target at all.
+    "ha_wide_targets": ["area_id", "device_id", "floor_id", "label_id"],
+    # Home Assistant services an agent can't run without asking, even with 'control devices (no asking)': they run
+    # scripts, scenes or automations, or press buttons, and so could do anything, unlocking included.
+    "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
     # Homey changes that unlock, open or disarm: [capability, value].
     "homey_sensitive": [["locked", False], ["garagedoor_closed", False], ["homealarm_state", "disarmed"]],
     # MikroTik's RouterOS REST API (#360): the only calls made, [method, path]. Reading, and the monitor command, which
@@ -167,9 +164,6 @@ SAFETY = {
     "agent_private": ["email", "email_send", "calendar", "telegram", "telegram_send", "telegram_send_free", "discord", "discord_send",
                       "discord_send_free", "slack", "slack_send", "slack_send_free", "github", "github_act", "ha_read", "ha_act",
                       "ha_act_free", "homey_read", "homey_act", "homey_act_free", "mqtt", "mqtt_act", "mqtt_act_free", "memory", "file", "mcp"],
-    # Home Assistant services an agent can't run without asking, even with 'control devices (no asking)': they run
-    # scripts, scenes or automations, or press buttons, and so could do anything, unlocking included.
-    "agent_ha_indirect": [r"^script\.", r"^scene\.", r"^automation\.trigger$", r"^(input_)?button\.press$"],
     # An address in what the agent was given or read (#304): whole addresses are compared, never a piece of one. Ends in
     # . , ; : ! ? and a ) that closes nothing are punctuation, not part of the address.
     "agent_seen_address": r"https?://[^\s\"'<>\[\]{}]+",
@@ -262,10 +256,6 @@ SAFETY = {
     "mcp_vaillant_safe": ["vaillant_get_devices", "vaillant_get_diagnostics", "vaillant_get_energy_report",
                           "vaillant_get_status"],
 }
-HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
-HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
-
-
 # sync:connections-fns-begin
 ARR_SEARCH = {"radarr": "MissingMovieSearch", "sonarr": "MissingEpisodeSearch"}
 def arr_call(method, path):
@@ -484,6 +474,40 @@ def docker_call(method, path):
 # GitHub: a token from https://github.com/settings/tokens (read access to your repositories is enough to look;
 # to comment on pull requests it also needs pull request write access).
 GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
+# Home Assistant: the address of your Home Assistant and a long-lived access token
+# (your Home Assistant profile, Security tab, "Long-lived access tokens").
+HA_URL = os.environ.get("HA_URL", "http://homeassistant.local:8123").rstrip("/")
+HA_TOKEN = os.environ.get("HA_TOKEN", "")
+HA_TTS_ENTITY = os.environ.get("HA_TTS_ENTITY", "tts.home_assistant_cloud")  # used by the 'say … on' block
+HA_WATCH_SECONDS = 15  # how often 'when … changes' scripts check Home Assistant
+
+HA_SENSITIVE = tuple(SAFETY["ha_sensitive"])
+HA_SENSITIVE_ENTITY = SAFETY["ha_sensitive_entity"]
+
+
+def ha_sensitive(service, entity="", data=None):
+    """True for an action that could unlock, open or disarm: a sensitive service, or homeassistant.turn_on, turn_off or
+    toggle that could reach a lock, cover, valve or alarm (they reach the same devices). That's judged on the call as
+    sent: the entity and any entity_id in the data (JSON text or a dict); an area, device, floor or label target,
+    entity_id "all" or no target at all count too, since we can't see what they reach (#303)."""
+    service = to_str(service).strip()
+    if any(re.match(p, service) for p in HA_SENSITIVE):
+        return True
+    if not re.match(SAFETY["ha_generic"], service):
+        return False
+    if not isinstance(data, dict):
+        try:
+            data = json.loads(to_str(data)) if to_str(data).strip() else {}
+        except ValueError:
+            data = {}
+        data = data if isinstance(data, dict) else {}
+    parts = [data] + ([data["target"]] if isinstance(data.get("target"), dict) else [])
+    if any(p.get(k) not in (None, "", []) for p in parts for k in SAFETY["ha_wide_targets"]):
+        return True
+    ids = [to_str(entity)] + [i for p in parts for i in (p.get("entity_id") if isinstance(p.get("entity_id"), list) else [p.get("entity_id")])
+                              if i is not None]
+    ids = [e for i in ids for e in re.split(r"[\s,]+", to_str(i).strip()) if e]
+    return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 def mikrotik_allowed(method, path):
     """True for one of the few RouterOS REST calls the runtime makes (#360): reading, never changing."""
     method, path = to_str(method).strip().upper(), to_str(path).strip()
@@ -692,30 +716,6 @@ def seen_addresses(text):
         out.add(m.rstrip("/"))
     return out
 
-
-def ha_sensitive(service, entity="", data=None):
-    """True for an action that could unlock, open or disarm: a sensitive service, or homeassistant.turn_on, turn_off or
-    toggle that could reach a lock, cover, valve or alarm (they reach the same devices). That's judged on the call as
-    sent: the entity and any entity_id in the data (JSON text or a dict); an area, device, floor or label target,
-    entity_id "all" or no target at all count too, since we can't see what they reach (#303)."""
-    service = to_str(service).strip()
-    if any(re.match(p, service) for p in HA_SENSITIVE):
-        return True
-    if not re.match(SAFETY["ha_generic"], service):
-        return False
-    if not isinstance(data, dict):
-        try:
-            data = json.loads(to_str(data)) if to_str(data).strip() else {}
-        except ValueError:
-            data = {}
-        data = data if isinstance(data, dict) else {}
-    parts = [data] + ([data["target"]] if isinstance(data.get("target"), dict) else [])
-    if any(p.get(k) not in (None, "", []) for p in parts for k in SAFETY["ha_wide_targets"]):
-        return True
-    ids = [to_str(entity)] + [i for p in parts for i in (p.get("entity_id") if isinstance(p.get("entity_id"), list) else [p.get("entity_id")])
-                              if i is not None]
-    ids = [e for i in ids for e in re.split(r"[\s,]+", to_str(i).strip()) if e]
-    return not ids or any(e.lower() == "all" or re.match(HA_SENSITIVE_ENTITY, e) for e in ids)
 
 # Connections. Each one is only needed if your program uses it; put the keys in second-thought.ini.
 # WEBHOOK_PORT is the port to listen on (8765 if you don't say). Only this computer can reach it unless
@@ -1074,13 +1074,13 @@ CAPABILITIES = [
     ("arr_control", "search your Radarr and Sonarr for what's missing (asking you each time)", True),
     ("discord_send", "send Discord messages", True),
     ("slack_send", "send Slack messages", True),
-    ("ha_act", "control your Home Assistant devices", True),
     ("mcp", "use the tools of the MCP servers you set up (they can do whatever those servers can)", True),
     ("kraken_trade", "trade on your Kraken account with real money (asking you before every order)", True),
     ("coinbase_trade", "trade on your Coinbase account with real money (asking you before every order)", True),
     ("docker_control", "restart, stop and start your Docker containers (asking you each time)", True),
     ("email_send", "send email", True),
     ("github_comment", "comment on GitHub, and open and label issues", True),
+    ("ha_act", "control your Home Assistant devices", True),
     ("homey_act", "control your Homey devices and start Homey flows", True),
     ("mqtt_publish", "publish MQTT messages", True),
     ("nzbgeek_fetch", "fetch an NZB file from NZBGeek and save it (asking you each time)", True),
@@ -1106,6 +1106,7 @@ CAPABILITIES = [
     ("feeds", "read news feeds", False),
     ("folder", "look at the files in a folder, and watch it for new ones", False),
     ("github_read", "look at your GitHub projects", False),
+    ("ha_read", "look at your Home Assistant devices", False),
     ("homey_read", "look at your Homey devices, flows and variables", False),
     ("mikrotik_read", "read your MikroTik router or switch: its ports, modules, health and log", False),
     ("mqtt_read", "read MQTT messages", False),
@@ -1121,7 +1122,6 @@ CAPABILITIES = [
     ("unraid_read", "read your Unraid server: the array, its disks, its shares, its containers and its VMs", False),
     ("web", "read public web pages and search the web", False),
     # sync:connections-capabilities-read-end
-    ("ha_read", "look at your Home Assistant devices", False),
     ("files_read", "read files you choose", False),
     ("files_save", "save files in its outputs folder", False),
     ("memory", "keep notes between runs, in memory.json", False),

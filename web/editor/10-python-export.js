@@ -58,7 +58,7 @@
     const blocks = allProgramBlocks();
     const kinds = new Set(blocks.filter(b => b.type === "rb_agent_builtin").map(b => b.getFieldValue("KIND")));
     const has = (types, ks) => blocks.some(b => types.includes(b.type)) || ks.some(k => kinds.has(k));
-    return { keys, llama:programUses(serviceNamed("Llama")), ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
+    return { keys, llama:programUses(serviceNamed("Llama")),
             
             
             
@@ -77,6 +77,7 @@
              feeds:has(["rb_feed_news", "rb_feed_when"], ["feeds"]),
              folder:has(["rb_folder_when"], []),
               github:has(["rb_gh_when", "rb_gh_issue_when", "rb_gh_release_when"], ["github", "github_act"]),
+             ha:has([], ["ha_read", "ha_act", "ha_act_free"]) || blocks.some(b => b.type.startsWith("rb_ha_")),
              homey:blocks.some(b => b.type.startsWith("rb_homey_")) || ["homey_read", "homey_act", "homey_act_free"].some(k => kinds.has(k)),
              mikrotik:blocks.some(b => b.type.startsWith("rb_mikrotik_")),
               mqtt:has(["rb_mqtt_when", "rb_mqtt_read", "rb_mqtt_publish"], ["mqtt", "mqtt_act", "mqtt_act_free"]),
@@ -186,6 +187,9 @@
       "; A token from https://github.com/settings/tokens. Fine-grained: read access to contents, issues and pull requests;",
       "; to let the agent comment, pull requests and issues need read and write.",
       "GITHUB_TOKEN = ");
+    if (need.ha) out.push("", "[home assistant]",
+      "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
+      "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
     if (need.homey) out.push("", "[homey]",
       "; Your Homey's address, and an API key: in the Homey Web App (my.homey.app), Settings, API Keys, New API Key.",
       "; Homey Pro: http://homey-XXXXXXX.local or its IP address. Homey Self-Hosted Server: the computer's IP address and :4859,",
@@ -273,9 +277,6 @@
       "; on another machine, IFTTT or your phone, uncomment WEBHOOK_HOST = 0.0.0.0 and call http://<this computer>:8765/...",
       "WEBHOOK_SECRET = ", "; WEBHOOK_PORT = 8765", "; WEBHOOK_HOST = 0.0.0.0");
     // sync:connections-ini-end
-    if (need.ha) out.push("", "[home assistant]",
-      "; A long-lived access token: in Home Assistant, open your profile, then the Security tab.",
-      "HA_URL = http://homeassistant.local:8123", "HA_TOKEN = ");
     if (need.llama) out.push("", "[llama]",
       "; Where your Llama server is. This is Ollama on this computer; change it if Llama lives elsewhere.",
       "LLAMA_BASE_URL = http://localhost:11434/v1", "; LLAMA_API_KEY = ");
@@ -526,13 +527,6 @@
         case "rb_timer": return "R.timer()";
         case "rb_now": return "R.now(" + pyStr(F("PART")) + ")";
         case "rb_mem_get": return "R.recall(" + I("NAME", '""') + ")";
-        case "rb_ha_state": return "(await R.ha_state(" + I("ENTITY", '""') + "))";
-        case "rb_ha_attr": return "(await R.ha_attr(" + I("ATTR", '""') + ", " + I("ENTITY", '""') + "))";
-        case "rb_ha_find": return "(await R.ha_find(" + I("TEXT", '"*"') + "))";
-        case "rb_ha_summary": return "(await R.ha_summary(" + I("TEXT", '"*"') + "))";
-        case "rb_ha_history": return "(await R.ha_history(" + I("ENTITY", '""') + ", " + I("HOURS", "24") + "))";
-        case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
-        case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_event": return "R.event(" + pyStr(String(F("KEY") || "").trim()) + ")";
         // sync:connections-pyread-begin
         case "rb_arr_queue": return "(await R.arr_queue(" + pyStr(b.getFieldValue("WHICH")) + "))";
@@ -552,6 +546,13 @@
         case "rb_folder_files": return "(await R.folder_files(" + I("FOLDER", '""') + ", " + I("MATCH", '""') + "))";
         case "rb_img_choose": return "(await R.choose_picture())";
         case "rb_file_choose": return "(await R.choose_file())";
+        case "rb_ha_state": return "(await R.ha_state(" + I("ENTITY", '""') + "))";
+        case "rb_ha_attr": return "(await R.ha_attr(" + I("ATTR", '""') + ", " + I("ENTITY", '""') + "))";
+        case "rb_ha_find": return "(await R.ha_find(" + I("TEXT", '"*"') + "))";
+        case "rb_ha_summary": return "(await R.ha_summary(" + I("TEXT", '"*"') + "))";
+        case "rb_ha_history": return "(await R.ha_history(" + I("ENTITY", '""') + ", " + I("HOURS", "24") + "))";
+        case "rb_ha_snapshot": return "(await R.ha_snapshot(" + I("CAMERA", '""') + "))";
+        case "rb_ha_trigger": return "R.ha_trigger()";
         case "rb_homey_value": return "(await R.homey_value(" + I("CAPABILITY", '""') + ", " + I("DEVICE", '""') + "))";
         case "rb_homey_find": return "(await R.homey_find(" + I("TEXT", '"*"') + "))";
         case "rb_homey_variable": return "(await R.homey_variable(" + I("NAME", '""') + "))";
@@ -714,9 +715,6 @@
           case "rb_rec_set": E("rec_set(" + I("REC", "None") + ", " + I("KEY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_broadcast_with": E("R.broadcast(" + I("MSG", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_broadcast_with_wait": E("await R.broadcast_and_wait(" + I("MSG", '""') + ", " + I("VALUE", '""') + ")"); break;
-          case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
-          case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
-          case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           // sync:connections-pyact-begin
           case "rb_arr_search": E("await R.arr_search(" + pyStr(b.getFieldValue("WHICH")) + ")"); break;
           case "rb_discord_send": case "rb_slack_send": E("await R.chat_send(" + pyStr(b.type === "rb_discord_send" ? "discord" : "slack") + ", " + I("TEXT", '""') + ")"); break;
@@ -726,6 +724,9 @@
           case "rb_email_send": E("await R.email_send(" + I("TO", '""') + ", " + I("SUBJECT", '""') + ", " + I("TEXT", '""') + ")"); break;
           case "rb_file_save": E("await R.save_file(" + I("VALUE", '""') + ", " + I("NAME", '"output"') + ", " + pyStr(F("EXT") || "md") + ")"); break;
           case "rb_img_save": E("await R.save_picture(" + I("IMG", "None") + ", " + pyStr(F("FORMAT") || "png") + ")"); break;
+          case "rb_ha_call": E("await R.ha_call(" + I("SERVICE", '""') + ", " + I("ENTITY", '""') + ", " + I("DATA", '""') + ")"); break;
+          case "rb_ha_notify": E("await R.ha_notify(" + I("TARGET", '"persistent_notification"') + ", " + I("TEXT", '""') + ")"); break;
+          case "rb_ha_speak": E("await R.ha_speak(" + I("TEXT", '""') + ", " + I("PLAYER", '""') + ")"); break;
           case "rb_homey_set": E("await R.homey_set(" + I("DEVICE", '""') + ", " + I("CAPABILITY", '""') + ", " + I("VALUE", '""') + ")"); break;
           case "rb_homey_flow": E("await R.homey_run_flow(" + I("NAME", '""') + ")"); break;
           case "rb_homey_set_variable": E("await R.homey_set_variable(" + I("NAME", '""') + ", " + I("VALUE", '""') + ")"); break;

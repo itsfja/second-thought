@@ -83,14 +83,22 @@ function load(options = {}){
   // One script, as in the page. A line in an error is given as the file it's in.
   const dir = path.join(ROOT, "web", "editor"), files = [];
   let code = "", line = 1;
-  for (const name of fs.readdirSync(dir).filter(f => f.endsWith(".js")).sort()) {
-    let text = read(path.join(dir, name));
+  // a connection may hold a whole editor file (connections/<name>/<NN-name>.js); it joins at its name's place, as in sync.py
+  const connDir = path.join(ROOT, "connections");
+  // [sort name, path relative to dir, label in error lines]
+  const entries = fs.readdirSync(dir).filter(f => f.endsWith(".js")).map(f => [f, f, "web/editor/" + f]);
+  if (fs.existsSync(connDir)) for (const folder of fs.readdirSync(connDir)) {
+    const fdir = path.join(connDir, folder);
+    if (fs.statSync(fdir).isDirectory()) for (const f of fs.readdirSync(fdir)) if (/^[0-9][0-9]-.*\.js$/.test(f)) entries.push([f, path.join("..", "..", "connections", folder, f), "connections/" + folder + "/" + f]);
+  }
+  for (const [name, rel, label] of entries.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))) {
+    let text = read(path.join(dir, rel));
     if (!text.endsWith("\n")) text += "\n";
-    files.push([line, name]);
+    files.push([line, label]);
     code += text;
     line += text.split("\n").length - 1;
   }
-  const where = n => { const f = files.filter(([start]) => start <= n).pop(); return "web/editor/" + f[1] + ":" + (n - f[0] + 1); };
+  const where = n => { const f = files.filter(([start]) => start <= n).pop(); return f[1] + ":" + (n - f[0] + 1); };
   try {
     vm.runInContext(code, g, { filename:"EDITOR" });
   } catch (e) {

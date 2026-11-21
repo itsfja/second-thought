@@ -141,8 +141,8 @@
   const CAPABILITIES = JSON.parse(document.getElementById("capabilities").textContent);  // [id, what it does, acts]
   const keeps = b => (b.getFieldValue("KIND") || "transient") === "permanent" ? "memory" : null;
   const CAP_BLOCKS = {
-    rb_ha_call:"ha_act", rb_ha_notify:"ha_act", rb_ha_speak:"ha_act", rb_ha_attr:"ha_read", rb_ha_event_when:"ha_read", rb_ha_find:"ha_read",
-    rb_ha_history:"ha_read", rb_ha_snapshot:"ha_read", rb_ha_state:"ha_read", rb_ha_summary:"ha_read", rb_ha_trigger:"ha_read", rb_ha_when:"ha_read",
+   
+   
     
     
     rb_mem_set:keeps, rb_mem_add:keeps, rb_mem_set_for:"memory", rb_mem_get:"memory", rb_mem_has:"memory",
@@ -169,6 +169,18 @@
     rb_file_save:"files_save",
     rb_img_save:"files_save",
      rb_gh_when:"github_read", rb_gh_issue_when:"github_read", rb_gh_release_when:"github_read",
+    rb_ha_call:"ha_act",
+    rb_ha_notify:"ha_act",
+    rb_ha_speak:"ha_act",
+    rb_ha_attr:"ha_read",
+    rb_ha_event_when:"ha_read",
+    rb_ha_find:"ha_read",
+    rb_ha_history:"ha_read",
+    rb_ha_snapshot:"ha_read",
+    rb_ha_state:"ha_read",
+    rb_ha_summary:"ha_read",
+    rb_ha_trigger:"ha_read",
+    rb_ha_when:"ha_read",
     rb_homey_flow:"homey_act", rb_homey_set:"homey_act", rb_homey_set_variable:"homey_act", rb_homey_find:"homey_read", rb_homey_value:"homey_read",
     rb_homey_variable:"homey_read", rb_homey_when:"homey_read",
     rb_mikrotik_ports:"mikrotik_read", rb_mikrotik_sfp:"mikrotik_read",

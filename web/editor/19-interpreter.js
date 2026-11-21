@@ -304,8 +304,6 @@
       /* You */
       case "rb_answer": return run.answer;
       case "rb_msg_value": return tc.payload;
-      case "rb_ha_state": case "rb_ha_attr": case "rb_ha_find": case "rb_ha_summary":
-      case "rb_ha_history": case "rb_ha_snapshot": case "rb_ha_trigger": return haValue(b, tc);
       case "rb_event": {
         const key = str(b.getFieldValue("KEY")).trim(), v = tc.payload;
         if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";
@@ -349,6 +347,8 @@
       case "rb_img_choose": {
         return choosePicture();
       }
+      case "rb_ha_state": case "rb_ha_attr": case "rb_ha_find": case "rb_ha_summary":
+      case "rb_ha_history": case "rb_ha_snapshot": case "rb_ha_trigger": return haValue(b, tc);
       case "rb_homey_value": return homeyValue(await input(b, tc, "CAPABILITY"), await input(b, tc, "DEVICE"));
       case "rb_homey_find": {
         const t = str(await input(b, tc, "TEXT", "*")) || "*", recs = homeyFind(t);
@@ -1095,13 +1095,6 @@
         if (isImg(v)) showPictureIn(st, v);
         st.done("say", "ok"); break;
       }
-      case "rb_ha_call": await haCall(await input(b, tc, "SERVICE"), await input(b, tc, "ENTITY"), await input(b, tc, "DATA"), tc); break;
-      case "rb_ha_notify": {
-        const target = str(await input(b, tc, "TARGET")).trim() || "persistent_notification", text = str(await input(b, tc, "TEXT"));
-        if (!text.trim()) fail(tr("The 'notify' block has no message."));
-        if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
-        haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
-      }
       // sync:connections-iact-begin
       case "rb_arr_search": await arrSearch(b.getFieldValue("WHICH")); break;
       case "rb_discord_send": case "rb_slack_send": await chatSend(b.type === "rb_discord_send" ? "discord" : "slack", await input(b, tc, "TEXT"), false); break;
@@ -1122,6 +1115,19 @@
         const msg = await savePicture(pic, b.getFieldValue("FORMAT") || "png");
         st.text(msg); st.done(/^Saved/.test(msg) ? tr("saved") : tr("skipped"), /^Saved/.test(msg) ? "ok" : "warn"); break;
       }
+      case "rb_ha_call": await haCall(await input(b, tc, "SERVICE"), await input(b, tc, "ENTITY"), await input(b, tc, "DATA"), tc); break;
+      case "rb_ha_notify": {
+        const target = str(await input(b, tc, "TARGET")).trim() || "persistent_notification", text = str(await input(b, tc, "TEXT"));
+        if (!text.trim()) fail(tr("The 'notify' block has no message."));
+        if (!(await allowed(["ha", "messages"], "send a notification to " + target + ": " + short(text, 120)))) break;
+        haNote(); addStep(tr("Notification → {target}", { target }), { text }).done("sample house", "ok"); break;
+      }
+      case "rb_ha_speak": {
+        const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
+        if (!text.trim()) fail(tr("The 'say' block has nothing to say."));
+        if (!(await allowed(["ha", "messages"], "say on " + (player || "a speaker") + ": " + short(text, 120)))) break;
+        haNote(); addStep(tr("Spoken on {player}", { player:player || tr("a speaker") }), { text }).done("sample house", "ok"); break;
+      }
       case "rb_homey_set": await homeySet(await input(b, tc, "DEVICE"), await input(b, tc, "CAPABILITY"), await input(b, tc, "VALUE"), false); break;
       case "rb_homey_flow": await homeyRunFlow(await input(b, tc, "NAME"), false); break;
       case "rb_homey_set_variable": await homeySetVariable(await input(b, tc, "NAME"), await input(b, tc, "VALUE"), false); break;
@@ -1141,12 +1147,6 @@
       case "rb_unraid_vm_power": await unraidPower("vm", b.getFieldValue("ACTION"), await input(b, tc, "NAME")); break;
       case "rb_unraid_parity": await unraidParity(); break;
       // sync:connections-iact-end
-      case "rb_ha_speak": {
-        const text = str(await input(b, tc, "TEXT")), player = str(await input(b, tc, "PLAYER")).trim();
-        if (!text.trim()) fail(tr("The 'say' block has nothing to say."));
-        if (!(await allowed(["ha", "messages"], "say on " + (player || "a speaker") + ": " + short(text, 120)))) break;
-        haNote(); addStep(tr("Spoken on {player}", { player:player || tr("a speaker") }), { text }).done("sample house", "ok"); break;
-      }
       case "rb_set_instructions": {
         run.instructions = str(await input(b, tc, "TEXT")).trim();
         addStep("Instructions for Claude", { text:run.instructions || tr("(cleared)") }).done("set", "ok"); break;
