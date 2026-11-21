@@ -305,6 +305,18 @@ class Doctor:
                 q = (s.get("queries") or {})
                 return tr("{n} queries, {blocked} blocked", n=num(q.get("total")), blocked=num(q.get("blocked")))
             out.append(("Pi-hole", pihole))
+        if has("plex_read", "plex_control"):
+            async def plex():
+                home = await self._plex("GET", "/")
+                libs = await self._plex("GET", "/library/sections")
+                return tr("Plex {version}", version=to_str(home.get("version")) or "?") \
+                    + ", " + tr("{n} libraries", n=len([d for d in (libs.get("Directory") or []) if isinstance(d, dict)]))
+            out.append(("Plex", plex))
+            async def tautulli():
+                r = await self._tautulli("get_history", {"length": "1"})
+                data = (r.get("data") or {}) if isinstance(r.get("data"), dict) else {}
+                return tr("Tautulli") + ", " + tr("{n} plays", n=num(data.get("recordsFiltered")))
+            out.append(("Tautulli", tautulli))
         if has("powerwall_read", "powerwall_control"):
             async def powerwall():
                 base = os.environ.get("POWERWALL_URL", "").strip()
@@ -362,18 +374,6 @@ class Doctor:
                     + ", " + tr("array {state}", state=to_str((d.get("array") or {}).get("state")) or "?")
             out.append(("Unraid", unraid))
         # sync:connections-check-end
-        if has("plex_read", "plex_control"):
-            async def plex():
-                home = await self._plex("GET", "/")
-                libs = await self._plex("GET", "/library/sections")
-                return tr("Plex {version}", version=to_str(home.get("version")) or "?") \
-                    + ", " + tr("{n} libraries", n=len([d for d in (libs.get("Directory") or []) if isinstance(d, dict)]))
-            out.append(("Plex", plex))
-            async def tautulli():
-                r = await self._tautulli("get_history", {"length": "1"})
-                data = (r.get("data") or {}) if isinstance(r.get("data"), dict) else {}
-                return tr("Tautulli") + ", " + tr("{n} plays", n=num(data.get("recordsFiltered")))
-            out.append(("Tautulli", tautulli))
         if has("mqtt_read", "mqtt_publish"):
             async def mqtt():
                 await self.mqtt_read("second-thought/doctor", 1.0)
@@ -709,7 +709,7 @@ class Doctor:
         """For a program exported before CAN: is this connection set up at all?"""
         need = {"Home Assistant": "HA_TOKEN", "Homey": "HOMEY_API_KEY", "MQTT": "MQTT_HOST", "Telegram": "TELEGRAM_BOT_TOKEN",
                 "Discord": "DISCORD_BOT_TOKEN", "Slack": "SLACK_BOT_TOKEN", "Email (reading)": "EMAIL_ADDRESS", "GitHub": "GITHUB_TOKEN",
-                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", "Plex": "PLEX_URL PLEX_TOKEN", "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
+                "Calendar": "CALENDAR_URL", "News feeds": "RB_FEEDS", "Web requests": "WEBHOOK_SECRET", 
                 # sync:connections-settingsmap-begin
                 "Radarr": "RADARR_URL",
                 "Sonarr": "SONARR_URL",
@@ -718,6 +718,8 @@ class Doctor:
                 "MikroTik": "MIKROTIK_URL",
                 "NZBGeek": "NZBGEEK_API_KEY",
                 "Pi-hole": "PIHOLE_URL PIHOLE_PASSWORD",
+                "Plex": "PLEX_URL PLEX_TOKEN",
+                "Tautulli": "TAUTULLI_URL TAUTULLI_API_KEY",
                 "Powerwall": "POWERWALL_URL",
                 "Proxmox": "PROXMOX_URL",
                 "SABnzbd": "SABNZBD_URL",
