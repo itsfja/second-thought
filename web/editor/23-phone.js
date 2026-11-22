@@ -59,4 +59,31 @@
   }
   ws.addChangeListener(ev => { if (!ev.isUiEvent) renderOutline(); });
   applyOutlineMode();
+  // The whole program as an outline, for the gallery's web pages (tools/pages.py, #438): [depth, words] for each block in
+  // each script, a C-block's inside one deeper. Uncapped, unlike the phone's.
+  window.__programOutline = () => {
+    const rows = [];
+    // A field's words: a dropdown's chosen label, a tick box as ☑ or ☐, anything else as it shows.
+    const fieldText = f => {
+      if (f instanceof Blockly.FieldDropdown) { const o = (f.getOptions(false) || []).find(x => x[1] === f.getValue()); return o && typeof o[0] === "string" ? o[0] : ""; }
+      if (f instanceof Blockly.FieldCheckbox) return f.getValueBoolean() ? "\u2611" : "\u2610";
+      return f.getText ? String(f.getText() == null ? "" : f.getText()) : "";
+    };
+    const inputText = i => i.fieldRow.map(fieldText).filter(Boolean).join(" ")
+      + (i.connection && i.type === Blockly.inputs.inputTypes.VALUE && i.connection.targetBlock() ? " " + own(i.connection.targetBlock()) : "");
+    const own = b => b.inputList.filter(i => i.type !== Blockly.inputs.inputTypes.STATEMENT).map(inputText)
+      .filter(t => t.trim()).join(" ").replace(/\s+/g, " ").trim();
+    const walk = (b, depth) => {
+      for (; b; b = b.getNextBlock()) {
+        if (!b.isEnabled()) continue;
+        rows.push([depth, own(b)]);
+        b.inputList.filter(i => i.type === Blockly.inputs.inputTypes.STATEMENT).forEach(i => {
+          const inner = i.connection && i.connection.targetBlock();
+          if (inner) { const label = i.fieldRow.map(fieldText).filter(Boolean).join(" "); if (label) rows.push([depth, label]); walk(inner, depth + 1); }
+        });
+      }
+    };
+    ws.getTopBlocks(true).forEach((top, n) => { if (n) rows.push([0, ""]); walk(top, 0); });
+    return rows;
+  };
   window.__outline = () => ({ mode: document.body.classList.contains("outline"), text: $("block-outline").innerText });

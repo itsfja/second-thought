@@ -3,6 +3,8 @@
 Programs people have shared. Each file here appears on the page in a **Community** group, by its category (Community: news, Community: home and baking and so on), in both the Example menu and **Browse examples**, with who shared it,
 what it does, and what it can do, which the page works out from its blocks.
 
+Each one also gets a web page of its own on the GitHub Pages site, [itsfja.github.io/second-thought/gallery/](https://itsfja.github.io/second-thought/gallery/), made with each release (#438): what it does and can do, its blocks, **Open in the editor** and **Download Python**. Link to that page when you point someone at a program.
+
 ## Sharing a program
 
 The easy way is from the page, no git needed:

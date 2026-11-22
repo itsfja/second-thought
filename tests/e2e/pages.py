@@ -3,6 +3,7 @@ browser would on github.io. It loads, says what it can and can't do there, saves
 loads another language, and stops a run saying why. With your own API key (#293) it runs programs and builds them,
 calling a stand-in for Claude's API, and the key stays out of everything it saves; its Content-Security-Policy lets
 nothing else run or connect."""
+import html
 import sys
 
 from e2e.common import *  # noqa: F401,F403
@@ -86,6 +87,8 @@ async def pages_tests():
                 return await r.fulfill(status=200, headers=cors, content_type="text/event-stream", body=api_reply(reply))
             if u.startswith("http://pages.test/"):
                 rel = u[len("http://pages.test/"):].split("?")[0].split("#")[0] or "index.html"
+                if rel.endswith("/"):
+                    rel += "index.html"  # a folder's page, as GitHub Pages serves it
                 path = site / rel
                 if path.is_file():
                     kind = {".html": "text/html", ".js": "application/javascript",
@@ -276,4 +279,51 @@ async def pages_tests():
                   "another language loads from lang/ beside the page, as on claude.ai")
             check(not errors, "no page errors" + (f": {errors[:2]}" if errors else ""))
             check(not blocked, "the Content-Security-Policy blocked nothing the page uses" + (f": {blocked[:2]}" if blocked else ""))
+
+            # The gallery's own pages (#438): one per program, Open in the editor offers it, Download Python is the page's export.
+            gallery = sorted((ROOT / "gallery").glob("*.json"))
+            pages = sorted(p.parent.name for p in (site / "gallery").glob("*/index.html"))
+            check(pages == [g.stem for g in gallery], f"every gallery program has its own page ({len(pages)} of {len(gallery)})")
+            sitemap = (site / "sitemap.xml").read_text(encoding="utf-8")
+            check(all(f"/gallery/{g.stem}/</loc>" in sitemap for g in gallery) and "Sitemap: " in (site / "robots.txt").read_text(encoding="utf-8"),
+                  "the sitemap lists them all, and robots.txt points to it")
+            key = "pihole-daily-report" if (site / "gallery" / "pihole-daily-report").exists() else gallery[0].stem
+            one = (site / "gallery" / key / "index.html").read_text(encoding="utf-8")
+            data = json.loads((ROOT / "gallery" / (key + ".json")).read_text(encoding="utf-8"))
+            pol = re.search(r'http-equiv="Content-Security-Policy" content="([^"]+)"', one).group(1)
+            check("script-src 'none'" in pol and "<script" not in one and html.escape(data["gallery"]["title"]) in one
+                  and html.escape(data["gallery"]["description"]) in one and '<link rel="canonical"' in one,
+                  f"a program's page says what it does, with no scripts at all ({key})")
+            base = re.search(r'href="([^"]+)\.py" download', one).group(1)
+            node = shutil.which("node")
+            if node:
+                with tempfile.TemporaryDirectory() as t2:
+                    subprocess.run([node, str(ROOT / "tools" / "export.cjs"), str(ROOT / "gallery" / (key + ".json")), "--out-dir", t2],
+                                   capture_output=True, timeout=300)
+                    mine = pathlib.Path(t2) / (base + ".py")
+                    served = (site / "gallery" / key / (base + ".py")).read_text(encoding="utf-8")
+                    code = lambda t: t.split("\n# BLOCKS:")[0]  # the block file inside has fresh block ids each export
+                    check(mine.exists() and code(mine.read_text(encoding="utf-8")) == code(served) and "\n# BLOCKS:" in served,
+                          "its Download Python is what the page exports (tools/export.cjs), with the block file inside")
+            gpg = await ctx.new_page()
+            gpg.on("pageerror", lambda e: errors.append(str(e)))
+            await gpg.route("**/*", serve)
+            await gpg.goto(f"http://pages.test/gallery/{key}/")
+            await gpg.wait_for_timeout(500)
+            shown = await gpg.evaluate("""() => ({ h1: document.querySelector('h1').textContent,
+                rows: document.querySelectorAll('.outline div').length, can: document.querySelectorAll('.can li').length,
+                font: getComputedStyle(document.querySelector('h1')).fontFamily })""")
+            check(shown["h1"] == data["gallery"]["title"] and shown["rows"] > 3 and "Bricolage" in shown["font"],
+                  f"the page shows its title in the page's typeface and its blocks as an outline ({shown})")
+            await gpg.click("text=Open in the editor")
+            await gpg.wait_for_timeout(2000)
+            offer = await gpg.evaluate("""() => ({ msg: document.getElementById('io-import-msg').textContent,
+                choices: [...document.querySelectorAll('#io-choice button')].map(b => b.textContent), url: location.pathname })""")
+            check(offer["url"] == "/" and data["name"] in offer["msg"] and len(offer["choices"]) == 1,  # in the language chosen above
+                  f"Open in the editor goes to the editor beside it and offers the program ({offer['msg'][:100]!r})")
+            await gpg.goto("http://pages.test/gallery/")
+            await gpg.wait_for_timeout(300)
+            cards = await gpg.eval_on_selector_all(".cards a", "e => e.map(a => a.getAttribute('href'))")
+            check(sorted(cards) == sorted(g.stem + "/" for g in gallery), f"gallery/ lists every program's page ({len(cards)})")
+            check(not blocked, "the gallery pages' Content-Security-Policy blocked nothing they use" + (f": {blocked[:2]}" if blocked else ""))
             await browser.close()
