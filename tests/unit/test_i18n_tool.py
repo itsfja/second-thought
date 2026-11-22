@@ -79,6 +79,14 @@ class Scripts(unittest.TestCase):
         self.assertEqual(tool.to_script("phn", "<b>lk</b> %1 Claude title {name}"), "<b>𐤋𐤊</b> %1 Claude title {name}")
         self.assertEqual(tool.printed("phn", "ʾbn ʿbd"), "ꜣbn ꜥbd", "aleph and ayin print as Latin letters")
 
+    def test_old_persian_is_spelled_by_its_own_rules(self):
+        self.assertEqual(tool.to_script("peo", "pārsa"), "𐎱𐎠𐎼𐎿𐎠", "pa-a-ra-sa-a: ā and a word's last a written out")
+        self.assertEqual(tool.oldpersian("xšāyaθiya"), tool.oldpersian("x") + "𐏁𐎠𐎹𐎰𐎡𐎹𐎠", "θi is θa-i: there's no θi sign")
+        self.assertEqual(tool.oldpersian("dahyu"), "𐎭𐏃𐎹𐎢")
+        self.assertEqual(tool.to_script("peo", "kartam ^status Claude {x}"), "𐎣𐎼𐎫𐎶 status Claude {x}")
+        self.assertIsNone(tool.oldpersian("block"), "o isn't an Old Persian letter")
+        self.assertEqual(tool.printed("peo", "aθanga ^status"), "athanga status", "θ is Greek: Python prints th")
+
     def test_sumerian_signs_are_the_signs_themselves(self):
         # A sign's readings, not those of a variant form listed after it (#374): u3 is U, not ŠA17's old form, and aš and
         # dili are AŠ, not the numeral 1(AŠ@c).
