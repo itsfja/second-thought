@@ -41,7 +41,7 @@ page and a tool's file disagree about the environment, trust the tool's file.
 - **i18n merges:** `python tools/merge_i18n.py --install` once per clone.
 - **Who read the words (#460):** each `i18n/*.json` has `"read_by"`. Words a model wrote are `model`; only Francis
   changes one to `speaker`, once a named speaker has read it through.
-- **New words:** `python tools/i18n.py missing`, then write translations for all 36 languages (not qnr, qar or qcg,
+- **New words:** `python tools/i18n.py missing`, then write translations for all 37 languages (not qnr, qar or qcg,
   below) into a JSON file and `python tools/i18n.py add words.json` (Mycenaean Greek, Akkadian, Sumerian, Hittite,
   Middle Egyptian, Coptic, Syriac, Gothic, Ugaritic, Phoenician and Old Persian romanised; the tool writes the scripts).
 - **Old Norse in runes (`qnr`, #465) and Old English in runes (`qar`, #466)** are made from `i18n/non.json` and
@@ -58,7 +58,7 @@ visible page change has new pictures.
 
 ## The artifact
 The page is published at https://claude.ai/artifact/XmNRmDbYLY3bo7o31nvdzN: `second-thought.html` with every
-`lang/<code>.js` as a supporting file at `lang/<code>.js` (all 39). If the publish says files changed since last
+`lang/<code>.js` as a supporting file at `lang/<code>.js` (all 40). If the publish says files changed since last
 seen, read them first (they'll match an earlier main), then publish. Your tool's file says whether you can publish
 it or Francis does.
 
