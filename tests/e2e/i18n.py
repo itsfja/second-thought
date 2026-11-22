@@ -152,8 +152,8 @@ async def i18n_tests():
         check(len(page_info["keys"]) > 60 and "Run" in page_info["keys"] and "Step: on" in tr_texts,
               f"the page lists its own words for translators ({len(page_info['keys'])} in the page, {len(tr_texts)} set by code)")
         files = {path.stem: json.loads(path.read_text(encoding="utf-8")) for path in sorted((ROOT / "i18n").glob("*.json"))}
-        check(info["lang"] == "en" and info["loaded"] is None and info["langs"] == {c: {"name": t.get("name", c)} for c, t in files.items()},
-              f"the page lists all {len(files)} languages by name, loads none of their words, and is in English when none is chosen")
+        check(info["lang"] == "en" and info["loaded"] is None and info["langs"] == {c: {"name": t.get("name", c), "read_by": t["read_by"]} for c, t in files.items()},
+              f"the page lists all {len(files)} languages by name (and who read them, #460), loads none of their words, and is in English when none is chosen")
         info["langs"] = files  # the checks below compare each language's words with the page
         for code, t in info["langs"].items():
             problems = []
@@ -218,6 +218,12 @@ async def i18n_tests():
             check(got["lang"] == code and got["start"] == t["blocks"]["rb_start"]["message0"] and got["cat"] == t["categories"]["Events"]
                   and got["wait"] == t["options"]["rb_wait.UNIT"]["s"] and got["ifmsg"] not in ("if", None),
                   f"with {code} chosen, blocks, choices, categories and Blockly's own blocks are in {t.get('name', code)} ({got})")
+            sure = await pg.evaluate("""() => { const el = document.getElementById('lang-words'), a = el.querySelector('a');
+                return { hidden:el.hidden, text:el.textContent, href:a ? a.href : '' }; }""")
+            said = t["page"]["Read by a speaker." if t["read_by"] == "speaker" else "Made by a model: corrections welcome."]
+            check(not sure["hidden"] and sure["text"].startswith(said)
+                  and (t["read_by"] == "speaker" or "issues/new?template=language.yml&title=Corrections%20to%20" in sure["href"]),
+                  f"with {code} chosen, the Blocks menu says how sure its words are (#460): {sure['text']!r}")
             if "blocklyMsg" in t:
                 own = await pg.evaluate("""(bm) => { const ws = Blockly.getMainWorkspace(), r = ws.newBlock('controls_repeat_ext'), l = ws.newBlock('lists_length');
                     const out = { differ:Object.keys(bm).filter(k => Blockly.Msg[k] !== bm[k]), repeat:r.toString(), length:l.toString() };

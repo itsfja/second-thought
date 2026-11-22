@@ -3,6 +3,7 @@
 "name":"中文（简体）",
 "blockly":"zh-hans",
 "note":"Simplified Chinese words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Chinese names (运行, 继续, 程序).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"把 %1 加入结果"},
 "rb_agent":{"message0":"智能体：朝 %1 努力","message1":"最多 %1 步，使用这些工具：","message2":"%1","message3":"先做计划，并边做边调整 %1","tooltip":"由 Claude 决定下一步做什么：每一步它从里面的工具中挑一个，看看结果，然后继续，直到达成目标或步数用完。它的最终答案放进草稿。每一步是一次模型调用。勾选“先做计划”后，它会在第一步写一个简短计划并随时更新，不额外花费。","message4":"说明每个事实的来源 %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"输入 {name} 必须是“是”或“否”，而不是 {value}。",
 "Input {name} must be a date like 2026-11-21, not {value}.":"输入 {name} 必须是像 2026-11-21 这样的日期，而不是 {value}。",
 "Yes":"是",
-"No":"否"
+"No":"否",
+"Made by a model: corrections welcome.":"由模型生成：欢迎指正。",
+"Read by a speaker.":"经母语者审读。",
+"Suggest a correction":"提出修正"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},

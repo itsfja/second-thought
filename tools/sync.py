@@ -41,6 +41,7 @@ import pathlib
 import re
 import sys
 import urllib.request
+from urllib.parse import quote
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGE = ROOT / "second-thought.html"
@@ -382,6 +383,10 @@ def _lines(value, depth: int) -> str:
                               for k, v in value.items()) + "\n}"
 
 
+READ_BY = {"speaker": "Read by a speaker.", "model": "Made by a model: corrections welcome."}  # i18n/*.json "read_by" (#460)
+LANGUAGE_FORM = "https://github.com/itsfja/second-thought/issues/new?template=language.yml"
+
+
 def _languages() -> dict:
     langs = {}
     for path in sorted(I18N.glob("*.json")):
@@ -389,13 +394,16 @@ def _languages() -> dict:
             langs[path.stem] = json.loads(path.read_text(encoding="utf-8"))
         except ValueError as e:
             sys.exit(f"{path.relative_to(ROOT)} isn't valid JSON: {e}")
+        if langs[path.stem].get("read_by") not in READ_BY:
+            sys.exit(f"{path.relative_to(ROOT)} should say who its words were read by: \"read_by\": \"speaker\" (a named speaker "
+                     "read them through) or \"model\" (made by a model, not read yet) (#460)")
     return langs
 
 
 def i18n_json() -> str:
-    """The languages the page offers, for its Blocks menu, as {"es": {"name": "Español"}, ...}. The words themselves are in
+    """The languages the page offers, for its Blocks menu, as {"es": {"name": "Español", "read_by": "model"}, ...}. The words themselves are in
     lang/<language>.js, which the page loads for the chosen language only."""
-    return _lines({code: {"name": t.get("name", code)} for code, t in _languages().items()}, 1) + "\n"
+    return _lines({code: {"name": t.get("name", code), "read_by": t["read_by"]} for code, t in _languages().items()}, 1) + "\n"
 
 
 def lang_files() -> dict:
@@ -420,8 +428,12 @@ def word_lists() -> dict:
     for code, t in _languages().items():
         pairs = [(k, v) for section in ("categories", "labels") for k, v in (t.get(section) or {}).items() if isinstance(v, str)]
         if pairs:
+            sure = ("**Read by a speaker.**" if t["read_by"] == "speaker" else
+                    "**Made by a model**, not read by a speaker yet. Something wrong? Say so with the "
+                    f"[language form]({LANGUAGE_FORM}&title=" + quote(f"Corrections to {t.get('name', code)}") + ").")
             out[WORDS / f"{code}.md"] = (f"# {t.get('name', code)}: everyday words\n\n"
                                          f"Made by tools/sync.py from i18n/{code}.json: edit that, not this.\n\n"
+                                         f"{sure}\n\n"
                                          + "".join(f"- {k}: {v}\n" for k, v in pairs))
     return out
 

@@ -3,6 +3,7 @@
  "blockly": "en",
  "font": "Noto Sans Runic",
  "note": "Old English in runes: the words of i18n/ang.json, written in the Anglo-Saxon futhorc (U+16A0-U+16FF) by tools/i18n.py (`python tools/i18n.py derive`): edit ang.json, not this file. The page shows runes in blocks, options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Runic font named in \"font\"; python holds ang.json's Latin spelling, which exported programs print, since few terminals have a runic font. The futhorc has a rune for nearly every Old English letter, so the words go letter for letter, as on the Ruthwell Cross and the Franks Casket: ᚫ for æ, ᚪ for a, ᚩ for o, ᚣ for y, ᛠ for ea, ᛝ for ng, ᛇ for the h of ht, ᚦ for þ and ð, ᚹ for w, with doubled letters written twice and no length marks. Names, modern words, field names, keys and placeholders stay in Latin letters (tools/latin_kept.json lists them). The code qar is from ISO 639-3's private-use range (qaa-qtz), since Old English in runes (ang-Runr) has no code of its own.",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "ᚣᚳ %1 ᛏᚩ ᚦᚪᛗ ᚹᚫᛋᛏᛗᛖ"
@@ -2059,7 +2060,10 @@
   "Input {name} must be yes or no, not {value}.": "ᛁᛝᚪᛝ {name} ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᚷᛠ ᚩᚦᚦᛖ ᚾᛖᛋᛖ, ᚾᚪ {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "ᛁᛝᚪᛝ {name} ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᛞᚫᚷ ᛋᚹᚪ 2026-11-21, ᚾᚪ {value}.",
   "Yes": "ᚷᛠ",
-  "No": "ᚾᛖᛋᛖ"
+  "No": "ᚾᛖᛋᛖ",
+  "Made by a model: corrections welcome.": "ᚠᚱᚪᛗ ᚷᛖᛋᚳᛠᚠᛏᛖ ᚷᛖᚹᚩᚱᛇᛏ: ᛒᚩᛏᚪ ᚹᛁᛚᚳᚢᛗᚪᚾ.",
+  "Read by a speaker.": "ᚠᚱᚪᛗ ᛋᛈᚱᛖᚳᛖᚾᛞᛖ ᚷᛖᚱᚫᛞ.",
+  "Suggest a correction": "ᛒᚩᛏᛖ ᚠᚩᚱᚦᛚᚫᛞᚪᚾ"
  },
  "examples": {
   "review": {

@@ -3,6 +3,7 @@
  "blockly": "en",
  "font": "Noto Sans Coptic",
  "note": "Coptic, in its Sahidic dialect, the classical literary standard (Bohairic is the one used in the liturgy today). Coptic, the last stage of Egyptian, has no words for most of this, so the wording is Sahidic vocabulary and the Greek words Coptic borrowed, used for new things (ōne, stone, for block; apostolos, messenger, for agent; sabe, wise one, for a model; dokimasia, testing, for review; taksis, order, for program; šošt, bolt, for a key; skeuos, vessel, for a tool; karpos, fruit, for the result); it is not genuine ancient text. The page shows the Coptic alphabet (U+2C80-U+2CFF, with ϣ ϥ ϩ ϫ ϭ) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, without supralinear strokes, with the Noto Sans Coptic font named in \"font\"; python holds the transliteration (š f h j c for ϣ ϥ ϩ ϫ ϭ, ē ō for ⲏ ⲱ), because terminal fonts rarely include Coptic. Names (Claude, Home Assistant), keys, English field names and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. To change a word, edit its transliteration and write it in letters with python tools/i18n.py (cop is one of its scripts; a word kept in Latin letters is written with ^ in front, like ^email).",
+ "read_by": "model",
  "blocks": {
   "rb_longtext": {
    "message0": "%1",
@@ -2049,7 +2050,10 @@
   "Input {name} must be yes or no, not {value}.": "ⲡⲃⲱⲕ ⲉϩⲟⲩⲛ {name} ϩⲁϩⲧⲉ ⲛϥϣⲱⲡⲉ ⲥⲉ ⲏ ⲙⲙⲟⲛ, ⲛⲟⲩϩ {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "ⲡⲃⲱⲕ ⲉϩⲟⲩⲛ {name} ϩⲁϩⲧⲉ ⲛϥϣⲱⲡⲉ ⲛⲟⲩϩⲟⲟⲩ ⲛⲧϩⲉ 2026-11-21, ⲛⲟⲩϩ {value}.",
   "Yes": "ⲥⲉ",
-  "No": "ⲙⲙⲟⲛ"
+  "No": "ⲙⲙⲟⲛ",
+  "Made by a model: corrections welcome.": "ⲁⲩⲁⲁϥ ϩⲓⲧⲛ ⲟⲩⲙⲏⲕϩⲁⲛⲏ: ⲛⲧⲁⲝⲓⲥ ⲥⲉⲥϩⲏⲡ ⲙⲙⲟⲟⲩ.",
+  "Read by a speaker.": "ⲁⲩⲟϣϥ ϩⲓⲧⲛ ⲟⲩϣⲁϫⲉ.",
+  "Suggest a correction": "ϫⲓ ⲛⲧⲁⲝⲓⲥ"
  },
  "examples": {
   "review": {

@@ -2,6 +2,7 @@
  "name": "日本語",
  "blockly": "ja",
  "note": "Japanese words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Japanese names (実行, 続ける, プログラム).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "%1 を結果に追加する"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "入力 {name} ははいかいいえでなければなりません（{value} ではなく）。",
   "Input {name} must be a date like 2026-11-21, not {value}.": "入力 {name} は 2026-11-21 のような日付でなければなりません（{value} ではなく）。",
   "Yes": "はい",
-  "No": "いいえ"
+  "No": "いいえ",
+  "Made by a model: corrections welcome.": "モデルが作成しました。修正を歓迎します。",
+  "Read by a speaker.": "話者が確認しました。",
+  "Suggest a correction": "修正を提案する"
  },
  "examples": {
   "review": {

@@ -3,6 +3,7 @@
 "name":"Englisch",
 "blockly":"en",
 "note":"Middle English (late fourteenth-century London, the English of Chaucer) words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Middle English. Spelling is normalised to one consistent form without þ or ȝ; modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Middle English names (Renne, Go forth, Devyses).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"adde %1 to the effect"},
 "rb_agent":{"message0":"procuratour: travaille toward %1","message1":"up to %1 pases, with thise tooles:","message2":"%1","message3":"make first a purpos, and chaunge it as it goth %1","tooltip":"Claude demeth what to do next: at ech pas he cheseth oon of the tooles withinne, seeth what bifel, and goth forth til the ende be wonne or the pases be spent. His laste answere goth into the draughte. Ech pas is oon callyng of the patron. Whan “make first a purpos” is marked, he writeth a short purpos with his firste pas and kepeth it newe, withouten more cost.","message4":"seye whennes ech sooth cam %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Entree {name} moot be ye or nay, nat {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Entree {name} moot be a day lyk 2026-11-21, nat {value}.",
 "Yes":"Ye",
-"No":"Nay"
+"No":"Nay",
+"Made by a model: corrections welcome.":"Made by an engyn: amendementes welcome.",
+"Read by a speaker.":"Rede by a spekere.",
+"Suggest a correction":"Purpose an amendement"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},

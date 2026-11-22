@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/non.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20Norr%C5%93nt%20m%C3%A1l).
+
 - Events: Atburðir
 - Control: Stjórn
 - Wait & time: Bið ok tími

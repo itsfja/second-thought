@@ -3,6 +3,7 @@
 "name":"словѣнскїй",
 "blockly":"en",
 "note":"Church Slavonic (словѣнскїй) in pre-reform Cyrillic, with ѣ, ї, ѡ, ѿ and ѧ and a final ъ, but without titla or stress marks so that it shows in ordinary fonts, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg): \"blockly\" is \"en\" with Church Slavonic laid over it, as Latin does. The liturgical language has no words for most of this, so the wording uses its own vocabulary for new things: чинъ (an order, a rite) for a program, чреда (a course, a turn) for a script, звѣно (a link) for a block, подобїе (a likeness) for a model, посланникъ for an agent, ѡрудїе for a tool, начертанїе for a draft, испытанїе for a review, плодъ (fruit) for a result, лѣтопись теченїѧ for the run log, ключь for a key, свитокъ (a scroll) for a file, ковчегъ for a folder, хартїѧ (a charter) for a record, поле for a field, знаменїе for a token, предѣлъ for a checkpoint, источникъ for a news feed, посланїе for email, степень for a channel, вещь for a Home Assistant entity, моделитва for a prompt and мрежа (a net) for the web. Buttons: Тецы Run, Ѡстанови Stop, Продолжи Continue, Одобри Approve, Возврати Send back, Попусти Allow, Не твори Don't, Времена Schedules. Typed answers: ей or да for yes, ни or нѣтъ for no (y and n work too). It is a modern use of the church language, not genuine ancient text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"Долгое писанїе. Пожми Enter для новыѧ строки; строки преносѧтсѧ на 80 письменехъ."},
 "rb_start":{"message0":"егда пожато будетъ «Тецы»","tooltip":"Всѧкъ чинъ здѣ начинаетсѧ. Звѣна подъ нимъ текутъ свыше внизъ. Многа таковаѧ текутъ купно."},
@@ -1298,7 +1299,10 @@
 "Input {name} must be yes or no, not {value}.":"Входъ {name} подобаетъ быти ей или ни, а не {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Входъ {name} подобаетъ быти днемъ яко 2026-11-21, а не {value}.",
 "Yes":"Ей",
-"No":"Ни"
+"No":"Ни",
+"Made by a model: corrections welcome.":"Сотворено хитростїю: исправленїя прїятна.",
+"Read by a speaker.":"Прочтено глаголющимъ.",
+"Suggest a correction":"Предложити исправленїе"
 },
 "examples":{
 "review":{"title":"Ѡбхожденїе испытанїѧ","desc":"Claude пишетъ ѡ autolyse, испытуетъ по правиламъ твоимъ, и исправляетъ неудовлетворившее, до 3 кратъ.","tip":"Премѣни дѣло въ синемъ звѣнѣ и правила въ багрѧномъ."},

@@ -3,6 +3,7 @@
 "name":"Nederlands",
 "blockly":"nl",
 "note":"Dutch words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Dutch names (Uitvoeren, Doorgaan, Programma’s).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"%1 aan het resultaat toevoegen"},
 "rb_agent":{"message0":"agent: werk toe naar %1","message1":"tot %1 stappen, met deze hulpmiddelen:","message2":"%1","message3":"eerst een plan maken en het onderweg bijstellen %1","tooltip":"Claude beslist wat er nu moet gebeuren: bij elke stap kiest hij een van de hulpmiddelen erin, ziet wat er gebeurde en gaat door tot het doel bereikt is of de stappen op zijn. Zijn eindantwoord komt in het concept. Elke stap is één modelaanroep. Met ‘eerst een plan maken’ aangevinkt schrijft hij bij zijn eerste stap een kort plan en houdt dat bij, zonder extra kosten.","message4":"zeggen waar elk feit vandaan komt %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Invoer {name} moet ja of nee zijn, niet {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Invoer {name} moet een datum zijn zoals 2026-11-21, niet {value}.",
 "Yes":"Ja",
-"No":"Nee"
+"No":"Nee",
+"Made by a model: corrections welcome.":"Gemaakt door een model: correcties welkom.",
+"Read by a speaker.":"Nagelezen door een spreker.",
+"Suggest a correction":"Een correctie voorstellen"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},

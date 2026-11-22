@@ -3,6 +3,7 @@
 "name":"Deutsch",
 "blockly":"de",
 "note":"German words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their German names (Ausführen, Weiter, Programme).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"%1 zum Ergebnis hinzufügen"},
 "rb_agent":{"message0":"Agent: arbeite auf %1 hin","message1":"bis zu %1 Schritte, mit diesen Werkzeugen:","message2":"%1","message3":"erst einen Plan machen und ihn unterwegs anpassen %1","tooltip":"Claude entscheidet, was als Nächstes zu tun ist: Bei jedem Schritt wählt er eines der Werkzeuge darin, sieht, was passiert ist, und macht weiter, bis das Ziel erreicht ist oder die Schritte aufgebraucht sind. Seine endgültige Antwort kommt in den Entwurf. Jeder Schritt ist ein Modellaufruf. Mit „erst einen Plan machen“ angehakt schreibt er bei seinem ersten Schritt einen kurzen Plan und hält ihn aktuell, ohne Zusatzkosten.","message4":"sagen, woher jede Tatsache stammt %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Die Eingabe {name} muss ja oder nein sein, nicht {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Die Eingabe {name} muss ein Datum wie 2026-11-21 sein, nicht {value}.",
 "Yes":"Ja",
-"No":"Nein"
+"No":"Nein",
+"Made by a model: corrections welcome.":"Von einem Modell gemacht: Korrekturen willkommen.",
+"Read by a speaker.":"Von einem Muttersprachler gelesen.",
+"Suggest a correction":"Korrektur vorschlagen"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},

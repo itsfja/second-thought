@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/akk.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%F0%92%80%9D%F0%92%85%97%F0%92%81%BA%F0%92%8C%9D).
+
 - Events: 𒀉𒋫𒌅𒌝
 - Control: 𒋗𒋼𒋗𒊒𒌝
 - Wait & time: 𒋡𒇻𒌝 𒌋 𒋛𒈠𒉡𒌝

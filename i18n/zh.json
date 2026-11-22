@@ -2,6 +2,7 @@
  "name": "中文（简体）",
  "blockly": "zh-hans",
  "note": "Simplified Chinese words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Chinese names (运行, 继续, 程序).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "把 %1 加入结果"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "输入 {name} 必须是“是”或“否”，而不是 {value}。",
   "Input {name} must be a date like 2026-11-21, not {value}.": "输入 {name} 必须是像 2026-11-21 这样的日期，而不是 {value}。",
   "Yes": "是",
-  "No": "否"
+  "No": "否",
+  "Made by a model: corrections welcome.": "由模型生成：欢迎指正。",
+  "Read by a speaker.": "经母语者审读。",
+  "Suggest a correction": "提出修正"
  },
  "examples": {
   "review": {

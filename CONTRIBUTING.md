@@ -160,7 +160,8 @@ CI never runs it.
 
 - **A translation, or a new language:** see [Languages](docs/using-the-page.md#languages) in the guide. Copy an existing
   `i18n/*.json`, translate the words (never the choice values, `%1` or `{name}` markers), and run `tools/sync.py`.
-  The tests list anything missing. Scripts most computers lack need a `"font"`, plus a copy in `tests/setup.sh` and
+  The tests list anything missing. Every language file says who read its words, `"read_by": "model"` or `"speaker"` (#460): it stays `model` until a named
+  speaker has read it all through, and the issue names them. Scripts most computers lack need a `"font"`, plus a copy in `tests/setup.sh` and
   `FONTS` in `tests/e2e/common.py`; see the Linear B, Sanskrit, Akkadian, Sumerian, Hittite, Gothic, Middle Egyptian, Coptic and Syriac files for examples.
 - **New words in a change:** every text shown through `tr()` needs a translation in each language. `python
   tools/i18n.py missing` lists what's missing. Write the translations into one file (`{"page": {"English": {"de": "…",

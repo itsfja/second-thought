@@ -3,6 +3,7 @@
 "name":"nāhuatlahtōlli",
 "blockly":"en",
 "note":"Classical Nahuatl (nāhuatlahtōlli) in the modern scholarly spelling, with macrons for long vowels and h for the glottal stop (as in Andrews and Karttunen), for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Nahuatl. Instructions are polite imperatives (xic-, xi-) and descriptions use the present. Attested words are used where they fit (āmatl paper for a file, petlacalli chest for a folder, tōnalāmatl book of days for a calendar, tōnalpōhualli count of days for Schedules, mecatl cord for a list, tlatlapoāni opener for a key, ōra for an hour), and descriptive coinages elsewhere: tlatēcpantli (a thing set in order) for a program, tēcpantli (a row) for a script, tlaxtlapalli (a piece) for a block, īxiptlatl (a representative) for a model, tītlantli (an envoy) for an agent, tlachīhualoni (a thing to make with) for a tool, achtlahcuilōlli (a first writing) for a draft, tlattaliztli for a review, tlachīhualli for a result, tlachīhualāmatl for the run log, āmapōhualli (a register entry) for a record, xeliuhqui for a field, tlapōhualli for a number, tlahcuilōlli for a picture, tlahtōlli for a message, tepozāmatl (metal paper) for email, āpantli (a canal) for a channel, tlahtōlāmeyalli (a spring of words) for a news feed, tlamantli for a Home Assistant entity, tepoztli for a device, tlahtōlpiltzin for a token, tlaquetzalli for a checkpoint, tlalnamiquiliztli for memory, tlapatlalli for a variable, tlanāhuatīlli (an order) for a prompt, matlatl (a net) for the web, tlaxcalli for bread and textli for dough. Buttons: Ma mochīhua Run, Ma moquetza Stop, Ma ōc mochīhua Continue, Ca yēctli Approve, Xiccuepa Send back, Xicmācāhua Allow, Ahmo Don't. Typed answers: quēmah, quema or q for yes, ahmo, amo or a for no (y and n work too). It is a modern use of the classical language, not genuine colonial text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"Huēyi tlahcuilōlli. Xicpachoa Enter ic yancuīc tecpantli; in tecpantli mocuepa ic 80 tlahcuilōlpiltzin."},
 "rb_start":{"message0":"In īquac mopachoa Ma mochīhua","tooltip":"Nicān peuhua ceceyacah tlatēcpantli. In tlaxtlapalli in tlani mochīhuah ōmpa huehca ic tlani. Miequintin inīn mochīhuah zan cepa."},
@@ -1298,7 +1299,10 @@
 "Input {name} must be yes or no, not {value}.":"In calaquiliztli {name} monequi ma quēmah anozo ahmo, ahmo {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"In calaquiliztli {name} monequi ma tōnalli iuhqui 2026-11-21, ahmo {value}.",
 "Yes":"Quēmah",
-"No":"Ahmo"
+"No":"Ahmo",
+"Made by a model: corrections welcome.":"Ōquichīuh ce tlachīuhtli: motlahpalōz in tlatlācatlaliliztli.",
+"Read by a speaker.":"Ōquipōuh ce tlahtoāni.",
+"Suggest a correction":"Xiquihtōs ce tlatlācatlaliliztli"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},

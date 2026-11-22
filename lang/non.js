@@ -3,6 +3,7 @@
 "name":"Norrœnt mál",
 "blockly":"en",
 "note":"Old Norse (normalised Old Icelandic spelling, with þ, ð, æ, œ and ǫ) words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Old Norse. Old Norse words are used where they exist (kubbr for block, erindreki for agent, rím for calendar, annáll for the run log); modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Old Norse names (Keyr, Áfram, Tíðir).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"bæt %1 við úrslitin"},
 "rb_agent":{"message0":"erindreki: vinn at %1","message1":"allt at %1 fetum, með þessum tólum:","message2":"%1","message3":"ger ráðagørð fyrst, ok breyt henni sem á líðr %1","tooltip":"Claude ræðr hvat næst skal gera: á hverju feti velr hann eitt tólanna hér inni, sér hvat varð, ok heldr áfram unz markinu er náð eða fetin eru þrotin. Hans hinzta svar ferr í frumritit. Hvert fet er eitt kall til líkansins. Þá er „ger ráðagørð fyrst“ er merkt, ritar hann stutta ráðagørð með fyrsta feti ok heldr henni nýrri, án meira kostnaðar.","message4":"segja hvaðan hver sannindi kómu %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Inntak {name} skal vera já eða nei, eigi {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Inntak {name} skal vera dagr sem 2026-11-21, eigi {value}.",
 "Yes":"Já",
-"No":"Nei"
+"No":"Nei",
+"Made by a model: corrections welcome.":"Gǫrt af vél: leiðréttingar velkomnar.",
+"Read by a speaker.":"Lesit af mælanda.",
+"Suggest a correction":"Leggja til leiðrétting"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},

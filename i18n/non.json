@@ -2,6 +2,7 @@
  "name": "Norrœnt mál",
  "blockly": "en",
  "note": "Old Norse (normalised Old Icelandic spelling, with þ, ð, æ, œ and ǫ) words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Old Norse. Old Norse words are used where they exist (kubbr for block, erindreki for agent, rím for calendar, annáll for the run log); modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Old Norse names (Keyr, Áfram, Tíðir).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "bæt %1 við úrslitin"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "Inntak {name} skal vera já eða nei, eigi {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "Inntak {name} skal vera dagr sem 2026-11-21, eigi {value}.",
   "Yes": "Já",
-  "No": "Nei"
+  "No": "Nei",
+  "Made by a model: corrections welcome.": "Gǫrt af vél: leiðréttingar velkomnar.",
+  "Read by a speaker.": "Lesit af mælanda.",
+  "Suggest a correction": "Leggja til leiðrétting"
  },
  "examples": {
   "review": {

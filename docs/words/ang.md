@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/ang.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%C3%86nglisc).
+
 - Events: Gelimpu
 - Control: Wealdung
 - Wait & time: Abid and tid

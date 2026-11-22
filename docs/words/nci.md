@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/nci.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20n%C4%81huatlaht%C5%8Dlli).
+
 - Agent: Tītlantli
 - Ask Claude: Xictlatlani in Claude
 - Connections: Tlahtōlōhtli

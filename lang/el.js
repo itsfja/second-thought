@@ -3,6 +3,7 @@
 "name":"Ελληνικά",
 "blockly":"el",
 "note":"Greek words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Greek names (Εκτέλεση, Συνέχεια, Προγράμματα).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"πρόσθεσε %1 στο αποτέλεσμα"},
 "rb_agent":{"message0":"πράκτορας: δούλεψε προς %1","message1":"έως %1 βήματα, με αυτά τα εργαλεία:","message2":"%1","message3":"κάνε πρώτα σχέδιο και άλλαζέ το στην πορεία %1","tooltip":"Ο Claude αποφασίζει τι θα κάνει μετά: σε κάθε βήμα διαλέγει ένα από τα εργαλεία μέσα, βλέπει τι έγινε και συνεχίζει ώσπου να πετύχει τον στόχο ή να τελειώσουν τα βήματα. Η τελική του απάντηση μπαίνει στο πρόχειρο. Κάθε βήμα είναι μία κλήση στο μοντέλο. Με το «κάνε πρώτα σχέδιο» επιλεγμένο, γράφει ένα σύντομο σχέδιο στο πρώτο βήμα και το κρατά ενημερωμένο, χωρίς επιπλέον κόστος.","message4":"να λέει από πού προέρχεται κάθε γεγονός %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Η είσοδος {name} πρέπει να είναι ναι ή όχι, όχι {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Η είσοδος {name} πρέπει να είναι ημερομηνία όπως 2026-11-21, όχι {value}.",
 "Yes":"Ναι",
-"No":"Όχι"
+"No":"Όχι",
+"Made by a model: corrections welcome.":"Φτιαγμένο από μοντέλο: διορθώσεις ευπρόσδεκτες.",
+"Read by a speaker.":"Διαβασμένο από ομιλητή.",
+"Suggest a correction":"Πρότεινε μια διόρθωση"
 },
 "examples":{
 "review":{"title":"Βρόχος ελέγχου","desc":"Ο Claude γράφει για την αυτόλυση, το ελέγχει με τους κανόνες σας και διορθώνει ό,τι αποτύχει, έως 3 γύρους.","tip":"Αλλάξτε την εργασία στο μπλε μπλοκ και τους κανόνες στο μωβ."},

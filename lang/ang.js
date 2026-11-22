@@ -3,6 +3,7 @@
 "name":"Ænglisc",
 "blockly":"en",
 "note":"Old English (late West Saxon) words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Old English. Spelled with þ, ð and æ, ƿ written as w and without length marks, as in the manuscripts; modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Old English names (Fremme, Ga forþ, Forescrifta).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"yc %1 to þam wæstme"},
 "rb_agent":{"message0":"ærendraca: wyrc toweard %1","message1":"oþ %1 stæpas, mid þissum tolum:","message2":"%1","message3":"maca ærest ræd, and wend hine on wege %1","tooltip":"Claude demeþ hwæt he æfter do: æt ælcum stæpe he geceosþ an þara tola þe þærinne sind, gesihþ hwæt gelamp, and gæþ forþ oþ þæt se ende sy gemet oþþe þa stæpas ateorien. His nihste andswaru gæþ on þæt frumgewrit. Ælc stæp is an clypung þære bysene. Gif “maca ærest ræd” is gemearcod, he writ sceortne ræd mid his forman stæpe and hylt hine niwne, butan maran ceape.","message4":"secgan hwanon ǣlc sōþ cōm %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Ingang {name} sceal bēon gēa oþþe nese, nā {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Ingang {name} sceal bēon dæg swā 2026-11-21, nā {value}.",
 "Yes":"Gea",
-"No":"Nese"
+"No":"Nese",
+"Made by a model: corrections welcome.":"Fram gesceafte geworht: bōta wilcuman.",
+"Read by a speaker.":"Fram sprecende gerǣd.",
+"Suggest a correction":"Bōte forþlǣdan"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},

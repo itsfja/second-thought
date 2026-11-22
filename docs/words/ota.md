@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/ota.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%D9%84%D8%B3%D8%A7%D9%86%20%D8%B9%D8%AB%D9%85%D8%A7%D9%86%D9%89).
+
 - Agent: وكیل
 - Ask Claude: Claude ه صور
 - Connections: اتصاللر

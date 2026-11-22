@@ -3,6 +3,7 @@
  "blockly": "en",
  "font": "Noto Sans Cuneiform",
  "note": "Akkadian (Old Babylonian) in cuneiform. Akkadian has no words for most of this, so the wording is Old Babylonian vocabulary used for new things (libittum, brick, for block; mār šiprim, messenger, for agent; apkallum, sage, for a model; bīrum, the diviner's inspection, for review; nēpešum, procedure, for program; ṭup epištim, tablet of the work, for the run log); it is not genuine ancient text. The page shows cuneiform signs (U+12000-U+1254F) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, spelled syllable by syllable as Old Babylonian scribes did (CV, VC, CVC as CV-VC), with the Noto Sans Cuneiform font named in \"font\"; python holds the normalised transliteration (šarrum, bītum), because terminals have no cuneiform font. Names (Claude, Home Assistant), keys, English field names and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "%1 𒀀𒈾 𒍢𒋾𒅎 𒊒𒌓𒁲"
@@ -2059,7 +2060,10 @@
   "Input {name} must be yes or no, not {value}.": "𒅕𒁍𒌝 {name} 𒀭𒈾 𒌌𒆷 𒇻, 𒌌 {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "𒅕𒁍𒌝 {name} 𒌑𒈬𒌝 𒆠𒈠 2026-11-21 𒇻, 𒌌 {value}.",
   "Yes": "𒀭𒈾",
-  "No": "𒌌𒆷"
+  "No": "𒌌𒆷",
+  "Read by a speaker.": "𒊭 𒁕𒁉𒁉𒅎 𒊭𒋛.",
+  "Suggest a correction": "𒋫𒅈𒍝𒄠 𒆠𒁉",
+  "Made by a model: corrections welcome.": "𒄿𒈾 𒉈𒁉𒅆𒅎 𒂊𒁉𒅖: 𒋫𒅈𒍝𒌅𒌝 𒁕𒁀."
  },
  "examples": {
   "review": {

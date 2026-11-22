@@ -2,6 +2,7 @@
  "name": "文言",
  "blockly": "en",
  "note": "Classical Chinese (文言) in traditional characters, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg): Blockly's zh-hant words are modern Chinese, so \"blockly\" is \"en\" with 文言 laid over it, as Latin does. Literary Chinese has no words for most of this, so the wording uses classical vocabulary for new things: 程 (a course, a procedure) for a program, 段 (a section) for a script, 塊 for a block, 模 (a pattern, a mould) for a model, 使者 (an envoy) for an agent, 器 for a tool, 稿 for a draft, 審 for a review, 果 for a result, 行錄 for the run log, 鑰 for a key, 卷 (a scroll) for a file, 匣 for a folder, 簿 (a register) for a record, 欄 for a field, 符 (a tally) for a token, 關 (a checkpoint, a pass) for a checkpoint, 訊源 for a news feed, 郵 for email, 頻 for a channel and 物 for a Home Assistant entity. Buttons: 行 Run, 止 Stop, 續 Continue, 可 Approve, 退 Send back, 許 Allow, 勿 Don't, 時令 Schedules. Typed answers: 然, 是, 可 or 諾 for yes, 否, 不 or 弗 for no (y and n work too). It is a modern use of the classical language, not genuine ancient text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+ "read_by": "model",
  "blocks": {
   "rb_longtext": {
    "message0": "%1",
@@ -2048,7 +2049,10 @@
   "Input {name} must be yes or no, not {value}.": "所入 {name} 當為然否，非 {value}。",
   "Input {name} must be a date like 2026-11-21, not {value}.": "所入 {name} 當為日，如 2026-11-21，非 {value}。",
   "Yes": "然",
-  "No": "否"
+  "No": "否",
+  "Made by a model: corrections welcome.": "模所為：願聞其誤。",
+  "Read by a speaker.": "通者已讀。",
+  "Suggest a correction": "請正之"
  },
  "examples": {
   "review": {

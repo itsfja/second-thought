@@ -322,6 +322,7 @@ button.danger{border-color:var(--bad);color:var(--bad);font-weight:700}
         <label class="lab" for="lang" title="The language the blocks are shown in. Programs are the same in every language.">Blocks
           <select id="lang"></select>
         </label>
+        <span id="lang-words" class="sched-status" hidden></span>
         <label class="lab" for="theme">Theme
           <select id="theme"></select>
         </label>
@@ -11969,40 +11970,40 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
 </script>
 <script type="application/json" id="i18n">
 {
-"akk":{"name":"𒀝𒅗𒁺𒌝"},
-"ang":{"name":"Ænglisc"},
-"arc":{"name":"ארמית"},
-"cop":{"name":"ⲧⲙⲛⲧⲣⲙⲛⲕⲏⲙⲉ"},
-"cu":{"name":"словѣнскїй"},
-"de":{"name":"Deutsch"},
-"egy":{"name":"𓂋𓄿 𓈖 𓎡𓅓𓏏"},
-"el":{"name":"Ελληνικά"},
-"enm":{"name":"Englisch"},
-"es":{"name":"Español"},
-"fr":{"name":"Français"},
-"gez":{"name":"ግዕዝ"},
-"gmy":{"name":"Mycenaean Greek (Linear B)"},
-"got":{"name":"𐌲𐌿𐍄𐌹𐍃𐌺"},
-"grc":{"name":"Κοινή"},
-"he":{"name":"עברית"},
-"hit":{"name":"𒉈𒅆𒇷"},
-"it":{"name":"Italiano"},
-"ja":{"name":"日本語"},
-"la":{"name":"Latina"},
-"lzh":{"name":"文言"},
-"nci":{"name":"nāhuatlahtōlli"},
-"nl":{"name":"Nederlands"},
-"non":{"name":"Norrœnt mál"},
-"ota":{"name":"لسان عثمانى"},
-"pi":{"name":"पाळि"},
-"pt":{"name":"Português"},
-"qar":{"name":"ᚫᛝᛚᛁᛋᚳ"},
-"qcg":{"name":"ⱄⰾⱁⰲⱑⱀⱄⰽⰹⰻ"},
-"qnr":{"name":"ᚾᚢᚱᚢᚾᛏ ᛘᛅᛚ"},
-"sa":{"name":"संस्कृतम्"},
-"sux":{"name":"𒅴𒂠"},
-"syc":{"name":"ܠܫܢܐ ܣܘܪܝܝܐ"},
-"zh":{"name":"中文（简体）"}
+"akk":{"name":"𒀝𒅗𒁺𒌝","read_by":"model"},
+"ang":{"name":"Ænglisc","read_by":"model"},
+"arc":{"name":"ארמית","read_by":"model"},
+"cop":{"name":"ⲧⲙⲛⲧⲣⲙⲛⲕⲏⲙⲉ","read_by":"model"},
+"cu":{"name":"словѣнскїй","read_by":"model"},
+"de":{"name":"Deutsch","read_by":"model"},
+"egy":{"name":"𓂋𓄿 𓈖 𓎡𓅓𓏏","read_by":"model"},
+"el":{"name":"Ελληνικά","read_by":"model"},
+"enm":{"name":"Englisch","read_by":"model"},
+"es":{"name":"Español","read_by":"model"},
+"fr":{"name":"Français","read_by":"model"},
+"gez":{"name":"ግዕዝ","read_by":"model"},
+"gmy":{"name":"Mycenaean Greek (Linear B)","read_by":"model"},
+"got":{"name":"𐌲𐌿𐍄𐌹𐍃𐌺","read_by":"model"},
+"grc":{"name":"Κοινή","read_by":"model"},
+"he":{"name":"עברית","read_by":"model"},
+"hit":{"name":"𒉈𒅆𒇷","read_by":"model"},
+"it":{"name":"Italiano","read_by":"model"},
+"ja":{"name":"日本語","read_by":"model"},
+"la":{"name":"Latina","read_by":"model"},
+"lzh":{"name":"文言","read_by":"model"},
+"nci":{"name":"nāhuatlahtōlli","read_by":"model"},
+"nl":{"name":"Nederlands","read_by":"model"},
+"non":{"name":"Norrœnt mál","read_by":"model"},
+"ota":{"name":"لسان عثمانى","read_by":"model"},
+"pi":{"name":"पाळि","read_by":"model"},
+"pt":{"name":"Português","read_by":"model"},
+"qar":{"name":"ᚫᛝᛚᛁᛋᚳ","read_by":"model"},
+"qcg":{"name":"ⱄⰾⱁⰲⱑⱀⱄⰽⰹⰻ","read_by":"model"},
+"qnr":{"name":"ᚾᚢᚱᚢᚾᛏ ᛘᛅᛚ","read_by":"model"},
+"sa":{"name":"संस्कृतम्","read_by":"model"},
+"sux":{"name":"𒅴𒂠","read_by":"model"},
+"syc":{"name":"ܠܫܢܐ ܣܘܪܝܝܐ","read_by":"model"},
+"zh":{"name":"中文（简体）","read_by":"model"}
 }
 </script>
 <script type="application/json" id="sri">
@@ -20600,6 +20601,19 @@ HOW TO MAP CODE
       const o = document.createElement("option"); o.value = k; o.textContent = name; sel.appendChild(o);
     });
     sel.value = window.ST_LANG || "en";
+    // How sure the words are (#460): read through by a named speaker, or made by a model, with where to send corrections.
+    const chosen = langs[sel.value], sure = $("lang-words");
+    if (chosen && sure) {
+      const speaker = chosen.read_by === "speaker";
+      sure.append(tr(speaker ? "Read by a speaker." : "Made by a model: corrections welcome."));
+      if (!speaker) {
+        const a = document.createElement("a");
+        a.href = "https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=" + encodeURIComponent("Corrections to " + (chosen.name || sel.value));
+        a.target = "_blank"; a.rel = "noopener"; a.textContent = tr("Suggest a correction");
+        sure.append(" ", a);
+      }
+      sure.hidden = false;
+    }
     // The chosen language's words didn't load (lang/<language>.js missing or unreachable): say so, in English, since
     // that's what the page is showing. The choice is kept, so reloading tries again.
     if (window.ST_I18N_MISSING) {

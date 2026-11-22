@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Glagolitic",
 "note":"Church Slavonic in Glagolitic: the words of i18n/cu.json, written in the Glagolitic alphabet (U+2C00-U+2C5F), the one the language was first written in, by tools/i18n.py (`python tools/i18n.py derive`): edit cu.json, not this file. The page shows Glagolitic in blocks, options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Glagolitic font named in \"font\"; python holds cu.json's Cyrillic, which exported programs print, since few terminals have a Glagolitic font. The letters go one for one, as the two alphabets were matched in the manuscripts: ⱑ for ѣ, я and ꙗ; ⱏⰹ for ы; ⱉⱅ for ѿ; ⰻ for и and й; ⰹ for і and ї; ⱆ for у, ѹ and ꙋ. Names, field names, keys and placeholders, in Latin letters, stay as they are. The code qcg is from ISO 639-3's private-use range (qaa-qtz), since Church Slavonic in Glagolitic (cu-Glag) has no code of its own.",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"Ⰴⱁⰾⰳⱁⰵ ⱂⰻⱄⰰⱀⰹⰵ. Ⱂⱁⰶⰿⰻ Enter ⰴⰾⱑ ⱀⱁⰲⱏⰹⱔ ⱄⱅⱃⱁⰽⰻ; ⱄⱅⱃⱁⰽⰻ ⱂⱃⰵⱀⱁⱄⱔⱅⱄⱔ ⱀⰰ 80 ⱂⰻⱄⱐⰿⰵⱀⰵⱈⱏ."},
 "rb_start":{"message0":"ⰵⰳⰴⰰ ⱂⱁⰶⰰⱅⱁ ⰱⱆⰴⰵⱅⱏ «Ⱅⰵⱌⱏⰹ»","tooltip":"Ⰲⱄⱔⰽⱏ ⱍⰻⱀⱏ ⰸⰴⱑ ⱀⰰⱍⰻⱀⰰⰵⱅⱄⱔ. Ⰸⰲⱑⱀⰰ ⱂⱁⰴⱏ ⱀⰻⰿⱏ ⱅⰵⰽⱆⱅⱏ ⱄⰲⱏⰹⱎⰵ ⰲⱀⰻⰸⱏ. Ⰿⱀⱁⰳⰰ ⱅⰰⰽⱁⰲⰰⱔ ⱅⰵⰽⱆⱅⱏ ⰽⱆⱂⱀⱁ."},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Ⰲⱈⱁⰴⱏ {name} ⱂⱁⰴⱁⰱⰰⰵⱅⱏ ⰱⱏⰹⱅⰻ ⰵⰻ ⰻⰾⰻ ⱀⰻ, ⰰ ⱀⰵ {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Ⰲⱈⱁⰴⱏ {name} ⱂⱁⰴⱁⰱⰰⰵⱅⱏ ⰱⱏⰹⱅⰻ ⰴⱀⰵⰿⱏ ⱑⰽⱁ 2026-11-21, ⰰ ⱀⰵ {value}.",
 "Yes":"Ⰵⰻ",
-"No":"Ⱀⰻ"
+"No":"Ⱀⰻ",
+"Made by a model: corrections welcome.":"Ⱄⱁⱅⰲⱁⱃⰵⱀⱁ ⱈⰻⱅⱃⱁⱄⱅⰹⱓ: ⰻⱄⱂⱃⰰⰲⰾⰵⱀⰹⱑ ⱂⱃⰹⱑⱅⱀⰰ.",
+"Read by a speaker.":"Ⱂⱃⱁⱍⱅⰵⱀⱁ ⰳⰾⰰⰳⱁⰾⱓⱋⰻⰿⱏ.",
+"Suggest a correction":"Ⱂⱃⰵⰴⰾⱁⰶⰻⱅⰻ ⰻⱄⱂⱃⰰⰲⰾⰵⱀⰹⰵ"
 },
 "examples":{
 "review":{"title":"Ⱉⰱⱈⱁⰶⰴⰵⱀⰹⰵ ⰻⱄⱂⱏⰹⱅⰰⱀⰹⱔ","desc":"Claude ⱂⰻⱎⰵⱅⱏ ⱉ autolyse, ⰻⱄⱂⱏⰹⱅⱆⰵⱅⱏ ⱂⱁ ⱂⱃⰰⰲⰻⰾⰰⰿⱏ ⱅⰲⱁⰻⰿⱏ, ⰻ ⰻⱄⱂⱃⰰⰲⰾⱑⰵⱅⱏ ⱀⰵⱆⰴⱁⰲⰾⰵⱅⰲⱁⱃⰻⰲⱎⰵⰵ, ⰴⱁ 3 ⰽⱃⰰⱅⱏ.","tip":"Ⱂⱃⰵⰿⱑⱀⰻ ⰴⱑⰾⱁ ⰲⱏ ⱄⰻⱀⰵⰿⱏ ⰸⰲⱑⱀⱑ ⰻ ⱂⱃⰰⰲⰻⰾⰰ ⰲⱏ ⰱⰰⰳⱃⱔⱀⱁⰿⱏ."},

@@ -2,6 +2,7 @@
  "name": "Español",
  "blockly": "es",
  "note": "Spanish words for the block palette and the page. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text, with {name} for the parts filled in. In examples, keys are the example keys, each with its title, description and tip. In starters, keys are the English words already in the palette's blocks. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas, Continuar).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "añadir %1 al resultado"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "La entrada {name} debe ser sí o no, no {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "La entrada {name} debe ser una fecha como 2026-11-21, no {value}.",
   "Yes": "Sí",
-  "No": "No"
+  "No": "No",
+  "Made by a model: corrections welcome.": "Hecho por un modelo: se agradecen correcciones.",
+  "Read by a speaker.": "Revisado por un hablante.",
+  "Suggest a correction": "Sugerir una corrección"
  },
  "examples": {
   "review": {

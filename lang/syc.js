@@ -5,6 +5,7 @@
 "dir":"rtl",
 "font":"Noto Sans Syriac",
 "note":"Classical Syriac in the Estrangela script, written right to left (dir: rtl, as for Hebrew and Aramaic), for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Syriac. Every word is written here in transliteration, and tools/i18n.py writes the page's words in Syriac letters, unpointed as Syriac is usually written: short vowels and a medial ā left out, i, ī and ē as ܝ, o and u as ܘ, a final ā or ē as ܐ, and an initial vowel with ܐ first; a doubled consonant once. A word marked ^ stays in Latin letters, and a proclitic on such a word keeps a hyphen (d-Claude). The font is Noto Sans Syriac. python holds the transliteration without the marks, because terminals rarely have a Syriac font; typed answers are in or ʾīn for yes and la or lā for no (y and n work too). Syriac has no words for most of this, so the wording uses classical vocabulary for new things, much as the Aramaic file does: ṭuksā (order) for a program, psaqtā (a section) for a script, lebntā (a brick) for a block, dmutā (a likeness) for a model, šlīḥā (an envoy) for an agent, mānā (a vessel) for a tool, rušmā (a sketch) for a draft, buḥrānā for a review, pērā (fruit) for a result, pinqsā (a register) for the run log, qlīdā for a key, pengā for a file, gāzā (a treasury) for a folder, ṭablā (a tablet) for a record, ḥaqlā for a field, ʾātā (a sign) for a token, tḥumā (a boundary) for a checkpoint and mabbʿā (a spring) for a news feed. Buttons: rhaṭ Run, psoq Stop, ʾammen Continue, qabbel Approve, hpok Send back, šbuq Allow, lā Don't, zabnē Schedules. It is a modern use of the classical language, not genuine ancient text. Names, keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. To see a transliterated line in Syriac letters: python tools/i18n.py script syc \"…\".",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"ܟܬܒܐ ܢܓܝܪܐ. ܕܘܫ Enter ܠܣܘܪܛܐ ܚܕܬܐ; ܣܘܪܛܐ ܡܬܥܬܦܢ ܒ-80 ܐܬܘܬܐ."},
 "rb_start":{"message0":"ܟܕ ܐܬܕܪܫ ܪܗܛ","tooltip":"ܟܘܠ ܛܘܟܣܐ ܫܪܐ ܗܪܟܐ. ܠܒܢܐ ܕܠܬܗܬܝܗ ܪܗܛܝܢ ܡܢ ܠܥܠ ܠܬܚܬ. ܣܓܝܐܐ ܡܢ ܗܠܝܢ ܪܗܛܝܢ ܚܕ ܠܘܬ ܚܕ."},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"ܡܥܠܢܐ {name} ܘܠܗ ܕܢܗܘܐ ܐܝܢ ܐܘ ܠܐ, ܠܐ {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"ܡܥܠܢܐ {name} ܘܠܗ ܕܢܗܘܐ ܝܘܡܐ ܐܟ 2026-11-21, ܠܐ {value}.",
 "Yes":"ܐܝܢ",
-"No":"ܠܐ"
+"No":"ܠܐ",
+"Made by a model: corrections welcome.":"ܥܒܝܕ ܒܡܟܢܐ: ܬܘܪܨܐ ܡܩܒܠܝܢ.",
+"Read by a speaker.":"ܩܪܐ ܒܡܡܠܢܐ.",
+"Suggest a correction":"ܐܡܪ ܬܘܪܨܐ"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},

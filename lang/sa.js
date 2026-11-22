@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Devanagari",
 "note":"Sanskrit words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Sanskrit. Written in Devanagari, with the Noto Sans Devanagari font loaded so every computer shows it the same. Modern technical words follow established Sanskrit coinages (सङ्गणकम् computer, सञ्चिका file, ईपत्रम् email, खण्डः block, प्रतिनिधिः agent, चालनपञ्जी run log); product names (Home Assistant, Telegram, API) stay in Latin letters. Blocks and instructions use the second person singular imperative; sentences end with a danda (।). In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Sanskrit names (चालय, अग्रे, कालयोजनाः).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"%1 परिणामे योजय"},
 "rb_agent":{"message0":"प्रतिनिधिः: %1 प्रति प्रयतस्व","message1":"%1 पदानि यावत्, एतैः साधनैः:","message2":"%1","message3":"प्रथमं योजनां कुरु, गच्छता कालेन तां परिवर्तय %1","tooltip":"Claude किं करणीयम् इति निश्चिनोति: प्रत्येकस्मिन् पदे अन्तःस्थितेषु साधनेषु एकं वृणोति, किं जातम् इति पश्यति, लक्ष्यं यावत् न प्राप्यते पदानि वा यावत् न समाप्यन्ते तावत् अग्रे गच्छति। तस्य अन्तिमम् उत्तरं प्रारूपे गच्छति। प्रत्येकं पदं प्रतिरूपस्य एकम् आह्वानम्। “प्रथमं योजनां कुरु” इति चिह्निते सः प्रथमपदेन सह लघ्वीं योजनां लिखति, तां च नवीकरोति, अधिकव्ययं विना।","message4":"प्रत्येकं तथ्यं कुतः आगतम् इति वद %1"},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"{name} प्रवेशः आम् वा न वा भवेत्, न {value}।",
 "Input {name} must be a date like 2026-11-21, not {value}.":"{name} प्रवेशः 2026-11-21 इव दिनाङ्कः भवेत्, न {value}।",
 "Yes":"आम्",
-"No":"न"
+"No":"न",
+"Made by a model: corrections welcome.":"यन्त्रेण कृतम्: संशोधनानि स्वागतानि।",
+"Read by a speaker.":"भाषकेण पठितम्।",
+"Suggest a correction":"संशोधनं सूचय"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},

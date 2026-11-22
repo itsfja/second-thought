@@ -2,6 +2,7 @@
  "name": "Nederlands",
  "blockly": "nl",
  "note": "Dutch words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Dutch names (Uitvoeren, Doorgaan, Programma’s).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "%1 aan het resultaat toevoegen"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "Invoer {name} moet ja of nee zijn, niet {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "Invoer {name} moet een datum zijn zoals 2026-11-21, niet {value}.",
   "Yes": "Ja",
-  "No": "Nee"
+  "No": "Nee",
+  "Made by a model: corrections welcome.": "Gemaakt door een model: correcties welkom.",
+  "Read by a speaker.": "Nagelezen door een spreker.",
+  "Suggest a correction": "Een correctie voorstellen"
  },
  "examples": {
   "review": {

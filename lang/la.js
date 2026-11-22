@@ -3,6 +3,7 @@
 "name":"Latina",
 "blockly":"la",
 "note":"Latin words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has almost no Latin of its own. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Latin names (Exsequere, Perge, Programmata).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"adde %1 ad effectum"},
 "rb_agent":{"message0":"procurator: labora ad %1","message1":"usque ad %1 gradus, his instrumentis:","message2":"%1","message3":"primum consilium cape et in itinere muta %1","tooltip":"Claude decernit quid deinde agat: quoque gradu unum ex instrumentis intus eligit, videt quid acciderit, et pergit donec finis attingatur aut gradus deficiant. Responsum eius ultimum in adumbrationem it. Quisque gradus una vocatio exemplaris est. Si «primum consilium cape» notatum est, breve consilium primo gradu scribit et renovat, sine sumptu addito.","message4":"dicere unde quaeque res venerit %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Ingressus {name} ita aut non esse debet, non {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Ingressus {name} dies esse debet ut 2026-11-21, non {value}.",
 "Yes":"Ita",
-"No":"Non"
+"No":"Non",
+"Made by a model: corrections welcome.":"A machina factum: emendationes gratae.",
+"Read by a speaker.":"A loquente lectum.",
+"Suggest a correction":"Emendationem propone"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},

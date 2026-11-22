@@ -148,3 +148,14 @@ class RecordedPictures(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LanguagesSayHowSure(unittest.TestCase):
+    def test_every_language_says_who_read_its_words(self):
+        """#460: each i18n/*.json says read_by speaker or model, and its docs/words page says so too."""
+        for path in sorted((ROOT / "i18n").glob("*.json")):
+            with self.subTest(language=path.stem):
+                t = json.loads(path.read_text(encoding="utf-8"))
+                self.assertIn(t.get("read_by"), ("speaker", "model"))
+                words = (ROOT / "docs" / "words" / (path.stem + ".md")).read_text(encoding="utf-8")
+                self.assertIn("**Read by a speaker.**" if t["read_by"] == "speaker" else "**Made by a model**", words)
