@@ -99,6 +99,7 @@
       run.sample = await getSample() || (svcKeys.all().length ? noClaudeSample() : null);  // keys for other services only (#321)
       if (!run.sample) { showBanner(tr("Running needs Claude. Open this page in claude.ai while signed in.") + orOwnKey()); throw new Halt(); }
       await memInit();
+      run.programInputs = await programInputs(reason === "manual");  // #442
       run.ready = true;
       run.pending.forEach(h => h.evalBlock ? startScript(null, "", h.evalBlock) : startScript(h.getNextBlock(), h.payload));
       run.pending = [];

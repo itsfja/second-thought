@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"提到 %1","tooltip":"草稿中没有这些词则不合格（不区分大小写）。"},
 "rb_chk_no_mention":{"message0":"不提 %1","tooltip":"草稿中出现这些词则不合格（不区分大小写）。"},
 "rb_chk_json":{"message0":"是有效的JSON","tooltip":"草稿不是有效JSON则不合格。"},
-"rb_chk_link":{"message0":"包含链接","tooltip":"草稿中没有链接则不合格（http://… 或 www.…）。"}
+"rb_chk_link":{"message0":"包含链接","tooltip":"草稿中没有链接则不合格（http://… 或 www.…）。"},
+"rb_inputs":{"message0":"这个程序的输入","message1":"%1","tooltip":"这个程序接受的输入。“运行”会用表单询问；导出的 Python 用 --input town=Rye，--mcp 按名称接收。没有默认值的输入必须给出。"},
+"rb_input_def":{"message0":"输入 %1 : %2 默认 %3","tooltip":"一个输入：名称、类型和默认值。没有默认值就必须给出。日期写成 2026-11-21 这样。"},
+"rb_input":{"message0":"输入 %1","tooltip":"程序开始时这个输入得到的值，或者它的默认值。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每天","weekdays":"工作日","weekends":"周末"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"审阅者设置","same":"同一模型","another":"其他厂商的模型"},
-"rb_reflect.REVIEWER":{"":"审阅者设置","same":"同一模型","another":"其他厂商的模型"}
+"rb_reflect.REVIEWER":{"":"审阅者设置","same":"同一模型","another":"其他厂商的模型"},
+"rb_input_def.TYPE":{"text":"文本","number":"数字","yesno":"是或否","date":"日期"}
 },
 "categories":{
 "Events":"事件",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"在 GitHub 上提问或分享想法",
 "Save for Docker (.zip)":"保存为 Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"已保存 {name}-docker.zip。解压后把密钥填进 keys.env，然后按 SETUP.md 操作。",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"这个程序没有要等待的事，在 Docker 里会结束又一再重启。Docker 适合带有时间表或“当……时”积木的程序。"
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"这个程序没有要等待的事，在 Docker 里会结束又一再重启。Docker 适合带有时间表或“当……时”积木的程序。",
+"Fill in the inputs, then press Run.":"填好输入，然后按“运行”。",
+"Program inputs":"程序的输入",
+"Input {name} needs a value.":"输入 {name} 需要一个值。",
+"Input {name} must be a number, not {value}.":"输入 {name} 必须是数字，而不是 {value}。",
+"Input {name} must be yes or no, not {value}.":"输入 {name} 必须是“是”或“否”，而不是 {value}。",
+"Input {name} must be a date like 2026-11-21, not {value}.":"输入 {name} 必须是像 2026-11-21 这样的日期，而不是 {value}。",
+"Yes":"是",
+"No":"否"
 },
 "examples":{
 "review":{"title":"审阅循环","desc":"Claude 写一篇关于自溶法的文章，按你的规则检查，并修正不合格的地方，最多 3 轮。","tip":"改动蓝色积木里的任务和紫色积木里的规则。"},
@@ -2520,6 +2532,12 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"最近 {days} 天没有已保存的日志 (save_log = yes 会在 logs/ 中为每次运行保存一份)。",
 "Actions done, from the receipts of the last {days} days: {n}.":"最近 {days} 天的回执显示已完成的操作: {n} 次。",
 "Cost, counted on this computer at list prices:":"成本 (按本机定价计):",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: 运行 {runs} 次 (通过 {ok} 次,出错 {failed} 次),完成操作 {actions} 次,拒绝 {refused} 次,支出 {cost}。"
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: 运行 {runs} 次 (通过 {ok} 次,出错 {failed} 次),完成操作 {actions} 次,拒绝 {refused} 次,支出 {cost}。",
+"Input {name} needs a value.":"输入 {name} 需要一个值。",
+"Input {name} must be a number, not {value}.":"输入 {name} 必须是数字，而不是 {value}。",
+"Input {name} must be yes or no, not {value}.":"输入 {name} 必须是“是”或“否”，而不是 {value}。",
+"Input {name} must be a date like 2026-11-21, not {value}.":"输入 {name} 必须是像 2026-11-21 这样的日期，而不是 {value}。",
+"There's no input called {name}. Its inputs: {names}.":"没有名为 {name} 的输入。它的输入：{names}。",
+"--input wants a name and a value, like --input town=Rye.":"--input 需要名称和值，例如 --input town=Rye。"
 }
 };

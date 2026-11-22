@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"ሰልዕ %1","tooltip":"አላአ ሰልዕ"},
 "rb_chk_no_mention":{"message0":"አላአ ሰልዕ %1","tooltip":"ሰልዕ"},
 "rb_chk_json":{"message0":"JSON አብርታየ","tooltip":"አላአ አብርታየ JSON"},
-"rb_chk_link":{"message0":"ተንንንይግእ አብርታየ","tooltip":"አላአ ተንንንይግእ"}
+"rb_chk_link":{"message0":"ተንንንይግእ አብርታየ","tooltip":"አላአ ተንንንይግእ"},
+"rb_inputs":{"message0":"ቦአተ ዝንቱ ሥርዐት","message1":"%1","tooltip":"ቦአት ዘይነሥእ ዝንቱ ሥርዐት። ሩጽ ይሴአሎሙ በመጽሐፈ መልእክት፤ Python ዘወፅአ ይነሥእ --input town=Rye፣ ወ --mcp ይነሥኦሙ በስም። ዘአልቦ ቀዳሚ ይደሉ ይትወሀብ።"},
+"rb_input_def":{"message0":"ቦአት %1 : %2 ቀዳሚ %3","tooltip":"አሐቲ ቦአት፦ ስማ፣ ዘመዳ ወቀዳሚሃ። እንበለ ቀዳሚ ይደሉ ትትወሀብ። ዕለት ትጽሐፍ ከመ 2026-11-21።"},
+"rb_input":{"message0":"ቦአት %1","tooltip":"ዋጋ ዘነሥአት ዛቲ ቦአት አመ ጥንተ ሥርዐት፣ አው ቀዳሚሃ።"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ኵሎ ዕለተ","weekdays":"በመዋዕለ ግብር","weekends":"በሰንበታት"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"ዬሜሪምሩ ስረተ","same":"ዬም aደgiው ሜስወድ","another":"ሌለ ዬሜሪምሩ ሜስወድ"},
-"rb_reflect.REVIEWER":{"":"ዬሜሪምሩ ስረተ","same":"ዬም aደgiው ሜስወድ","another":"ሌለ ዬሜሪምሩ ሜስወድ"}
+"rb_reflect.REVIEWER":{"":"ዬሜሪምሩ ስረተ","same":"ዬም aደgiው ሜስወድ","another":"ሌለ ዬሜሪምሩ ሜስወድ"},
+"rb_input_def.TYPE":{"text":"መጽሐፍ","number":"ኍልቈ","yesno":"እወ አው አልቦ","date":"ዕለት"}
 },
 "categories":{
 "Events":"ኵነታት",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"ተሰአል አው አይድዕ ሕሊናከ በ GitHub",
 "Save for Docker (.zip)":"ዕቀብ ለ Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"ተዐቅበ {name}-docker.zip። ፍትሖ፣ ደይ መራኁተከ ውስተ keys.env፣ ወእምዝ ትልዎ ለ SETUP.md።",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ዝንቱ ሥርዐት ኢይጸንሕ ምንተኒ፣ ወበእንተዝ በ Docker ይፌጽም ወይቀድም ካዕበ ወካዕበ። Docker ይደሉ ለሥርዐት ዘቦ ጊዜ ወአው ኅብረ 'አመ'።"
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ዝንቱ ሥርዐት ኢይጸንሕ ምንተኒ፣ ወበእንተዝ በ Docker ይፌጽም ወይቀድም ካዕበ ወካዕበ። Docker ይደሉ ለሥርዐት ዘቦ ጊዜ ወአው ኅብረ 'አመ'።",
+"Fill in the inputs, then press Run.":"ምላእ ቦአተ፣ ወእምዝ ኩርዖ ለሩጽ።",
+"Program inputs":"ቦአተ ሥርዐት",
+"Input {name} needs a value.":"ቦአት {name} ይፈቅድ ዋጋ።",
+"Input {name} must be a number, not {value}.":"ቦአት {name} ይደሉ ይኩን ኍልቈ፣ አኮ {value}።",
+"Input {name} must be yes or no, not {value}.":"ቦአት {name} ይደሉ ይኩን እወ አው አልቦ፣ አኮ {value}።",
+"Input {name} must be a date like 2026-11-21, not {value}.":"ቦአት {name} ይደሉ ይኩን ዕለተ ከመ 2026-11-21፣ አኮ {value}።",
+"Yes":"እወ",
+"No":"አልቦ"
 },
 "examples":{
 "review":{"title":"ዑደተ ሐተታ","desc":"Claude ይጽሕፍ በእንተ autolyse፣ ይሔትቶ በከመ ሕግጋቲከ፣ ወያስተራትዕ ኵሎ ዘይወድቅ፣ እስከ 3 ዙረታት።","tip":"ወልጥ ግብረ በግንፋል ሰማያዊ ወሕግጋተ በግንፋል ሐምራዊ።"},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"ሎgስ aልLeቤም ቤ {days} ዌር (ሰve_ሎg = ዬስ ቤዚ ሎgስ ሰveድ)",
 "Actions done, from the receipts of the last {days} days: {n}.":"acቲoንስ ዬቴወሌ, ሬceipትስ ዬ {days} ዌር: {n}",
 "Cost, counted on this computer at list prices:":"coስት, ቤዚ coምpuቴር couንቴድ:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} ሩንስ ({ok} paስሴድ, {failed} eርሮር), {actions} acቲoንስ, {refused} ሬfuሴድ, {cost} ስpeንት"
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} ሩንስ ({ok} paስሴድ, {failed} eርሮር), {actions} acቲoንስ, {refused} ሬfuሴድ, {cost} ስpeንት",
+"Input {name} needs a value.":"ቦአት {name} ይፈቅድ ዋጋ።",
+"Input {name} must be a number, not {value}.":"ቦአት {name} ይደሉ ይኩን ኍልቈ፣ አኮ {value}።",
+"Input {name} must be yes or no, not {value}.":"ቦአት {name} ይደሉ ይኩን እወ አው አልቦ፣ አኮ {value}።",
+"Input {name} must be a date like 2026-11-21, not {value}.":"ቦአት {name} ይደሉ ይኩን ዕለተ ከመ 2026-11-21፣ አኮ {value}።",
+"There's no input called {name}. Its inputs: {names}.":"አልቦ ቦአት ዘስሙ {name}። ቦአቱ፦ {names}።",
+"--input wants a name and a value, like --input town=Rye.":"--input ይፈቅድ ስመ ወዋጋ፣ ከመ --input town=Rye።"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ወስክ ትርጓሜ",

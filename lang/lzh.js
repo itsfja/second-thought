@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"書 %1","tooltip":"稿闕此言則敗（大小書無別）。"},
 "rb_chk_no_mention":{"message0":"不書 %1","tooltip":"稿有此言則敗（大小書無別）。"},
 "rb_chk_json":{"message0":"合乎JSON","tooltip":"稿非合JSON則敗。"},
-"rb_chk_link":{"message0":"有聯","tooltip":"稿無聯則敗（http://… 或 www.…）。"}
+"rb_chk_link":{"message0":"有聯","tooltip":"稿無聯則敗（http://… 或 www.…）。"},
+"rb_inputs":{"message0":"此程之所入","message1":"%1","tooltip":"此程所受之入。行時以表問之；所出之 Python 受 --input town=Rye，--mcp 以名受之。無預設者必予之。"},
+"rb_input_def":{"message0":"所入 %1 ：%2 預設 %3","tooltip":"一入：其名、其類、其預設。無預設則必予之。日書如 2026-11-21。"},
+"rb_input":{"message0":"所入 %1","tooltip":"程始時此入所得之值，或其預設。"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"每日","weekdays":"平日","weekends":"休日"},
@@ -239,7 +242,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"審者之設","same":"同一模型","another":"他廠之模型"},
-"rb_reflect.REVIEWER":{"":"審者之設","same":"同一模型","another":"他廠之模型"}
+"rb_reflect.REVIEWER":{"":"審者之設","same":"同一模型","another":"他廠之模型"},
+"rb_input_def.TYPE":{"text":"文","number":"數","yesno":"然否","date":"日"}
 },
 "categories":{
 "Agent":"使者",
@@ -1286,7 +1290,15 @@
 "Ask a question or share an idea on GitHub":"於 GitHub 問疑獻策",
 "Save for Docker (.zip)":"存為 Docker（.zip）",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"已存 {name}-docker.zip。解之，置鑰於 keys.env，乃從 SETUP.md。",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"此程無所待，於 Docker 中將終而復始，無已。Docker 宜於有時表或「當」之塊者。"
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"此程無所待，於 Docker 中將終而復始，無已。Docker 宜於有時表或「當」之塊者。",
+"Fill in the inputs, then press Run.":"填其所入，乃按「行」。",
+"Program inputs":"程之所入",
+"Input {name} needs a value.":"所入 {name} 須有值。",
+"Input {name} must be a number, not {value}.":"所入 {name} 當為數，非 {value}。",
+"Input {name} must be yes or no, not {value}.":"所入 {name} 當為然否，非 {value}。",
+"Input {name} must be a date like 2026-11-21, not {value}.":"所入 {name} 當為日，如 2026-11-21，非 {value}。",
+"Yes":"然",
+"No":"否"
 },
 "examples":{
 "review":{"title":"審之循","desc":"Claude 論自溶（autolyse），依汝之則察之，不中者正之，至多三回。","tip":"易藍塊之事、紫塊之則。"},
@@ -2519,7 +2531,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"近 {days} 日無存記 (save_log = yes 每行存一記於 logs/)。",
 "Actions done, from the receipts of the last {days} days: {n}.":"近 {days} 日收據所載已行之事: {n}。",
 "Cost, counted on this computer at list prices:":"費, 以此器牌價計:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: 行 {runs} 次 (過 {ok}, 有過 {failed}), 已行 {actions}, 所卻 {refused}, 所費 {cost}。"
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: 行 {runs} 次 (過 {ok}, 有過 {failed}), 已行 {actions}, 所卻 {refused}, 所費 {cost}。",
+"Input {name} needs a value.":"所入 {name} 須有值。",
+"Input {name} must be a number, not {value}.":"所入 {name} 當為數，非 {value}。",
+"Input {name} must be yes or no, not {value}.":"所入 {name} 當為然否，非 {value}。",
+"Input {name} must be a date like 2026-11-21, not {value}.":"所入 {name} 當為日，如 2026-11-21，非 {value}。",
+"There's no input called {name}. Its inputs: {names}.":"無名 {name} 之所入。其所入：{names}。",
+"--input wants a name and a value, like --input town=Rye.":"--input 須名與值，如 --input town=Rye。"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"加注",

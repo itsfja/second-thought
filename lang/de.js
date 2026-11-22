@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"erwähnt %1","tooltip":"Schlägt fehl, wenn der Entwurf diese Wörter nicht enthält (Groß-/Kleinschreibung egal)."},
 "rb_chk_no_mention":{"message0":"erwähnt nicht %1","tooltip":"Schlägt fehl, wenn der Entwurf diese Wörter enthält (Groß-/Kleinschreibung egal)."},
 "rb_chk_json":{"message0":"ist gültiges JSON","tooltip":"Schlägt fehl, wenn der Entwurf kein gültiges JSON ist."},
-"rb_chk_link":{"message0":"hat einen Link","tooltip":"Schlägt fehl, wenn der Entwurf keinen Link enthält (http://… oder www.…)."}
+"rb_chk_link":{"message0":"hat einen Link","tooltip":"Schlägt fehl, wenn der Entwurf keinen Link enthält (http://… oder www.…)."},
+"rb_inputs":{"message0":"Eingaben dieses Programms","message1":"%1","tooltip":"Die Eingaben, die dieses Programm nimmt. „Ausführen“ fragt in einem Formular danach; exportiertes Python nimmt --input town=Rye, und --mcp nimmt sie beim Namen. Eine ohne Vorgabe muss angegeben werden."},
+"rb_input_def":{"message0":"Eingabe %1 : %2 Vorgabe %3","tooltip":"Eine Eingabe: ihr Name, ihre Art und ihre Vorgabe. Ohne Vorgabe muss sie angegeben werden. Ein Datum wird wie 2026-11-21 geschrieben."},
+"rb_input":{"message0":"Eingabe %1","tooltip":"Der Wert, den diese Eingabe beim Start des Programms bekam, oder ihre Vorgabe."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"jeden Tag","weekdays":"an Wochentagen","weekends":"am Wochenende"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"die Prüfer-Einstellung","same":"dasselbe Modell","another":"ein Modell eines anderen Herstellers"},
-"rb_reflect.REVIEWER":{"":"die Prüfer-Einstellung","same":"dasselbe Modell","another":"ein Modell eines anderen Herstellers"}
+"rb_reflect.REVIEWER":{"":"die Prüfer-Einstellung","same":"dasselbe Modell","another":"ein Modell eines anderen Herstellers"},
+"rb_input_def.TYPE":{"text":"Text","number":"Zahl","yesno":"ja oder nein","date":"Datum"}
 },
 "categories":{
 "Events":"Ereignisse",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Stell eine Frage oder teile eine Idee auf GitHub",
 "Save for Docker (.zip)":"Für Docker speichern (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip gespeichert. Entpacke es, trage deine Schlüssel in keys.env ein und folge dann SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Dieses Programm wartet auf nichts, also würde es in Docker enden und immer wieder neu starten. Docker passt zu einem Programm mit Zeitplan oder einem „wenn“-Block."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Dieses Programm wartet auf nichts, also würde es in Docker enden und immer wieder neu starten. Docker passt zu einem Programm mit Zeitplan oder einem „wenn“-Block.",
+"Fill in the inputs, then press Run.":"Fülle die Eingaben aus und drücke dann „Ausführen“.",
+"Program inputs":"Eingaben des Programms",
+"Input {name} needs a value.":"Die Eingabe {name} braucht einen Wert.",
+"Input {name} must be a number, not {value}.":"Die Eingabe {name} muss eine Zahl sein, nicht {value}.",
+"Input {name} must be yes or no, not {value}.":"Die Eingabe {name} muss ja oder nein sein, nicht {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Die Eingabe {name} muss ein Datum wie 2026-11-21 sein, nicht {value}.",
+"Yes":"Ja",
+"No":"Nein"
 },
 "examples":{
 "review":{"title":"Prüfschleife","desc":"Claude schreibt über Autolyse, prüft den Text anhand Ihrer Regeln und behebt, was durchfällt, bis zu 3 Runden.","tip":"Ändern Sie die Aufgabe im blauen Block und die Regeln im lila Block."},
@@ -2520,6 +2532,12 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Keine gespeicherten Logs in den letzten {days} Tagen (save_log = yes speichert einen pro Lauf in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Erledigte Aktionen, aus den Belegen der letzten {days} Tage: {n}.",
 "Cost, counted on this computer at list prices:":"Kosten, auf diesem Computer zu Listenpreisen gezählt:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} Läufe ({ok} bestanden, {failed} mit Fehler), {actions} Aktionen erledigt, {refused} abgelehnt, {cost} ausgegeben."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} Läufe ({ok} bestanden, {failed} mit Fehler), {actions} Aktionen erledigt, {refused} abgelehnt, {cost} ausgegeben.",
+"Input {name} needs a value.":"Die Eingabe {name} braucht einen Wert.",
+"Input {name} must be a number, not {value}.":"Die Eingabe {name} muss eine Zahl sein, nicht {value}.",
+"Input {name} must be yes or no, not {value}.":"Die Eingabe {name} muss ja oder nein sein, nicht {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Die Eingabe {name} muss ein Datum wie 2026-11-21 sein, nicht {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Es gibt keine Eingabe namens {name}. Seine Eingaben: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input braucht einen Namen und einen Wert, etwa --input town=Rye."
 }
 };

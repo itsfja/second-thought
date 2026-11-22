@@ -819,6 +819,19 @@
   "rb_chk_link": {
    "message0": "リンクあり",
    "tooltip": "下書きにリンクがなければ不合格（http://… または www.…）。"
+  },
+  "rb_inputs": {
+   "message0": "このプログラムの入力",
+   "message1": "%1",
+   "tooltip": "このプログラムが受け取る入力です。「実行」でフォームから尋ね、書き出した Python は --input town=Rye、--mcp では名前で受け取ります。既定値のない入力は必須です。"
+  },
+  "rb_input_def": {
+   "message0": "入力 %1 : %2 既定値 %3",
+   "tooltip": "1 つの入力: 名前、種類、既定値。既定値がなければ必須です。日付は 2026-11-21 のように書きます。"
+  },
+  "rb_input": {
+   "message0": "入力 %1",
+   "tooltip": "プログラム開始時にこの入力に与えられた値、または既定値。"
   }
  },
  "options": {
@@ -984,6 +997,12 @@
    "": "レビュアーの設定",
    "same": "同じモデル",
    "another": "別のメーカーのモデル"
+  },
+  "rb_input_def.TYPE": {
+   "text": "テキスト",
+   "number": "数値",
+   "yesno": "はい/いいえ",
+   "date": "日付"
   }
  },
  "categories": {
@@ -2031,7 +2050,15 @@
   "Ask a question or share an idea on GitHub": "GitHub で質問やアイデアを投稿する",
   "Save for Docker (.zip)": "Docker 用に保存 (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip を保存しました。展開して keys.env にキーを入れ、SETUP.md の手順に従ってください。",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "このプログラムには待つものがないため、Docker では終了と再起動を繰り返します。Docker はスケジュールか「〜のとき」ブロックのあるプログラム向けです。"
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "このプログラムには待つものがないため、Docker では終了と再起動を繰り返します。Docker はスケジュールか「〜のとき」ブロックのあるプログラム向けです。",
+  "Fill in the inputs, then press Run.": "入力を埋めてから「実行」を押してください。",
+  "Program inputs": "プログラムの入力",
+  "Input {name} needs a value.": "入力 {name} には値が必要です。",
+  "Input {name} must be a number, not {value}.": "入力 {name} は数値でなければなりません（{value} ではなく）。",
+  "Input {name} must be yes or no, not {value}.": "入力 {name} ははいかいいえでなければなりません（{value} ではなく）。",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "入力 {name} は 2026-11-21 のような日付でなければなりません（{value} ではなく）。",
+  "Yes": "はい",
+  "No": "いいえ"
  },
  "examples": {
   "review": {
@@ -3896,6 +3923,12 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "過去 {days} 日間の保存ログはありません (save_log = yes で logs/ に run ごとに 1 件保存されます)。",
   "Actions done, from the receipts of the last {days} days: {n}.": "過去 {days} 日間の受領書による実行済みアクション: {n} 件。",
   "Cost, counted on this computer at list prices:": "コスト (このコンピューターで定価換算):",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: run {runs} 件 (合格 {ok}、エラー {failed})、アクション {actions} 件実行、拒否 {refused} 件、支出 {cost}。"
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: run {runs} 件 (合格 {ok}、エラー {failed})、アクション {actions} 件実行、拒否 {refused} 件、支出 {cost}。",
+  "Input {name} needs a value.": "入力 {name} には値が必要です。",
+  "Input {name} must be a number, not {value}.": "入力 {name} は数値でなければなりません（{value} ではなく）。",
+  "Input {name} must be yes or no, not {value}.": "入力 {name} ははいかいいえでなければなりません（{value} ではなく）。",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "入力 {name} は 2026-11-21 のような日付でなければなりません（{value} ではなく）。",
+  "There's no input called {name}. Its inputs: {names}.": "{name} という入力はありません。このプログラムの入力: {names}。",
+  "--input wants a name and a value, like --input town=Rye.": "--input には名前と値が必要です。例: --input town=Rye"
  }
 }

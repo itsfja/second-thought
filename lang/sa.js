@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"कहता है %1","tooltip":"न शब्द"},
 "rb_chk_no_mention":{"message0":"न कहता है %1","tooltip":"शब्द मि"},
 "rb_chk_json":{"message0":"JSON वाली","tooltip":"न वाली JSON"},
-"rb_chk_link":{"message0":"लिंक है","tooltip":"न लिंक"}
+"rb_chk_link":{"message0":"लिंक है","tooltip":"न लिंक"},
+"rb_inputs":{"message0":"अस्य कार्यक्रमस्य प्रवेशाः","message1":"%1","tooltip":"अयं कार्यक्रमः यान् प्रवेशान् गृह्णाति। चालय तान् पत्रे पृच्छति; निर्यातितं Python --input town=Rye गृह्णाति, --mcp च तान् नाम्ना। पूर्वनिर्धारणरहितः दातव्यः।"},
+"rb_input_def":{"message0":"प्रवेशः %1 : %2 पूर्वनिर्धारितम् %3","tooltip":"एकः प्रवेशः: नाम, प्रकारः, पूर्वनिर्धारितं च। तद्विना दातव्यः। दिनाङ्कः 2026-11-21 इव लिख्यते।"},
+"rb_input":{"message0":"प्रवेशः %1","tooltip":"कार्यक्रमस्य आरम्भे अनेन प्रवेशेन लब्धं मूल्यम्, अथवा पूर्वनिर्धारितम्।"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"प्रतिदिनम्","weekdays":"कार्यदिनेषु","weekends":"सप्ताहान्तेषु"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"parīkṣakasya vyavasthā","same":"tad eva mānam","another":"anyasya kārayituḥ mānam"},
-"rb_reflect.REVIEWER":{"":"parīkṣakasya vyavasthā","same":"tad eva mānam","another":"anyasya kārayituḥ mānam"}
+"rb_reflect.REVIEWER":{"":"parīkṣakasya vyavasthā","same":"tad eva mānam","another":"anyasya kārayituḥ mānam"},
+"rb_input_def.TYPE":{"text":"पाठः","number":"सङ्ख्या","yesno":"आम् वा न वा","date":"दिनाङ्कः"}
 },
 "categories":{
 "Events":"घटनाः",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"GitHub इत्यत्र प्रश्नं पृच्छ विचारं वा कथय",
 "Save for Docker (.zip)":"Docker कृते रक्ष (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip रक्षितम्। तत् उद्घाट्य कुञ्चिकाः keys.env इत्यत्र स्थापय, ततः SETUP.md अनुसर।",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"अयं कार्यक्रमः किमपि न प्रतीक्षते, अतः Docker मध्ये समाप्य पुनः पुनः आरभेत। Docker कालयोजनायुक्ताय 'यदा'-खण्डयुक्ताय वा कार्यक्रमाय उचितम्।"
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"अयं कार्यक्रमः किमपि न प्रतीक्षते, अतः Docker मध्ये समाप्य पुनः पुनः आरभेत। Docker कालयोजनायुक्ताय 'यदा'-खण्डयुक्ताय वा कार्यक्रमाय उचितम्।",
+"Fill in the inputs, then press Run.":"प्रवेशान् पूरयित्वा चालय इति नुद।",
+"Program inputs":"कार्यक्रमस्य प्रवेशाः",
+"Input {name} needs a value.":"{name} प्रवेशः मूल्यम् अपेक्षते।",
+"Input {name} must be a number, not {value}.":"{name} प्रवेशः सङ्ख्या भवेत्, न {value}।",
+"Input {name} must be yes or no, not {value}.":"{name} प्रवेशः आम् वा न वा भवेत्, न {value}।",
+"Input {name} must be a date like 2026-11-21, not {value}.":"{name} प्रवेशः 2026-11-21 इव दिनाङ्कः भवेत्, न {value}।",
+"Yes":"आम्",
+"No":"न"
 },
 "examples":{
 "review":{"title":"समीक्षाचक्रम्","desc":"Claude autolyse विषये लिखति, तव नियमैः परीक्षते, यत् विफलं तत् शोधयति च, 3 आवर्तनानि यावत्।","tip":"नीलखण्डे कार्यं नीललोहितखण्डे नियमान् च परिवर्तय।"},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"न कश्चित् सं्रक्षितः् पटिः् {days} दिनानाम् (सवे_लोग् = येस् prati-abhyāsaṃ एकं् लोग्स्/ इति सं्रक्षति).",
 "Actions done, from the receipts of the last {days} days: {n}.":"क्ṛतानि कर्माणि, {days} दिनानां् प्राप्तयः्: {n}.",
 "Cost, counted on this computer at list prices:":"व्ययः्, अस्मिन् यन्त्रे प्रतिव्ṛत्तः्:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} अभ्यासाः् ({ok} जयाः्, {failed} दोषेण), {actions} कर्माणि क्ṛतानि, {refused} प्रत्याख्यातानि, {cost} व्ययः् क्ṛतः्."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} अभ्यासाः् ({ok} जयाः्, {failed} दोषेण), {actions} कर्माणि क्ṛतानि, {refused} प्रत्याख्यातानि, {cost} व्ययः् क्ṛतः्.",
+"Input {name} needs a value.":"{name} प्रवेशः मूल्यम् अपेक्षते।",
+"Input {name} must be a number, not {value}.":"{name} प्रवेशः सङ्ख्या भवेत्, न {value}।",
+"Input {name} must be yes or no, not {value}.":"{name} प्रवेशः आम् वा न वा भवेत्, न {value}।",
+"Input {name} must be a date like 2026-11-21, not {value}.":"{name} प्रवेशः 2026-11-21 इव दिनाङ्कः भवेत्, न {value}।",
+"There's no input called {name}. Its inputs: {names}.":"{name} नाम प्रवेशः नास्ति। तस्य प्रवेशाः: {names}।",
+"--input wants a name and a value, like --input town=Rye.":"--input नाम मूल्यं च अपेक्षते, यथा --input town=Rye।"
 },
 "blocklyMsg":{
 "ADD_COMMENT":"टिप्पणीं योजय",

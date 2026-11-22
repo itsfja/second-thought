@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"quītoa %1","tooltip":"Ahmo cualli in achtlahcuilōlli quipiya in tlahtolli (tlahcuilōlli monequi ahmo)."},
 "rb_chk_no_mention":{"message0":"ahmo quītoa %1","tooltip":"Ahmo cualli in achtlahcuilōlli quipiya in tlahtolli (tlahcuilōlli monequi ahmo)."},
 "rb_chk_json":{"message0":"cualli JSON","tooltip":"Ahmo cualli in achtlahcuilōlli ahmo cualli JSON."},
-"rb_chk_link":{"message0":"quipiya ce huitztiliztli","tooltip":"Ahmo cualli in achtlahcuilōlli ahmo quipiya huitztiliztli (http://… ahnozo www.…)."}
+"rb_chk_link":{"message0":"quipiya ce huitztiliztli","tooltip":"Ahmo cualli in achtlahcuilōlli ahmo quipiya huitztiliztli (http://… ahnozo www.…)."},
+"rb_inputs":{"message0":"in calaquiliztli inīn tlatēcpantli","message1":"%1","tooltip":"In calaquiliztli quicui inīn tlatēcpantli. Ma mochīhua quintlahtlania ipan ce āmatl; in Python quicui --input town=Rye, ihuān --mcp quincui ica intōcā. In ahmo quipia achtopa tlaīxtlapalli monequi motemaca."},
+"rb_input_def":{"message0":"calaquiliztli %1 : %2 achtopa %3","tooltip":"Ce calaquiliztli: itōcā, itlamantiliz ihuān iachtopa. Ahtle achtopa, monequi motemaca. Ce tōnalli mohcuiloa iuhqui 2026-11-21."},
+"rb_input":{"message0":"calaquiliztli %1","tooltip":"In tlaīxtlapalli ōquiceuh inīn calaquiliztli ihcuāc ōpēuh in tlatēcpantli, anozo iachtopa."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"mochipa","weekdays":"ipan tequitōnalli","weekends":"ipan in chicōmilhuitl ītlamiyān"},
@@ -239,7 +242,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"itlantlahtōl tlamachīuhqui","same":"zan tlamachīuhqui","another":"ocachi tlamachīuhqui"},
-"rb_reflect.REVIEWER":{"":"itlantlahtōl tlamachīuhqui","same":"zan tlamachīuhqui","another":"ocachi tlamachīuhqui"}
+"rb_reflect.REVIEWER":{"":"itlantlahtōl tlamachīuhqui","same":"zan tlamachīuhqui","another":"ocachi tlamachīuhqui"},
+"rb_input_def.TYPE":{"text":"tlahcuilōlli","number":"pōhualli","yesno":"quēmah anozo ahmo","date":"tōnalli"}
 },
 "categories":{
 "Agent":"Tītlantli",
@@ -1286,7 +1290,15 @@
 "Ask a question or share an idea on GitHub":"Xitlahtlani nozo xiquitoa motlalnamiquiliz ipan GitHub",
 "Save for Docker (.zip)":"Xicpiya ic Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Ōmopix {name}-docker.zip. Xiquixtli, xictlālli motlatlapōlōni ipan keys.env, niman xictoca SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Inīn tlatēcpantli ahtlei quichiya, ic ipan Docker tlamizquia ihuān occeppa occeppa pēhuazquia. Docker quinamiqui ce tlatēcpantli ica tōnalpōhualli anozo ce 'ihcuāc' tlatzacualli."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Inīn tlatēcpantli ahtlei quichiya, ic ipan Docker tlamizquia ihuān occeppa occeppa pēhuazquia. Docker quinamiqui ce tlatēcpantli ica tōnalpōhualli anozo ce 'ihcuāc' tlatzacualli.",
+"Fill in the inputs, then press Run.":"Xictēmi in calaquiliztli, niman xicpachoa Ma mochīhua.",
+"Program inputs":"Calaquiliztli in tlatēcpantli",
+"Input {name} needs a value.":"In calaquiliztli {name} quinequi ce tlaīxtlapalli.",
+"Input {name} must be a number, not {value}.":"In calaquiliztli {name} monequi ma pōhualli, ahmo {value}.",
+"Input {name} must be yes or no, not {value}.":"In calaquiliztli {name} monequi ma quēmah anozo ahmo, ahmo {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"In calaquiliztli {name} monequi ma tōnalli iuhqui 2026-11-21, ahmo {value}.",
+"Yes":"Quēmah",
+"No":"Ahmo"
 },
 "examples":{
 "review":{"title":"Tlattaliztli tlayahualōliztli","desc":"Claude tlahcuiloa ic autolyse, quitlatta ica motlanequiliz ihuān quiyēctilia in ahmo yēctli, ixquichcāuh ēxpa.","tip":"Xicpatla in tequitl ipan in texohtic tlaxtlapalli ihuān in tlanequiliztli ipan in camohpaltic."},
@@ -2519,7 +2531,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Ahmo tlamantli ōmocīuhque in {days} tōnalli (save_log = yes quitta cē īpan logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Ōmochīuhque tlamantli, in {days} tōnalli tlamachtiliztli: {n}.",
 "Cost, counted on this computer at list prices:":"Tomin, īpan inīn tepos īpan tlahcuilōlli:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} tlahcuilōlli ({ok} ōmochīuhque, {failed} ōmotlahuelī), {actions} ōmochīuhque, {refused} ōmotlāzque, {cost} ōmotitlan."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} tlahcuilōlli ({ok} ōmochīuhque, {failed} ōmotlahuelī), {actions} ōmochīuhque, {refused} ōmotlāzque, {cost} ōmotitlan.",
+"Input {name} needs a value.":"In calaquiliztli {name} quinequi ce tlaīxtlapalli.",
+"Input {name} must be a number, not {value}.":"In calaquiliztli {name} monequi ma pōhualli, ahmo {value}.",
+"Input {name} must be yes or no, not {value}.":"In calaquiliztli {name} monequi ma quēmah anozo ahmo, ahmo {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"In calaquiliztli {name} monequi ma tōnalli iuhqui 2026-11-21, ahmo {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Ahmo onca calaquiliztli itōcā {name}. Icalaquiliz: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input quinequi ce tōcāitl ihuān ce tlaīxtlapalli, iuhqui --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Xictlāli tlahtōlli",

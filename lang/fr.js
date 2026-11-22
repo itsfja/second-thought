@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"mentionne %1","tooltip":"Échoue si le brouillon ne contient pas ces mots (la casse importe peu)."},
 "rb_chk_no_mention":{"message0":"ne mentionne pas %1","tooltip":"Échoue si le brouillon contient ces mots (la casse importe peu)."},
 "rb_chk_json":{"message0":"est un JSON valide","tooltip":"Échoue si le brouillon n'est pas un JSON valide."},
-"rb_chk_link":{"message0":"a un lien","tooltip":"Échoue si le brouillon n'a pas de lien (http://… ou www.…)."}
+"rb_chk_link":{"message0":"a un lien","tooltip":"Échoue si le brouillon n'a pas de lien (http://… ou www.…)."},
+"rb_inputs":{"message0":"entrées de ce programme","message1":"%1","tooltip":"Les entrées que prend ce programme. Exécuter les demande dans un formulaire ; le Python exporté prend --input town=Rye, et --mcp les prend par leur nom. Une entrée sans valeur par défaut doit être donnée."},
+"rb_input_def":{"message0":"entrée %1 : %2 par défaut %3","tooltip":"Une entrée : son nom, son type et sa valeur par défaut. Sans valeur par défaut, elle doit être donnée. Une date s'écrit comme 2026-11-21."},
+"rb_input":{"message0":"entrée %1","tooltip":"La valeur donnée à cette entrée au démarrage du programme, ou sa valeur par défaut."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"tous les jours","weekdays":"en semaine","weekends":"le week-end"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"le paramètre du relecteur","same":"le même modèle","another":"un modèle d'un autre fabricant"},
-"rb_reflect.REVIEWER":{"":"le paramètre du relecteur","same":"le même modèle","another":"un modèle d'un autre fabricant"}
+"rb_reflect.REVIEWER":{"":"le paramètre du relecteur","same":"le même modèle","another":"un modèle d'un autre fabricant"},
+"rb_input_def.TYPE":{"text":"texte","number":"nombre","yesno":"oui ou non","date":"date"}
 },
 "categories":{
 "Events":"Événements",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Posez une question ou partagez une idée sur GitHub",
 "Save for Docker (.zip)":"Enregistrer pour Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip enregistré. Décompressez-le, mettez vos clés dans keys.env, puis suivez SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Ce programme n'attend rien : dans Docker, il se terminerait et redémarrerait sans cesse. Docker convient à un programme avec un horaire ou un bloc « quand »."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Ce programme n'attend rien : dans Docker, il se terminerait et redémarrerait sans cesse. Docker convient à un programme avec un horaire ou un bloc « quand ».",
+"Fill in the inputs, then press Run.":"Remplissez les entrées, puis appuyez sur Exécuter.",
+"Program inputs":"Entrées du programme",
+"Input {name} needs a value.":"L'entrée {name} a besoin d'une valeur.",
+"Input {name} must be a number, not {value}.":"L'entrée {name} doit être un nombre, pas {value}.",
+"Input {name} must be yes or no, not {value}.":"L'entrée {name} doit être oui ou non, pas {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"L'entrée {name} doit être une date comme 2026-11-21, pas {value}.",
+"Yes":"Oui",
+"No":"Non"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},
@@ -2520,6 +2532,12 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Aucun log enregistré ces {days} derniers jours (save_log = yes en garde un par run dans logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Actions faites, d'après les reçus des {days} derniers jours : {n}.",
 "Cost, counted on this computer at list prices:":"Coût, compté sur cet ordinateur aux prix catalogue :",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog} : {runs} runs ({ok} réussis, {failed} avec une erreur), {actions} actions faites, {refused} refusées, {cost} dépensé."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog} : {runs} runs ({ok} réussis, {failed} avec une erreur), {actions} actions faites, {refused} refusées, {cost} dépensé.",
+"Input {name} needs a value.":"L'entrée {name} a besoin d'une valeur.",
+"Input {name} must be a number, not {value}.":"L'entrée {name} doit être un nombre, pas {value}.",
+"Input {name} must be yes or no, not {value}.":"L'entrée {name} doit être oui ou non, pas {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"L'entrée {name} doit être une date comme 2026-11-21, pas {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Il n'y a pas d'entrée nommée {name}. Ses entrées : {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input veut un nom et une valeur, comme --input town=Rye."
 }
 };

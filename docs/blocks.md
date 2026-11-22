@@ -2,7 +2,7 @@
 
 [← Second Thought](../README.md) · [Using the page](using-the-page.md) · **Blocks** · [The agent](agent.md) · [Connections](connections.md) · [MCP tools](mcp.md) · [Running exported programs](running.md) · [Program format](program-format.md) · [Settings and models](settings.md)
 
-*Every block on the page — 207 of them — grouped as the palette groups them: what each does, what it lets a program do, and whether an exported program asks you first.*
+*Every block on the page — 210 of them — grouped as the palette groups them: what each does, what it lets a program do, and whether an exported program asks you first.*
 
 <!-- Made by tools/sync.py from tools/blocks.json: edit the blocks in web/editor/, not this. -->
 
@@ -69,6 +69,9 @@
 
 | Block | What it does | Lets a program | Asks first |
 |---|---|---|---|
+| input *name*<br>`rb_input` | The value this input was given when the program started, or its default. | nothing to declare | no |
+| input *name* : *type* default *default*<br>`rb_input_def` | One input: its name, its kind and its default. With no default, it must be given. A date is written like 2026-11-21. | nothing to declare | no |
+| this program's inputs<br>`rb_inputs` | The inputs this program takes. Run asks for them in a form; exported Python takes --input town=Rye, and --mcp takes them by name. One with no default must be given. | nothing to declare | no |
 | run program *name* with *value*<br>`rb_run_program` | Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported. | nothing to declare | no |
 
 ## Draft

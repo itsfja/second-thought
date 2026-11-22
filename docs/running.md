@@ -48,6 +48,8 @@ only the `.py`, not the zip's other files. It needs Node 18 or later, and Blockl
 @blockly/field-multilineinput@13.4.0`, or `bash tests/setup.sh`. `--lang`, `--model` and `--backups` do what the
 page's language, Model menu and backups do; `--help` lists them.
 
+**Inputs.** A program with named inputs (**this program's inputs**, #442) takes them on the command line, one `--input` each: `python my-program.py --input town=Rye --input loaves=3`. Those you leave out take their defaults; one with no default must be given, and a value of the wrong kind (a word for a number, a date not like 2026-11-21) stops the program before it starts, saying which. They apply to `--schedule` runs and `--test` too.
+
 ### Running on a schedule
 
 If a program has timed jobs or listeners, the zip also has `run-on-schedule.bat` and `run-on-schedule.sh`. These keep running, so the jobs start by themselves, and if the program stops with a problem they start it again 30 seconds later.

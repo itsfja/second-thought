@@ -819,6 +819,19 @@
   "rb_chk_link": {
    "message0": "έχει σύνδεσμο",
    "tooltip": "Αποτυγχάνει αν το προσχέδιο δεν έχει σύνδεσμο (http://… ή www.…)."
+  },
+  "rb_inputs": {
+   "message0": "είσοδοι αυτού του προγράμματος",
+   "message1": "%1",
+   "tooltip": "Οι είσοδοι που παίρνει αυτό το πρόγραμμα. Η Εκτέλεση τις ζητά σε μια φόρμα· η εξαγόμενη Python παίρνει --input town=Rye, και το --mcp τις παίρνει με το όνομά τους. Μία χωρίς προεπιλογή πρέπει να δοθεί."
+  },
+  "rb_input_def": {
+   "message0": "είσοδος %1 : %2 προεπιλογή %3",
+   "tooltip": "Μία είσοδος: το όνομά της, το είδος της και η προεπιλογή της. Χωρίς προεπιλογή πρέπει να δοθεί. Η ημερομηνία γράφεται όπως 2026-11-21."
+  },
+  "rb_input": {
+   "message0": "είσοδος %1",
+   "tooltip": "Η τιμή που πήρε αυτή η είσοδος όταν ξεκίνησε το πρόγραμμα, ή η προεπιλογή της."
   }
  },
  "options": {
@@ -984,6 +997,12 @@
    "": "η ρύθμιση του ελεγκτή",
    "same": "το ίδιο μοντέλο",
    "another": "ένα μοντέλο άλλου κατασκευαστή"
+  },
+  "rb_input_def.TYPE": {
+   "text": "κείμενο",
+   "number": "αριθμός",
+   "yesno": "ναι ή όχι",
+   "date": "ημερομηνία"
   }
  },
  "categories": {
@@ -2031,7 +2050,15 @@
   "Ask a question or share an idea on GitHub": "Κάντε μια ερώτηση ή μοιραστείτε μια ιδέα στο GitHub",
   "Save for Docker (.zip)": "Αποθήκευση για Docker (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "Αποθηκεύτηκε το {name}-docker.zip. Αποσυμπίεσέ το, βάλε τα κλειδιά σου στο keys.env και ακολούθησε το SETUP.md.",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Αυτό το πρόγραμμα δεν περιμένει τίποτα, οπότε στο Docker θα τελείωνε και θα ξεκινούσε ξανά και ξανά. Το Docker ταιριάζει σε πρόγραμμα με χρονοδιάγραμμα ή μπλοκ «όταν»."
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Αυτό το πρόγραμμα δεν περιμένει τίποτα, οπότε στο Docker θα τελείωνε και θα ξεκινούσε ξανά και ξανά. Το Docker ταιριάζει σε πρόγραμμα με χρονοδιάγραμμα ή μπλοκ «όταν».",
+  "Fill in the inputs, then press Run.": "Συμπλήρωσε τις εισόδους και πάτησε Εκτέλεση.",
+  "Program inputs": "Είσοδοι του προγράμματος",
+  "Input {name} needs a value.": "Η είσοδος {name} χρειάζεται τιμή.",
+  "Input {name} must be a number, not {value}.": "Η είσοδος {name} πρέπει να είναι αριθμός, όχι {value}.",
+  "Input {name} must be yes or no, not {value}.": "Η είσοδος {name} πρέπει να είναι ναι ή όχι, όχι {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "Η είσοδος {name} πρέπει να είναι ημερομηνία όπως 2026-11-21, όχι {value}.",
+  "Yes": "Ναι",
+  "No": "Όχι"
  },
  "examples": {
   "review": {
@@ -3896,6 +3923,12 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "Δεν υπάρχουν αποθηκευμένα logs τις τελευταίες {days} ημέρες (save_log = yes κρατά ένα ανά run στο logs/).",
   "Actions done, from the receipts of the last {days} days: {n}.": "Ενέργειες που έγιναν, από τις αποδείξεις των τελευταίων {days} ημερών: {n}.",
   "Cost, counted on this computer at list prices:": "Κόστος, μετρημένο σε αυτόν τον υπολογιστή σε τιμές καταλόγου:",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} πέρασαν, {failed} με σφάλμα), {actions} ενέργειες έγιναν, {refused} απορρίφθηκαν, {cost} ξοδεύτηκαν."
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} πέρασαν, {failed} με σφάλμα), {actions} ενέργειες έγιναν, {refused} απορρίφθηκαν, {cost} ξοδεύτηκαν.",
+  "Input {name} needs a value.": "Η είσοδος {name} χρειάζεται τιμή.",
+  "Input {name} must be a number, not {value}.": "Η είσοδος {name} πρέπει να είναι αριθμός, όχι {value}.",
+  "Input {name} must be yes or no, not {value}.": "Η είσοδος {name} πρέπει να είναι ναι ή όχι, όχι {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "Η είσοδος {name} πρέπει να είναι ημερομηνία όπως 2026-11-21, όχι {value}.",
+  "There's no input called {name}. Its inputs: {names}.": "Δεν υπάρχει είσοδος με όνομα {name}. Οι είσοδοί του: {names}.",
+  "--input wants a name and a value, like --input town=Rye.": "Το --input θέλει όνομα και τιμή, όπως --input town=Rye."
  }
 }

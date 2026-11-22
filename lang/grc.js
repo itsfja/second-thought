@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"τὸ %1 μνημονεύει","tooltip":"ἀποτυγχάνει ἐὰν μὴ τὸ προσχέδιον ταῦτα τὰ ῥήματα περιέχῃ (τὰ κεφαλαῖα οὐ διαφέρει)."},
 "rb_chk_no_mention":{"message0":"τὸ %1 οὐ μνημονεύει","tooltip":"ἀποτυγχάνει ἐὰν τὸ προσχέδιον ταῦτα τὰ ῥήματα περιέχῃ (τὰ κεφαλαῖα οὐ διαφέρει)."},
 "rb_chk_json":{"message0":"ἔγκυρον JSON ἐστί","tooltip":"ἀποτυγχάνει ἐὰν μὴ τὸ προσχέδιον ἔγκυρον JSON ᾖ."},
-"rb_chk_link":{"message0":"σύνδεσμον ἔχει","tooltip":"ἀποτυγχάνει ἐὰν μὴ σύνδεσμον ἔχῃ τὸ προσχέδιον (http://… ἢ www.…)."}
+"rb_chk_link":{"message0":"σύνδεσμον ἔχει","tooltip":"ἀποτυγχάνει ἐὰν μὴ σύνδεσμον ἔχῃ τὸ προσχέδιον (http://… ἢ www.…)."},
+"rb_inputs":{"message0":"αἱ εἴσοδοι τούτου τοῦ προγράμματος","message1":"%1","tooltip":"Αἱ εἴσοδοι ἃς τοῦτο τὸ πρόγραμμα δέχεται. Τὸ Δράμε ἐν πίνακι αὐτὰς αἰτεῖ· ἡ Python ἐξαχθεῖσα --input town=Rye δέχεται, καὶ τὸ --mcp ὀνόματι. Ἡ ἄνευ προκειμένης δοθῆναι δεῖ."},
+"rb_input_def":{"message0":"εἴσοδος %1 : %2 προκειμένη %3","tooltip":"Μία εἴσοδος· ὄνομα, γένος, προκειμένη. Ἄνευ προκειμένης δοθῆναι δεῖ. Ἡμέρα γράφεται ὡς 2026-11-21."},
+"rb_input":{"message0":"εἴσοδος %1","tooltip":"Ἡ τιμὴ ἣν ἔλαβεν αὕτη ἡ εἴσοδος ἀρχομένου τοῦ προγράμματος, ἢ ἡ προκειμένη."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"καθ᾽ ἡμέραν","weekdays":"ἐν ταῖς ἡμέραις τῶν ἔργων","weekends":"ἐν τῷ τέλει τῆς ἑβδομάδος"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"ἡ τοῦ ἐξεταστοῦ ῥύθμισις","same":"τὸ αὐτὸ πρότυπον","another":"ἄλλου δημιουργοῦ πρότυπον"},
-"rb_reflect.REVIEWER":{"":"ἡ τοῦ ἐξεταστοῦ ῥύθμισις","same":"τὸ αὐτὸ πρότυπον","another":"ἄλλου δημιουργοῦ πρότυπον"}
+"rb_reflect.REVIEWER":{"":"ἡ τοῦ ἐξεταστοῦ ῥύθμισις","same":"τὸ αὐτὸ πρότυπον","another":"ἄλλου δημιουργοῦ πρότυπον"},
+"rb_input_def.TYPE":{"text":"κείμενον","number":"ἀριθμός","yesno":"ναὶ ἢ οὔ","date":"ἡμέρα"}
 },
 "categories":{
 "Events":"Συμβάντα",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Ἐρώτησον ἢ γνώμην κοίνωσον ἐν τῷ GitHub",
 "Save for Docker (.zip)":"Σῷσον εἰς Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Ἐσώθη {name}-docker.zip. Λῦσον αὐτό, θὲς τὰς κλεῖς σου εἰς τὸ keys.env, εἶτα ἕπου τῷ SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Τοῦτο τὸ πρόγραμμα οὐδὲν περιμένει, ὥστε ἐν τῷ Docker τελευτήσειεν ἂν καὶ αὖθις καὶ αὖθις ἄρξαιτο. Τὸ Docker ἁρμόζει προγράμματι μετὰ τάξεως χρόνων ἢ πλίνθου «ὅταν»."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Τοῦτο τὸ πρόγραμμα οὐδὲν περιμένει, ὥστε ἐν τῷ Docker τελευτήσειεν ἂν καὶ αὖθις καὶ αὖθις ἄρξαιτο. Τὸ Docker ἁρμόζει προγράμματι μετὰ τάξεως χρόνων ἢ πλίνθου «ὅταν».",
+"Fill in the inputs, then press Run.":"Πλήρωσον τὰς εἰσόδους, εἶτα πάτησον Δράμε.",
+"Program inputs":"Εἴσοδοι τοῦ προγράμματος",
+"Input {name} needs a value.":"Ἡ εἴσοδος {name} δεῖται τιμῆς.",
+"Input {name} must be a number, not {value}.":"Ἡ εἴσοδος {name} ἀριθμὸς εἶναι δεῖ, οὐ {value}.",
+"Input {name} must be yes or no, not {value}.":"Ἡ εἴσοδος {name} ναὶ ἢ οὔ εἶναι δεῖ, οὐ {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ἡ εἴσοδος {name} ἡμέρα εἶναι δεῖ ὡς 2026-11-21, οὐ {value}.",
+"Yes":"Ναί",
+"No":"Οὔ"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Nulla acta servata intra {days} dies (save_log = yes unum quodque cursum in logs/ servat).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Actiones factae ex tesseris ultimorum {days} dierum: {n}.",
 "Cost, counted on this computer at list prices:":"Sumptus in hoc computatro ad pretia catalogi numeratus:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} cursus ({ok} probati, {failed} errore), {actions} actiones factae, {refused} repudiatae, {cost} impensum."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} cursus ({ok} probati, {failed} errore), {actions} actiones factae, {refused} repudiatae, {cost} impensum.",
+"Input {name} needs a value.":"Ἡ εἴσοδος {name} δεῖται τιμῆς.",
+"Input {name} must be a number, not {value}.":"Ἡ εἴσοδος {name} ἀριθμὸς εἶναι δεῖ, οὐ {value}.",
+"Input {name} must be yes or no, not {value}.":"Ἡ εἴσοδος {name} ναὶ ἢ οὔ εἶναι δεῖ, οὐ {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ἡ εἴσοδος {name} ἡμέρα εἶναι δεῖ ὡς 2026-11-21, οὐ {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Οὐκ ἔστιν εἴσοδος ὀνόματι {name}. Αἱ εἴσοδοι αὐτοῦ· {names}.",
+"--input wants a name and a value, like --input town=Rye.":"Τὸ --input ὄνομα καὶ τιμὴν βούλεται, ὡς --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Πρόσθες σχόλιον",

@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"ᚾᚪᛗᛁᛖᚦ %1","tooltip":"ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚦᚪᛋ ᚹᚩᚱᛞ ᚻᚪᛒᛖ (ᛒᚩᚷᚪᚾ ᛋᛏᚫᚠᚳᚱᚫᚠᛏ ᚾᛖ ᛗᚪᚾᚾᚪᚦ)."},
 "rb_chk_no_mention":{"message0":"ᚾᛖ ᚾᚪᛗᛁᛖᚦ %1","tooltip":"ᚠᛖᛚᛚᚦ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚦᚪᛋ ᚹᚩᚱᛞ ᚻᚫᛒᛒᛖ (ᛒᚩᚷᚪᚾ ᛋᛏᚫᚠᚳᚱᚫᚠᛏ ᚾᛖ ᛗᚪᚾᚾᚪᚦ)."},
 "rb_chk_json":{"message0":"ᛁᛋ ᚱᛁᛇᛏ JSON","tooltip":"ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚾᚫᛒᛒᛖ ᚱᛁᛇᛏ JSON."},
-"rb_chk_link":{"message0":"ᚻᚫᚠᚦ ᚻᛚᛖᚾᚳ","tooltip":"ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚾᚫᛒᛒᛖ ᚻᛚᛖᚾᚳ (http://… ᚩᚦᚦᛖ ᚹᚹᚹ.…)."}
+"rb_chk_link":{"message0":"ᚻᚫᚠᚦ ᚻᛚᛖᚾᚳ","tooltip":"ᚠᛖᛚᛚᚦ ᛒᚢᛏᚩᚾ ᚷᛁᚠ ᛋᛖ ᚠᚱᚢᛗᚷᛖᚹᚱᛁᛏ ᚾᚫᛒᛒᛖ ᚻᛚᛖᚾᚳ (http://… ᚩᚦᚦᛖ ᚹᚹᚹ.…)."},
+"rb_inputs":{"message0":"ᚦᛁᛋᛋᛖ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏᛖ ᛁᛝᚪᛝᚪᛋ","message1":"%1","tooltip":"ᚦᚪ ᛁᛝᚪᛝᚪᛋ ᚦᛖ ᚦᛖᚩᛋ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ ᚩᚾᚠᛖᚻᚦ. ᚠᚱᛖᛗᛗᛖ ᚪᛋᚳᚪᚦ ᚻᛁᛖ ᚩᚾ ᛒᚩᚳᚠᛖᛚᛚᛖ; ᚢᛏᛚᚫᛞᛖᛞ Python ᚩᚾᚠᛖᚻᚦ --input town=Rye, ᚪᚾᛞ --mcp ᚩᚾᚠᛖᚻᚦ ᚻᛁᛖ ᛒᛖ ᚾᚪᛗᚪᚾ. ᚪᚾ ᛒᚢᛏᚪᚾ ᚠᚩᚱᛖᚳᚹᛖᛞᛖᚾᚢᛗ ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᚷᛁᚠᛖᚾ."},
+"rb_input_def":{"message0":"ᛁᛝᚪᛝ %1 : %2 ᚠᚩᚱᛖᚳᚹᛖᛞᛖᚾ %3","tooltip":"ᚪᚾ ᛁᛝᚪᛝ: ᚻᛁᛋ ᚾᚪᛗᚪ, ᚻᛁᛋ ᚳᚣᚾᚾ ᚪᚾᛞ ᚻᛁᛋ ᚠᚩᚱᛖᚳᚹᛖᛞᛖᚾ ᚹᛖᚩᚱᚦ. ᛒᚢᛏᚪᚾ ᚦᚫᛗ ᚻᛖ ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᚷᛁᚠᛖᚾ. ᛞᚫᚷ ᛒᛁᚦ ᚷᛖᚹᚱᛁᛏᛖᚾ ᛋᚹᚪ 2026-11-21."},
+"rb_input":{"message0":"ᛁᛝᚪᛝ %1","tooltip":"ᚦᚫᛏ ᚹᛖᚩᚱᚦ ᚦᛖ ᚦᛖᛋ ᛁᛝᚪᛝ ᚩᚾᚠᛖᛝ ᚦᚪ ᛋᛖᚩ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ ᚩᛝᚪᚾᚾ, ᚩᚦᚦᛖ ᚻᛁᛋ ᚠᚩᚱᛖᚳᚹᛖᛞᛖᚾ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ᚫᛚᚳᛖ ᛞᚫᚷᛖ","weekdays":"ᚩᚾ ᚹᛖᚩᚱᚳᛞᚪᚷᚢᛗ","weekends":"ᚩᚾ ᚹᚢᚳᚪᚾ ᛖᚾᛞᛖ"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"ᛋᚳᛠᚹᛖᚾᛞᛚᛁᚳ ᛋᛖᛏᛖᛞᚾᛖᛋᛋ","same":"ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ","another":"ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ"},
-"rb_reflect.REVIEWER":{"":"ᛋᚳᛠᚹᛖᚾᛞᛚᛁᚳ ᛋᛖᛏᛖᛞᚾᛖᛋᛋ","same":"ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ","another":"ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ"}
+"rb_reflect.REVIEWER":{"":"ᛋᚳᛠᚹᛖᚾᛞᛚᛁᚳ ᛋᛖᛏᛖᛞᚾᛖᛋᛋ","same":"ᚦᚫᛏ ᛁᛚᚳᛖ ᛏᚪᚳᚾ","another":"ᚩᚦᚱᛖᛋ ᚳᚣᚾᚾᛖᛋ ᛏᚪᚳᚾ"},
+"rb_input_def.TYPE":{"text":"ᚷᛖᚹᚱᛁᛏ","number":"ᚷᛖᛏᚫᛚ","yesno":"ᚷᛠ ᚩᚦᚦᛖ ᚾᛖᛋᛖ","date":"ᛞᚫᚷ"}
 },
 "categories":{
 "Events":"ᚷᛖᛚᛁᛗᛈᚢ",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"ᚪᛉᚪ ᚪᚾᛖ ᚠᚱᛁᚷᚾᚢᛝᛖ ᚩᚦᚦᛖ ᛞᚫᛚ ᚦᛁᚾᚾᛖ ᚷᛖᚦᚪᚾᚳ ᚩᚾ GitHub",
 "Save for Docker (.zip)":"ᚻᛠᛚᛞ ᚠᚩᚱ Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip ᛁᛋ ᚷᛖᚻᛠᛚᛞᛖᚾ. ᚢᚾᚠᛠᛚᛞ ᚻᛁᛏ, ᛋᛖᛏᛖ ᚦᛁᚾᛖ ᚳᚫᚷᚪᛋ ᚩᚾ keys.env, ᚪᚾᛞ ᚠᚩᛚᚷᚪ ᚦᚩᚾᚾᛖ SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ᚦᛁᛋ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ ᚾᛖ ᛒᛁᛞᛖᚦ ᚾᚪᚾᛖᛋ ᚦᛁᛝᛖᛋ, ᛋᚹᚪ ᚩᚾ Docker ᚻᛁᛏ ᚷᛖᛖᚾᛞᚩᛞᛖ ᚪᚾᛞ ᛖᚠᛏ ᚪᚾᛞ ᛖᚠᛏ ᚩᛝᛁᚾᚾᛖ. Docker ᚷᛖᚱᛁᛋᛖᚦ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏᛖ ᛗᛁᛞ ᛏᛁᛞᛋᛖᛏᚾᛖᛋᛋᛖ ᚩᚦᚦᛖ 'ᚦᚩᚾᚾᛖ' ᛋᛏᚪᚾᛖ."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ᚦᛁᛋ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏ ᚾᛖ ᛒᛁᛞᛖᚦ ᚾᚪᚾᛖᛋ ᚦᛁᛝᛖᛋ, ᛋᚹᚪ ᚩᚾ Docker ᚻᛁᛏ ᚷᛖᛖᚾᛞᚩᛞᛖ ᚪᚾᛞ ᛖᚠᛏ ᚪᚾᛞ ᛖᚠᛏ ᚩᛝᛁᚾᚾᛖ. Docker ᚷᛖᚱᛁᛋᛖᚦ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏᛖ ᛗᛁᛞ ᛏᛁᛞᛋᛖᛏᚾᛖᛋᛋᛖ ᚩᚦᚦᛖ 'ᚦᚩᚾᚾᛖ' ᛋᛏᚪᚾᛖ.",
+"Fill in the inputs, then press Run.":"ᚠᚣᛚᛚ ᚦᚪ ᛁᛝᚪᛝᚪᛋ, ᚪᚾᛞ ᚦᚣ ᚦᚩᚾᚾᛖ ᚠᚱᛖᛗᛗᛖ.",
+"Program inputs":"ᛁᛝᚪᛝᚪᛋ ᚦᚫᚱᛖ ᚠᚩᚱᛖᛋᚳᚱᛁᚠᛏᛖ",
+"Input {name} needs a value.":"ᛁᛝᚪᛝ {name} ᛒᛖᚦᛠᚱᚠ ᚹᛖᚩᚱᚦᛖᛋ.",
+"Input {name} must be a number, not {value}.":"ᛁᛝᚪᛝ {name} ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᚷᛖᛏᚫᛚ, ᚾᚪ {value}.",
+"Input {name} must be yes or no, not {value}.":"ᛁᛝᚪᛝ {name} ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᚷᛠ ᚩᚦᚦᛖ ᚾᛖᛋᛖ, ᚾᚪ {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"ᛁᛝᚪᛝ {name} ᛋᚳᛠᛚ ᛒᛖᚩᚾ ᛞᚫᚷ ᛋᚹᚪ 2026-11-21, ᚾᚪ {value}.",
+"Yes":"ᚷᛠ",
+"No":"ᚾᛖᛋᛖ"
 },
 "examples":{
 "review":{"title":"ᛋᚳᛠᚹᚢᛝᛖ ᚻᚱᛁᛝ","desc":"Claude ᚹᚱᛁᛏ ᛒᛖ autolyse, ᛋᚳᛠᚹᚪᚦ ᚻᛁᛏ ᛒᛖ ᚦᛁᚾᚢᛗ ᚱᛖᚷᚩᛚᚢᛗ, ᚪᚾᛞ ᛒᛖᛏᛖᚦ ᛋᚹᚪ ᚻᚹᚫᛏ ᛋᚹᚪ ᛗᛁᛋᛏᛁᛗᚦ, ᚩᚦ 3 ᚣᛗᛒᚷᚪᛝᚪᛋ.","tip":"ᚹᛖᚾᛞ ᚦᚫᛏ ᚫᚱᛖᚾᛞᛖ ᚩᚾ ᚦᚪᛗ ᚻᚫᚹᛖᚾᚪᚾ ᛋᛏᚩᚳᚳᛖ ᚪᚾᛞ ᚦᚪ ᚱᛖᚷᚩᛚᚪᛋ ᚩᚾ ᚦᚪᛗ ᛈᚢᚱᛈᚢᚱᚪᚾ."},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Nænige gehealdenra bócra on þǣm dagum {days} (save_log = yes healt ān on ǣlcere rynne on logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Wyrcunga gedon, of þǣm bócum þǣre daga {days}: {n}.",
 "Cost, counted on this computer at list prices:":"Cost on þissum tǣle æt cennunge:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rynn ({ok} þafodon, {failed} mid wrixle), {actions} wyrcunga gedon, {refused} forwyrned, {cost} maniunge."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rynn ({ok} þafodon, {failed} mid wrixle), {actions} wyrcunga gedon, {refused} forwyrned, {cost} maniunge.",
+"Input {name} needs a value.":"Ingang {name} beþearf weorþes.",
+"Input {name} must be a number, not {value}.":"Ingang {name} sceal bēon getæl, nā {value}.",
+"Input {name} must be yes or no, not {value}.":"Ingang {name} sceal bēon gēa oþþe nese, nā {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ingang {name} sceal bēon dæg swā 2026-11-21, nā {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Nis nān ingang {name} gehāten. Hire ingangas: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input wile naman and weorþ, swā --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᚣᚳ ᚳᚹᛁᛞᛖ",

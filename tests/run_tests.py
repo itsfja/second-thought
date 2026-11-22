@@ -37,6 +37,7 @@ from e2e.i18n import i18n_tests  # noqa: E402
 from e2e.gallery import broken_gallery_tests, changed_gallery_tests, gallery_smoke_tests, gallery_tests  # noqa: E402
 from e2e.actions import actions_tests, docker_tests  # noqa: E402
 from e2e.pages import pages_tests  # noqa: E402
+from e2e.inputs import inputs_tests  # noqa: E402
 from e2e.offline import offline_tests  # noqa: E402
 from e2e.describe import describe_tests  # noqa: E402
 from e2e.formats import format_tests  # noqa: E402
@@ -181,7 +182,7 @@ def main():
         if exports and not failures:
             save_exports(codes, exports)
     if "page" in areas:
-        for fn in (describe_tests, format_tests, program_test_tests, safety_tests, access_tests, pages_tests, offline_tests, phone_palette_tests, phone_run_tests, theme_tests):
+        for fn in (inputs_tests, describe_tests, format_tests, program_test_tests, safety_tests, access_tests, pages_tests, offline_tests, phone_palette_tests, phone_run_tests, theme_tests):
             with timed(f"page: {fn.__name__}"):
                 asyncio.run(fn())
     if "i18n" in areas:

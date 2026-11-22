@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"namieþ %1","tooltip":"Fellþ buton gif se frumgewrit þās word habe (bogan stæfcræft ne mannaþ)."},
 "rb_chk_no_mention":{"message0":"ne namieþ %1","tooltip":"Fellþ gif se frumgewrit þās word hæbbe (bogan stæfcræft ne mannaþ)."},
 "rb_chk_json":{"message0":"is riht JSON","tooltip":"Fellþ buton gif se frumgewrit næbbe riht JSON."},
-"rb_chk_link":{"message0":"hæfþ hlenc","tooltip":"Fellþ buton gif se frumgewrit næbbe hlenc (http://… oþþe www.…)."}
+"rb_chk_link":{"message0":"hæfþ hlenc","tooltip":"Fellþ buton gif se frumgewrit næbbe hlenc (http://… oþþe www.…)."},
+"rb_inputs":{"message0":"þisse forescrifte ingangas","message1":"%1","tooltip":"Þā ingangas þe þēos forescrift onfēhþ. Fremme ascaþ hīe on bōcfelle; ūtlǣded Python onfēhþ --input town=Rye, and --mcp onfēhþ hīe be naman. Ān būtan forecwedenum sceal bēon gifen."},
+"rb_input_def":{"message0":"ingang %1 : %2 forecweden %3","tooltip":"Ān ingang: his nama, his cynn and his forecweden weorþ. Būtan þǣm hē sceal bēon gifen. Dæg biþ gewriten swā 2026-11-21."},
+"rb_input":{"message0":"ingang %1","tooltip":"Þæt weorþ þe þes ingang onfēng þā sēo forescrift ongann, oþþe his forecweden."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ælce dæge","weekdays":"on weorcdagum","weekends":"on wucan ende"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"sceawendlic setedness","same":"þæt ilce tacn","another":"oðres cynnes tacn"},
-"rb_reflect.REVIEWER":{"":"sceawendlic setedness","same":"þæt ilce tacn","another":"oðres cynnes tacn"}
+"rb_reflect.REVIEWER":{"":"sceawendlic setedness","same":"þæt ilce tacn","another":"oðres cynnes tacn"},
+"rb_input_def.TYPE":{"text":"gewrit","number":"getæl","yesno":"gēa oþþe nese","date":"dæg"}
 },
 "categories":{
 "Events":"Gelimpu",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Āxa āne frignunge oþþe dǣl þīnne geþanc on GitHub",
 "Save for Docker (.zip)":"Heald for Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip is gehealden. Unfeald hit, sete þīne cǣgas on keys.env, and folga þonne SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þis forescrift ne bīdeþ nānes þinges, swā on Docker hit geendode and eft and eft onginne. Docker gerīseþ forescrifte mid tīdsetnesse oþþe 'þonne' stāne."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þis forescrift ne bīdeþ nānes þinges, swā on Docker hit geendode and eft and eft onginne. Docker gerīseþ forescrifte mid tīdsetnesse oþþe 'þonne' stāne.",
+"Fill in the inputs, then press Run.":"Fyll þā ingangas, and þȳ þonne Fremme.",
+"Program inputs":"Ingangas þǣre forescrifte",
+"Input {name} needs a value.":"Ingang {name} beþearf weorþes.",
+"Input {name} must be a number, not {value}.":"Ingang {name} sceal bēon getæl, nā {value}.",
+"Input {name} must be yes or no, not {value}.":"Ingang {name} sceal bēon gēa oþþe nese, nā {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ingang {name} sceal bēon dæg swā 2026-11-21, nā {value}.",
+"Yes":"Gea",
+"No":"Nese"
 },
 "examples":{
 "review":{"title":"Sceawunge hring","desc":"Claude writ be autolyse, sceawaþ hit be þinum regolum, and beteþ swa hwæt swa mistimþ, oþ 3 ymbgangas.","tip":"Wend þæt ærende on þam hæwenan stocce and þa regolas on þam purpuran."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Nænige gehealdenra bócra on þǣm dagum {days} (save_log = yes healt ān on ǣlcere rynne on logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Wyrcunga gedon, of þǣm bócum þǣre daga {days}: {n}.",
 "Cost, counted on this computer at list prices:":"Cost on þissum tǣle æt cennunge:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rynn ({ok} þafodon, {failed} mid wrixle), {actions} wyrcunga gedon, {refused} forwyrned, {cost} maniunge."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rynn ({ok} þafodon, {failed} mid wrixle), {actions} wyrcunga gedon, {refused} forwyrned, {cost} maniunge.",
+"Input {name} needs a value.":"Ingang {name} beþearf weorþes.",
+"Input {name} must be a number, not {value}.":"Ingang {name} sceal bēon getæl, nā {value}.",
+"Input {name} must be yes or no, not {value}.":"Ingang {name} sceal bēon gēa oþþe nese, nā {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ingang {name} sceal bēon dæg swā 2026-11-21, nā {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Nis nān ingang {name} gehāten. Hire ingangas: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input wile naman and weorþ, swā --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Yc cwide",

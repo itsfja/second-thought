@@ -9666,6 +9666,74 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         """The money budget as it was set, in its currency: '$0.50', '£0.40', '¥75'."""
         return amount_text(self.budget_amount, self.budget_unit)
 
+    # ----- Named inputs (#442): declared on the page, given as --input town=Rye, or by name in an MCP call -----
+    @staticmethod
+    def input_value(name, kind, raw):
+        """(value, None) for a value given for an input, as its kind, or (None, why) if it won't do. The page's
+        inputValue does the same."""
+        s = to_str(raw).strip()
+        if not s:
+            return None, tr("Input {name} needs a value.", name=name)
+        if kind == "number":
+            if not re.fullmatch(r"[+-]?(\d+([.,]\d*)?|[.,]\d+)", s):
+                return None, tr("Input {name} must be a number, not {value}.", name=name, value=s)
+            n = float(s.replace(",", "."))
+            return (int(n) if n.is_integer() else n), None
+        if kind == "yesno":
+            t = s.lower()
+            if t in ("yes", "y", "true", "1", "on", tr("Yes").lower()):
+                return True, None
+            if t in ("no", "n", "false", "0", "off", tr("No").lower()):
+                return False, None
+            return None, tr("Input {name} must be yes or no, not {value}.", name=name, value=s)
+        if kind == "date":
+            try:
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+                    raise ValueError
+                datetime.date.fromisoformat(s)
+            except ValueError:
+                return None, tr("Input {name} must be a date like 2026-11-21, not {value}.", name=name, value=s)
+        return s, None
+
+    def give_inputs(self, declared, given):
+        """Sets the values of the program's inputs from what was given ({name: raw}), each by its kind, with the defaults
+        for the rest. Returns why it can't, or None."""
+        known = {d[0].lower(): d for d in declared}
+        for name in given:
+            if name.lower() not in known:
+                return tr("There's no input called {name}. Its inputs: {names}.", name=name,
+                          names=", ".join(d[0] for d in declared) or "-")
+        got = {k.lower(): v for k, v in given.items()}
+        values = {}
+        for name, kind, default in declared:
+            value, why = self.input_value(name, kind, got.get(name.lower(), default))
+            if why:
+                return why
+            values[name.lower()] = value
+        self.inputs = values
+        return None
+
+    @staticmethod
+    def cli_inputs():
+        """{name: value} from --input name=value on the command line, or the line that says how to write one."""
+        given, args = {}, sys.argv[1:]
+        for i, a in enumerate(args):
+            if a == "--input" or a.startswith("--input="):
+                pair = a[len("--input="):] if a.startswith("--input=") else (args[i + 1] if i + 1 < len(args) else "")
+                name, eq, value = pair.partition("=")
+                if not eq or not name.strip():
+                    return None, tr("--input wants a name and a value, like --input town=Rye.")
+                given[name.strip()] = value
+        return given, None
+
+    def input(self, name, kind="text", default=""):
+        """What an 'input' block gives: the value given when the program started, else its default."""
+        key = to_str(name).strip().lower()
+        if key in getattr(self, "inputs", {}):
+            return self.inputs[key]
+        value, why = self.input_value(name, kind, default) if to_str(default).strip() else ("", None)
+        return "" if why else value
+
     def tokens_used(self):
         return sum(u[0] + u[1] for u in self.usage.values())
 
@@ -11334,8 +11402,26 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         what = (" It can " + "; ".join(lines) + ".") if lines else " It only uses its models."
         return {"name": self.mcp_tool_name(),
                 "description": f"Runs the Second Thought program “{self.mcp_tool_name()}” and gives back its result.{what}",
-                "inputSchema": {"type": "object", "properties": {"value": {
-                    "type": "string", "description": "What the program starts with: its 'message value'. Leave it out if it needs nothing."}}}}
+                "inputSchema": self.mcp_input_schema()}
+
+    def mcp_input_schema(self):
+        """The tool's inputs: 'value', the message value, and each of the program's named inputs by its kind (#442);
+        an input with no default is required."""
+        props = {"value": {"type": "string", "description": "What the program starts with: its 'message value'. Leave it out if it needs nothing."}}
+        required = []
+        kinds = {"number": {"type": "number"}, "yesno": {"type": "boolean"}, "date": {"type": "string", "format": "date"}}
+        for name, kind, default in getattr(self, "declared_inputs", []):
+            prop = dict(kinds.get(kind, {"type": "string"}))
+            value, why = self.input_value(name, kind, default) if to_str(default).strip() else (None, "none")
+            if why:
+                required.append(name)
+            else:
+                prop["default"] = value
+            props[name] = prop
+        schema = {"type": "object", "properties": props}
+        if required:
+            schema["required"] = required
+        return schema
 
     async def serve_mcp(self, start_scripts, can):
         out, sys.stdout = sys.stdout, sys.stderr  # the run log goes to stderr; stdout carries only the protocol
@@ -11380,7 +11466,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 if refusal:
                     send({"jsonrpc": "2.0", "id": mid, "result": {"content": [{"type": "text", "text": refusal}], "isError": True}})
                     continue
-                value = to_str((params.get("arguments") or {}).get("value", ""))
+                args = params.get("arguments") or {}
+                value = to_str(args.get("value", ""))
+                named = {k: (("yes" if v else "no") if isinstance(v, bool) else v) for k, v in args.items() if k != "value"}
+                why = self.give_inputs(getattr(self, "declared_inputs", []), named)
+                if why:
+                    send({"jsonrpc": "2.0", "id": mid, "result": {"content": [{"type": "text", "text": why}], "isError": True}})
+                    continue
                 code = await self.run([(fn, value) for fn in start_scripts], tr("MCP call"))
                 if code == 0:
                     text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
@@ -11809,7 +11901,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             await type(self)().doctor(getattr(self, "_can", None))
         return out.getvalue().strip()
 
-    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None, inputs=()):
         if "--version" in sys.argv:
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
@@ -11839,8 +11931,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if "--status" in sys.argv:
             sys.exit(self.show_status())
         self.receivers = {k.lower(): v for k, v in receivers.items()}
+        self.declared_inputs = [tuple(d) for d in inputs]
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))
+        given, why = self.cli_inputs()
+        why = why or self.give_inputs(self.declared_inputs, given)
+        if why:
+            sys.exit(why + ("" if "--input" in why else " (--input name=value)"))
         if "--test" in sys.argv:
             times = 1  # --test --times 3 runs each case three times and lists the rules that flip (#427)
             if "--times" in sys.argv:
@@ -17233,6 +17330,9 @@ Powerwall:
   rb_powerwall_reserve (N): set Powerwall backup reserve to %1 % — Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes.  [powerwall_control]
 
 Programs:
+  rb_input (NAME): input %1 — The value this input was given when the program started, or its default.
+  rb_input_def (NAME, TYPE, DEFAULT): input %1 : %2 default %3 — One input: its name, its kind and its default. With no default, it must be given. A date is written like 2026-11-21.
+  rb_inputs: this program's inputs — The inputs this program takes. Run asks for them in a form; exported Python takes --input town=Rye, and --mcp takes them by name. One with no default must be given.
   rb_run_program (NAME, VALUE): run program %1 with %2 — Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported.
 
 Proxmox:
@@ -17781,7 +17881,7 @@ HOW TO MAP CODE
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_chk_json rb_chk_link rb_chk_max_words rb_chk_mentions rb_chk_no_mention rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
     "rb_event rb_every rb_extract rb_finish_with rb_generate rb_img_ask rb_img_change rb_img_draw rb_img_score rb_img_show rb_longtext " +
-    "rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
+    "rb_input rb_input_def rb_inputs rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
     "rb_reflect rb_reset_timer rb_result rb_result_text rb_retry rb_review rb_revise rb_rework rb_rewrite rb_run_program rb_say rb_score " +
     "rb_set_draft rb_set_instructions rb_show rb_sort rb_start rb_stop rb_task rb_task_get rb_setup_check rb_timer rb_tokens_used rb_try rb_use_model " +
     "rb_wait rb_wait_msg rb_wait_time rb_wait_until rb_when_time rb_with_any_model rb_with_model rb_word_count").split(" ");
@@ -18266,6 +18366,18 @@ HOW TO MAP CODE
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
+    // Named inputs (#442): a program declares a few, filled in from a form when Run is pressed, --input town=Rye in
+    // Python, or by name when it's served as an MCP tool.
+    { type:"rb_inputs", message0:"this program's inputs", message1:"%1", args1:[{ type:"input_statement", name:"INPUTS", check:"ProgramInput" }],
+      style:"procedure_blocks",
+      tooltip:"The inputs this program takes. Run asks for them in a form; exported Python takes --input town=Rye, and --mcp takes them by name. One with no default must be given." },
+    { type:"rb_input_def", message0:"input %1 : %2 default %3", args0:[{ type:"field_input", name:"NAME", text:"town" },
+        { type:"field_dropdown", name:"TYPE", options:[["text","text"],["number","number"],["yes or no","yesno"],["date","date"]] },
+        { type:"field_input", name:"DEFAULT", text:"" }],
+      previousStatement:"ProgramInput", nextStatement:"ProgramInput", style:"procedure_blocks",
+      tooltip:"One input: its name, its kind and its default. With no default, it must be given. A date is written like 2026-11-21." },
+    V("rb_input", "input %1", [{ type:"field_input", name:"NAME", text:"town" }], null, { style:"procedure_blocks",
+      tooltip:"The value this input was given when the program started, or its default." }),
     /* Memory */
     S("rb_mem_set", "remember %1 as %2 %3", [val("VALUE"), val("NAME"),
       { type:"field_dropdown", name:"KIND", options:[["while this page is open","transient"],["forever","permanent"]] }],
@@ -18335,7 +18447,9 @@ HOW TO MAP CODE
     ]},
     { kind:"category", name:"My Blocks", categorystyle:"procedures", custom:"PROCEDURE" },
     { kind:"category", name:"Programs", categorystyle:"procedures", contents:[
-      B("rb_run_program", { VALUE:T("") }), B("rb_msg_value")
+      B("rb_run_program", { VALUE:T("") }), B("rb_msg_value"),
+      B("rb_inputs", { INPUTS:{ block:{ type:"rb_input_def", fields:{ NAME:"town", TYPE:"text", DEFAULT:"Rye" } } } }),
+      B("rb_input_def"), B("rb_input")
     ]},
     { kind:"category", name:"Search results", categorystyle:"search", custom:"SEARCH" },
     { kind:"sep" },
@@ -21900,6 +22014,10 @@ HOW TO MAP CODE
         case "rb_better": return "(await R.better(" + I("A", '""') + ", " + I("B", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_answer": return "R.answer";
         case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True, mins=" + MINS() + ", default=" + DEFLT() + "))";  // a no offers the reason as a new rule (#428)
+        case "rb_input": {  // #442: its kind and default from the declaration in its own program
+          const name = String(F("NAME") || "").trim(), d = inputDecls(b.workspace).find(x => x.name.toLowerCase() === name.toLowerCase());
+          return "R.input(" + pyStr(name) + ", " + pyStr(d ? d.type : "text") + ", " + pyStr(d ? d.def : "") + ")";
+        }
         case "rb_tokens_used": return "R.tokens_used()";
         case "rb_setup_check": return "(await R.setup_check())";
         case "rb_agent_steps": return "R.agent_steps()";
@@ -22246,6 +22364,7 @@ HOW TO MAP CODE
     tops.filter(b => b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn").forEach(b => procId(b.getFieldValue("NAME")));
     tops.forEach(b => {
       const out = [];
+      if (b.type === "rb_inputs") return;  // declarations: INPUTS below (#442)
       if (b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn") {
         const name = b.getFieldValue("NAME");
         const params = (b.getVarModels ? b.getVarModels() : []).map(varName);
@@ -22318,6 +22437,7 @@ HOW TO MAP CODE
     });
 
     const fileBase = slug(progName);
+    const declared = inputDecls(ws);
     const when = new Date();
     const usedServices = servicesUsed(), caps = programCapabilities();
     const usesHA = allProgramBlocks().some(b => b.type.startsWith("rb_ha_"));
@@ -22376,6 +22496,7 @@ HOW TO MAP CODE
       "HA_WATCHES = [" + watches.join(", ") + "]",
       telegram.length ? "TELEGRAM_WATCHES = [" + telegram.join(", ") + "]" : null,
       listeners.length ? "LISTENERS = [" + listeners.map(l => l[1]).join(", ") + "]" : null,
+      declared.length ? "INPUTS = [" + declared.map(d => "(" + [d.name, d.type, d.def].map(pyStr).join(", ") + ")").join(", ") + "]  # --input name=value (#442)" : null,
       "# What this program can do (listed in the notes at the top). If any of it acts on the world, the program asks",
       "# before its first run, and again whenever this file changes.",
       "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]" +
@@ -22384,7 +22505,7 @@ HOW TO MAP CODE
         (settingsFor().flightradar24 ? ", \"flightradar24\": \"read\"" : "") + "}",
       "",
       "if __name__ == \"__main__\":",
-      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",
+      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + (declared.length ? ", inputs=INPUTS" : "") + ", can=CAN)",
       ""
     ].filter(l => l !== null).join("\n");
     const words = exportWords();
@@ -25343,7 +25464,94 @@ HOW TO MAP CODE
   // What the person answers during a run is kept (run.inputs), so a good run can become a test case; a test run
   // (run.replay) gives the same answers back instead of asking. Pictures aren't kept: they're too big.
   const INPUT_KINDS = { "Question for you":"answer", "Allow this?":"allow", "Do you approve this?":"approve", "Choose one":"choose",
-    "Choose a file":"file", "Choose a picture":"picture", "Paused":"pause" };
+    "Choose a file":"file", "Choose a picture":"picture", "Paused":"pause", "Program inputs":"program inputs" };
+  /* ----- Named inputs (#442): declared in 'this program's inputs', given when the program starts ----- */
+  // [{ name, type, def }] a workspace declares, in order, the first of each name.
+  function inputDecls(w){
+    const out = [], seen = new Set();
+    (w ? w.getTopBlocks(true) : []).filter(b => b.type === "rb_inputs" && b.isEnabled()).forEach(top => {
+      for (let d = top.getInputTargetBlock("INPUTS"); d; d = d.getNextBlock()) {
+        const name = String(d.getFieldValue("NAME") || "").trim();
+        if (!d.isEnabled() || !name || seen.has(name.toLowerCase())) continue;
+        seen.add(name.toLowerCase());
+        out.push({ name, type:d.getFieldValue("TYPE") || "text", def:String(d.getFieldValue("DEFAULT") == null ? "" : d.getFieldValue("DEFAULT")) });
+      }
+    });
+    return out;
+  }
+  // A value given for an input, as its kind: { value } or { why }. Python's Runtime.input_value does the same.
+  function inputValue(decl, raw){
+    const s = String(raw == null ? "" : raw).trim(), name = decl.name;
+    if (!s) return { why:tr("Input {name} needs a value.", { name }) };
+    if (decl.type === "number")
+      return /^[+-]?(\d+([.,]\d*)?|[.,]\d+)$/.test(s) ? { value:Number(s.replace(",", ".")) } : { why:tr("Input {name} must be a number, not {value}.", { name, value:s }) };
+    if (decl.type === "yesno") {
+      const t = s.toLowerCase();
+      if (["yes", "y", "true", "1", "on", tr("Yes").toLowerCase()].includes(t)) return { value:true };
+      if (["no", "n", "false", "0", "off", tr("No").toLowerCase()].includes(t)) return { value:false };
+      return { why:tr("Input {name} must be yes or no, not {value}.", { name, value:s }) };
+    }
+    if (decl.type === "date") {
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s), d = m && new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+      return d && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3] ? { value:s } : { why:tr("Input {name} must be a date like 2026-11-21, not {value}.", { name, value:s }) };
+    }
+    return { value:s };
+  }
+  // The canvas program's inputs for a run: a manual run asks for them in a form (a test case replays what was given);
+  // any other run, such as a schedule's, takes the defaults. { lower-case name: value }.
+  async function programInputs(ask){
+    const decls = inputDecls(ws);
+    if (!decls.length) return {};
+    let raw = Object.fromEntries(decls.map(d => [d.name, d.def]));
+    if (ask) raw = await waitForYou("Program inputs", tr("Fill in the inputs, then press Run."), (box, done) => {
+      const form = document.createElement("div"); form.className = "inputs-form";
+      const controls = decls.map(d => {
+        const lab = document.createElement("label"); lab.className = "field"; lab.textContent = d.name;
+        let c;
+        if (d.type === "yesno") {
+          c = document.createElement("select");
+          [["", ""], ["yes", tr("Yes")], ["no", tr("No")]].forEach(([v, t]) => { const o = document.createElement("option"); o.value = v; o.textContent = t; c.appendChild(o); });
+          const r = d.def ? inputValue(d, d.def) : {};
+          c.value = r.value === true ? "yes" : r.value === false ? "no" : "";
+        } else {
+          c = document.createElement("input");
+          c.type = d.type === "date" ? "date" : "text";
+          if (d.type === "number") c.inputMode = "decimal";
+          c.value = d.def;
+        }
+        lab.appendChild(c); form.appendChild(lab);
+        return [d, c];
+      });
+      const msg = document.createElement("p"); msg.className = "msg bad"; msg.setAttribute("role", "status");
+      const row = document.createElement("div"); row.className = "row";
+      const go = document.createElement("button"); go.type = "button"; go.className = "primary"; go.textContent = tr("Run");
+      go.onclick = () => {
+        const given = Object.fromEntries(controls.map(([d, c]) => [d.name, c.value]));
+        const bad = controls.find(([d, c]) => inputValue(d, c.value).why);
+        if (bad) { msg.textContent = inputValue(bad[0], bad[1].value).why; bad[1].focus(); return; }
+        done(given);
+      };
+      form.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { e.preventDefault(); go.click(); } });
+      row.appendChild(go); box.append(form, msg, row);
+      setTimeout(() => controls[0][1].focus(), 0);
+    });
+    const out = {};
+    for (const d of decls) {
+      const r = inputValue(d, (raw || {})[d.name]);
+      if (r.why) fail(r.why);
+      out[d.name.toLowerCase()] = r.value;
+    }
+    return out;
+  }
+  // What an 'input' block gives: the canvas program's given value, else (or in a program run by 'run program') the
+  // default its own program declares; nothing for an input no program declares.
+  function inputBlockValue(b){
+    const key = String(b.getFieldValue("NAME") || "").trim().toLowerCase();
+    if (b.workspace === ws && run && run.programInputs && key in run.programInputs) return run.programInputs[key];
+    const d = inputDecls(b.workspace).find(x => x.name.toLowerCase() === key);
+    const r = d && d.def ? inputValue(d, d.def) : null;
+    return r && !r.why ? r.value : "";
+  }
   async function waitForYou(title, text, build){
     const kind = INPUT_KINDS[title];
     if (run && run.replay && kind) {
@@ -25572,6 +25780,7 @@ HOW TO MAP CODE
       /* You */
       case "rb_answer": return run.answer;
       case "rb_msg_value": return tc.payload;
+      case "rb_input": return inputBlockValue(b);
       case "rb_event": {
         const key = str(b.getFieldValue("KEY")).trim(), v = tc.payload;
         if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";
@@ -26877,6 +27086,7 @@ HOW TO MAP CODE
       run.sample = await getSample() || (svcKeys.all().length ? noClaudeSample() : null);  // keys for other services only (#321)
       if (!run.sample) { showBanner(tr("Running needs Claude. Open this page in claude.ai while signed in.") + orOwnKey()); throw new Halt(); }
       await memInit();
+      run.programInputs = await programInputs(reason === "manual");  // #442
       run.ready = true;
       run.pending.forEach(h => h.evalBlock ? startScript(null, "", h.evalBlock) : startScript(h.getNextBlock(), h.payload));
       run.pending = [];
@@ -27405,6 +27615,6 @@ HOW TO MAP CODE
   // For tests/editor, which runs these in Node without a browser: the editor's functions that need no page.
   window.__editorUnits = { calcText, calcValue, timePlusText, nextDueFor, actionsCrons, migrateProgram, unknownTypes, tr, codeHash, readExported,
     localizeBlock, short, pad2, num, str, parseRules, reviewVerdicts, stuckRule, rulesTableRows, exactChecks,
-    makerOfTier, otherMakerTiers, reviewerTier, mergeRule };
+    makerOfTier, otherMakerTiers, reviewerTier, mergeRule, inputValue };
 })();
 </script>

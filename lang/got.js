@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"𐌼𐌰𐌸𐌹 %1","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌸𐌰𐌹𐍅𐌰 𐌼𐌰𐌸𐌹"},
 "rb_chk_no_mention":{"message0":"𐌽𐌹 𐌼𐌰𐌸𐌹 %1","tooltip":"𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌸𐌰𐌹𐍅𐌰 𐌼𐌰𐌸𐌹"},
 "rb_chk_json":{"message0":"𐌹𐍃𐍄 𐌲𐌰𐍅𐌰𐍃 JSON","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌲𐌰𐍅𐌰𐍃 JSON"},
-"rb_chk_link":{"message0":"𐌷𐌰𐌱𐌰𐌹𐌳 𐌱𐌰𐌽𐌳𐌹","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌱𐌰𐌽𐌳𐌹 𐌷𐌰𐌱𐌰𐌹𐌳"}
+"rb_chk_link":{"message0":"𐌷𐌰𐌱𐌰𐌹𐌳 𐌱𐌰𐌽𐌳𐌹","tooltip":"𐌽𐌹 𐌱𐍉𐍄𐌾𐌰𐌽𐌳 𐌱𐌰𐌽𐌳𐌹 𐌷𐌰𐌱𐌰𐌹𐌳"},
+"rb_inputs":{"message0":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐌸𐌹𐍃 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐌹𐌽𐍃","message1":"%1","tooltip":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐌸𐍉𐌶𐌴𐌹 𐌸𐌰𐍄𐌰 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐍃 𐌽𐌹𐌼𐌹𐌸. 𐍄𐌰𐍅𐌴𐌹 𐍆𐍂𐌰𐌹𐌷𐌽𐌹𐌸 𐌸𐍉𐍃 𐌹𐌽 𐌱𐍉𐌺𐍉𐌼; Python 𐌿𐍃𐌱𐌰𐌿𐍂𐌰𐌽𐍃 𐌽𐌹𐌼𐌹𐌸 --𐌹𐌽𐍀𐌿𐍄 town=Rye, 𐌾𐌰𐌷 --mcp 𐌽𐌹𐌼𐌹𐌸 𐌸𐍉𐍃 𐌱𐌹 𐌽𐌰𐌼𐌹𐌽. 𐍃𐌴𐌹 𐌹𐌽𐌿𐌷 𐍆𐌰𐌿𐍂𐌰𐌲𐌰𐍃𐌰𐍄𐌹𐌸 𐍃𐌺𐌰𐌻 𐌲𐌹𐌱𐌰𐌽𐌰 𐍅𐌰𐌹𐍂𐌸𐌰𐌽."},
+"rb_input_def":{"message0":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 %1 : %2 𐍆𐌰𐌿𐍂𐌰𐌲𐌰𐍃𐌰𐍄𐌹𐌸 %3","tooltip":"𐌰𐌹𐌽𐍃 𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹: 𐌽𐌰𐌼𐍉 𐌹𐍃, 𐌺𐌿𐌽𐌹 𐌹𐍃 𐌾𐌰𐌷 𐍆𐌰𐌿𐍂𐌰𐌲𐌰𐍃𐌰𐍄𐌹𐌸 𐌹𐍃. 𐌹𐌽𐌿𐌷 𐌸𐌰𐍄𐌰 𐍃𐌺𐌰𐌻 𐌲𐌹𐌱𐌰𐌽𐌰 𐍅𐌰𐌹𐍂𐌸𐌰𐌽. 𐌳𐌰𐌲𐍃 𐌲𐌰𐌼𐌴𐌻𐌹𐌳𐌰 𐍃𐍅𐌴 2026-11-21."},
+"rb_input":{"message0":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 %1","tooltip":"𐍅𐌰𐌹𐍂𐌸 𐌸𐌰𐍄𐌴𐌹 𐍃𐍉 𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 𐌽𐌰𐌼, 𐌸𐌰𐌽 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐍃 𐌳𐌿𐌲𐌰𐌽𐌽, 𐌰𐌹𐌸𐌸𐌰𐌿 𐍆𐌰𐌿𐍂𐌰𐌲𐌰𐍃𐌰𐍄𐌹𐌸 𐌹𐍃."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𐌳𐌰𐌲𐌰 𐍈𐌰𐌼𐌼𐌴𐌷","weekdays":"𐌳𐌰𐌲𐌰𐌼 𐍅𐌰𐌿𐍂𐍃𐍄𐍅𐌹𐍃","weekends":"𐌳𐌰𐌲𐌰𐌼 𐌲𐌰𐌵𐌿𐌼𐌸𐌰𐌹𐍃"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 𐍃𐌴𐍄","same":"𐍃𐌰𐌼𐌰 tákne","another":"𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne"},
-"rb_reflect.REVIEWER":{"":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 𐍃𐌴𐍄","same":"𐍃𐌰𐌼𐌰 tákne","another":"𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne"}
+"rb_reflect.REVIEWER":{"":"𐍃𐍉𐌺𐌾𐌰𐌽𐌳𐍃 𐍃𐌴𐍄","same":"𐍃𐌰𐌼𐌰 tákne","another":"𐌰𐌽𐌸𐌰𐍂𐌰𐌽𐌳𐍃 tákne"},
+"rb_input_def.TYPE":{"text":"𐌱𐍉𐌺𐌰","number":"𐍂𐌰𐌷𐌽𐌾𐍉","yesno":"𐌾𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌽𐌴","date":"𐌳𐌰𐌲𐍃"}
 },
 "categories":{
 "Agent":"𐌰𐌹𐍂𐌿𐍃",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"𐍆𐍂𐌰𐌹𐌷𐌽 𐍈𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌲𐌰𐍄𐌴𐌹𐌷 𐍆𐍂𐌰𐌸𐌹 𐌸𐌴𐌹𐌽𐌰𐍄𐌰 𐌰𐌽𐌰 GitHub",
 "Save for Docker (.zip)":"𐍃𐍅𐌴 Docker 𐍆𐌰𐍃𐍄𐌰𐌹 (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip 𐍆𐌰𐍃𐍄𐌰𐌹𐌸. 𐌰𐌽𐌳𐌱𐌹𐌽𐌳𐌰𐌹𐍃 𐌹𐍄𐌰, 𐌻𐌰𐌲𐌾𐌰𐌹𐍃 𐌻𐌿𐌺𐌰𐌽𐍃 𐌸𐌴𐌹𐌽𐌰𐌽𐍃 𐌹𐌽 keys.env, 𐌾𐌰𐌷 𐌸𐌰𐌸𐍂𐍉𐌷 𐌻𐌰𐌹𐍃𐍄𐌾𐌰𐌹𐍃 SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þ𐌰𐍄𐌰 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐍃 𐌽𐌹 𐌱𐌴𐌹𐌳𐌹𐌸 𐍈𐌹𐍃, 𐍃𐍅𐌰𐌴𐌹 𐌹𐌽 Docker 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰𐌹 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌹. Docker 𐌲𐌰𐌳𐍉𐌱 𐌹𐍃𐍄 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐌹𐌽 𐌼𐌹𐌸 𐌼𐌴𐌻𐌰𐌼 𐌰𐌹𐌸𐌸𐌰𐌿 '𐌸𐌰𐌽' 𐍃𐍄𐌰𐌹𐌽𐌰."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þ𐌰𐍄𐌰 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐍃 𐌽𐌹 𐌱𐌴𐌹𐌳𐌹𐌸 𐍈𐌹𐍃, 𐍃𐍅𐌰𐌴𐌹 𐌹𐌽 Docker 𐌿𐍃𐍄𐌰𐌿𐌷𐌰𐌽𐌰𐌹 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰 𐌰𐌽𐌰𐍃𐍄𐍉𐌳𐌾𐌰𐌹. Docker 𐌲𐌰𐌳𐍉𐌱 𐌹𐍃𐍄 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐌹𐌽 𐌼𐌹𐌸 𐌼𐌴𐌻𐌰𐌼 𐌰𐌹𐌸𐌸𐌰𐌿 '𐌸𐌰𐌽' 𐍃𐍄𐌰𐌹𐌽𐌰.",
+"Fill in the inputs, then press Run.":"𐍆𐌿𐌻𐌻𐌴𐌹 𐌸𐍉 𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃, 𐌾𐌰𐌷 𐌸𐌰𐌸𐍂𐍉𐌷 𐌳𐍂𐌹𐌲𐌺 𐍄𐌰𐍅𐌴𐌹.",
+"Program inputs":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹𐌽𐍃 𐍂𐌰𐌷𐌽𐌾𐌰𐌽𐌳𐌹𐌽𐍃",
+"Input {name} needs a value.":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 {name} 𐌸𐌰𐍂𐍆 𐍅𐌰𐌹𐍂𐌸𐌹𐍃.",
+"Input {name} must be a number, not {value}.":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 {name} 𐍃𐌺𐌰𐌻 𐍅𐌹𐍃𐌰𐌽 𐍂𐌰𐌷𐌽𐌾𐍉, 𐌽𐌹 {value}.",
+"Input {name} must be yes or no, not {value}.":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 {name} 𐍃𐌺𐌰𐌻 𐍅𐌹𐍃𐌰𐌽 𐌾𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌽𐌴, 𐌽𐌹 {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 {name} 𐍃𐌺𐌰𐌻 𐍅𐌹𐍃𐌰𐌽 𐌳𐌰𐌲𐍃 𐍃𐍅𐌴 2026-11-21, 𐌽𐌹 {value}.",
+"Yes":"𐌾𐌰",
+"No":"𐌽𐌴"
 },
 "examples":{
 "review":{"title":"𐌲𐌰𐍃𐌰𐌹𐌷𐍄𐍃 𐌰𐍆𐍄𐍂𐌰 𐌾𐌰𐌷 𐌰𐍆𐍄𐍂𐌰","desc":"Claude 𐌱𐌹 autolyse 𐌼𐌴𐌻𐌾𐌹𐌸, 𐌱𐌹 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐌹𐌼 𐌸𐌴𐌹𐌽𐌰𐌹𐌼 𐍃𐌰𐌹𐍈𐌹𐌸 𐌾𐌰𐌷 𐌰𐌹𐍂𐌶𐌴𐌹𐌽𐍃 𐌱𐍉𐍄𐌾𐌹𐌸, 3 𐍃𐌹𐌽𐌸𐌰𐌼 𐌰𐌹𐌽𐌰𐌹.","tip":"𐌰𐍂𐌱𐌰𐌹𐌸 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌱𐌻𐌰𐍅𐌰𐌼𐌼𐌰 𐌾𐌰𐌷 𐌰𐌽𐌰𐌱𐌿𐍃𐌽𐍃 𐌹𐌽 𐍃𐍄𐌰𐌹𐌽𐌰 𐌲𐍂𐌴𐌽𐌾𐌰𐌼𐌼𐌰 𐌹𐌽𐌼𐌰𐌹𐌳𐌴𐌹."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Doon actions, of the resetes of the laste {days} dayes: {n}.",
 "Cost, counted on this computer at list prices:":"Cost, counted on this computour at liste prices:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent.",
+"Input {name} needs a value.":"inngaggandei {name} þarf wairþis.",
+"Input {name} must be a number, not {value}.":"inngaggandei {name} skal wisan rahnjo, ni {value}.",
+"Input {name} must be yes or no, not {value}.":"inngaggandei {name} skal wisan ja aiþþau ne, ni {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"inngaggandei {name} skal wisan dags swe 2026-11-21, ni {value}.",
+"There's no input called {name}. Its inputs: {names}.":"nist inngaggandei haitana {name}. inngaggandeins is: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input wili namo jah wairþ, swe --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𐌲𐌰𐌼𐌴𐌻𐌴𐌹𐌽𐍃 𐌱𐌹𐌰𐌿𐌺",

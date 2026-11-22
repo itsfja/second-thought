@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"menciona %1","tooltip":"Falla si el borrador no contiene estas palabras (no importan las mayúsculas)."},
 "rb_chk_no_mention":{"message0":"no menciona %1","tooltip":"Falla si el borrador contiene estas palabras (no importan las mayúsculas)."},
 "rb_chk_json":{"message0":"es JSON válido","tooltip":"Falla si el borrador no es JSON válido."},
-"rb_chk_link":{"message0":"tiene un enlace","tooltip":"Falla si el borrador no tiene un enlace (http://… o www.…)."}
+"rb_chk_link":{"message0":"tiene un enlace","tooltip":"Falla si el borrador no tiene un enlace (http://… o www.…)."},
+"rb_inputs":{"message0":"entradas de este programa","message1":"%1","tooltip":"Las entradas que toma este programa. Ejecutar las pide en un formulario; el Python exportado toma --input town=Rye, y --mcp las toma por su nombre. Una sin valor por defecto debe darse."},
+"rb_input_def":{"message0":"entrada %1 : %2 por defecto %3","tooltip":"Una entrada: su nombre, su tipo y su valor por defecto. Sin valor por defecto, hay que darla. Una fecha se escribe como 2026-11-21."},
+"rb_input":{"message0":"entrada %1","tooltip":"El valor que recibió esta entrada al empezar el programa, o su valor por defecto."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"todos los días","weekdays":"entre semana","weekends":"los fines de semana"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"el ajuste del revisor","same":"el mismo modelo","another":"un modelo de otro fabricante"},
-"rb_reflect.REVIEWER":{"":"el ajuste del revisor","same":"el mismo modelo","another":"un modelo de otro fabricante"}
+"rb_reflect.REVIEWER":{"":"el ajuste del revisor","same":"el mismo modelo","another":"un modelo de otro fabricante"},
+"rb_input_def.TYPE":{"text":"texto","number":"número","yesno":"sí o no","date":"fecha"}
 },
 "categories":{
 "Events":"Eventos",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Haz una pregunta o comparte una idea en GitHub",
 "Save for Docker (.zip)":"Guardar para Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Guardado {name}-docker.zip. Descomprímelo, pon tus claves en keys.env y sigue SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Este programa no espera nada, así que en Docker terminaría y volvería a empezar una y otra vez. Docker conviene a un programa con horario o con un bloque «cuando»."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Este programa no espera nada, así que en Docker terminaría y volvería a empezar una y otra vez. Docker conviene a un programa con horario o con un bloque «cuando».",
+"Fill in the inputs, then press Run.":"Rellena las entradas y pulsa Ejecutar.",
+"Program inputs":"Entradas del programa",
+"Input {name} needs a value.":"La entrada {name} necesita un valor.",
+"Input {name} must be a number, not {value}.":"La entrada {name} debe ser un número, no {value}.",
+"Input {name} must be yes or no, not {value}.":"La entrada {name} debe ser sí o no, no {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"La entrada {name} debe ser una fecha como 2026-11-21, no {value}.",
+"Yes":"Sí",
+"No":"No"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},
@@ -2520,6 +2532,12 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No hay logs guardados en los últimos {days} días (save_log = yes guarda uno por run en logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Acciones hechas, de los recibos de los últimos {days} días: {n}.",
 "Cost, counted on this computer at list prices:":"Coste, contado en este ordenador a precios de lista:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} pasaron, {failed} con error), {actions} acciones hechas, {refused} rechazadas, {cost} gastado."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} pasaron, {failed} con error), {actions} acciones hechas, {refused} rechazadas, {cost} gastado.",
+"Input {name} needs a value.":"La entrada {name} necesita un valor.",
+"Input {name} must be a number, not {value}.":"La entrada {name} debe ser un número, no {value}.",
+"Input {name} must be yes or no, not {value}.":"La entrada {name} debe ser sí o no, no {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"La entrada {name} debe ser una fecha como 2026-11-21, no {value}.",
+"There's no input called {name}. Its inputs: {names}.":"No hay ninguna entrada llamada {name}. Sus entradas: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input necesita un nombre y un valor, como --input town=Rye."
 }
 };

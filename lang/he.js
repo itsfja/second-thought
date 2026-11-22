@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"מזכיר %1","tooltip":"נכשל אלא אם הטיوطة מכילה את המילים האלה (גודל האותיות לא משנה)."},
 "rb_chk_no_mention":{"message0":"לא מזכיר %1","tooltip":"נכשל אם הטיوطة מכילה את המילים האלה (גודל האותיות לא משנה)."},
 "rb_chk_json":{"message0":"JSON תקין","tooltip":"נכשל אם הטיوطة אינה JSON תקין."},
-"rb_chk_link":{"message0":"יש קישור","tooltip":"נכשל אם אין קישור בטיוטה"}
+"rb_chk_link":{"message0":"יש קישור","tooltip":"נכשל אם אין קישור בטיוטה"},
+"rb_inputs":{"message0":"הקלטים של התוכנית הזאת","message1":"%1","tooltip":"הקלטים שהתוכנית הזאת מקבלת. הרץ מבקש אותם בטופס; Python מיוצא מקבל --input town=Rye, ו־--mcp מקבל אותם לפי שם. קלט בלי ברירת מחדל חייב להינתן."},
+"rb_input_def":{"message0":"קלט %1 : %2 ברירת מחדל %3","tooltip":"קלט אחד: השם שלו, הסוג שלו וברירת המחדל שלו. בלי ברירת מחדל, חייבים לתת אותו. תאריך נכתב כמו 2026-11-21."},
+"rb_input":{"message0":"קלט %1","tooltip":"הערך שהקלט הזה קיבל כשהתוכנית התחילה, או ברירת המחדל שלו."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יום","weekdays":"בימי חול","weekends":"בסופי שבוע"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"},
-"rb_reflect.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"}
+"rb_reflect.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"},
+"rb_input_def.TYPE":{"text":"טקסט","number":"מספר","yesno":"כן או לא","date":"תאריך"}
 },
 "categories":{
 "Events":"אירועים",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"שאלו שאלה או שתפו רעיון ב־GitHub",
 "Save for Docker (.zip)":"שמירה ל-Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"נשמר {name}-docker.zip. חלץ אותו, שים את המפתחות שלך ב-keys.env, ואז עקוב אחרי SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"התוכנית הזאת לא מחכה לשום דבר, אז ב-Docker היא תסתיים ותתחיל שוב ושוב. Docker מתאים לתוכנית עם לוח זמנים או בלוק 'כאשר'."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"התוכנית הזאת לא מחכה לשום דבר, אז ב-Docker היא תסתיים ותתחיל שוב ושוב. Docker מתאים לתוכנית עם לוח זמנים או בלוק 'כאשר'.",
+"Fill in the inputs, then press Run.":"מלאו את הקלטים, ואז לחצו על הרץ.",
+"Program inputs":"הקלטים של התוכנית",
+"Input {name} needs a value.":"הקלט {name} צריך ערך.",
+"Input {name} must be a number, not {value}.":"הקלט {name} חייב להיות מספר, לא {value}.",
+"Input {name} must be yes or no, not {value}.":"הקלט {name} חייב להיות כן או לא, לא {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"הקלט {name} חייב להיות תאריך כמו 2026-11-21, לא {value}.",
+"Yes":"כן",
+"No":"לא"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},
@@ -2521,6 +2533,12 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"אין לוגים שמורים ב-{days} הימים האחרונים (save_log = yes שומר אחד לכל run ב-logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"פעולות שבוצעו, מהקבלות של {days} הימים האחרונים: {n}.",
 "Cost, counted on this computer at list prices:":"עלות counted on this computer at list prices:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} עברו, {failed} עם שגיאה), {actions} פעולות בוצעו, {refused} סורבו, {cost} spent."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} עברו, {failed} עם שגיאה), {actions} פעולות בוצעו, {refused} סורבו, {cost} spent.",
+"Input {name} needs a value.":"הקלט {name} צריך ערך.",
+"Input {name} must be a number, not {value}.":"הקלט {name} חייב להיות מספר, לא {value}.",
+"Input {name} must be yes or no, not {value}.":"הקלט {name} חייב להיות כן או לא, לא {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"הקלט {name} חייב להיות תאריך כמו 2026-11-21, לא {value}.",
+"There's no input called {name}. Its inputs: {names}.":"אין קלט בשם {name}. הקלטים שלה: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"‏--input צריך שם וערך, למשל --input town=Rye."
 }
 };

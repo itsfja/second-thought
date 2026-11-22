@@ -212,7 +212,10 @@
 "rb_chk_mentions":{"message0":"ܐܡܪܐ %1","tooltip":"ܠܐ ܡܫܟ ܐܡܪܐ"},
 "rb_chk_no_mention":{"message0":"ܠܐ ܐܡܪܐ %1","tooltip":"ܡܫܟ ܐܡܪܐ"},
 "rb_chk_json":{"message0":"JSON ܫܪܝܪܐ","tooltip":"ܠܐ ܫܪܝܪ JSON"},
-"rb_chk_link":{"message0":"ܚܒܠܐ ܫܪܝܪ","tooltip":"ܠܐ ܚܒܠܐ ܫܪܝܪ"}
+"rb_chk_link":{"message0":"ܚܒܠܐ ܫܪܝܪ","tooltip":"ܠܐ ܚܒܠܐ ܫܪܝܪ"},
+"rb_inputs":{"message0":"ܡܥܠܢܐ ܕܗܢܐ ܚܫܘܒܐ","message1":"%1","tooltip":"ܡܥܠܢܐ ܕܢܣܒ ܗܢܐ ܚܫܘܒܐ. ܪܗܛܐ ܫܐܠ ܠܗܘܢ ܒܕܦܬܐ; Python ܢܣܒ --ܐܝܢܦܘܬ town=Rye, ܘ --mcp ܢܣܒ ܠܗܘܢ ܒܫܡܐ. ܕܠܝܬ ܠܗ ܩܕܡܝܐ ܘܠܗ ܕܢܬܝܗܒ."},
+"rb_input_def":{"message0":"ܡܥܠܢܐ %1 : %2 ܩܕܡܝܐ %3","tooltip":"ܡܥܠܢܐ ܚܕ: ܫܡܗ, ܓܢܣܝܗ ܘܩܕܡܝܗ. ܕܠܐ ܩܕܡܝܐ ܘܠܗ ܕܢܬܝܗܒ. ܝܘܡܐ ܡܟܬܒ ܐܟ 2026-11-21."},
+"rb_input":{"message0":"ܡܥܠܢܐ %1","tooltip":"ܛܥܡܐ ܕܢܣܒ ܗܢܐ ܡܥܠܢܐ ܟܕ ܫܪܐ ܚܫܘܒܐ, ܐܘ ܩܕܡܝܗ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ܟܘܠ ܝܘܡ","weekdays":"ܒܝܘܡܬܐ ܕܥܒܕܐ","weekends":"ܒܫܒܬܐ"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"ܚܘܐ ܣܬ","same":"ܚܘܐ ܙ","another":"ܚܘܐ o-ze"},
-"rb_reflect.REVIEWER":{"":"ܚܘܐ ܣܬ","same":"ܚܘܐ ܙ","another":"ܚܘܐ o-ze"}
+"rb_reflect.REVIEWER":{"":"ܚܘܐ ܣܬ","same":"ܚܘܐ ܙ","another":"ܚܘܐ o-ze"},
+"rb_input_def.TYPE":{"text":"ܟܬܒܐ","number":"ܡܢܝܢܐ","yesno":"ܐܝܢ ܐܘ ܠܐ","date":"ܝܘܡܐ"}
 },
 "categories":{
 "Agent":"ܫܠܝܚܐ",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"ܫܐܠ ܫܐܠܬܐ ܐܘ ܫܘܬܦܗ ܡܚܫܒܬܐ ܥܠ GitHub",
 "Save for Docker (.zip)":"ܢܛܘܪ ܐܟ Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip ܐܬܢܛܪ. ܫܪܝ, ܣܝܡ ܩܠܝܕܟ ܥܠ keys.env, ܘܒܬܪ ܗܕܐ ܐܙܠ ܒܬܪ SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ܗܢܐ ܚܫܘܒܐ ܠܐ ܡܣܟܐ ܠܡܕܡ, ܘܡܬܘܠ ܗܢܐ ܒ Docker ܫܠܡ ܘܫܪܐ ܬܘܒ ܘܬܘܒ. Docker ܝܐܐ ܠܚܫܘܒܐ ܕܐܝܬ ܠܗ ܙܒܢܐ ܐܘ ܠܒܢܬܐ 'ܟܕ'."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ܗܢܐ ܚܫܘܒܐ ܠܐ ܡܣܟܐ ܠܡܕܡ, ܘܡܬܘܠ ܗܢܐ ܒ Docker ܫܠܡ ܘܫܪܐ ܬܘܒ ܘܬܘܒ. Docker ܝܐܐ ܠܚܫܘܒܐ ܕܐܝܬ ܠܗ ܙܒܢܐ ܐܘ ܠܒܢܬܐ 'ܟܕ'.",
+"Fill in the inputs, then press Run.":"ܡܠܝ ܡܥܠܢܐ, ܘܒܬܪ ܗܕܐ ܕܚܘܩ ܪܗܛܐ.",
+"Program inputs":"ܡܥܠܢܐ ܕܚܫܘܒܐ",
+"Input {name} needs a value.":"ܡܥܠܢܐ {name} ܣܢܩ ܠܬܥܡܐ.",
+"Input {name} must be a number, not {value}.":"ܡܥܠܢܐ {name} ܘܠܗ ܕܢܗܘܐ ܡܢܝܢܐ, ܠܐ {value}.",
+"Input {name} must be yes or no, not {value}.":"ܡܥܠܢܐ {name} ܘܠܗ ܕܢܗܘܐ ܐܝܢ ܐܘ ܠܐ, ܠܐ {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"ܡܥܠܢܐ {name} ܘܠܗ ܕܢܗܘܐ ܝܘܡܐ ܐܟ 2026-11-21, ܠܐ {value}.",
+"Yes":"ܐܝܢ",
+"No":"ܠܐ"
 },
 "examples":{
 "review":{"title":"ܚܕܪܐ ܕܒܘܚܪܢܐ","desc":"Claude ܟܬܒ ܥܠ autolyse, ܒܚܢ ܠܗ ܠܘܬ ܢܡܘܣܝܟ, ܘܡܬܩܢ ܡܐ ܕܢܦܠ, ܥܕܡܐ ܠ-3 ܙܒܢܝܢ.","tip":"ܫܢܝ ܥܒܕܐ ܒܠܒܢܬܐ ܬܟܠܝܠܬܐ ܘܢܡܘܣܐ ܒܐܪܓܘܢܬܐ."},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Doon actions, of the resetes of the laste {days} dayes: {n}.",
 "Cost, counted on this computer at list prices:":"Cost, counted on this computour at liste prices:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent.",
+"Input {name} needs a value.":"maꜥlānā {name} sneq ltaꜥmā.",
+"Input {name} must be a number, not {value}.":"maꜥlānā {name} wāleh dnehwē menyānā, lā {value}.",
+"Input {name} must be yes or no, not {value}.":"maꜥlānā {name} wāleh dnehwē ꜣīn ꜣaw lā, lā {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"maꜥlānā {name} wāleh dnehwē yawmā ꜣak 2026-11-21, lā {value}.",
+"There's no input called {name}. Its inputs: {names}.":"layt maꜥlānā dšmeh {name}. maꜥlānaw: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input bāꜥē šmā wṭaꜥmā, ꜣak --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ܐܘܣܦ ܫܪܚܐ",
