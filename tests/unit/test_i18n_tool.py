@@ -65,6 +65,15 @@ class Scripts(unittest.TestCase):
         self.assertEqual(gaps, {"c", "v"})
         self.assertEqual(tool.printed("got", "^the gutisk"), "the gutisk")
 
+    def test_ugaritic_is_written_letter_for_letter(self):
+        self.assertEqual(tool.to_script("uga", "ủgrt mlk šảl"), "𐎜𐎂𐎗𐎚 𐎎𐎍𐎋 𐎌𐎀𐎍")
+        self.assertEqual(tool.to_script("uga", "<b>lk</b> %1 Claude ^ṯ {name} second-thought.ini"),
+                         "<b>𐎍𐎋</b> %1 Claude ṯ {name} second-thought.ini")
+        gaps = set()
+        self.assertEqual(tool.to_script("uga", "title", gaps), "title", "plain vowels aren't Ugaritic letters")
+        self.assertEqual(gaps, {"e", "i"})
+        self.assertEqual(tool.printed("uga", "^title mlk ʿbd"), "title mlk ꜥbd", "ʿ prints as the Latin letter ꜥ")
+
     def test_sumerian_signs_are_the_signs_themselves(self):
         # A sign's readings, not those of a variant form listed after it (#374): u3 is U, not ŠA17's old form, and aš and
         # dili are AŠ, not the numeral 1(AŠ@c).
