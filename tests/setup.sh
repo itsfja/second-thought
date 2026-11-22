@@ -13,7 +13,7 @@ mkdir -p vendor
 cd vendor
 for pkg in blockly@13.4.0 @blockly/field-multilineinput@13.4.0 axe-core@4.10.3 pdfjs-dist@3.11.174 @fontsource/noto-sans-linear-b@5.3.0 \
            @fontsource/noto-sans-devanagari@5.3.0 @fontsource/noto-sans-cuneiform@5.3.0 @fontsource/noto-sans-egyptian-hieroglyphs@5.3.0 @fontsource/noto-sans-coptic@5.3.0 @fontsource/noto-sans-syriac@5.3.0 \
-           @fontsource/noto-sans-gothic@5.3.0 @fontsource/noto-sans-runic@5.3.0 @fontsource/noto-sans-glagolitic@5.3.0 @fontsource/noto-sans-ethiopic@5.3.0 @fontsource/noto-sans-armenian@5.3.0 \
+           @fontsource/noto-sans-gothic@5.3.0 @fontsource/noto-sans-runic@5.3.0 @fontsource/noto-sans-glagolitic@5.3.0 @fontsource/noto-sans-ethiopic@5.3.0 @fontsource/noto-sans-armenian@5.3.0 @fontsource/noto-sans-ugaritic@5.3.0 \
            @fontsource/atkinson-hyperlegible@5.3.0 @fontsource/bricolage-grotesque@5.3.0 @fontsource/jetbrains-mono@5.3.0; do  # the last three: the page's own typefaces (#453)
   name="${pkg%@*}"; name="${name#@blockly/}"
   if [ ! -d "$name" ]; then

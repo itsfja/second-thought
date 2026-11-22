@@ -14,9 +14,10 @@ async def offline_tests():
     with tempfile.TemporaryDirectory() as tmp:
         path = offline_tool.build(pathlib.Path(tmp) / "second-thought-offline.html")
         text = path.read_text(encoding="utf-8")
-        # 16 MB: the file holds every language's words, so new words in 34 languages move it (#426, #448); Windows'
-        # CRLF line endings add a little more than Linux's.
-        check(path.stat().st_size < 16e6 and 'http-equiv="Content-Security-Policy"' in text and "lang/" not in re.findall(r'<script src="([^"]+)"', text),
+        # 20 MB: the file holds every language's words, so new words in every language move it (#426, #448), and so
+        # does each new language (#469-#473: an ancient script's letters take four bytes each); Windows' CRLF line
+        # endings add a little more than Linux's.
+        check(path.stat().st_size < 20e6 and 'http-equiv="Content-Security-Policy"' in text and "lang/" not in re.findall(r'<script src="([^"]+)"', text),
               f"tools/offline.py builds one file with the libraries and languages inside, and a security policy ({path.stat().st_size / 1e6:.1f} MB)")
         fetched = []
 
