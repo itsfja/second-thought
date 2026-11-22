@@ -1017,6 +1017,36 @@
   "capability": null
  },
  {
+  "type": "rb_input",
+  "words": "input %1",
+  "slots": [
+   "NAME"
+  ],
+  "tooltip": "The value this input was given when the program started, or its default.",
+  "category": "Programs",
+  "capability": null
+ },
+ {
+  "type": "rb_input_def",
+  "words": "input %1 : %2 default %3",
+  "slots": [
+   "NAME",
+   "TYPE",
+   "DEFAULT"
+  ],
+  "tooltip": "One input: its name, its kind and its default. With no default, it must be given. A date is written like 2026-11-21.",
+  "category": "Programs",
+  "capability": null
+ },
+ {
+  "type": "rb_inputs",
+  "words": "this program's inputs",
+  "slots": [],
+  "tooltip": "The inputs this program takes. Run asks for them in a form; exported Python takes --input town=Rye, and --mcp takes them by name. One with no default must be given.",
+  "category": "Programs",
+  "capability": null
+ },
+ {
   "type": "rb_longtext",
   "words": "%1",
   "slots": [

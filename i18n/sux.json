@@ -820,6 +820,19 @@
   "rb_chk_link": {
    "message0": "𒊬 𒌇",
    "tooltip": "𒊬 𒉡𒌇 𒅗"
+  },
+  "rb_inputs": {
+   "message0": "𒆭𒆭 𒄑𒄯 𒉈𒂊",
+   "message1": "%1",
+   "tooltip": "𒆭𒆭 𒄑𒄯 𒉈𒂊 𒋗 𒋾𒀀. 𒀝 𒁾𒀀 𒇷 𒋻; Python --input town=Rye 𒋗 𒋾, --mcp 𒈬𒁉𒋫 𒋗 𒋾. 𒅆 𒉡𒌇𒀀 𒃶𒋧."
+  },
+  "rb_input_def": {
+   "message0": "𒆭 %1 : %2 𒅆 %3",
+   "tooltip": "𒆭 𒁹: 𒈬𒁉, 𒃻𒁉 𒅇 𒅆𒁉. 𒅆 𒉡𒌇 𒋧𒈬. 𒌓 2026-11-21-𒁶 𒊬."
+  },
+  "rb_input": {
+   "message0": "𒆭 %1",
+   "tooltip": "𒉚 𒆭 𒉈𒂊 𒋗 𒁀𒀭𒋾 𒄑𒄯 𒊕 𒂷𒀀, 𒅇 𒅆𒁉."
   }
  },
  "options": {
@@ -975,6 +988,12 @@
    "": "šumma 𒇻 set",
    "same": "šumma 𒇻 𒍣",
    "another": "šumma 𒇻 o-𒍣"
+  },
+  "rb_input_def.TYPE": {
+   "text": "𒁾",
+   "number": "𒋃",
+   "yesno": "𒃶 𒅇 𒉡",
+   "date": "𒌓"
   }
  },
  "categories": {
@@ -2022,7 +2041,15 @@
   "Ask a question or share an idea on GitHub": "GitHub 𒆠𒀀 𒇷 𒋻 𒅇 𒅗 𒅗",
   "Save for Docker (.zip)": "Docker-𒉈 𒃻 (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip 𒃻. 𒂃, 𒈩𒍪 keys.env 𒃻, 𒂕 SETUP.md 𒁺.",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "𒄑𒄯 𒉈𒂊 𒃻 𒉡𒌒𒋛, Docker-𒀀 𒌀 𒅇 𒀀𒁺 𒉋 𒊕 𒂷. Docker 𒄑𒄯 𒌓 𒌇 𒅇 𒋞 '𒌓𒁀' 𒌇𒊏 𒊷."
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "𒄑𒄯 𒉈𒂊 𒃻 𒉡𒌒𒋛, Docker-𒀀 𒌀 𒅇 𒀀𒁺 𒉋 𒊕 𒂷. Docker 𒄑𒄯 𒌓 𒌇 𒅇 𒋞 '𒌓𒁀' 𒌇𒊏 𒊷.",
+  "Fill in the inputs, then press Run.": "𒆭𒆭 𒋛 𒁲, 𒂕 𒀝 𒁾.",
+  "Program inputs": "𒆭𒆭 𒄑𒄯",
+  "Input {name} needs a value.": "𒆭 {name} 𒉚 𒀠𒀝.",
+  "Input {name} must be a number, not {value}.": "𒆭 {name} 𒋃 𒃶𒀀, {value} 𒉡.",
+  "Input {name} must be yes or no, not {value}.": "𒆭 {name} 𒃶 𒅇 𒉡 𒃶𒀀, {value} 𒉡.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "𒆭 {name} 𒌓 2026-11-21-𒁶 𒃶𒀀, {value} 𒉡.",
+  "Yes": "𒃶",
+  "No": "𒉡"
  },
  "examples": {
   "review": {
@@ -3887,7 +3914,13 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
   "Actions done, from the receipts of the last {days} days: {n}.": "Doon actions, of the resetes of the laste {days} dayes: {n}.",
   "Cost, counted on this computer at list prices:": "Cost, counted on this computour at liste prices:",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent.",
+  "Input {name} needs a value.": "ku4 {name} sa10 al-ak.",
+  "Input {name} must be a number, not {value}.": "ku4 {name} šid ḫe2-a, {value} nu.",
+  "Input {name} must be yes or no, not {value}.": "ku4 {name} he2 u3 nu ḫe2-a, {value} nu.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "ku4 {name} u4 2026-11-21-gin7 ḫe2-a, {value} nu.",
+  "There's no input called {name}. Its inputs: {names}.": "ku4 mu {name} nu-ĝal2. ku4-ku4-bi: {names}.",
+  "--input wants a name and a value, like --input town=Rye.": "--input mu u3 sa10 al-ak, --input town=Rye-gin7."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "𒅗 𒃻",

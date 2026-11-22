@@ -356,6 +356,9 @@ Powerwall:
   rb_powerwall_reserve (N): set Powerwall backup reserve to %1 % — Raises or lowers the backup reserve: how much of the battery the house keeps for a power cut. It always asks you first, even when nothing else asks, and with nobody there to say yes it doesn't run. Needs POWERWALL_URL and POWERWALL_PASSWORD in second-thought.ini. On this page nothing really changes.  [powerwall_control]
 
 Programs:
+  rb_input (NAME): input %1 — The value this input was given when the program started, or its default.
+  rb_input_def (NAME, TYPE, DEFAULT): input %1 : %2 default %3 — One input: its name, its kind and its default. With no default, it must be given. A date is written like 2026-11-21.
+  rb_inputs: this program's inputs — The inputs this program takes. Run asks for them in a form; exported Python takes --input town=Rye, and --mcp takes them by name. One with no default must be given.
   rb_run_program (NAME, VALUE): run program %1 with %2 — Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported.
 
 Proxmox:

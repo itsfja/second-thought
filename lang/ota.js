@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"%1 anar","tooltip":"Taslak bu kelimeleri içermiyorsa kalır (büyük/küçük harf fark etmez)."},
 "rb_chk_no_mention":{"message0":"%1 anmaz","tooltip":"Taslak bu kelimeleri içeriyorsa kalır (büyük/küçük harf fark etmez)."},
 "rb_chk_json":{"message0":"geçerli JSON'dur","tooltip":"Taslak geçerli JSON değilse kalır."},
-"rb_chk_link":{"message0":"bir bağlantısı var","tooltip":"Taslakta bağlantı yoksa kalır (http://… veya www.…)."}
+"rb_chk_link":{"message0":"bir bağlantısı var","tooltip":"Taslakta bağlantı yoksa kalır (http://… veya www.…)."},
+"rb_inputs":{"message0":"بو پروغرامڭ گیریشلری","message1":"%1","tooltip":"بو پروغرامڭ آلدیغی گیریشلر. اجرا اونلری بر فورمده صورار؛ چیقاریلان Python --input town=Rye آلیر، --mcp ایسه اونلری آدیله آلیر. اصلی اولمایان ویریلملیدر."},
+"rb_input_def":{"message0":"گیریش %1 : %2 اصلی %3","tooltip":"بر گیریش: آدی، نوعی و اصلی. اصلی یوقسه ویریلملیدر. تاریخ 2026-11-21 کبی یازیلیر."},
+"rb_input":{"message0":"گیریش %1","tooltip":"پروغرام باشلادیغنده بو گیریشه ویریلن قیمت، یاخود اصلیسی."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"هر گون","weekdays":"ایش گونلری","weekends":"هفته صوڭلری"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"tetkikçi ayarı","same":"aynı model","another":"başka bir yapımcının modeli"},
-"rb_reflect.REVIEWER":{"":"tetkikçi ayarı","same":"aynı model","another":"başka bir yapımcının modeli"}
+"rb_reflect.REVIEWER":{"":"tetkikçi ayarı","same":"aynı model","another":"başka bir yapımcının modeli"},
+"rb_input_def.TYPE":{"text":"متن","number":"عدد","yesno":"اوت یاخود خیر","date":"تاریخ"}
 },
 "categories":{
 "Agent":"وكیل",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"GitHub اوزرنده بر سؤال صور یاخود بر فكر بیلدیر",
 "Save for Docker (.zip)":"Docker ایچون حفظ ایت (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip حفظ ایدیلدی. آچ، آنختارلریڭی keys.env ایچنه قوی، صوڭره SETUP.md ه اویغون حرکت ایت.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"بو پروغرام هیچ بر شی بكلەمز، بو سببله Docker ایچنده بیتر و تكرار تكرار باشلاردی. Docker زمانلاماسی یاخود 'وقتا كه' بلوغی اولان پروغرامه یاقیشیر."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"بو پروغرام هیچ بر شی بكلەمز، بو سببله Docker ایچنده بیتر و تكرار تكرار باشلاردی. Docker زمانلاماسی یاخود 'وقتا كه' بلوغی اولان پروغرامه یاقیشیر.",
+"Fill in the inputs, then press Run.":"گیریشلری طولدیر، صوڭره اجرا یه باص.",
+"Program inputs":"پروغرامڭ گیریشلری",
+"Input {name} needs a value.":"{name} گیریشی بر قیمته محتاجدر.",
+"Input {name} must be a number, not {value}.":"{name} گیریشی بر عدد اولملیدر، {value} دگل.",
+"Input {name} must be yes or no, not {value}.":"{name} گیریشی اوت یاخود خیر اولملیدر، {value} دگل.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"{name} گیریشی 2026-11-21 کبی بر تاریخ اولملیدر، {value} دگل.",
+"Yes":"اوت",
+"No":"خیر"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Son {days} günde kayıtlı günlük yok (save_log = yes her koşmada logs/ içine bir tane kaydeder).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Son {days} günün makbuzlarına göre yapılan eylemler: {n}.",
 "Cost, counted on this computer at list prices:":"Bu bilgisayarda liste fiyatlarıyla hesaplanan maliyet:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} koşma ({ok} geçti, {failed} hatalı), {actions} eylem yapıldı, {refused} reddedildi, {cost} harcandı."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} koşma ({ok} geçti, {failed} hatalı), {actions} eylem yapıldı, {refused} reddedildi, {cost} harcandı.",
+"Input {name} needs a value.":"{name} گیریشی بر قیمته محتاجدر.",
+"Input {name} must be a number, not {value}.":"{name} گیریشی بر عدد اولملیدر، {value} دگل.",
+"Input {name} must be yes or no, not {value}.":"{name} گیریشی اوت یاخود خیر اولملیدر، {value} دگل.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"{name} گیریشی 2026-11-21 کبی بر تاریخ اولملیدر، {value} دگل.",
+"There's no input called {name}. Its inputs: {names}.":"{name} آدلی بر گیریش یوقدر. گیریشلری: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"‏--input بر آد و بر قیمت ایستر، --input town=Rye کبی."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"تعلیق علاوه ایت",

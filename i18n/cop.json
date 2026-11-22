@@ -820,6 +820,19 @@
   "rb_chk_link": {
    "message0": "ϩⲩⲡⲉ ⲙⲙⲟϥ",
    "tooltip": "a-anhype ⲙⲙⲟϥ"
+  },
+  "rb_inputs": {
+   "message0": "ⲛⲃⲱⲕ ⲉϩⲟⲩⲛ ⲛⲧⲁⲓⲧⲁⲝⲓⲥ",
+   "message1": "%1",
+   "tooltip": "ⲛⲃⲱⲕ ⲉϩⲟⲩⲛ ⲉⲧⲉⲣⲉ taitaxis ϫⲓ ⲙⲙⲟⲟⲩ. ⲁⲣⲓ ϣⲓⲛⲉ ⲙⲙⲟⲟⲩ ϩⲛ ⲟⲩϫⲱⲱⲙⲉ; Python ϫⲓ --ⲓⲛⲡⲩⲧ town=Rye, ⲁⲩⲱ --ⲙϭⲡ ϫⲓ ⲙⲙⲟⲟⲩ ϩⲙ ⲡⲟⲩⲣⲁⲛ. ⲡⲉⲧⲉⲙⲛⲧⲁϥ ϣⲟⲣⲡ ϩⲁϩⲧⲉ ⲉⲧⲟⲩϥ."
+  },
+  "rb_input_def": {
+   "message0": "ⲃⲱⲕ ⲉϩⲟⲩⲛ %1 : %2 ϣⲟⲣⲡ %3",
+   "tooltip": "ⲟⲩⲃⲱⲕ ⲉϩⲟⲩⲛ ⲛⲟⲩⲱⲧ: ⲡⲉϥⲣⲁⲛ, ⲡⲉϥⲅⲉⲛⲟⲥ, ⲡⲉϥϣⲟⲣⲡ. ⲁϫⲛ ϣⲟⲣⲡ ϩⲁϩⲧⲉ ⲉⲧⲟⲩϥ. ⲡϩⲟⲟⲩ ϣⲁⲩⲥⲁϩϥ ⲛⲧϩⲉ 2026-11-21."
+  },
+  "rb_input": {
+   "message0": "ⲃⲱⲕ ⲉϩⲟⲩⲛ %1",
+   "tooltip": "ⲡϩⲱⲃ ⲛⲧⲁⲡⲉⲓⲃⲱⲕ ⲉϩⲟⲩⲛ ϫⲓⲧϥ ⲛⲧⲉⲣⲉ ⲧⲁⲝⲓⲥ ⲁⲣⲭⲉⲓ, ⲏ ⲡⲉϥϣⲟⲣⲡ."
   }
  },
  "options": {
@@ -975,6 +988,12 @@
    "": "ⲧⲁⲙⲟ ⲥⲉⲧ",
    "same": "ⲧⲁⲙⲟ ⲡⲓ ⲍⲉ",
    "another": "ⲧⲁⲙⲟ ⲡⲓ o-ze"
+  },
+  "rb_input_def.TYPE": {
+   "text": "ⲥϩⲁⲓ",
+   "number": "ⲏⲡⲉ",
+   "yesno": "ⲥⲉ ⲏ ⲙⲙⲟⲛ",
+   "date": "ϩⲟⲟⲩ"
   }
  },
  "categories": {
@@ -2022,7 +2041,15 @@
   "Ask a question or share an idea on GitHub": "ϣⲓⲛⲉ ⲛⲟⲩϩⲱⲃ ⲏ ⲕⲟⲓⲛⲱⲛⲉⲓ ⲛⲛⲟⲩⲙⲉⲉⲩⲉ ϩⲓϫⲛ GitHub",
   "Save for Docker (.zip)": "ϩⲁⲣⲉϩ ϩⲱⲥ Docker (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "ⲁϥϩⲁⲣⲉϩ {name}-docker.zip. ⲃⲟⲗϥ ⲉⲃⲟⲗ, ⲕⲱ ⲛⲛⲉⲕϣⲟϣⲧ ϩⲛ keys.env, ⲁⲩⲱ ⲟⲩⲁϩⲕ ⲛⲥⲁ SETUP.md.",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "ⲙⲛ ⲗⲁⲁⲩ ⲛϩⲱⲃ ⲉⲣⲉ ⲡⲉⲓⲟⲣⲅⲁⲛⲟⲛ čⲱϣⲧ ⲉⲃⲟⲗ ϩⲏⲧϥ, ⲉⲧⲃⲉ ⲡⲁⲓ ϩⲛ Docker ⲛⲁⲁϥⲱⲕ ⲁϥⲁⲣⲭⲉⲓ ⲟⲛ ⲟⲛ. Docker ⲙⲡϣⲁ ⲛⲟⲩⲟⲣⲅⲁⲛⲟⲛ ⲙⲛ ⲟⲩⲟⲉⲓϣ ⲏ ⲟⲩⲱⲛⲉ 'ϩⲟⲧⲁⲛ'."
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "ⲙⲛ ⲗⲁⲁⲩ ⲛϩⲱⲃ ⲉⲣⲉ ⲡⲉⲓⲟⲣⲅⲁⲛⲟⲛ čⲱϣⲧ ⲉⲃⲟⲗ ϩⲏⲧϥ, ⲉⲧⲃⲉ ⲡⲁⲓ ϩⲛ Docker ⲛⲁⲁϥⲱⲕ ⲁϥⲁⲣⲭⲉⲓ ⲟⲛ ⲟⲛ. Docker ⲙⲡϣⲁ ⲛⲟⲩⲟⲣⲅⲁⲛⲟⲛ ⲙⲛ ⲟⲩⲟⲉⲓϣ ⲏ ⲟⲩⲱⲛⲉ 'ϩⲟⲧⲁⲛ'.",
+  "Fill in the inputs, then press Run.": "ⲙⲟⲩϩ ⲛⲛⲃⲱⲕ ⲉϩⲟⲩⲛ, ⲁⲩⲱ ⲧⲱⲙⲧ ⲁⲣⲓ.",
+  "Program inputs": "ⲛⲃⲱⲕ ⲉϩⲟⲩⲛ ⲛⲧⲁⲝⲓⲥ",
+  "Input {name} needs a value.": "ⲡⲃⲱⲕ ⲉϩⲟⲩⲛ {name} ϣⲁⲁϥ ϩⲱⲃ ⲛⲟⲩϩⲱⲃ.",
+  "Input {name} must be a number, not {value}.": "ⲡⲃⲱⲕ ⲉϩⲟⲩⲛ {name} ϩⲁϩⲧⲉ ⲛϥϣⲱⲡⲉ ⲛⲟⲩⲏⲡⲉ, ⲛⲟⲩϩ {value}.",
+  "Input {name} must be yes or no, not {value}.": "ⲡⲃⲱⲕ ⲉϩⲟⲩⲛ {name} ϩⲁϩⲧⲉ ⲛϥϣⲱⲡⲉ ⲥⲉ ⲏ ⲙⲙⲟⲛ, ⲛⲟⲩϩ {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "ⲡⲃⲱⲕ ⲉϩⲟⲩⲛ {name} ϩⲁϩⲧⲉ ⲛϥϣⲱⲡⲉ ⲛⲟⲩϩⲟⲟⲩ ⲛⲧϩⲉ 2026-11-21, ⲛⲟⲩϩ {value}.",
+  "Yes": "ⲥⲉ",
+  "No": "ⲙⲙⲟⲛ"
  },
  "examples": {
   "review": {
@@ -3887,7 +3914,13 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
   "Actions done, from the receipts of the last {days} days: {n}.": "Doon actions, of the resetes of the laste {days} dayes: {n}.",
   "Cost, counted on this computer at list prices:": "Cost, counted on this computour at liste prices:",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent.",
+  "Input {name} needs a value.": "pbōk ehoun {name} šaaf hōb nouhōb.",
+  "Input {name} must be a number, not {value}.": "pbōk ehoun {name} hahte nfšōpe nouēpe, nouh {value}.",
+  "Input {name} must be yes or no, not {value}.": "pbōk ehoun {name} hahte nfšōpe se ē mmon, nouh {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "pbōk ehoun {name} hahte nfšōpe nouhoou nthe 2026-11-21, nouh {value}.",
+  "There's no input called {name}. Its inputs: {names}.": "mn bōk ehoun epefran pe {name}. nefbōk ehoun: {names}.",
+  "--input wants a name and a value, like --input town=Rye.": "--input ouōš nouran mn ouhōb, nthe --input town=Rye."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "ⲕⲱ ⲛⲟⲩⲙⲉⲉⲩⲉ",

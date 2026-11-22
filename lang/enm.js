@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"nameth %1","tooltip":"Failleth unless the draughte conteyneth these wordes (case mattere nat)."},
 "rb_chk_no_mention":{"message0":"nameth nat %1","tooltip":"Failleth if the draughte conteyneth these wordes (case mattere nat)."},
 "rb_chk_json":{"message0":"is trewe JSON","tooltip":"Failleth unless the draughte be trewe JSON."},
-"rb_chk_link":{"message0":"hath a link","tooltip":"Failleth unless the draughte hath a link (http://… or www.…)."}
+"rb_chk_link":{"message0":"hath a link","tooltip":"Failleth unless the draughte hath a link (http://… or www.…)."},
+"rb_inputs":{"message0":"entrees of this devys","message1":"%1","tooltip":"The entrees that this devys taketh. Renne asketh hem in a forme; sent-out Python taketh --input town=Rye, and --mcp taketh hem by name. Oon withouten a defaut moot be yeven."},
+"rb_input_def":{"message0":"entree %1 : %2 defaut %3","tooltip":"Oon entree: his name, his kynde and his defaut. Withouten defaut it moot be yeven. A day is writen lyk 2026-11-21."},
+"rb_input":{"message0":"entree %1","tooltip":"The value this entree hadde whan the devys bigan, or his defaut."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"every day","weekdays":"on werkdayes","weekends":"at the wikes ende"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"the examynoures setting","same":"the same modelle","another":"a nother makeres modelle"},
-"rb_reflect.REVIEWER":{"":"the examynoures setting","same":"the same modelle","another":"a nother makeres modelle"}
+"rb_reflect.REVIEWER":{"":"the examynoures setting","same":"the same modelle","another":"a nother makeres modelle"},
+"rb_input_def.TYPE":{"text":"text","number":"nombre","yesno":"ye or nay","date":"day"}
 },
 "categories":{
 "Events":"Events",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Aske a questioun or shewe thy thought on GitHub",
 "Save for Docker (.zip)":"Save for Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"Saved {name}-docker.zip. Unfolde it, put thy keyes in keys.env, and than folwe SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"This devys abideth no thyng, so in Docker it sholde ende and bigynne agayn and agayn. Docker is mete for a devys with an ordinaunce or a 'whan' blok."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"This devys abideth no thyng, so in Docker it sholde ende and bigynne agayn and agayn. Docker is mete for a devys with an ordinaunce or a 'whan' blok.",
+"Fill in the inputs, then press Run.":"Fille the entrees, and than presse Renne.",
+"Program inputs":"Entrees of the devys",
+"Input {name} needs a value.":"Entree {name} nedeth a value.",
+"Input {name} must be a number, not {value}.":"Entree {name} moot be a nombre, nat {value}.",
+"Input {name} must be yes or no, not {value}.":"Entree {name} moot be ye or nay, nat {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Entree {name} moot be a day lyk 2026-11-21, nat {value}.",
+"Yes":"Ye",
+"No":"Nay"
 },
 "examples":{
 "review":{"title":"Cercle of examinacioun","desc":"Claude writeth of autolyse, examyneth it agayns thy reules, and amendeth what so failleth, up to 3 roundes.","tip":"Chaunge the charge in the blewe blok and the reules in the purpre oon."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No savid logges in þe laste {days} dayes (save_log = yes kepes oon per ronne in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Doon dedes, of þe resetes of þe laste {days} dayes: {n}.",
 "Cost, counted on this computer at list prices:":"Cost, counted on this computour at liste prices:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rannes ({ok} passed, {failed} with an errour), {actions} dedes doon, {refused} refused, {cost} spent."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} rannes ({ok} passed, {failed} with an errour), {actions} dedes doon, {refused} refused, {cost} spent.",
+"Input {name} needs a value.":"Entree {name} nedeth a value.",
+"Input {name} must be a number, not {value}.":"Entree {name} moot be a nombre, nat {value}.",
+"Input {name} must be yes or no, not {value}.":"Entree {name} moot be ye or nay, nat {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Entree {name} moot be a day lyk 2026-11-21, nat {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Ther is noon entree cleped {name}. His entrees: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input wol have a name and a value, as --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde comente",

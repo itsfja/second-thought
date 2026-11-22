@@ -820,6 +820,19 @@
   "rb_chk_link": {
    "message0": "लिंक",
    "tooltip": "न लिंक"
+  },
+  "rb_inputs": {
+   "message0": "इमस्स किच्चक्कमस्स पवेसना",
+   "message1": "%1",
+   "tooltip": "इमं किच्चक्कमं गण्हाति ये पवेसने। चालेहि ते पत्तके पुच्छति; नीहटं Python --input town=Rye गण्हाति, --mcp च ते नामेन गण्हाति। पुब्बमूल्यरहितं दातब्बं।"
+  },
+  "rb_input_def": {
+   "message0": "पवेसनं %1 : %2 पुब्बमूल्यं %3",
+   "tooltip": "एकं पवेसनं: नामं, जाति, पुब्बमूल्यं च। पुब्बमूल्यं विना दातब्बं। दिवसो 2026-11-21 विय लिखीयति।"
+  },
+  "rb_input": {
+   "message0": "पवेसनं %1",
+   "tooltip": "किच्चक्कमस्स आरम्भे इमिना पवेसनेन लद्धं मूल्यं, तस्स पुब्बमूल्यं वा।"
   }
  },
  "options": {
@@ -975,6 +988,12 @@
    "": "parīkṣakassa vyavasthā",
    "same": "tad eva mānaṃ",
    "another": "aññassa kārakassa mānaṃ"
+  },
+  "rb_input_def.TYPE": {
+   "text": "पाठो",
+   "number": "सङ्ख्या",
+   "yesno": "आम वा न वा",
+   "date": "दिवसो"
   }
  },
  "categories": {
@@ -2022,7 +2041,15 @@
   "Ask a question or share an idea on GitHub": "GitHub-ए पञ्हं पुच्छ, अथ वा मतिं आचिक्ख",
   "Save for Docker (.zip)": "Docker-अत्थाय रक्ख (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "{name}-docker.zip रक्खितं। तं विवरित्वा कुञ्चिकायो keys.env-मध्ये ठपेहि, ततो SETUP.md अनुगच्छ।",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "इमं किच्चक्कमं किञ्चि न आगमेति, तस्मा Docker-मध्ये निट्ठहित्वा पुनप्पुनं आरभेय्य। Docker कालयोजनावतो 'यदा'-खण्डवतो वा किच्चक्कमस्स युत्तं।"
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "इमं किच्चक्कमं किञ्चि न आगमेति, तस्मा Docker-मध्ये निट्ठहित्वा पुनप्पुनं आरभेय्य। Docker कालयोजनावतो 'यदा'-खण्डवतो वा किच्चक्कमस्स युत्तं।",
+  "Fill in the inputs, then press Run.": "पवेसने पूरेत्वा चालेहि ति पीळेहि।",
+  "Program inputs": "किच्चक्कमस्स पवेसना",
+  "Input {name} needs a value.": "{name} पवेसनं मूल्यं इच्छति।",
+  "Input {name} must be a number, not {value}.": "{name} पवेसनं सङ्ख्या भवितब्बं, न {value}।",
+  "Input {name} must be yes or no, not {value}.": "{name} पवेसनं आम वा न वा भवितब्बं, न {value}।",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "{name} पवेसनं 2026-11-21 विय दिवसो भवितब्बं, न {value}।",
+  "Yes": "आम",
+  "No": "न"
  },
  "examples": {
   "review": {
@@ -3887,7 +3914,13 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "न किञ्चि सं्रक्खितं् पटिं् {days} दीनं् (सवे_लोग् = येस् prati-abhiyāsaṃ एकं् लोग्स्/ इति सं्रक्खति).",
   "Actions done, from the receipts of the last {days} days: {n}.": "कतानि कम्मानि, {days} दीनं् पत्तिहि: {n}.",
   "Cost, counted on this computer at list prices:": "ब्ययो, इमस्मि यं्ते पटिवत्तनं्:",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} अभियासा ({ok} जया, {failed} दोसेन), {actions} कम्मानि कतानि, {refused} पटिक्खित्तानि, {cost} ब्ययो कतो."
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} अभियासा ({ok} जया, {failed} दोसेन), {actions} कम्मानि कतानि, {refused} पटिक्खित्तानि, {cost} ब्ययो कतो.",
+  "Input {name} needs a value.": "{name} पवेसनं मूल्यं इच्छति।",
+  "Input {name} must be a number, not {value}.": "{name} पवेसनं सङ्ख्या भवितब्बं, न {value}।",
+  "Input {name} must be yes or no, not {value}.": "{name} पवेसनं आम वा न वा भवितब्बं, न {value}।",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "{name} पवेसनं 2026-11-21 विय दिवसो भवितब्बं, न {value}।",
+  "There's no input called {name}. Its inputs: {names}.": "{name} नाम पवेसनं नत्थि। तस्स पवेसना: {names}।",
+  "--input wants a name and a value, like --input town=Rye.": "--input नामं च मूल्यं च इच्छति, यथा --input town=Rye।"
  },
  "blocklyMsg": {
   "ADD_COMMENT": "टीकं पक्खिप",

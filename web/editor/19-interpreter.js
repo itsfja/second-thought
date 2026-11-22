@@ -75,7 +75,94 @@
   // What the person answers during a run is kept (run.inputs), so a good run can become a test case; a test run
   // (run.replay) gives the same answers back instead of asking. Pictures aren't kept: they're too big.
   const INPUT_KINDS = { "Question for you":"answer", "Allow this?":"allow", "Do you approve this?":"approve", "Choose one":"choose",
-    "Choose a file":"file", "Choose a picture":"picture", "Paused":"pause" };
+    "Choose a file":"file", "Choose a picture":"picture", "Paused":"pause", "Program inputs":"program inputs" };
+  /* ----- Named inputs (#442): declared in 'this program's inputs', given when the program starts ----- */
+  // [{ name, type, def }] a workspace declares, in order, the first of each name.
+  function inputDecls(w){
+    const out = [], seen = new Set();
+    (w ? w.getTopBlocks(true) : []).filter(b => b.type === "rb_inputs" && b.isEnabled()).forEach(top => {
+      for (let d = top.getInputTargetBlock("INPUTS"); d; d = d.getNextBlock()) {
+        const name = String(d.getFieldValue("NAME") || "").trim();
+        if (!d.isEnabled() || !name || seen.has(name.toLowerCase())) continue;
+        seen.add(name.toLowerCase());
+        out.push({ name, type:d.getFieldValue("TYPE") || "text", def:String(d.getFieldValue("DEFAULT") == null ? "" : d.getFieldValue("DEFAULT")) });
+      }
+    });
+    return out;
+  }
+  // A value given for an input, as its kind: { value } or { why }. Python's Runtime.input_value does the same.
+  function inputValue(decl, raw){
+    const s = String(raw == null ? "" : raw).trim(), name = decl.name;
+    if (!s) return { why:tr("Input {name} needs a value.", { name }) };
+    if (decl.type === "number")
+      return /^[+-]?(\d+([.,]\d*)?|[.,]\d+)$/.test(s) ? { value:Number(s.replace(",", ".")) } : { why:tr("Input {name} must be a number, not {value}.", { name, value:s }) };
+    if (decl.type === "yesno") {
+      const t = s.toLowerCase();
+      if (["yes", "y", "true", "1", "on", tr("Yes").toLowerCase()].includes(t)) return { value:true };
+      if (["no", "n", "false", "0", "off", tr("No").toLowerCase()].includes(t)) return { value:false };
+      return { why:tr("Input {name} must be yes or no, not {value}.", { name, value:s }) };
+    }
+    if (decl.type === "date") {
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s), d = m && new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+      return d && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3] ? { value:s } : { why:tr("Input {name} must be a date like 2026-11-21, not {value}.", { name, value:s }) };
+    }
+    return { value:s };
+  }
+  // The canvas program's inputs for a run: a manual run asks for them in a form (a test case replays what was given);
+  // any other run, such as a schedule's, takes the defaults. { lower-case name: value }.
+  async function programInputs(ask){
+    const decls = inputDecls(ws);
+    if (!decls.length) return {};
+    let raw = Object.fromEntries(decls.map(d => [d.name, d.def]));
+    if (ask) raw = await waitForYou("Program inputs", tr("Fill in the inputs, then press Run."), (box, done) => {
+      const form = document.createElement("div"); form.className = "inputs-form";
+      const controls = decls.map(d => {
+        const lab = document.createElement("label"); lab.className = "field"; lab.textContent = d.name;
+        let c;
+        if (d.type === "yesno") {
+          c = document.createElement("select");
+          [["", ""], ["yes", tr("Yes")], ["no", tr("No")]].forEach(([v, t]) => { const o = document.createElement("option"); o.value = v; o.textContent = t; c.appendChild(o); });
+          const r = d.def ? inputValue(d, d.def) : {};
+          c.value = r.value === true ? "yes" : r.value === false ? "no" : "";
+        } else {
+          c = document.createElement("input");
+          c.type = d.type === "date" ? "date" : "text";
+          if (d.type === "number") c.inputMode = "decimal";
+          c.value = d.def;
+        }
+        lab.appendChild(c); form.appendChild(lab);
+        return [d, c];
+      });
+      const msg = document.createElement("p"); msg.className = "msg bad"; msg.setAttribute("role", "status");
+      const row = document.createElement("div"); row.className = "row";
+      const go = document.createElement("button"); go.type = "button"; go.className = "primary"; go.textContent = tr("Run");
+      go.onclick = () => {
+        const given = Object.fromEntries(controls.map(([d, c]) => [d.name, c.value]));
+        const bad = controls.find(([d, c]) => inputValue(d, c.value).why);
+        if (bad) { msg.textContent = inputValue(bad[0], bad[1].value).why; bad[1].focus(); return; }
+        done(given);
+      };
+      form.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT") { e.preventDefault(); go.click(); } });
+      row.appendChild(go); box.append(form, msg, row);
+      setTimeout(() => controls[0][1].focus(), 0);
+    });
+    const out = {};
+    for (const d of decls) {
+      const r = inputValue(d, (raw || {})[d.name]);
+      if (r.why) fail(r.why);
+      out[d.name.toLowerCase()] = r.value;
+    }
+    return out;
+  }
+  // What an 'input' block gives: the canvas program's given value, else (or in a program run by 'run program') the
+  // default its own program declares; nothing for an input no program declares.
+  function inputBlockValue(b){
+    const key = String(b.getFieldValue("NAME") || "").trim().toLowerCase();
+    if (b.workspace === ws && run && run.programInputs && key in run.programInputs) return run.programInputs[key];
+    const d = inputDecls(b.workspace).find(x => x.name.toLowerCase() === key);
+    const r = d && d.def ? inputValue(d, d.def) : null;
+    return r && !r.why ? r.value : "";
+  }
   async function waitForYou(title, text, build){
     const kind = INPUT_KINDS[title];
     if (run && run.replay && kind) {
@@ -304,6 +391,7 @@
       /* You */
       case "rb_answer": return run.answer;
       case "rb_msg_value": return tc.payload;
+      case "rb_input": return inputBlockValue(b);
       case "rb_event": {
         const key = str(b.getFieldValue("KEY")).trim(), v = tc.payload;
         if (!v || typeof v !== "object" || Array.isArray(v)) return ["", "text", "all"].includes(key) ? (v == null ? "" : v) : "";

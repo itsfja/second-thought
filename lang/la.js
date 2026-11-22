@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"%1 nominat","tooltip":"Deficit nisi adumbratio haec verba contineat (maiúsculas non refert)."},
 "rb_chk_no_mention":{"message0":"%1 non nominat","tooltip":"Deficit si adumbratio haec verba contineat (maiúsculas non refert)."},
 "rb_chk_json":{"message0":"JSON validum est","tooltip":"Deficit nisi adumbratio JSON validum sit."},
-"rb_chk_link":{"message0":"nexum habet","tooltip":"Deficit nisi adumbratio nexum habeat (http://… aut www.…)."}
+"rb_chk_link":{"message0":"nexum habet","tooltip":"Deficit nisi adumbratio nexum habeat (http://… aut www.…)."},
+"rb_inputs":{"message0":"ingressus huius programmatis","message1":"%1","tooltip":"Ingressus quos hoc programma accipit. Exsequere eos in formula rogat; Python exportatum --input town=Rye accipit, et --mcp eos nomine accipit. Qui praefinitum non habet, dari debet."},
+"rb_input_def":{"message0":"ingressus %1 : %2 praefinitum %3","tooltip":"Unus ingressus: nomen, genus, praefinitum. Sine praefinito dari debet. Dies scribitur ut 2026-11-21."},
+"rb_input":{"message0":"ingressus %1","tooltip":"Valor quem hic ingressus accepit cum programma coepit, aut praefinitum eius."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"cotidie","weekdays":"diebus profestis","weekends":"diebus Saturni et Solis"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"ratio examinatoris","same":"idem exemplar","another":"alterius opificis exemplar"},
-"rb_reflect.REVIEWER":{"":"ratio examinatoris","same":"idem exemplar","another":"alterius opificis exemplar"}
+"rb_reflect.REVIEWER":{"":"ratio examinatoris","same":"idem exemplar","another":"alterius opificis exemplar"},
+"rb_input_def.TYPE":{"text":"textus","number":"numerus","yesno":"ita aut non","date":"dies"}
 },
 "categories":{
 "Events":"Eventus",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Quaere aliquid aut consilium communica in GitHub",
 "Save for Docker (.zip)":"Serva ad Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip servatum est. Expande, claves tuas in keys.env pone, deinde SETUP.md sequere.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Hoc programma nihil exspectat, itaque in Docker finiretur et iterum atque iterum inciperet. Docker programmati cum horario aut cum lateri 'cum' convenit."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Hoc programma nihil exspectat, itaque in Docker finiretur et iterum atque iterum inciperet. Docker programmati cum horario aut cum lateri 'cum' convenit.",
+"Fill in the inputs, then press Run.":"Ingressus imple, deinde Exsequere preme.",
+"Program inputs":"Ingressus programmatis",
+"Input {name} needs a value.":"Ingressus {name} valore eget.",
+"Input {name} must be a number, not {value}.":"Ingressus {name} numerus esse debet, non {value}.",
+"Input {name} must be yes or no, not {value}.":"Ingressus {name} ita aut non esse debet, non {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ingressus {name} dies esse debet ut 2026-11-21, non {value}.",
+"Yes":"Ita",
+"No":"Non"
 },
 "examples":{
 "review":{"title":"Orbis recognitionis","desc":"Claude de autolysi scribit, id secundum normas tuas examinat, et quidquid deficit corrigit, usque ad 3 circuitus.","tip":"Pensum in latere caeruleo et normas in purpureo muta."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Nulla acta servata intra dies {days} (save_log = yes unum pro cursu in logs/ servat).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Actiones factae, e tesseris dierum ultimorum {days}: {n}.",
 "Cost, counted on this computer at list prices:":"Sumptus, in hoc computatro ad pretia catalogi numeratus:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} cursus ({ok} probati, {failed} errore), {actions} actiones factae, {refused} repudiatae, {cost} impensum."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} cursus ({ok} probati, {failed} errore), {actions} actiones factae, {refused} repudiatae, {cost} impensum.",
+"Input {name} needs a value.":"Ingressus {name} valore eget.",
+"Input {name} must be a number, not {value}.":"Ingressus {name} numerus esse debet, non {value}.",
+"Input {name} must be yes or no, not {value}.":"Ingressus {name} ita aut non esse debet, non {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Ingressus {name} dies esse debet ut 2026-11-21, non {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Nullus ingressus {name} appellatus est. Ingressus eius: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input nomen et valorem vult, ut --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Adde commentarium",

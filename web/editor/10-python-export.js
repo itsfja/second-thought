@@ -516,6 +516,10 @@
         case "rb_better": return "(await R.better(" + I("A", '""') + ", " + I("B", '""') + ", " + I("CRITERIA", '""') + "))";
         case "rb_answer": return "R.answer";
         case "rb_approve": return "(await R.approve(" + I("TEXT", '""') + ", offer=True, mins=" + MINS() + ", default=" + DEFLT() + "))";  // a no offers the reason as a new rule (#428)
+        case "rb_input": {  // #442: its kind and default from the declaration in its own program
+          const name = String(F("NAME") || "").trim(), d = inputDecls(b.workspace).find(x => x.name.toLowerCase() === name.toLowerCase());
+          return "R.input(" + pyStr(name) + ", " + pyStr(d ? d.type : "text") + ", " + pyStr(d ? d.def : "") + ")";
+        }
         case "rb_tokens_used": return "R.tokens_used()";
         case "rb_setup_check": return "(await R.setup_check())";
         case "rb_agent_steps": return "R.agent_steps()";
@@ -862,6 +866,7 @@
     tops.filter(b => b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn").forEach(b => procId(b.getFieldValue("NAME")));
     tops.forEach(b => {
       const out = [];
+      if (b.type === "rb_inputs") return;  // declarations: INPUTS below (#442)
       if (b.type === "procedures_defnoreturn" || b.type === "procedures_defreturn") {
         const name = b.getFieldValue("NAME");
         const params = (b.getVarModels ? b.getVarModels() : []).map(varName);
@@ -934,6 +939,7 @@
     });
 
     const fileBase = slug(progName);
+    const declared = inputDecls(ws);
     const when = new Date();
     const usedServices = servicesUsed(), caps = programCapabilities();
     const usesHA = allProgramBlocks().some(b => b.type.startsWith("rb_ha_"));
@@ -992,6 +998,7 @@
       "HA_WATCHES = [" + watches.join(", ") + "]",
       telegram.length ? "TELEGRAM_WATCHES = [" + telegram.join(", ") + "]" : null,
       listeners.length ? "LISTENERS = [" + listeners.map(l => l[1]).join(", ") + "]" : null,
+      declared.length ? "INPUTS = [" + declared.map(d => "(" + [d.name, d.type, d.def].map(pyStr).join(", ") + ")").join(", ") + "]  # --input name=value (#442)" : null,
       "# What this program can do (listed in the notes at the top). If any of it acts on the world, the program asks",
       "# before its first run, and again whenever this file changes.",
       "CAN = {\"services\": [" + usedServices.map(x => pyStr(x.name)).join(", ") + "], \"can\": [" + caps.map(c => pyStr(c[0])).join(", ") + "]" +
@@ -1000,7 +1007,7 @@
         (settingsFor().flightradar24 ? ", \"flightradar24\": \"read\"" : "") + "}",
       "",
       "if __name__ == \"__main__\":",
-      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + ", can=CAN)",
+      "    R.main(START_SCRIPTS, RECEIVERS, SCHEDULES, HA_WATCHES" + (telegram.length ? ", TELEGRAM_WATCHES" : "") + (listeners.length ? ", listeners=LISTENERS" : "") + (declared.length ? ", inputs=INPUTS" : "") + ", can=CAN)",
       ""
     ].filter(l => l !== null).join("\n");
     const words = exportWords();

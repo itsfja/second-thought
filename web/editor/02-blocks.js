@@ -211,7 +211,7 @@
     "rb_ask_number rb_ask_record rb_ask_records rb_ask_yesno rb_better rb_broadcast rb_broadcast_wait rb_broadcast_with rb_broadcast_with_wait " +
     "rb_budget rb_chat rb_chat_reset rb_checkpoint_restore rb_checkpoint_save rb_chk_json rb_chk_link rb_chk_max_words rb_chk_mentions rb_chk_no_mention rb_choose rb_clear_instructions rb_contains rb_draft rb_error " +
     "rb_event rb_every rb_extract rb_finish_with rb_generate rb_img_ask rb_img_change rb_img_draw rb_img_score rb_img_show rb_longtext " +
-    "rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
+    "rb_input rb_input_def rb_inputs rb_msg_value rb_now rb_passed rb_pause rb_problems rb_prompt rb_rec_get rb_rec_has rb_rec_keys rb_rec_new rb_rec_set rb_receive " +
     "rb_reflect rb_reset_timer rb_result rb_result_text rb_retry rb_review rb_revise rb_rework rb_rewrite rb_run_program rb_say rb_score " +
     "rb_set_draft rb_set_instructions rb_show rb_sort rb_start rb_stop rb_task rb_task_get rb_setup_check rb_timer rb_tokens_used rb_try rb_use_model " +
     "rb_wait rb_wait_msg rb_wait_time rb_wait_until rb_when_time rb_with_any_model rb_with_model rb_word_count").split(" ");
@@ -696,6 +696,18 @@
     /* Programs */
     V("rb_run_program", "run program %1 with %2", [{ type:"field_input", name:"NAME", text:"my program" }, val("VALUE")], "String", { style:"procedure_blocks", inputsInline:true,
       tooltip:"Runs a program from your Programs list, as a step. It gets its own draft, result and variables, and gives back its result. Inside it, 'message value' is the value you pass here. Exported Python includes a copy of the program as it was when you exported." }),
+    // Named inputs (#442): a program declares a few, filled in from a form when Run is pressed, --input town=Rye in
+    // Python, or by name when it's served as an MCP tool.
+    { type:"rb_inputs", message0:"this program's inputs", message1:"%1", args1:[{ type:"input_statement", name:"INPUTS", check:"ProgramInput" }],
+      style:"procedure_blocks",
+      tooltip:"The inputs this program takes. Run asks for them in a form; exported Python takes --input town=Rye, and --mcp takes them by name. One with no default must be given." },
+    { type:"rb_input_def", message0:"input %1 : %2 default %3", args0:[{ type:"field_input", name:"NAME", text:"town" },
+        { type:"field_dropdown", name:"TYPE", options:[["text","text"],["number","number"],["yes or no","yesno"],["date","date"]] },
+        { type:"field_input", name:"DEFAULT", text:"" }],
+      previousStatement:"ProgramInput", nextStatement:"ProgramInput", style:"procedure_blocks",
+      tooltip:"One input: its name, its kind and its default. With no default, it must be given. A date is written like 2026-11-21." },
+    V("rb_input", "input %1", [{ type:"field_input", name:"NAME", text:"town" }], null, { style:"procedure_blocks",
+      tooltip:"The value this input was given when the program started, or its default." }),
     /* Memory */
     S("rb_mem_set", "remember %1 as %2 %3", [val("VALUE"), val("NAME"),
       { type:"field_dropdown", name:"KIND", options:[["while this page is open","transient"],["forever","permanent"]] }],

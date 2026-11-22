@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"ܐܡܠ %1","tooltip":"ܠܐ ܬܩܢ ܐܢ ܐܡܪ"},
 "rb_chk_no_mention":{"message0":"ܠܐ ܐܡܠ %1","tooltip":"ܬܩܢ ܐܢ ܐܡܪ"},
 "rb_chk_json":{"message0":"JSON ܠܘيܠܐ","tooltip":"ܠܐ ܬܩܝܢ JSON"},
-"rb_chk_link":{"message0":"ܐܘتܐ ܠܘيܠܐ","tooltip":"ܠܐ ܬܩܢ ܐܘܬܐ"}
+"rb_chk_link":{"message0":"ܐܘتܐ ܠܘيܠܐ","tooltip":"ܠܐ ܬܩܢ ܐܘܬܐ"},
+"rb_inputs":{"message0":"מעלני סדורא הדין","message1":"%1","tooltip":"מעלניא דסדורא הדין נסב. שרי שאל להון בטופסא; Python דנפק נסב --input town=Rye, ו־--mcp נסב להון בשמא. דלית לה טעמא קדמאה, לאתיהבא."},
+"rb_input_def":{"message0":"מעלנא %1 : %2 קדמאה %3","tooltip":"מעלנא חד: שמה, גנסה וטעמה קדמאה. בלא קדמאה לאתיהבא. יומא מתכתב כד 2026-11-21."},
+"rb_input":{"message0":"מעלנא %1","tooltip":"טעמא דנסב מעלנא הדין כד שרי סדורא, או קדמאה דילה."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"כל יומא","weekdays":"ביומי חול","weekends":"בסופי שבתא"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"},
-"rb_reflect.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"}
+"rb_reflect.REVIEWER":{"":"הגדרת הבודק","same":"אותו מודל","another":"מודל של יצרן אחר"},
+"rb_input_def.TYPE":{"text":"כתבא","number":"מניינא","yesno":"אין או לא","date":"יומא"}
 },
 "categories":{
 "Events":"מאורעין",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"שאל שאלתא או שתף מחשבתא על GitHub",
 "Save for Docker (.zip)":"נטר לות Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"אתנטר {name}-docker.zip. שרי יתה, שים מפתחך ב-keys.env, ובתר כן הלך בתר SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"סדורא הדין לא מסכא למדעם, ובכן ב-Docker נשלם ונשרא תוב ותוב. Docker יאה לסדורא דאית לה זבנא או לבנתא 'כד'."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"סדורא הדין לא מסכא למדעם, ובכן ב-Docker נשלם ונשרא תוב ותוב. Docker יאה לסדורא דאית לה זבנא או לבנתא 'כד'.",
+"Fill in the inputs, then press Run.":"מלי מעלניא, ובתר כן דחוק על שרי.",
+"Program inputs":"מעלני סדורא",
+"Input {name} needs a value.":"מעלנא {name} צריך לטעמא.",
+"Input {name} must be a number, not {value}.":"מעלנא {name} לאיתוהי מניינא, לא {value}.",
+"Input {name} must be yes or no, not {value}.":"מעלנא {name} לאיתוהי אין או לא, לא {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"מעלנא {name} לאיתוהי יומא כד 2026-11-21, לא {value}.",
+"Yes":"אין",
+"No":"לא"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"ܠܝܬ ܡܟܬܒ̈̈ܐ ܡܚܦܪ̈̈ܐ ܒ{days} ܝܘܡܬܐ ܐܚܪ̈ܝܐ (save_log = yes ܚܕ ܡܟܬܒܐ ܠܟܠ ܪܘܨܐ ܒlogs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"ܥܒ̈̈ܕܐ ܕܐܬܥܒܕ̈̈ ܡܢ ܩܒܠܐ ܕ{days} ܝܘܡܬܐ ܐܚܪ̈ܝܐ: {n}.",
 "Cost, counted on this computer at list prices:":"ܡܨܪܐ ܒܗܢܐ ܡܚܫܒܬܐ ܒܣܥܪ̈̈ܐ ܕܡܚܝܪ̈̈ܐ:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} ܪܘܨ̈̈ܐ ({ok} ܥܒܪ̈̈̈، {failed} ܒܓܘܠܬܐ)، {actions} ܥܒ̈̈ܕܐ ܕܐܬܥܒܕ̈̈، {refused} ܐܬܬܒܥܘ، {cost} ܐܬܡܨܪ."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} ܪܘܨ̈̈ܐ ({ok} ܥܒܪ̈̈̈، {failed} ܒܓܘܠܬܐ)، {actions} ܥܒ̈̈ܕܐ ܕܐܬܥܒܕ̈̈، {refused} ܐܬܬܒܥܘ، {cost} ܐܬܡܨܪ.",
+"Input {name} needs a value.":"מעלנא {name} צריך לטעמא.",
+"Input {name} must be a number, not {value}.":"מעלנא {name} לאיתוהי מניינא, לא {value}.",
+"Input {name} must be yes or no, not {value}.":"מעלנא {name} לאיתוהי אין או לא, לא {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"מעלנא {name} לאיתוהי יומא כד 2026-11-21, לא {value}.",
+"There's no input called {name}. Its inputs: {names}.":"לית מעלנא דשמה {name}. מעלנוהי: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"‏--input בעא שמא וטעמא, כד --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"אוסף פירושא",

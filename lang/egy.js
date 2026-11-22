@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"𓅓𓂧 %1","tooltip":"𓈖𓈖 𓅓𓂧"},
 "rb_chk_no_mention":{"message0":"𓈖𓈖 𓅓𓂧 %1","tooltip":"𓇋𓂋 𓅓𓂧"},
 "rb_chk_json":{"message0":"JSON 𓅓𓄿𓂝","tooltip":"𓈖𓈖 𓅓𓄿𓂝 JSON"},
-"rb_chk_link":{"message0":"𓋴𓄿𓐍 𓅓𓄿𓂝","tooltip":"𓈖𓈖 𓋴𓄿𓐍"}
+"rb_chk_link":{"message0":"𓋴𓄿𓐍 𓅓𓄿𓂝","tooltip":"𓈖𓈖 𓋴𓄿𓐍"},
+"rb_inputs":{"message0":"𓂝𓈎𓅱 𓈖 𓋴𓐍𓂋 𓊪𓈖","message1":"%1","tooltip":"𓂝𓈎𓅱 𓈙𓈙𓊪 𓋴𓐍𓂋 𓊪𓈖 𓇋𓂋𓏏 𓈖𓆓 𓋴𓏏 𓅓 𓂝𓂋𓏏; Python 𓈙𓈙𓊪 --input town=Rye, --mcp 𓈙𓈙𓊪 𓋴𓏏 𓅓 𓂋𓈖 𓈖𓏏𓏭 𓈖𓈖 𓏏𓊪𓇋𓆑 𓂋𓂧𓇋𓏏𓅱𓆑"},
+"rb_input_def":{"message0":"𓂝𓈎 %1 : %2 𓏏𓊪𓇋 %3","tooltip":"𓂝𓈎 𓅱𓂝: 𓂋𓈖𓆑, 𓈎𓂧𓆑, 𓏏𓊪𓇋𓆑 𓈖𓈖 𓏏𓊪𓇋 𓂋𓂧𓇋𓏏𓅱𓆑 𓉔𓂋𓅱 𓋴𓈙 𓅓𓇋 2026-11-21."},
+"rb_input":{"message0":"𓂝𓈎 %1","tooltip":"𓐍𓏏 𓈙𓋴𓊪𓈖 𓂝𓈎 𓊪𓈖 𓅓 𓈙𓄿𓂝 𓋴𓐍𓂋, 𓂋𓊪𓅱 𓏏𓊪𓇋𓆑"}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𓅓 𓉔𓂋𓅱 𓈖𓃀","weekdays":"𓅓 𓉔𓂋𓅱 𓈖 𓃀𓄿𓎡","weekends":"𓅓 𓉔𓂋𓅱 𓈖 𓎛𓏏𓊪"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"𓅓𓆓𓄿 𓈖𓆑𓂋𓅱","same":"𓅓𓆓𓄿 𓂝𓎛𓂝","another":"𓅓𓆓𓄿 𓈖𓆑𓂋 𓈖𓋴𓅱"},
-"rb_reflect.REVIEWER":{"":"𓅓𓆓𓄿 𓈖𓆑𓂋𓅱","same":"𓅓𓆓𓄿 𓂝𓎛𓂝","another":"𓅓𓆓𓄿 𓈖𓆑𓂋 𓈖𓋴𓅱"}
+"rb_reflect.REVIEWER":{"":"𓅓𓆓𓄿 𓈖𓆑𓂋𓅱","same":"𓅓𓆓𓄿 𓂝𓎛𓂝","another":"𓅓𓆓𓄿 𓈖𓆑𓂋 𓈖𓋴𓅱"},
+"rb_input_def.TYPE":{"text":"𓋴𓈙","number":"𓍿𓈖𓅱","yesno":"𓅓𓄿𓂝 𓂋𓊪𓅱 𓈖𓈖","date":"𓉔𓂋𓅱"}
 },
 "categories":{
 "Agent":"𓅱𓊪𓅱𓏏𓇋",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"𓈖𓆓 𓐍𓏏 𓂋𓊪𓅱 𓂧𓇋 𓋴𓐍𓂋 𓎛𓂋 GitHub",
 "Save for Docker (.zip)":"𓋴𓄿𓅱 𓅓 Docker (𓊃𓇋𓊪)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"𓋴𓄿𓅱 {name}-docker.zip. 𓅱𓎛𓂝 𓋴𓅱, 𓂋𓂧𓇋 𓐍𓏏𓅓𓅱𓎡 𓅓 keys.env, 𓐍𓂋 𓈙𓅓𓋴 SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"𓈖𓈖 𓋴𓐍𓂋 𓊪𓈖 𓎛𓂋 𓋴𓆓𓂋 𓈖 𓐍𓏏, 𓐍𓂋 𓅓 Docker 𓂝𓎛𓂝𓆑 𓎛𓂋 𓎡𓅓 𓎛𓂋 𓈙𓄿𓂝 𓅓 𓅱𓎛𓅓 𓅓 𓅱𓎛𓅓 Docker 𓅓𓏏𓂋 𓈖 𓋴𓐍𓂋 𓎛𓈖𓂝 𓏏𓂋 𓂋𓊪𓅱 𓇋𓈖𓂋 'ḫft'."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"𓈖𓈖 𓋴𓐍𓂋 𓊪𓈖 𓎛𓂋 𓋴𓆓𓂋 𓈖 𓐍𓏏, 𓐍𓂋 𓅓 Docker 𓂝𓎛𓂝𓆑 𓎛𓂋 𓎡𓅓 𓎛𓂋 𓈙𓄿𓂝 𓅓 𓅱𓎛𓅓 𓅓 𓅱𓎛𓅓 Docker 𓅓𓏏𓂋 𓈖 𓋴𓐍𓂋 𓎛𓈖𓂝 𓏏𓂋 𓂋𓊪𓅱 𓇋𓈖𓂋 'ḫft'.",
+"Fill in the inputs, then press Run.":"𓅓𓎛 𓂝𓈎𓅱, 𓐍𓂋 𓂧𓎛 𓇋𓂋𓏏",
+"Program inputs":"𓂝𓈎𓅱 𓈖 𓋴𓐍𓂋",
+"Input {name} needs a value.":"𓂝𓈎 {name} 𓎛𓂋 𓈖𓎛𓇋 𓐍𓏏",
+"Input {name} must be a number, not {value}.":"𓂝𓈎 {name} 𓎛𓂋 𓅱𓈖𓈖 𓅓 𓍿𓈖𓅱, 𓈖𓈖 {value}.",
+"Input {name} must be yes or no, not {value}.":"𓂝𓈎 {name} 𓎛𓂋 𓅱𓈖𓈖 𓅓 𓅓𓄿𓂝 𓂋𓊪𓅱 𓈖𓈖, 𓈖𓈖 {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"𓂝𓈎 {name} 𓎛𓂋 𓅱𓈖𓈖 𓅓 𓉔𓂋𓅱 𓅓𓇋 2026-11-21, 𓈖𓈖 {value}.",
+"Yes":"𓅓𓄿𓂝",
+"No":"𓈖𓈖"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Doon actions, of the resetes of the laste {days} dayes: {n}.",
 "Cost, counted on this computer at list prices:":"Cost, counted on this computour at liste prices:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent.",
+"Input {name} needs a value.":"ꜥq {name} ḥr nḥj ḫt.",
+"Input {name} must be a number, not {value}.":"ꜥq {name} ḥr wnn m ṯnw, nn {value}.",
+"Input {name} must be yes or no, not {value}.":"ꜥq {name} ḥr wnn m mꜣꜥ r-pw nn, nn {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"ꜥq {name} ḥr wnn m hrw mj 2026-11-21, nn {value}.",
+"There's no input called {name}. Its inputs: {names}.":"nn ꜥq rn=f {name}. ꜥqw=f: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input ḥr nḥj rn ḥnꜥ ḫt, mj --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𓂋𓂧𓇋 𓋴𓐍𓄿𓅱",

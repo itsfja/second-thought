@@ -259,6 +259,74 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         """The money budget as it was set, in its currency: '$0.50', '£0.40', '¥75'."""
         return amount_text(self.budget_amount, self.budget_unit)
 
+    # ----- Named inputs (#442): declared on the page, given as --input town=Rye, or by name in an MCP call -----
+    @staticmethod
+    def input_value(name, kind, raw):
+        """(value, None) for a value given for an input, as its kind, or (None, why) if it won't do. The page's
+        inputValue does the same."""
+        s = to_str(raw).strip()
+        if not s:
+            return None, tr("Input {name} needs a value.", name=name)
+        if kind == "number":
+            if not re.fullmatch(r"[+-]?(\d+([.,]\d*)?|[.,]\d+)", s):
+                return None, tr("Input {name} must be a number, not {value}.", name=name, value=s)
+            n = float(s.replace(",", "."))
+            return (int(n) if n.is_integer() else n), None
+        if kind == "yesno":
+            t = s.lower()
+            if t in ("yes", "y", "true", "1", "on", tr("Yes").lower()):
+                return True, None
+            if t in ("no", "n", "false", "0", "off", tr("No").lower()):
+                return False, None
+            return None, tr("Input {name} must be yes or no, not {value}.", name=name, value=s)
+        if kind == "date":
+            try:
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+                    raise ValueError
+                datetime.date.fromisoformat(s)
+            except ValueError:
+                return None, tr("Input {name} must be a date like 2026-11-21, not {value}.", name=name, value=s)
+        return s, None
+
+    def give_inputs(self, declared, given):
+        """Sets the values of the program's inputs from what was given ({name: raw}), each by its kind, with the defaults
+        for the rest. Returns why it can't, or None."""
+        known = {d[0].lower(): d for d in declared}
+        for name in given:
+            if name.lower() not in known:
+                return tr("There's no input called {name}. Its inputs: {names}.", name=name,
+                          names=", ".join(d[0] for d in declared) or "-")
+        got = {k.lower(): v for k, v in given.items()}
+        values = {}
+        for name, kind, default in declared:
+            value, why = self.input_value(name, kind, got.get(name.lower(), default))
+            if why:
+                return why
+            values[name.lower()] = value
+        self.inputs = values
+        return None
+
+    @staticmethod
+    def cli_inputs():
+        """{name: value} from --input name=value on the command line, or the line that says how to write one."""
+        given, args = {}, sys.argv[1:]
+        for i, a in enumerate(args):
+            if a == "--input" or a.startswith("--input="):
+                pair = a[len("--input="):] if a.startswith("--input=") else (args[i + 1] if i + 1 < len(args) else "")
+                name, eq, value = pair.partition("=")
+                if not eq or not name.strip():
+                    return None, tr("--input wants a name and a value, like --input town=Rye.")
+                given[name.strip()] = value
+        return given, None
+
+    def input(self, name, kind="text", default=""):
+        """What an 'input' block gives: the value given when the program started, else its default."""
+        key = to_str(name).strip().lower()
+        if key in getattr(self, "inputs", {}):
+            return self.inputs[key]
+        value, why = self.input_value(name, kind, default) if to_str(default).strip() else ("", None)
+        return "" if why else value
+
     def tokens_used(self):
         return sum(u[0] + u[1] for u in self.usage.values())
 
@@ -1927,8 +1995,26 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         what = (" It can " + "; ".join(lines) + ".") if lines else " It only uses its models."
         return {"name": self.mcp_tool_name(),
                 "description": f"Runs the Second Thought program “{self.mcp_tool_name()}” and gives back its result.{what}",
-                "inputSchema": {"type": "object", "properties": {"value": {
-                    "type": "string", "description": "What the program starts with: its 'message value'. Leave it out if it needs nothing."}}}}
+                "inputSchema": self.mcp_input_schema()}
+
+    def mcp_input_schema(self):
+        """The tool's inputs: 'value', the message value, and each of the program's named inputs by its kind (#442);
+        an input with no default is required."""
+        props = {"value": {"type": "string", "description": "What the program starts with: its 'message value'. Leave it out if it needs nothing."}}
+        required = []
+        kinds = {"number": {"type": "number"}, "yesno": {"type": "boolean"}, "date": {"type": "string", "format": "date"}}
+        for name, kind, default in getattr(self, "declared_inputs", []):
+            prop = dict(kinds.get(kind, {"type": "string"}))
+            value, why = self.input_value(name, kind, default) if to_str(default).strip() else (None, "none")
+            if why:
+                required.append(name)
+            else:
+                prop["default"] = value
+            props[name] = prop
+        schema = {"type": "object", "properties": props}
+        if required:
+            schema["required"] = required
+        return schema
 
     async def serve_mcp(self, start_scripts, can):
         out, sys.stdout = sys.stdout, sys.stderr  # the run log goes to stderr; stdout carries only the protocol
@@ -1973,7 +2059,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
                 if refusal:
                     send({"jsonrpc": "2.0", "id": mid, "result": {"content": [{"type": "text", "text": refusal}], "isError": True}})
                     continue
-                value = to_str((params.get("arguments") or {}).get("value", ""))
+                args = params.get("arguments") or {}
+                value = to_str(args.get("value", ""))
+                named = {k: (("yes" if v else "no") if isinstance(v, bool) else v) for k, v in args.items() if k != "value"}
+                why = self.give_inputs(getattr(self, "declared_inputs", []), named)
+                if why:
+                    send({"jsonrpc": "2.0", "id": mid, "result": {"content": [{"type": "text", "text": why}], "isError": True}})
+                    continue
                 code = await self.run([(fn, value) for fn in start_scripts], tr("MCP call"))
                 if code == 0:
                     text = "\n\n".join(to_str(x) for x in self.result) if self.result else to_str(self.draft)
@@ -2402,7 +2494,7 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
             await type(self)().doctor(getattr(self, "_can", None))
         return out.getvalue().strip()
 
-    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None):
+    def main(self, start_scripts, receivers, schedules, watches=(), telegram=(), listeners=(), can=None, inputs=()):
         if "--version" in sys.argv:
             print(tr("Second Thought runtime {runtime_version}", runtime_version=RUNTIME_VERSION))
             return
@@ -2432,8 +2524,13 @@ class Runtime(ModelCalls, Connections, MCPTools, AgentTools, Spending, Doctor, U
         if "--status" in sys.argv:
             sys.exit(self.show_status())
         self.receivers = {k.lower(): v for k, v in receivers.items()}
+        self.declared_inputs = [tuple(d) for d in inputs]
         if "--mcp" in sys.argv:
             sys.exit(asyncio.run(self.serve_mcp(start_scripts, can)))
+        given, why = self.cli_inputs()
+        why = why or self.give_inputs(self.declared_inputs, given)
+        if why:
+            sys.exit(why + ("" if "--input" in why else " (--input name=value)"))
         if "--test" in sys.argv:
             times = 1  # --test --times 3 runs each case three times and lists the rules that flip (#427)
             if "--times" in sys.argv:

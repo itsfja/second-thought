@@ -43,7 +43,9 @@
     ]},
     { kind:"category", name:"My Blocks", categorystyle:"procedures", custom:"PROCEDURE" },
     { kind:"category", name:"Programs", categorystyle:"procedures", contents:[
-      B("rb_run_program", { VALUE:T("") }), B("rb_msg_value")
+      B("rb_run_program", { VALUE:T("") }), B("rb_msg_value"),
+      B("rb_inputs", { INPUTS:{ block:{ type:"rb_input_def", fields:{ NAME:"town", TYPE:"text", DEFAULT:"Rye" } } } }),
+      B("rb_input_def"), B("rb_input")
     ]},
     { kind:"category", name:"Search results", categorystyle:"search", custom:"SEARCH" },
     { kind:"sep" },

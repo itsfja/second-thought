@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"𒍝𒅗𒅈 %1","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒍝𒅗𒅈 𒌌 𒇷𒄣"},
 "rb_chk_no_mention":{"message0":"𒌌 𒍝𒅗𒅈 %1","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒍝𒅗𒅈 𒇷𒄣"},
 "rb_chk_json":{"message0":"JSON 𒊭𒀝𒉡𒌝","tooltip":"𒈠𒀸𒁕𒊒𒌝 JSON 𒌌 𒊭𒀝𒉡 𒇷𒄣"},
-"rb_chk_link":{"message0":"𒆠𒈠 𒊭𒊏𒁍𒌝","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒊭𒊏𒁍𒌝 𒌌 𒇷𒄣"}
+"rb_chk_link":{"message0":"𒆠𒈠 𒊭𒊏𒁍𒌝","tooltip":"𒈠𒀸𒁕𒊒𒌝 𒊭𒊏𒁍𒌝 𒌌 𒇷𒄣"},
+"rb_inputs":{"message0":"𒅕𒁁𒀉 𒉈𒁉𒅆𒅎 𒀭𒉌𒅎","message1":"%1","tooltip":"𒅕𒁁𒋾 𒊭 𒉈𒁉𒋗𒌝 𒀭𒉡𒌝 𒄿𒇷𒅅𒄣. 𒂊𒁍𒍑 𒄿𒈾 𒌅𒌒𒁉𒅎 𒄿𒊭𒀠𒋗𒉡𒋾; Python --𒅔𒁍𒌓 town=Rye 𒄿𒇷𒅅𒆠, 𒌑 --mcp 𒄿𒈾 𒋗𒈪𒋗𒉡 𒄿𒇷𒅅𒆠𒋗𒉡𒋾. 𒊭 𒉺𒈾𒄠 𒆷 𒄿𒋗 𒅔𒈾𒀜𒁲𒅔."},
+"rb_input_def":{"message0":"𒅕𒁍𒌝 %1 : %2 𒉺𒉡𒌝 %3","tooltip":"𒅕𒁍𒌝 𒅖𒋼𒅔: 𒋗𒌝𒋗, 𒆠𒅔𒋗 𒌑 𒉺𒉡𒋗. 𒄿𒈾 𒆷 𒉺𒉌𒅎 𒅔𒈾𒀜𒁲𒅔. 𒌑𒈬𒌝 𒆠𒈠 2026-11-21 𒅖𒊭𒀜𒁕𒅈."},
+"rb_input":{"message0":"𒅕𒁍𒌝 %1","tooltip":"𒅆𒈬𒌝 𒊭 𒅕𒁍𒌝 𒀭𒉡𒌝 𒅋𒄣 𒄿𒉡𒈠 𒉈𒁉𒋗𒌝 𒅖𒊭𒊒, 𒇻 𒉺𒉡𒋗."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"𒌑𒈪𒊭𒄠","weekdays":"𒄿𒈾 𒌑𒈪 𒅆𒅁𒊑𒅎","weekends":"𒄿𒈾 𒌑𒈪 𒉡𒄭𒅎"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"𒋗𒌝𒈠 𒊭𒅈𒊏𒋾𒅎","same":"𒋗𒌝𒈠 𒊭 𒅎","another":"𒈠𒅈 𒋗𒌝𒈠 𒊭 aḫêrim"},
-"rb_reflect.REVIEWER":{"":"𒋗𒌝𒈠 𒊭𒅈𒊏𒋾𒅎","same":"𒋗𒌝𒈠 𒊭 𒅎","another":"𒈠𒅈 𒋗𒌝𒈠 𒊭 aḫêrim"}
+"rb_reflect.REVIEWER":{"":"𒋗𒌝𒈠 𒊭𒅈𒊏𒋾𒅎","same":"𒋗𒌝𒈠 𒊭 𒅎","another":"𒈠𒅈 𒋗𒌝𒈠 𒊭 aḫêrim"},
+"rb_input_def.TYPE":{"text":"𒌅𒌒𒁍𒌝","number":"𒈪𒉡𒌅𒌝","yesno":"𒀭𒈾 𒌌𒆷","date":"𒌑𒈬𒌝"}
 },
 "categories":{
 "Events":"𒀉𒋫𒌅𒌝",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"𒄿𒈾 GitHub 𒅆𒋫𒀠 𒌑 𒈪𒅋𒅗𒄠 𒄿𒁲𒅔",
 "Save for Docker (.zip)":"𒀀𒈾 Docker 𒌑𒍮𒌨 (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip 𒈾𒍢𒅕. 𒁍𒌅𒌨𒋗, 𒆪𒉡𒊌𒆠𒅗 𒄿𒈾 keys.env 𒋗𒆪𒌦, 𒌑 𒉿𒅈𒆠 SETUP.md 𒀀𒇷𒅅.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"𒉈𒁉𒋗𒌝 𒀭𒉡𒌝 𒈪𒅎𒈠 𒌌 𒄿𒋡𒀠, 𒀸𒋗𒌝 𒆠𒄠 𒄿𒈾 Docker 𒄿𒂵𒄠𒈠𒅈 𒌑 𒀀𒈾 𒊭𒉌𒋗 𒀀𒈾 𒊭𒉌𒋗 𒄿𒊭𒅈𒊒. Docker 𒀀𒈾 𒉈𒁉𒅆𒅎 𒊭 𒀀𒁕𒀭𒉡𒌝 𒄿𒋗 𒌑 𒇷𒁉𒀉𒌅𒌝 '𒄿𒉡𒈠' 𒄿𒋗 𒊭𒇷𒅎."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"𒉈𒁉𒋗𒌝 𒀭𒉡𒌝 𒈪𒅎𒈠 𒌌 𒄿𒋡𒀠, 𒀸𒋗𒌝 𒆠𒄠 𒄿𒈾 Docker 𒄿𒂵𒄠𒈠𒅈 𒌑 𒀀𒈾 𒊭𒉌𒋗 𒀀𒈾 𒊭𒉌𒋗 𒄿𒊭𒅈𒊒. Docker 𒀀𒈾 𒉈𒁉𒅆𒅎 𒊭 𒀀𒁕𒀭𒉡𒌝 𒄿𒋗 𒌑 𒇷𒁉𒀉𒌅𒌝 '𒄿𒉡𒈠' 𒄿𒋗 𒊭𒇷𒅎.",
+"Fill in the inputs, then press Run.":"𒅕𒁁𒋾 𒈠𒀠𒇷, 𒌑 𒉿𒅈𒆠 𒂊𒁍𒍑 𒇻𒌒𒁍𒌓.",
+"Program inputs":"𒅕𒁁𒀉 𒉈𒁉𒅆𒅎",
+"Input {name} needs a value.":"𒅕𒁍𒌝 {name} 𒅆𒈠𒄠 𒄩𒅆𒄴.",
+"Input {name} must be a number, not {value}.":"𒅕𒁍𒌝 {name} 𒈪𒉡𒌅𒌝 𒇻, 𒌌 {value}.",
+"Input {name} must be yes or no, not {value}.":"𒅕𒁍𒌝 {name} 𒀭𒈾 𒌌𒆷 𒇻, 𒌌 {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"𒅕𒁍𒌝 {name} 𒌑𒈬𒌝 𒆠𒈠 2026-11-21 𒇻, 𒌌 {value}.",
+"Yes":"𒀭𒈾",
+"No":"𒌌𒆷"
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"No savid logs in the laste {days} dayes (save_log = yes kepes oon per run in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Doon actions, of the resetes of the laste {days} dayes: {n}.",
 "Cost, counted on this computer at list prices:":"Cost, counted on this computour at liste prices:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} passed, {failed} with an errour), {actions} actions doon, {refused} refused, {cost} spent.",
+"Input {name} needs a value.":"erbum {name} šīmam ḫašiḫ.",
+"Input {name} must be a number, not {value}.":"erbum {name} minûtum lū, ul {value}.",
+"Input {name} must be yes or no, not {value}.":"erbum {name} anna ulla lū, ul {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"erbum {name} ūmum kīma 2026-11-21 lū, ul {value}.",
+"There's no input called {name}. Its inputs: {names}.":"erbum ša šumšu {name} ul ibašši. erbēšu: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input šumam u šīmam ḫašiḫ, kīma --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"𒀀𒉿𒋫𒄠 𒊒𒌓𒁲",

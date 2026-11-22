@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"nefnir %1","tooltip":"Brestur nema frumritið innihaldi þessi orð (stafsetning skiptir ekki máli)."},
 "rb_chk_no_mention":{"message0":"nefnir eigi %1","tooltip":"Brestur ef frumritið inniheldur þessi orð (stafsetning skiptir ekki máli)."},
 "rb_chk_json":{"message0":"er gilt JSON","tooltip":"Brestur nema frumritið sé gilt JSON."},
-"rb_chk_link":{"message0":"á tengil","tooltip":"Brestur nema frumritið innihaldi tengil (http://… eða www.…)."}
+"rb_chk_link":{"message0":"á tengil","tooltip":"Brestur nema frumritið innihaldi tengil (http://… eða www.…)."},
+"rb_inputs":{"message0":"inntök þessa forrits","message1":"%1","tooltip":"Inntökin er þetta forrit tekr. Keyr spyrr þeira í formi; útflutt Python tekr --input town=Rye, ok --mcp tekr þau at nafni. Þat er ekki hefir sjálfgildi skal gefa."},
+"rb_input_def":{"message0":"inntak %1 : %2 sjálfgildi %3","tooltip":"Eitt inntak: nafn þess, kyn ok sjálfgildi. Án sjálfgildis skal þat gefa. Dagr er ritinn sem 2026-11-21."},
+"rb_input":{"message0":"inntak %1","tooltip":"Gildit er þetta inntak fekk er forritit hófsk, eða sjálfgildi þess."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"hvern dag","weekdays":"virka daga","weekends":"um helgar"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"stilling skoaðara","same":"sama táknið","another":"tákn annars smiðs"},
-"rb_reflect.REVIEWER":{"":"stilling skoaðara","same":"sama táknið","another":"tákn annars smiðs"}
+"rb_reflect.REVIEWER":{"":"stilling skoaðara","same":"sama táknið","another":"tákn annars smiðs"},
+"rb_input_def.TYPE":{"text":"texti","number":"tala","yesno":"já eða nei","date":"dagr"}
 },
 "categories":{
 "Events":"Atburðir",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Spyr spurningar eða seg ráð þín á GitHub",
 "Save for Docker (.zip)":"Geyma fyrir Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip geymt. Leys þat upp, set lykla þína í keys.env, ok fylg síðan SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þetta forrit bíðr einskis, svá at í Docker myndi þat enda ok byrja aptr ok aptr. Docker hæfir forriti með tíðaskrá eða 'þá er' kubbi."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Þetta forrit bíðr einskis, svá at í Docker myndi þat enda ok byrja aptr ok aptr. Docker hæfir forriti með tíðaskrá eða 'þá er' kubbi.",
+"Fill in the inputs, then press Run.":"Fyll inntökin, ok ýt síðan á Keyr.",
+"Program inputs":"Inntök forritsins",
+"Input {name} needs a value.":"Inntak {name} þarf gildi.",
+"Input {name} must be a number, not {value}.":"Inntak {name} skal vera tala, eigi {value}.",
+"Input {name} must be yes or no, not {value}.":"Inntak {name} skal vera já eða nei, eigi {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Inntak {name} skal vera dagr sem 2026-11-21, eigi {value}.",
+"Yes":"Já",
+"No":"Nei"
 },
 "examples":{
 "review":{"title":"Hringr dóms","desc":"Claude ritar um autolyse, prófar þat eptir reglum þínum, ok lagar hvatki er bregzk, allt at 3 umferðum.","tip":"Breyt verkinu í bláa kubbinum ok reglunum í hinum purpuralita."},
@@ -2520,7 +2532,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Engar vistaðar skrár síðustu {days} dagana (save_log = yes vistar eina á keyrslu í logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Framkvæmdir aðgerðir, samkvæmt kvittunum síðustu {days} daga: {n}.",
 "Cost, counted on this computer at list prices:":"Kostnaður, talinn á þessari tölvu á verðskrá:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} keyrslur ({ok} stóðust, {failed} með villu), {actions} aðgerðir framkvæmdar, {refused} hafnað, {cost} varið."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} keyrslur ({ok} stóðust, {failed} með villu), {actions} aðgerðir framkvæmdar, {refused} hafnað, {cost} varið.",
+"Input {name} needs a value.":"Inntak {name} þarf gildi.",
+"Input {name} must be a number, not {value}.":"Inntak {name} skal vera tala, eigi {value}.",
+"Input {name} must be yes or no, not {value}.":"Inntak {name} skal vera já eða nei, eigi {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Inntak {name} skal vera dagr sem 2026-11-21, eigi {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Ekki er inntak er heitir {name}. Inntök þess: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input vill nafn ok gildi, sem --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"Bæt við athugasemd",

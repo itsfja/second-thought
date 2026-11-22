@@ -211,7 +211,10 @@
 "rb_chk_mentions":{"message0":"ᚾᛁᚠᚾᛁᛦ %1","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛅᛚᛏᛁ ᚦᛁᛋᛁ ᚢᚱᚦ (ᛋᛏᛅᚠᛋᛁᛏᚾᛁᚴ ᛋᚴᛁᛒᛏᛁᛦ ᛁᚴᛁ ᛘᛅᛚᛁ)."},
 "rb_chk_no_mention":{"message0":"ᚾᛁᚠᚾᛁᛦ ᛅᛁᚴᛁ %1","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᛁᚠ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛁᛚᛏᚢᛦ ᚦᛁᛋᛁ ᚢᚱᚦ (ᛋᛏᛅᚠᛋᛁᛏᚾᛁᚴ ᛋᚴᛁᛒᛏᛁᛦ ᛁᚴᛁ ᛘᛅᛚᛁ)."},
 "rb_chk_json":{"message0":"ᛁᚱ ᚴᛁᛚᛏ JSON","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛋᛁ ᚴᛁᛚᛏ JSON."},
-"rb_chk_link":{"message0":"ᚬ ᛏᛁᚴᛁᛚ","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛅᛚᛏᛁ ᛏᛁᚴᛁᛚ (http://… ᛁᚦᛅ ᚢ.…)."}
+"rb_chk_link":{"message0":"ᚬ ᛏᛁᚴᛁᛚ","tooltip":"ᛒᚱᛁᛋᛏᚢᛦ ᚾᛁᛘᛅ ᚠᚱᚢᛘᚱᛁᛏᛁᚦ ᛁᚾᛁᚼᛅᛚᛏᛁ ᛏᛁᚴᛁᛚ (http://… ᛁᚦᛅ ᚢ.…)."},
+"rb_inputs":{"message0":"ᛁᚾᛏᛅᚢᚴ ᚦᛁᛋᛅ ᚠᚢᚱᛁᛏᛋ","message1":"%1","tooltip":"ᛁᚾᛏᛅᚢᚴᛁᚾ ᛁᚱ ᚦᛁᛏᛅ ᚠᚢᚱᛁᛏ ᛏᛁᚴᛦ. ᚴᛅᚢᚱ ᛋᛒᚢᚱ ᚦᛅᛁᚱᛅ ᛁ ᚠᚢᚱᛘᛁ; ᚢᛏᚠᛚᚢᛏ Python ᛏᛁᚴᛦ --input town=Rye, ᚢᚴ --mcp ᛏᛁᚴᛦ ᚦᛅᚢ ᛅᛏ ᚾᛅᚠᚾᛁ. ᚦᛅᛏ ᛁᚱ ᛁᚴᛁ ᚼᛁᚠᛁᛦ ᛋᛁᛅᛚᚠᚴᛁᛚᛏᛁ ᛋᚴᛅᛚ ᚴᛁᚠᛅ."},
+"rb_input_def":{"message0":"ᛁᚾᛏᛅᚴ %1 : %2 ᛋᛁᛅᛚᚠᚴᛁᛚᛏᛁ %3","tooltip":"ᛅᛁᛏ ᛁᚾᛏᛅᚴ: ᚾᛅᚠᚾ ᚦᛁᛋ, ᚴᚢᚾ ᚢᚴ ᛋᛁᛅᛚᚠᚴᛁᛚᛏᛁ. ᚬᚾ ᛋᛁᛅᛚᚠᚴᛁᛚᛏᛁᛋ ᛋᚴᛅᛚ ᚦᛅᛏ ᚴᛁᚠᛅ. ᛏᛅᚴᛦ ᛁᚱ ᚱᛁᛏᛁᚾ ᛋᛁᛘ 2026-11-21."},
+"rb_input":{"message0":"ᛁᚾᛏᛅᚴ %1","tooltip":"ᚴᛁᛚᛏᛁᛏ ᛁᚱ ᚦᛁᛏᛅ ᛁᚾᛏᛅᚴ ᚠᛁᚴ ᛁᚱ ᚠᚢᚱᛁᛏᛁᛏ ᚼᚢᚠᛋᚴ, ᛁᚦᛅ ᛋᛁᛅᛚᚠᚴᛁᛚᛏᛁ ᚦᛁᛋ."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"ᚼᚢᛁᚱᚾ ᛏᛅᚴ","weekdays":"ᚢᛁᚱᚴᛅ ᛏᛅᚴᛅ","weekends":"ᚢᛘ ᚼᛁᛚᚴᛅᛦ"},
@@ -241,7 +244,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"ᛋᛏᛁᛚᛁᚴ ᛋᚴᚢᛅᚦᛅᚱᛅ","same":"ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ","another":"ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ"},
-"rb_reflect.REVIEWER":{"":"ᛋᛏᛁᛚᛁᚴ ᛋᚴᚢᛅᚦᛅᚱᛅ","same":"ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ","another":"ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ"}
+"rb_reflect.REVIEWER":{"":"ᛋᛏᛁᛚᛁᚴ ᛋᚴᚢᛅᚦᛅᚱᛅ","same":"ᛋᛅᛘᛅ ᛏᛅᚴᚾᛁᚦ","another":"ᛏᛅᚴᚾ ᛅᚾᛅᚱᛋ ᛋᛘᛁᚦᛋ"},
+"rb_input_def.TYPE":{"text":"ᛏᛁᚴᛋᛏᛁ","number":"ᛏᛅᛚᛅ","yesno":"ᛁᛅ ᛁᚦᛅ ᚾᛅᛁ","date":"ᛏᛅᚴᛦ"}
 },
 "categories":{
 "Events":"ᛅᛏᛒᚢᚱᚦᛁᛦ",
@@ -1288,7 +1292,15 @@
 "Ask a question or share an idea on GitHub":"ᛋᛒᚢᚱ ᛋᛒᚢᚱᚾᛁᚴᛅᛦ ᛁᚦᛅ ᛋᛁᚴ ᚱᛅᚦ ᚦᛁᚾ ᚬ GitHub",
 "Save for Docker (.zip)":"ᚴᛅᚢᛘᛅ ᚠᚢᚱᛁᛦ Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip ᚴᛅᚢᛘᛏ. ᛚᛅᚢᛋ ᚦᛅᛏ ᚢᛒ, ᛋᛁᛏ ᛚᚢᚴᛚᛅ ᚦᛁᚾᛅ ᛁ keys.env, ᚢᚴ ᚠᚢᛚᚴ ᛋᛁᚦᛅᚾ SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ᚦᛁᛏᛅ ᚠᚢᚱᛁᛏ ᛒᛁᚦᚱ ᛅᛁᚾᛋᚴᛁᛋ, ᛋᚢᛅ ᛅᛏ ᛁ Docker ᛘᚢᚾᛏᛁ ᚦᛅᛏ ᛁᚾᛏᛅ ᚢᚴ ᛒᚢᚱᛁᛅ ᛅᛒᛏᚱ ᚢᚴ ᛅᛒᛏᚱ. Docker ᚼᛅᚠᛁᛦ ᚠᚢᚱᛁᛏᛁ ᛘᛁᚦ ᛏᛁᚦᛅᛋᚴᚱᛅ ᛁᚦᛅ 'ᚦᛅ ᛁᚱ' ᚴᚢᛒᛁ."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"ᚦᛁᛏᛅ ᚠᚢᚱᛁᛏ ᛒᛁᚦᚱ ᛅᛁᚾᛋᚴᛁᛋ, ᛋᚢᛅ ᛅᛏ ᛁ Docker ᛘᚢᚾᛏᛁ ᚦᛅᛏ ᛁᚾᛏᛅ ᚢᚴ ᛒᚢᚱᛁᛅ ᛅᛒᛏᚱ ᚢᚴ ᛅᛒᛏᚱ. Docker ᚼᛅᚠᛁᛦ ᚠᚢᚱᛁᛏᛁ ᛘᛁᚦ ᛏᛁᚦᛅᛋᚴᚱᛅ ᛁᚦᛅ 'ᚦᛅ ᛁᚱ' ᚴᚢᛒᛁ.",
+"Fill in the inputs, then press Run.":"ᚠᚢᛚ ᛁᚾᛏᛅᚢᚴᛁᚾ, ᚢᚴ ᚢᛏ ᛋᛁᚦᛅᚾ ᚬ ᚴᛅᚢᚱ.",
+"Program inputs":"ᛁᚾᛏᛅᚢᚴ ᚠᚢᚱᛁᛏᛋᛁᚾᛋ",
+"Input {name} needs a value.":"ᛁᚾᛏᛅᚴ {name} ᚦᛅᚱᚠ ᚴᛁᛚᛏᛁ.",
+"Input {name} must be a number, not {value}.":"ᛁᚾᛏᛅᚴ {name} ᛋᚴᛅᛚ ᚢᛁᚱᛅ ᛏᛅᛚᛅ, ᛅᛁᚴᛁ {value}.",
+"Input {name} must be yes or no, not {value}.":"ᛁᚾᛏᛅᚴ {name} ᛋᚴᛅᛚ ᚢᛁᚱᛅ ᛁᛅ ᛁᚦᛅ ᚾᛅᛁ, ᛅᛁᚴᛁ {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"ᛁᚾᛏᛅᚴ {name} ᛋᚴᛅᛚ ᚢᛁᚱᛅ ᛏᛅᚴᛦ ᛋᛁᛘ 2026-11-21, ᛅᛁᚴᛁ {value}.",
+"Yes":"ᛁᛅ",
+"No":"ᚾᛅᛁ"
 },
 "examples":{
 "review":{"title":"ᚼᚱᛁᚴᛦ ᛏᚢᛘᛋ","desc":"Claude ᚱᛁᛏᛅᛦ ᚢᛘ autolyse, ᛒᚱᚢᚠᛅᛦ ᚦᛅᛏ ᛁᛒᛏᛁᛦ ᚱᛁᚴᛚᚢᛘ ᚦᛁᚾᚢᛘ, ᚢᚴ ᛚᛅᚴᛅᛦ ᚼᚢᛅᛏᚴᛁ ᛁᚱ ᛒᚱᛁᚴᛋᚴ, ᛅᛚᛏ ᛅᛏ 3 ᚢᛘᚠᛁᚱᚦᚢᛘ.","tip":"ᛒᚱᛅᚢᛏ ᚢᛁᚱᚴᛁᚾᚢ ᛁ ᛒᛚᛅ ᚴᚢᛒᛁᚾᚢᛘ ᚢᚴ ᚱᛁᚴᛚᚢᚾᚢᛘ ᛁ ᚼᛁᚾᚢᛘ ᛒᚢᚱᛒᚢᚱᛅᛚᛁᛏᛅ."},
@@ -2521,7 +2533,13 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Engar vistaðar skrár síðustu {days} dagana (save_log = yes vistar eina á keyrslu í logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Framkvæmdir aðgerðir, samkvæmt kvittunum síðustu {days} daga: {n}.",
 "Cost, counted on this computer at list prices:":"Kostnaður, talinn á þessari tölvu á verðskrá:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} keyrslur ({ok} stóðust, {failed} með villu), {actions} aðgerðir framkvæmdar, {refused} hafnað, {cost} varið."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} keyrslur ({ok} stóðust, {failed} með villu), {actions} aðgerðir framkvæmdar, {refused} hafnað, {cost} varið.",
+"Input {name} needs a value.":"Inntak {name} þarf gildi.",
+"Input {name} must be a number, not {value}.":"Inntak {name} skal vera tala, eigi {value}.",
+"Input {name} must be yes or no, not {value}.":"Inntak {name} skal vera já eða nei, eigi {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Inntak {name} skal vera dagr sem 2026-11-21, eigi {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Ekki er inntak er heitir {name}. Inntök þess: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input vill nafn ok gildi, sem --input town=Rye."
 },
 "blocklyMsg":{
 "ADD_COMMENT":"ᛒᛅᛏ ᚢᛁᚦ ᛅᚦᚢᚴᛅᛋᛁᛘᛏ",

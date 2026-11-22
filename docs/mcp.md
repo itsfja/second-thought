@@ -129,6 +129,8 @@ It works the other way round too: `python my-program.py --mcp` serves the progra
 {"mcpServers": {"my-program": {"command": "python", "args": ["/full/path/to/my-program.py", "--mcp"]}}}
 ```
 
+A program with named inputs (#442) offers each as a property of its own in the tool's input schema, typed (a string, a number, true or false, or a date), with its default; those with no default are required. A call that leaves one out, or gives one of the wrong kind, comes back as an error saying which.
+
 Nobody is at a keyboard when an agent calls it, so a question (an **ask me** or **approve** block) makes the call fail with the reason, and an action that would ask first is refused, as on a schedule. A program that can act on the world serves only once it's been allowed to without asking: run it once in a terminal and answer y, or put `approve = no` in `second-thought.ini`. That's deliberate: an agent calling your program shouldn't be able to do more than you'd let it do unattended. `--doctor` names the tool it would serve.
 
 ---

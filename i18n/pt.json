@@ -819,6 +819,19 @@
   "rb_chk_link": {
    "message0": "tem um link",
    "tooltip": "Falha se o rascunho não tiver um link (http://… ou www.…)."
+  },
+  "rb_inputs": {
+   "message0": "entradas deste programa",
+   "message1": "%1",
+   "tooltip": "As entradas que este programa recebe. Executar pede-as num formulário; o Python exportado recebe --input town=Rye, e o --mcp recebe-as pelo nome. Uma sem valor predefinido tem de ser dada."
+  },
+  "rb_input_def": {
+   "message0": "entrada %1 : %2 predefinido %3",
+   "tooltip": "Uma entrada: o nome, o tipo e o valor predefinido. Sem predefinido, tem de ser dada. Uma data escreve-se como 2026-11-21."
+  },
+  "rb_input": {
+   "message0": "entrada %1",
+   "tooltip": "O valor que esta entrada recebeu quando o programa começou, ou o seu predefinido."
   }
  },
  "options": {
@@ -984,6 +997,12 @@
    "": "a definição do revisor",
    "same": "o mesmo modelo",
    "another": "um modelo de outro fabricante"
+  },
+  "rb_input_def.TYPE": {
+   "text": "texto",
+   "number": "número",
+   "yesno": "sim ou não",
+   "date": "data"
   }
  },
  "categories": {
@@ -2031,7 +2050,15 @@
   "Ask a question or share an idea on GitHub": "Faça uma pergunta ou partilhe uma ideia no GitHub",
   "Save for Docker (.zip)": "Guardar para Docker (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "Guardado {name}-docker.zip. Descompacte-o, ponha as suas chaves em keys.env e siga o SETUP.md.",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Este programa não espera por nada, por isso no Docker terminaria e recomeçaria sem parar. O Docker serve para um programa com horário ou um bloco «quando»."
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Este programa não espera por nada, por isso no Docker terminaria e recomeçaria sem parar. O Docker serve para um programa com horário ou um bloco «quando».",
+  "Fill in the inputs, then press Run.": "Preencha as entradas e carregue em Executar.",
+  "Program inputs": "Entradas do programa",
+  "Input {name} needs a value.": "A entrada {name} precisa de um valor.",
+  "Input {name} must be a number, not {value}.": "A entrada {name} tem de ser um número, não {value}.",
+  "Input {name} must be yes or no, not {value}.": "A entrada {name} tem de ser sim ou não, não {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "A entrada {name} tem de ser uma data como 2026-11-21, não {value}.",
+  "Yes": "Sim",
+  "No": "Não"
  },
  "examples": {
   "review": {
@@ -3896,6 +3923,12 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "Sem logs guardados nos últimos {days} dias (save_log = yes guarda um por run em logs/).",
   "Actions done, from the receipts of the last {days} days: {n}.": "Ações feitas, dos recibos dos últimos {days} dias: {n}.",
   "Cost, counted on this computer at list prices:": "Custo, contado neste computador aos preços de tabela:",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} passaram, {failed} com erro), {actions} ações feitas, {refused} recusadas, {cost} gasto."
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: {runs} runs ({ok} passaram, {failed} com erro), {actions} ações feitas, {refused} recusadas, {cost} gasto.",
+  "Input {name} needs a value.": "A entrada {name} precisa de um valor.",
+  "Input {name} must be a number, not {value}.": "A entrada {name} tem de ser um número, não {value}.",
+  "Input {name} must be yes or no, not {value}.": "A entrada {name} tem de ser sim ou não, não {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "A entrada {name} tem de ser uma data como 2026-11-21, não {value}.",
+  "There's no input called {name}. Its inputs: {names}.": "Não há nenhuma entrada chamada {name}. As suas entradas: {names}.",
+  "--input wants a name and a value, like --input town=Rye.": "--input quer um nome e um valor, como --input town=Rye."
  }
 }

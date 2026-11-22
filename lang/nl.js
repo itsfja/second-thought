@@ -210,7 +210,10 @@
 "rb_chk_mentions":{"message0":"vermeldt %1","tooltip":"Faalt als het concept deze woorden niet bevat (hoofdletters maken niet uit)."},
 "rb_chk_no_mention":{"message0":"vermeldt niet %1","tooltip":"Faalt als het concept deze woorden bevat (hoofdletters maken niet uit)."},
 "rb_chk_json":{"message0":"is geldige JSON","tooltip":"Faalt als het concept geen geldige JSON is."},
-"rb_chk_link":{"message0":"heeft een link","tooltip":"Faalt als het concept geen link heeft (http://… of www.…)."}
+"rb_chk_link":{"message0":"heeft een link","tooltip":"Faalt als het concept geen link heeft (http://… of www.…)."},
+"rb_inputs":{"message0":"invoer van dit programma","message1":"%1","tooltip":"De invoer die dit programma neemt. Uitvoeren vraagt erom in een formulier; geëxporteerd Python neemt --input town=Rye, en --mcp neemt ze bij naam. Een zonder standaardwaarde moet gegeven worden."},
+"rb_input_def":{"message0":"invoer %1 : %2 standaard %3","tooltip":"Eén invoer: de naam, de soort en de standaardwaarde. Zonder standaardwaarde moet hij gegeven worden. Een datum schrijf je als 2026-11-21."},
+"rb_input":{"message0":"invoer %1","tooltip":"De waarde die deze invoer kreeg toen het programma begon, of de standaardwaarde."}
 },
 "options":{
 "rb_when_time.DAYS":{"every":"elke dag","weekdays":"op werkdagen","weekends":"in het weekend"},
@@ -240,7 +243,8 @@
 "rb_arr_diskspace.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_arr_search.WHICH":{"radarr":"Radarr","sonarr":"Sonarr"},
 "rb_review.REVIEWER":{"":"de instelling van de reviewer","same":"hetzelfde model","another":"een model van een andere maker"},
-"rb_reflect.REVIEWER":{"":"de instelling van de reviewer","same":"hetzelfde model","another":"een model van een andere maker"}
+"rb_reflect.REVIEWER":{"":"de instelling van de reviewer","same":"hetzelfde model","another":"een model van een andere maker"},
+"rb_input_def.TYPE":{"text":"tekst","number":"getal","yesno":"ja of nee","date":"datum"}
 },
 "categories":{
 "Events":"Gebeurtenissen",
@@ -1287,7 +1291,15 @@
 "Ask a question or share an idea on GitHub":"Stel een vraag of deel een idee op GitHub",
 "Save for Docker (.zip)":"Opslaan voor Docker (.zip)",
 "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.":"{name}-docker.zip opgeslagen. Pak het uit, zet je sleutels in keys.env en volg dan SETUP.md.",
-"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Dit programma wacht nergens op, dus in Docker zou het stoppen en steeds opnieuw beginnen. Docker past bij een programma met een schema of een 'wanneer'-blok."
+"This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.":"Dit programma wacht nergens op, dus in Docker zou het stoppen en steeds opnieuw beginnen. Docker past bij een programma met een schema of een 'wanneer'-blok.",
+"Fill in the inputs, then press Run.":"Vul de invoer in en druk dan op Uitvoeren.",
+"Program inputs":"Invoer van het programma",
+"Input {name} needs a value.":"Invoer {name} heeft een waarde nodig.",
+"Input {name} must be a number, not {value}.":"Invoer {name} moet een getal zijn, niet {value}.",
+"Input {name} must be yes or no, not {value}.":"Invoer {name} moet ja of nee zijn, niet {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Invoer {name} moet een datum zijn zoals 2026-11-21, niet {value}.",
+"Yes":"Ja",
+"No":"Nee"
 },
 "examples":{
 "review":{"title":"Beoordelingslus","desc":"Claude schrijft over autolyse, controleert de tekst aan de hand van jouw regels en verbetert wat niet slaagt, tot 3 rondes.","tip":"Verander de taak in het blauwe blok en de regels in het paarse."},
@@ -2520,6 +2532,12 @@
 "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).":"Geen opgeslagen logs in de laatste {days} dagen (save_log = yes bewaart er één per run in logs/).",
 "Actions done, from the receipts of the last {days} days: {n}.":"Gedane acties, uit de bonnen van de laatste {days} dagen: {n}.",
 "Cost, counted on this computer at list prices:":"Kosten, geteld op deze computer tegen lijstprijzen:",
-"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} geslaagd, {failed} met een fout), {actions} acties gedaan, {refused} geweigerd, {cost} uitgegeven."
+"{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.":"{prog}: {runs} runs ({ok} geslaagd, {failed} met een fout), {actions} acties gedaan, {refused} geweigerd, {cost} uitgegeven.",
+"Input {name} needs a value.":"Invoer {name} heeft een waarde nodig.",
+"Input {name} must be a number, not {value}.":"Invoer {name} moet een getal zijn, niet {value}.",
+"Input {name} must be yes or no, not {value}.":"Invoer {name} moet ja of nee zijn, niet {value}.",
+"Input {name} must be a date like 2026-11-21, not {value}.":"Invoer {name} moet een datum zijn zoals 2026-11-21, niet {value}.",
+"There's no input called {name}. Its inputs: {names}.":"Er is geen invoer die {name} heet. Zijn invoer: {names}.",
+"--input wants a name and a value, like --input town=Rye.":"--input wil een naam en een waarde, zoals --input town=Rye."
 }
 };

@@ -819,6 +819,19 @@
   "rb_chk_link": {
    "message0": "имать ссылꙋ",
    "tooltip": "Прѣстѫпаетъ ꙗко черновикъ ссылꙋ не имать (http://… или www.…)."
+  },
+  "rb_inputs": {
+   "message0": "входы сего чина",
+   "message1": "%1",
+   "tooltip": "Входы, яже сей чинъ прїемлетъ. Тецы вопрошаетъ ихъ въ образѣ; изнесенный Python прїемлетъ --input town=Rye, а --mcp прїемлетъ ихъ по имени. Входъ безъ предустава подобаетъ дати."
+  },
+  "rb_input_def": {
+   "message0": "входъ %1 : %2 предуставъ %3",
+   "tooltip": "Единъ входъ: имя его, родъ его и предуставъ его. Безъ предустава подобаетъ дати его. День пишется яко 2026-11-21."
+  },
+  "rb_input": {
+   "message0": "входъ %1",
+   "tooltip": "Значенїе, еже прїятъ сей входъ въ началѣ чина, или предуставъ его."
   }
  },
  "options": {
@@ -974,6 +987,12 @@
    "": "оуставъ проверѧющаго",
    "same": "та же модел",
    "another": "модел иного творца"
+  },
+  "rb_input_def.TYPE": {
+   "text": "писанїе",
+   "number": "число",
+   "yesno": "ей или ни",
+   "date": "день"
   }
  },
  "categories": {
@@ -2021,7 +2040,15 @@
   "Ask a question or share an idea on GitHub": "Вопроси или повѣждь мысль твою на GitHub",
   "Save for Docker (.zip)": "Сохрани для Docker (.zip)",
   "Saved {name}-docker.zip. Unzip it, put your keys in keys.env, then follow SETUP.md.": "Сохраненъ {name}-docker.zip. Разрѣши его, положи ключи твоя въ keys.env, и тогда послѣдуй SETUP.md.",
-  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Сей чинъ ничесоже ожидаетъ, тѣмже въ Docker скончалъ бы ся и паки и паки начиналъ. Docker подобаетъ чину со урокомъ или со кирпичемъ «егда»."
+  "This program has nothing to wait for, so in Docker it would finish and start again and again. Docker suits a program with a schedule or a 'when' block.": "Сей чинъ ничесоже ожидаетъ, тѣмже въ Docker скончалъ бы ся и паки и паки начиналъ. Docker подобаетъ чину со урокомъ или со кирпичемъ «егда».",
+  "Fill in the inputs, then press Run.": "Исполни входы, и тогда притисни Тецы.",
+  "Program inputs": "Входы чина",
+  "Input {name} needs a value.": "Входъ {name} требуетъ значенїя.",
+  "Input {name} must be a number, not {value}.": "Входъ {name} подобаетъ быти числомъ, а не {value}.",
+  "Input {name} must be yes or no, not {value}.": "Входъ {name} подобаетъ быти ей или ни, а не {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "Входъ {name} подобаетъ быти днемъ яко 2026-11-21, а не {value}.",
+  "Yes": "Ей",
+  "No": "Ни"
  },
  "examples": {
   "review": {
@@ -3886,7 +3913,13 @@
   "No saved logs in the last {days} days (save_log = yes keeps one per run in logs/).": "Нет сохранённых журналов за последние {days} дней (save_log = yes сохраняет один на запуск в logs/).",
   "Actions done, from the receipts of the last {days} days: {n}.": "Выполнено действий по квитанциям за последние {days} дней: {n}.",
   "Cost, counted on this computer at list prices:": "Расходы на этом компьютере по ценам каталога:",
-  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: запусков {runs} ({ok} пройдено, {failed} с ошибкой), действий выполнено {actions}, отклонено {refused}, потрачено {cost}."
+  "{prog}: {runs} runs ({ok} passed, {failed} with an error), {actions} actions done, {refused} refused, {cost} spent.": "{prog}: запусков {runs} ({ok} пройдено, {failed} с ошибкой), действий выполнено {actions}, отклонено {refused}, потрачено {cost}.",
+  "Input {name} needs a value.": "Входъ {name} требуетъ значенїя.",
+  "Input {name} must be a number, not {value}.": "Входъ {name} подобаетъ быти числомъ, а не {value}.",
+  "Input {name} must be yes or no, not {value}.": "Входъ {name} подобаетъ быти ей или ни, а не {value}.",
+  "Input {name} must be a date like 2026-11-21, not {value}.": "Входъ {name} подобаетъ быти днемъ яко 2026-11-21, а не {value}.",
+  "There's no input called {name}. Its inputs: {names}.": "Нѣсть входа нарицаемаго {name}. Входы его: {names}.",
+  "--input wants a name and a value, like --input town=Rye.": "--input хощетъ имене и значенїя, яко --input town=Rye."
  },
  "blocklyMsg": {
   "ADD_COMMENT": "Приложи толкъ",
