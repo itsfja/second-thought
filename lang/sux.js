@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Cuneiform",
 "note":"Sumerian in cuneiform, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Sumerian. Every word is written here in the standard transliteration (ĝ, š, ḫ; digits for the sign indices, so du3 and du8 are different signs; hyphens between the signs of one word), and tools/i18n.py writes the page's words in cuneiform from tools/sux_signs.json, the readings of the Oracc Global Sign List (osl.asl, github.com/oracc/osl, CC0). A word marked ^ stays in Latin letters, and a suffix on a name, number or placeholder keeps a hyphen (%1-da, Claude-e). The font is Noto Sans Cuneiform, as for Akkadian. python holds the transliteration without the marks, because terminals rarely have a cuneiform font; typed answers are he2 (or he) for yes and nu for no (y and n work too). Sumerian has no words for most of this, and its grammar is simplified here to nominal phrases and bare verb stems with the common case endings (-a, -še3, -ta, -da, -gin7). The wording uses old words for new things: ĝeš-ḫur (a plan) for a program, kaskal (a road) for a script, sig4 (a brick) for a block, abgal (a sage) for a model, kin-gi4-a (a messenger) for an agent, ĝeš-tukul (a weapon, an implement) for a tool, dub-saĝ (a first tablet) for a draft, igi-du8-a (an inspection) for a review, niĝ2-ak (what is done) for a result, dub kiĝ2-ak-a (the tablet of the work) for the run log, niĝ2-du8 (an opener) for a key, dub (a tablet) for a file, pisaĝ (a basket) for a folder, niĝ2-ka9 (an account) for a record, a-ša3 (a field) for a field, ĝeštug2 (the ear, understanding) for memory, kiĝ2 for a task, ki-gub (a standing place) for a checkpoint and inim-gibil (new words) for a news feed. Buttons: ak Run, gub Stop, diri Continue, še-ga Approve, gi4 Send back, še-ga Allow, nu Don't, u4-ĝar-ra Schedules. It is a modern use of the ancient language, not genuine ancient text. Names, keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. To see a transliterated line in cuneiform: python tools/i18n.py script sux \"…\".",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"𒅗 𒁍𒁕. Enter 𒋳 𒄖 𒉋𒂠; 𒄖 80 𒋞𒋫 𒄄."},
 "rb_start":{"message0":"𒌓 𒀝 𒋳𒂵𒀀","tooltip":"𒄑𒄯 𒀸𒀸 𒆠 𒉈𒀀 𒊕 𒃻. 𒋞 𒆠𒋫 𒀭𒋫 𒆠𒂠 𒀝. 𒊹𒁉 𒍠𒍠𒁀 𒀝."},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"𒆭 {name} 𒃶 𒅇 𒉡 𒃶𒀀, {value} 𒉡.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"𒆭 {name} 𒌓 2026-11-21-𒁶 𒃶𒀀, {value} 𒉡.",
 "Yes":"𒃶",
-"No":"𒉡"
+"No":"𒉡",
+"Made by a model: corrections welcome.":"𒄑𒄯𒂊 𒅔𒀝: 𒋛 𒁲 𒃶𒄭.",
+"Read by a speaker.":"𒅗 𒅗𒂵𒂊 𒋃.",
+"Suggest a correction":"𒋛 𒁲 𒅗𒂵"
 },
 "examples":{
 "review":{"title":"𒃻𒄥𒊏 𒅆𒂃𒀀","desc":"Claude autolyse-𒀀 𒊬, 𒀉𒉘𒂷𒍪𒁶 𒅆 𒁇 𒅇 𒉡𒋛𒁲 𒋛 𒁲, 𒂗𒈾 𒀀𒁺 3.","tip":"𒆥 𒋞 𒍝𒆳𒈾 𒅇 𒀉𒉘𒂷 𒋞 𒅊𒂵𒀀 𒉽."},

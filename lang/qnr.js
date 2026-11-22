@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Runic",
 "note":"Old Norse in runes: the words of i18n/non.json, written in the Younger Futhark (long-branch runes, U+16A0-U+16FF) by tools/i18n.py (`python tools/i18n.py derive`): edit non.json, not this file. The page shows runes in blocks, options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Runic font named in \"font\"; python holds non.json's Latin spelling, which exported programs print, since few terminals have a runic font. The spelling follows the Viking Age inscriptions: sixteen runes for all the sounds (ᚢ for u, o, y, ø and v; ᛁ for i, e and j; ᚴ for k and g; ᛏ for t and d; ᛒ for b and p), no length marks, doubled letters written once, n left out before k and g, ei as ᛅᛁ and ǫ as ᛅᚢ, and ᛦ for the r of endings. Names, modern words, field names, keys and placeholders stay in Latin letters (tools/latin_kept.json lists them). The code qnr is from ISO 639-3's private-use range (qaa-qtz), since Old Norse in runes (non-Runr) has no code of its own.",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"ᛒᛅᛏ %1 ᚢᛁᚦ ᚢᚱᛋᛚᛁᛏᛁᚾ"},
 "rb_agent":{"message0":"ᛁᚱᛁᚾᛏᚱᛁᚴᛁ: ᚢᛁᚾ ᛅᛏ %1","message1":"ᛅᛚᛏ ᛅᛏ %1 ᚠᛁᛏᚢᛘ, ᛘᛁᚦ ᚦᛁᛋᚢᛘ ᛏᚢᛚᚢᛘ:","message2":"%1","message3":"ᚴᛁᚱ ᚱᛅᚦᛅᚴᚢᚱᚦ ᚠᚢᚱᛋᛏ, ᚢᚴ ᛒᚱᛅᚢᛏ ᚼᛁᚾᛁ ᛋᛁᛘ ᚬ ᛚᛁᚦᚱ %1","tooltip":"Claude ᚱᛅᚦᚱ ᚼᚢᛅᛏ ᚾᛅᛋᛏ ᛋᚴᛅᛚ ᚴᛁᚱᛅ: ᚬ ᚼᚢᛁᚱᛁᚢ ᚠᛁᛏᛁ ᚢᛁᛚᛦ ᚼᛅᚾ ᛅᛁᛏ ᛏᚢᛚᛅᚾᛅ ᚼᛁᚱ ᛁᚾᛁ, ᛋᛁᛦ ᚼᚢᛅᛏ ᚢᛅᚱᚦ, ᚢᚴ ᚼᛁᛚᛏᚱ ᛅᚠᚱᛅᛘ ᚢᚾᛋ ᛘᛅᚱᚴᛁᚾᚢ ᛁᚱ ᚾᛅᚦ ᛁᚦᛅ ᚠᛁᛏᛁᚾ ᛁᚱᚢ ᚦᚱᚢᛏᛁᚾ. ᚼᛅᚾᛋ ᚼᛁᚾᛋᛏᛅ ᛋᚢᛅᚱ ᚠᛁᚱ ᛁ ᚠᚱᚢᛘᚱᛁᛏᛁᛏ. ᚼᚢᛁᚱᛏ ᚠᛁᛏ ᛁᚱ ᛅᛁᛏ ᚴᛅᛚ ᛏᛁᛚ ᛚᛁᚴᛅᚾᛋᛁᚾᛋ. ᚦᛅ ᛁᚱ „ᚴᛁᚱ ᚱᛅᚦᛅᚴᚢᚱᚦ ᚠᚢᚱᛋᛏ“ ᛁᚱ ᛘᛁᚱᚴᛏ, ᚱᛁᛏᛅᛦ ᚼᛅᚾ ᛋᛏᚢᛏᛅ ᚱᛅᚦᛅᚴᚢᚱᚦ ᛘᛁᚦ ᚠᚢᚱᛋᛏᛅ ᚠᛁᛏᛁ ᚢᚴ ᚼᛁᛚᛏᚱ ᚼᛁᚾᛁ ᚾᚢᚱᛁ, ᚬᚾ ᛘᛅᛁᚱᛅ ᚴᚢᛋᛏᚾᛅᚦᛅᛦ.","message4":"ᛋᛁᚴᛁᛅ ᚼᚢᛅᚦᛅᚾ ᚼᚢᛁᚱ ᛋᛅᚾᛁᚾᛏᛁ ᚴᚢᛘᚢ %1"},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"ᛁᚾᛏᛅᚴ {name} ᛋᚴᛅᛚ ᚢᛁᚱᛅ ᛁᛅ ᛁᚦᛅ ᚾᛅᛁ, ᛅᛁᚴᛁ {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"ᛁᚾᛏᛅᚴ {name} ᛋᚴᛅᛚ ᚢᛁᚱᛅ ᛏᛅᚴᛦ ᛋᛁᛘ 2026-11-21, ᛅᛁᚴᛁ {value}.",
 "Yes":"ᛁᛅ",
-"No":"ᚾᛅᛁ"
+"No":"ᚾᛅᛁ",
+"Made by a model: corrections welcome.":"ᚴᛅᚢᚱᛏ ᛅᚠ ᚢᛁᛚ: ᛚᛅᛁᚦᚱᛁᛏᛁᚴᛅᛦ ᚢᛁᛚᚴᚢᛘᚾᛅᛦ.",
+"Read by a speaker.":"ᛚᛁᛋᛁᛏ ᛅᚠ ᛘᛅᛚᛅᚾᛏᛅ.",
+"Suggest a correction":"ᛚᛁᚴᛁᛅ ᛏᛁᛚ ᛚᛅᛁᚦᚱᛁᛏᛁᚴ"
 },
 "examples":{
 "review":{"title":"ᚼᚱᛁᚴᛦ ᛏᚢᛘᛋ","desc":"Claude ᚱᛁᛏᛅᛦ ᚢᛘ autolyse, ᛒᚱᚢᚠᛅᛦ ᚦᛅᛏ ᛁᛒᛏᛁᛦ ᚱᛁᚴᛚᚢᛘ ᚦᛁᚾᚢᛘ, ᚢᚴ ᛚᛅᚴᛅᛦ ᚼᚢᛅᛏᚴᛁ ᛁᚱ ᛒᚱᛁᚴᛋᚴ, ᛅᛚᛏ ᛅᛏ 3 ᚢᛘᚠᛁᚱᚦᚢᛘ.","tip":"ᛒᚱᛅᚢᛏ ᚢᛁᚱᚴᛁᚾᚢ ᛁ ᛒᛚᛅ ᚴᚢᛒᛁᚾᚢᛘ ᚢᚴ ᚱᛁᚴᛚᚢᚾᚢᛘ ᛁ ᚼᛁᚾᚢᛘ ᛒᚢᚱᛒᚢᚱᛅᛚᛁᛏᛅ."},

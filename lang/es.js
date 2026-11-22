@@ -3,6 +3,7 @@
 "name":"Español",
 "blockly":"es",
 "note":"Spanish words for the block palette and the page. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, keys are the page's English text, with {name} for the parts filled in. In examples, keys are the example keys, each with its title, description and tip. In starters, keys are the English words already in the palette's blocks. Page buttons named in block text use their Spanish names (Ejecutar, Horarios, Programas, Continuar).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"añadir %1 al resultado"},
 "rb_agent":{"message0":"agente: trabajar para %1","message1":"hasta %1 pasos, con estas herramientas:","message2":"%1","message3":"hacer primero un plan, y cambiarlo sobre la marcha %1","tooltip":"Claude decide qué hacer a continuación: en cada paso elige una de las herramientas de dentro, ve lo que pasó y sigue hasta cumplir el objetivo o quedarse sin pasos. Su respuesta final va al borrador. Cada paso es una llamada al modelo. Con 'hacer primero un plan' marcado, escribe un plan corto en su primer paso y lo mantiene al día, sin coste adicional.","message4":"decir de dónde sale cada dato %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"La entrada {name} debe ser sí o no, no {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"La entrada {name} debe ser una fecha como 2026-11-21, no {value}.",
 "Yes":"Sí",
-"No":"No"
+"No":"No",
+"Made by a model: corrections welcome.":"Hecho por un modelo: se agradecen correcciones.",
+"Read by a speaker.":"Revisado por un hablante.",
+"Suggest a correction":"Sugerir una corrección"
 },
 "examples":{
 "review":{"title":"Bucle de revisión","desc":"Claude escribe sobre la autólisis, lo comprueba con tus reglas y arregla lo que falle, hasta 3 rondas.","tip":"Cambia la tarea en el bloque azul y las reglas en el morado."},

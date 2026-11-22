@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Cuneiform",
 "note":"Akkadian (Old Babylonian) in cuneiform. Akkadian has no words for most of this, so the wording is Old Babylonian vocabulary used for new things (libittum, brick, for block; mār šiprim, messenger, for agent; apkallum, sage, for a model; bīrum, the diviner's inspection, for review; nēpešum, procedure, for program; ṭup epištim, tablet of the work, for the run log); it is not genuine ancient text. The page shows cuneiform signs (U+12000-U+1254F) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, spelled syllable by syllable as Old Babylonian scribes did (CV, VC, CVC as CV-VC), with the Noto Sans Cuneiform font named in \"font\"; python holds the normalised transliteration (šarrum, bītum), because terminals have no cuneiform font. Names (Claude, Home Assistant), keys, English field names and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"%1 𒀀𒈾 𒍢𒋾𒅎 𒊒𒌓𒁲"},
 "rb_agent":{"message0":"𒈠𒅈 𒅆𒅁𒊑𒅎: 𒀀𒈾 %1 𒂊𒁍𒍑","message1":"𒀀𒁲 %1 𒀠𒅗𒅗𒋾𒅎, 𒄿𒈾 𒌑𒉡𒋾𒅎 𒀭𒉌𒋾𒅎:","message2":"%1","message3":"𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦, 𒌋 𒄿𒈾 𒀀𒆷𒆠𒅎 𒋗𒌦𒉌 %1","tooltip":"Claude 𒊭 𒂊𒁉𒅆𒅎 𒄿𒈠𒀠𒇷𒅅: 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒅖𒋾𒀜 𒅖𒋼𒅔 𒌑𒉡𒋾𒅎 𒊭 𒇷𒅁𒁉 𒄿𒄭𒅕, 𒊭 𒅁𒋗 𒅎𒈠𒅈, 𒌋 𒅋𒆷𒀝 𒀀𒁲 𒍢𒁍𒌅𒌝 𒅅𒋗𒁺 𒌑𒇻 𒀠𒅗𒅗𒌅𒌝 𒅅𒈬𒊏. 𒀀𒁉𒅋𒋗 𒊭 𒄴𒊏𒋾𒅎 𒀀𒈾 𒈠𒀸𒁕𒊑𒅎 𒅕𒊒𒌒. 𒀀𒆷𒀝𒌅𒌝 𒅖𒋾𒀜 𒅆𒋛𒌅𒌝 𒅖𒋾𒀜 𒀀𒈾 𒀊𒅗𒀠𒇷𒅎. 𒋗𒌝𒈠 „𒉺𒈾 𒁲𒈠𒄠 𒋗𒆪𒌦” 𒍝𒁉𒀉, 𒄿𒈾 𒀀𒆷𒀝𒋾𒅎 𒉺𒉌𒋾𒅎 𒁲𒈠𒄠 𒍢𒄴𒊏𒄠 𒄿𒊭𒀜𒁕𒅈 𒌋 𒌓𒁕𒀸, 𒁀𒇻 𒅗𒊍𒁉𒅎 𒍢𒋾𒅎.","message4":"𒀀𒊭𒅈 𒀀𒉿𒌅𒌝 𒅖𒌅 𒅋𒇷𒅗𒄠 𒋡𒁍 %1"},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"𒅕𒁍𒌝 {name} 𒀭𒈾 𒌌𒆷 𒇻, 𒌌 {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"𒅕𒁍𒌝 {name} 𒌑𒈬𒌝 𒆠𒈠 2026-11-21 𒇻, 𒌌 {value}.",
 "Yes":"𒀭𒈾",
-"No":"𒌌𒆷"
+"No":"𒌌𒆷",
+"Read by a speaker.":"𒊭 𒁕𒁉𒁉𒅎 𒊭𒋛.",
+"Suggest a correction":"𒋫𒅈𒍝𒄠 𒆠𒁉",
+"Made by a model: corrections welcome.":"𒄿𒈾 𒉈𒁉𒅆𒅎 𒂊𒁉𒅖: 𒋫𒅈𒍝𒌅𒌝 𒁕𒁀."
 },
 "examples":{
 "review":{"title":"𒊓𒄴𒄷𒌨𒌅𒌝 𒊭 𒁉𒊑𒅎","desc":"Claude 𒀸𒋗𒌝 autolyse 𒄿𒊭𒀜𒁕𒅈, 𒀀𒈾 𒍢𒁍𒋾𒅗 𒄿𒁀𒅈𒊑, 𒌋 𒈪𒅎𒈠 𒊭 𒄴𒌅 𒍑𒋼𒅖𒊺𒅕, 𒀀𒁲 3 𒊓𒄴𒄷𒊏𒋾𒅎.","tip":"𒁺𒌌𒆷𒄠 𒄿𒈾 𒇷𒁉𒀉𒋾𒅎 𒊌𒉌𒋾𒅎 𒌋 𒍢𒁍𒋫𒄠 𒄿𒈾 𒋫𒆠𒅋𒋾𒅎 𒋗𒌦𒉌."},

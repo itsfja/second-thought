@@ -4,6 +4,7 @@
 "blockly":"he",
 "dir":"rtl",
 "note":"Modern Hebrew words for the block palette, the page, the examples and what exported programs print. Blockly's own blocks and menus come from its msg/he.js. The page is right to left (dir: rtl): Blockly is mirrored, and code, file names and model names stay left to right. Instructions to the reader use the plural imperative, which addresses everyone; blocks use the short singular imperative, as Scratch does in Hebrew. Modern product words (email, token, API, Home Assistant) are kept in Latin letters where Hebrew users would see them that way. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Hebrew names (הרץ, המשך, תזמונים).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"הוסף %1 לתוצאה"},
 "rb_agent":{"message0":"סוכן: פעל להשגת %1","message1":"עד %1 צעדים, בעזרת הכלים האלה:","message2":"%1","message3":"הכן תוכנית קודם, ועדכן אותה תוך כדי %1","tooltip":"Claude מחליט מה לעשות הלאה: בכל צעד הוא בוחר באחד הכלים שבפנים, רואה מה קרה, וממשיך עד שהמטרה הושגה או שהצעדים נגמרו. התשובה הסופית שלו נכנסת לטיוטה. כל צעד הוא קריאה אחת למודל. כשמסומן \"הכן תוכנית קודם\", הוא כותב תוכנית קצרה בצעד הראשון ומעדכן אותה, בלי עלות נוספת.","message4":"לומר מאין הגיעה כל עובדה %1"},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"הקלט {name} חייב להיות כן או לא, לא {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"הקלט {name} חייב להיות תאריך כמו 2026-11-21, לא {value}.",
 "Yes":"כן",
-"No":"לא"
+"No":"לא",
+"Made by a model: corrections welcome.":"נוצר על ידי מודל: תיקונים יתקבלו בברכה.",
+"Read by a speaker.":"נקרא על ידי דובר השפה.",
+"Suggest a correction":"הצעת תיקון"
 },
 "examples":{
 "review":{"title":"לולאת ביקורת","desc":"Claude כותב על אוטוליזה, בודק את הטקסט מול הכללים שלכם, ומתקן כל מה שנכשל, עד 3 סבבים.","tip":"שנו את המשימה בבלוק הכחול ואת הכללים בבלוק הסגול."},

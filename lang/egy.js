@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Egyptian Hieroglyphs",
 "note":"Middle Egyptian in hieroglyphs. Egyptian has no words for most of this, so the wording is Middle Egyptian vocabulary used for new things (jnr, stone block, for block; wpwtj, messenger, for agent; rḫ-ḫt, knower of things, for a model; sjp, inspection, for review; sḫr, plan, for program; gnwt, annals, for the run log; ḫtm, seal, for a key; ḏꜣj, ferry across, for export; sꜥq, bring in, for import); it is not genuine ancient text. The page shows hieroglyphs (U+13000-U+1342F) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, each sound written with its one-consonant sign in a linear run, without determinatives or the grouping controls (U+13430-U+1343F), which fonts and browsers support patchily; the Noto Sans Egyptian Hieroglyphs font is named in \"font\". python holds the transliteration (rḫ-ḫt, sḫr), because terminals have no hieroglyph font. Names (Claude, Home Assistant), keys, English field names and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. To change a word, edit its transliteration and write it in signs with python tools/i18n.py (egy is one of its scripts).",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"𓅓𓂧𓅱 𓅱𓋴𓐍 𓆓𓂝𓂋 Enter 𓂋 𓏏𓊪 𓅓𓄿𓅱; 𓋴𓈙𓅱 𓎛𓂋 𓐍𓊪𓂋 𓐍𓆑𓏏 80 𓋴𓈙"},
 "rb_start":{"message0":"𓐍𓆑𓏏 𓇋𓂋𓏏","tooltip":"𓋴𓐍𓂋 𓈖𓃀 𓈙𓄿𓂝𓆑 𓂝𓄿 𓇋𓈖𓂋𓅱 𓄡𓂋𓆑 𓇋𓂋 𓅓 𓏏𓊪 𓂋 𓊪𓎛𓅱𓏭 𓇋𓈖𓂋𓅱 𓂝𓈙𓄿 𓇋𓊪𓏏𓈖 𓇋𓂋 𓎛𓈖𓂝 𓂝"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"𓂝𓈎 {name} 𓎛𓂋 𓅱𓈖𓈖 𓅓 𓅓𓄿𓂝 𓂋𓊪𓅱 𓈖𓈖, 𓈖𓈖 {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"𓂝𓈎 {name} 𓎛𓂋 𓅱𓈖𓈖 𓅓 𓉔𓂋𓅱 𓅓𓇋 2026-11-21, 𓈖𓈖 {value}.",
 "Yes":"𓅓𓄿𓂝",
-"No":"𓈖𓈖"
+"No":"𓈖𓈖",
+"Made by a model: corrections welcome.":"𓇋𓂋 𓅓 𓃀𓇋𓄿: 𓋴𓅓𓄿𓂝 𓈖𓆑𓂋",
+"Read by a speaker.":"𓈙𓂧𓇋 𓇋𓈖 𓅓𓂧𓅱",
+"Suggest a correction":"𓂧𓇋 𓋴𓅓𓄿𓂝"
 },
 "examples":{
 "review":{"title":"𓊪𓎛𓂋 𓈖 𓋴𓇋𓊪","desc":"Claude 𓋴𓈙 𓎛𓂋 autolyse, 𓋴𓇋𓊪𓆑 𓋴𓅱 𓂋 𓉔𓊪𓅱𓎡, 𓋴𓅓𓈖𓐍𓆑 𓅱𓉔 𓈖𓃀, 𓂋 𓋴𓊪 3.","tip":"𓈙𓈖𓇋 𓅱𓊪𓅱𓏏 𓅓 𓇋𓈖𓂋 𓇋𓂋𓏏𓇋 𓎛𓈖𓂝 𓉔𓊪𓅱 𓅓 𓇋𓈖𓂋 𓎛𓋴𓅓𓈖"},

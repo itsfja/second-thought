@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Cuneiform",
 "note":"Hittite (nešili) in cuneiform, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Hittite. Every word is written here in the usual transliteration, and tools/i18n.py writes the page's words in cuneiform from tools/sux_signs.json, the readings of the Oracc Global Sign List (osl.asl, github.com/oracc/osl, CC0), shared with Sumerian. As the scribes of Ḫattuša did, the writing mixes three kinds of sign: Hittite words spelled syllable by syllable in lowercase, joined by hyphens (ḫa-at-re-eš-šar, a message); Sumerograms in capitals, their signs joined by dots (DUB, a tablet, for a file; É, a house; LÚ.MEŠ, men); and Akkadograms in capitals joined by hyphens (A-NA, to; I-NA, in; IŠ-TU, from; QA-DU, with; ŠA, of; Ù, and). An accent on a vowel is the sign's index, as Hittitologists write it (ú is u2). A word marked ^ stays in Latin letters, and an English abbreviation in capitals is kept as it is (PDF, MQTT). The font is Noto Sans Cuneiform, as for Akkadian and Sumerian. python holds the transliteration, because terminals rarely have a cuneiform font; typed answers are e-eš-zi (it is; also ešzi, e or y) for yes and UL (not; also natta or n) for no. Hittite has no words for most of this, and the grammar is simplified to short clauses with the third person present (-zi), the imperative and the common case endings. The wording uses attested words for new things: GIŠ.ḪUR (a wooden writing board, a plan) for a program, KASKAL (a road) for a script, SIG4 (a brick) for a block, UM.MI.A (a master scholar) for a model, LÚ.KIN.GI4.A (a messenger) for an agent, GIŠ.TUKUL (an implement) for a tool, ḫa-an-te-ez-zi DUB (the first tablet) for a draft, ša-ku-wa-tar (sight) for a review, i-ya-an (what is done) for a result, DUB i-ya-u-wa-aš (the tablet of doing) for the run log, GIŠ.SAG.KUL (a bolt) for a key, GIŠ.PISAN (a box) for a folder, DUB kap-pu-wa-aš (a tablet of counting) for a record and kap-pu-u-wa-ar (a count) for a list, A.ŠÀ (a field) for a field, iš-ta-an-za (the soul, the mind) for memory, a-ni-ya-at-ta (work) for a task, iš-ḫi-ú-ul (an obligation, an instruction) for instructions, ḫa-at-re-eš-šar (a written message) for a message, ÍD (a river) for a channel and ne-e-wa me-mi-ya-an (new words) for a news feed. Buttons: i-ya (do) Run, kar-aš (cut off) Stop, pa-ra-a i-it (go forth) Continue, ma-la-a-i (approve) Approve, EGIR-pa pé-e-da (carry back) Send back, tar-na (let) Allow, le-e (do not) Don't, me-e-ḫur.MEŠ (times) Schedules. It is a modern use of the ancient language, not genuine ancient text. Names, keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. To see a transliterated line in cuneiform: python tools/i18n.py script hit \"…\".",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"𒈨𒈪𒀭 𒁍𒁕. Enter-𒀭 𒄿𒉿 𒉈𒂊𒉿 𒅗𒅆; 𒅗 80 𒋃𒍝 𒂕𒉺 𒉿𒄴𒉡𒍣."},
 "rb_start":{"message0":"𒈠𒀀𒀭 𒄿𒉿 𒁖𒆪𒉿𒀭𒍣","tooltip":"𒄑𒄯 𒄷𒌋𒈠𒀭 𒅗𒀀 𒋾𒉿𒍣. 𒋞𒄭𒀀 𒃰𒋫𒀭 𒊭𒊏𒊍𒍣𒉿𒊍 𒃰𒋼𒅕𒊏 𒄿𒉿𒀭𒍣. 𒈨𒅅𒆠𒍑 𒁖𒊭𒀭 𒄿𒉿𒀭𒍣."},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"𒀭𒁕 𒉺𒄑𒍣 {name} 𒂊𒌍𒍣 𒈾𒀸𒈠 𒌌 𒂊𒌍𒁺, 𒌌 {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"𒀭𒁕 𒉺𒄑𒍣 {name} 𒌓 𒈠𒄴𒄩𒀭 2026-11-21 𒂊𒌍𒁺, 𒌌 {value}.",
 "Yes":"𒂊𒌍𒍣",
-"No":"𒌌"
+"No":"𒌌",
+"Made by a model: corrections welcome.":"𒆏𒁍𒌋𒉿𒅈𒊑𒀉 𒄿𒉿𒀭: 𒄩𒀭𒁕𒀀𒋻 𒀀𒀸𒋗.",
+"Read by a speaker.":"𒈨𒈪𒉿𒀭𒋫𒀭𒍝 𒄬𒍣𒅖𒊭𒀭.",
+"Suggest a correction":"𒄩𒀭𒁕𒀀𒋻 𒈨𒈪"
 },
 "examples":{
 "review":{"title":"𒊭𒆪𒉿𒋻 𒂕𒉺 𒂕𒉺","desc":"Claude 𒀀𒈾 autolyse 𒄢𒀸𒍣, 𒀀𒈾 𒅖𒄭𒌑𒌌𒅗 𒀀𒍑𒍣 𒅇 𒉿𒀸𒋫𒌌 𒆷𒀀𒄿, 3 𒄿𒉿𒌋𒉿𒅈𒁁.","tip":"𒀀𒉌𒉿𒀜𒋫 𒄿𒈾 𒋞 𒍝𒆳 𒅇 𒅖𒄭𒌑𒌌 𒄿𒈾 𒋞 𒅊 𒉿𒄴𒉡."},

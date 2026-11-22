@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Devanagari",
 "note":"Pali (पाळि) in Devanagari, with the Noto Sans Devanagari font that Sanskrit already loads, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Pali. It was written in the standard romanisation and converted letter by letter: ḷ is ळ, ṃ the anusvara, conjuncts with the virama, and a full stop after Pali words a danda (।). The canon has no words for most of this, so the coinages are built from Pali roots, close to Sanskrit's where they can be: किच्चक्कमो (kiccakkamo) for a program, पटिपाटि (paṭipāṭi) a sequence, for a script, खण्डो (khaṇḍo) for a block, पटिरूपं (paṭirūpaṃ) a likeness, for a model, पटिनिधि (paṭinidhi) for an agent, उपकरणं (upakaraṇaṃ) for a tool, आलेखो (ālekho) a sketch, for a draft, समेक्खा (samekkhā) for a review, फलं (phalaṃ) fruit, for a result, चालनपोत्थकं (cālanapotthakaṃ) for the run log, कुञ्चिका (kuñcikā) for a key, सञ्चिका (sañcikā) for a file, पेळा (peḷā) a basket, for a folder, अभिलेखो (abhilekho) for a record, कोट्ठासो (koṭṭhāso) for a field, सासनं (sāsanaṃ) for a message, ईपत्तं (īpattaṃ) for email, नाळि (nāḷi) for a channel, वत्थु (vatthu) for a Home Assistant entity, यन्तं (yantaṃ) for a device, सङ्केतं (saṅketaṃ) for a token, विरामो (virāmo) for a checkpoint, सति (sati) for memory, उय्योजनं (uyyojanaṃ) an urging, for a prompt, जालं (jālaṃ) a net, for the web, चालको (cālako) for the runtime. Buttons: चालेहि Run, ठपेहि Stop, पवत्तेहि Continue, अनुमोदस्सु Approve, पटिपेसेहि Send back, अनुजानाहि Allow, मा Don't, कालयोजना Schedules. Typed answers: आम, आ or ama for yes, न, नो or na for no (y and n work too). It is a modern use of the canonical language, not genuine ancient text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are, in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"दीघो पाठो। नवाय पङ्तिया Enter नुदाहि; पङ्तियो 80 अक्खरेसु निवत्तन्ति।"},
 "rb_start":{"message0":"यदा चालेहि इति नुदितं","tooltip":"सब्बो किच्चक्कमो इध आरभति। हेट्ठा खण्डा उपरितो हेट्ठा चालियन्ति। बहवो इमे एकतो चालियन्ति।"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"{name} पवेसनं आम वा न वा भवितब्बं, न {value}।",
 "Input {name} must be a date like 2026-11-21, not {value}.":"{name} पवेसनं 2026-11-21 विय दिवसो भवितब्बं, न {value}।",
 "Yes":"आम",
-"No":"न"
+"No":"न",
+"Made by a model: corrections welcome.":"यन्तेन कतं: सोधनानि सुस्वागतानि।",
+"Read by a speaker.":"भासकेन पठितं।",
+"Suggest a correction":"सोधनं पवेदेहि"
 },
 "examples":{
 "review":{"title":"समेक्खावट्टं","desc":"Claude autolyse विसये लिखति, तव नियमेहि परिक्खति, असम्पन्नञ्च सोधेति, याव तयो वारा।","tip":"नीलखण्डे किच्चं, जम्बुखण्डे नियमे च परिवत्तेहि।"},

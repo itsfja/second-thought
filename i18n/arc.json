@@ -3,6 +3,7 @@
  "blockly": "en",
  "dir": "rtl",
  "note": "Jewish Babylonian Aramaic, the language of the Talmud, in Hebrew square script, for the block palette, the page, the examples and what exported programs print. There is no Blockly translation for Aramaic, so Blockly's own blocks and menus come from blocklyMsg here. The page is right to left (dir: rtl), as for Hebrew: Blockly is mirrored, and code, file names and model names stay left to right. Instructions use the short singular imperative. Modern product words (email, token, API, Home Assistant) stay in Latin letters. Coinages: לבנתא block (a brick), שליחא agent (an agent in Talmudic law), טופסא draft, פנקסא log, זמניא schedules. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Aramaic names (שרי, אזיל, פסוק).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "אוסיף %1 לפירא"
@@ -2059,7 +2060,10 @@
   "Input {name} must be yes or no, not {value}.": "מעלנא {name} לאיתוהי אין או לא, לא {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "מעלנא {name} לאיתוהי יומא כד 2026-11-21, לא {value}.",
   "Yes": "אין",
-  "No": "לא"
+  "No": "לא",
+  "Made by a model: corrections welcome.": "עביד בידי מכונתא: תקוני מקבלין.",
+  "Read by a speaker.": "קרי בידי ממללא.",
+  "Suggest a correction": "אמר תקונא"
  },
  "examples": {
   "review": {

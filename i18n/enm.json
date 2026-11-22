@@ -2,6 +2,7 @@
  "name": "Englisch",
  "blockly": "en",
  "note": "Middle English (late fourteenth-century London, the English of Chaucer) words for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Middle English. Spelling is normalised to one consistent form without þ or ȝ; modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Middle English names (Renne, Go forth, Devyses).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "adde %1 to the effect"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "Entree {name} moot be ye or nay, nat {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "Entree {name} moot be a day lyk 2026-11-21, nat {value}.",
   "Yes": "Ye",
-  "No": "Nay"
+  "No": "Nay",
+  "Made by a model: corrections welcome.": "Made by an engyn: amendementes welcome.",
+  "Read by a speaker.": "Rede by a spekere.",
+  "Suggest a correction": "Purpose an amendement"
  },
  "examples": {
   "review": {

@@ -3,6 +3,7 @@
  "blockly": "en",
  "font": "Noto Sans Ethiopic",
  "note": "Ge'ez (Classical Ethiopic) in its own script, the fidel (Ethiopic, U+1200-U+137F), left to right. The words were made by a model, not read by a scholar of the language: treat the grammar as approximate. Most of the vocabulary is attested (the Bible, the liturgy, inscriptions and law); modern ideas are descriptive coinages on attested words: ሥርዐት (order, rite) for a program, ፍኖት (path) for a script, ግንፋል (brick) for a block, ሩጸት (a running) for a run, አምሳል (likeness) for a model, ላእክ (one who is sent) for an agent, ንዋይ (vessel, instrument) for a tool, ሐተታ (examination) for a review, ፍሬ (fruit) for the result, ተወላጢ (what changes) for a variable, ዝርዝር for a list, ጦማር for a record, መጽሐፍ for a file, መርበብ (net) for the web, መኈልቍ (counter) for a computer, መርኆ (key) for a key, ባሕረ ሐሳብ (the computus) for a calendar. A few words are borrowed from later Ethiopian usage where Ge'ez has none (ማስታወሻ for a note, ቅጂ for a copy, ዶላር). Commands are in the singular. Sentences end with ። and lists use ፣, but a comma that separates field names stays a comma. Names, keys, field names, token, email and placeholders stay as they are. The page serves the Noto Sans Ethiopic font named in \"font\". Blockly has no Ge'ez locale, so \"blockly\" is \"en\" and blocklyMsg holds the words of Blockly's own blocks. Exported Python prints these words in the fidel.",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "ወስክ %1 ለፍሬ"
@@ -2059,7 +2060,10 @@
   "Input {name} must be yes or no, not {value}.": "ቦአት {name} ይደሉ ይኩን እወ አው አልቦ፣ አኮ {value}።",
   "Input {name} must be a date like 2026-11-21, not {value}.": "ቦአት {name} ይደሉ ይኩን ዕለተ ከመ 2026-11-21፣ አኮ {value}።",
   "Yes": "እወ",
-  "No": "አልቦ"
+  "No": "አልቦ",
+  "Made by a model: corrections welcome.": "ዘተገብረ በመካን፤ ርቱዓት ይትወከፉ።",
+  "Read by a speaker.": "ዘአንበበ ተናጋሪ።",
+  "Suggest a correction": "አምጽእ ርቱዐ"
  },
  "examples": {
   "review": {

@@ -3,6 +3,7 @@
 "name":"日本語",
 "blockly":"ja",
 "note":"Japanese words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Japanese names (実行, 続ける, プログラム).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"%1 を結果に追加する"},
 "rb_agent":{"message0":"エージェント：%1 を目指す","message1":"最大 %1 ステップ、使う道具：","message2":"%1","message3":"先に計画を立て、進めながら見直す %1","tooltip":"次に何をするかを Claude が決めます。各ステップで中の道具を一つ選び、結果を見て、目標に届くかステップがなくなるまで続けます。最終的な答えは下書きに入ります。1 ステップは 1 回のモデル呼び出しです。「先に計画を立て」にチェックを入れると、最初のステップで短い計画を書き、追加の費用なしで更新し続けます。","message4":"各事実の出典を示す %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"入力 {name} ははいかいいえでなければなりません（{value} ではなく）。",
 "Input {name} must be a date like 2026-11-21, not {value}.":"入力 {name} は 2026-11-21 のような日付でなければなりません（{value} ではなく）。",
 "Yes":"はい",
-"No":"いいえ"
+"No":"いいえ",
+"Made by a model: corrections welcome.":"モデルが作成しました。修正を歓迎します。",
+"Read by a speaker.":"話者が確認しました。",
+"Suggest a correction":"修正を提案する"
 },
 "examples":{
 "review":{"title":"レビューの繰り返し","desc":"Claude がオートリーズについて書き、あなたのルールに照らして確認し、不合格の点を直します。最大 3 回。","tip":"青いブロックのタスクと、紫のブロックのルールを変えてみてください。"},

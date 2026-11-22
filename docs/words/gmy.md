@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/gmy.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20Mycenaean%20Greek%20%28Linear%20B%29).
+
 - Events: 𐀱𐀞𐀲
 - Control: 𐀀𐀏
 - Wait & time: 𐀕𐀚 𐀏𐀂 𐀒𐀫𐀜

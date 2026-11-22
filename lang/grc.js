@@ -3,6 +3,7 @@
 "name":"Κοινή",
 "blockly":"en",
 "note":"Koine Greek words, in polytonic spelling, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Koine. Koine vocabulary where it exists (πλίνθος for block, σελίς for page, κλίβανος for oven); modern words (email, token, API, Home Assistant) are kept. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. Page buttons named in block text use their Koine names (Δράμε, Πρόβαινε, Προγράμματα).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"πρόσθες %1 τῷ ἀποτελέσματι"},
 "rb_agent":{"message0":"ἐπίτροπος· ἐργάζου πρὸς %1","message1":"ἕως %1 βημάτων, τοῖσδε τοῖς ὀργάνοις χρώμενος·","message2":"%1","message3":"πρῶτον σχέδιον ποίησον, καὶ ἄλλασσε αὐτὸ καθ᾽ ὁδόν %1","tooltip":"Ὁ Claude κρίνει τί ποιήσει· καθ᾽ ἕκαστον βῆμα ἐκλέγεται ἓν τῶν ὀργάνων τῶν ἔσω, βλέπει τί ἐγένετο, καὶ προβαίνει ἕως ἂν τὸ τέλος εὑρεθῇ ἢ τὰ βήματα παύσωνται. Ἡ ἐσχάτη ἀπόκρισις αὐτοῦ εἰς τὸ σχέδιον τίθεται. Ἕκαστον βῆμα μία κλῆσίς ἐστι τοῦ τύπου. Ἐὰν τὸ «πρῶτον σχέδιον ποίησον» σημειωθῇ, γράφει σύντομον σχέδιον ἐν τῷ πρώτῳ βήματι καὶ νέον αὐτὸ φυλάσσει, ἄνευ πλείονος δαπάνης.","message4":"λέγειν ὅθεν ἕκαστον ἐλήφθη %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"Ἡ εἴσοδος {name} ναὶ ἢ οὔ εἶναι δεῖ, οὐ {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"Ἡ εἴσοδος {name} ἡμέρα εἶναι δεῖ ὡς 2026-11-21, οὐ {value}.",
 "Yes":"Ναί",
-"No":"Οὔ"
+"No":"Οὔ",
+"Made by a model: corrections welcome.":"Ὑπὸ μηχανῆς πεποιημένον· ἐπανορθώσεις ἀσμέναι.",
+"Read by a speaker.":"Ὑπὸ λέγοντος ἀνεγνωσμένον.",
+"Suggest a correction":"Πρότεινε ἐπανόρθωσιν"
 },
 "examples":{
 "review":{"title":"Κύκλος ἐξετάσεως","desc":"Ὁ Claude γράφει περὶ τῆς autolyse, ἐξετάζει κατὰ τοὺς κανόνας σου, καὶ ἰᾶται ὅ τι ἂν ἀποτύχῃ, ἕως 3 κύκλων.","tip":"Ἄλλαξον τὸ ἔργον ἐν τῇ κυανῇ πλίνθῳ καὶ τοὺς κανόνας ἐν τῇ πορφυρᾷ."},

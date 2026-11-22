@@ -4,6 +4,7 @@
 "blockly":"en",
 "font":"Noto Sans Linear B",
 "note":"Mycenaean Greek in Linear B. Linear B records only a few hundred words, all palace bookkeeping, so the wording is Greek built from ancient roots and spelled by Mycenaean spelling rules, using attested words where they exist (wa-na-ka, do-mo, a-to-po-qo, te-u-ke-a); it is not genuine Bronze Age text. The page shows Linear B signs (U+10000-U+100FF) in blocks, options, categories, labels, page, examples, starters and blocklyMsg, with the Noto Sans Linear B font named in \"font\"; python holds the standard transcription (ko-no-so), because terminals have no Linear B font. Names (Claude, Home Assistant), keys and placeholders stay in Latin letters. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"𐀡𐀮𐀳𐀮 %1 𐀳𐀩𐀂"},
 "rb_agent":{"message0":"𐀁𐀠𐀵𐀫𐀡: 𐀸𐀐 𐀁𐀠 %1","message1":"𐀕𐀑 %1 𐀡𐀅, 𐀕𐀲 𐀵𐀂𐀆 𐀃𐀏𐀙:","message2":"%1","message3":"𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍, 𐀏𐀂 𐀀𐀨𐀐 𐀀𐀵 𐀁𐀚 𐀃𐀈 %1","tooltip":"Claude 𐀓𐀪𐀚 𐀴 𐀡𐀁𐀮𐀂: 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀏𐀜 𐀁𐀚𐀵𐀰 𐀨𐀞𐀚, 𐀃𐀨𐀁 𐀴 𐀐𐀚𐀵, 𐀏𐀂 𐀡𐀫𐀣𐀂𐀚𐀁 𐀁𐀒𐀳 𐀳𐀫 𐀁𐀄𐀩𐀳𐀂 𐀁 𐀡𐀆 𐀞𐀄𐀰𐀲𐀂. 𐀀𐀡𐀑𐀪𐀯 𐀄𐀲𐀲 𐀁𐀚 𐀐𐀇𐀍. 𐀁𐀏𐀵 𐀡𐀆 𐀃𐀚 𐀏𐀩𐀯 𐀶𐀡. 𐀁𐀚 “𐀡𐀁𐀮 𐀡𐀫𐀵 𐀐𐀇𐀍” 𐀮𐀔𐀵, 𐀏𐀨𐀟𐀂 𐀐𐀇𐀍 𐀁𐀚 𐀡𐀫𐀵 𐀡𐀆 𐀏𐀂 𐀚𐀺 𐀢𐀨𐀭𐀁, 𐀀𐀚𐀄 𐀟𐀨 𐀃𐀜.","message4":"𐀃𐀟𐀫 𐀁𐀳𐀃 𐀁𐀩𐀁 %1"},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"𐀁𐀰𐀈 {name} 𐀙𐀂 𐀁 𐀃𐀄 𐀁𐀵, 𐀃𐀄 {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"𐀁𐀰𐀈 {name} 𐀀𐀔 𐀃𐀒 2026-11-21 𐀁𐀵, 𐀃𐀄 {value}.",
 "Yes":"𐀙𐀂",
-"No":"𐀃𐀄"
+"No":"𐀃𐀄",
+"Made by a model: corrections welcome.":"𐀕𐀏𐀙 𐀡𐀁𐀵: 𐀃𐀵𐀨𐀲 𐀏𐀨.",
+"Read by a speaker.":"𐀞𐀵𐀨 𐀀𐀙𐀐𐀜𐀵.",
+"Suggest a correction":"𐀃𐀵𐀨𐀲 𐀟𐀩"
 },
 "examples":{
 "review":{"title":"𐀓𐀒𐀫 𐀁𐀐𐀮𐀲𐀮𐀃","desc":"Claude 𐀏𐀨𐀟𐀂 𐀟𐀪 autolyse, 𐀁𐀐𐀲𐀽𐀂 𐀏𐀲 𐀏𐀜𐀚 𐀰, 𐀏𐀂 𐀂𐀀𐀲𐀂 𐀃𐀴 𐀀𐀔𐀲𐀚𐀂, 𐀕𐀑 3 𐀓𐀒𐀫.","tip":"𐀀𐀨𐀏𐀮 𐀸𐀒 𐀁𐀚 𐀓𐀷𐀜 𐀠𐀪𐀵 𐀏𐀂 𐀏𐀜𐀚 𐀁𐀚 𐀡𐀢𐀫."},

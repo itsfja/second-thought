@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/lzh.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%E6%96%87%E8%A8%80).
+
 - Agent: 使者
 - Ask Claude: 問 Claude
 - Connections: 諸連

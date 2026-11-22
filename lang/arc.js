@@ -4,6 +4,7 @@
 "blockly":"en",
 "dir":"rtl",
 "note":"Jewish Babylonian Aramaic, the language of the Talmud, in Hebrew square script, for the block palette, the page, the examples and what exported programs print. There is no Blockly translation for Aramaic, so Blockly's own blocks and menus come from blocklyMsg here. The page is right to left (dir: rtl), as for Hebrew: Blockly is mirrored, and code, file names and model names stay left to right. Instructions use the short singular imperative. Modern product words (email, token, API, Home Assistant) stay in Latin letters. Coinages: לבנתא block (a brick), שליחא agent (an agent in Talmudic law), טופסא draft, פנקסא log, זמניא schedules. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Aramaic names (שרי, אזיל, פסוק).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"אוסיף %1 לפירא"},
 "rb_agent":{"message0":"שליחא: עביד לות %1","message1":"עד %1 פסיען, בהלין מאניא:","message2":"%1","message3":"עביד עיטתא קדמאה, ושני יתה באורחא %1","tooltip":"Claude דאין מה למעבד: בכל פסיעתא בחר חד מן מאניא דבגוה, חזי מה הוה, ואזיל עד דמטי לצביונא או עד דשלמו פסיעתא. פתגמא בתראה דיליה עאל לטופסא. כל פסיעתא היא קריאה חדא לחכימא. כד \"עביד עיטתא קדמאה\" רשים, כתב עיטתא זעירתא בפסיעתא קדמייתא ומחדת לה, בלא אגרא יתירא.","message4":"למימר מן היכא אתת כל עובדא %1"},
@@ -1300,7 +1301,10 @@
 "Input {name} must be yes or no, not {value}.":"מעלנא {name} לאיתוהי אין או לא, לא {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"מעלנא {name} לאיתוהי יומא כד 2026-11-21, לא {value}.",
 "Yes":"אין",
-"No":"לא"
+"No":"לא",
+"Made by a model: corrections welcome.":"עביד בידי מכונתא: תקוני מקבלין.",
+"Read by a speaker.":"קרי בידי ממללא.",
+"Suggest a correction":"אמר תקונא"
 },
 "examples":{
 "review":{"title":"סבובא דבדיקתא","desc":"Claude כתב על autolyse, בדיק יתיה כלקבל נמוסך, ומתקן כל מה דנפל, עד 3 סבובין.","tip":"שני עבידתא בלבנתא תכלתא ונמוסיא בלבנתא ארגוונא."},

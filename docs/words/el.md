@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/el.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%CE%95%CE%BB%CE%BB%CE%B7%CE%BD%CE%B9%CE%BA%CE%AC).
+
 - Events: Συμβάντα
 - Control: Έλεγχος ροής
 - Wait & time: Αναμονή και χρόνος

@@ -2,6 +2,7 @@
  "name": "Français",
  "blockly": "fr",
  "note": "French words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their French names (Exécuter, Planification, Programmes, Continuer).",
+ "read_by": "model",
  "blocks": {
   "rb_add_result": {
    "message0": "ajouter %1 au résultat"
@@ -2058,7 +2059,10 @@
   "Input {name} must be yes or no, not {value}.": "L'entrée {name} doit être oui ou non, pas {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "L'entrée {name} doit être une date comme 2026-11-21, pas {value}.",
   "Yes": "Oui",
-  "No": "Non"
+  "No": "Non",
+  "Made by a model: corrections welcome.": "Fait par un modèle : corrections bienvenues.",
+  "Read by a speaker.": "Relu par un locuteur.",
+  "Suggest a correction": "Proposer une correction"
  },
  "examples": {
   "review": {

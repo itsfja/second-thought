@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/sux.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%F0%92%85%B4%F0%92%82%A0).
+
 - Agent: 𒆥𒄄𒀀
 - Ask Claude: Claude 𒇷 𒋻
 - Connections: 𒊓

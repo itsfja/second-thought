@@ -3,6 +3,7 @@
  "blockly": "en",
  "font": "Noto Sans Gothic",
  "note": "Gothic (gutisk) in the Gothic alphabet, for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg), since Blockly has no Gothic. Every word is written here in the usual transliteration, one Latin letter for each Gothic one (þ, ƕ, q for kw), and tools/i18n.py writes the page's words letter for letter in Gothic (𐌲𐌿𐍄𐌹𐍃𐌺); a word marked ^ stays in Latin letters. The font is Noto Sans Gothic. python holds the transliteration, because terminals rarely have a Gothic font; typed answers are ja (or jai, y) for yes and ne (or ni, n) for no. Almost all Gothic that survives is Wulfila's Bible, about 3,600 words, so the wording uses attested words where they fit and new uses of them elsewhere: garaideins (an ordinance) for a program, wigs (a way) for a script, stains (a stone) for a block, laisareis (a teacher) for a model, airus (a messenger) for an agent, sarwa (gear, armour) for a tool, frumagameli (first writing, a coinage) for a draft, gasaihts (a sight, a coinage from saiƕan) for a review, waurstw (a work) for a result, bokos waurstwis (the book of the work) for the run log, uslukands (an opener, a coinage from uslukan) for a key, bokos (a writing) for a file, arka (a chest) for a folder, rahneins (a reckoning) for a record, ufarmeli (an inscription) for a list, akrs (a field) for a field, manleika (an image) for a picture, spill (a tale, a message) for a message, ahwa (a river) for a channel, nati (a net) for the web, laufs (a leaf) for a page, gamunds (remembrance) for memory, hlauts (a lot) for a variable, arbaiþs (toil) for a task, anabusns (a commandment) for instructions, skatts (a coin) for a token, frisahts (a likeness) for an example and niuja spilla (new tales) for a news feed. Buttons: tawei (do) Run, gastoþ (stand) Stop, gagg faurþis (go forward) Continue, gakius (approve) Approve, aftra sandei (send back) Send back, fralet (let) Allow, ni (not) Don't, melos (times) Schedules. It is a modern use of the ancient language, not genuine ancient text. Names, keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names. To see a transliterated line in Gothic letters: python tools/i18n.py script got \"…\".",
+ "read_by": "model",
  "blocks": {
   "rb_longtext": {
    "message0": "%1",
@@ -2049,7 +2050,10 @@
   "Input {name} must be yes or no, not {value}.": "𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 {name} 𐍃𐌺𐌰𐌻 𐍅𐌹𐍃𐌰𐌽 𐌾𐌰 𐌰𐌹𐌸𐌸𐌰𐌿 𐌽𐌴, 𐌽𐌹 {value}.",
   "Input {name} must be a date like 2026-11-21, not {value}.": "𐌹𐌽𐌽𐌲𐌰𐌲𐌲𐌰𐌽𐌳𐌴𐌹 {name} 𐍃𐌺𐌰𐌻 𐍅𐌹𐍃𐌰𐌽 𐌳𐌰𐌲𐍃 𐍃𐍅𐌴 2026-11-21, 𐌽𐌹 {value}.",
   "Yes": "𐌾𐌰",
-  "No": "𐌽𐌴"
+  "No": "𐌽𐌴",
+  "Made by a model: corrections welcome.": "𐍆𐍂𐌰𐌼 𐍄𐌰𐍅𐌰 𐌲𐌰𐍄𐌰𐌿𐌾𐌰𐌽: 𐌲𐌰𐌱𐍉𐍄𐍉𐍃 𐍅𐌰𐌹𐌻𐌰 𐌰𐌽𐌳𐌽𐌿𐌼𐌰𐌽𐍉𐍃.",
+  "Read by a speaker.": "𐍆𐍂𐌰𐌼 𐍂𐍉𐌳𐌾𐌰𐌽𐌳𐌹𐌽 𐌿𐍃𐍃𐌹𐌲𐌲𐍅𐌰𐌽.",
+  "Suggest a correction": "𐌲𐌰𐌱𐍉𐍄 𐌰𐍄𐌰𐌿𐌲𐌴𐌹"
  },
  "examples": {
   "review": {

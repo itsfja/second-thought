@@ -3,6 +3,7 @@
 "name":"Français",
 "blockly":"fr",
 "note":"French words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their French names (Exécuter, Planification, Programmes, Continuer).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"ajouter %1 au résultat"},
 "rb_agent":{"message0":"agent : travailler vers %1","message1":"jusqu'à %1 étapes, avec ces outils :","message2":"%1","message3":"faire d'abord un plan, et l'adapter en route %1","tooltip":"Claude décide quoi faire ensuite : à chaque étape il choisit un des outils à l'intérieur, voit ce qui s'est passé, et continue jusqu'à atteindre le but ou épuiser les étapes. Sa réponse finale va dans le brouillon. Chaque étape est un appel au modèle. Avec « faire d'abord un plan » coché, il écrit un court plan à sa première étape et le tient à jour, sans coût supplémentaire.","message4":"dire d'où vient chaque fait %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"L'entrée {name} doit être oui ou non, pas {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"L'entrée {name} doit être une date comme 2026-11-21, pas {value}.",
 "Yes":"Oui",
-"No":"Non"
+"No":"Non",
+"Made by a model: corrections welcome.":"Fait par un modèle : corrections bienvenues.",
+"Read by a speaker.":"Relu par un locuteur.",
+"Suggest a correction":"Proposer une correction"
 },
 "examples":{
 "review":{"title":"Boucle de relecture","desc":"Claude écrit sur l'autolyse, vérifie le texte selon vos règles et corrige ce qui ne va pas, jusqu'à 3 tours.","tip":"Changez la tâche dans le bloc bleu et les règles dans le violet."},

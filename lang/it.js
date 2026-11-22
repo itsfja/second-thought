@@ -3,6 +3,7 @@
 "name":"Italiano",
 "blockly":"it",
 "note":"Italian words for the block palette, the page, the examples and what exported programs print. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. Page buttons named in block text use their Italian names (Esegui, Continua, Programmi).",
+"read_by":"model",
 "blocks":{
 "rb_add_result":{"message0":"aggiungi %1 al risultato"},
 "rb_agent":{"message0":"agente: lavora verso %1","message1":"fino a %1 passi, con questi strumenti:","message2":"%1","message3":"fai prima un piano e aggiornalo strada facendo %1","tooltip":"Claude decide cosa fare dopo: a ogni passo sceglie uno degli strumenti al suo interno, vede cosa è successo e continua finché l'obiettivo è raggiunto o i passi finiscono. La sua risposta finale va nella bozza. Ogni passo è una chiamata al modello. Con «fai prima un piano» spuntato, scrive un breve piano al primo passo e lo tiene aggiornato, senza costi aggiuntivi.","message4":"dire da dove viene ogni fatto %1"},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"L'input {name} deve essere sì o no, non {value}.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"L'input {name} deve essere una data come 2026-11-21, non {value}.",
 "Yes":"Sì",
-"No":"No"
+"No":"No",
+"Made by a model: corrections welcome.":"Fatto da un modello: correzioni benvenute.",
+"Read by a speaker.":"Riletto da un parlante.",
+"Suggest a correction":"Suggerisci una correzione"
 },
 "examples":{
 "review":{"title":"Ciclo di revisione","desc":"Claude scrive sull'autolisi, controlla il testo secondo le tue regole e corregge ciò che non va, fino a 3 giri.","tip":"Cambia il compito nel blocco blu e le regole in quello viola."},

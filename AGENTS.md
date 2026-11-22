@@ -39,6 +39,8 @@ page and a tool's file disagree about the environment, trust the tool's file.
 
 ## Words and languages
 - **i18n merges:** `python tools/merge_i18n.py --install` once per clone.
+- **Who read the words (#460):** each `i18n/*.json` has `"read_by"`. Words a model wrote are `model`; only Francis
+  changes one to `speaker`, once a named speaker has read it through.
 - **New words:** `python tools/i18n.py missing`, then write translations for all 31 languages (not qnr, qar or qcg,
   below) into a JSON file and `python tools/i18n.py add words.json` (Mycenaean Greek, Akkadian, Sumerian, Hittite,
   Middle Egyptian, Coptic, Syriac and Gothic romanised; the tool writes the scripts).

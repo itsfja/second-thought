@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/ja.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%E6%97%A5%E6%9C%AC%E8%AA%9E).
+
 - Events: イベント
 - Control: 制御
 - Wait & time: 待機と時間

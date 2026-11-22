@@ -2,6 +2,8 @@
 
 Made by tools/sync.py from i18n/cop.json: edit that, not this.
 
+**Made by a model**, not read by a speaker yet. Something wrong? Say so with the [language form](https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=Corrections%20to%20%E2%B2%A7%E2%B2%99%E2%B2%9B%E2%B2%A7%E2%B2%A3%E2%B2%99%E2%B2%9B%E2%B2%95%E2%B2%8F%E2%B2%99%E2%B2%89).
+
 - Agent: ⲁⲡⲟⲥⲧⲟⲗⲟⲥ
 - Ask Claude: ϣⲓⲛⲉ nClaude
 - Connections: ϩⲱⲧⲣ

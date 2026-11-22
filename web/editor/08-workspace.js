@@ -33,6 +33,19 @@
       const o = document.createElement("option"); o.value = k; o.textContent = name; sel.appendChild(o);
     });
     sel.value = window.ST_LANG || "en";
+    // How sure the words are (#460): read through by a named speaker, or made by a model, with where to send corrections.
+    const chosen = langs[sel.value], sure = $("lang-words");
+    if (chosen && sure) {
+      const speaker = chosen.read_by === "speaker";
+      sure.append(tr(speaker ? "Read by a speaker." : "Made by a model: corrections welcome."));
+      if (!speaker) {
+        const a = document.createElement("a");
+        a.href = "https://github.com/itsfja/second-thought/issues/new?template=language.yml&title=" + encodeURIComponent("Corrections to " + (chosen.name || sel.value));
+        a.target = "_blank"; a.rel = "noopener"; a.textContent = tr("Suggest a correction");
+        sure.append(" ", a);
+      }
+      sure.hidden = false;
+    }
     // The chosen language's words didn't load (lang/<language>.js missing or unreachable): say so, in English, since
     // that's what the page is showing. The choice is kept, so reloading tries again.
     if (window.ST_I18N_MISSING) {

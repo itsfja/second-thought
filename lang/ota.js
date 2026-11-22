@@ -4,6 +4,7 @@
 "blockly":"en",
 "dir":"rtl",
 "note":"Ottoman Turkish (لسان عثمانى) in the Perso-Arabic script, right to left as Hebrew is, with Ottoman spelling (ك and ڭ, Arabic-Indic digits in running text), for the block palette, the page, the examples and what exported programs print, and for Blockly's own blocks and menus (blocklyMsg): Blockly's tr words are modern Turkish in Latin letters, so \"blockly\" is \"en\" with Ottoman laid over it, as Latin does. Exported Python prints the Ottoman script as it is, as it does Hebrew. Ottoman had words for the telegraph, the railway and the press, and those are used where they fit: پروغرام for a program, قطعه (a piece) for a block, سلسله (a chain) for a script, مودل for a model, وكیل (a deputy) for an agent, آلت for a tool, مسوده (a rough copy) for a draft, تدقیق for a review, نتیجه for a result, اجرا دفتری for the run log, آناختار for a key, دوسیه for a file, صندوق for a folder, قید (an entry in a register) for a record, ساحه for a field, لیسته for a list, رسم for a picture, خبر for a message, مكتوب for email, قنال for a channel, خبر منبعی for a news feed, شی for a Home Assistant entity, جهاز for a device, علامت for a token, مرحله for a checkpoint, حافظه for memory, استدعا (a petition) for a prompt, شبكه (a net) for the web and اجرا ماكینه‌سی for the runtime. Buttons: اجرا Run, دور Stop, دوام Continue, تصدیق ایت Approve, گری گوندر Send back, مساعده ایت Allow, ایتمه Don't, مواعید Schedules. Typed answers: اوت, ایوت, evet or e for yes, خیر, یوق, hayır or h for no (y and n work too). It is a modern use of the late Ottoman language, not genuine historical text. Names (Claude, Home Assistant), keys, setting and field names and placeholders stay as they are. In blocks, keys are block types and the English parts they replace; dropdown values never change, only their labels. In page, starters and python, keys are the English text, with {name} for the parts filled in. In examples, keys are the example keys. In blocklyMsg, keys are Blockly's message names.",
+"read_by":"model",
 "blocks":{
 "rb_longtext":{"message0":"%1","tooltip":"اوزون متن. یڭی سطر ایچون Enter ه باص؛ سطرلر ٨٠ حرفده بوكولور."},
 "rb_start":{"message0":"اجرا باصیلدیغنده","tooltip":"هر پروغرام بوراده باشلار. آلتنده‌كی قطعه‌لر یوقاریدن آشاغی اجرا اولونور. بونلردن بر قاچی یان یانه اجرا اولونور."},
@@ -1299,7 +1300,10 @@
 "Input {name} must be yes or no, not {value}.":"{name} گیریشی اوت یاخود خیر اولملیدر، {value} دگل.",
 "Input {name} must be a date like 2026-11-21, not {value}.":"{name} گیریشی 2026-11-21 کبی بر تاریخ اولملیدر، {value} دگل.",
 "Yes":"اوت",
-"No":"خیر"
+"No":"خیر",
+"Made by a model: corrections welcome.":"بر مودل طرفندن یاپیلدی: تصحیحلر ممنونیتله قبول ایدیلیر.",
+"Read by a speaker.":"بر سویلەین طرفندن اوقوندی.",
+"Suggest a correction":"تصحیح تکلیف ایت"
 },
 "examples":{
 "review":{"title":"تدقیق دونگوسی","desc":"Claude اوتولیز حقنده یازار، قاعده‌لركه گوره یوقلار و مقبول اولمایانی دوزلتیر، ٣ دوره‌یه قدر.","tip":"ماوی قطعه‌ده‌كی وظیفه‌یی و مور قطعه‌ده‌كی قاعده‌لری دڭیشدیر."},
