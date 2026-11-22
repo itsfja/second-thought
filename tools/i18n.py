@@ -182,8 +182,11 @@ def syriac(word):
 
 def printed(code, text):
     """What exported Python prints for a word list in a script language: the transliteration, without the ^ marks, and
-    for Syriac, Ugaritic and Phoenician with ꜣ and ꜥ (Latin letters) for ʾ and ʿ, so a terminal shows it in Latin script."""
+    for Syriac, Ugaritic and Phoenician with ꜣ and ꜥ (Latin letters) for ʾ and ʿ, and for Old Persian with th for θ (a
+    Greek letter), so a terminal shows it in Latin script."""
     text = unmark(text)
+    if code == "peo":
+        return text.replace("θ", "th")
     return text.replace("ʾ", "ꜣ").replace("ʿ", "ꜥ") if code in ("syc", "uga", "phn") else text
 
 
@@ -279,7 +282,7 @@ def unmark(text):
 
 def to_script(lang, text, missing=None):
     """A romanised line in Linear B (gmy), cuneiform (akk, sux, hit), hieroglyphs (egy), Coptic (cop), Syriac (syc), Gothic (got)
-    or the Ugaritic (uga) or Phoenician (phn) alphabet.
+    the Ugaritic (uga) or Phoenician (phn) alphabet, or Old Persian cuneiform (peo).
     Placeholders, names, file names and code are kept."""
     missing = set() if missing is None else missing
     if lang == "cop":
@@ -292,6 +295,8 @@ def to_script(lang, text, missing=None):
         return _to_marked(text, missing, UGA_LETTERS, ugaritic)
     if lang == "phn":
         return _to_marked(text, missing, PHN_LETTERS, phoenician)
+    if lang == "peo":
+        return _to_marked(text, missing, PEO_LETTERS, oldpersian)
     if lang == "sux":
         return _to_sumerian(text, missing)
     if lang == "hit":
@@ -367,6 +372,47 @@ def phoenician(word):
     return "".join(PHN[c] for c in word) if word and all(c in PHN for c in word) else None
 
 
+# ----- Old Persian (#473) -----
+# Old Persian as the dictionaries normalise it (xšāyaθiya, dahyu, framānā), written in its cuneiform by its own rules:
+# a consonant takes the sign of the vowel after it (ka, ku; di, du), or the a-sign where there is no i- or u-sign
+# (ta for ti); i and u are always written after their sign, and ā after its a-sign; a consonant with no vowel after
+# it takes its a-sign; a word's last a is written out (pārsa → pa-a-ra-sa-a). A lowercase word that should stay in Latin
+# letters is written with ^ in front.
+PEO_LETTERS = "aāiīuūkxgcjtθdpbfnmyvrlszšçh"
+_PEO_SIGNS = ["a", "i", "u", "ka", "ku", "ga", "gu", "xa", "ca", "ja", "ji", "ta", "tu", "da", "di", "du", "θa", "pa",
+              "ba", "fa", "na", "nu", "ma", "mi", "mu", "ya", "va", "vi", "ra", "ru", "la", "sa", "za", "ša", "ça", "ha"]
+PEO = {name: chr(0x103A0 + i) for i, name in enumerate(_PEO_SIGNS)}
+
+
+def oldpersian(word):
+    """A normalised Old Persian word in cuneiform (pārsa → 𐎱𐎠𐎼𐎿𐎠), or None if it has a letter Old Persian doesn't."""
+    if not word or any(c not in PEO_LETTERS for c in word):
+        return None
+    short = {"ā": "a", "ī": "i", "ū": "u"}
+    signs, i = [], 0
+    while i < len(word):
+        c = word[i]
+        v = short.get(c, c)
+        if v in "aiu":  # a vowel with no consonant before it
+            signs.append(v)
+            i += 1
+            continue
+        nxt = word[i + 1] if i + 1 < len(word) else ""
+        n = short.get(nxt, nxt)
+        if n in ("i", "u"):
+            signs += [PEO.get(c + n) and c + n or c + "a", n]
+            i += 2
+        elif n == "a":
+            signs.append(c + "a")
+            if nxt == "ā" or i + 2 == len(word):
+                signs.append("a")
+            i += 2
+        else:
+            signs.append(c + "a")
+            i += 1
+    return "".join(PEO[s] for s in signs)
+
+
 def _to_marked(text, missing, letters, convert):
     """A transliterated line in its own letters (Coptic, Syriac), word by word. A word marked ^, placeholders, names,
     code and file names stay as they are; a Syriac proclitic joined by a hyphen to one of those (d-Claude) is written in
@@ -409,7 +455,7 @@ def _to_marked(text, missing, letters, convert):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit", "got", "uga", "phn"}
+SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit", "got", "uga", "phn", "peo"}
 
 
 # ----- Old Norse in runes (#465) -----
@@ -725,7 +771,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit", "got", "uga", "phn") else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit", "got", "uga", "phn", "peo") else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:
