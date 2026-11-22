@@ -74,6 +74,11 @@ class Scripts(unittest.TestCase):
         self.assertEqual(gaps, {"e", "i"})
         self.assertEqual(tool.printed("uga", "^title mlk ʿbd"), "title mlk ꜥbd", "ʿ prints as the Latin letter ꜥ")
 
+    def test_phoenician_is_written_letter_for_letter(self):
+        self.assertEqual(tool.to_script("phn", "knʿn mlk ʾbn"), "𐤊𐤍𐤏𐤍 𐤌𐤋𐤊 𐤀𐤁𐤍")
+        self.assertEqual(tool.to_script("phn", "<b>lk</b> %1 Claude title {name}"), "<b>𐤋𐤊</b> %1 Claude title {name}")
+        self.assertEqual(tool.printed("phn", "ʾbn ʿbd"), "ꜣbn ꜥbd", "aleph and ayin print as Latin letters")
+
     def test_sumerian_signs_are_the_signs_themselves(self):
         # A sign's readings, not those of a variant form listed after it (#374): u3 is U, not ŠA17's old form, and aš and
         # dili are AŠ, not the numeral 1(AŠ@c).

@@ -67,6 +67,8 @@ FONTS = {
                            "\u0531", "[\\u0530-\\u058F]", False),
     "Noto Sans Ugaritic": (VENDOR / "@fontsource/noto-sans-ugaritic/package/files/noto-sans-ugaritic-ugaritic-400-normal.woff2",
                            "\U00010380", "[\\u{10380}-\\u{1039F}]", True),
+    "Noto Sans Phoenician": (VENDOR / "@fontsource/noto-sans-phoenician/package/files/noto-sans-phoenician-phoenician-400-normal.woff2",
+                             "\U00010900", "[\\u{10900}-\\u{1091F}]", True),
 }
 PAGE = (ROOT / "second-thought.html").read_text(encoding="utf-8")
 DOC = '<!doctype html><html><head><meta charset=utf8><style>[hidden]{display:none!important}</style></head><body>' + PAGE + "</body></html>"

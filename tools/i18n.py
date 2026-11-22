@@ -182,9 +182,9 @@ def syriac(word):
 
 def printed(code, text):
     """What exported Python prints for a word list in a script language: the transliteration, without the ^ marks, and
-    for Syriac and Ugaritic with ꜣ and ꜥ (Latin letters) for ʾ and ʿ, so a terminal shows it in Latin script."""
+    for Syriac, Ugaritic and Phoenician with ꜣ and ꜥ (Latin letters) for ʾ and ʿ, so a terminal shows it in Latin script."""
     text = unmark(text)
-    return text.replace("ʾ", "ꜣ").replace("ʿ", "ꜥ") if code in ("syc", "uga") else text
+    return text.replace("ʾ", "ꜣ").replace("ʿ", "ꜥ") if code in ("syc", "uga", "phn") else text
 
 
 # ----- Sumerian (#137) -----
@@ -279,7 +279,7 @@ def unmark(text):
 
 def to_script(lang, text, missing=None):
     """A romanised line in Linear B (gmy), cuneiform (akk, sux, hit), hieroglyphs (egy), Coptic (cop), Syriac (syc), Gothic (got)
-    or the Ugaritic alphabet (uga).
+    or the Ugaritic (uga) or Phoenician (phn) alphabet.
     Placeholders, names, file names and code are kept."""
     missing = set() if missing is None else missing
     if lang == "cop":
@@ -290,6 +290,8 @@ def to_script(lang, text, missing=None):
         return _to_marked(text, missing, GOT_LETTERS, gothic)
     if lang == "uga":
         return _to_marked(text, missing, UGA_LETTERS, ugaritic)
+    if lang == "phn":
+        return _to_marked(text, missing, PHN_LETTERS, phoenician)
     if lang == "sux":
         return _to_sumerian(text, missing)
     if lang == "hit":
@@ -353,6 +355,18 @@ def ugaritic(word):
     return "".join(UGA[c] for c in word) if word and all(c in UGA for c in word) else None
 
 
+# ----- Phoenician (#472) -----
+# Phoenician in the usual transliteration: consonants only, its 22 letters, with ʾ for aleph and ʿ for ayin. One letter
+# for each sign; a word with a letter the alphabet doesn't have (any vowel) stays in Latin letters.
+PHN_LETTERS = "ʾbgdhwzḥṭyklmnsʿpṣqršt"
+PHN = dict(zip(PHN_LETTERS, (chr(0x10900 + i) for i in range(22))))
+
+
+def phoenician(word):
+    """A transliterated Phoenician word in its alphabet (mlk → 𐤌𐤋𐤊), or None if it has a letter Phoenician doesn't."""
+    return "".join(PHN[c] for c in word) if word and all(c in PHN for c in word) else None
+
+
 def _to_marked(text, missing, letters, convert):
     """A transliterated line in its own letters (Coptic, Syriac), word by word. A word marked ^, placeholders, names,
     code and file names stay as they are; a Syriac proclitic joined by a hyphen to one of those (d-Claude) is written in
@@ -395,7 +409,7 @@ def _to_marked(text, missing, letters, convert):
     return " ".join(out)
 
 
-SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit", "got", "uga"}
+SCRIPTS = {"gmy", "akk", "egy", "cop", "syc", "sux", "hit", "got", "uga", "phn"}
 
 
 # ----- Old Norse in runes (#465) -----
@@ -711,7 +725,7 @@ def cmd_add(path):
                     problems.append(f"{section} “{english[:50]}”: there's no language {code}")
                     continue
                 gaps = set()
-                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit", "got", "uga") else text
+                value = to_script(code, text, gaps) if code in SCRIPTS and section == "page" else printed(code, text) if code in ("cop", "syc", "sux", "hit", "got", "uga", "phn") else text
                 if gaps:
                     problems.append(f"{section} “{english[:50]}”: {code} has no sign for {', '.join(sorted(gaps))}, so those stay romanised")
                 if sorted(PLACEHOLDER.findall(value)) != want:
