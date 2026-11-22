@@ -15,4 +15,4 @@ End commit messages and PR bodies with the attribution lines the session gives.
   a branch has no remote, `git push -u origin <branch>` again.
 
 ## The artifact
-A Claude session can publish the page itself, to the URL in AGENTS.md, with all 41 `lang/<code>.js` files.
+A Claude session can publish the page itself, to the URL in AGENTS.md, with all 42 `lang/<code>.js` files.
