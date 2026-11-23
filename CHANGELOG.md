@@ -22,6 +22,8 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+- **The site builds again on a release:** `tools/export.cjs` couldn't find Blockly installed from npm (its `package.json` "exports" hide `package.json`), so the Pages build for 3.14.0 stopped at the gallery. It worked here only because the tests' own copy of Blockly was there.
+
 ## 3.14.0 - 2026-11-23
 
 ### Security
