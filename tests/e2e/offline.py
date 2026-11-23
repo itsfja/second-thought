@@ -14,11 +14,13 @@ async def offline_tests():
     with tempfile.TemporaryDirectory() as tmp:
         path = offline_tool.build(pathlib.Path(tmp) / "second-thought-offline.html")
         text = path.read_text(encoding="utf-8")
-        # 20 MB: the file holds every language's words, so new words in every language move it (#426, #448), and so
-        # does each new language (#469-#473: an ancient script's letters take four bytes each); Windows' CRLF line
-        # endings add a little more than Linux's.
-        check(path.stat().st_size < 20e6 and 'http-equiv="Content-Security-Policy"' in text and "lang/" not in re.findall(r'<script src="([^"]+)"', text),
-              f"tools/offline.py builds one file with the libraries and languages inside, and a security policy ({path.stat().st_size / 1e6:.1f} MB)")
+        # The file holds every language's words, so it grows with each language (#426, #448, #469-#473, #459): about
+        # 4 MB for the page and libraries and under 0.5 MB a language (an ancient script's letters take four bytes
+        # each, and Windows' CRLF line endings add a little), so the bound grows with the languages instead of being
+        # raised by hand each time one is added.
+        limit = 5e6 + 0.5e6 * len(list((ROOT / "lang").glob("*.js")))
+        check(path.stat().st_size < limit and 'http-equiv="Content-Security-Policy"' in text and "lang/" not in re.findall(r'<script src="([^"]+)"', text),
+              f"tools/offline.py builds one file with the libraries and languages inside, and a security policy ({path.stat().st_size / 1e6:.1f} MB, under {limit / 1e6:.1f} MB)")
         fetched = []
 
         async def no_network(r):
