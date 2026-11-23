@@ -24,7 +24,11 @@ const read = file => fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n");
 
 // Blockly and its multiline field, from node_modules if they're installed, else from the tests' copies.
 function packageFile(name, file){
-  try { return require.resolve(name + "/package.json").replace(/package\.json$/, file); } catch (e) { /* not installed */ }
+  // Blockly's package.json "exports" doesn't list package.json itself, so require.resolve("blockly/package.json")
+  // fails even when it's installed: look for the package's folder in the places Node looks instead.
+  for (const dir of require.resolve.paths(name) || []){
+    if (fs.existsSync(path.join(dir, name, "package.json"))) return path.join(dir, name, file);
+  }
   const vendored = path.join(ROOT, "tests", "vendor", name.replace(/^@blockly\//, ""), "package", file);
   if (fs.existsSync(vendored)) return vendored;
   throw new Error("Blockly isn't here. Run: npm install blockly@13.4.0 @blockly/field-multilineinput@13.4.0 (or bash tests/setup.sh)");
