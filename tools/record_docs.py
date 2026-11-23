@@ -95,12 +95,12 @@ Done · 4 model calls · Claude: 2,789 tokens in, 700 out · about £0.01 at lis
 """
 DOCTOR = """C:\\Users\\you\\wallet-health-check>python wallet-health-check.py --doctor
 
-Checking wallet-health-check.py (runtime 3.13.0, Python 3.14.6).
+Checking wallet-health-check.py (runtime 3.14.0, Python 3.14.6).
 Only reading: nothing is sent, posted, switched or charged.
 
   ok    Python: 3.14.6
   ok    Currency: GBP, at the ECB rate of 2026-11-06 (1 US dollar = £0.75)
-  ok    Runtime: 3.13.0 is the latest
+  ok    Runtime: 3.14.0 is the latest
   ok    Settings: read C:\\Users\\you\\second-thought.ini + C:\\Users\\you\\wallet-health-check\\second-thought.ini
   ok    Keys: ANTHROPIC_API_KEY (C:\\Users\\you\\second-thought.ini), EMAIL_PASSWORD (the keychain)
   ok    Package anthropic: 2.3.0

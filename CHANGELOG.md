@@ -22,10 +22,13 @@ workflow), which is what `--update-runtime` downloads; a release made before tha
 
 ## Unreleased
 
+## 3.14.0 - 2026-11-23
+
 ### Security
 - The runtime holds two release-signing keys, the working one and a spare kept somewhere else, and `--update-runtime` accepts a release signed by either (#429): `UPDATE_SIGNING_KEY` and `UPDATE_SIGNING_SPARE_KEY` in update.py. A key can now be retired by dropping it from the next release's runtime — [SECURITY.md](SECURITY.md) says how — instead of losing it and having to re-export every program, and `--doctor` says on its Runtime line that this runtime checks signatures, and how many keys it holds. Until the first signed release both keys are empty and the SHA-256 check applies as before (#311).
 
 ### Added
+- **Seven more classical languages (#467–#473):** Church Slavonic in Glagolitic, Ge'ez, Classical Armenian, Old Irish, Ugaritic and Phoenician in their alphabets, and Old Persian in its cuneiform syllabary, each with its own font where systems lack one. Words in a script of its own are written in transliteration and turned into the script by `tools/i18n.py`, and exported Python prints the transliteration. Made by a model, so they want reading by a scholar of each language.
 - **Hindi (हिन्दी, #459):** the page, the examples and what exported programs print, in Hindi in Devanagari, with Blockly's own Hindi blocks and the Noto Sans Devanagari font; yes/no prompts in exported programs take हाँ and नहीं as well as y/n. Made by a model, so it wants reading by a Hindi speaker.
 - **Arabic (العربية, #459):** the page, the examples and what exported programs print, in Modern Standard Arabic, right to left with Blockly mirrored, and Blockly's own Arabic blocks; yes/no prompts in exported programs take نعم and لا as well as y/n. Made by a model, so it wants reading by an Arabic speaker.
 - **Korean (한국어, #459):** the page, the examples and what exported programs print, in Korean, with Blockly's own Korean blocks and Korean word order on the blocks; yes/no prompts in exported programs take 예/네 and 아니요 as well as y/n. Made by a model, so it wants reading by a Korean speaker.
